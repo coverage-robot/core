@@ -88,7 +88,7 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
             'stmt' => LineTypeEnum::STATEMENT,
             'cond' => LineTypeEnum::CONDITION,
             'method' => LineTypeEnum::METHOD,
-            default => ParseException::lineTypeParseException($type)
+            default => throw ParseException::lineTypeParseException($type)
         };
     }
 }
