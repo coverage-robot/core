@@ -24,7 +24,9 @@ class IngestController extends AbstractController
                 $coverageFile->getObject()
             );
 
-            $this->coverageFileParserService->parse($source);
+            return $this->json($this->coverageFileParserService->parse($source));
         }
+
+        return $this->json([]);
     }
 }
