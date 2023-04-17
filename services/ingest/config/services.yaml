@@ -10,4 +10,15 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Handler\IngestHandler:
+        # The controller must be public so that Bref is able to run it through the Symfony
+        # runtime
+        public: true
+
     Psr\Container\ContainerInterface: '@service_container'
+
+when@test:
+    services:
+        App\Strategy\:
+            resource: '../src/Strategy/'
+            public: true

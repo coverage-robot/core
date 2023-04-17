@@ -6,13 +6,21 @@ provider:
     stage: dev
     environment:
         APP_ENV: prod
+    iam:
+        role:
+            statements:
+                -   Effect: Allow
+                    Action:
+                        - 's3:GetObject'
+                    Resource:
+                        - 'arn:aws:s3:::ryan-coverage-s3/*'
 
 plugins:
     - ./vendor/bref/bref
 
 functions:
     ingest:
-        handler: public/index.php
+        handler: App\Handler\IngestHandler
         timeout: 28
         runtime: php-82
         architecture: arm64

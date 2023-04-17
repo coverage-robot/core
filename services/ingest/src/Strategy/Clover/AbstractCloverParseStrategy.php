@@ -18,6 +18,8 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
 
     public function supports(string $content): bool
     {
+        libxml_use_internal_errors(true);
+
         $reader = $this->buildXmlReader($content);
         if (!$reader->read()) {
             return false;
@@ -34,6 +36,8 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
 
     public function parse(string $content): ProjectCoverage
     {
+        libxml_use_internal_errors(true);
+
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
         }

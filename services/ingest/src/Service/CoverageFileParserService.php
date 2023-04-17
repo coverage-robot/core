@@ -22,12 +22,11 @@ class CoverageFileParserService implements ServiceSubscriberInterface
     public function parse(string $coverageFile): ProjectCoverage
     {
         foreach (self::getSubscribedServices() as $strategy) {
-            if (!is_subclass_of(ParseStrategyInterface::class, $strategy)) {
+            $parserStrategy = $this->container->get($strategy);
+
+            if (!$parserStrategy instanceof ParseStrategyInterface) {
                 throw new RuntimeException('Strategy does not implement the correct interface');
             }
-
-            /** @var ParseStrategyInterface $parserStrategy */
-            $parserStrategy = $this->container->get($strategy);
 
             if (!$parserStrategy->supports($coverageFile)) {
                 continue;

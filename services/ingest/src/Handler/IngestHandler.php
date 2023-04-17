@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controller;
+namespace App\Handler;
 
 use App\Service\CoverageFileRetrievalService;
 use App\Service\CoverageFileParserService;
+use Bref\Context\Context;
 use Bref\Event\S3\S3Event;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Bref\Event\S3\S3Handler;
 
-class IngestController extends AbstractController
+class IngestHandler extends S3Handler
 {
     public function __construct(
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
@@ -16,7 +16,7 @@ class IngestController extends AbstractController
     ) {
     }
 
-    public function handle(S3Event $event): JsonResponse
+    public function handleS3(S3Event $event, Context $context): void
     {
         foreach ($event->getRecords() as $coverageFile) {
             $source = $this->coverageFileRetrievalService->ingestFromS3(
@@ -24,9 +24,7 @@ class IngestController extends AbstractController
                 $coverageFile->getObject()
             );
 
-            return $this->json($this->coverageFileParserService->parse($source));
+            print_r($this->coverageFileParserService->parse($source));
         }
-
-        return $this->json([]);
     }
 }
