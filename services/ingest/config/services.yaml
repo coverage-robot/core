@@ -10,3 +10,4 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    Psr\Container\ContainerInterface: '@service_container'

@@ -12,14 +12,12 @@ use XMLReader;
 
 abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
 {
-    private const PROJECT = "project";
-    private const FILE = "file";
-    private const LINE = "line";
+    private const PROJECT = 'project';
+    private const FILE = 'file';
+    private const LINE = 'line';
 
     public function supports(string $content): bool
     {
-        libxml_use_internal_errors(true);
-
         $reader = $this->buildXmlReader($content);
         if (!$reader->read()) {
             return false;
@@ -56,12 +54,12 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
     {
         switch ($reader->name) {
             case self::PROJECT:
-                $coverage->setGeneratedAt($reader->getAttribute("timestamp"));
+                $coverage->setGeneratedAt($reader->getAttribute('timestamp'));
                 break;
             case self::FILE:
                 $coverage->addFileCoverage(
                     new FileCoverage(
-                        $reader->getAttribute("name")
+                        $reader->getAttribute('name')
                     )
                 );
                 break;
@@ -70,12 +68,12 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
 
                 end($files)->addLineCoverage(
                     new LineCoverage(
-                        $this->convertLineType($reader->getAttribute("type")),
-                        $reader->getAttribute("num"),
-                        $reader->getAttribute("name"),
-                        $reader->getAttribute("count") ?? 0,
-                        $reader->getAttribute("complexity") ?? 0,
-                        $reader->getAttribute("crap") ?? 0,
+                        $this->convertLineType($reader->getAttribute('type')),
+                        $reader->getAttribute('num'),
+                        $reader->getAttribute('name'),
+                        $reader->getAttribute('count') ?? 0,
+                        $reader->getAttribute('complexity') ?? 0,
+                        $reader->getAttribute('crap') ?? 0,
                     )
                 );
                 break;
@@ -87,9 +85,9 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
     private function convertLineType(?string $type): LineTypeEnum
     {
         return match ($type) {
-            "stmt" => LineTypeEnum::STATEMENT,
-            "cond" => LineTypeEnum::CONDITION,
-            "method" => LineTypeEnum::METHOD,
+            'stmt' => LineTypeEnum::STATEMENT,
+            'cond' => LineTypeEnum::CONDITION,
+            'method' => LineTypeEnum::METHOD,
             default => ParseException::lineTypeParseException($type)
         };
     }

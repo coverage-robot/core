@@ -13,8 +13,7 @@ class IngestController extends AbstractController
     public function __construct(
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService
-    )
-    {
+    ) {
     }
 
     public function handle(S3Event $event): JsonResponse

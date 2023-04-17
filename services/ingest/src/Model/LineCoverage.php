@@ -21,8 +21,7 @@ class LineCoverage implements \JsonSerializable
         private readonly int $lineHits = 0,
         private readonly int $complexity = 0,
         private readonly int $crapIndex = 0,
-    )
-    {
+    ) {
     }
 
     public function getType(): LineTypeEnum
@@ -60,21 +59,21 @@ class LineCoverage implements \JsonSerializable
     {
         if ($this->getType() === LineTypeEnum::METHOD) {
             return [
-                "type" => $this->getType()->name,
-                "name" => $this->getName(),
-                "lineNumber" => $this->getLineNumber(),
-                "count" => $this->getLineHits(),
-                "complexity" => $this->getComplexity(),
-                "crap" => $this->getCrapIndex()
+                'type' => $this->getType()->name,
+                'name' => $this->getName(),
+                'lineNumber' => $this->getLineNumber(),
+                'count' => $this->getLineHits(),
+                'complexity' => $this->getComplexity(),
+                'crap' => $this->getCrapIndex()
             ];
         }
 
         return [
-            "type" => $this->getType()->name,
-            "lineNumber" => $this->getLineNumber(),
-            "count" => $this->getLineHits(),
-            "complexity" => $this->getComplexity(),
-            "crap" => $this->getCrapIndex()
+            'type' => $this->getType()->name,
+            'lineNumber' => $this->getLineNumber(),
+            'count' => $this->getLineHits(),
+            'complexity' => $this->getComplexity(),
+            'crap' => $this->getCrapIndex()
         ];
     }
 }

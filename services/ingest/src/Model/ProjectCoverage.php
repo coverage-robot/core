@@ -37,7 +37,7 @@ class ProjectCoverage implements JsonSerializable
      */
     public function setGeneratedAt(int|DateTimeImmutable $generatedAt): void
     {
-        if (gettype($generatedAt) === "integer") {
+        if (gettype($generatedAt) === 'integer') {
             $this->generatedAt = new DateTimeImmutable();
             $this->generatedAt = $this->generatedAt->setTimestamp($generatedAt);
             return;
@@ -62,8 +62,8 @@ class ProjectCoverage implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            "generatedAt" => $this->getGeneratedAt(),
-            "files" => $this->getFileCoverage()
+            'generatedAt' => $this->getGeneratedAt(),
+            'files' => $this->getFileCoverage()
         ];
     }
 }

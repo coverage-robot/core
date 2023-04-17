@@ -1,6 +1,6 @@
 <?php
 
-namespace Strategy\Clover;
+namespace App\Tests\Strategy\Clover;
 
 use App\Exception\ParseException;
 use App\Strategy\Clover\PhpCloverParseStrategy;
@@ -34,14 +34,15 @@ class PhpCloverParseStrategyTest extends TestCase
         }
     }
 
-    public static function cloverXmlDataProvider(): array {
+    public static function cloverXmlDataProvider(): array
+    {
         return [
-            "Invalid XML file" => [
-                "not-valid-xml",
+            'Invalid XML file' => [
+                'not-valid-xml',
                 false,
                 []
             ],
-            "Schema violating XML" => [
+            'Schema violating XML' => [
                 <<<XML
                 <?xml version="1.0" encoding="UTF-8"?>
                 <root generated="1681657109">
@@ -55,7 +56,7 @@ class PhpCloverParseStrategyTest extends TestCase
                 false,
                 []
             ],
-            "Valid schema XML" => [
+            'Valid schema XML' => [
                 <<<XML
                 <?xml version="1.0" encoding="UTF-8"?>
                 <coverage generated="1681657109">
@@ -84,59 +85,59 @@ class PhpCloverParseStrategyTest extends TestCase
                 XML,
                 true,
                 [
-                    "generatedAt" => [
-                        "date" => "2023-04-16 14:58:29.000000",
-                        "timezone_type" => 3,
-                        "timezone" => "UTC"
+                    'generatedAt' => [
+                        'date' => '2023-04-16 14:58:29.000000',
+                        'timezone_type' => 3,
+                        'timezone' => 'UTC'
                     ],
-                    "files" => [
+                    'files' => [
                         [
-                            "fileName" => "mock-file",
-                            "lines" => [
+                            'fileName' => 'mock-file',
+                            'lines' => [
                                 [
-                                    "type" => "METHOD",
-                                    "name" => "__construct",
-                                    "lineNumber" => 13,
-                                    "count" => 4,
-                                    "complexity" => 1,
-                                    "crap" => 1
+                                    'type' => 'METHOD',
+                                    'name' => '__construct',
+                                    'lineNumber' => 13,
+                                    'count' => 4,
+                                    'complexity' => 1,
+                                    'crap' => 1
                                 ],
                                 [
-                                    "type" => "STATEMENT",
-                                    "lineNumber" => 17,
-                                    "count" => 4,
-                                    "complexity" => 0,
-                                    "crap" => 0
+                                    'type' => 'STATEMENT',
+                                    'lineNumber' => 17,
+                                    'count' => 4,
+                                    'complexity' => 0,
+                                    'crap' => 0
                                 ],
                                 [
-                                    "type" => "METHOD",
-                                    "name" => "sendRequest",
-                                    "lineNumber" => 19,
-                                    "count" => 4,
-                                    "complexity" => 1,
-                                    "crap" => 1
+                                    'type' => 'METHOD',
+                                    'name' => 'sendRequest',
+                                    'lineNumber' => 19,
+                                    'count' => 4,
+                                    'complexity' => 1,
+                                    'crap' => 1
                                 ]
                             ]
                         ],
                         [
-                            "fileName" => "mock-file",
-                            "lines" => []
+                            'fileName' => 'mock-file',
+                            'lines' => []
                         ],
                         [
-                            "fileName" => "untestable-file",
-                            "lines" => []
+                            'fileName' => 'untestable-file',
+                            'lines' => []
                         ],
                         [
-                            "fileName" => "untestable-file",
-                            "lines" => []
+                            'fileName' => 'untestable-file',
+                            'lines' => []
                         ],
                         [
-                            "fileName" => "untestable-class-file",
-                            "lines" => []
+                            'fileName' => 'untestable-class-file',
+                            'lines' => []
                         ],
                         [
-                            "fileName" => "untestable-class-file",
-                            "lines" => []
+                            'fileName' => 'untestable-class-file',
+                            'lines' => []
                         ]
                     ]
                 ]

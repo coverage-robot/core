@@ -14,8 +14,7 @@ class FileCoverage implements \JsonSerializable
      */
     public function __construct(
         private readonly string $fileName
-    )
-    {
+    ) {
     }
 
     public function getFileName(): string
@@ -36,8 +35,8 @@ class FileCoverage implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            "fileName" => $this->getFileName(),
-            "lines" => $this->getLineCoverage()
+            'fileName' => $this->getFileName(),
+            'lines' => $this->getLineCoverage()
         ];
     }
 }

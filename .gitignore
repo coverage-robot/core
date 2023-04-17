@@ -8,3 +8,4 @@ vendor/
 .serverless/
 phpunit.xml
 .phpunit.cache
+.phpcs-cache

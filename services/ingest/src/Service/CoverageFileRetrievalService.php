@@ -9,6 +9,6 @@ class CoverageFileRetrievalService
 {
     public function ingestFromS3(Bucket $bucket, BucketObject $object): string
     {
-        return file_get_contents("./coverage.xml");
+        return file_get_contents('./coverage.xml');
     }
 }
