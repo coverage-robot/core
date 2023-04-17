@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1681657109">
+  <project timestamp="1681657109">
+    <file name="mock-file">
+      <class name="mock-class" namespace="global">
+        <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="15" coveredelements="15"/>
+      </class>
+      <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="17" type="stmt" count="4"/>
+      <line num="19" type="method" name="sendRequest" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="21" type="stmt" count="4"/>
+      <line num="24" type="method" name="decorateRequest" visibility="private" complexity="1" crap="1" count="4"/>
+      <line num="26" type="stmt" count="4"/>
+      <line num="27" type="stmt" count="4"/>
+      <line num="28" type="stmt" count="4"/>
+      <line num="29" type="stmt" count="4"/>
+      <line num="30" type="stmt" count="4"/>
+      <line num="31" type="stmt" count="4"/>
+      <line num="32" type="stmt" count="4"/>
+      <line num="33" type="stmt" count="4"/>
+      <line num="34" type="stmt" count="4"/>
+      <line num="35" type="stmt" count="4"/>
+      <metrics loc="38" ncloc="38" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="15" coveredelements="15"/>
+    </file>
+    <file name="untestable-file">
+      <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="untestable-class-file">
+      <class name="untestable-class" namespace="global">
+        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </class>
+      <metrics loc="41" ncloc="32" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <metrics files="50" loc="2716" ncloc="2226" classes="37" methods="107" coveredmethods="94" conditionals="0" coveredconditionals="0" statements="733" coveredstatements="683" elements="840" coveredelements="777"/>
+  </project>
+</coverage>
