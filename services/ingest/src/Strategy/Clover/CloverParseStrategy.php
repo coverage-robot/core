@@ -10,7 +10,7 @@ use App\Model\ProjectCoverage;
 use App\Strategy\ParseStrategyInterface;
 use XMLReader;
 
-abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
+class CloverParseStrategy implements ParseStrategyInterface
 {
     private const PROJECT = 'project';
     private const FILE = 'file';
@@ -52,7 +52,17 @@ abstract class AbstractCloverParseStrategy implements ParseStrategyInterface
         return $project;
     }
 
-    abstract protected function buildXmlReader(string $content): XMLReader;
+    protected function buildXmlReader(string $content): XMLReader
+    {
+        $reader = XMLReader::XML($content);
+        $reader->setSchema(__DIR__ . '/schema.xsd');
+
+        if (!($reader instanceof XMLReader)) {
+            throw new ParseException("Unable to build XML reader.");
+        }
+
+        return $reader;
+    }
 
     private function handleNode(ProjectCoverage $coverage, XMLReader $reader): ProjectCoverage
     {

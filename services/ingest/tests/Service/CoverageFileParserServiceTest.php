@@ -4,14 +4,14 @@ namespace App\Tests\Service;
 
 use App\Model\ProjectCoverage;
 use App\Service\CoverageFileParserService;
-use App\Strategy\Clover\PhpCloverParseStrategy;
+use App\Strategy\Clover\CloverParseStrategy;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CoverageFileParserServiceTest extends KernelTestCase
 {
     #[DataProvider('coverageFilePathDataProvider')]
-    public function testParse(string $path, string $expectedStrategy)
+    public function testParsingSupportedFiles(string $path, string $expectedStrategy)
     {
         $container = self::getContainer();
         $coverageFile = file_get_contents($path);
@@ -41,11 +41,15 @@ class CoverageFileParserServiceTest extends KernelTestCase
         return [
             "Clover XML file (PHP variant)" => [
                 __DIR__ . "/../Clover/simple-php-coverage.xml",
-                PhpCloverParseStrategy::class
+                CloverParseStrategy::class
             ],
-            "Clover XML file (PHP variant) 2" => [
+            "Clover XML file (Complex PHP variant)" => [
                 __DIR__ . "/../Clover/complex-php-coverage.xml",
-                PhpCloverParseStrategy::class
+                CloverParseStrategy::class
+            ],
+            "Clover XML file (Complex Agnostic variant)" => [
+                __DIR__ . "/../Clover/complex-jest-coverage.xml",
+                CloverParseStrategy::class
             ]
         ];
     }

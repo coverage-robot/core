@@ -8,7 +8,7 @@ use JsonSerializable;
 
 class ProjectCoverage implements JsonSerializable
 {
-    private DateTimeImmutable $generatedAt;
+    private ?DateTimeImmutable $generatedAt = null;
 
     /**
      * @var FileCoverage[]
@@ -27,7 +27,7 @@ class ProjectCoverage implements JsonSerializable
         }
     }
 
-    public function getGeneratedAt(): DateTimeImmutable
+    public function getGeneratedAt(): ?DateTimeImmutable
     {
         return $this->generatedAt;
     }
@@ -35,7 +35,7 @@ class ProjectCoverage implements JsonSerializable
     /**
      * @throws Exception
      */
-    public function setGeneratedAt(int|DateTimeImmutable $generatedAt): void
+    public function setGeneratedAt(int|DateTimeImmutable|null $generatedAt): void
     {
         if (gettype($generatedAt) === 'integer') {
             $this->generatedAt = new DateTimeImmutable();

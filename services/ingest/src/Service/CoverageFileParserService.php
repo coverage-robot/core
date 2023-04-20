@@ -3,13 +3,11 @@
 namespace App\Service;
 
 use App\Model\ProjectCoverage;
-use App\Strategy\Clover\AbstractCloverParseStrategy;
-use App\Strategy\Clover\AgnosticCloverParseStrategy;
-use App\Strategy\Clover\PhpCloverParseStrategy;
+use App\Strategy\Clover\CloverParseStrategy;
+use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class CoverageFileParserService implements ServiceSubscriberInterface
@@ -41,8 +39,8 @@ class CoverageFileParserService implements ServiceSubscriberInterface
     public static function getSubscribedServices(): array
     {
         return [
-            PhpCloverParseStrategy::class,
-            AgnosticCloverParseStrategy::class
+            CloverParseStrategy::class,
+            LcovParseStrategy::class
         ];
     }
 }

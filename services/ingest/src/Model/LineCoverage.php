@@ -7,7 +7,7 @@ use App\Enum\LineTypeEnum;
 class LineCoverage implements \JsonSerializable
 {
     /**
-     * @param LineTypeEnum $type
+     * @param ?LineTypeEnum $type
      * @param int $lineNumber
      * @param string|null $name
      * @param int $lineHits
@@ -15,7 +15,7 @@ class LineCoverage implements \JsonSerializable
      * @param int $crapIndex
      */
     public function __construct(
-        private readonly LineTypeEnum $type,
+        private readonly ?LineTypeEnum $type,
         private readonly int $lineNumber,
         private readonly ?string $name = null,
         private readonly int $lineHits = 0,
@@ -24,7 +24,7 @@ class LineCoverage implements \JsonSerializable
     ) {
     }
 
-    public function getType(): LineTypeEnum
+    public function getType(): ?LineTypeEnum
     {
         return $this->type;
     }

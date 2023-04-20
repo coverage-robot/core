@@ -11,9 +11,8 @@
             </xs:annotation>
             <xs:sequence>
                 <xs:element ref="project"/>
-                <xs:element ref="testproject"/>
             </xs:sequence>
-            <xs:attribute name="clover" use="required" type="xs:NMTOKEN"/>
+            <xs:attribute name="clover" type="xs:NMTOKEN"/>
             <xs:attribute name="generated" use="required" type="xs:integer"/>
         </xs:complexType>
     </xs:element>
@@ -27,25 +26,11 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="metrics" type="projectMetrics"/>
-                <xs:element maxOccurs="unbounded" ref="package"/>
-            </xs:sequence>
-            <xs:attribute name="name"/>
-            <xs:attribute name="timestamp" use="required" type="xs:integer"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="testproject">
-        <xs:annotation>
-            <xs:documentation>
-                Project metrics relating to test source.
-                @name - project name (optional)
-                @timestamp - seconds since UTC
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="metrics" type="projectMetrics"/>
-                <xs:element maxOccurs="unbounded" ref="package"/>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="metrics" type="projectMetrics"/>
+                    <xs:element ref="package"/>
+                    <xs:element ref="file"/>
+                </xs:choice>
             </xs:sequence>
             <xs:attribute name="name"/>
             <xs:attribute name="timestamp" use="required" type="xs:integer"/>
@@ -60,8 +45,10 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="metrics" type="packageMetrics"/>
-                <xs:element maxOccurs="unbounded" ref="file"/>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element maxOccurs="unbounded" ref="file"/>
+                    <xs:element name="metrics" type="packageMetrics"/>
+                </xs:choice>
             </xs:sequence>
             <xs:attribute name="name" use="required" type="xs:NCName"/>
         </xs:complexType>
@@ -76,13 +63,14 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="metrics" type="fileMetrics"/>
-                <xs:element maxOccurs="unbounded" ref="class"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded"
-                            ref="line"/>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element maxOccurs="unbounded" ref="class"/>
+                    <xs:element maxOccurs="unbounded" ref="line"/>
+                    <xs:element name="metrics" type="fileMetrics"/>
+                </xs:choice>
             </xs:sequence>
-            <xs:attribute name="name" use="required" type="xs:NCName"/>
-            <xs:attribute name="path" use="required"/>
+            <xs:attribute name="name" use="required" />
+            <xs:attribute name="path" />
         </xs:complexType>
     </xs:element>
     <xs:element name="class">
@@ -94,17 +82,10 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="metrics" type="classMetrics"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="metrics" type="classMetrics"/>
             </xs:sequence>
-            <xs:attribute name="name" use="required">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <!-- class name have letters, digits (but not as first character), dollars and underscores -->
-                        <!-- extra: Clover names inner classes as "Outer.Inner" for java and "Outer$Inner" for groovy -->
-                        <xs:pattern value="[\p{L}$_][\p{L}\p{Nd}$_.]+"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
+            <xs:attribute name="name" use="required" type="xs:string" />
+            <xs:attribute name="namespace" type="xs:string" />
         </xs:complexType>
     </xs:element>
     <xs:element name="line">
@@ -124,6 +105,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:complexType>
+            <xs:attribute type="xs:string" name="name"/>
             <xs:attribute name="num" use="required" type="xs:integer"/>
             <xs:attribute name="type" use="required" type="construct"/>
             <xs:attribute name="complexity" type="xs:integer"/>
@@ -134,6 +116,7 @@
             <xs:attribute name="testduration" type="xs:decimal"/>
             <xs:attribute name="testsuccess" type="xs:boolean"/>
             <xs:attribute name="visibility" type="visibility"/>
+            <xs:attribute type="xs:float" name="crap" />
         </xs:complexType>
     </xs:element>
 
@@ -156,9 +139,9 @@
                 @testruns - the total number of test methods run
             </xs:documentation>
         </xs:annotation>
-        <xs:attribute name="complexity" use="required" type="xs:integer"/>
-        <xs:attribute name="elements" use="required" type="xs:integer"/>
-        <xs:attribute name="coveredelements" use="required" type="xs:integer"/>
+        <xs:attribute name="complexity" type="xs:integer"/>
+        <xs:attribute name="elements" type="xs:integer"/>
+        <xs:attribute name="coveredelements" type="xs:integer"/>
         <xs:attribute name="conditionals" use="required" type="xs:integer"/>
         <xs:attribute name="coveredconditionals" use="required"
                       type="xs:integer"/>
@@ -216,7 +199,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
     <xs:simpleType name="construct">
         <xs:restriction base="xs:string">
             <xs:enumeration value="method"/>
@@ -224,7 +206,6 @@
             <xs:enumeration value="cond"/>
         </xs:restriction>
     </xs:simpleType>
-
     <xs:simpleType name="visibility">
         <xs:restriction base="xs:string">
             <xs:enumeration value="private"/>

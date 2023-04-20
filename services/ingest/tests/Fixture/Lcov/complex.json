@@ -1,0 +1,6217 @@
+{
+    "generatedAt": null,
+    "files": [
+        {
+            "fileName": "src\\App.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 52,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 57,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 59,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 60,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 61,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 63,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\config\\constants.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\config\\global.d.ts",
+            "lines": []
+        },
+        {
+            "fileName": "src\\config\\graphql.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 160,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 161,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 162,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\config\\routes.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\config\\storyblok.d.ts",
+            "lines": []
+        },
+        {
+            "fileName": "src\\features\\about\\AboutPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\ContactSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\HeadingSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\LiveStatsSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\MapSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\Tile\\ErrorCountTile.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\Tile\\LastReleaseTile.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\about\\components\\Tile\\ReleasesCountTile.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\articles\\library\\ArticlesPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\articles\\library\\components\\ArticlesSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 35,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\articles\\library\\components\\HeadingSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\articles\\viewer\\ArticlePage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 51,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 53,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 56,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 62,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 86,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 124,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 125,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 163,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 165,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\error\\GenericErrorPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\error\\NotFoundPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\HomePage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\ArticlesSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\ContactSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\CoverSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\ExperienceSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\HeadingSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\home\\components\\SkillsSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\projects\\library\\ProjectsPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\projects\\library\\components\\HeadingSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\projects\\library\\components\\ProjectsSection.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 35,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\features\\projects\\viewer\\ProjectPage.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 47,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 49,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 51,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 56,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 79,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 109,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 110,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 148,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 150,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Author\\Author.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Author\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Button\\Button.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 19,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 19,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 19,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 40,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Button\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 22,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Card\\Card.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 38,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 38,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 38,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 42,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Card\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 53,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ContactForm\\ContactForm.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 42,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 44,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 51,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 52,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 56,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 57,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 60,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 80,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 91,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Figure\\Figure.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Footer\\Footer.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Footer\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Header\\Header.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 34,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 47,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 51,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 58,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 59,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 61,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 74,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 75,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 77,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Header\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Input\\Input.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Input\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 11,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Label\\Label.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Label\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 9,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Loader\\Loader.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Loader\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\PostCard\\PostCard.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 58,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 59,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 64,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 66,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\PostCard\\PostCardContainer.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 35,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 46,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 52,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 54,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ProgressBar\\ProgressBar.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ProgressBar\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\RecentArticlesContainer\\RecentArticlesContainer.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 34,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ScrollReset\\ScrollReset.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ScrollReset\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Section\\Container.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Section\\Heading.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 26,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 26,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 26,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Section\\Section.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 36,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 37,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 39,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Section\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 53,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\SkillsDescriptor\\SkillsDescriptor.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 34,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 35,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 40,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 41,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 42,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 51,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 59,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 68,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 69,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 70,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 86,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 88,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\SkillsDescriptor\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\SocialIcons\\ShareIcons.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\SocialIcons\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\StatTile\\StatTile.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 46,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 47,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 62,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\StatTile\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 14,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\StoryblokContent\\StoryblokContent.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\StoryblokContent\\index.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Template\\DefaultTemplate.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Template\\DynamicTemplate.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Template\\MetaTags.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Template\\RightSidebarTemplate.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Template\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Textarea\\Textarea.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 24,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Textarea\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Timeline\\Marker.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 24,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 89,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Timeline\\Timeline.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Timeline\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Tooltip\\Tooltip.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 5,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\Tooltip\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ValidationError\\ValidationError.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 15,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\components\\ValidationError\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 19,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\hooks\\useMediaQuery.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 35,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 40,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\fomatNaturalLanguageDate\\formatNaturalLanguageDate.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 16,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 16,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 10,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 24,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 12,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 36,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\fomatNaturalLanguageDate\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\getGlobalNavigation\\getGlobalNavigation.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 28,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 28,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 14,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 14,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 44,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 49,
+                    "count": 28,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 50,
+                    "count": 14,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 64,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\getGlobalNavigation\\index.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\identity\\generateIdentity.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\identity\\getIdentity.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\identity\\index.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\renderStoryblokContent\\index.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\renderStoryblokContent\\renderStoryblokContent.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 8,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 11,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 34,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 24,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 34,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 14,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 19,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 39,
+                    "count": 20,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 40,
+                    "count": 20,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 41,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 42,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 45,
+                    "count": 13,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 47,
+                    "count": 13,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 49,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 52,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 55,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\renderStoryblokContent\\renderers\\blocks.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 15,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 38,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 41,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 42,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 44,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 54,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 55,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 56,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 59,
+                    "count": 7,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\renderStoryblokContent\\renderers\\marks.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 28,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 29,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 31,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 32,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 34,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 36,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 40,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 43,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 44,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 45,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 48,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\renderStoryblokContent\\renderers\\richtext.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 13,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 14,
+                    "count": 2,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 19,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 21,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 22,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 24,
+                    "count": 1,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 25,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 26,
+                    "count": 6,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 27,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 30,
+                    "count": 4,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 33,
+                    "count": 13,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 34,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 37,
+                    "count": 13,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\withHandledApiErrors\\ApiErrorHandler.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 7,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 9,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\withHandledApiErrors\\errors.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 10,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\withHandledApiErrors\\index.tsx",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 8,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 2,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 3,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        },
+        {
+            "fileName": "src\\shared\\utilities\\withHandledApiErrors\\withHandledApiErrors.ts",
+            "lines": [
+                {
+                    "type": null,
+                    "lineNumber": 1,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 4,
+                    "count": 3,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 5,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 6,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 12,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 16,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 17,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 18,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 20,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                },
+                {
+                    "type": null,
+                    "lineNumber": 23,
+                    "count": 0,
+                    "complexity": 0,
+                    "crap": 0
+                }
+            ]
+        }
+    ]
+}
