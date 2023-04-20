@@ -5,6 +5,7 @@ namespace App\Tests\Service;
 use App\Model\ProjectCoverage;
 use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
+use App\Strategy\Lcov\LcovParseStrategy;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -39,18 +40,18 @@ class CoverageFileParserServiceTest extends KernelTestCase
     public static function coverageFilePathDataProvider(): array
     {
         return [
-            "Clover XML file (PHP variant)" => [
-                __DIR__ . "/../Clover/simple-php-coverage.xml",
-                CloverParseStrategy::class
-            ],
-            "Clover XML file (Complex PHP variant)" => [
+            "Clover (PHP variant)" => [
                 __DIR__ . "/../Clover/complex-php-coverage.xml",
                 CloverParseStrategy::class
             ],
-            "Clover XML file (Complex Agnostic variant)" => [
+            "Clover (Jest variant)" => [
                 __DIR__ . "/../Clover/complex-jest-coverage.xml",
                 CloverParseStrategy::class
-            ]
+            ],
+            "Lcov" => [
+                __DIR__ . "/../Lcov/complex.xml",
+                LcovParseStrategy::class
+            ],
         ];
     }
 }

@@ -15,12 +15,12 @@ class LcovParseStrategy implements ParseStrategyInterface
 
     private const COVERAGE_DATA_VALIDATION = [
         'TN'   => '.+$',
-        'SF'   => '.+$',
+        self::FILE   => '.+$',
         'FN'   => '.+$',
         'FNDA' => '\d+,\d+$',
         'FNF'  => '\d+$',
         'FNH'  => '\d+$',
-        'DA'   => '\d+,\d+$',
+        self::LINE   => '\d+,\d+$',
         'LH'   => '\d+$',
         'LF'   => '\d+$',
         'BRDA' => '\d+,\d+,\d+$',
@@ -111,7 +111,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     public function getLineValidation(string $type): string
     {
         if (!array_key_exists($type, self::COVERAGE_DATA_VALIDATION)) {
-            throw new ParseException("Line type is not supported in Lcov parser.");
+            throw ParseException::notSupportedException();
         }
 
         return "/{${self::COVERAGE_DATA_VALIDATION[$type]}}/";
