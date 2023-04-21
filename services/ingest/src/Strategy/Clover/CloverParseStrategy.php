@@ -73,7 +73,7 @@ class CloverParseStrategy implements ParseStrategyInterface
             case self::FILE:
                 $coverage->addFileCoverage(
                     new FileCoverage(
-                        $reader->getAttribute('name')
+                        $reader->getAttribute('path') ?? $reader->getAttribute('name')
                     )
                 );
                 break;

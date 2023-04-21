@@ -6,7 +6,7 @@
     },
     "files": [
         {
-            "fileName": "App.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\App.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -186,11 +186,11 @@
             ]
         },
         {
-            "fileName": "App.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\App.tsx",
             "lines": []
         },
         {
-            "fileName": "constants.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\constants.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -251,19 +251,19 @@
             ]
         },
         {
-            "fileName": "constants.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\constants.ts",
             "lines": []
         },
         {
-            "fileName": "global.d.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\global.d.ts",
             "lines": []
         },
         {
-            "fileName": "global.d.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\global.d.ts",
             "lines": []
         },
         {
-            "fileName": "graphql.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\graphql.ts",
             "lines": [
                 {
                     "type": "CONDITION",
@@ -289,11 +289,11 @@
             ]
         },
         {
-            "fileName": "graphql.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\graphql.ts",
             "lines": []
         },
         {
-            "fileName": "routes.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\routes.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -361,19 +361,19 @@
             ]
         },
         {
-            "fileName": "routes.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\routes.tsx",
             "lines": []
         },
         {
-            "fileName": "storyblok.d.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\storyblok.d.ts",
             "lines": []
         },
         {
-            "fileName": "storyblok.d.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\storyblok.d.ts",
             "lines": []
         },
         {
-            "fileName": "AboutPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\AboutPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -441,11 +441,11 @@
             ]
         },
         {
-            "fileName": "AboutPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\AboutPage.tsx",
             "lines": []
         },
         {
-            "fileName": "ContactSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\ContactSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -499,11 +499,11 @@
             ]
         },
         {
-            "fileName": "ContactSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\ContactSection.tsx",
             "lines": []
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\HeadingSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -543,11 +543,11 @@
             ]
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\HeadingSection.tsx",
             "lines": []
         },
         {
-            "fileName": "LiveStatsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\LiveStatsSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -608,11 +608,11 @@
             ]
         },
         {
-            "fileName": "LiveStatsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\LiveStatsSection.tsx",
             "lines": []
         },
         {
-            "fileName": "MapSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\MapSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -687,11 +687,11 @@
             ]
         },
         {
-            "fileName": "MapSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\MapSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ErrorCountTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ErrorCountTile.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -773,11 +773,11 @@
             ]
         },
         {
-            "fileName": "ErrorCountTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ErrorCountTile.tsx",
             "lines": []
         },
         {
-            "fileName": "LastReleaseTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\LastReleaseTile.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -880,11 +880,11 @@
             ]
         },
         {
-            "fileName": "LastReleaseTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\LastReleaseTile.tsx",
             "lines": []
         },
         {
-            "fileName": "ReleasesCountTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ReleasesCountTile.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -966,11 +966,11 @@
             ]
         },
         {
-            "fileName": "ReleasesCountTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ReleasesCountTile.tsx",
             "lines": []
         },
         {
-            "fileName": "ArticlesPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\ArticlesPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1024,11 +1024,11 @@
             ]
         },
         {
-            "fileName": "ArticlesPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\ArticlesPage.tsx",
             "lines": []
         },
         {
-            "fileName": "ArticlesSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\ArticlesSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1117,11 +1117,11 @@
             ]
         },
         {
-            "fileName": "ArticlesSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\ArticlesSection.tsx",
             "lines": []
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\HeadingSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1161,11 +1161,11 @@
             ]
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\HeadingSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ArticlePage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\viewer\\ArticlePage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1373,11 +1373,11 @@
             ]
         },
         {
-            "fileName": "ArticlePage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\viewer\\ArticlePage.tsx",
             "lines": []
         },
         {
-            "fileName": "GenericErrorPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\GenericErrorPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1417,11 +1417,11 @@
             ]
         },
         {
-            "fileName": "GenericErrorPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\GenericErrorPage.tsx",
             "lines": []
         },
         {
-            "fileName": "NotFoundPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\NotFoundPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1461,11 +1461,11 @@
             ]
         },
         {
-            "fileName": "NotFoundPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\NotFoundPage.tsx",
             "lines": []
         },
         {
-            "fileName": "HomePage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\HomePage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1561,11 +1561,11 @@
             ]
         },
         {
-            "fileName": "HomePage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\HomePage.tsx",
             "lines": []
         },
         {
-            "fileName": "ArticlesSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ArticlesSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1619,11 +1619,11 @@
             ]
         },
         {
-            "fileName": "ArticlesSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ArticlesSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ContactSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ContactSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1684,11 +1684,11 @@
             ]
         },
         {
-            "fileName": "ContactSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ContactSection.tsx",
             "lines": []
         },
         {
-            "fileName": "CoverSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\CoverSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1742,11 +1742,11 @@
             ]
         },
         {
-            "fileName": "CoverSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\CoverSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ExperienceSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ExperienceSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1793,11 +1793,11 @@
             ]
         },
         {
-            "fileName": "ExperienceSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ExperienceSection.tsx",
             "lines": []
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\HeadingSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1851,11 +1851,11 @@
             ]
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\HeadingSection.tsx",
             "lines": []
         },
         {
-            "fileName": "SkillsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\SkillsSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1937,11 +1937,11 @@
             ]
         },
         {
-            "fileName": "SkillsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\SkillsSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ProjectsPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\ProjectsPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -1995,11 +1995,11 @@
             ]
         },
         {
-            "fileName": "ProjectsPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\ProjectsPage.tsx",
             "lines": []
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\HeadingSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2039,11 +2039,11 @@
             ]
         },
         {
-            "fileName": "HeadingSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\HeadingSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ProjectsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\ProjectsSection.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2132,11 +2132,11 @@
             ]
         },
         {
-            "fileName": "ProjectsSection.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\ProjectsSection.tsx",
             "lines": []
         },
         {
-            "fileName": "ProjectPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\viewer\\ProjectPage.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2337,11 +2337,11 @@
             ]
         },
         {
-            "fileName": "ProjectPage.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\viewer\\ProjectPage.tsx",
             "lines": []
         },
         {
-            "fileName": "Author.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\Author.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2409,11 +2409,11 @@
             ]
         },
         {
-            "fileName": "Author.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\Author.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2425,11 +2425,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Button.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\Button.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2490,11 +2490,11 @@
             ]
         },
         {
-            "fileName": "Button.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\Button.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2506,11 +2506,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Card.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\Card.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2571,11 +2571,11 @@
             ]
         },
         {
-            "fileName": "Card.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\Card.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2587,11 +2587,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\index.ts",
             "lines": []
         },
         {
-            "fileName": "ContactForm.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ContactForm\\ContactForm.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2778,11 +2778,11 @@
             ]
         },
         {
-            "fileName": "ContactForm.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ContactForm\\ContactForm.tsx",
             "lines": []
         },
         {
-            "fileName": "Figure.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Figure\\Figure.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2829,11 +2829,11 @@
             ]
         },
         {
-            "fileName": "Figure.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Figure\\Figure.tsx",
             "lines": []
         },
         {
-            "fileName": "Footer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\Footer.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2894,11 +2894,11 @@
             ]
         },
         {
-            "fileName": "Footer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\Footer.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -2910,11 +2910,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Header.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\Header.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3080,11 +3080,11 @@
             ]
         },
         {
-            "fileName": "Header.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\Header.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3096,11 +3096,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Input.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\Input.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3154,11 +3154,11 @@
             ]
         },
         {
-            "fileName": "Input.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\Input.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3170,11 +3170,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Label.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\Label.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3228,11 +3228,11 @@
             ]
         },
         {
-            "fileName": "Label.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\Label.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3244,11 +3244,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Loader.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\Loader.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3281,11 +3281,11 @@
             ]
         },
         {
-            "fileName": "Loader.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\Loader.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3297,11 +3297,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\index.ts",
             "lines": []
         },
         {
-            "fileName": "PostCard.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCard.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3411,11 +3411,11 @@
             ]
         },
         {
-            "fileName": "PostCard.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCard.tsx",
             "lines": []
         },
         {
-            "fileName": "PostCardContainer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCardContainer.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3497,11 +3497,11 @@
             ]
         },
         {
-            "fileName": "PostCardContainer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCardContainer.tsx",
             "lines": []
         },
         {
-            "fileName": "ProgressBar.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\ProgressBar.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3632,11 +3632,11 @@
             ]
         },
         {
-            "fileName": "ProgressBar.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\ProgressBar.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3648,11 +3648,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\index.ts",
             "lines": []
         },
         {
-            "fileName": "RecentArticlesContainer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\RecentArticlesContainer\\RecentArticlesContainer.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3755,11 +3755,11 @@
             ]
         },
         {
-            "fileName": "RecentArticlesContainer.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\RecentArticlesContainer\\RecentArticlesContainer.tsx",
             "lines": []
         },
         {
-            "fileName": "ScrollReset.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\ScrollReset.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3820,11 +3820,11 @@
             ]
         },
         {
-            "fileName": "ScrollReset.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\ScrollReset.ts",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3836,11 +3836,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Container.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Container.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3894,11 +3894,11 @@
             ]
         },
         {
-            "fileName": "Container.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Container.tsx",
             "lines": []
         },
         {
-            "fileName": "Heading.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Heading.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -3952,11 +3952,11 @@
             ]
         },
         {
-            "fileName": "Heading.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Heading.tsx",
             "lines": []
         },
         {
-            "fileName": "Section.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Section.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4045,11 +4045,11 @@
             ]
         },
         {
-            "fileName": "Section.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Section.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4061,11 +4061,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\index.ts",
             "lines": []
         },
         {
-            "fileName": "SkillsDescriptor.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\SkillsDescriptor.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4252,11 +4252,11 @@
             ]
         },
         {
-            "fileName": "SkillsDescriptor.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\SkillsDescriptor.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4268,11 +4268,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\index.ts",
             "lines": []
         },
         {
-            "fileName": "ShareIcons.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\ShareIcons.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4326,11 +4326,11 @@
             ]
         },
         {
-            "fileName": "ShareIcons.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\ShareIcons.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4349,11 +4349,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\index.ts",
             "lines": []
         },
         {
-            "fileName": "StatTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\StatTile.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4456,11 +4456,11 @@
             ]
         },
         {
-            "fileName": "StatTile.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\StatTile.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4472,11 +4472,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\index.ts",
             "lines": []
         },
         {
-            "fileName": "StoryblokContent.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\StoryblokContent.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4502,11 +4502,11 @@
             ]
         },
         {
-            "fileName": "StoryblokContent.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\StoryblokContent.tsx",
             "lines": []
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4518,11 +4518,11 @@
             ]
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\index.tsx",
             "lines": []
         },
         {
-            "fileName": "DefaultTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DefaultTemplate.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4569,11 +4569,11 @@
             ]
         },
         {
-            "fileName": "DefaultTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DefaultTemplate.tsx",
             "lines": []
         },
         {
-            "fileName": "DynamicTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DynamicTemplate.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4641,11 +4641,11 @@
             ]
         },
         {
-            "fileName": "DynamicTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DynamicTemplate.tsx",
             "lines": []
         },
         {
-            "fileName": "MetaTags.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\MetaTags.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4699,11 +4699,11 @@
             ]
         },
         {
-            "fileName": "MetaTags.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\MetaTags.tsx",
             "lines": []
         },
         {
-            "fileName": "RightSidebarTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\RightSidebarTemplate.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4750,11 +4750,11 @@
             ]
         },
         {
-            "fileName": "RightSidebarTemplate.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\RightSidebarTemplate.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4787,11 +4787,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Textarea.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\Textarea.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4859,11 +4859,11 @@
             ]
         },
         {
-            "fileName": "Textarea.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\Textarea.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4875,11 +4875,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Marker.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Marker.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4975,11 +4975,11 @@
             ]
         },
         {
-            "fileName": "Marker.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Marker.tsx",
             "lines": []
         },
         {
-            "fileName": "Timeline.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Timeline.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5040,11 +5040,11 @@
             ]
         },
         {
-            "fileName": "Timeline.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Timeline.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5056,11 +5056,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\index.ts",
             "lines": []
         },
         {
-            "fileName": "Tooltip.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\Tooltip.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5107,11 +5107,11 @@
             ]
         },
         {
-            "fileName": "Tooltip.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\Tooltip.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5123,11 +5123,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\index.ts",
             "lines": []
         },
         {
-            "fileName": "ValidationError.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\ValidationError.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5160,11 +5160,11 @@
             ]
         },
         {
-            "fileName": "ValidationError.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\ValidationError.tsx",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5176,11 +5176,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\index.ts",
             "lines": []
         },
         {
-            "fileName": "useMediaQuery.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\hooks\\useMediaQuery.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5318,11 +5318,11 @@
             ]
         },
         {
-            "fileName": "useMediaQuery.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\hooks\\useMediaQuery.ts",
             "lines": []
         },
         {
-            "fileName": "formatNaturalLanguageDate.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\formatNaturalLanguageDate.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5502,11 +5502,11 @@
             ]
         },
         {
-            "fileName": "formatNaturalLanguageDate.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\formatNaturalLanguageDate.ts",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5525,11 +5525,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\index.ts",
             "lines": []
         },
         {
-            "fileName": "getGlobalNavigation.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\getGlobalNavigation.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5646,11 +5646,11 @@
             ]
         },
         {
-            "fileName": "getGlobalNavigation.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\getGlobalNavigation.tsx",
             "lines": []
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5669,11 +5669,11 @@
             ]
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\index.tsx",
             "lines": []
         },
         {
-            "fileName": "generateIdentity.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\generateIdentity.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5734,11 +5734,11 @@
             ]
         },
         {
-            "fileName": "generateIdentity.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\generateIdentity.ts",
             "lines": []
         },
         {
-            "fileName": "getIdentity.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\getIdentity.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5764,11 +5764,11 @@
             ]
         },
         {
-            "fileName": "getIdentity.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\getIdentity.ts",
             "lines": []
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5794,11 +5794,11 @@
             ]
         },
         {
-            "fileName": "index.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\index.ts",
             "lines": []
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -5817,11 +5817,11 @@
             ]
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\index.tsx",
             "lines": []
         },
         {
-            "fileName": "renderStoryblokContent.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderStoryblokContent.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6015,11 +6015,11 @@
             ]
         },
         {
-            "fileName": "renderStoryblokContent.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderStoryblokContent.tsx",
             "lines": []
         },
         {
-            "fileName": "blocks.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\blocks.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6150,11 +6150,11 @@
             ]
         },
         {
-            "fileName": "blocks.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\blocks.tsx",
             "lines": []
         },
         {
-            "fileName": "marks.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\marks.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6257,11 +6257,11 @@
             ]
         },
         {
-            "fileName": "marks.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\marks.tsx",
             "lines": []
         },
         {
-            "fileName": "richtext.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\richtext.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6406,11 +6406,11 @@
             ]
         },
         {
-            "fileName": "richtext.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\richtext.tsx",
             "lines": []
         },
         {
-            "fileName": "ApiErrorHandler.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\ApiErrorHandler.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6464,11 +6464,11 @@
             ]
         },
         {
-            "fileName": "ApiErrorHandler.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\ApiErrorHandler.tsx",
             "lines": []
         },
         {
-            "fileName": "errors.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\errors.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6501,11 +6501,11 @@
             ]
         },
         {
-            "fileName": "errors.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\errors.ts",
             "lines": []
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6531,11 +6531,11 @@
             ]
         },
         {
-            "fileName": "index.tsx",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\index.tsx",
             "lines": []
         },
         {
-            "fileName": "withHandledApiErrors.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\withHandledApiErrors.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -6610,7 +6610,7 @@
             ]
         },
         {
-            "fileName": "withHandledApiErrors.ts",
+            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\withHandledApiErrors.ts",
             "lines": []
         }
     ]
