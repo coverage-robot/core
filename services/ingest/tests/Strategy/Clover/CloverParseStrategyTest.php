@@ -4,9 +4,9 @@ namespace App\Tests\Strategy\Clover;
 
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
-use App\Tests\Strategy\AbstractParseStrategyTest;
+use App\Tests\Strategy\AbstractParseStrategyTestCase;
 
-class CloverParseStrategyTest extends AbstractParseStrategyTest
+class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 {
     public static function coverageFilesDataProvider(): array
     {

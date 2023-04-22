@@ -47,15 +47,15 @@ class CoverageFileParserServiceTest extends TestCase
     {
         return [
             "Clover (PHP variant)" => [
-                __DIR__ . "/../Clover/complex-php-coverage.xml",
+                __DIR__ . "/../Fixture/Clover/complex-php.xml",
                 self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
             ],
             "Clover (Jest variant)" => [
-                __DIR__ . "/../Clover/complex-jest-coverage.xml",
+                __DIR__ . "/../Fixture/Clover/complex-jest.xml",
                 self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
             ],
             "Lcov" => [
-                __DIR__ . "/../Lcov/complex.xml",
+                __DIR__ . "/../Fixture/Lcov/complex.info",
                 self::STRATEGIES[CoverageFormatEnum::LCOV->name]
             ],
         ];

@@ -7,7 +7,7 @@ use App\Strategy\ParseStrategyInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractParseStrategyTest extends TestCase
+abstract class AbstractParseStrategyTestCase extends TestCase
 {
     #[DataProvider('coverageFilesDataProvider')]
     public function testSupports(string $contents, bool $expectedSupport): void

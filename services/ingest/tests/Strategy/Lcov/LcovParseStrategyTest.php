@@ -4,9 +4,9 @@ namespace App\Tests\Strategy\Lcov;
 
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
-use App\Tests\Strategy\AbstractParseStrategyTest;
+use App\Tests\Strategy\AbstractParseStrategyTestCase;
 
-class LcovParseStrategyTest extends AbstractParseStrategyTest
+class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 {
     public static function coverageFilesDataProvider(): array
     {
