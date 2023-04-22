@@ -119,19 +119,7 @@
             ]
         },
         {
-            "fileName": "mock-file",
-            "lines": []
-        },
-        {
             "fileName": "untestable-file",
-            "lines": []
-        },
-        {
-            "fileName": "untestable-file",
-            "lines": []
-        },
-        {
-            "fileName": "untestable-class-file",
             "lines": []
         },
         {

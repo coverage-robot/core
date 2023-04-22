@@ -47,6 +47,13 @@ class CloverParseStrategy implements ParseStrategyInterface
         $project = new ProjectCoverage(CoverageFormatEnum::CLOVER);
 
         while ($reader->read()) {
+            if ($reader->nodeType == XMLReader::END_ELEMENT) {
+                // We don't want to parse if it's a closing tag as the XML reader will
+                // let the parser use it as if it's the opening element, and that will
+                // cause duplicate files to be tracked.
+                continue;
+            }
+
             $project = $this->handleNode($project, $reader);
         }
 

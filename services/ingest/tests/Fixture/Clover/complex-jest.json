@@ -186,10 +186,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\App.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\constants.ts",
             "lines": [
                 {
@@ -251,14 +247,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\constants.ts",
-            "lines": []
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\global.d.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\global.d.ts",
             "lines": []
         },
@@ -287,10 +275,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\graphql.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\routes.tsx",
@@ -359,14 +343,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\routes.tsx",
-            "lines": []
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\storyblok.d.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\config\\storyblok.d.ts",
@@ -441,10 +417,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\AboutPage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\ContactSection.tsx",
             "lines": [
                 {
@@ -499,10 +471,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\ContactSection.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\HeadingSection.tsx",
             "lines": [
                 {
@@ -541,10 +509,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\HeadingSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\LiveStatsSection.tsx",
@@ -606,10 +570,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\LiveStatsSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\MapSection.tsx",
@@ -685,10 +645,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\MapSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ErrorCountTile.tsx",
@@ -771,10 +727,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ErrorCountTile.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\LastReleaseTile.tsx",
@@ -880,10 +832,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\LastReleaseTile.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ReleasesCountTile.tsx",
             "lines": [
                 {
@@ -966,10 +914,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\about\\components\\Tile\\ReleasesCountTile.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\ArticlesPage.tsx",
             "lines": [
                 {
@@ -1022,10 +966,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\ArticlesPage.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\ArticlesSection.tsx",
@@ -1117,10 +1057,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\ArticlesSection.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\HeadingSection.tsx",
             "lines": [
                 {
@@ -1159,10 +1095,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\library\\components\\HeadingSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\viewer\\ArticlePage.tsx",
@@ -1373,10 +1305,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\articles\\viewer\\ArticlePage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\GenericErrorPage.tsx",
             "lines": [
                 {
@@ -1417,10 +1345,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\GenericErrorPage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\NotFoundPage.tsx",
             "lines": [
                 {
@@ -1459,10 +1383,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\error\\NotFoundPage.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\HomePage.tsx",
@@ -1561,10 +1481,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\HomePage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ArticlesSection.tsx",
             "lines": [
                 {
@@ -1617,10 +1533,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ArticlesSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ContactSection.tsx",
@@ -1684,10 +1596,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ContactSection.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\CoverSection.tsx",
             "lines": [
                 {
@@ -1742,10 +1650,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\CoverSection.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ExperienceSection.tsx",
             "lines": [
                 {
@@ -1791,10 +1695,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\ExperienceSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\HeadingSection.tsx",
@@ -1849,10 +1749,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\HeadingSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\SkillsSection.tsx",
@@ -1937,10 +1833,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\home\\components\\SkillsSection.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\ProjectsPage.tsx",
             "lines": [
                 {
@@ -1995,10 +1887,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\ProjectsPage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\HeadingSection.tsx",
             "lines": [
                 {
@@ -2037,10 +1925,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\HeadingSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\ProjectsSection.tsx",
@@ -2130,10 +2014,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\library\\components\\ProjectsSection.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\viewer\\ProjectPage.tsx",
@@ -2337,10 +2217,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\features\\projects\\viewer\\ProjectPage.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\Author.tsx",
             "lines": [
                 {
@@ -2409,10 +2285,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\Author.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\index.ts",
             "lines": [
                 {
@@ -2423,10 +2295,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Author\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\Button.tsx",
@@ -2490,10 +2358,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\Button.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\index.ts",
             "lines": [
                 {
@@ -2504,10 +2368,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Button\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\Card.tsx",
@@ -2571,10 +2431,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\Card.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\index.ts",
             "lines": [
                 {
@@ -2585,10 +2441,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Card\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ContactForm\\ContactForm.tsx",
@@ -2778,10 +2630,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ContactForm\\ContactForm.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Figure\\Figure.tsx",
             "lines": [
                 {
@@ -2827,10 +2675,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Figure\\Figure.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\Footer.tsx",
@@ -2894,10 +2738,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\Footer.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\index.ts",
             "lines": [
                 {
@@ -2908,10 +2748,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Footer\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\Header.tsx",
@@ -3080,10 +2916,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\Header.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\index.ts",
             "lines": [
                 {
@@ -3094,10 +2926,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Header\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\Input.tsx",
@@ -3154,10 +2982,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\Input.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\index.ts",
             "lines": [
                 {
@@ -3168,10 +2992,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Input\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\Label.tsx",
@@ -3228,10 +3048,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\Label.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\index.ts",
             "lines": [
                 {
@@ -3242,10 +3058,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Label\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\Loader.tsx",
@@ -3281,10 +3093,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\Loader.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\index.ts",
             "lines": [
                 {
@@ -3295,10 +3103,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Loader\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCard.tsx",
@@ -3411,10 +3215,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCard.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCardContainer.tsx",
             "lines": [
                 {
@@ -3495,10 +3295,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\PostCard\\PostCardContainer.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\ProgressBar.tsx",
@@ -3632,10 +3428,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\ProgressBar.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\index.ts",
             "lines": [
                 {
@@ -3646,10 +3438,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ProgressBar\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\RecentArticlesContainer\\RecentArticlesContainer.tsx",
@@ -3755,10 +3543,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\RecentArticlesContainer\\RecentArticlesContainer.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\ScrollReset.ts",
             "lines": [
                 {
@@ -3820,10 +3604,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\ScrollReset.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\index.ts",
             "lines": [
                 {
@@ -3834,10 +3614,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ScrollReset\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Container.tsx",
@@ -3894,10 +3670,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Container.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Heading.tsx",
             "lines": [
                 {
@@ -3950,10 +3722,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Heading.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Section.tsx",
@@ -4045,10 +3813,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\Section.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\index.ts",
             "lines": [
                 {
@@ -4059,10 +3823,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Section\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\SkillsDescriptor.tsx",
@@ -4252,10 +4012,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\SkillsDescriptor.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\index.ts",
             "lines": [
                 {
@@ -4266,10 +4022,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SkillsDescriptor\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\ShareIcons.tsx",
@@ -4326,10 +4078,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\ShareIcons.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\index.ts",
             "lines": [
                 {
@@ -4347,10 +4095,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\SocialIcons\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\StatTile.tsx",
@@ -4456,10 +4200,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\StatTile.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\index.ts",
             "lines": [
                 {
@@ -4470,10 +4210,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StatTile\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\StoryblokContent.tsx",
@@ -4502,10 +4238,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\StoryblokContent.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\index.tsx",
             "lines": [
                 {
@@ -4516,10 +4248,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\StoryblokContent\\index.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DefaultTemplate.tsx",
@@ -4567,10 +4295,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DefaultTemplate.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DynamicTemplate.tsx",
@@ -4641,10 +4365,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\DynamicTemplate.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\MetaTags.tsx",
             "lines": [
                 {
@@ -4699,10 +4419,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\MetaTags.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\RightSidebarTemplate.tsx",
             "lines": [
                 {
@@ -4750,10 +4466,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\RightSidebarTemplate.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\index.ts",
             "lines": [
                 {
@@ -4785,10 +4497,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Template\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\Textarea.tsx",
@@ -4859,10 +4567,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\Textarea.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\index.ts",
             "lines": [
                 {
@@ -4873,10 +4577,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Textarea\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Marker.tsx",
@@ -4975,10 +4675,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Marker.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Timeline.tsx",
             "lines": [
                 {
@@ -5040,10 +4736,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\Timeline.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\index.ts",
             "lines": [
                 {
@@ -5054,10 +4746,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Timeline\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\Tooltip.tsx",
@@ -5107,10 +4795,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\Tooltip.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\index.ts",
             "lines": [
                 {
@@ -5121,10 +4805,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\Tooltip\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\ValidationError.tsx",
@@ -5160,10 +4840,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\ValidationError.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\index.ts",
             "lines": [
                 {
@@ -5174,10 +4850,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\components\\ValidationError\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\hooks\\useMediaQuery.ts",
@@ -5316,10 +4988,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\hooks\\useMediaQuery.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\formatNaturalLanguageDate.ts",
@@ -5502,10 +5170,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\formatNaturalLanguageDate.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\index.ts",
             "lines": [
                 {
@@ -5523,10 +5187,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\fomatNaturalLanguageDate\\index.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\getGlobalNavigation.tsx",
@@ -5646,10 +5306,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\getGlobalNavigation.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\index.tsx",
             "lines": [
                 {
@@ -5667,10 +5323,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\getGlobalNavigation\\index.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\generateIdentity.ts",
@@ -5734,10 +5386,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\generateIdentity.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\getIdentity.ts",
             "lines": [
                 {
@@ -5762,10 +5410,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\getIdentity.ts",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\index.ts",
@@ -5794,10 +5438,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\identity\\index.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\index.tsx",
             "lines": [
                 {
@@ -5815,10 +5455,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\index.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderStoryblokContent.tsx",
@@ -6015,10 +5651,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderStoryblokContent.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\blocks.tsx",
             "lines": [
                 {
@@ -6150,10 +5782,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\blocks.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\marks.tsx",
             "lines": [
                 {
@@ -6255,10 +5883,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\marks.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\richtext.tsx",
@@ -6406,10 +6030,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\renderStoryblokContent\\renderers\\richtext.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\ApiErrorHandler.tsx",
             "lines": [
                 {
@@ -6464,10 +6084,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\ApiErrorHandler.tsx",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\errors.ts",
             "lines": [
                 {
@@ -6501,10 +6117,6 @@
             ]
         },
         {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\errors.ts",
-            "lines": []
-        },
-        {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\index.tsx",
             "lines": [
                 {
@@ -6529,10 +6141,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\index.tsx",
-            "lines": []
         },
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\withHandledApiErrors.ts",
@@ -6608,10 +6216,6 @@
                     "crap": 0
                 }
             ]
-        },
-        {
-            "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\shared\\utilities\\withHandledApiErrors\\withHandledApiErrors.ts",
-            "lines": []
         }
     ]
 }
