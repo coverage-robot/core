@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractParseStrategyTest extends TestCase
 {
-    protected static function parseFixturesDataProvider(string $path, string $fileExtension): array
+    protected static function parseCoverageFixtures(string $path, string $fileExtension): array
     {
         return array_reduce(
             glob(sprintf("%s/*.%s", $path, $fileExtension)),

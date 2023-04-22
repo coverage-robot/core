@@ -11,14 +11,14 @@ use PHPUnit\Framework\TestCase;
 
 class LcovParseStrategyTest extends AbstractParseStrategyTest
 {
-    #[DataProvider('fixturesDataProvider')]
+    #[DataProvider('coverageFilesDataProvider')]
     public function testSupports(string $contents, bool $expectedSupport): void
     {
         $parser = new LcovParseStrategy();
         $this->assertEquals($expectedSupport, $parser->supports($contents));
     }
 
-    #[DataProvider('fixturesDataProvider')]
+    #[DataProvider('coverageFilesDataProvider')]
     public function testParse(string $contents, bool $expectedSupport, array $expectedCoverage): void
     {
         $parser = new LcovParseStrategy();
@@ -36,8 +36,8 @@ class LcovParseStrategyTest extends AbstractParseStrategyTest
         }
     }
 
-    public static function fixturesDataProvider(): array
+    public static function coverageFilesDataProvider(): array
     {
-        return parent::parseFixturesDataProvider(__DIR__ . "/../../Fixture/Lcov", "info");
+        return parent::parseCoverageFixtures(__DIR__ . "/../../Fixture/Lcov", "info");
     }
 }

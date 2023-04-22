@@ -8,33 +8,38 @@ use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
-class CoverageFileParserServiceTest extends KernelTestCase
+class CoverageFileParserServiceTest extends TestCase
 {
+    private const STRATEGIES = [
+        CoverageFormatEnum::CLOVER->name => CloverParseStrategy::class,
+        CoverageFormatEnum::LCOV->name => LcovParseStrategy::class
+    ];
+
     #[DataProvider('coverageFilePathDataProvider')]
     public function testParsingSupportedFiles(string $path, string $expectedStrategy)
     {
-        $container = self::getContainer();
         $coverageFile = file_get_contents($path);
         $coverage = new ProjectCoverage(CoverageFormatEnum::CLOVER);
 
-        foreach (CoverageFileParserService::getSubscribedServices() as $subscribedStrategy) {
-            $mockStrategy = $this->createMock($subscribedStrategy);
+        $mockedStrategies = [];
+        foreach (self::STRATEGIES as $strategy) {
+            $mockStrategy = $this->createMock($strategy);
             $mockStrategy->expects($this->atMost(1))
                 ->method("supports")
                 ->with($coverageFile)
-                ->willReturn($expectedStrategy === $subscribedStrategy);
+                ->willReturn($expectedStrategy === $strategy);
 
-            $mockStrategy->expects($this->exactly($expectedStrategy === $subscribedStrategy ? 1 : 0))
+            $mockStrategy->expects($this->exactly($expectedStrategy === $strategy ? 1 : 0))
                 ->method("parse")
                 ->with($coverageFile)
                 ->willReturn($coverage);
 
-            $container->set($subscribedStrategy, $mockStrategy);
+            $mockedStrategies[] = $mockStrategy;
         }
 
-        $coverageFileParserService = new CoverageFileParserService($container);
+        $coverageFileParserService = new CoverageFileParserService($mockedStrategies);
         $this->assertEquals($coverage, $coverageFileParserService->parse($coverageFile));
     }
 
@@ -43,15 +48,15 @@ class CoverageFileParserServiceTest extends KernelTestCase
         return [
             "Clover (PHP variant)" => [
                 __DIR__ . "/../Clover/complex-php-coverage.xml",
-                CloverParseStrategy::class
+                self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
             ],
             "Clover (Jest variant)" => [
                 __DIR__ . "/../Clover/complex-jest-coverage.xml",
-                CloverParseStrategy::class
+                self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
             ],
             "Lcov" => [
                 __DIR__ . "/../Lcov/complex.xml",
-                LcovParseStrategy::class
+                self::STRATEGIES[CoverageFormatEnum::LCOV->name]
             ],
         ];
     }

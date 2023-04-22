@@ -2,45 +2,37 @@
 
 namespace App\Service;
 
+use App\Exception\ParseException;
 use App\Model\ProjectCoverage;
-use App\Strategy\Clover\CloverParseStrategy;
-use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
-use Psr\Container\ContainerInterface;
 use RuntimeException;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CoverageFileParserService implements ServiceSubscriberInterface
+class CoverageFileParserService
 {
     public function __construct(
-        private readonly ContainerInterface $container
+        #[TaggedIterator('app.parser_strategy')]
+        private readonly iterable $parserStrategies
     ) {
     }
 
+    /**
+     * @throws ParseException
+     */
     public function parse(string $coverageFile): ProjectCoverage
     {
-        foreach (self::getSubscribedServices() as $strategy) {
-            $parserStrategy = $this->container->get($strategy);
-
-            if (!$parserStrategy instanceof ParseStrategyInterface) {
-                throw new RuntimeException('Strategy does not implement the correct interface');
+        foreach ($this->parserStrategies as $strategy) {
+            if (!$strategy instanceof ParseStrategyInterface) {
+                throw new ParseException('Strategy does not implement the correct interface.');
             }
 
-            if (!$parserStrategy->supports($coverageFile)) {
+            if (!$strategy->supports($coverageFile)) {
                 continue;
             }
 
-            return $parserStrategy->parse($coverageFile);
+            return $strategy->parse($coverageFile);
         }
 
-        throw new RuntimeException('No strategy found which supports coverage file content');
-    }
-
-    public static function getSubscribedServices(): array
-    {
-        return [
-            CloverParseStrategy::class,
-            LcovParseStrategy::class
-        ];
+        throw new ParseException('No strategy found which supports coverage file content.');
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Model;
 
 use App\Enum\LineTypeEnum;
+use JsonSerializable;
 
-class LineCoverage implements \JsonSerializable
+class LineCoverage implements JsonSerializable
 {
     /**
      * @param LineTypeEnum $type
@@ -20,7 +21,7 @@ class LineCoverage implements \JsonSerializable
         private readonly ?string $name = null,
         private readonly int $lineHits = 0,
         private readonly int $complexity = 0,
-        private readonly int $crapIndex = 0,
+        private readonly float $crapIndex = 0,
     ) {
     }
 
@@ -49,7 +50,7 @@ class LineCoverage implements \JsonSerializable
         return $this->complexity;
     }
 
-    public function getCrapIndex(): int
+    public function getCrapIndex(): float
     {
         return $this->crapIndex;
     }

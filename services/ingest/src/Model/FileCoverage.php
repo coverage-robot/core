@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
-class FileCoverage implements \JsonSerializable
+use JsonSerializable;
+
+class FileCoverage implements JsonSerializable
 {
     /**
      * @var LineCoverage[]

@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use App\Exception\ParseException;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
 use App\Service\CoverageFileParserService;
@@ -13,7 +14,9 @@ use Bref\Event\S3\S3Handler;
 
 class IngestHandler extends S3Handler
 {
-    const OUTPUT_BUCKET = "coverage-output-%s";
+    private const OUTPUT_BUCKET = "coverage-output-%s";
+
+    private const OUTPUT_KEY = "%s%s.json";
 
     public function __construct(
         private readonly EnvironmentService $environmentService,
@@ -34,19 +37,26 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $prefix = dirname($coverageFile->getObject()->getKey())."/";
+            $prefix = dirname($coverageFile->getObject()->getKey()) . "/";
 
             $outputKey = sprintf(
-                "%s%s.json",
+                self::OUTPUT_KEY,
                 $prefix !== "./" ? $prefix : "",
                 pathinfo($coverageFile->getObject()->getKey(), PATHINFO_FILENAME)
             );
 
-            $this->coverageFilePersistService->persistToS3(
-                sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
-                $outputKey,
-                $this->coverageFileParserService->parse($source)
-            );
+            try {
+                $coverage = $this->coverageFileParserService->parse($source);
+
+                $this->coverageFilePersistService->persistToS3(
+                    sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
+                    $outputKey,
+                    $coverage
+                );
+            } catch (ParseException) {
+                // Something went wrong during parsing. In the future, we should log this.
+                continue;
+            }
         }
     }
 }

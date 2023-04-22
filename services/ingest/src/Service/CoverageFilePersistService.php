@@ -2,11 +2,14 @@
 
 namespace App\Service;
 
+use App\Exception\PersistException;
 use App\Model\ProjectCoverage;
-use AsyncAws\S3\Enum\ObjectCannedACL;
-use AsyncAws\S3\Enum\ServerSideEncryption;
+use AsyncAws\Core\Exception\Exception;
+use AsyncAws\Core\Exception\Http\ClientException;
+use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
+use Symfony\Component\HttpFoundation\Response;
 
 class CoverageFilePersistService
 {
@@ -19,18 +22,27 @@ class CoverageFilePersistService
      */
     public function persistToS3(string $bucket, string $key, ProjectCoverage $projectCoverage): bool
     {
-        $this->s3Client->putObject(new PutObjectRequest(
-            [
-                "Bucket" => $bucket,
-                "Key" => $key,
-                "ContentType" => "application/json",
-                "Metadata" => [
-                    "sourceFormat" => $projectCoverage->getSourceFormat()->name
-                ],
-                "Body" => json_encode($projectCoverage, JSON_THROW_ON_ERROR),
-            ]
-        ));
+        try {
+            $response = $this->s3Client->putObject(
+                new PutObjectRequest(
+                    [
+                        "Bucket" => $bucket,
+                        "Key" => $key,
+                        "ContentType" => "application/json",
+                        "Metadata" => [
+                            "sourceFormat" => $projectCoverage->getSourceFormat()->name
+                        ],
+                        "Body" => json_encode($projectCoverage, JSON_THROW_ON_ERROR),
+                    ]
+                )
+            );
 
-        return true;
+            $response->resolve();
+
+            return $response->info()["status"] === Response::HTTP_OK;
+        }
+        catch (HttpException $exception) {
+            throw PersistException::from($exception);
+        }
     }
 }
