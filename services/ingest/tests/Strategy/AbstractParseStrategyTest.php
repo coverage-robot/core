@@ -45,7 +45,7 @@ abstract class AbstractParseStrategyTest extends TestCase
             static fn (array $fixtures, string $path) =>
                 [
                     ...$fixtures,
-                    basename($path, "." . $fileExtension) => [
+                    sprintf("Can handle %s", basename($path)) => [
                         file_get_contents($path),
                         true,
                         json_decode(

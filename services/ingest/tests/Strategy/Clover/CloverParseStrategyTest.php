@@ -10,7 +10,14 @@ class CloverParseStrategyTest extends AbstractParseStrategyTest
 {
     public static function coverageFilesDataProvider(): array
     {
-        return parent::parseCoverageFixtures(__DIR__ . "/../../Fixture/Clover", "xml");
+        return [
+            ...parent::parseCoverageFixtures(__DIR__ . "/../../Fixture/Clover", "xml"),
+            "Does not handle invalid file" => [
+                "invalid-file-content",
+                false,
+                []
+            ]
+        ];
     }
 
     protected function getParserStrategy(): ParseStrategyInterface
