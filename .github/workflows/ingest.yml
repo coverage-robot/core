@@ -1,0 +1,160 @@
+name: Ingest
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'services/ingest/**'
+            - '.github/workflows/backend.yml'
+
+    pull_request:
+        branches:
+            - master
+        paths:
+            - 'services/ingest/**'
+            - '.github/workflows/backend.yml'
+
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        shell: bash
+        working-directory: './services/ingest'
+
+env:
+    php-version: "8.2"
+    working-directory: './services/ingest'
+
+jobs:
+    build:
+        name: "Build"
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+                with:
+                    token: ${{ secrets.GIT_TOKEN }}
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{env.php-version}}
+
+            -   name: Validate Composer configuration
+                run: composer validate
+
+            -   name: Setup environment variables
+                uses: SpicyPizza/create-envfile@v1.3
+                with:
+                    envkey_APP_ENV: "dev"
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.local
+                    fail_on_empty: false
+
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress
+
+                # For Psalm's symfony plugin, which requires the test containers
+            -   name: Warm testing environment cache
+                run: php bin/console cache:warmup --env=test
+
+            -   name: Archive build package
+                run: zip -q -r build.zip ./
+
+            -   name: Upload build package to artifact storage
+                uses: actions/upload-artifact@v3
+                with:
+                    name: build
+                    if-no-files-found: error
+                    path: ${{ env.working-directory }}/build.zip
+                    retention-days: 1
+
+    lint:
+        name: "Lint"
+        runs-on: ubuntu-latest
+        needs: build
+
+        steps:
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
+
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
+
+            -   name: Extract build package
+                run: umask 644 && unzip -q build.zip -d ./
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+
+            -   name: Run PHP_CodeSniffer
+                run: composer lint:style
+
+            -   name: Run Psalm
+                run: composer lint:static-analysis
+
+            -   name: Run Psalm Security Analysis
+                run: composer lint:security
+
+    ingest-tests:
+        name: "Ingest Tests"
+        runs-on: ubuntu-latest
+        needs: lint
+
+        steps:
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
+
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
+
+            -   name: Extract build package
+                run: umask 644 && unzip -q build.zip -d ./
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+
+            -   name: Run PHPUnit
+                run: |
+                    if "${{ github.actor != 'dependabot[bot]' }}" = "true";
+                    then
+                        composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
+                    else
+                        composer test:unit
+                    fi
+                shell: bash
+
+            -   name: Upload coverage to artifact storage
+                if: ${{ github.actor != 'dependabot[bot]' }}
+                uses: actions/upload-artifact@v3
+                with:
+                    name: coverage
+                    if-no-files-found: error
+                    path: ${{ env.working-directory }}/coverage.xml
+                    retention-days: 1
+
+    cleanup:
+        name: "Cleanup"
+        runs-on: ubuntu-latest
+        if: always() && needs.build.result == 'success'
+        needs: [ build, publish-code-coverage ]
+
+        steps:
+            -   uses: geekyeggo/delete-artifact@v2
+                with:
+                    name: |
+                        build

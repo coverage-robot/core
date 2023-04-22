@@ -1,0 +1,15 @@
+version: 2
+updates:
+    -   package-ecosystem: "composer"
+        directory: "services/ingest"
+        schedule:
+            interval: "daily"
+        reviewers:
+            - "ryanmab"
+
+    -   package-ecosystem: "github-actions"
+        directory: "/"
+        schedule:
+            interval: "daily"
+        reviewers:
+            - "ryanmab"
