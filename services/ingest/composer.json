@@ -57,6 +57,9 @@
         "symfony/polyfill-php81": "*"
     },
     "scripts": {
+        "lint:style": "phpcs",
+        "lint:static-analysis": "psalm",
+        "lint:security": "psalm --taint-analysis",
         "test:unit": "phpunit --configuration=./phpunit.xml.dist",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
