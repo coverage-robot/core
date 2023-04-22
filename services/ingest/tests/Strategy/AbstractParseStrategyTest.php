@@ -2,10 +2,42 @@
 
 namespace App\Tests\Strategy;
 
+use App\Exception\ParseException;
+use App\Strategy\ParseStrategyInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractParseStrategyTest extends TestCase
 {
+    #[DataProvider('coverageFilesDataProvider')]
+    public function testSupports(string $contents, bool $expectedSupport): void
+    {
+        $parser = $this->getParserStrategy();
+        $this->assertEquals($expectedSupport, $parser->supports($contents));
+    }
+
+    #[DataProvider('coverageFilesDataProvider')]
+    public function testParse(string $contents, bool $expectedSupport, array $expectedCoverage): void
+    {
+        $parser = $this->getParserStrategy();
+        if (!$expectedSupport) {
+            $this->expectException(ParseException::class);
+        }
+
+        $projectCoverage = $parser->parse($contents);
+
+        if ($expectedSupport) {
+            $this->assertEquals(
+                $expectedCoverage,
+                json_decode(json_encode($projectCoverage), true)
+            );
+        }
+    }
+
+    abstract public static function coverageFilesDataProvider(): array;
+
+    abstract protected function getParserStrategy(): ParseStrategyInterface;
+
     protected static function parseCoverageFixtures(string $path, string $fileExtension): array
     {
         return array_reduce(
