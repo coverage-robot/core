@@ -110,7 +110,7 @@ class CloverParseStrategy implements ParseStrategyInterface
             'stmt' => LineTypeEnum::STATEMENT,
             'cond' => LineTypeEnum::CONDITION,
             'method' => LineTypeEnum::METHOD,
-            default => throw ParseException::lineTypeParseException($type ?? "NULL")
+            default => throw ParseException::lineTypeParseException($type ?? 'NULL')
         };
     }
 }
