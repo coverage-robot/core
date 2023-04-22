@@ -18,11 +18,11 @@ class CoverageFileRetrievalServiceTest extends TestCase
 
         $mockS3Client = $this->createMock(S3Client::class);
         $mockS3Client->expects($this->once())
-            ->method("getObject")
+            ->method('getObject')
             ->with(
                 new GetObjectRequest([
-                    'Bucket' => "mock-bucket",
-                    'Key' => "mock-key",
+                    'Bucket' => 'mock-bucket',
+                    'Key' => 'mock-key',
                 ])
             )
             ->willReturn($mockResponse);
@@ -30,8 +30,8 @@ class CoverageFileRetrievalServiceTest extends TestCase
         $coverageFileRetrievalService = new CoverageFileRetrievalService($mockS3Client);
 
         $coverageFileRetrievalService->ingestFromS3(
-            new Bucket("mock-bucket", "mock-arn"),
-            new BucketObject("mock-key", 0)
+            new Bucket('mock-bucket', 'mock-arn'),
+            new BucketObject('mock-key', 0)
         );
     }
 }

@@ -7,21 +7,13 @@ use JsonSerializable;
 
 class LineCoverage implements JsonSerializable
 {
-    /**
-     * @param LineTypeEnum $type
-     * @param int $lineNumber
-     * @param string|null $name
-     * @param int $lineHits
-     * @param int $complexity
-     * @param int $crapIndex
-     */
     public function __construct(
         private readonly LineTypeEnum $type,
         private readonly int $lineNumber,
         private readonly ?string $name = null,
         private readonly int $lineHits = 0,
         private readonly int $complexity = 0,
-        private readonly float $crapIndex = 0,
+        private readonly float $crapIndex = 0.0,
     ) {
     }
 

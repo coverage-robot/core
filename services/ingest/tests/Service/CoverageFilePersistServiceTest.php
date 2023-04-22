@@ -28,26 +28,26 @@ class CoverageFilePersistServiceTest extends TestCase
         $mockS3Client = $this->createMock(S3Client::class);
 
         $mockS3Client->expects($this->once())
-            ->method("putObject")
+            ->method('putObject')
             ->with(
                 new PutObjectRequest(
-                   [
-                       "Bucket" => "mock-bucket",
-                       "Key" => "mock-object.json",
-                       "ContentType" => "application/json",
-                       "Metadata" => [
-                           "sourceFormat" => $coverage->getSourceFormat()->name
+                    [
+                       'Bucket' => 'mock-bucket',
+                       'Key' => 'mock-object.json',
+                       'ContentType' => 'application/json',
+                       'Metadata' => [
+                           'sourceFormat' => $coverage->getSourceFormat()->name
                        ],
-                       "Body" => json_encode($coverage, JSON_THROW_ON_ERROR),
-                   ]
+                       'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
+                    ]
                 )
             )
             ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 200));
 
         $coverageFilePersistService = new CoverageFilePersistService($mockS3Client);
         $coverageFilePersistService->persistToS3(
-            "mock-bucket",
-            "mock-object.json",
+            'mock-bucket',
+            'mock-object.json',
             $coverage
         );
     }
@@ -62,17 +62,17 @@ class CoverageFilePersistServiceTest extends TestCase
         $mockS3Client = $this->createMock(S3Client::class);
 
         $mockS3Client->expects($this->once())
-            ->method("putObject")
+            ->method('putObject')
             ->with(
                 new PutObjectRequest(
                     [
-                        "Bucket" => "mock-bucket",
-                        "Key" => "mock-object.json",
-                        "ContentType" => "application/json",
-                        "Metadata" => [
-                            "sourceFormat" => $coverage->getSourceFormat()->name
+                        'Bucket' => 'mock-bucket',
+                        'Key' => 'mock-object.json',
+                        'ContentType' => 'application/json',
+                        'Metadata' => [
+                            'sourceFormat' => $coverage->getSourceFormat()->name
                         ],
-                        "Body" => json_encode($coverage, JSON_THROW_ON_ERROR),
+                        'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
                 )
             )
@@ -82,8 +82,8 @@ class CoverageFilePersistServiceTest extends TestCase
 
         $coverageFilePersistService = new CoverageFilePersistService($mockS3Client);
         $coverageFilePersistService->persistToS3(
-            "mock-bucket",
-            "mock-object.json",
+            'mock-bucket',
+            'mock-object.json',
             $coverage
         );
     }

@@ -13,51 +13,37 @@ use PHPUnit\Framework\TestCase;
 class CoverageFileParserServiceTest extends TestCase
 {
     private const STRATEGIES = [
-        CoverageFormatEnum::CLOVER->name => CloverParseStrategy::class,
-        CoverageFormatEnum::LCOV->name => LcovParseStrategy::class
+        CloverParseStrategy::class,
+        LcovParseStrategy::class
     ];
 
-    #[DataProvider('coverageFilePathDataProvider')]
-    public function testParsingSupportedFiles(string $path, string $expectedStrategy)
+    #[DataProvider('strategyDataProvider')]
+    public function testParsingSupportedFiles(string $expectedStrategy)
     {
-        $coverageFile = file_get_contents($path);
         $coverage = new ProjectCoverage(CoverageFormatEnum::CLOVER);
 
         $mockedStrategies = [];
         foreach (self::STRATEGIES as $strategy) {
             $mockStrategy = $this->createMock($strategy);
             $mockStrategy->expects($this->atMost(1))
-                ->method("supports")
-                ->with($coverageFile)
+                ->method('supports')
+                ->with('mock-file')
                 ->willReturn($expectedStrategy === $strategy);
 
             $mockStrategy->expects($this->exactly($expectedStrategy === $strategy ? 1 : 0))
-                ->method("parse")
-                ->with($coverageFile)
+                ->method('parse')
+                ->with('mock-file')
                 ->willReturn($coverage);
 
             $mockedStrategies[] = $mockStrategy;
         }
 
         $coverageFileParserService = new CoverageFileParserService($mockedStrategies);
-        $this->assertEquals($coverage, $coverageFileParserService->parse($coverageFile));
+        $this->assertEquals($coverage, $coverageFileParserService->parse('mock-file'));
     }
 
-    public static function coverageFilePathDataProvider(): array
+    public static function strategyDataProvider(): array
     {
-        return [
-            "Clover (PHP variant)" => [
-                __DIR__ . "/../Fixture/Clover/complex-php.xml",
-                self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
-            ],
-            "Clover (Jest variant)" => [
-                __DIR__ . "/../Fixture/Clover/complex-jest.xml",
-                self::STRATEGIES[CoverageFormatEnum::CLOVER->name]
-            ],
-            "Lcov" => [
-                __DIR__ . "/../Fixture/Lcov/complex.info",
-                self::STRATEGIES[CoverageFormatEnum::LCOV->name]
-            ],
-        ];
+        return array_map(static fn(string $strategy) => [$strategy], self::STRATEGIES);
     }
 }

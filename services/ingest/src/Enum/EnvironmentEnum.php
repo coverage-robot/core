@@ -4,6 +4,7 @@ namespace App\Enum;
 
 enum EnvironmentEnum: string
 {
-    case DEVELOPMENT = "dev";
-    case PRODUCTION = "prod";
+    case TESTING = 'test';
+    case DEVELOPMENT = 'dev';
+    case PRODUCTION = 'prod';
 }

@@ -14,9 +14,9 @@ use Bref\Event\S3\S3Handler;
 
 class IngestHandler extends S3Handler
 {
-    private const OUTPUT_BUCKET = "coverage-output-%s";
+    private const OUTPUT_BUCKET = 'coverage-output-%s';
 
-    private const OUTPUT_KEY = "%s%s.json";
+    private const OUTPUT_KEY = '%s%s.json';
 
     public function __construct(
         private readonly EnvironmentService $environmentService,
@@ -37,11 +37,11 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $prefix = dirname($coverageFile->getObject()->getKey()) . "/";
+            $prefix = dirname($coverageFile->getObject()->getKey()) . '/';
 
             $outputKey = sprintf(
                 self::OUTPUT_KEY,
-                $prefix !== "./" ? $prefix : "",
+                $prefix !== './' ? $prefix : '',
                 pathinfo($coverageFile->getObject()->getKey(), PATHINFO_FILENAME)
             );
 

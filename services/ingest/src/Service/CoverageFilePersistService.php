@@ -26,22 +26,21 @@ class CoverageFilePersistService
             $response = $this->s3Client->putObject(
                 new PutObjectRequest(
                     [
-                        "Bucket" => $bucket,
-                        "Key" => $key,
-                        "ContentType" => "application/json",
-                        "Metadata" => [
-                            "sourceFormat" => $projectCoverage->getSourceFormat()->name
+                        'Bucket' => $bucket,
+                        'Key' => $key,
+                        'ContentType' => 'application/json',
+                        'Metadata' => [
+                            'sourceFormat' => $projectCoverage->getSourceFormat()->name
                         ],
-                        "Body" => json_encode($projectCoverage, JSON_THROW_ON_ERROR),
+                        'Body' => json_encode($projectCoverage, JSON_THROW_ON_ERROR),
                     ]
                 )
             );
 
             $response->resolve();
 
-            return $response->info()["status"] === Response::HTTP_OK;
-        }
-        catch (HttpException $exception) {
+            return $response->info()['status'] === Response::HTTP_OK;
+        } catch (HttpException $exception) {
             throw PersistException::from($exception);
         }
     }

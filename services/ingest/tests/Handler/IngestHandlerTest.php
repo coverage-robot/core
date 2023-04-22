@@ -29,14 +29,14 @@ class IngestHandlerTest extends TestCase
     {
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
-            ->method("ingestFromS3")
+            ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(...$coverageFiles);
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
-            ->method("persistToS3")
+            ->method('persistToS3')
             ->with(
-                "coverage-output-dev",
+                'coverage-output-dev',
                 self::callback(static fn(string $outputKey) => in_array($outputKey, $expectedOutputKeys)),
                 self::callback(static fn(ProjectCoverage $coverage) => !!$coverage->jsonSerialize())
             );
@@ -65,127 +65,127 @@ class IngestHandlerTest extends TestCase
     public static function validS3EventDataProvider(): array
     {
         return [
-            "Single valid file (Lcov)" => [
+            'Single valid file (Lcov)' => [
                 new S3Event([
-                    "Records" => [
+                    'Records' => [
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "some-path/lcov.info"
+                                'object' => [
+                                    'key' => 'some-path/lcov.info'
                                 ]
                             ]
                         ]
                     ]
                 ]),
                 [
-                    file_get_contents(__DIR__ . "/../Fixture/Lcov/complex.info"),
+                    file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info'),
                 ],
                 [
-                    "some-path/lcov.json"
+                    'some-path/lcov.json'
                 ]
             ],
-            "Single valid file (Clover)" => [
+            'Single valid file (Clover)' => [
                 new S3Event([
-                    "Records" => [
+                    'Records' => [
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "clover.xml"
+                                'object' => [
+                                    'key' => 'clover.xml'
                                 ]
                             ]
                         ]
                     ]
                 ]),
                 [
-                    file_get_contents(__DIR__ . "/../Fixture/Clover/complex-jest.xml"),
+                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml'),
                 ],
                 [
-                    "clover.json"
+                    'clover.json'
                 ]
             ],
-            "Multiple valid files (Lcov and Clover)" => [
+            'Multiple valid files (Lcov and Clover)' => [
                 new S3Event([
-                    "Records" => [
+                    'Records' => [
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "clover.xml"
+                                'object' => [
+                                    'key' => 'clover.xml'
                                 ]
                             ]
                         ],
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "much/longer/nested/path/different-name.xml"
+                                'object' => [
+                                    'key' => 'much/longer/nested/path/different-name.xml'
                                 ]
                             ]
                         ]
                     ]
                 ]),
                 [
-                    file_get_contents(__DIR__ . "/../Fixture/Clover/complex-php.xml"),
-                    file_get_contents(__DIR__ . "/../Fixture/Clover/complex-jest.xml")
+                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-php.xml'),
+                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml')
                 ],
                 [
-                    "clover.json",
-                    "much/longer/nested/path/different-name.json"
+                    'clover.json',
+                    'much/longer/nested/path/different-name.json'
                 ]
             ],
-            "Valid and invalid files (Lcov)" => [
+            'Valid and invalid files (Lcov)' => [
                 new S3Event([
-                    "Records" => [
+                    'Records' => [
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "some-invalid-file.xml"
+                                'object' => [
+                                    'key' => 'some-invalid-file.xml'
                                 ]
                             ]
                         ],
                         [
-                            "eventSource" => "aws:s3",
-                            "s3" => [
-                                "bucket" => [
-                                    "name" => "mock-bucket",
-                                    "arn" => "mock-arn"
+                            'eventSource' => 'aws:s3',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
                                 ],
-                                "object" => [
-                                    "key" => "totally-valid-file.info"
+                                'object' => [
+                                    'key' => 'totally-valid-file.info'
                                 ]
                             ]
                         ]
                     ]
                 ]),
                 [
-                    "mock-invalid-file",
-                    file_get_contents(__DIR__ . "/../Fixture/Lcov/complex.info")
+                    'mock-invalid-file',
+                    file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info')
                 ],
                 [
-                    "totally-valid-file.json"
+                    'totally-valid-file.json'
                 ]
             ]
         ];

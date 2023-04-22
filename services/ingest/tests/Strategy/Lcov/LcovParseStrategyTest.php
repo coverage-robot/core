@@ -11,9 +11,9 @@ class LcovParseStrategyTest extends AbstractParseStrategyTestCase
     public static function coverageFilesDataProvider(): array
     {
         return [
-            ...parent::parseCoverageFixtures(__DIR__ . "/../../Fixture/Lcov", "info"),
-            "Does not handle invalid file" => [
-                "invalid-file-content",
+            ...parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Lcov', 'info'),
+            'Does not handle invalid file' => [
+                'invalid-file-content',
                 false,
                 []
             ]

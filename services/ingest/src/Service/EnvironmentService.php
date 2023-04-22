@@ -3,14 +3,16 @@
 namespace App\Service;
 
 use App\Enum\EnvironmentEnum;
+use App\Kernel;
 
 class EnvironmentService
 {
-    public function isDevelopmentEnvironment(): bool {
-        return $_ENV["APP_ENV"] === EnvironmentEnum::DEVELOPMENT;
+    public function __construct(private readonly Kernel $kernel)
+    {
     }
 
-    public function getEnvironment(): EnvironmentEnum {
-        return EnvironmentEnum::from($_ENV["APP_ENV"]);
+    public function getEnvironment(): EnvironmentEnum
+    {
+        return EnvironmentEnum::from($this->kernel->getEnvironment());
     }
 }

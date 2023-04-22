@@ -55,28 +55,35 @@ class CloverParseStrategy implements ParseStrategyInterface
 
     protected function buildXmlReader(string $content): XMLReader
     {
+        /** @var XMLReader|false $reader */
         $reader = XMLReader::XML($content);
-        $reader->setSchema(__DIR__ . '/schema.xsd');
 
-        if (!($reader instanceof XMLReader)) {
-            throw new ParseException("Unable to build XML reader.");
+        if ($reader instanceof XMLReader) {
+            $reader->setSchema(__DIR__ . '/schema.xsd');
+            return $reader;
         }
 
-        return $reader;
+        throw new ParseException('Unable to build XML reader.');
     }
 
     private function handleNode(ProjectCoverage $coverage, XMLReader $reader): ProjectCoverage
     {
         switch ($reader->name) {
             case self::PROJECT:
-                $coverage->setGeneratedAt($reader->getAttribute('timestamp'));
+                $timestamp = $reader->getAttribute('timestamp');
+                if (!is_numeric($timestamp)) {
+                    break;
+                }
+
+                $coverage->setGeneratedAt((int)$reader->getAttribute('timestamp'));
                 break;
             case self::FILE:
-                $coverage->addFileCoverage(
-                    new FileCoverage(
-                        $reader->getAttribute('path') ?? $reader->getAttribute('name')
-                    )
-                );
+                $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
+                if ($path === null) {
+                    break;
+                }
+
+                $coverage->addFileCoverage(new FileCoverage($path));
                 break;
             case self::LINE:
                 $files = $coverage->getFileCoverage();
@@ -84,11 +91,11 @@ class CloverParseStrategy implements ParseStrategyInterface
                 end($files)->addLineCoverage(
                     new LineCoverage(
                         $this->convertLineType($reader->getAttribute('type')),
-                        $reader->getAttribute('num'),
+                        intval($reader->getAttribute('num')),
                         $reader->getAttribute('name'),
-                        $reader->getAttribute('count') ?? 0,
-                        $reader->getAttribute('complexity') ?? 0,
-                        $reader->getAttribute('crap') ?? 0,
+                        intval($reader->getAttribute('count')),
+                        intval($reader->getAttribute('complexity')),
+                        floatval($reader->getAttribute('crap')),
                     )
                 );
                 break;
@@ -103,7 +110,7 @@ class CloverParseStrategy implements ParseStrategyInterface
             'stmt' => LineTypeEnum::STATEMENT,
             'cond' => LineTypeEnum::CONDITION,
             'method' => LineTypeEnum::METHOD,
-            default => throw ParseException::lineTypeParseException($type)
+            default => throw ParseException::lineTypeParseException($type ?? "NULL")
         };
     }
 }

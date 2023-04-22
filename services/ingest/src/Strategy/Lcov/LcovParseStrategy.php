@@ -12,8 +12,8 @@ use App\Strategy\ParseStrategyInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
 {
-    private const FILE = "SF";
-    private const LINE = "DA";
+    private const FILE = 'SF';
+    private const LINE = 'DA';
 
     private const COVERAGE_DATA_VALIDATION = [
         'TN'   => '.*$',
@@ -30,7 +30,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         'BRH'  => '\d+$'
     ];
 
-    public const END_OF_RECORD_MARKER = "end_of_record";
+    public const END_OF_RECORD_MARKER = 'end_of_record';
 
     public function supports(string $content): bool
     {
@@ -49,7 +49,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                 return false;
             }
 
-            if (!preg_match($this->getLineValidation($matches["type"]), $matches["data"])) {
+            if (!preg_match($this->getLineValidation($matches['type']), $matches['data'])) {
                 return false;
             }
         }
@@ -77,7 +77,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
             preg_match('/^(?<type>\w+):(?<data>.*)$/', $record, $matches);
 
-            $projectCoverage = $this->handleLine($projectCoverage, $matches["type"], $matches["data"]);
+            $projectCoverage = $this->handleLine($projectCoverage, $matches['type'], $matches['data']);
         }
 
         return $projectCoverage;
@@ -92,7 +92,7 @@ class LcovParseStrategy implements ParseStrategyInterface
             case self::LINE:
                 $files = $coverage->getFileCoverage();
 
-                $data = explode(",", $data);
+                $data = explode(',', $data);
 
                 end($files)->addLineCoverage(
                     new LineCoverage(
@@ -116,6 +116,6 @@ class LcovParseStrategy implements ParseStrategyInterface
             throw ParseException::notSupportedException();
         }
 
-        return sprintf("/%s/", self::COVERAGE_DATA_VALIDATION[$type]);
+        return sprintf('/%s/', self::COVERAGE_DATA_VALIDATION[$type]);
     }
 }

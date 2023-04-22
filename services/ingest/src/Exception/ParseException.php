@@ -2,9 +2,11 @@
 
 namespace App\Exception;
 
-class ParseException extends \RuntimeException
+use RuntimeException;
+
+class ParseException extends RuntimeException
 {
-    public static function lineTypeParseException(?string $type): ParseException
+    public static function lineTypeParseException(string $type): ParseException
     {
         return new ParseException(
             sprintf(
