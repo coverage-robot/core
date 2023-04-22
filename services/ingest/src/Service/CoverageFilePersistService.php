@@ -24,6 +24,9 @@ class CoverageFilePersistService
                 "Bucket" => $bucket,
                 "Key" => $key,
                 "ContentType" => "application/json",
+                "Metadata" => [
+                    "sourceFormat" => $projectCoverage->getSourceFormat()->name
+                ],
                 "Body" => json_encode($projectCoverage, JSON_THROW_ON_ERROR),
             ]
         ));
