@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Enum\CoverageFormatEnum;
 use App\Model\ProjectCoverage;
 use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
@@ -16,7 +17,7 @@ class CoverageFileParserServiceTest extends KernelTestCase
     {
         $container = self::getContainer();
         $coverageFile = file_get_contents($path);
-        $coverage = new ProjectCoverage();
+        $coverage = new ProjectCoverage(CoverageFormatEnum::CLOVER);
 
         foreach (CoverageFileParserService::getSubscribedServices() as $subscribedStrategy) {
             $mockStrategy = $this->createMock($subscribedStrategy);

@@ -11,6 +11,7 @@ class CoverageFileRetrievalService
     public function __construct(private readonly S3Client $s3Client)
     {
     }
+
     public function ingestFromS3(Bucket $bucket, BucketObject $object): string
     {
         $result = $this->s3Client->getObject([

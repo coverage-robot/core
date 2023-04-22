@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Enum\CoverageFormatEnum;
 use DateTimeImmutable;
 use Exception;
 use JsonSerializable;
@@ -20,11 +21,17 @@ class ProjectCoverage implements JsonSerializable
      * @throws Exception
      */
     public function __construct(
+        private readonly CoverageFormatEnum $sourceFormat,
         int|DateTimeImmutable|null $generatedAt = null
     ) {
         if ($generatedAt !== null) {
             $this->setGeneratedAt($generatedAt);
         }
+    }
+
+    public function getSourceFormat(): CoverageFormatEnum
+    {
+        return $this->sourceFormat;
     }
 
     public function getGeneratedAt(): ?DateTimeImmutable

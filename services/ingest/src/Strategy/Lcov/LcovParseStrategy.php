@@ -2,6 +2,8 @@
 
 namespace App\Strategy\Lcov;
 
+use App\Enum\CoverageFormatEnum;
+use App\Enum\LineTypeEnum;
 use App\Exception\ParseException;
 use App\Model\FileCoverage;
 use App\Model\LineCoverage;
@@ -14,10 +16,10 @@ class LcovParseStrategy implements ParseStrategyInterface
     private const LINE = "DA";
 
     private const COVERAGE_DATA_VALIDATION = [
-        'TN'   => '.+$',
+        'TN'   => '.*$',
         self::FILE   => '.+$',
         'FN'   => '.+$',
-        'FNDA' => '\d+,\d+$',
+        'FNDA' => '\d+,.+$',
         'FNF'  => '\d+$',
         'FNH'  => '\d+$',
         self::LINE   => '\d+,\d+$',
@@ -63,7 +65,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $projectCoverage = new ProjectCoverage();
+        $projectCoverage = new ProjectCoverage(CoverageFormatEnum::LCOV);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -94,7 +96,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
                 end($files)->addLineCoverage(
                     new LineCoverage(
-                        null,
+                        LineTypeEnum::UNKNOWN,
                         (int)$data[0],
                         null,
                         (int)$data[1],
@@ -114,6 +116,6 @@ class LcovParseStrategy implements ParseStrategyInterface
             throw ParseException::notSupportedException();
         }
 
-        return "/{${self::COVERAGE_DATA_VALIDATION[$type]}}/";
+        return sprintf("/%s/", self::COVERAGE_DATA_VALIDATION[$type]);
     }
 }

@@ -5,7 +5,7 @@ provider:
     region: eu-west-2
     stage: dev
     environment:
-        APP_ENV: prod
+        APP_ENV: dev
     iam:
         role:
             statements:
@@ -13,7 +13,12 @@ provider:
                     Action:
                         - 's3:GetObject'
                     Resource:
-                        - 'arn:aws:s3:::ryan-coverage-s3/*'
+                        - arn:aws:s3:::coverage-ingest-${opt:stage, self:provider.stage}/*
+                -   Effect: Allow
+                    Action:
+                        - 's3:*'
+                    Resource:
+                        - arn:aws:s3:::coverage-output-${opt:stage, self:provider.stage}/*
 
 plugins:
     - ./vendor/bref/bref
@@ -26,7 +31,7 @@ functions:
         architecture: arm64
         events:
             - s3:
-                bucket: ryan-coverage-s3
+                bucket: coverage-ingest-${opt:stage, self:provider.stage}
                 event: s3:ObjectCreated:*
 
 package:
@@ -36,3 +41,23 @@ package:
         - 'var/cache/prod/**'
         - 'public/build/entrypoints.json'
         - 'public/build/manifest.json'
+
+resources:
+    Resources:
+        CoverageData:
+            Type: AWS::S3::Bucket
+            UpdateReplacePolicy: Delete
+            DeletionPolicy: Delete
+            Properties:
+                BucketName: coverage-output-${opt:stage, self:provider.stage}
+                PublicAccessBlockConfiguration:
+                    BlockPublicAcls: true
+                    BlockPublicPolicy: true
+                    IgnorePublicAcls: true
+                    RestrictPublicBuckets: true
+                VersioningConfiguration:
+                    Status: Suspended
+                BucketEncryption:
+                    ServerSideEncryptionConfiguration:
+                        -   ServerSideEncryptionByDefault:
+                                SSEAlgorithm: 'AES256'
