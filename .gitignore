@@ -9,3 +9,4 @@ vendor/
 phpunit.xml
 .phpunit.cache
 .phpcs-cache
+.idea/
