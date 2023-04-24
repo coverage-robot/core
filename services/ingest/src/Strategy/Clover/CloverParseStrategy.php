@@ -3,11 +3,12 @@
 namespace App\Strategy\Clover;
 
 use App\Enum\CoverageFormatEnum;
-use App\Enum\LineTypeEnum;
 use App\Exception\ParseException;
-use App\Model\FileCoverage;
-use App\Model\LineCoverage;
-use App\Model\ProjectCoverage;
+use App\Model\File;
+use App\Model\Line\BranchCoverage;
+use App\Model\Line\MethodCoverage;
+use App\Model\Line\StatementCoverage;
+use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
 use XMLReader;
 
@@ -16,6 +17,10 @@ class CloverParseStrategy implements ParseStrategyInterface
     private const PROJECT = 'project';
     private const FILE = 'file';
     private const LINE = 'line';
+
+    private const STATEMENT = 'stmt';
+    private const METHOD = 'method';
+    private const CONDITION = 'cond';
 
     public function supports(string $content): bool
     {
@@ -35,7 +40,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         return true;
     }
 
-    public function parse(string $content): ProjectCoverage
+    public function parse(string $content): Project
     {
         libxml_use_internal_errors(true);
 
@@ -44,7 +49,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new ProjectCoverage(CoverageFormatEnum::CLOVER);
+        $project = new Project(CoverageFormatEnum::CLOVER);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -73,7 +78,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         throw new ParseException('Unable to build XML reader.');
     }
 
-    private function handleNode(ProjectCoverage $coverage, XMLReader $reader): ProjectCoverage
+    private function handleNode(Project $coverage, XMLReader $reader): Project
     {
         switch ($reader->name) {
             case self::PROJECT:
@@ -90,34 +95,33 @@ class CloverParseStrategy implements ParseStrategyInterface
                     break;
                 }
 
-                $coverage->addFileCoverage(new FileCoverage($path));
+                $coverage->addFile(new File($path));
                 break;
             case self::LINE:
-                $files = $coverage->getFileCoverage();
+                $files = $coverage->getFiles();
 
-                end($files)->addLineCoverage(
-                    new LineCoverage(
-                        $this->convertLineType($reader->getAttribute('type')),
-                        intval($reader->getAttribute('num')),
-                        $reader->getAttribute('name'),
-                        intval($reader->getAttribute('count')),
-                        intval($reader->getAttribute('complexity')),
-                        floatval($reader->getAttribute('crap')),
-                    )
+                $type = $reader->getAttribute('type');
+                $lineNumber = (int)$reader->getAttribute('num');
+                $lineHits = (int)$reader->getAttribute('count');
+
+                end($files)->setLineCoverage(
+                    match ($type) {
+                        self::METHOD => new MethodCoverage($lineNumber, $lineHits, $reader->getAttribute('name')),
+                        self::STATEMENT => new StatementCoverage($lineNumber, $lineHits),
+                        self::CONDITION => new BranchCoverage(
+                            $lineNumber,
+                            $lineHits,
+                            [
+                                0 => (int)$reader->getAttribute('falsecount'),
+                                1 => (int)$reader->getAttribute('truecount')
+                            ]
+                        ),
+                        default => throw ParseException::lineTypeParseException($type ?? 'NULL')
+                    }
                 );
                 break;
         }
 
         return $coverage;
-    }
-
-    private function convertLineType(?string $type): LineTypeEnum
-    {
-        return match ($type) {
-            'stmt' => LineTypeEnum::STATEMENT,
-            'cond' => LineTypeEnum::CONDITION,
-            'method' => LineTypeEnum::METHOD,
-            default => throw ParseException::lineTypeParseException($type ?? 'NULL')
-        };
     }
 }

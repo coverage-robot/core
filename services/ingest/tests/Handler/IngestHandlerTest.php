@@ -4,7 +4,7 @@ namespace App\Tests\Handler;
 
 use App\Enum\EnvironmentEnum;
 use App\Handler\IngestHandler;
-use App\Model\ProjectCoverage;
+use App\Model\Project;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
@@ -38,7 +38,7 @@ class IngestHandlerTest extends TestCase
             ->with(
                 'coverage-output-dev',
                 self::callback(static fn(string $outputKey) => in_array($outputKey, $expectedOutputKeys)),
-                self::callback(static fn(ProjectCoverage $coverage) => !!$coverage->jsonSerialize())
+                self::callback(static fn(Project $coverage) => !!$coverage->jsonSerialize())
             );
 
         $handler = new IngestHandler(

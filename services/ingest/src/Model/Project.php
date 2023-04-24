@@ -7,12 +7,12 @@ use DateTimeImmutable;
 use Exception;
 use JsonSerializable;
 
-class ProjectCoverage implements JsonSerializable
+class Project implements JsonSerializable
 {
     private ?DateTimeImmutable $generatedAt = null;
 
     /**
-     * @var FileCoverage[]
+     * @var File[]
      */
     private array $files = [];
 
@@ -54,14 +54,14 @@ class ProjectCoverage implements JsonSerializable
     }
 
     /**
-     * @return FileCoverage[]
+     * @return File[]
      */
-    public function getFileCoverage(): array
+    public function getFiles(): array
     {
         return $this->files;
     }
 
-    public function addFileCoverage(FileCoverage $file): void
+    public function addFile(File $file): void
     {
         $this->files[] = $file;
     }
@@ -70,7 +70,7 @@ class ProjectCoverage implements JsonSerializable
     {
         return [
             'generatedAt' => $this->getGeneratedAt(),
-            'files' => $this->getFileCoverage()
+            'files' => $this->getFiles()
         ];
     }
 }

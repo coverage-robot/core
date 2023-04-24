@@ -27,7 +27,7 @@ abstract class AbstractParseStrategyTestCase extends TestCase
         $projectCoverage = $parser->parse($contents);
 
         if ($expectedSupport) {
-            $this->assertEquals(
+            $this->assertSame(
                 $expectedCoverage,
                 json_decode(json_encode($projectCoverage), true)
             );

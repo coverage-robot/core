@@ -4,9 +4,9 @@ namespace App\Service;
 
 use App\Client\BigQueryClient;
 use App\Exception\PersistException;
-use App\Model\FileCoverage;
-use App\Model\LineCoverage;
-use App\Model\ProjectCoverage;
+use App\Model\File;
+use App\Model\Line\AbstractLineCoverage;
+use App\Model\Project;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
@@ -23,7 +23,7 @@ class CoverageFilePersistService
     /**
      * @throws \JsonException
      */
-    public function persistToS3(string $bucket, string $key, ProjectCoverage $projectCoverage): bool
+    public function persistToS3(string $bucket, string $key, Project $projectCoverage): bool
     {
         try {
             $response = $this->s3Client->putObject(
@@ -48,7 +48,7 @@ class CoverageFilePersistService
         }
     }
 
-    public function persistToBigQuery(ProjectCoverage $projectCoverage, string $uniqueId): bool
+    public function persistToBigQuery(Project $projectCoverage, string $uniqueId): bool
     {
         $table = $this->bigQueryClient->getLineAnalyticsDataset()
             ->table('lines');
@@ -58,15 +58,15 @@ class CoverageFilePersistService
         return $insertResponse->isSuccessful();
     }
 
-    private function buildRows(ProjectCoverage $projectCoverage, string $uniqueId): array
+    private function buildRows(Project $projectCoverage, string $uniqueId): array
     {
         return array_reduce(
-            $projectCoverage->getFileCoverage(),
-            static function (array $carry, FileCoverage $fileCoverage) use ($projectCoverage, $uniqueId): array {
+            $projectCoverage->getFiles(),
+            static function (array $carry, File $fileCoverage) use ($projectCoverage, $uniqueId): array {
                 return [
                     ...$carry,
                     ...array_map(
-                        static fn(LineCoverage $lineCoverage): array => [
+                        static fn(AbstractLineCoverage $lineCoverage): array => [
                             'data' => [
                                 'id' => $uniqueId,
                                 'sourceFormat' => $projectCoverage->getSourceFormat()->name,
@@ -78,7 +78,7 @@ class CoverageFilePersistService
                                 'lineHits' => $lineCoverage->getLineHits()
                             ]
                         ],
-                        $fileCoverage->getLineCoverage()
+                        $fileCoverage->getAllLineCoverage()
                     )
                 ];
             },

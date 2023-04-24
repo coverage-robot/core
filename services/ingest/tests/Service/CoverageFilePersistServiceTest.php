@@ -4,11 +4,10 @@ namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
 use App\Enum\CoverageFormatEnum;
-use App\Enum\LineTypeEnum;
 use App\Exception\PersistException;
-use App\Model\FileCoverage;
-use App\Model\LineCoverage;
-use App\Model\ProjectCoverage;
+use App\Model\File;
+use App\Model\Line\StatementCoverage;
+use App\Model\Project;
 use App\Service\CoverageFilePersistService;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
@@ -25,7 +24,7 @@ class CoverageFilePersistServiceTest extends TestCase
 {
     public function testPersistToS3(): void
     {
-        $coverage = new ProjectCoverage(
+        $coverage = new Project(
             CoverageFormatEnum::CLOVER,
             new DateTimeImmutable()
         );
@@ -62,7 +61,7 @@ class CoverageFilePersistServiceTest extends TestCase
 
     public function testFailingToPersistToS3(): void
     {
-        $coverage = new ProjectCoverage(
+        $coverage = new Project(
             CoverageFormatEnum::CLOVER,
             new DateTimeImmutable()
         );
@@ -103,11 +102,11 @@ class CoverageFilePersistServiceTest extends TestCase
     {
         $uuid = Uuid::uuid4()->toString();
 
-        $fileCoverage = new FileCoverage('mock-file');
-        $fileCoverage->addLineCoverage(new LineCoverage(LineTypeEnum::UNKNOWN, 1, null, 1));
+        $fileCoverage = new File('mock-file');
+        $fileCoverage->setLineCoverage(new StatementCoverage(1, 1));
 
-        $coverage = new ProjectCoverage(CoverageFormatEnum::LCOV);
-        $coverage->addFileCoverage($fileCoverage);
+        $coverage = new Project(CoverageFormatEnum::LCOV);
+        $coverage->addFile($fileCoverage);
 
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->expects($this->once())

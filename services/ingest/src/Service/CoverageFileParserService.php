@@ -3,9 +3,8 @@
 namespace App\Service;
 
 use App\Exception\ParseException;
-use App\Model\ProjectCoverage;
+use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class CoverageFileParserService
@@ -19,7 +18,7 @@ class CoverageFileParserService
     /**
      * @throws ParseException
      */
-    public function parse(string $coverageFile): ProjectCoverage
+    public function parse(string $coverageFile): Project
     {
         foreach ($this->parserStrategies as $strategy) {
             if (!$strategy instanceof ParseStrategyInterface) {
