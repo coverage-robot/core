@@ -30,8 +30,8 @@ class IngestHandlerTest extends TestCase
     {
         $mockUniqueIdGenerator = $this->createMock(UniqueIdGeneratorService::class);
         $mockUniqueIdGenerator->expects($this->exactly(count($coverageFiles)))
-            ->method("generate")
-            ->willReturn("mock-uuid");
+            ->method('generate')
+            ->willReturn('mock-uuid');
 
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
