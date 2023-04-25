@@ -8,13 +8,13 @@ class MethodCoverage extends AbstractLineCoverage
 {
     public function __construct(
         int $lineNumber,
-        int $lineHits = 0,
-        private readonly ?string $name = null,
+        int $lineHits,
+        private readonly string $name,
     ) {
         parent::__construct($lineNumber, $lineHits);
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
