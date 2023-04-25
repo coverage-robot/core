@@ -106,7 +106,7 @@ class CloverParseStrategy implements ParseStrategyInterface
 
                 end($files)->setLineCoverage(
                     match ($type) {
-                        self::METHOD => new MethodCoverage($lineNumber, $lineHits, $reader->getAttribute('name')),
+                        self::METHOD => new MethodCoverage($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
                         self::STATEMENT => new StatementCoverage($lineNumber, $lineHits),
                         self::CONDITION => new BranchCoverage(
                             $lineNumber,
