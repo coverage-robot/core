@@ -8,6 +8,7 @@ use App\Model\ProjectCoverage;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
+use App\Service\UniqueIdGeneratorService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
@@ -27,6 +28,11 @@ class IngestHandlerTest extends TestCase
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
+        $mockUniqueIdGenerator = $this->createMock(UniqueIdGeneratorService::class);
+        $mockUniqueIdGenerator->expects($this->exactly(count($coverageFiles)))
+            ->method('generate')
+            ->willReturn('mock-uuid');
+
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
@@ -45,7 +51,8 @@ class IngestHandlerTest extends TestCase
             MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
-            $mockCoverageFilePersistService
+            $mockCoverageFilePersistService,
+            $mockUniqueIdGenerator
         );
 
         $handler->handleS3($event, Context::fake());
@@ -86,7 +93,7 @@ class IngestHandlerTest extends TestCase
                     file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info'),
                 ],
                 [
-                    'some-path/lcov.json'
+                    'some-path/mock-uuid.json'
                 ]
             ],
             'Single valid file (Clover)' => [
@@ -110,7 +117,7 @@ class IngestHandlerTest extends TestCase
                     file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml'),
                 ],
                 [
-                    'clover.json'
+                    'mock-uuid.json'
                 ]
             ],
             'Multiple valid files (Lcov and Clover)' => [
@@ -147,8 +154,8 @@ class IngestHandlerTest extends TestCase
                     file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml')
                 ],
                 [
-                    'clover.json',
-                    'much/longer/nested/path/different-name.json'
+                    'mock-uuid.json',
+                    'much/longer/nested/path/mock-uuid.json'
                 ]
             ],
             'Valid and invalid files (Lcov)' => [
@@ -185,7 +192,7 @@ class IngestHandlerTest extends TestCase
                     file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info')
                 ],
                 [
-                    'totally-valid-file.json'
+                    'mock-uuid.json'
                 ]
             ]
         ];

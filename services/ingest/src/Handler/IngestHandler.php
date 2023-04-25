@@ -3,10 +3,11 @@
 namespace App\Handler;
 
 use App\Exception\ParseException;
+use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\CoverageFileParserService;
 use App\Service\EnvironmentService;
+use App\Service\UniqueIdGeneratorService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
@@ -22,7 +23,8 @@ class IngestHandler extends S3Handler
         private readonly EnvironmentService $environmentService,
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
-        private readonly CoverageFilePersistService $coverageFilePersistService
+        private readonly CoverageFilePersistService $coverageFilePersistService,
+        private readonly UniqueIdGeneratorService $uniqueIdGenerator
     ) {
     }
 
@@ -37,12 +39,15 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
+
+            $uniqueCoverageId = $this->uniqueIdGenerator->generate();
+
             $prefix = dirname($coverageFile->getObject()->getKey()) . '/';
 
             $outputKey = sprintf(
                 self::OUTPUT_KEY,
                 $prefix !== './' ? $prefix : '',
-                pathinfo($coverageFile->getObject()->getKey(), PATHINFO_FILENAME)
+                $uniqueCoverageId
             );
 
             try {
@@ -53,6 +58,8 @@ class IngestHandler extends S3Handler
                     $outputKey,
                     $coverage
                 );
+
+                $this->coverageFilePersistService->persistToBigQuery($coverage, $uniqueCoverageId);
             } catch (ParseException) {
                 // Something went wrong during parsing. In the future, we should log this.
                 continue;
