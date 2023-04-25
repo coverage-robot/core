@@ -9,38 +9,35 @@ class BranchCoverage extends AbstractLineCoverage
     /**
      * @param int $lineNumber
      * @param int $lineHits
-     * @param array<array-key, int> $branchesTaken
+     * @param array<array-key, int> $branchesHit
      */
     public function __construct(
         int $lineNumber,
         int $lineHits = 0,
-        private array $branchesTaken = []
+        private array $branchesHit = []
     ) {
         parent::__construct($lineNumber, $lineHits);
     }
 
-    public function addToBranchesHit(int $branchNumber, int $branchesTaken): void
+    public function addToBranchHits(int $branchNumber, int $branchesTaken): void
     {
-        $this->branchesTaken[$branchNumber] = ($this->branchesTaken[$branchNumber] ?? 0) + $branchesTaken;
+        $this->branchesHit[$branchNumber] = ($this->branchesHit[$branchNumber] ?? 0) + $branchesTaken;
     }
 
-    public function isPartiallyCovered(): bool
+    /**
+     * Get the branches hit during tests.
+     *
+     * It's important to note that the branch is only partially covered if any of the branches of logic **have
+     * not** been run at least once.
+     *
+     * We cannot check if line hits is equal to branches taken because it's possible that a branch without an
+     * else (for example, a condition for bailing early) will result in less branches hit than line hits.
+     *
+     * @return int[]
+     */
+    public function getBranchesHit(): array
     {
-        // The branch is only partially covered if any of the branches **have not**
-        // been run at least once. We cannot check if line hits is equal to branches taken
-        // because it's possible that a branch without an else (for example, a condition
-        // for bailing early) will result in less branches hit than line hits.
-        return !empty(
-            array_filter(
-                $this->branchesTaken,
-                static fn(int $branchesTaken) => $branchesTaken === 0
-            )
-        );
-    }
-
-    public function getBranchesTaken(): array
-    {
-        return $this->branchesTaken;
+        return $this->branchesHit;
     }
 
     public function getType(): LineTypeEnum
@@ -53,8 +50,7 @@ class BranchCoverage extends AbstractLineCoverage
         return array_merge(
             parent::jsonSerialize(),
             [
-                'branchesTaken' => $this->getBranchesTaken(),
-                'isPartiallyCovered' => $this->isPartiallyCovered(),
+                'branchHits' => $this->getBranchesHit()
             ]
         );
     }

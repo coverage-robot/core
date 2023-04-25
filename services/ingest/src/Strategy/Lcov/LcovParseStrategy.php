@@ -145,7 +145,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                     $line = $latestFile->getSpecificLineCoverage($lineNumber);
 
                     if ($line instanceof BranchCoverage) {
-                        $line->addToBranchesHit((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
+                        $line->addToBranchHits((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
                         break;
                     }
 
