@@ -32,7 +32,7 @@ class File implements JsonSerializable
     {
         if (!array_key_exists($lineIdentifier, $this->lines)) {
             throw new OutOfBoundsException(
-                sprintf("No coverage recorded for line: %s", $lineIdentifier)
+                sprintf('No coverage recorded for line: %s', $lineIdentifier)
             );
         }
 

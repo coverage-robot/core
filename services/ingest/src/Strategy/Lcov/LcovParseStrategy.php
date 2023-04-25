@@ -111,41 +111,41 @@ class LcovParseStrategy implements ParseStrategyInterface
             case self::LINE_DATA:
                 $latestFile->setLineCoverage(
                     new StatementCoverage(
-                        (int)$extractedData["lineNumber"],
-                        (int)$extractedData["lineHits"],
+                        (int)$extractedData['lineNumber'],
+                        (int)$extractedData['lineHits'],
                     )
                 );
                 break;
             case self::FUNCTION:
             case self::FUNCTION_DATA:
                 try {
-                    $line = $latestFile->getSpecificLineCoverage($extractedData["name"]);
+                    $line = $latestFile->getSpecificLineCoverage($extractedData['name']);
 
                     $latestFile->setLineCoverage(
                         new MethodCoverage(
                             $line->getLineNumber(),
-                            (int)$extractedData["lineHits"] ?: $line->getLineHits(),
-                            $extractedData["name"]
+                            (int)$extractedData['lineHits'] ?: $line->getLineHits(),
+                            $extractedData['name']
                         )
                     );
                 } catch (OutOfBoundsException) {
                     $latestFile->setLineCoverage(
                         new MethodCoverage(
-                            (int)$extractedData["lineNumber"],
+                            (int)$extractedData['lineNumber'],
                             0,
-                            $extractedData["name"]
+                            $extractedData['name']
                         )
                     );
                 }
                 break;
             case self::BRANCH_DATA:
-                $lineNumber = (int)$extractedData["lineNumber"];
+                $lineNumber = (int)$extractedData['lineNumber'];
 
                 try {
                     $line = $latestFile->getSpecificLineCoverage($lineNumber);
 
                     if ($line instanceof BranchCoverage) {
-                        $line->addToBranchesHit((int)$extractedData["branchNumber"], (int)$extractedData["branchHits"]);
+                        $line->addToBranchesHit((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
                         break;
                     }
 
@@ -154,7 +154,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                             $line->getLineNumber(),
                             $line->getLineHits(),
                             [
-                                (int)$extractedData["branchNumber"] => (int)$extractedData["branchHits"]
+                                (int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']
                             ]
                         )
                     );
@@ -163,7 +163,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                         new BranchCoverage(
                             $lineNumber,
                             0,
-                            [(int)$extractedData["branchNumber"] => (int)$extractedData["branchHits"]]
+                            [(int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']]
                         )
                     );
                 }

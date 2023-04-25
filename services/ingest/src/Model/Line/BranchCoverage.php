@@ -31,10 +31,10 @@ class BranchCoverage extends AbstractLineCoverage
         // because it's possible that a branch without an else (for example, a condition
         // for bailing early) will result in less branches hit than line hits.
         return !empty(
-        array_filter(
-            $this->branchesTaken,
-            static fn(int $branchesTaken) => $branchesTaken === 0
-        )
+            array_filter(
+                $this->branchesTaken,
+                static fn(int $branchesTaken) => $branchesTaken === 0
+            )
         );
     }
 
