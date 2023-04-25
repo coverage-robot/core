@@ -7,11 +7,11 @@ use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
 use App\Service\EnvironmentService;
+use App\Service\UniqueIdGeneratorService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
-use Ramsey\Uuid\Uuid;
 
 class IngestHandler extends S3Handler
 {
@@ -23,7 +23,8 @@ class IngestHandler extends S3Handler
         private readonly EnvironmentService $environmentService,
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
-        private readonly CoverageFilePersistService $coverageFilePersistService
+        private readonly CoverageFilePersistService $coverageFilePersistService,
+        private readonly UniqueIdGeneratorService $uniqueIdGenerator
     ) {
     }
 
@@ -38,14 +39,15 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $prefix = dirname($coverageFile->getObject()->getKey()) . '/';
 
-            $uniqueCoverageId = Uuid::uuid4();
+            $uniqueCoverageId = $this->uniqueIdGenerator->generate();
+
+            $prefix = dirname($coverageFile->getObject()->getKey()) . '/';
 
             $outputKey = sprintf(
                 self::OUTPUT_KEY,
                 $prefix !== './' ? $prefix : '',
-                $uniqueCoverageId->toString()
+                $uniqueCoverageId
             );
 
             try {
@@ -57,7 +59,7 @@ class IngestHandler extends S3Handler
                     $coverage
                 );
 
-                $this->coverageFilePersistService->persistToBigQuery($coverage, $uniqueCoverageId->toString());
+                $this->coverageFilePersistService->persistToBigQuery($coverage, $uniqueCoverageId);
             } catch (ParseException) {
                 // Something went wrong during parsing. In the future, we should log this.
                 continue;
