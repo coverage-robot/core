@@ -6,7 +6,6 @@ use App\Client\BigQueryClient;
 use App\Exception\PersistException;
 use App\Model\File;
 use App\Model\Line\AbstractLineCoverage;
-use App\Model\Line\BranchCoverage;
 use App\Model\Project;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
@@ -81,25 +80,6 @@ class CoverageFilePersistService
 
     private function buildRow(string $uniqueId, Project $project, File $file, AbstractLineCoverage $line): array
     {
-        $metadata = [
-            [
-                'key' => 'lineHits',
-                'value' => $line->getLineHits(),
-            ]
-        ];
-
-        if ($line instanceof BranchCoverage) {
-            $metadata[] = [
-                'key' => 'allBranchesHit',
-                'value' => (string)empty(
-                array_filter(
-                    $line->getBranchHits(),
-                    static fn(int $branchHits) => $branchHits === 0
-                )
-                )
-            ];
-        }
-
         return [
             'id' => $uniqueId,
             'sourceFormat' => $project->getSourceFormat()->name,
@@ -109,7 +89,14 @@ class CoverageFilePersistService
                 null,
             'type' => $line->getType()->name,
             'lineNumber' => $line->getLineNumber(),
-            'metadata' => $metadata
+            'metadata' => array_map(
+                static fn($key, $value) => [
+                    "key" => (string)$key,
+                    "value" => (string)$value
+                ],
+                array_keys($line->jsonSerialize()),
+                array_values($line->jsonSerialize())
+            )
         ];
     }
 }
