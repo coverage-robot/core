@@ -9,19 +9,19 @@ class BranchCoverage extends AbstractLineCoverage
     /**
      * @param int $lineNumber
      * @param int $lineHits
-     * @param array<array-key, int> $branchesHit
+     * @param array<array-key, int> $branchHits
      */
     public function __construct(
         int $lineNumber,
         int $lineHits = 0,
-        private array $branchesHit = []
+        private array $branchHits = []
     ) {
         parent::__construct($lineNumber, $lineHits);
     }
 
     public function addToBranchHits(int $branchNumber, int $branchesTaken): void
     {
-        $this->branchesHit[$branchNumber] = ($this->branchesHit[$branchNumber] ?? 0) + $branchesTaken;
+        $this->branchHits[$branchNumber] = ($this->branchHits[$branchNumber] ?? 0) + $branchesTaken;
     }
 
     /**
@@ -35,9 +35,9 @@ class BranchCoverage extends AbstractLineCoverage
      *
      * @return int[]
      */
-    public function getBranchesHit(): array
+    public function getBranchHits(): array
     {
-        return $this->branchesHit;
+        return $this->branchHits;
     }
 
     public function getType(): LineTypeEnum
@@ -50,7 +50,7 @@ class BranchCoverage extends AbstractLineCoverage
         return array_merge(
             parent::jsonSerialize(),
             [
-                'branchHits' => $this->getBranchesHit()
+                'branchHits' => $this->getBranchHits()
             ]
         );
     }

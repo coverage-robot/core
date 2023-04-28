@@ -6,10 +6,12 @@ use App\Client\BigQueryClient;
 use App\Exception\PersistException;
 use App\Model\File;
 use App\Model\Line\AbstractLineCoverage;
+use App\Model\Line\BranchCoverage;
 use App\Model\Project;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
+use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CoverageFilePersistService
@@ -21,7 +23,7 @@ class CoverageFilePersistService
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function persistToS3(string $bucket, string $key, Project $projectCoverage): bool
     {
@@ -58,31 +60,56 @@ class CoverageFilePersistService
         return $insertResponse->isSuccessful();
     }
 
-    private function buildRows(Project $projectCoverage, string $uniqueId): array
+    private function buildRows(Project $project, string $uniqueId): array
     {
         return array_reduce(
-            $projectCoverage->getFiles(),
-            static function (array $carry, File $fileCoverage) use ($projectCoverage, $uniqueId): array {
+            $project->getFiles(),
+            function (array $carry, File $file) use ($project, $uniqueId): array {
                 return [
                     ...$carry,
                     ...array_map(
-                        static fn(AbstractLineCoverage $lineCoverage): array => [
-                            'data' => [
-                                'id' => $uniqueId,
-                                'sourceFormat' => $projectCoverage->getSourceFormat()->name,
-                                'fileName' => $fileCoverage->getFileName(),
-                                'generatedAt' => $projectCoverage->getGeneratedAt() ?
-                                    $projectCoverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
-                                    null,
-                                'lineNumber' => $lineCoverage->getLineNumber(),
-                                'lineHits' => $lineCoverage->getLineHits()
-                            ]
+                        fn(AbstractLineCoverage $line): array => [
+                            'data' => $this->buildRow($uniqueId, $project, $file, $line)
                         ],
-                        $fileCoverage->getAllLineCoverage()
+                        $file->getAllLineCoverage()
                     )
                 ];
             },
             []
         );
+    }
+
+    private function buildRow(string $uniqueId, Project $project, File $file, AbstractLineCoverage $line): array
+    {
+        $metadata = [
+            [
+                'key' => 'lineHits',
+                'value' => $line->getLineHits(),
+            ]
+        ];
+
+        if ($line instanceof BranchCoverage) {
+            $metadata[] = [
+                'key' => 'allBranchesHit',
+                'value' => (string)empty(
+                array_filter(
+                    $line->getBranchHits(),
+                    static fn(int $branchHits) => $branchHits === 0
+                )
+                )
+            ];
+        }
+
+        return [
+            'id' => $uniqueId,
+            'sourceFormat' => $project->getSourceFormat()->name,
+            'fileName' => $file->getFileName(),
+            'generatedAt' => $project->getGeneratedAt() ?
+                $project->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                null,
+            'type' => $line->getType()->name,
+            'lineNumber' => $line->getLineNumber(),
+            'metadata' => $metadata
+        ];
     }
 }
