@@ -15,12 +15,12 @@ class CoverageFilePersistServiceTest extends TestCase
     {
         $mockS3PersistService = $this->createMock(S3PersistService::class);
         $mockS3PersistService->expects($this->once())
-            ->method("persist")
+            ->method('persist')
             ->willReturn(true);
 
         $mockBigQueryPersistService = $this->createMock(BigQueryPersistService::class);
         $mockBigQueryPersistService->expects($this->once())
-            ->method("persist")
+            ->method('persist')
             ->willReturn(true);
 
         $coverageFilePersistService = new CoverageFilePersistService([
@@ -31,7 +31,7 @@ class CoverageFilePersistServiceTest extends TestCase
         $this->assertTrue(
             $coverageFilePersistService->persist(
                 $this->createMock(Project::class),
-                "mock-uuid"
+                'mock-uuid'
             )
         );
     }
@@ -40,12 +40,12 @@ class CoverageFilePersistServiceTest extends TestCase
     {
         $mockS3PersistService = $this->createMock(S3PersistService::class);
         $mockS3PersistService->expects($this->once())
-            ->method("persist")
+            ->method('persist')
             ->willThrowException(new PersistException());
 
         $mockBigQueryPersistService = $this->createMock(BigQueryPersistService::class);
         $mockBigQueryPersistService->expects($this->once())
-            ->method("persist")
+            ->method('persist')
             ->willReturn(true);
 
         $coverageFilePersistService = new CoverageFilePersistService([
@@ -56,7 +56,7 @@ class CoverageFilePersistServiceTest extends TestCase
         $this->assertFalse(
             $coverageFilePersistService->persist(
                 $this->createMock(Project::class),
-                "mock-uuid"
+                'mock-uuid'
             )
         );
     }

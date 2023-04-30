@@ -35,7 +35,7 @@ class S3PersistService implements PersistServiceInterface
                 new PutObjectRequest(
                     [
                         'Bucket' => sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
-                        'Key' => sprintf(self::OUTPUT_KEY, "", $uniqueId),
+                        'Key' => sprintf(self::OUTPUT_KEY, '', $uniqueId),
                         'ContentType' => 'application/json',
                         'Metadata' => [
                             'sourceFormat' => $project->getSourceFormat()->name
