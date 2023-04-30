@@ -8,7 +8,7 @@ class IngestCompleteEvent
 
     public function __construct(array $data)
     {
-        $this->uniqueId = (string)$data["uniqueId"] ?? '';
+        $this->uniqueId = (string)$data['uniqueId'] ?? '';
     }
 
     public function getUniqueId(): string

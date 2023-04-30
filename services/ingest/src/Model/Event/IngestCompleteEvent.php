@@ -13,7 +13,7 @@ class IngestCompleteEvent implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            "uniqueId" => $this->uniqueId
+            'uniqueId' => $this->uniqueId
         ];
     }
 }

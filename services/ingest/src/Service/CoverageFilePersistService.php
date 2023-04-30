@@ -12,10 +12,9 @@ class CoverageFilePersistService
 {
     public function __construct(
         #[TaggedIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
-        private readonly iterable        $persistServices,
+        private readonly iterable $persistServices,
         private readonly LoggerInterface $persistServiceLogger
-    )
-    {
+    ) {
     }
 
     /**

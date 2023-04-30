@@ -12,8 +12,7 @@ class AnalyseHandler extends SqsHandler
 {
     public function __construct(
         private readonly LoggerInterface $handlerLogger
-    )
-    {
+    ) {
     }
 
     public function handleSqs(SqsEvent $event, Context $context): void
@@ -21,7 +20,7 @@ class AnalyseHandler extends SqsHandler
         foreach ($event->getRecords() as $record) {
             $event = new IngestCompleteEvent($record->getBody());
 
-            $this->handlerLogger->info(sprintf("Starting analysis on %s coverage upload.", $event->getUniqueId()));
+            $this->handlerLogger->info(sprintf('Starting analysis on %s coverage upload.', $event->getUniqueId()));
         }
     }
 }

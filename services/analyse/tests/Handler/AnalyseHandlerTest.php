@@ -12,7 +12,7 @@ class AnalyseHandlerTest extends TestCase
     public function testHandleSqs(): void
     {
         $handler = new AnalyseHandler();
-        
+
         $handler->handleSqs(
             new SqsEvent(
                 [
