@@ -1,4 +1,6 @@
 {
+    "name": "ryanmab/coverage",
+    "description": "The analyse coverage service.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
