@@ -17,18 +17,18 @@ class SqsPersistServiceTest extends TestCase
     {
         $messageBus = $this->createMock(MessageBus::class);
         $messageBus->expects($this->once())
-            ->method("dispatch")
+            ->method('dispatch')
             ->with(
-                new IngestCompleteEvent("mock-uuid")
+                new IngestCompleteEvent('mock-uuid')
             )
             ->willReturn(Envelope::wrap(
-                new IngestCompleteEvent("mock-uuid"),
-                [new SentStamp("")]
+                new IngestCompleteEvent('mock-uuid'),
+                [new SentStamp('')]
             ));
 
         $sqsPersistService = new SqsPersistService($messageBus);
 
-        $successful = $sqsPersistService->persist($this->createMock(Project::class), "mock-uuid");
+        $successful = $sqsPersistService->persist($this->createMock(Project::class), 'mock-uuid');
 
         $this->assertTrue($successful);
     }
