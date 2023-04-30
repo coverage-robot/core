@@ -49,8 +49,26 @@ class S3PersistService implements PersistServiceInterface
 
             $response->resolve();
 
+            $this->persistServiceLogger->info(
+                sprintf(
+                    "Persisting %s into BigQuery was %s",
+                    $uniqueId,
+                    $response->info()['status'] === Response::HTTP_OK ? "successful" : "failed"
+                )
+            );
+
             return $response->info()['status'] === Response::HTTP_OK;
         } catch (HttpException $exception) {
+            $this->persistServiceLogger->info(
+                sprintf(
+                    "Exception while persisting %s into S3",
+                    $uniqueId
+                ),
+                [
+                    "exception" => $exception
+                ]
+            );
+
             throw PersistException::from($exception);
         }
     }

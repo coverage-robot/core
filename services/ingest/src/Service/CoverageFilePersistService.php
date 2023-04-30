@@ -30,8 +30,24 @@ class CoverageFilePersistService
 
         /** @var PersistServiceInterface $service */
         foreach ($this->persistServices as $service) {
+            $this->persistServiceLogger->info(
+                sprintf(
+                    "Persisting %s into storage using %s",
+                    $uniqueId,
+                    $service::class
+                )
+            );
+
             try {
                 $successful = $service->persist($project, $uniqueId) && $successful;
+
+                $this->persistServiceLogger->info(
+                    sprintf(
+                        "Persist using %s continues to be a %s",
+                        $service::class,
+                        $successful ? "success" : "fail"
+                    )
+                );
             } catch (PersistException $e) {
                 $this->persistServiceLogger->error(
                     sprintf('Exception received while attempting to persist %s into storage.', $uniqueId),

@@ -6,6 +6,7 @@ provider:
     stage: prod
     environment:
         APP_ENV: prod
+        INGEST_COMPLETE_QUEUE_DSN: { "Ref": "ingestCompletionQueue" }
     iam:
         role:
             statements:
@@ -19,6 +20,11 @@ provider:
                         - 's3:*'
                     Resource:
                         - arn:aws:s3:::coverage-output-${opt:stage, self:provider.stage}/*
+                -   Effect: Allow
+                    Action:
+                        - sqs:*
+                    Resource:
+                        - !GetAtt ingestCompletionQueue.Arn
 
 plugins:
     - ./vendor/bref/bref

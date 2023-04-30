@@ -21,7 +21,9 @@ class BigQueryPersistService implements PersistServiceInterface
         $table = $this->bigQueryClient->getLineAnalyticsDataset()
             ->table('lines');
 
-        $insertResponse = $table->insertRows($this->buildRows($project, $uniqueId));
+        $rows = $this->buildRows($project, $uniqueId);
+
+        $insertResponse = $table->insertRows($rows);
 
         if (!$insertResponse->isSuccessful()) {
             $this->persistServiceLogger->critical(
@@ -38,6 +40,13 @@ class BigQueryPersistService implements PersistServiceInterface
             return false;
         }
 
+        $this->persistServiceLogger->info(
+            sprintf(
+                "Persisting %s (%s rows) into BigQuery was successful",
+                $uniqueId,
+                count($rows)
+            )
+        );
 
         return true;
     }
