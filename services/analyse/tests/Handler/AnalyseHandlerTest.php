@@ -6,12 +6,13 @@ use App\Handler\AnalyseHandler;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class AnalyseHandlerTest extends TestCase
 {
     public function testHandleSqs(): void
     {
-        $handler = new AnalyseHandler();
+        $handler = new AnalyseHandler(new NullLogger());
 
         $handler->handleSqs(
             new SqsEvent(
@@ -20,9 +21,9 @@ class AnalyseHandlerTest extends TestCase
                         [
                             'eventSource' => 'aws:sqs',
                             'messageId' => 'mock',
-                            'body' => [
-
-                            ],
+                            'body' => json_encode([
+                                'uniqueId' => 'mock-uuid'
+                            ]),
                             'messageAttributes' => [
 
                             ]
