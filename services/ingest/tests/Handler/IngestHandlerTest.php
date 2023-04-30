@@ -2,16 +2,14 @@
 
 namespace App\Tests\Handler;
 
-use App\Enum\EnvironmentEnum;
 use App\Handler\IngestHandler;
-use App\Model\ProjectCoverage;
+use App\Model\Project;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
 use App\Service\UniqueIdGeneratorService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
@@ -40,15 +38,13 @@ class IngestHandlerTest extends TestCase
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
-            ->method('persistToS3')
+            ->method('persist')
             ->with(
-                'coverage-output-dev',
-                self::callback(static fn(string $outputKey) => in_array($outputKey, $expectedOutputKeys)),
-                self::callback(static fn(ProjectCoverage $coverage) => !!$coverage->jsonSerialize())
+                self::callback(static fn(Project $coverage) => !!$coverage->jsonSerialize()),
+                'mock-uuid',
             );
 
         $handler = new IngestHandler(
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,

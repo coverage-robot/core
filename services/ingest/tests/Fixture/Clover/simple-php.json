@@ -10,111 +10,81 @@
             "lines": [
                 {
                     "type": "METHOD",
-                    "name": "__construct",
                     "lineNumber": 13,
-                    "count": 4,
-                    "complexity": 1,
-                    "crap": 1
+                    "lineHits": 4,
+                    "name": "__construct"
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 17,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "METHOD",
-                    "name": "sendRequest",
                     "lineNumber": 19,
-                    "count": 4,
-                    "complexity": 1,
-                    "crap": 1
+                    "lineHits": 4,
+                    "name": "sendRequest"
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 21,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "METHOD",
-                    "name": "decorateRequest",
                     "lineNumber": 24,
-                    "count": 4,
-                    "complexity": 1,
-                    "crap": 1
+                    "lineHits": 4,
+                    "name": "decorateRequest"
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 26,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 27,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 28,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 29,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 30,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 31,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 32,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 33,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 34,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 35,
-                    "count": 4,
-                    "complexity": 0,
-                    "crap": 0
+                    "lineHits": 4
                 }
             ]
         },

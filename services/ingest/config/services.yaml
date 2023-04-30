@@ -16,9 +16,3 @@ services:
         public: true
 
     Psr\Container\ContainerInterface: '@service_container'
-
-when@test:
-    services:
-        App\Strategy\:
-            resource: '../src/Strategy/'
-            public: true

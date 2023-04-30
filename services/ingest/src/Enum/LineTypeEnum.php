@@ -7,5 +7,5 @@ enum LineTypeEnum
     case UNKNOWN;
     case STATEMENT;
     case METHOD;
-    case CONDITION;
+    case BRANCH;
 }
