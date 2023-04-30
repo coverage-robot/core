@@ -40,11 +40,10 @@ class IngestHandlerTest extends TestCase
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
-            ->method('persistToS3')
+            ->method('persist')
             ->with(
-                'coverage-output-dev',
-                self::callback(static fn(string $outputKey) => in_array($outputKey, $expectedOutputKeys)),
-                self::callback(static fn(Project $coverage) => !!$coverage->jsonSerialize())
+                self::callback(static fn(Project $coverage) => !!$coverage->jsonSerialize()),
+                'mock-uuid',
             );
 
         $handler = new IngestHandler(
