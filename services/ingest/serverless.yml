@@ -61,3 +61,23 @@ resources:
                     ServerSideEncryptionConfiguration:
                         -   ServerSideEncryptionByDefault:
                                 SSEAlgorithm: 'AES256'
+
+        ingestCompletionQueue:
+            Type: "AWS::SQS::Queue"
+            Properties:
+                QueueName: coverage-ingest-completion-${opt:stage, self:provider.stage}
+                RedrivePolicy:
+                    deadLetterTargetArn: !GetAtt ingestCompletionQueueDeadletter.Arn
+                    maxReceiveCount: 3
+
+        ingestCompletionQueueDeadletter:
+            Type: "AWS::SQS::Queue"
+            Properties:
+                QueueName: coverage-ingest-completion-deadletter-queue-${opt:stage, self:provider.stage}
+                MessageRetentionPeriod: 1209600
+
+    Outputs:
+        ingestCompletionQueue:
+            Value: !GetAtt ingestCompletionQueue.Arn
+            Export:
+                Name: coverage-ingest-completion-${opt:stage, self:provider.stage}

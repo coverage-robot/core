@@ -54,4 +54,9 @@ class S3PersistService implements PersistServiceInterface
             throw PersistException::from($exception);
         }
     }
+
+    public static function getPriority(): int
+    {
+        return 0;
+    }
 }

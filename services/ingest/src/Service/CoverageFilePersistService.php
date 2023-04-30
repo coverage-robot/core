@@ -8,13 +8,14 @@ use App\Service\Persist\PersistServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CoverageFilePersistService implements PersistServiceInterface
+class CoverageFilePersistService
 {
     public function __construct(
-        #[TaggedIterator('app.persist_service')]
-        private readonly iterable $persistServices,
+        #[TaggedIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
+        private readonly iterable        $persistServices,
         private readonly LoggerInterface $persistServiceLogger
-    ) {
+    )
+    {
     }
 
     /**

@@ -17,4 +17,14 @@ interface PersistServiceInterface
      * @return bool
      */
     public function persist(Project $project, string $uniqueId): bool;
+
+    /**
+     * Priories the specific persistence service when injected into the main coverage persist
+     * service.
+     *
+     * The higher the number, the earlier the persistence service will be located in the collection.
+     *
+     * @return int
+     */
+    public static function getPriority(): int;
 }

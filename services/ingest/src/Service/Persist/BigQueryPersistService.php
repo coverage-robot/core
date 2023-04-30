@@ -82,4 +82,9 @@ class BigQueryPersistService implements PersistServiceInterface
             )
         ];
     }
+
+    public static function getPriority(): int
+    {
+        return 0;
+    }
 }

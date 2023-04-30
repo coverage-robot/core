@@ -1,0 +1,9 @@
+framework:
+    messenger:
+        transports:
+            ingestComplete:
+                dsn: '%env(INGEST_COMPLETE_QUEUE_DSN)%'
+                serializer: App\Service\Event\IngestCompleteEventTransportSerializer
+
+        routing:
+            App\Model\Event\IngestCompleteEvent: ingestComplete
