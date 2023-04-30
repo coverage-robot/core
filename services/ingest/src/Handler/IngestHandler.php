@@ -6,7 +6,6 @@ use App\Exception\ParseException;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\EnvironmentService;
 use App\Service\UniqueIdGeneratorService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
@@ -16,7 +15,6 @@ use Bref\Event\S3\S3Handler;
 class IngestHandler extends S3Handler
 {
     public function __construct(
-        private readonly EnvironmentService $environmentService,
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
@@ -39,7 +37,6 @@ class IngestHandler extends S3Handler
 
             try {
                 $coverage = $this->coverageFileParserService->parse($source);
-
 
                 $this->coverageFilePersistService->persist($coverage, $uniqueCoverageId);
             } catch (ParseException) {
