@@ -1,17 +1,17 @@
-name: Ingest
+name: Analyse
 
 on:
     push:
         branches:
             - master
         paths:
-            - 'services/ingest/**'
+            - 'services/analyse/**'
 
     pull_request:
         branches:
             - master
         paths:
-            - 'services/ingest/**'
+            - 'services/analyse/**'
 
     workflow_dispatch:
 
@@ -22,11 +22,11 @@ concurrency:
 defaults:
     run:
         shell: bash
-        working-directory: './services/ingest'
+        working-directory: './services/analyse'
 
 env:
     php-version: "8.2"
-    working-directory: './services/ingest'
+    working-directory: './services/analyse'
 
 jobs:
     build:
@@ -101,8 +101,8 @@ jobs:
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
 
-    ingest-tests:
-        name: "Ingest Tests"
+    analyse-tests:
+        name: "Analyse Tests"
         runs-on: ubuntu-latest
         needs: lint
 
@@ -147,7 +147,7 @@ jobs:
         name: "Cleanup"
         runs-on: ubuntu-latest
         if: always() && needs.build.result == 'success'
-        needs: [ build, ingest-tests ]
+        needs: [ build, analyse-tests ]
 
         steps:
             -   uses: geekyeggo/delete-artifact@v2

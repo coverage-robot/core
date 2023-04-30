@@ -1,0 +1,26 @@
+service: analyse
+
+provider:
+    name: aws
+    region: eu-west-2
+    stage: prod
+    environment:
+        APP_ENV: prod
+        
+plugins:
+    - ./vendor/bref/bref
+
+functions:
+    ingest:
+        handler: App\Handler\AnalyseHandler
+        timeout: 28
+        runtime: php-82
+        architecture: arm64
+
+package:
+    patterns:
+        - '!tests/**'
+        - '!var/**'
+        - 'var/cache/prod/**'
+        - 'public/build/entrypoints.json'
+        - 'public/build/manifest.json'

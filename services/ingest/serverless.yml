@@ -3,9 +3,9 @@ service: ingest
 provider:
     name: aws
     region: eu-west-2
-    stage: dev
+    stage: prod
     environment:
-        APP_ENV: dev
+        APP_ENV: prod
     iam:
         role:
             statements:
