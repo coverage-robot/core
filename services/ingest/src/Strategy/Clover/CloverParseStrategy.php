@@ -10,6 +10,8 @@ use App\Model\Line\MethodCoverage;
 use App\Model\Line\StatementCoverage;
 use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
+use LibXMLError;
+use Psr\Log\LoggerInterface;
 use XMLReader;
 
 class CloverParseStrategy implements ParseStrategyInterface
@@ -22,17 +24,39 @@ class CloverParseStrategy implements ParseStrategyInterface
     private const METHOD = 'method';
     private const CONDITION = 'cond';
 
+    public function __construct(
+        private readonly LoggerInterface $parseStrategyLogger
+    ) {
+    }
+
     public function supports(string $content): bool
     {
         libxml_use_internal_errors(true);
 
         $reader = $this->buildXmlReader($content);
         if (!$reader->read()) {
+            $this->parseStrategyLogger->error('Unable to read first line of Clover file.');
             return false;
         }
 
         while ($reader->read()) {
             if (!$reader->isValid()) {
+                $this->parseStrategyLogger->error(
+                    sprintf('Received %s errors when validating Clover file.', count(libxml_get_errors())),
+                    [
+                        'errors' => array_map(
+                            static fn(LibXMLError $error) => [
+                                'code' => $error->code,
+                                'message' => $error->message,
+                                'line' => $error->line,
+                                'column' => $error->column
+                            ],
+                            libxml_get_errors()
+                        )
+                    ]
+                );
+
+                libxml_clear_errors();
                 return false;
             }
         }
@@ -45,6 +69,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         libxml_use_internal_errors(true);
 
         if (!$this->supports($content)) {
+            $this->parseStrategyLogger->critical('Parse method called for content which is not supported.');
             throw ParseException::notSupportedException();
         }
 

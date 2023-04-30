@@ -16,6 +16,7 @@ use Bref\Event\S3\S3Event;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class IngestHandlerTest extends TestCase
 {
@@ -48,7 +49,8 @@ class IngestHandlerTest extends TestCase
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,
-            $mockUniqueIdGenerator
+            $mockUniqueIdGenerator,
+            new NullLogger()
         );
 
         $handler->handleS3($event, Context::fake());
@@ -56,10 +58,13 @@ class IngestHandlerTest extends TestCase
 
     private function getRealCoverageFileParserService(): CoverageFileParserService
     {
-        return new CoverageFileParserService([
-            new LcovParseStrategy(),
-            new CloverParseStrategy()
-        ]);
+        return new CoverageFileParserService(
+            [
+                new LcovParseStrategy(new NullLogger()),
+                new CloverParseStrategy(new NullLogger())
+            ],
+            new NullLogger()
+        );
     }
 
     /**

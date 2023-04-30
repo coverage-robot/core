@@ -11,6 +11,7 @@ use App\Model\Line\StatementCoverage;
 use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
+use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
 {
@@ -20,6 +21,8 @@ class LcovParseStrategy implements ParseStrategyInterface
     private const BRANCH_DATA = 'BRDA';
     private const FUNCTION = 'FN';
     private const FUNCTION_DATA = 'FNDA';
+
+    private const LINE_STRUCTURE = '/^(?<type>\w+):(?<data>.*)$/';
 
     private const COVERAGE_DATA_VALIDATION = [
         'TN' => '.*$',
@@ -38,6 +41,11 @@ class LcovParseStrategy implements ParseStrategyInterface
 
     public const END_OF_RECORD_MARKER = 'end_of_record';
 
+    public function __construct(
+        private readonly LoggerInterface $parseStrategyLogger
+    ) {
+    }
+
     /**
      * @inheritDoc
      */
@@ -54,11 +62,25 @@ class LcovParseStrategy implements ParseStrategyInterface
             }
 
             // Match the record type and its data
-            if (!preg_match('/^(?<type>\w+):(?<data>.*)$/', $record, $matches)) {
+            if (!preg_match(self::LINE_STRUCTURE, $record, $matches)) {
+                $this->parseStrategyLogger->error(
+                    'Unable to validate structure of line in Lcov file.',
+                    [
+                        'line' => $record
+                    ]
+                );
+
                 return false;
             }
 
             if (!preg_match($this->getLineValidation($matches['type']), $matches['data'])) {
+                $this->parseStrategyLogger->error(
+                    'Unable to validate data of line in Lcov file.',
+                    [
+                        'line' => $record
+                    ]
+                );
+
                 return false;
             }
         }
@@ -87,7 +109,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                 continue;
             }
 
-            preg_match('/^(?<type>\w+):(?<data>.*)$/', $record, $matches);
+            preg_match(self::LINE_STRUCTURE, $record, $matches);
 
             $project = $this->handleLine($project, $matches['type'], $matches['data']);
         }
@@ -102,7 +124,6 @@ class LcovParseStrategy implements ParseStrategyInterface
         /** @var File $latestFile */
         $latestFile = end($files);
         preg_match($this->getLineValidation($type), $data, $extractedData);
-
 
         switch ($type) {
             case self::FILE:

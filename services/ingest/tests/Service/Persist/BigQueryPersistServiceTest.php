@@ -13,6 +13,7 @@ use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
 use Google\Cloud\BigQuery\Table;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 
 class BigQueryPersistServiceTest extends TestCase
@@ -76,7 +77,7 @@ class BigQueryPersistServiceTest extends TestCase
             ->method('getLineAnalyticsDataset')
             ->willReturn($mockBigQueryDataset);
 
-        $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient);
+        $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient, new NullLogger());
 
         $bigQueryPersistService->persist($coverage, $uuid);
     }

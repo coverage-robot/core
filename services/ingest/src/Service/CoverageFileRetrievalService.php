@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Exception\RetrievalException;
 use AsyncAws\Core\Exception\Exception;
-use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\S3Client;
 use Bref\Event\S3\Bucket;
@@ -16,6 +15,13 @@ class CoverageFileRetrievalService
     {
     }
 
+    /**
+     * Ingest a file from an S3 bucket.
+     *
+     * @param Bucket $bucket
+     * @param BucketObject $object
+     * @return string
+     */
     public function ingestFromS3(Bucket $bucket, BucketObject $object): string
     {
         try {

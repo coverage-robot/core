@@ -5,6 +5,7 @@ namespace App\Tests\Strategy\Clover;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
+use Psr\Log\NullLogger;
 
 class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 {
@@ -22,6 +23,6 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new CloverParseStrategy();
+        return new CloverParseStrategy(new NullLogger());
     }
 }

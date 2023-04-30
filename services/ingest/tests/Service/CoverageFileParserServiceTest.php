@@ -9,6 +9,7 @@ use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CoverageFileParserServiceTest extends TestCase
 {
@@ -38,7 +39,7 @@ class CoverageFileParserServiceTest extends TestCase
             $mockedStrategies[] = $mockStrategy;
         }
 
-        $coverageFileParserService = new CoverageFileParserService($mockedStrategies);
+        $coverageFileParserService = new CoverageFileParserService($mockedStrategies, new NullLogger());
         $this->assertEquals($coverage, $coverageFileParserService->parse('mock-file'));
     }
 

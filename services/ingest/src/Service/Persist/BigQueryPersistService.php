@@ -6,11 +6,14 @@ use App\Client\BigQueryClient;
 use App\Model\File;
 use App\Model\Line\AbstractLineCoverage;
 use App\Model\Project;
+use Psr\Log\LoggerInterface;
 
 class BigQueryPersistService implements PersistServiceInterface
 {
-    public function __construct(private readonly BigQueryClient $bigQueryClient)
-    {
+    public function __construct(
+        private readonly BigQueryClient $bigQueryClient,
+        private readonly LoggerInterface $persistServiceLogger
+    ) {
     }
 
     public function persist(Project $project, string $uniqueId): bool
@@ -20,7 +23,23 @@ class BigQueryPersistService implements PersistServiceInterface
 
         $insertResponse = $table->insertRows($this->buildRows($project, $uniqueId));
 
-        return $insertResponse->isSuccessful();
+        if (!$insertResponse->isSuccessful()) {
+            $this->persistServiceLogger->critical(
+                sprintf(
+                    '%s row error(s) while attempting to persist coverage file (%s) into BigQuery.',
+                    $uniqueId,
+                    count($insertResponse->failedRows())
+                ),
+                [
+                    'failedRows' => $insertResponse->failedRows()
+                ]
+            );
+
+            return false;
+        }
+
+
+        return true;
     }
 
     private function buildRows(Project $project, string $uniqueId): array

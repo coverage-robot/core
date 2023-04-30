@@ -9,6 +9,7 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use JsonException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class S3PersistService implements PersistServiceInterface
@@ -19,7 +20,8 @@ class S3PersistService implements PersistServiceInterface
 
     public function __construct(
         private readonly S3Client $s3Client,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentService $environmentService,
+        private readonly LoggerInterface $persistServiceLogger
     ) {
     }
 

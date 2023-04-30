@@ -14,6 +14,7 @@ use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class S3PersistServiceTest extends TestCase
 {
@@ -45,7 +46,8 @@ class S3PersistServiceTest extends TestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT)
+            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
+            new NullLogger()
         );
         $S3PersistService->persist(
             $coverage,
@@ -83,7 +85,8 @@ class S3PersistServiceTest extends TestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT)
+            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
+            new NullLogger()
         );
         $S3PersistService->persist(
             $coverage,

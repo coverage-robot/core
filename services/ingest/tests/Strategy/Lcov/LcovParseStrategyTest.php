@@ -5,6 +5,7 @@ namespace App\Tests\Strategy\Lcov;
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
+use Psr\Log\NullLogger;
 
 class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 {
@@ -22,6 +23,6 @@ class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new LcovParseStrategy();
+        return new LcovParseStrategy(new NullLogger());
     }
 }

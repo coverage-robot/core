@@ -8,6 +8,7 @@ use App\Service\CoverageFilePersistService;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\S3PersistService;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CoverageFilePersistServiceTest extends TestCase
 {
@@ -23,10 +24,13 @@ class CoverageFilePersistServiceTest extends TestCase
             ->method('persist')
             ->willReturn(true);
 
-        $coverageFilePersistService = new CoverageFilePersistService([
-            $mockS3PersistService,
-            $mockBigQueryPersistService
-        ]);
+        $coverageFilePersistService = new CoverageFilePersistService(
+            [
+                $mockS3PersistService,
+                $mockBigQueryPersistService
+            ],
+            new NullLogger()
+        );
 
         $this->assertTrue(
             $coverageFilePersistService->persist(
@@ -48,10 +52,13 @@ class CoverageFilePersistServiceTest extends TestCase
             ->method('persist')
             ->willReturn(true);
 
-        $coverageFilePersistService = new CoverageFilePersistService([
-            $mockS3PersistService,
-            $mockBigQueryPersistService
-        ]);
+        $coverageFilePersistService = new CoverageFilePersistService(
+            [
+                $mockS3PersistService,
+                $mockBigQueryPersistService
+            ],
+            new NullLogger()
+        );
 
         $this->assertFalse(
             $coverageFilePersistService->persist(
