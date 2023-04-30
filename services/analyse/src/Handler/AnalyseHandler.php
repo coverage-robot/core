@@ -13,10 +13,9 @@ use Psr\Log\LoggerInterface;
 class AnalyseHandler extends SqsHandler
 {
     public function __construct(
-        private readonly LoggerInterface         $handlerLogger,
+        private readonly LoggerInterface $handlerLogger,
         private readonly CoverageAnalyserService $coverageAnalyserService
-    )
-    {
+    ) {
     }
 
     public function handleSqs(SqsEvent $event, Context $context): void

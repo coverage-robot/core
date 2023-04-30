@@ -51,9 +51,9 @@ class S3PersistService implements PersistServiceInterface
 
             $this->persistServiceLogger->info(
                 sprintf(
-                    "Persisting %s into BigQuery was %s",
+                    'Persisting %s into BigQuery was %s',
                     $uniqueId,
-                    $response->info()['status'] === Response::HTTP_OK ? "successful" : "failed"
+                    $response->info()['status'] === Response::HTTP_OK ? 'successful' : 'failed'
                 )
             );
 
@@ -61,11 +61,11 @@ class S3PersistService implements PersistServiceInterface
         } catch (HttpException $exception) {
             $this->persistServiceLogger->info(
                 sprintf(
-                    "Exception while persisting %s into S3",
+                    'Exception while persisting %s into S3',
                     $uniqueId
                 ),
                 [
-                    "exception" => $exception
+                    'exception' => $exception
                 ]
             );
 

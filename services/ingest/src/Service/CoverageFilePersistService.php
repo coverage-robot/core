@@ -32,7 +32,7 @@ class CoverageFilePersistService
         foreach ($this->persistServices as $service) {
             $this->persistServiceLogger->info(
                 sprintf(
-                    "Persisting %s into storage using %s",
+                    'Persisting %s into storage using %s',
                     $uniqueId,
                     $service::class
                 )
@@ -43,9 +43,9 @@ class CoverageFilePersistService
 
                 $this->persistServiceLogger->info(
                     sprintf(
-                        "Persist using %s continues to be a %s",
+                        'Persist using %s continues to be a %s',
                         $service::class,
-                        $successful ? "success" : "fail"
+                        $successful ? 'success' : 'fail'
                     )
                 );
             } catch (PersistException $e) {

@@ -12,9 +12,8 @@ class SqsPersistService implements PersistServiceInterface
 {
     public function __construct(
         private readonly MessageBusInterface $messageBus,
-        private readonly LoggerInterface     $persistServiceLogger
-    )
-    {
+        private readonly LoggerInterface $persistServiceLogger
+    ) {
     }
 
     public function persist(Project $project, string $uniqueId): bool
@@ -27,9 +26,9 @@ class SqsPersistService implements PersistServiceInterface
 
         $this->persistServiceLogger->info(
             sprintf(
-                "Persisting %s to SQS was %s",
+                'Persisting %s to SQS was %s',
                 $uniqueId,
-                $sent ? "successful" : "failed"
+                $sent ? 'successful' : 'failed'
             )
         );
 

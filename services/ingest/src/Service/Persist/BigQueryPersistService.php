@@ -42,7 +42,7 @@ class BigQueryPersistService implements PersistServiceInterface
 
         $this->persistServiceLogger->info(
             sprintf(
-                "Persisting %s (%s rows) into BigQuery was successful",
+                'Persisting %s (%s rows) into BigQuery was successful',
                 $uniqueId,
                 count($rows)
             )
