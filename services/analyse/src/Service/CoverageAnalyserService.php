@@ -97,15 +97,8 @@ SQL;
             ]
         );
 
-        $line = sprintf(
-            "Total Lines: %s\n\rCoverage: %s\n\rPartial: %s\n\rUncovered: %s\n\rCoverage (%%): %s\n\r",
-            $rows->current()['lines'],
-            $rows->current()['covered'],
-            $rows->current()['partial'],
-            $rows->current()['uncovered'],
-            $rows->current()['coverage']
-        );
-
-        $this->logger->info($line);
+        $this->logger->info('Coverage file analysed.', [
+            'data' => $rows->current()
+        ]);
     }
 }

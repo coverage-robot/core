@@ -22,9 +22,14 @@ class AnalyseHandler extends SqsHandler
     {
         foreach ($event->getRecords() as $record) {
             try {
-                $event = new IngestCompleteEvent(
-                    json_decode($record->getBody(), JSON_THROW_ON_ERROR)
-                );
+                $body = json_decode($record->getBody(), true, JSON_THROW_ON_ERROR);
+
+                if (!is_array($body)) {
+                    $this->handlerLogger->info('Message body was not valid.');
+                    continue;
+                }
+
+                $event = new IngestCompleteEvent($body);
 
                 $this->handlerLogger->info(
                     sprintf('Starting analysis on %s coverage upload.', $event->getUniqueId())

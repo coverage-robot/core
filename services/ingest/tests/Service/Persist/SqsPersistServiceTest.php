@@ -7,6 +7,7 @@ use App\Model\Project;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\SqsPersistService;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBus;
 use Symfony\Component\Messenger\Stamp\SentStamp;
@@ -26,7 +27,7 @@ class SqsPersistServiceTest extends TestCase
                 [new SentStamp('')]
             ));
 
-        $sqsPersistService = new SqsPersistService($messageBus);
+        $sqsPersistService = new SqsPersistService($messageBus, new NullLogger());
 
         $successful = $sqsPersistService->persist($this->createMock(Project::class), 'mock-uuid');
 
