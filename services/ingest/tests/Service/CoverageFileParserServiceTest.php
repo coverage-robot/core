@@ -18,7 +18,7 @@ class CoverageFileParserServiceTest extends TestCase
     ];
 
     #[DataProvider('strategyDataProvider')]
-    public function testParsingSupportedFiles(string $expectedStrategy)
+    public function testParsingSupportedFiles(string $expectedStrategy): void
     {
         $coverage = new Project(CoverageFormatEnum::CLOVER);
 
