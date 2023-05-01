@@ -37,7 +37,7 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name,
+                            'sourceFormat' => $coverage->getSourceFormat(),
                             'commit' => '1',
                             'parent' => '2',
                             'ingestTime' => new DateTimeImmutable('2023-05-02 12:00:00')
@@ -82,7 +82,7 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name,
+                            'sourceFormat' => $coverage->getSourceFormat(),
                             'commit' => '1',
                             'parent' => '2',
                             'ingestTime' => new DateTimeImmutable('2023-05-02 12:00:00')

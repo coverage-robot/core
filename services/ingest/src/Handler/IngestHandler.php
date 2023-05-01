@@ -58,7 +58,7 @@ class IngestHandler extends S3Handler
                     sprintf(
                         'Successfully parsed %s using %s parser.',
                         $uploadId,
-                        $coverage->getSourceFormat()->name
+                        $coverage->getSourceFormat()->value
                     )
                 );
 

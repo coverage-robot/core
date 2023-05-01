@@ -42,7 +42,7 @@ class S3PersistService implements PersistServiceInterface
                         'Key' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $project->getSourceFormat()->name,
+                            'sourceFormat' => $project->getSourceFormat(),
                             'commit' => $upload->getCommit(),
                             'parent' => $upload->getParent(),
                             'ingestTime' => $upload->getIngestTime()

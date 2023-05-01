@@ -2,10 +2,10 @@
 
 namespace App\Enum;
 
-enum LineTypeEnum
+enum LineTypeEnum: string
 {
-    case UNKNOWN;
-    case STATEMENT;
-    case METHOD;
-    case BRANCH;
+    case UNKNOWN = "UNKNOWN";
+    case STATEMENT = "STATEMENT";
+    case METHOD = "METHOD";
+    case BRANCH = "BRANCH";
 }

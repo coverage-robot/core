@@ -69,6 +69,7 @@ class Project implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'sourceFormat' => $this->sourceFormat,
             'generatedAt' => $this->getGeneratedAt(),
             'files' => $this->getFiles()
         ];

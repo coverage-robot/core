@@ -21,13 +21,13 @@ class BigQueryPersistServiceTest extends TestCase
 {
     public function testPersist(): void
     {
-        $uuid = Uuid::uuid4()->toString();
-
         $fileCoverage = new File('mock-file');
         $fileCoverage->setLineCoverage(new StatementCoverage(1, 1));
 
         $coverage = new Project(CoverageFormatEnum::LCOV);
         $coverage->addFile($fileCoverage);
+
+        $upload = new Upload($coverage, Uuid::uuid4()->toString(), "", "");
 
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->expects($this->once())
@@ -41,16 +41,19 @@ class BigQueryPersistServiceTest extends TestCase
                 [
                     [
                         'data' => [
-                            'id' => $uuid,
-                            'sourceFormat' => 'LCOV',
+                            'uploadId' => $upload->getUploadId(),
+                            'commit' => '',
+                            'parent' => '',
+                            'ingestTime' => $upload->getIngestTime(),
+                            'sourceFormat' => CoverageFormatEnum::LCOV,
                             'fileName' => 'mock-file',
                             'generatedAt' => null,
-                            'type' => LineTypeEnum::STATEMENT->name,
+                            'type' => LineTypeEnum::STATEMENT,
                             'lineNumber' => 1,
                             'metadata' => [
                                 [
                                     'key' => 'type',
-                                    'value' => LineTypeEnum::STATEMENT->name,
+                                    'value' => LineTypeEnum::STATEMENT->value,
                                 ],
                                 [
                                     'key' => 'lineNumber',
@@ -80,6 +83,6 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient, new NullLogger());
 
-        $bigQueryPersistService->persist(new Upload($coverage, $uuid, "", ""));
+        $bigQueryPersistService->persist($upload);
     }
 }

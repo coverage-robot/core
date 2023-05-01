@@ -44,6 +44,11 @@ class File implements JsonSerializable
         $this->lines[$line->getUniqueLineIdentifier()] = $line;
     }
 
+    public function toString(): string
+    {
+        return "File #" . $this->getFileName();
+    }
+
     public function jsonSerialize(): array
     {
         return [
