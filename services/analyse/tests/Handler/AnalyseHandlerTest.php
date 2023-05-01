@@ -3,6 +3,7 @@
 namespace App\Tests\Handler;
 
 use App\Handler\AnalyseHandler;
+use App\Service\CoverageAnalyserService;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +13,13 @@ class AnalyseHandlerTest extends TestCase
 {
     public function testHandleSqs(): void
     {
-        $handler = new AnalyseHandler(new NullLogger());
+        $coverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+
+        $coverageAnalyserService->expects($this->once())
+            ->method('analyse')
+            ->with('mock-uuid');
+
+        $handler = new AnalyseHandler(new NullLogger(), $coverageAnalyserService);
 
         $handler->handleSqs(
             new SqsEvent(
@@ -24,9 +31,7 @@ class AnalyseHandlerTest extends TestCase
                             'body' => json_encode([
                                 'uniqueId' => 'mock-uuid'
                             ]),
-                            'messageAttributes' => [
-
-                            ]
+                            'messageAttributes' => []
                         ]
                     ]
                 ]
