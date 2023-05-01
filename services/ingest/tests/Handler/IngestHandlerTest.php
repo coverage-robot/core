@@ -3,18 +3,21 @@
 namespace App\Tests\Handler;
 
 use App\Handler\IngestHandler;
-use App\Model\Project;
+use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
 use App\Service\UniqueIdGeneratorService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
+use AsyncAws\Core\Stream\ResultStream;
+use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -35,14 +38,22 @@ class IngestHandlerTest extends TestCase
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
-            ->willReturnOnConsecutiveCalls(...$coverageFiles);
+            ->willReturnOnConsecutiveCalls(
+                ...array_map(
+                    [$this, "getMockS3ObjectResponse"],
+                    $coverageFiles
+                )
+            );
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
             ->method('persist')
             ->with(
-                self::callback(static fn(Project $coverage) => !!$coverage->jsonSerialize()),
-                'mock-uuid',
+                self::callback(
+                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
+                        $upload->getCommit() === '1' &&
+                        $upload->getParent() === '2'
+                ),
             );
 
         $handler = new IngestHandler(
@@ -67,6 +78,24 @@ class IngestHandlerTest extends TestCase
         );
     }
 
+    private function getMockS3ObjectResponse(string $body): GetObjectOutput|MockObject
+    {
+        $mockStream = $this->createMock(ResultStream::class);
+        $mockStream->method("getContentAsString")
+            ->willReturn($body);
+
+        $mockResponse = $this->createMock(GetObjectOutput::class);
+        $mockResponse->method("getBody")
+            ->willReturn($mockStream);
+        $mockResponse->method("getMetadata")
+            ->willReturn([
+                "commit" => "1",
+                "parent" => "2"
+            ]);
+
+        return $mockResponse;
+    }
+
     /**
      * @throws InvalidLambdaEvent
      */
@@ -78,6 +107,7 @@ class IngestHandlerTest extends TestCase
                     'Records' => [
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',
@@ -102,6 +132,7 @@ class IngestHandlerTest extends TestCase
                     'Records' => [
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',
@@ -126,6 +157,7 @@ class IngestHandlerTest extends TestCase
                     'Records' => [
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',
@@ -138,6 +170,7 @@ class IngestHandlerTest extends TestCase
                         ],
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',
@@ -164,6 +197,7 @@ class IngestHandlerTest extends TestCase
                     'Records' => [
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',
@@ -176,6 +210,7 @@ class IngestHandlerTest extends TestCase
                         ],
                         [
                             'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
                             's3' => [
                                 'bucket' => [
                                     'name' => 'mock-bucket',

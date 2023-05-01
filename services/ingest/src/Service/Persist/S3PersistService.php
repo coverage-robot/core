@@ -3,7 +3,7 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
-use App\Model\Project;
+use App\Model\Upload;
 use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
@@ -26,21 +26,26 @@ class S3PersistService implements PersistServiceInterface
     }
 
     /**
-     * @param Project $project
-     * @param string $uniqueId
+     * @param Upload $upload
+     * @return bool
      * @throws JsonException
      */
-    public function persist(Project $project, string $uniqueId): bool
+    public function persist(Upload $upload): bool
     {
         try {
+            $project = $upload->getProject();
+
             $response = $this->s3Client->putObject(
                 new PutObjectRequest(
                     [
                         'Bucket' => sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
-                        'Key' => sprintf(self::OUTPUT_KEY, '', $uniqueId),
+                        'Key' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $project->getSourceFormat()->name
+                            'sourceFormat' => $project->getSourceFormat()->name,
+                            'commit' => $upload->getCommit(),
+                            'parent' => $upload->getParent(),
+                            'ingestTime' => $upload->getIngestTime()
                         ],
                         'Body' => json_encode($project, JSON_THROW_ON_ERROR),
                     ]
@@ -52,7 +57,7 @@ class S3PersistService implements PersistServiceInterface
             $this->persistServiceLogger->info(
                 sprintf(
                     'Persisting %s into BigQuery was %s',
-                    $uniqueId,
+                    $upload,
                     $response->info()['status'] === Response::HTTP_OK ? 'successful' : 'failed'
                 )
             );
@@ -62,7 +67,7 @@ class S3PersistService implements PersistServiceInterface
             $this->persistServiceLogger->info(
                 sprintf(
                     'Exception while persisting %s into S3',
-                    $uniqueId
+                    $upload
                 ),
                 [
                     'exception' => $exception

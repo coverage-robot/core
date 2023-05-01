@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Exception\PersistException;
-use App\Model\Project;
+use App\Model\Upload;
 use App\Service\Persist\PersistServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -20,11 +20,10 @@ class CoverageFilePersistService
     /**
      * Persist a parsed project's coverage file into all supported services.
      *
-     * @param Project $project
-     * @param string $uniqueId
+     * @param Upload $upload
      * @return bool
      */
-    public function persist(Project $project, string $uniqueId): bool
+    public function persist(Upload $upload): bool
     {
         $successful = true;
 
@@ -33,13 +32,13 @@ class CoverageFilePersistService
             $this->persistServiceLogger->info(
                 sprintf(
                     'Persisting %s into storage using %s',
-                    $uniqueId,
+                    $upload,
                     $service::class
                 )
             );
 
             try {
-                $successful = $service->persist($project, $uniqueId) && $successful;
+                $successful = $service->persist($upload) && $successful;
 
                 $this->persistServiceLogger->info(
                     sprintf(
@@ -50,7 +49,7 @@ class CoverageFilePersistService
                 );
             } catch (PersistException $e) {
                 $this->persistServiceLogger->error(
-                    sprintf('Exception received while attempting to persist %s into storage.', $uniqueId),
+                    sprintf('Exception received while attempting to persist %s into storage.', $upload),
                     [
                         'exception' => $e
                     ]

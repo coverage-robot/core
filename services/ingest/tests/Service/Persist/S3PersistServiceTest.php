@@ -6,6 +6,7 @@ use App\Enum\CoverageFormatEnum;
 use App\Enum\EnvironmentEnum;
 use App\Exception\PersistException;
 use App\Model\Project;
+use App\Model\Upload;
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
@@ -36,7 +37,10 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name
+                            'sourceFormat' => $coverage->getSourceFormat()->name,
+                            'commit' => '1',
+                            'parent' => '2',
+                            'ingestTime' => new DateTimeImmutable('2023-05-02 12:00:00')
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -50,8 +54,13 @@ class S3PersistServiceTest extends TestCase
             new NullLogger()
         );
         $S3PersistService->persist(
-            $coverage,
-            'mock-uuid'
+            new Upload(
+                $coverage,
+                'mock-uuid',
+                '1',
+                '2',
+                new DateTimeImmutable('2023-05-02 12:00:00')
+            )
         );
     }
 
@@ -73,7 +82,10 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name
+                            'sourceFormat' => $coverage->getSourceFormat()->name,
+                            'commit' => '1',
+                            'parent' => '2',
+                            'ingestTime' => new DateTimeImmutable('2023-05-02 12:00:00')
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -89,8 +101,13 @@ class S3PersistServiceTest extends TestCase
             new NullLogger()
         );
         $S3PersistService->persist(
-            $coverage,
-            'mock-uuid'
+            new Upload(
+                $coverage,
+                'mock-uuid',
+                '1',
+                '2',
+                new DateTimeImmutable('2023-05-02 12:00:00')
+            )
         );
     }
 }

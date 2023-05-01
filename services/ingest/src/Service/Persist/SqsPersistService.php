@@ -2,8 +2,7 @@
 
 namespace App\Service\Persist;
 
-use App\Model\Event\IngestCompleteEvent;
-use App\Model\Project;
+use App\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\SentStamp;
@@ -16,18 +15,16 @@ class SqsPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Project $project, string $uniqueId): bool
+    public function persist(Upload $upload): bool
     {
-        $envelope = $this->messageBus->dispatch(
-            new IngestCompleteEvent($uniqueId)
-        );
+        $envelope = $this->messageBus->dispatch($upload);
 
         $sent = !is_null($envelope->last(SentStamp::class));
 
         $this->persistServiceLogger->info(
             sprintf(
                 'Persisting %s to SQS was %s',
-                $uniqueId,
+                $upload,
                 $sent ? 'successful' : 'failed'
             )
         );

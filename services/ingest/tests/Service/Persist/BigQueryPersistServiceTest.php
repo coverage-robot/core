@@ -8,6 +8,7 @@ use App\Enum\LineTypeEnum;
 use App\Model\File;
 use App\Model\Line\StatementCoverage;
 use App\Model\Project;
+use App\Model\Upload;
 use App\Service\Persist\BigQueryPersistService;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
@@ -79,6 +80,6 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient, new NullLogger());
 
-        $bigQueryPersistService->persist($coverage, $uuid);
+        $bigQueryPersistService->persist(new Upload($coverage, $uuid, "", ""));
     }
 }

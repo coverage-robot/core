@@ -6,6 +6,7 @@ use App\Client\BigQueryClient;
 use App\Model\File;
 use App\Model\Line\AbstractLineCoverage;
 use App\Model\Project;
+use App\Model\Upload;
 use Psr\Log\LoggerInterface;
 
 class BigQueryPersistService implements PersistServiceInterface
@@ -16,12 +17,12 @@ class BigQueryPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Project $project, string $uniqueId): bool
+    public function persist(Upload $upload): bool
     {
         $table = $this->bigQueryClient->getLineAnalyticsDataset()
             ->table('lines');
 
-        $rows = $this->buildRows($project, $uniqueId);
+        $rows = $this->buildRows($upload->getProject(), $upload->getUploadId());
 
         $insertResponse = $table->insertRows($rows);
 
@@ -29,7 +30,7 @@ class BigQueryPersistService implements PersistServiceInterface
             $this->persistServiceLogger->critical(
                 sprintf(
                     '%s row error(s) while attempting to persist coverage file (%s) into BigQuery.',
-                    $uniqueId,
+                    $upload,
                     count($insertResponse->failedRows())
                 ),
                 [
@@ -43,7 +44,7 @@ class BigQueryPersistService implements PersistServiceInterface
         $this->persistServiceLogger->info(
             sprintf(
                 'Persisting %s (%s rows) into BigQuery was successful',
-                $uniqueId,
+                $upload,
                 count($rows)
             )
         );

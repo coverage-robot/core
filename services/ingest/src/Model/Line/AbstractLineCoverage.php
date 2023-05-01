@@ -44,6 +44,15 @@ abstract class AbstractLineCoverage implements JsonSerializable
         return $this->lineHits;
     }
 
+    public function __toString(): string
+    {
+        return sprintf(
+            "%s #%s",
+            ucfirst(strtolower($this->getType()->name)),
+            $this->getUniqueLineIdentifier()
+        );
+    }
+
     public function jsonSerialize(): array
     {
         return [

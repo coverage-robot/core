@@ -6,4 +6,4 @@ framework:
                 serializer: App\Service\Event\IngestCompleteEventTransportSerializer
 
         routing:
-            App\Model\Event\IngestCompleteEvent: ingestComplete
+            App\Model\Upload: ingestComplete
