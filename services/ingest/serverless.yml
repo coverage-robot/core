@@ -6,7 +6,7 @@ provider:
     stage: prod
     environment:
         APP_ENV: prod
-        INGEST_COMPLETE_QUEUE_DSN: { "Ref": "analysisQueue" }
+        ANALYSIS_QUEUE_DSN: { "Ref": "analysisQueue" }
     iam:
         role:
             statements:
@@ -24,7 +24,7 @@ provider:
                     Action:
                         - sqs:*
                     Resource:
-                        - !GetAtt ingestCompletionQueue.Arn
+                        - !GetAtt analysisQueue.Arn
 
 plugins:
     - ./vendor/bref/bref
