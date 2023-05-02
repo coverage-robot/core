@@ -7,7 +7,7 @@ use JsonException;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 
-class UploadEventTransportSerializer implements SerializerInterface
+class AnalysisTransportSerializer implements SerializerInterface
 {
     /**
      * @throws Exception

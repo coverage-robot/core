@@ -66,7 +66,7 @@ class Upload implements JsonSerializable
     {
         return [
             'uploadId' => $this->uploadId,
-            'ingestTime' => $this->ingestTime,
+            'ingestTime' => $this->ingestTime->format('Y-m-d H:i:s'),
             'commit' => $this->commit,
             'parent' => $this->parent
         ];

@@ -6,7 +6,7 @@ provider:
     stage: prod
     environment:
         APP_ENV: prod
-        INGEST_COMPLETE_QUEUE_DSN: { "Ref": "ingestCompletionQueue" }
+        INGEST_COMPLETE_QUEUE_DSN: { "Ref": "analysisQueue" }
     iam:
         role:
             statements:
@@ -68,22 +68,22 @@ resources:
                         -   ServerSideEncryptionByDefault:
                                 SSEAlgorithm: 'AES256'
 
-        ingestCompletionQueue:
+        analysisQueue:
             Type: "AWS::SQS::Queue"
             Properties:
-                QueueName: coverage-ingest-completion-${opt:stage, self:provider.stage}
+                QueueName: coverage-analysis-${opt:stage, self:provider.stage}
                 RedrivePolicy:
-                    deadLetterTargetArn: !GetAtt ingestCompletionQueueDeadletter.Arn
+                    deadLetterTargetArn: !GetAtt analysisQueueDeadletter.Arn
                     maxReceiveCount: 3
 
-        ingestCompletionQueueDeadletter:
+        analysisQueueDeadletter:
             Type: "AWS::SQS::Queue"
             Properties:
-                QueueName: coverage-ingest-completion-deadletter-queue-${opt:stage, self:provider.stage}
+                QueueName: coverage-analysis-deadletter-queue-${opt:stage, self:provider.stage}
                 MessageRetentionPeriod: 1209600
 
     Outputs:
-        ingestCompletionQueue:
-            Value: !GetAtt ingestCompletionQueue.Arn
+        analysisQueue:
+            Value: !GetAtt analysisQueue.Arn
             Export:
-                Name: coverage-ingest-completion-${opt:stage, self:provider.stage}
+                Name: coverage-analysis-${opt:stage, self:provider.stage}

@@ -44,7 +44,7 @@ class BigQueryPersistServiceTest extends TestCase
                             'uploadId' => $upload->getUploadId(),
                             'commit' => '',
                             'parent' => '',
-                            'ingestTime' => $upload->getIngestTime(),
+                            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
                             'sourceFormat' => CoverageFormatEnum::LCOV,
                             'fileName' => 'mock-file',
                             'generatedAt' => null,
