@@ -2,103 +2,21 @@
 
 namespace App\Service;
 
-use App\Client\BigQueryClient;
-use Psr\Log\LoggerInterface;
+use App\Model\CachedPublishableCoverageData;
+use App\Model\PublishableCoverageDataInterface;
+use App\Model\Upload;
 
 class CoverageAnalyserService
 {
-    public function __construct(
-        private readonly BigQueryClient $bigQueryClient,
-        private readonly LoggerInterface $logger
-    ) {
+    public function __construct(private readonly QueryService $queryService)
+    {
     }
 
-    public function analyse(string $uniqueId): void
+    public function analyse(Upload $upload): PublishableCoverageDataInterface
     {
-        $query = <<<SQL
-WITH unnested AS (
-  SELECT
-    *,
-    (
-      SELECT
-        IF (
-          value <> '',
-          CAST(value AS int),
-          0
-        )
-      FROM
-        UNNEST(metadata)
-      WHERE
-        KEY = "lineHits"
-    ) AS hits,
-    IF (
-      type = "BRANCH",
-      (
-        SELECT
-          IF (
-            value <> '',
-            CAST(value AS int),
-            0
-          )
-        FROM
-          UNNEST(metadata)
-        WHERE
-          KEY = "partial"
-      ),
-      0
-    ) AS isPartiallyHit
-  FROM
-    `coverage-384615.line_analytics.lines`
-),
-coverage AS (
-  SELECT
-    IF(
-      SUM(hits) = 0,
-      "uncovered",
-      IF (
-        MAX(isPartiallyHit) = 1,
-        "partial",
-        "covered"
-      )
-    ) as state
-  FROM
-    unnested
-  GROUP BY
-    fileName,
-    lineNumber
-),
-summed AS (
-  SELECT
-COUNT(*) as lines,
-SUM(IF(state = "covered", 1, 0)) as covered,
-SUM(IF(state = "partial", 1, 0)) as partial,
-SUM(IF(state = "uncovered", 1, 0)) as uncovered,
-FROM
-  coverage
-)
-SELECT
-SUM(lines) as lines,
-SUM(covered) as covered,
-SUM(partial) as partial,
-SUM(uncovered) as uncovered,
-CONCAT(ROUND((SUM(covered) + SUM(partial)) / SUM(lines) * 100, 2), "%") as coverage
-FROM
-summed
-SQL;
-
-
-        $job = $this->bigQueryClient->query($query);
-
-        $results = $this->bigQueryClient->runQuery($job);
-
-        $rows = $results->rows(
-            [
-                'maxResults' => 1
-            ]
+        return new CachedPublishableCoverageData(
+            $this->queryService,
+            $upload
         );
-
-        $this->logger->info('Coverage file analysed.', [
-            'data' => $rows->current()
-        ]);
     }
 }

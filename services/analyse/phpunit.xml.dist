@@ -15,6 +15,12 @@
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
+
+        <!-- ###+ knplabs/github-api ### -->
+        <env name="GITHUB_AUTH_METHOD" value="http_password"/>
+        <env name="GITHUB_USERNAME" value="username"/>
+        <env name="GITHUB_SECRET" value="password_or_token"/>
+        <!-- ###- knplabs/github-api ### -->
     </php>
     <testsuites>
         <testsuite name="Project Test Suite">

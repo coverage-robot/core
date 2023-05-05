@@ -38,8 +38,12 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
+            $provider = $source->getMetadata()["provider"];
+            $owner = $source->getMetadata()["owner"];
+            $repository = $source->getMetadata()["repository"];
             $commit = $source->getMetadata()["commit"];
             $parent = $source->getMetadata()["parent"];
+            $pullRequest = $source->getMetadata()["pullRequest"];
 
             $this->handlerLogger->info(
                 sprintf(
@@ -52,7 +56,17 @@ class IngestHandler extends S3Handler
             try {
                 $coverage = $this->coverageFileParserService->parse($source->getBody()->getContentAsString());
 
-                $upload = new Upload($coverage, $uploadId, $commit, $parent, $coverageFile->getEventTime());
+                $upload = new Upload(
+                    $coverage,
+                    $uploadId,
+                    $provider,
+                    $owner,
+                    $repository,
+                    $commit,
+                    $parent,
+                    $pullRequest,
+                    $coverageFile->getEventTime()
+                );
 
                 $this->handlerLogger->info(
                     sprintf(

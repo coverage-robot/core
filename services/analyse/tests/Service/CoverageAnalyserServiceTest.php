@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
+use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
@@ -34,10 +35,18 @@ class CoverageAnalyserServiceTest extends TestCase
 
 
         $analyserService = new CoverageAnalyserService(
-            $mockBigQueryClient,
+            new BigQueryClient(),
             new NullLogger()
         );
 
-        $analyserService->analyse('mock-uuid');
+        $analyserService->analyse(
+            new Upload([
+                'uploadId' => 'mock-uuid',
+                'commit' => '6fc03961c51e4b5fb91f423ebdfd830b5fd11ed4',
+                'owner' => 'ryanmab',
+                'repository' => 'portfolio',
+                'pullRequest' => 1242
+            ])
+        );
     }
 }

@@ -74,24 +74,30 @@ class BigQueryPersistService implements PersistServiceInterface
     {
         $project = $upload->getProject();
 
-        return $upload->jsonSerialize() +
-            [
-                'sourceFormat' => $project->getSourceFormat(),
-                'fileName' => $file->getFileName(),
-                'generatedAt' => $project->getGeneratedAt() ?
-                    $project->getGeneratedAt()?->format('Y-m-d H:i:s') :
-                    null,
-                'type' => $line->getType(),
-                'lineNumber' => $line->getLineNumber(),
-                'metadata' => array_map(
-                    static fn($key, $value) => [
-                        'key' => (string)$key,
-                        'value' => (string)$value
-                    ],
-                    array_keys($line->jsonSerialize()),
-                    array_values($line->jsonSerialize())
-                )
-            ];
+        return [
+            'uploadId' => $upload->getUploadId(),
+            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+            'provider' => $upload->getProvider()->value,
+            'owner' => $upload->getOwner(),
+            'repository' => $upload->getRepository(),
+            'commit' => $upload->getCommit(),
+            'parent' => $upload->getParent(),
+            'sourceFormat' => $project->getSourceFormat(),
+            'fileName' => $file->getFileName(),
+            'generatedAt' => $project->getGeneratedAt() ?
+                $project->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                null,
+            'type' => $line->getType(),
+            'lineNumber' => $line->getLineNumber(),
+            'metadata' => array_map(
+                static fn($key, $value) => [
+                    'key' => (string)$key,
+                    'value' => (string)$value
+                ],
+                array_keys($line->jsonSerialize()),
+                array_values($line->jsonSerialize())
+            )
+        ];
     }
 
     public static function getPriority(): int

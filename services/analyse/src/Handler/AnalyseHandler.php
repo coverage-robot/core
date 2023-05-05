@@ -2,8 +2,9 @@
 
 namespace App\Handler;
 
-use App\Model\Event\IngestCompleteEvent;
+use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
+use App\Service\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
@@ -14,7 +15,8 @@ class AnalyseHandler extends SqsHandler
 {
     public function __construct(
         private readonly LoggerInterface $handlerLogger,
-        private readonly CoverageAnalyserService $coverageAnalyserService
+        private readonly CoverageAnalyserService $coverageAnalyserService,
+        private readonly CoveragePublisherService $coveragePublisherService
     ) {
     }
 
@@ -29,13 +31,22 @@ class AnalyseHandler extends SqsHandler
                     continue;
                 }
 
-                $event = new IngestCompleteEvent($body);
+                $upload = new Upload($body);
 
-                $this->handlerLogger->info(
-                    sprintf('Starting analysis on %s coverage upload.', $event->getUniqueId())
-                );
+                $this->handlerLogger->info(sprintf('Starting analysis on %s.', (string)$upload));
 
-                $this->coverageAnalyserService->analyse($event->getUniqueId());
+                $coverageData = $this->coverageAnalyserService->analyse($upload);
+
+                $successful = $this->coveragePublisherService->publish($upload, $coverageData);
+                
+                if (!$successful) {
+                    $this->handlerLogger->critical(
+                        sprintf(
+                            "Attempt to publish coverage for %s was unsuccessful.",
+                            (string)$upload
+                        )
+                    );
+                }
             } catch (JsonException) {
                 $this->handlerLogger->error(
                     'Error while decoding ingest completion event.',

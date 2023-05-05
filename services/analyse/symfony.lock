@@ -11,6 +11,18 @@
             "./serverless.yml"
         ]
     },
+    "knplabs/github-api": {
+        "version": "3.11",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.6",
+            "ref": "a7d5781e4a8e84f1c238c43e4c9bb806f01d8a3f"
+        },
+        "files": [
+            "./config/packages/github_api.yaml"
+        ]
+    },
     "nyholm/psr7": {
         "version": "1.7",
         "recipe": {
