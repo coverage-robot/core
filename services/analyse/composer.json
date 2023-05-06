@@ -60,7 +60,10 @@
         "lint:style": "phpcs",
         "lint:static-analysis": "psalm",
         "lint:security": "psalm --taint-analysis",
-        "test:unit": "phpunit --configuration=./phpunit.xml.dist",
+        "test:unit": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration=./phpunit.xml.dist"
+        ],
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"

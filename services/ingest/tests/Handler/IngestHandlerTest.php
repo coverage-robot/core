@@ -2,13 +2,12 @@
 
 namespace App\Tests\Handler;
 
-use App\Client\BigQueryClient;
+use App\Enum\ProviderEnum;
 use App\Handler\IngestHandler;
 use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\Persist\BigQueryPersistService;
 use App\Service\UniqueIdGeneratorService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
@@ -91,9 +90,10 @@ class IngestHandlerTest extends TestCase
             ->willReturn($mockStream);
         $mockResponse->method('getMetadata')
             ->willReturn([
-                'commit' => '6fc03961c51e4b5fb91f423ebdfd830b5fd11ed4',
+                'provider' => ProviderEnum::GITHUB->value,
+                'commit' => '1',
                 'parent' => '2',
-                'pullRequest' => '1242',
+                'pullrequest' => 1234,
                 'owner' => 'ryanmab',
                 'repository' => 'portfolio'
             ]);
@@ -235,64 +235,6 @@ class IngestHandlerTest extends TestCase
                 [
                     'mock-uuid.json'
                 ]
-            ]
-        ];
-    }
-
-    #[DataProvider('anotherDataProvider')]
-    public function testHandleS3Again(string $coverageFile): void
-    {
-        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
-        $mockCoverageFileRetrievalService->expects($this->once())
-            ->method('ingestFromS3')
-            ->willReturn($this->getMockS3ObjectResponse($coverageFile));
-
-        $handler = new IngestHandler(
-            $mockCoverageFileRetrievalService,
-            $this->getRealCoverageFileParserService(),
-            new CoverageFilePersistService([
-                new BigQueryPersistService(
-                    new BigQueryClient(),
-                    new NullLogger()
-                )
-            ], new NullLogger()),
-            new UniqueIdGeneratorService(),
-            new NullLogger()
-        );
-
-        $handler->handleS3(
-            new S3Event([
-                'Records' => [
-                    [
-                        'eventSource' => 'aws:s3',
-                        'eventTime' => '2023-05-02 12:00:00',
-                        's3' => [
-                            'bucket' => [
-                                'name' => 'mock-bucket',
-                                'arn' => 'mock-arn'
-                            ],
-                            'object' => [
-                                'key' => 'some-path/lcov.info'
-                            ]
-                        ]
-                    ]
-                ]
-            ]),
-            Context::fake()
-        );
-    }
-
-    public static function anotherDataProvider(): array
-    {
-        return [
-            [
-                file_get_contents(__DIR__ . '/backend.xml'),
-            ],
-            [
-                file_get_contents(__DIR__ . '/frontend.info'),
-            ],
-            [
-                file_get_contents(__DIR__ . '/storybook.info'),
             ]
         ];
     }

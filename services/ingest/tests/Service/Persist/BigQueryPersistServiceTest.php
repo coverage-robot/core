@@ -5,6 +5,7 @@ namespace App\Tests\Service\Persist;
 use App\Client\BigQueryClient;
 use App\Enum\CoverageFormatEnum;
 use App\Enum\LineTypeEnum;
+use App\Enum\ProviderEnum;
 use App\Model\File;
 use App\Model\Line\StatementCoverage;
 use App\Model\Project;
@@ -27,7 +28,16 @@ class BigQueryPersistServiceTest extends TestCase
         $coverage = new Project(CoverageFormatEnum::LCOV);
         $coverage->addFile($fileCoverage);
 
-        $upload = new Upload($coverage, Uuid::uuid4()->toString(), '', '');
+        $upload = new Upload(
+            $coverage,
+            Uuid::uuid4()->toString(),
+            ProviderEnum::GITHUB->value,
+            '',
+            '',
+            '',
+            '',
+            1
+        );
 
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->expects($this->once())
@@ -44,6 +54,9 @@ class BigQueryPersistServiceTest extends TestCase
                             'uploadId' => $upload->getUploadId(),
                             'commit' => '',
                             'parent' => '',
+                            'provider' => 'github',
+                            'owner' => '',
+                            'repository' => '',
                             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
                             'sourceFormat' => CoverageFormatEnum::LCOV,
                             'fileName' => 'mock-file',

@@ -1,10 +1,6 @@
 {
     "sourceFormat": "CLOVER",
-    "generatedAt": {
-        "date": "+55268-08-11 07:09:08.000000",
-        "timezone_type": 3,
-        "timezone": "UTC"
-    },
+    "generatedAt": "55268-08-11T07:09:08+00:00",
     "files": [
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\frontend\\src\\App.tsx",
@@ -541,7 +537,7 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -611,7 +607,7 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -691,7 +687,7 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -1946,7 +1942,7 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         2,
                         2
@@ -1991,7 +1987,7 @@
                     "type": "BRANCH",
                     "lineNumber": 51,
                     "lineHits": 1,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         2,
                         7
@@ -2706,7 +2702,7 @@
                     "type": "BRANCH",
                     "lineNumber": 19,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         2,
                         9
@@ -3001,7 +2997,7 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         2
@@ -3031,7 +3027,7 @@
                     "type": "BRANCH",
                     "lineNumber": 35,
                     "lineHits": 1,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         1
@@ -3826,7 +3822,7 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         1
@@ -3851,7 +3847,7 @@
                     "type": "BRANCH",
                     "lineNumber": 32,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
                         1,
                         1
