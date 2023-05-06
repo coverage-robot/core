@@ -121,8 +121,9 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         $api = $this->client->repo();
 
         /** @var array{ id: int, app: array{ id: string } }[] $checkRuns */
+        $checkRuns = $api->checkRuns()->allForReference($owner, $repository, $commit)["check_runs"] ?? [];
         $checkRuns = array_filter(
-            $api->checkRuns()->allForReference($owner, $repository, $commit),
+            $checkRuns,
             static fn(array $checkRun) => isset($checkRun['id']) &&
                 isset($checkRun['app']['id']) &&
                 $checkRun['app']['id'] == GithubAppClient::APP_ID
