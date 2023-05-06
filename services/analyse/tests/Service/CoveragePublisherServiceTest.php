@@ -2,58 +2,51 @@
 
 namespace App\Tests\Service;
 
-use App\Client\Github\GithubAppClient;
-use App\Client\Github\GithubAppInstallationClient;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
 use App\Service\CoveragePublisherService;
 use App\Service\Publisher\GithubCheckRunPublisherService;
+use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 
 class CoveragePublisherServiceTest extends TestCase
 {
-    public function testPublishGithubPullRequestComment(): void
+    private const PUBLISHERS = [
+        GithubCheckRunPublisherService::class,
+        GithubPullRequestCommentPublisherService::class
+    ];
+
+    #[DataProvider('publisherDataProvider')]
+    public function testParsingSupportedFiles(string $expectedPublisher): void
     {
-        $publisherService = new CoveragePublisherService(
-            [
-                new GithubCheckRunPublisherService(
-                    new GithubAppInstallationClient(
-                        new GithubAppClient(),
-                        'ryanmab'
-                    ),
-                    new NullLogger()
-                )
-            //                new GithubPullRequestCommentPublisherService(
-            //                    new GithubAppInstallationClient(
-            //                        new GithubAppClient(),
-            //                        "ryanmab"
-            //                    ),
-            //                    new NullLogger()
-            //                )
-            ]
-        );
-
+        $mockUpload = $this->createMock(Upload::class);
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
-        $mockPublishableCoverageData->method('getCoveragePercentage')
-            ->willReturn(99.8);
-        $mockPublishableCoverageData->method('getTotalLines')
-            ->willReturn(100);
-        $mockPublishableCoverageData->method('getAtLeastPartiallyCoveredLines')
-            ->willReturn(97);
 
-        $successful = $publisherService->publish(
-            new Upload([
-                'uploadId' => 'mock-uuid',
-                'commit' => '6fc03961c51e4b5fb91f423ebdfd830b5fd11ed4',
-                'provider' => 'github',
-                'owner' => 'ryanmab',
-                'repository' => 'portfolio',
-                'pullRequest' => 1242
-            ]),
-            $mockPublishableCoverageData
-        );
+        $mockedPublishers = [];
+        foreach (self::PUBLISHERS as $publisher) {
+            $mockPublisher = $this->createMock($publisher);
+            $mockPublisher->expects($this->exactly(2))
+                ->method('supports')
+                ->with($mockUpload, $mockPublishableCoverageData)
+                ->willReturn($expectedPublisher === $publisher);
 
-        $this->assertTrue($successful);
+            $mockPublisher->expects($expectedPublisher === $publisher ? $this->atLeastOnce() : $this->never())
+                ->method('publish')
+                ->with($mockUpload, $mockPublishableCoverageData)
+                ->willReturn($expectedPublisher === $publisher);
+
+            $mockedPublishers[] = $mockPublisher;
+        }
+
+        $coveragePublisherService = new CoveragePublisherService($mockedPublishers);
+        $coveragePublisherService->publish($mockUpload, $mockPublishableCoverageData);
+
+        $this->assertTrue($coveragePublisherService->publish($mockUpload, $mockPublishableCoverageData));
+    }
+
+    public static function publisherDataProvider(): array
+    {
+        return array_map(static fn(string $strategy) => [$strategy], self::PUBLISHERS);
     }
 }

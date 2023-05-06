@@ -12,17 +12,17 @@ use App\Query\TotalCommitCoverageQuery;
  */
 class CachedPublishableCoverageData extends AbstractPublishableCoverageData
 {
-    private ?int $totalUploads;
+    private ?int $totalUploads = null;
 
     /**
-     * @var CommitCoverage
+     * @var CommitCoverage|null
      */
-    private ?array $totalCommitCoverage;
+    private ?array $totalCommitCoverage = null;
 
     /**
-     * @var CommitLineCoverage[]
+     * @var CommitLineCoverage[]|null
      */
-    private ?array $commitLineCoverage;
+    private ?array $commitLineCoverage = null;
 
     public function getTotalUploads(): int
     {
