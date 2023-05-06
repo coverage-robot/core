@@ -54,7 +54,7 @@ class GithubAppInstallationClient extends Client
     private function getInstallationForOwner(string $owner): string
     {
         $installs = array_filter(
-            $this->api('apps')->findInstallations(),
+            $this->githubAppClient->api('apps')->findInstallations(),
             static fn(array $install) => isset($install["id"]) &&
                 isset($install["account"]["login"])
                 && $install["account"]["login"] === $owner
