@@ -68,7 +68,7 @@ class Upload implements JsonSerializable
         return $this->repository;
     }
 
-    public function getPullRequest(): int
+    public function getPullRequest(): int|string
     {
         return $this->pullRequest;
     }

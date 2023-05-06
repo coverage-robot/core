@@ -44,8 +44,23 @@ class GithubAppInstallationClientTest extends TestCase
                 'token' => 'mock-token'
             ]);
 
+        $appClient = $this->getMockBuilder(GithubAppClient::class)
+            ->setConstructorArgs(
+                [
+                    $this->createMock(Builder::class),
+                    'mock',
+                    'https://mock-client.com'
+                ]
+            )
+            ->onlyMethods(["getHttpClientBuilder"])
+            ->getMock();
+
         $installationClient = $this->getMockBuilder(GithubAppInstallationClient::class)
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(
+                [
+                    $appClient
+                ]
+            )
             ->onlyMethods(['apps', 'authenticate'])
             ->getMock();
 
