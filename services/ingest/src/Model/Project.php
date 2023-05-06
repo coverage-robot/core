@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\CoverageFormatEnum;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Exception;
 use JsonSerializable;
 
@@ -70,7 +71,7 @@ class Project implements JsonSerializable
     {
         return [
             'sourceFormat' => $this->sourceFormat,
-            'generatedAt' => $this->getGeneratedAt()?->format(DATE_ATOM),
+            'generatedAt' => $this->getGeneratedAt()?->format(DateTimeInterface::ATOM),
             'files' => $this->getFiles()
         ];
     }

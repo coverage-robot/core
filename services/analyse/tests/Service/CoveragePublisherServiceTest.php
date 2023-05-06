@@ -7,21 +7,32 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
 use App\Service\CoveragePublisherService;
-use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use App\Service\Publisher\GithubCheckRunPublisherService;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CoveragePublisherServiceTest extends TestCase
 {
     public function testPublishGithubPullRequestComment(): void
     {
-        $publisherService = new CoveragePublisherService([
-            new GithubPullRequestCommentPublisherService(
-                new GithubAppInstallationClient(
-                    new GithubAppClient(),
-                    "ryanmab"
+        $publisherService = new CoveragePublisherService(
+            [
+                new GithubCheckRunPublisherService(
+                    new GithubAppInstallationClient(
+                        new GithubAppClient(),
+                        "ryanmab"
+                    ),
+                    new NullLogger()
                 )
-            )
-        ]);
+//                new GithubPullRequestCommentPublisherService(
+//                    new GithubAppInstallationClient(
+//                        new GithubAppClient(),
+//                        "ryanmab"
+//                    ),
+//                    new NullLogger()
+//                )
+            ]
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->method("getCoveragePercentage")

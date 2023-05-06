@@ -20,7 +20,7 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
         return $this->queryService->runQuery(TotalCommitUploadsQuery::class, $this->upload);
     }
 
-    public function getTotalCommitCoverage(): array
+    protected function getTotalCommitCoverage(): array
     {
         return $this->queryService->runQuery(TotalCommitCoverageQuery::class, $this->upload);
     }

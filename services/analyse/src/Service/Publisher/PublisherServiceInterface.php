@@ -12,4 +12,6 @@ interface PublisherServiceInterface
     public function supports(Upload $upload, PublishableCoverageDataInterface $coverageData): bool;
 
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool;
+
+    public static function getPriority(): int;
 }

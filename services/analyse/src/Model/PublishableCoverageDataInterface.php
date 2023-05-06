@@ -5,7 +5,7 @@ namespace App\Model;
 interface PublishableCoverageDataInterface
 {
     public function getTotalUploads(): int;
-    
+
     public function getTotalLines(): int;
 
     public function getAtLeastPartiallyCoveredLines(): int;

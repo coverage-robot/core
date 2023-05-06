@@ -100,7 +100,7 @@ class Upload implements JsonSerializable
             'provider' => $this->provider->value,
             'owner' => $this->owner,
             'repository' => $this->repository,
-            'ingestTime' => $this->ingestTime->format(DATE_ATOM),
+            'ingestTime' => $this->ingestTime->format(DateTimeInterface::ATOM),
             'commit' => $this->commit,
             'parent' => $this->parent,
             'pullRequest' => $this->pullRequest

@@ -28,7 +28,7 @@ class QueryService
     public function runQuery(string $queryClass, Upload $upload): mixed
     {
         foreach ($this->queries as $query) {
-            if ($query::class === $queryClass) {
+            if ($query instanceof $queryClass) {
                 return $this->runQueryAndParseResult($query, $upload);
             }
         }

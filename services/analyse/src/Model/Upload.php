@@ -9,7 +9,7 @@ class Upload
     private string $uploadId;
     private string $commit;
     private string $parent;
-    private int $pullRequest;
+    private ?int $pullRequest;
     private string $owner;
     private string $repository;
     private ProviderEnum $provider;
@@ -22,7 +22,7 @@ class Upload
         $this->repository = (string)$data['repository'];
         $this->commit = (string)$data['commit'];
         $this->parent = (string)$data['parent'];
-        $this->pullRequest = (int)$data['pullRequest'];
+        $this->pullRequest = isset($data['pullRequest']) ? (int)$data['pullRequest'] : null;
     }
 
     public function getUploadId(): string
@@ -55,7 +55,7 @@ class Upload
         return $this->parent;
     }
 
-    public function getPullRequest(): int
+    public function getPullRequest(): ?int
     {
         return $this->pullRequest;
     }

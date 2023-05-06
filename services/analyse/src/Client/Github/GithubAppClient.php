@@ -13,7 +13,7 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 class GithubAppClient extends Client
 {
-    private const APP_ID = '327333';
+    public const APP_ID = '327333';
 
     private const PRIVATE_KEY = __DIR__ . '/../../../config/github.pem';
 

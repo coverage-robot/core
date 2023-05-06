@@ -22,6 +22,10 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
 
     public function supports(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
+        if (!$upload->getPullRequest()) {
+            return false;
+        }
+
         return $upload->getProvider() === ProviderEnum::GITHUB;
     }
 
@@ -149,5 +153,10 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         }
 
         return null;
+    }
+
+    public static function getPriority(): int
+    {
+        return 0;
     }
 }

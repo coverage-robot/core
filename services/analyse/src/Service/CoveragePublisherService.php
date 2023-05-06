@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 class CoveragePublisherService
 {
     public function __construct(
-        #[TaggedIterator('app.publisher_service')]
+        #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers
     ) {
     }
