@@ -52,7 +52,7 @@ class GithubAppInstallationClientTest extends TestCase
                     'https://mock-client.com'
                 ]
             )
-            ->onlyMethods(["getHttpClientBuilder"])
+            ->onlyMethods(['getHttpClientBuilder'])
             ->getMock();
 
         $installationClient = $this->getMockBuilder(GithubAppInstallationClient::class)
