@@ -3,10 +3,12 @@
 namespace App\Tests\Service\Persist;
 
 use App\Enum\CoverageFormatEnum;
+use App\Enum\ProviderEnum;
 use App\Model\Project;
 use App\Model\Upload;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\SqsPersistService;
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -46,8 +48,30 @@ class SqsPersistServiceTest extends TestCase
     {
         return [
             [
-                new Upload(new Project(CoverageFormatEnum::LCOV), 'mock-uuid-1', 1, 2),
-                new Upload(new Project(CoverageFormatEnum::CLOVER), 'mock-uuid-1', 3, 4)
+                new Upload(
+                    new Project(CoverageFormatEnum::LCOV),
+                    'mock-uuid-1',
+                    ProviderEnum::GITHUB->value,
+                    'mock-owner',
+                    'mock-repo',
+                    '1',
+                    '2',
+                    1234,
+                    new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
+                )
+            ],
+            [
+                new Upload(
+                    new Project(CoverageFormatEnum::CLOVER),
+                    'mock-uuid-1',
+                    ProviderEnum::GITHUB->value,
+                    'mock-owner',
+                    'mock-repo',
+                    '3',
+                    '4',
+                    1234,
+                    new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
+                ),
             ]
         ];
     }
