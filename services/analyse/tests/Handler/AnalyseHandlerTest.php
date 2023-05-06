@@ -2,8 +2,12 @@
 
 namespace App\Tests\Handler;
 
+use App\Enum\ProviderEnum;
 use App\Handler\AnalyseHandler;
+use App\Model\PublishableCoverageDataInterface;
+use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
+use App\Service\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use PHPUnit\Framework\TestCase;
@@ -13,13 +17,34 @@ class AnalyseHandlerTest extends TestCase
 {
     public function testHandleSqs(): void
     {
-        $coverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $body = [
+            'uploadId' => 'mock-uuid',
+            'provider' => ProviderEnum::GITHUB->value,
+            'commit' => 'mock-commit',
+            'parent' => 'mock-parent-commit',
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository'
+        ];
 
-        $coverageAnalyserService->expects($this->once())
+        $upload = new Upload($body);
+
+        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+
+        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+
+        $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with('mock-uuid');
+            ->with($upload)
+            ->willReturn($mockPublishableCoverageData);
 
-        $handler = new AnalyseHandler(new NullLogger(), $coverageAnalyserService);
+        $mockCoveragePublisherService = $this->createMock(CoveragePublisherService::class);
+
+        $mockCoveragePublisherService->expects($this->once())
+            ->method('publish')
+            ->with($upload, $mockPublishableCoverageData)
+            ->willReturn(true);
+
+        $handler = new AnalyseHandler(new NullLogger(), $mockCoverageAnalyserService, $mockCoveragePublisherService);
 
         $handler->handleSqs(
             new SqsEvent(
@@ -28,9 +53,7 @@ class AnalyseHandlerTest extends TestCase
                         [
                             'eventSource' => 'aws:sqs',
                             'messageId' => 'mock',
-                            'body' => json_encode([
-                                'uniqueId' => 'mock-uuid'
-                            ]),
+                            'body' => json_encode($body),
                             'messageAttributes' => []
                         ]
                     ]

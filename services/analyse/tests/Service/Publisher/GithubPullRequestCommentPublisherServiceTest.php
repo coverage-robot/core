@@ -26,10 +26,6 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $this->assertEquals($expectedSupport, $isSupported);
     }
 
-    public function testPublish()
-    {
-    }
-
     public static function supportsDataProvider(): array
     {
         return [
