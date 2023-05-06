@@ -38,12 +38,12 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $provider = $source->getMetadata()["provider"];
-            $owner = $source->getMetadata()["owner"];
-            $repository = $source->getMetadata()["repository"];
-            $commit = $source->getMetadata()["commit"];
-            $parent = $source->getMetadata()["parent"];
-            $pullRequest = $source->getMetadata()["pullrequest"];
+            $provider = $source->getMetadata()['provider'];
+            $owner = $source->getMetadata()['owner'];
+            $repository = $source->getMetadata()['repository'];
+            $commit = $source->getMetadata()['commit'];
+            $parent = $source->getMetadata()['parent'];
+            $pullRequest = $source->getMetadata()['pullrequest'];
 
             $this->handlerLogger->info(
                 sprintf(

@@ -55,7 +55,7 @@ class S3PersistService implements PersistServiceInterface
             $this->persistServiceLogger->info(
                 sprintf(
                     'Persisting %s into BigQuery was %s',
-                    $upload,
+                    (string)$upload,
                     $response->info()['status'] === Response::HTTP_OK ? 'successful' : 'failed'
                 )
             );
@@ -65,7 +65,7 @@ class S3PersistService implements PersistServiceInterface
             $this->persistServiceLogger->info(
                 sprintf(
                     'Exception while persisting %s into S3',
-                    $upload
+                    (string)$upload
                 ),
                 [
                     'exception' => $exception

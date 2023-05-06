@@ -22,11 +22,11 @@ class GithubAppInstallationClientTest extends TestCase
             ->willReturn($this->createMock(StreamInterface::class));
 
         $mockClient = $this->createMock(HttpMethodsClientInterface::class);
-        $mockClient->method("get")
+        $mockClient->method('get')
             ->willReturn($mockResponse);
 
         $mockBuilder = $this->createMock(Builder::class);
-        $mockBuilder->method("getHttpClient")
+        $mockBuilder->method('getHttpClient')
             ->willReturn($mockClient);
 
         $mockGithubAppClient = $this->getMockBuilder(GithubAppClient::class)
@@ -37,11 +37,11 @@ class GithubAppInstallationClientTest extends TestCase
                     'https://mock-client.com'
                 ]
             )
-            ->onlyMethods(["authenticate", "api"])
+            ->onlyMethods(['authenticate', 'api'])
             ->getMock();
 
         $mockAppsApi->expects($this->once())
-            ->method("findInstallations")
+            ->method('findInstallations')
             ->willReturn(
                 [
                     [
@@ -67,11 +67,11 @@ class GithubAppInstallationClientTest extends TestCase
             ]);
 
         $mockGithubAppClient->expects($this->exactly(2))
-            ->method("api")
-            ->with("apps")
+            ->method('api')
+            ->with('apps')
             ->willReturn($mockAppsApi);
 
-        new GithubAppInstallationClient($mockGithubAppClient, "mock-owner");
+        new GithubAppInstallationClient($mockGithubAppClient, 'mock-owner');
     }
 
     public function testClientAuthenticatesDoesNotAuthenticateWithNoOwner(): void
@@ -83,11 +83,11 @@ class GithubAppInstallationClientTest extends TestCase
             ->willReturn($this->createMock(StreamInterface::class));
 
         $mockClient = $this->createMock(HttpMethodsClientInterface::class);
-        $mockClient->method("get")
+        $mockClient->method('get')
             ->willReturn($mockResponse);
 
         $mockBuilder = $this->createMock(Builder::class);
-        $mockBuilder->method("getHttpClient")
+        $mockBuilder->method('getHttpClient')
             ->willReturn($mockClient);
 
         $mockGithubAppClient = $this->getMockBuilder(GithubAppClient::class)
@@ -98,17 +98,17 @@ class GithubAppInstallationClientTest extends TestCase
                     'https://mock-client.com'
                 ]
             )
-            ->onlyMethods(["authenticate", "api"])
+            ->onlyMethods(['authenticate', 'api'])
             ->getMock();
 
         $mockAppsApi->expects($this->never())
-            ->method("findInstallations");
+            ->method('findInstallations');
 
         $mockAppsApi->expects($this->never())
             ->method('createInstallationToken');
 
         $mockGithubAppClient->expects($this->never())
-            ->method("api");
+            ->method('api');
 
         new GithubAppInstallationClient($mockGithubAppClient);
     }

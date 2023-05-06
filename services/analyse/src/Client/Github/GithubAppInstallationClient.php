@@ -2,6 +2,9 @@
 
 namespace App\Client\Github;
 
+use Github\Api\Apps;
+use Github\Api\Issue;
+use Github\Api\Repo;
 use Github\AuthMethod;
 use Github\Client;
 use OutOfBoundsException;
@@ -39,34 +42,47 @@ class GithubAppInstallationClient extends Client
         $this->owner = $owner;
     }
 
-    private function authenticateAsInstallation(string $installationId): void
+    private function authenticateAsInstallation(int $installationId): void
     {
-        $accessToken = $this->githubAppClient->api('apps')
+        $accessToken = $this->apps()
             ->createInstallationToken($installationId);
 
-        if (!isset($accessToken["token"])) {
-            throw new UnexpectedValueException("Unable to generate access token for installation.");
+        if (!isset($accessToken['token']) || !is_string($accessToken['token'])) {
+            throw new UnexpectedValueException('Unable to generate access token for installation.');
         }
 
-        $this->authenticate($accessToken["token"], null, AuthMethod::ACCESS_TOKEN);
+        $this->authenticate($accessToken['token'], null, AuthMethod::ACCESS_TOKEN);
     }
 
-    private function getInstallationForOwner(string $owner): string
+    private function getInstallationForOwner(string $owner): int
     {
+        /** @var array{ id: int, account: array{ login: string } }[] $installs */
         $installs = array_filter(
-            $this->githubAppClient->api('apps')->findInstallations(),
-            static fn(array $install) => isset($install["id"]) &&
-                isset($install["account"]["login"])
-                && $install["account"]["login"] === $owner
+            $this->apps()->findInstallations(),
+            static fn(array $install) => isset($install['id']) &&
+                isset($install['account']['login'])
+                && $install['account']['login'] === $owner
         );
 
         if (empty($installs)) {
-            throw new OutOfBoundsException("No installation with access to that account.");
+            throw new OutOfBoundsException('No installation with access to that account.');
         }
 
-        /** @var string $id */
-        $id = end($installs)["id"];
+        return end($installs)['id'];
+    }
 
-        return $id;
+    public function issue(): Issue
+    {
+        return new Issue($this);
+    }
+
+    public function repo(): Repo
+    {
+        return new Repo($this);
+    }
+
+    public function apps(): Apps
+    {
+        return new Apps($this->githubAppClient);
     }
 }

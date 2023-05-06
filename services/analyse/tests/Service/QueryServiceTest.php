@@ -42,12 +42,12 @@ class QueryServiceTest extends TestCase
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
 
         $mockBigQueryService->expects(!$expectedException ? $this->once() : $this->never())
-            ->method("query")
-            ->with("mock-query")
+            ->method('query')
+            ->with('mock-query')
             ->willReturn($mockQueryJobConfiguration);
 
         $mockBigQueryService->expects(!$expectedException ? $this->once() : $this->never())
-            ->method("runQuery")
+            ->method('runQuery')
             ->with($mockQueryJobConfiguration)
             ->willReturn($this->createMock(QueryResults::class));
 

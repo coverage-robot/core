@@ -20,7 +20,7 @@ class Upload implements JsonSerializable
      * @param string $repository
      * @param string $commit
      * @param string $parent
-     * @param int $pullRequest
+     * @param string|int $pullRequest
      * @param DateTimeInterface|null $ingestTime
      */
     public function __construct(
@@ -31,7 +31,7 @@ class Upload implements JsonSerializable
         private readonly string $repository,
         private readonly string $commit,
         private readonly string $parent,
-        private readonly int $pullRequest,
+        private readonly string|int $pullRequest,
         ?DateTimeInterface $ingestTime = null
     ) {
         $this->provider = ProviderEnum::from($provider);
@@ -90,7 +90,7 @@ class Upload implements JsonSerializable
 
     public function __toString(): string
     {
-        return "Upload #" . $this->uploadId;
+        return 'Upload #' . $this->uploadId;
     }
 
     public function jsonSerialize(): array

@@ -29,7 +29,7 @@ class BigQueryPersistService implements PersistServiceInterface
             $this->persistServiceLogger->critical(
                 sprintf(
                     '%s row error(s) while attempting to persist coverage file (%s) into BigQuery.',
-                    $upload,
+                    (string)$upload,
                     count($insertResponse->failedRows())
                 ),
                 [
@@ -43,7 +43,7 @@ class BigQueryPersistService implements PersistServiceInterface
         $this->persistServiceLogger->info(
             sprintf(
                 'Persisting %s (%s rows) into BigQuery was successful',
-                $upload,
+                (string)$upload,
                 count($rows)
             )
         );

@@ -35,10 +35,13 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             throw PublishException::notSupportedException();
         }
 
+        /** @var int $pullRequest */
+        $pullRequest = $upload->getPullRequest();
+
         return $this->upsertComment(
             $upload->getOwner(),
             $upload->getRepository(),
-            $upload->getPullRequest(),
+            $pullRequest,
             $this->buildCommentBody($upload, $coverageData)
         );
     }
@@ -58,7 +61,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
 
         if ($coverageData->getCoveragePercentage()) {
             $body .= sprintf(
-                "Consisting of *%s* covered lines, out of *%s* total lines.",
+                'Consisting of *%s* covered lines, out of *%s* total lines.',
                 $coverageData->getAtLeastPartiallyCoveredLines(),
                 $coverageData->getTotalLines()
             );
@@ -75,6 +78,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     ): bool {
         $this->client->authenticateAsRepositoryOwner($owner);
 
+        $api = $this->client->issue();
+
         $existingComment = $this->getExistingCommentId(
             $owner,
             $repository,
@@ -82,22 +87,21 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         );
 
         if (!$existingComment) {
-            $this->client->api('issue')
-                ->comments()
+            $api->comments()
                 ->create(
                     $owner,
                     $repository,
                     $pullRequest,
                     [
-                        "body" => $body
+                        'body' => $body
                     ]
                 );
 
-            if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_CREATED) {
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
                 $this->publisherLogger->critical(
                     sprintf(
-                        "%s status code returned while attempting to create a new pull request comment for results.",
-                        $this->client->getLastResponse()->getStatusCode()
+                        '%s status code returned while attempting to create a new pull request comment for results.',
+                        (string)$this->client->getLastResponse()?->getStatusCode()
                     )
                 );
 
@@ -107,22 +111,21 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             return true;
         }
 
-        $this->client->api('issue')
-            ->comments()
+        $api->comments()
             ->update(
                 $owner,
                 $repository,
                 $existingComment,
                 [
-                    "body" => $body
+                    'body' => $body
                 ]
             );
 
-        if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_OK) {
+        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
             $this->publisherLogger->critical(
                 sprintf(
-                    "%s status code returned while attempting to update existing pull request comment with new results.",
-                    $this->client->getLastResponse()->getStatusCode()
+                    '%s status code returned while updating pull request comment with new results.',
+                    (string)$this->client->getLastResponse()?->getStatusCode()
                 )
             );
 
@@ -132,24 +135,20 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         return true;
     }
 
-    private function getExistingCommentId(string $owner, string $repository, int $pullRequest): ?string
+    private function getExistingCommentId(string $owner, string $repository, int $pullRequest): ?int
     {
-        $allComments = $this->client->api('issue')
-            ->comments()
-            ->all($owner, $repository, $pullRequest);
+        $api = $this->client->issue();
 
+        /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
-            $allComments,
-            static fn(array $comment) => isset($comment["id"]) &&
+            $api->comments()->all($owner, $repository, $pullRequest),
+            static fn(array $comment) => isset($comment['id']) &&
                 isset($comment['user']['node_id']) &&
                 $comment['user']['node_id'] === self::BOT_ID
         );
 
         if (!empty($comments)) {
-            /** @var string $id */
-            $id = end($comments)["id"];
-
-            return $id;
+            return end($comments)['id'];
         }
 
         return null;

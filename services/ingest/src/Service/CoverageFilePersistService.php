@@ -32,7 +32,7 @@ class CoverageFilePersistService
             $this->persistServiceLogger->info(
                 sprintf(
                     'Persisting %s into storage using %s',
-                    $upload,
+                    (string)$upload,
                     $service::class
                 )
             );
@@ -49,7 +49,7 @@ class CoverageFilePersistService
                 );
             } catch (PersistException $e) {
                 $this->persistServiceLogger->error(
-                    sprintf('Exception received while attempting to persist %s into storage.', $upload),
+                    sprintf('Exception received while attempting to persist %s into storage.', (string)$upload),
                     [
                         'exception' => $e
                     ]

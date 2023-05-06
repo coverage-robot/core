@@ -42,7 +42,7 @@ class AnalyseHandler extends SqsHandler
                 if (!$successful) {
                     $this->handlerLogger->critical(
                         sprintf(
-                            "Attempt to publish coverage for %s was unsuccessful.",
+                            'Attempt to publish coverage for %s was unsuccessful.',
                             (string)$upload
                         )
                     );

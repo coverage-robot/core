@@ -25,7 +25,7 @@ class TotalCommitUploadsQuery implements QueryInterface
 
     public function getNamedSubqueries(string $table, Upload $upload): string
     {
-        return "";
+        return '';
     }
 
     /**
@@ -35,9 +35,18 @@ class TotalCommitUploadsQuery implements QueryInterface
     public function parseResults(QueryResults $results): int
     {
         if (!$results->isComplete()) {
-            throw new QueryException("Query was not complete when attempting to parse results.");
+            throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        return $results->rows()->current()["totalUploads"];
+        $rows = $results->rows();
+
+        /** @var mixed|null $totalUploads */
+        $totalUploads = $rows->current()['totalUploads'] ?? null;
+
+        if (is_int($totalUploads)) {
+            return $totalUploads;
+        }
+
+        throw QueryException::typeMismatch(gettype($totalUploads), "int");
     }
 }

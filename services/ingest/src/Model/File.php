@@ -46,7 +46,7 @@ class File implements JsonSerializable
 
     public function toString(): string
     {
-        return "File #" . $this->getFileName();
+        return 'File #' . $this->getFileName();
     }
 
     public function jsonSerialize(): array

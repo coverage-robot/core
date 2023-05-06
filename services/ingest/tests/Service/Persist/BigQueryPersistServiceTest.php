@@ -27,7 +27,7 @@ class BigQueryPersistServiceTest extends TestCase
         $coverage = new Project(CoverageFormatEnum::LCOV);
         $coverage->addFile($fileCoverage);
 
-        $upload = new Upload($coverage, Uuid::uuid4()->toString(), "", "");
+        $upload = new Upload($coverage, Uuid::uuid4()->toString(), '', '');
 
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->expects($this->once())

@@ -22,14 +22,14 @@ class MockQueryFactory
     ): MockObject {
         $mockQuery = $testCase->getMockBuilder($queryClass)
             ->disableOriginalConstructor()
-            ->onlyMethods(["getQuery", "parseResults"])
+            ->onlyMethods(['getQuery', 'parseResults'])
             ->getMock();
 
         $mockQuery->expects($queryString !== null ? $testCase::any() : $testCase::never())
-            ->method("getQuery")
-            ->willReturn($queryString ?? "");
+            ->method('getQuery')
+            ->willReturn($queryString ?? '');
 
-        $mockQuery->method("parseResults")
+        $mockQuery->method('parseResults')
             ->willReturn($parsedResults);
 
         return $mockQuery;

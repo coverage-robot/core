@@ -13,5 +13,5 @@ interface QueryInterface
 
     public function getQuery(string $table, Upload $upload): string;
 
-    public function parseResults(QueryResults $results): mixed;
+    public function parseResults(QueryResults $results): string|int|float|array;
 }

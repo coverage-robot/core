@@ -20,26 +20,26 @@ class CoveragePublisherServiceTest extends TestCase
                 new GithubCheckRunPublisherService(
                     new GithubAppInstallationClient(
                         new GithubAppClient(),
-                        "ryanmab"
+                        'ryanmab'
                     ),
                     new NullLogger()
                 )
-//                new GithubPullRequestCommentPublisherService(
-//                    new GithubAppInstallationClient(
-//                        new GithubAppClient(),
-//                        "ryanmab"
-//                    ),
-//                    new NullLogger()
-//                )
+            //                new GithubPullRequestCommentPublisherService(
+            //                    new GithubAppInstallationClient(
+            //                        new GithubAppClient(),
+            //                        "ryanmab"
+            //                    ),
+            //                    new NullLogger()
+            //                )
             ]
         );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
-        $mockPublishableCoverageData->method("getCoveragePercentage")
+        $mockPublishableCoverageData->method('getCoveragePercentage')
             ->willReturn(99.8);
-        $mockPublishableCoverageData->method("getTotalLines")
+        $mockPublishableCoverageData->method('getTotalLines')
             ->willReturn(100);
-        $mockPublishableCoverageData->method("getAtLeastPartiallyCoveredLines")
+        $mockPublishableCoverageData->method('getAtLeastPartiallyCoveredLines')
             ->willReturn(97);
 
         $successful = $publisherService->publish(

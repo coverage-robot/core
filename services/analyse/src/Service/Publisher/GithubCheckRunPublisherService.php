@@ -12,8 +12,6 @@ use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-use function Amp\Promise\first;
-
 class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     public function __construct(
@@ -47,6 +45,8 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     ): bool {
         $this->client->authenticateAsRepositoryOwner($owner);
 
+        $api = $this->client->repo();
+
         $existingCheckRun = $this->getExistingCheckRunId(
             $owner,
             $repository,
@@ -54,8 +54,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         );
 
         if (!$existingCheckRun) {
-            $this->client->api('repo')
-                ->checkRuns()
+            $api->checkRuns()
                 ->create(
                     $owner,
                     $repository,
@@ -66,17 +65,17 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                         'conclusion' => 'success',
                         'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                         'output' => [
-                            "title" => "Coverage",
-                            "summary" => "Coverage Analysis Complete."
+                            'title' => 'Coverage',
+                            'summary' => 'Coverage Analysis Complete.'
                         ]
                     ]
                 );
 
-            if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_CREATED) {
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
                 $this->publisherLogger->critical(
                     sprintf(
-                        "%s status code returned while attempting to create a new check run for results.",
-                        $this->client->getLastResponse()->getStatusCode()
+                        '%s status code returned while attempting to create a new check run for results.',
+                        (string)$this->client->getLastResponse()?->getStatusCode()
                     )
                 );
 
@@ -86,8 +85,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             return true;
         }
 
-        $this->client->api('repo')
-            ->checkRuns()
+        $api->checkRuns()
             ->update(
                 $owner,
                 $repository,
@@ -98,17 +96,17 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     'conclusion' => 'success',
                     'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                     'output' => [
-                        "title" => "Coverage",
-                        "summary" => "Coverage Analysis Complete."
+                        'title' => 'Coverage',
+                        'summary' => 'Coverage Analysis Complete.'
                     ]
                 ]
             );
 
-        if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_OK) {
+        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
             $this->publisherLogger->critical(
                 sprintf(
-                    "%s status code returned while attempting to update existing check run with new results.",
-                    $this->client->getLastResponse()->getStatusCode()
+                    '%s status code returned while attempting to update existing check run with new results.',
+                    (string)$this->client->getLastResponse()?->getStatusCode()
                 )
             );
 
@@ -118,24 +116,20 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         return true;
     }
 
-    private function getExistingCheckRunId(string $owner, string $repository, string $commit): ?string
+    private function getExistingCheckRunId(string $owner, string $repository, string $commit): ?int
     {
-        $allCheckRuns = $this->client->api('repo')
-            ->checkRuns()
-            ->allForReference($owner, $repository, $commit);
+        $api = $this->client->repo();
 
+        /** @var array{ id: int, app: array{ id: string } }[] $checkRuns */
         $checkRuns = array_filter(
-            $allCheckRuns["check_runs"],
-            static fn(array $checkRun) => isset($checkRun["id"]) &&
+            $api->checkRuns()->allForReference($owner, $repository, $commit),
+            static fn(array $checkRun) => isset($checkRun['id']) &&
                 isset($checkRun['app']['id']) &&
                 $checkRun['app']['id'] == GithubAppClient::APP_ID
         );
 
         if (!empty($checkRuns)) {
-            /** @var string $id */
-            $id = first($checkRuns)["id"];
-
-            return $id;
+            return reset($checkRuns)['id'];
         }
 
         return null;

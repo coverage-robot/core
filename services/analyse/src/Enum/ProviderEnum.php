@@ -4,5 +4,5 @@ namespace App\Enum;
 
 enum ProviderEnum: string
 {
-    case GITHUB = "github";
+    case GITHUB = 'github';
 }

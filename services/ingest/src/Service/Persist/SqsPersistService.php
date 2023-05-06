@@ -24,7 +24,7 @@ class SqsPersistService implements PersistServiceInterface
         $this->persistServiceLogger->info(
             sprintf(
                 'Persisting %s to SQS was %s',
-                $upload,
+                (string)$upload,
                 $sent ? 'successful' : 'failed'
             )
         );

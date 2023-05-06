@@ -4,7 +4,7 @@ namespace App\Enum;
 
 enum CoverageFormatEnum: string
 {
-    case LCOV = "LCOV";
+    case LCOV = 'LCOV';
 
-    case CLOVER = "CLOVER";
+    case CLOVER = 'CLOVER';
 }

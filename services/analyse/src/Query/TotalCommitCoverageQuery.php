@@ -7,6 +7,15 @@ use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 
+/**
+ * @psalm-type CommitCoverage = array{
+ *     coveragePercentage: float,
+ *     lines: int,
+ *     covered: int,
+ *     partial: int,
+ *     uncovered: int
+ * }
+ */
 class TotalCommitCoverageQuery extends CommitLineCoverageQuery
 {
     public function getQuery(string $table, Upload $upload): string
@@ -48,9 +57,25 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
     public function parseResults(QueryResults $results): array
     {
         if (!$results->isComplete()) {
-            throw new QueryException("Query was not complete when attempting to parse results.");
+            throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        return $results->rows()->current();
+        $rows = $results->rows();
+
+        /** @var array|null $coverageValues */
+        $coverageValues = $rows->current() ?? null;
+
+        if (
+            is_float($coverageValues['coveragePercentage'] ?? null) &&
+            is_int($coverageValues['lines'] ?? null) &&
+            is_int($coverageValues['covered'] ?? null) &&
+            is_int($coverageValues['partial'] ?? null) &&
+            is_int($coverageValues['uncovered'] ?? null)
+        ) {
+            /** @var CommitCoverage $coverageValues */
+            return $coverageValues;
+        }
+
+        throw QueryException::typeMismatch(gettype($coverageValues), "array");
     }
 }

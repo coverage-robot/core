@@ -42,7 +42,7 @@ class IngestHandlerTest extends TestCase
             ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(
                 ...array_map(
-                    [$this, "getMockS3ObjectResponse"],
+                    [$this, 'getMockS3ObjectResponse'],
                     $coverageFiles
                 )
             );
@@ -83,19 +83,19 @@ class IngestHandlerTest extends TestCase
     private function getMockS3ObjectResponse(string $body): GetObjectOutput|MockObject
     {
         $mockStream = $this->createMock(ResultStream::class);
-        $mockStream->method("getContentAsString")
+        $mockStream->method('getContentAsString')
             ->willReturn($body);
 
         $mockResponse = $this->createMock(GetObjectOutput::class);
-        $mockResponse->method("getBody")
+        $mockResponse->method('getBody')
             ->willReturn($mockStream);
-        $mockResponse->method("getMetadata")
+        $mockResponse->method('getMetadata')
             ->willReturn([
-                "commit" => "6fc03961c51e4b5fb91f423ebdfd830b5fd11ed4",
-                "parent" => "2",
-                "pullRequest" => "1242",
-                "owner" => "ryanmab",
-                "repository" => "portfolio"
+                'commit' => '6fc03961c51e4b5fb91f423ebdfd830b5fd11ed4',
+                'parent' => '2',
+                'pullRequest' => '1242',
+                'owner' => 'ryanmab',
+                'repository' => 'portfolio'
             ]);
 
         return $mockResponse;

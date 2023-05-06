@@ -2,53 +2,79 @@
 
 namespace App\Model;
 
+use App\Exception\QueryException;
+use App\Query\CommitLineCoverageQuery;
+use App\Query\TotalCommitCoverageQuery;
+
+/**
+ * @psalm-import-type CommitCoverage from TotalCommitCoverageQuery
+ * @psalm-import-type CommitLineCoverage from CommitLineCoverageQuery
+ */
 class CachedPublishableCoverageData extends AbstractPublishableCoverageData
 {
-    private int $totalUploads;
+    private ?int $totalUploads;
 
-    private array $totalCommitCoverage;
+    /**
+     * @var CommitCoverage
+     */
+    private ?array $totalCommitCoverage;
 
-    private array $commitLineCoverage;
+    /**
+     * @var CommitLineCoverage[]
+     */
+    private ?array $commitLineCoverage;
 
     public function getTotalUploads(): int
     {
-        if (!isset($this->totalUploads)) {
+        if (is_null($this->totalUploads)) {
             $this->totalUploads = parent::getTotalUploads();
         }
 
         return $this->totalUploads;
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getTotalLines(): int
     {
-        if (!isset($this->totalCommitCoverage)) {
+        if (is_null($this->totalCommitCoverage)) {
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
-        return $this->totalCommitCoverage["lines"];
+        return $this->totalCommitCoverage['lines'];
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getAtLeastPartiallyCoveredLines(): int
     {
-        if (!isset($this->totalCommitCoverage)) {
+        if (is_null($this->totalCommitCoverage)) {
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
-        return $this->totalCommitCoverage["covered"] + $this->totalCommitCoverage["partial"];
+        return $this->totalCommitCoverage['covered'] + $this->totalCommitCoverage['partial'];
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getUncoveredLines(): int
     {
-        if (!isset($this->totalCommitCoverage)) {
+        if (is_null($this->totalCommitCoverage)) {
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
-        return $this->totalCommitCoverage["uncovered"];
+        return $this->totalCommitCoverage['uncovered'];
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getCoveragePercentage(): float
     {
-        if (!isset($this->totalCommitCoverage)) {
+        if (is_null($this->totalCommitCoverage)) {
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
@@ -57,7 +83,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
 
     public function getCommitLineCoverage(): array
     {
-        if (!isset($this->commitLineCoverage)) {
+        if (is_null($this->commitLineCoverage)) {
             $this->commitLineCoverage = parent::getCommitLineCoverage();
         }
 

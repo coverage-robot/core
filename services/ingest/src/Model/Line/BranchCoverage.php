@@ -51,9 +51,9 @@ class BranchCoverage extends AbstractLineCoverage
             parent::jsonSerialize(),
             [
                 'partial' => array_filter(
-                        $this->getBranchHits(),
-                        static fn(int $hits) => $hits === 0
-                    ) !== [],
+                    $this->getBranchHits(),
+                    static fn(int $hits) => $hits === 0
+                ) !== [],
                 'branchHits' => $this->getBranchHits()
             ]
         );
