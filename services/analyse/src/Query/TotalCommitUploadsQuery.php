@@ -47,6 +47,6 @@ class TotalCommitUploadsQuery implements QueryInterface
             return $totalUploads;
         }
 
-        throw QueryException::typeMismatch(gettype($totalUploads), "int");
+        throw QueryException::typeMismatch(gettype($totalUploads), 'int');
     }
 }

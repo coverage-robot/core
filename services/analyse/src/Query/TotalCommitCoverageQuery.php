@@ -76,6 +76,6 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
             return $coverageValues;
         }
 
-        throw QueryException::typeMismatch(gettype($coverageValues), "array");
+        throw QueryException::typeMismatch(gettype($coverageValues), 'array');
     }
 }

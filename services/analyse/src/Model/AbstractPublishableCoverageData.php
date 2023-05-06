@@ -31,7 +31,7 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
             return $totalUploads;
         }
 
-        throw QueryException::typeMismatch(gettype($totalUploads), "int");
+        throw QueryException::typeMismatch(gettype($totalUploads), 'int');
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
             return $commitCoverage;
         }
 
-        throw QueryException::typeMismatch(gettype($commitCoverage), "array");
+        throw QueryException::typeMismatch(gettype($commitCoverage), 'array');
     }
 
     /**
@@ -63,6 +63,6 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
             return $lineCoverage;
         }
 
-        throw QueryException::typeMismatch(gettype($lineCoverage), "array");
+        throw QueryException::typeMismatch(gettype($lineCoverage), 'array');
     }
 }

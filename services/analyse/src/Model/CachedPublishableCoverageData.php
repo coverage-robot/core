@@ -78,7 +78,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
-        return $this->totalCommitCoverage["coveragePercentage"];
+        return $this->totalCommitCoverage['coveragePercentage'];
     }
 
     public function getCommitLineCoverage(): array
