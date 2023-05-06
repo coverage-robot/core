@@ -43,7 +43,7 @@ class IngestHandler extends S3Handler
             $repository = $source->getMetadata()["repository"];
             $commit = $source->getMetadata()["commit"];
             $parent = $source->getMetadata()["parent"];
-            $pullRequest = $source->getMetadata()["pullRequest"];
+            $pullRequest = $source->getMetadata()["pullrequest"];
 
             $this->handlerLogger->info(
                 sprintf(

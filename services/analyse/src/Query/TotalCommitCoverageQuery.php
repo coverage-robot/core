@@ -12,6 +12,7 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
     public function getQuery(string $table, Upload $upload): string
     {
         return <<<SQL
+        {$this->getNamedSubqueries($table, $upload)}
         SELECT
             SUM(lines) as lines,
             SUM(covered) as covered,
@@ -25,8 +26,9 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
 
     public function getNamedSubqueries(string $table, Upload $upload): string
     {
+        $parent = parent::getNamedSubqueries($table, $upload);
         return <<<SQL
-        {${parent::getNamedSubqueries($table, $upload)}}
+        {$parent},
         summedCoverage AS (
             SELECT
                 COUNT(*) as lines,

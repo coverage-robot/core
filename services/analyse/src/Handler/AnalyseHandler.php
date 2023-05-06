@@ -38,7 +38,7 @@ class AnalyseHandler extends SqsHandler
                 $coverageData = $this->coverageAnalyserService->analyse($upload);
 
                 $successful = $this->coveragePublisherService->publish($upload, $coverageData);
-                
+
                 if (!$successful) {
                     $this->handlerLogger->critical(
                         sprintf(
@@ -49,7 +49,7 @@ class AnalyseHandler extends SqsHandler
                 }
             } catch (JsonException) {
                 $this->handlerLogger->error(
-                    'Error while decoding ingest completion event.',
+                    'Error while decoding event.',
                     [
                         'body' => $record->getBody()
                     ]

@@ -13,7 +13,7 @@ class QueryService
 {
     public function __construct(
         private readonly BigQueryClient $bigQueryClient,
-        #[TaggedIterator('app.coverage_queries')]
+        #[TaggedIterator('app.coverage_query')]
         private readonly iterable $queries
     ) {
     }
@@ -27,17 +27,19 @@ class QueryService
      */
     public function runQuery(string $queryClass, Upload $upload): mixed
     {
-        $query = array_filter(
-            (array)$this->queries,
-            static fn(QueryInterface $queryInstance) => $queryInstance::class === $queryClass
-        );
-
-        if (!$query) {
-            throw new QueryException(
-                sprintf("No query found with class name of %s.", $queryClass)
-            );
+        foreach ($this->queries as $query) {
+            if ($query::class === $queryClass) {
+                return $this->runQueryAndParseResult($query, $upload);
+            }
         }
 
+        throw new QueryException(
+            sprintf("No query found with class name of %s.", $queryClass)
+        );
+    }
+
+    private function runQueryAndParseResult(QueryInterface $query, Upload $upload): mixed
+    {
         /** @var QueryInterface $query */
         $job = $this->bigQueryClient->query(
             $query->getQuery(

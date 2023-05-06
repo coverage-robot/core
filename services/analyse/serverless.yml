@@ -18,7 +18,7 @@ functions:
         architecture: arm64
         events:
             -   sqs:
-                    arn: !ImportValue coverage-ingest-completion-${opt:stage, self:provider.stage}
+                    arn: !ImportValue coverage-analysis-${opt:stage, self:provider.stage}
                     batchSize: 1
                     maximumBatchingWindow: 60
                     functionResponseType: ReportBatchItemFailures

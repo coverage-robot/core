@@ -12,6 +12,7 @@ class CommitLineCoverageQuery implements QueryInterface
     public function getQuery(string $table, Upload $upload): string
     {
         return <<<SQL
+        {$this->getNamedSubqueries($table, $upload)}
         SELECT
             *
         FROM
@@ -92,7 +93,7 @@ class CommitLineCoverageQuery implements QueryInterface
         if (!$results->isComplete()) {
             throw new QueryException("Query was not complete when attempting to parse results.");
         }
-        
+
         return $results->rows()->current();
     }
 }

@@ -7,6 +7,7 @@ use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
@@ -14,7 +15,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     private const BOT_ID = 'BOT_kgDOB-Qpag';
 
     public function __construct(
-        private readonly GithubAppInstallationClient $client
+        private readonly GithubAppInstallationClient $client,
+        private readonly LoggerInterface $publisherLogger
     ) {
     }
 
@@ -40,7 +42,11 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     private function buildCommentBody(Upload $upload, PublishableCoverageDataInterface $coverageData): string
     {
         $body = "### New Coverage Information\n\r";
-        $body .= sprintf("This is for %s commit \n\r", $upload->getCommit());
+        $body .= sprintf(
+            "This is for %s commit. Which has had %s uploads. \n\r",
+            $upload->getCommit(),
+            $coverageData->getTotalUploads()
+        );
 
         if ($coverageData->getCoveragePercentage()) {
             $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getCoveragePercentage());
@@ -83,7 +89,18 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
                     ]
                 );
 
-            return $this->client->getLastResponse()->getStatusCode() === Response::HTTP_OK;
+            if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_CREATED) {
+                $this->publisherLogger->critical(
+                    sprintf(
+                        "%s status code returned while attempting to create a new pull request comment for results.",
+                        $this->client->getLastResponse()->getStatusCode()
+                    )
+                );
+
+                return false;
+            }
+
+            return true;
         }
 
         $this->client->api('issue')
@@ -97,7 +114,18 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
                 ]
             );
 
-        return $this->client->getLastResponse()->getStatusCode() === Response::HTTP_OK;
+        if ($this->client->getLastResponse()->getStatusCode() !== Response::HTTP_OK) {
+            $this->publisherLogger->critical(
+                sprintf(
+                    "%s status code returned while attempting to update existing pull request comment with new results.",
+                    $this->client->getLastResponse()->getStatusCode()
+                )
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     private function getExistingCommentId(string $owner, string $repository, int $pullRequest): ?string

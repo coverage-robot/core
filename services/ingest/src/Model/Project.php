@@ -70,7 +70,7 @@ class Project implements JsonSerializable
     {
         return [
             'sourceFormat' => $this->sourceFormat,
-            'generatedAt' => $this->getGeneratedAt(),
+            'generatedAt' => $this->getGeneratedAt()?->format(DATE_ATOM),
             'files' => $this->getFiles()
         ];
     }

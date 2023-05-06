@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Query\CommitLineCoverageQuery;
 use App\Query\TotalCommitCoverageQuery;
+use App\Query\TotalCommitUploadsQuery;
 use App\Service\QueryService;
 
 abstract class AbstractPublishableCoverageData implements PublishableCoverageDataInterface
@@ -12,6 +13,11 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
         protected readonly QueryService $queryService,
         protected readonly Upload $upload
     ) {
+    }
+
+    public function getTotalUploads(): int
+    {
+        return $this->queryService->runQuery(TotalCommitUploadsQuery::class, $this->upload);
     }
 
     public function getTotalCommitCoverage(): array

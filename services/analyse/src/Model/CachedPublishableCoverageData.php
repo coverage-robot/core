@@ -4,9 +4,20 @@ namespace App\Model;
 
 class CachedPublishableCoverageData extends AbstractPublishableCoverageData
 {
+    private int $totalUploads;
+
     private array $totalCommitCoverage;
 
     private array $commitLineCoverage;
+
+    public function getTotalUploads(): int
+    {
+        if (!isset($this->totalUploads)) {
+            $this->totalUploads = parent::getTotalUploads();
+        }
+
+        return $this->totalUploads;
+    }
 
     public function getTotalLines(): int
     {
@@ -41,7 +52,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
         }
 
-        return $this->totalCommitCoverage["coveragePercent"];
+        return $this->totalCommitCoverage["coveragePercentage"];
     }
 
     public function getCommitLineCoverage(): array
