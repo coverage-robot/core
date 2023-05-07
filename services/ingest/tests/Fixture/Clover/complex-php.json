@@ -1,9 +1,6 @@
 {
-    "generatedAt": {
-        "date": "2023-04-16 14:58:29.000000",
-        "timezone_type": 3,
-        "timezone": "UTC"
-    },
+    "sourceFormat": "CLOVER",
+    "generatedAt": "2023-04-16T14:58:29+00:00",
     "files": [
         {
             "fileName": "C:\\Users\\ryan\\Desktop\\Projects\\RyanMaber\\portfolio\\services\\backend\\src\\Client\\SentryClient.php",

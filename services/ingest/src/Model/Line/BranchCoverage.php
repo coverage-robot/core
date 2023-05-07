@@ -47,15 +47,17 @@ class BranchCoverage extends AbstractLineCoverage
 
     public function jsonSerialize(): array
     {
+        $branchesWithNoHits = array_filter(
+            $this->getBranchHits(),
+            static fn(int $hits) => $hits === 0
+        );
+
         return array_merge(
             parent::jsonSerialize(),
             [
-                'partial' => empty(
-                    array_filter(
-                        $this->getBranchHits(),
-                        static fn(int $hits) => $hits === 0
-                    )
-                ),
+                // If there's at least 1 branch with no hits then its partially covered, so long as
+                // not every branch has no hits (as that's completely uncovered)
+                'partial' => count($branchesWithNoHits) > 0 && count($this->getBranchHits()) > $branchesWithNoHits,
                 'branchHits' => $this->getBranchHits()
             ]
         );

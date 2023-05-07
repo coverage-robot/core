@@ -3,9 +3,10 @@ service: ingest
 provider:
     name: aws
     region: eu-west-2
-    stage: dev
+    stage: prod
     environment:
-        APP_ENV: dev
+        APP_ENV: prod
+        ANALYSIS_QUEUE_DSN: { "Ref": "analysisQueue" }
     iam:
         role:
             statements:
@@ -19,6 +20,11 @@ provider:
                         - 's3:*'
                     Resource:
                         - arn:aws:s3:::coverage-output-${opt:stage, self:provider.stage}/*
+                -   Effect: Allow
+                    Action:
+                        - sqs:*
+                    Resource:
+                        - !GetAtt analysisQueue.Arn
 
 plugins:
     - ./vendor/bref/bref
@@ -61,3 +67,23 @@ resources:
                     ServerSideEncryptionConfiguration:
                         -   ServerSideEncryptionByDefault:
                                 SSEAlgorithm: 'AES256'
+
+        analysisQueue:
+            Type: "AWS::SQS::Queue"
+            Properties:
+                QueueName: coverage-analysis-${opt:stage, self:provider.stage}
+                RedrivePolicy:
+                    deadLetterTargetArn: !GetAtt analysisQueueDeadletter.Arn
+                    maxReceiveCount: 3
+
+        analysisQueueDeadletter:
+            Type: "AWS::SQS::Queue"
+            Properties:
+                QueueName: coverage-analysis-deadletter-queue-${opt:stage, self:provider.stage}
+                MessageRetentionPeriod: 1209600
+
+    Outputs:
+        analysisQueue:
+            Value: !GetAtt analysisQueue.Arn
+            Export:
+                Name: coverage-analysis-${opt:stage, self:provider.stage}

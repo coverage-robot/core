@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Exception\RetrievalException;
 use AsyncAws\Core\Exception\Exception;
 use AsyncAws\S3\Input\GetObjectRequest;
+use AsyncAws\S3\Result\GetObjectOutput;
 use AsyncAws\S3\S3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
@@ -20,12 +21,12 @@ class CoverageFileRetrievalService
      *
      * @param Bucket $bucket
      * @param BucketObject $object
-     * @return string
+     * @return GetObjectOutput
      */
-    public function ingestFromS3(Bucket $bucket, BucketObject $object): string
+    public function ingestFromS3(Bucket $bucket, BucketObject $object): GetObjectOutput
     {
         try {
-            $result = $this->s3Client->getObject(
+            return $this->s3Client->getObject(
                 new GetObjectRequest(
                     [
                         'Bucket' => $bucket->getName(),
@@ -33,8 +34,6 @@ class CoverageFileRetrievalService
                     ]
                 )
             );
-
-            return $result->getBody()->getContentAsString();
         } catch (Exception $exception) {
             throw RetrievalException::from($exception);
         }

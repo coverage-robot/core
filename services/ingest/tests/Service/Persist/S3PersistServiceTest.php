@@ -4,8 +4,10 @@ namespace App\Tests\Service\Persist;
 
 use App\Enum\CoverageFormatEnum;
 use App\Enum\EnvironmentEnum;
+use App\Enum\ProviderEnum;
 use App\Exception\PersistException;
 use App\Model\Project;
+use App\Model\Upload;
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
@@ -36,7 +38,15 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name
+                            'sourceFormat' => $coverage->getSourceFormat()->value,
+                            'commit' => '1',
+                            'parent' => '2',
+                            'ingestTime' => '2023-05-02T12:00:00+00:00',
+                            'uploadId' => 'mock-uuid',
+                            'provider' => 'github',
+                            'owner' => 'mock-owner',
+                            'repository' => 'mock-repo',
+                            'pullRequest' => 1234
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -50,8 +60,17 @@ class S3PersistServiceTest extends TestCase
             new NullLogger()
         );
         $S3PersistService->persist(
-            $coverage,
-            'mock-uuid'
+            new Upload(
+                $coverage,
+                'mock-uuid',
+                ProviderEnum::GITHUB->value,
+                'mock-owner',
+                'mock-repo',
+                '1',
+                '2',
+                1234,
+                new DateTimeImmutable('2023-05-02 12:00:00')
+            )
         );
     }
 
@@ -73,7 +92,15 @@ class S3PersistServiceTest extends TestCase
                         'Key' => 'mock-uuid.json',
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->name
+                            'sourceFormat' => $coverage->getSourceFormat()->value,
+                            'commit' => '1',
+                            'parent' => '2',
+                            'ingestTime' => '2023-05-02T12:00:00+00:00',
+                            'uploadId' => 'mock-uuid',
+                            'provider' => 'github',
+                            'owner' => 'mock-owner',
+                            'repository' => 'mock-repo',
+                            'pullRequest' => 1234
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -89,8 +116,17 @@ class S3PersistServiceTest extends TestCase
             new NullLogger()
         );
         $S3PersistService->persist(
-            $coverage,
-            'mock-uuid'
+            new Upload(
+                $coverage,
+                'mock-uuid',
+                ProviderEnum::GITHUB->value,
+                'mock-owner',
+                'mock-repo',
+                '1',
+                '2',
+                1234,
+                new DateTimeImmutable('2023-05-02 12:00:00')
+            )
         );
     }
 }

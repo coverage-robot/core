@@ -11,3 +11,4 @@ phpunit.xml
 .phpcs-cache
 .idea/
 bigquery.json
+github.pem

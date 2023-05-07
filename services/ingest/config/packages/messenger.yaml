@@ -1,0 +1,9 @@
+framework:
+    messenger:
+        transports:
+            analysis:
+                dsn: '%env(ANALYSIS_QUEUE_DSN)%'
+                serializer: App\Service\Event\AnalysisTransportSerializer
+
+        routing:
+            App\Model\Upload: analysis
