@@ -15,6 +15,8 @@ class GithubAppClient extends Client
 {
     public const APP_ID = '327333';
 
+    public const BOT_ID = 'BOT_kgDOB-Qpag';
+
     private const PRIVATE_KEY = __DIR__ . '/../../../config/github.pem';
 
     /**

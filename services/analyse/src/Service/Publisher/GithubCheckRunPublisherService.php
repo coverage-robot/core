@@ -5,6 +5,7 @@ namespace App\Service\Publisher;
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\ProviderEnum;
+use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
 use DateTimeImmutable;
@@ -27,6 +28,10 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
+        if (!$this->supports($upload, $coverageData)) {
+            throw PublishException::notSupportedException();
+        }
+
         $this->upsertCheckRun(
             $upload->getOwner(),
             $upload->getRepository(),
@@ -121,7 +126,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         $api = $this->client->repo();
 
         /** @var array{ id: int, app: array{ id: string } }[] $checkRuns */
-        $checkRuns = $api->checkRuns()->allForReference($owner, $repository, $commit)["check_runs"] ?? [];
+        $checkRuns = $api->checkRuns()->allForReference($owner, $repository, $commit)['check_runs'] ?? [];
         $checkRuns = array_filter(
             $checkRuns,
             static fn(array $checkRun) => isset($checkRun['id']) &&

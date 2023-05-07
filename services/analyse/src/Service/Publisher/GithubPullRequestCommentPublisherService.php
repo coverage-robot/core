@@ -2,6 +2,7 @@
 
 namespace App\Service\Publisher;
 
+use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
@@ -12,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
-    private const BOT_ID = 'BOT_kgDOB-Qpag';
-
     public function __construct(
         private readonly GithubAppInstallationClient $client,
         private readonly LoggerInterface $publisherLogger
@@ -144,7 +143,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             $api->comments()->all($owner, $repository, $pullRequest),
             static fn(array $comment) => isset($comment['id']) &&
                 isset($comment['user']['node_id']) &&
-                $comment['user']['node_id'] === self::BOT_ID
+                $comment['user']['node_id'] === GithubAppClient::BOT_ID
         );
 
         if (!empty($comments)) {
