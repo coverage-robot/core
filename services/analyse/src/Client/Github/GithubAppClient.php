@@ -8,6 +8,7 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
 use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Key\FileCouldNotBeRead;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
@@ -29,10 +30,22 @@ class GithubAppClient extends Client
     ) {
         parent::__construct($httpClientBuilder, $apiVersion, $this->enterpriseUrl);
 
-        $config = Configuration::forSymmetricSigner(
-            new Sha256(),
-            InMemory::file(self::PRIVATE_KEY)
-        );
+        $this->authenticateAsApp();
+    }
+
+    private function authenticateAsApp(): bool
+    {
+        try {
+            $config = Configuration::forSymmetricSigner(
+                new Sha256(),
+                InMemory::file(self::PRIVATE_KEY)
+            );
+        } catch (FileCouldNotBeRead) {
+            // Attempt to read the key file. If it fails, we can't authenticate. This
+            // is usually the result of running tests, but can happen if configured
+            // incorrectly.
+            return false;
+        }
 
         $now = new DateTimeImmutable('@' . time());
         $jwt = $config->builder()
@@ -42,5 +55,7 @@ class GithubAppClient extends Client
             ->getToken($config->signer(), $config->signingKey());
 
         $this->authenticate($jwt->toString(), null, AuthMethod::JWT);
+
+        return true;
     }
 }
