@@ -5,7 +5,7 @@ config/secrets/prod/prod.decrypt.private.php
 public/bundles/
 var/
 vendor/
-.serverless/
+.terraform/
 phpunit.xml
 .phpunit.cache
 .phpcs-cache

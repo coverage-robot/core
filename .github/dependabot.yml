@@ -20,3 +20,10 @@ updates:
             interval: "daily"
         reviewers:
             - "ryanmab"
+
+    -   package-ecosystem: "terraform"
+        directory: "infrastructure"
+        schedule:
+            interval: "daily"
+        reviewers:
+            - "ryanmab"

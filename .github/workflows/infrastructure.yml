@@ -1,0 +1,98 @@
+name: Infrastructure
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'infrastructure/**'
+            - '**/infrastructure/**'
+
+    pull_request:
+        branches:
+            - master
+        paths:
+            - 'infrastructure/**'
+            - '**/infrastructure/**'
+
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        working-directory: './infrastructure'
+
+env:
+    working-directory: './infrastructure'
+    workspace: 'dev'
+
+jobs:
+    lint:
+        name: "Lint"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            security-events: write
+            actions: read
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   name: Run Format
+                id: format
+                continue-on-error: true
+                run: terraform fmt -check
+
+            -   name: Run Checkov
+                uses: bridgecrewio/checkov-action@v12
+                with:
+                    quiet: true
+                    soft_fail: true
+
+    plan:
+        name: Plan
+        runs-on: ubuntu-latest
+        needs: lint
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   uses: aws-actions/configure-aws-credentials@v1
+                with:
+                    aws-region: eu-west-2
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+            -   name: Install Dependencies
+                working-directory: ${{ github.workspace }}/services
+                run: |
+                    for f in *; do
+                       cd "${{ github.workspace }}/services"
+                       if [ -d "$f" ]; then
+                           composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
+                           if [ ${#composer[@]} -gt 0 ]; then
+                               cd "$f"
+                               echo "Installing dependencies for $f"
+                               # Theres no reason to conform to PHP version requirements as the dependencies
+                               # are only used for Bref layers
+                               composer install --ignore-platform-req=php
+                           else
+                               echo "No composer.json found for $f"
+                           fi
+                       else
+                           echo "$f is not a directory"
+                       fi
+                    done
+
+            -   name: Run Plan
+                uses: dflook/terraform-plan@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}

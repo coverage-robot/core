@@ -6,12 +6,14 @@ on:
             - master
         paths:
             - 'services/analyse/**'
+            - '!services/analyse/infrastructure/**'
 
     pull_request:
         branches:
             - master
         paths:
             - 'services/analyse/**'
+            - '!services/analyse/infrastructure/**'
 
     workflow_dispatch:
 
