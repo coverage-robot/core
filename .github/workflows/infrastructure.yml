@@ -58,6 +58,19 @@ jobs:
                     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+            -   name: Install Dependencies
+                working-directory: ${{ github.workspace }}/services
+                run: |
+                    for f in *; do
+                        if [ -d "$f" ]; then
+                            composer=(`find "$f" -maxdepth 1 -name "composer.lock"`)
+                            if [ ${#composer[@]} -gt 0 ]; then
+                                cd "$f"
+                                composer install
+                            fi
+                        fi
+                    done
+
             -   name: Run Initialise
                 id: init
                 run: terraform init
