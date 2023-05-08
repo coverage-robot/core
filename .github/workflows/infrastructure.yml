@@ -25,9 +25,6 @@ defaults:
     run:
         working-directory: './infrastructure'
 
-env:
-    php-version: "8.2"
-    
 jobs:
     lint:
         name: "Lint"
@@ -61,10 +58,6 @@ jobs:
                     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{env.php-version}}
-
             -   name: Install Dependencies
                 working-directory: ${{ github.workspace }}/services
                 run: |
@@ -75,7 +68,9 @@ jobs:
                             if [ ${#composer[@]} -gt 0 ]; then
                                 cd "$f"
                                 echo "Installing dependencies for $f"
-                                composer install
+                                # Theres no reason to conform to PHP version requirements as the dependencies
+                                # are only used for Bref layers
+                                composer install --ignore-platform-req=php
                             else
                                 echo "No composer.json found for $f"
                             fi
