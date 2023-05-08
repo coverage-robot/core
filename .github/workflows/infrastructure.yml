@@ -87,7 +87,7 @@ jobs:
                           return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
                         })
 
-                        const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+                        const output = `#### Terraform Format and Style 🖌\`${{ steps.format.outcome }}\`
                         #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
                         #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
                         <details><summary>Validation Output</summary>
@@ -106,9 +106,7 @@ jobs:
                         ${process.env.PLAN}
                         \`\`\`
 
-                        </details>
-
-                        *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                        </details>`;
 
                         if (botComment) {
                           github.rest.issues.updateComment({
