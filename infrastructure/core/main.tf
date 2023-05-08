@@ -1,26 +1,3 @@
-terraform {
-    required_providers {
-        aws = {
-            source  = "hashicorp/aws"
-            version = "~> 4.16"
-        }
-    }
-
-    required_version = ">= 1.2.0"
-
-    backend "s3" {
-        bucket         = "tf-coverage-state"
-        key            = "state/terraform.tfstate"
-        region         = "eu-west-2"
-        encrypt        = true
-        dynamodb_table = "tf-coverage-locks"
-    }
-}
-
-provider "aws" {
-    region = var.region
-}
-
 resource "aws_iam_role" "lambda_role" {
     name               = "coverage_services_lambda_role"
     assume_role_policy = jsonencode({
@@ -86,8 +63,8 @@ resource "aws_s3_bucket" "coverage-output" {
     }
 }
 
-module "ingest-service" {
-    source      = "../services/ingest/infra"
+module "ingest" {
+    source      = "../../services/ingest/infrastructure"
     environment = var.environment
     lambda_role = aws_iam_role.lambda_role.arn
     region      = var.region
@@ -104,17 +81,17 @@ module "ingest-service" {
     ]
 }
 
-#module "analyse-service" {
-#    source      = "../services/analyse/infra"
-#    environment = var.environment
-#    lambda_role = aws_iam_role.lambda_role.arn
-#    region      = var.region
-#
-#    # The layer version needs to be kept inline with Bref's release, so that the layers
-#    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
-#    bref_layer_version = "21"
-#
-#    depends_on = [
-#        aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role
-#    ]
-#}
+module "analyse" {
+    source      = "../../services/analyse/infrastructure"
+    environment = var.environment
+    lambda_role = aws_iam_role.lambda_role.arn
+    region      = var.region
+
+    # The layer version needs to be kept inline with Bref's release, so that the layers
+    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
+    bref_layer_version = "21"
+
+    depends_on = [
+        aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role
+    ]
+}

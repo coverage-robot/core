@@ -6,8 +6,7 @@ data "archive_file" "deployment" {
         "composer.lock",
         "README.md",
         "tests",
-        "infra",
-        ".serverless"
+        "infrastructure"
     ]
 }
 
