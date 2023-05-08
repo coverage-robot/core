@@ -6,12 +6,14 @@ on:
             - master
         paths:
             - 'services/ingest/**'
+            - '!services/ingest/infrastructure/**'
 
     pull_request:
         branches:
             - master
         paths:
             - 'services/ingest/**'
+            - '!services/ingest/infrastructure/**'
 
     workflow_dispatch:
 
