@@ -22,7 +22,7 @@ updates:
             - "ryanmab"
 
     -   package-ecosystem: "terraform"
-        directory: "infra"
+        directory: "infrastructure"
         schedule:
             interval: "daily"
         reviewers:
