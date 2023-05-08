@@ -27,6 +27,7 @@ defaults:
 
 env:
     working-directory: './infrastructure'
+    workspace: 'dev'
 
 jobs:
     lint:
@@ -93,4 +94,5 @@ jobs:
             -   name: Run Plan
                 uses: dflook/terraform-plan@v1
                 with:
+                    workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
