@@ -25,6 +25,9 @@ defaults:
     run:
         working-directory: './infrastructure'
 
+env:
+    working-directory: './infrastructure'
+
 jobs:
     lint:
         name: "Lint"
@@ -36,117 +39,57 @@ jobs:
         steps:
             -   uses: actions/checkout@v3
 
+            -   name: Run Format
+                id: format
+                continue-on-error: true
+                run: terraform fmt -check
+
             -   name: Run Checkov
                 uses: bridgecrewio/checkov-action@v12
                 with:
                     quiet: true
                     soft_fail: true
 
-    plan:
-        name: "Plan"
-        runs-on: ubuntu-latest
-        needs: lint
-        permissions:
-            contents: read
-            pull-requests: write
-        steps:
-            -   uses: actions/checkout@v3
+        plan:
+            runs-on: ubuntu-latest
+            name: Plan
+            env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            permissions:
+                id-token: write
+                contents: read
+                pull-requests: write
+            steps:
+                -   uses: actions/checkout@v3
 
-            -   uses: aws-actions/configure-aws-credentials@v1
-                with:
-                    aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                -   uses: aws-actions/configure-aws-credentials@v1
+                    with:
+                        aws-region: eu-west-2
+                        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-            -   name: Install Dependencies
-                working-directory: ${{ github.workspace }}/services
-                run: |
-                    for f in *; do
-                        cd "${{ github.workspace }}/services"
-                        if [ -d "$f" ]; then
-                            composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
-                            if [ ${#composer[@]} -gt 0 ]; then
-                                cd "$f"
-                                echo "Installing dependencies for $f"
-                                # Theres no reason to conform to PHP version requirements as the dependencies
-                                # are only used for Bref layers
-                                composer install --ignore-platform-req=php
-                            else
-                                echo "No composer.json found for $f"
-                            fi
-                        else
-                            echo "$f is not a directory"
-                        fi
-                    done
+                -   name: Install Dependencies
+                    working-directory: ${{ github.workspace }}/services
+                    run: |
+                        for f in *; do
+                           cd "${{ github.workspace }}/services"
+                           if [ -d "$f" ]; then
+                               composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
+                               if [ ${#composer[@]} -gt 0 ]; then
+                                   cd "$f"
+                                   echo "Installing dependencies for $f"
+                                   # Theres no reason to conform to PHP version requirements as the dependencies
+                                   # are only used for Bref layers
+                                   composer install --ignore-platform-req=php
+                               else
+                                   echo "No composer.json found for $f"
+                               fi
+                           else
+                               echo "$f is not a directory"
+                           fi
+                        done
 
-            -   name: Run Initialise
-                id: init
-                run: terraform init
-
-            -   name: Run Validation
-                id: validate
-                run: terraform validate -no-color
-
-            -   name: Run Format
-                id: format
-                continue-on-error: true
-                run: terraform fmt -check
-
-            -   name: Run Plan
-                id: plan
-                run: terraform plan -no-color
-                continue-on-error: true
-
-            -   uses: actions/github-script@v6
-                if: github.event_name == 'pull_request'
-                env:
-                    PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-                with:
-                    github-token: ${{ secrets.GITHUB_TOKEN }}
-                    script: |
-                        const { data: comments } = await github.rest.issues.listComments({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number,
-                        })
-
-                        const botComment = comments.find(comment => {
-                          return comment.user.type === 'Bot' && comment.body.includes('Terraform Format and Style')
-                        })
-
-                        const output = `#### Terraform Format and Style 🖌\`${{ steps.format.outcome }}\`
-                        #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-                        #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-                        <details><summary>Validation Output</summary>
-
-                        \`\`\`\n
-                        ${{ steps.validate.outputs.stdout }}
-                        \`\`\`
-
-                        </details>
-
-                        #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-
-                        <details><summary>Show Plan</summary>
-
-                        \`\`\`\n
-                        ${process.env.PLAN}
-                        \`\`\`
-
-                        </details>`;
-
-                        if (botComment) {
-                          github.rest.issues.updateComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            comment_id: botComment.id,
-                            body: output
-                          })
-                        } else {
-                          github.rest.issues.createComment({
-                            issue_number: context.issue.number,
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            body: output
-                          })
-                        }
+                -   name: terraform plan
+                    uses: dflook/terraform-plan@v1
+                    with:
+                        path: ${{ env.working-directory }}
