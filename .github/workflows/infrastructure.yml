@@ -50,46 +50,46 @@ jobs:
                     quiet: true
                     soft_fail: true
 
-        plan:
-            runs-on: ubuntu-latest
-            name: Plan
-            env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            permissions:
-                id-token: write
-                contents: read
-                pull-requests: write
-            steps:
-                -   uses: actions/checkout@v3
+    plan:
+        runs-on: ubuntu-latest
+        name: Plan
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        steps:
+            -   uses: actions/checkout@v3
 
-                -   uses: aws-actions/configure-aws-credentials@v1
-                    with:
-                        aws-region: eu-west-2
-                        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            -   uses: aws-actions/configure-aws-credentials@v1
+                with:
+                    aws-region: eu-west-2
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-                -   name: Install Dependencies
-                    working-directory: ${{ github.workspace }}/services
-                    run: |
-                        for f in *; do
-                           cd "${{ github.workspace }}/services"
-                           if [ -d "$f" ]; then
-                               composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
-                               if [ ${#composer[@]} -gt 0 ]; then
-                                   cd "$f"
-                                   echo "Installing dependencies for $f"
-                                   # Theres no reason to conform to PHP version requirements as the dependencies
-                                   # are only used for Bref layers
-                                   composer install --ignore-platform-req=php
-                               else
-                                   echo "No composer.json found for $f"
-                               fi
+            -   name: Install Dependencies
+                working-directory: ${{ github.workspace }}/services
+                run: |
+                    for f in *; do
+                       cd "${{ github.workspace }}/services"
+                       if [ -d "$f" ]; then
+                           composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
+                           if [ ${#composer[@]} -gt 0 ]; then
+                               cd "$f"
+                               echo "Installing dependencies for $f"
+                               # Theres no reason to conform to PHP version requirements as the dependencies
+                               # are only used for Bref layers
+                               composer install --ignore-platform-req=php
                            else
-                               echo "$f is not a directory"
+                               echo "No composer.json found for $f"
                            fi
-                        done
+                       else
+                           echo "$f is not a directory"
+                       fi
+                    done
 
-                -   name: terraform plan
-                    uses: dflook/terraform-plan@v1
-                    with:
-                        path: ${{ env.working-directory }}
+            -   name: terraform plan
+                uses: dflook/terraform-plan@v1
+                with:
+                    path: ${{ env.working-directory }}
