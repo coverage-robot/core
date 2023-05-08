@@ -25,6 +25,9 @@ defaults:
     run:
         working-directory: './infrastructure'
 
+env:
+    php-version: "8.2"
+    
 jobs:
     lint:
         name: "Lint"
@@ -57,6 +60,10 @@ jobs:
                     aws-region: eu-west-2
                     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{env.php-version}}
 
             -   name: Install Dependencies
                 working-directory: ${{ github.workspace }}/services
