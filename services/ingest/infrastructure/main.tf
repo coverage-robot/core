@@ -1,3 +1,28 @@
+resource "aws_iam_policy" "output_bucket_policy" {
+    name   = "ingest-coverage-output-policy"
+    path   = "/"
+    policy = jsonencode({
+        Version   = "2012-10-17"
+        Statement = [
+
+            {
+                Effect = "Allow"
+                Action = [
+                    "s3:PutObject"
+                ]
+                Resource = [
+                    "${var.output_bucket.arn}/*"
+                ]
+            }
+        ]
+    })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_output_bucket_policy" {
+    role       = var.lambda_role
+    policy_arn = aws_iam_policy.output_bucket_policy.arn
+}
+
 data "archive_file" "deployment" {
     type        = "zip"
     source_dir  = "${path.module}/../"

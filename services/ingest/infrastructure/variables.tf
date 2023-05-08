@@ -1,6 +1,4 @@
-variable "lambda_role" {
-    type = string
-}
+variable "lambda_role" {}
 
 variable "environment" {
     type = string
@@ -14,8 +12,6 @@ variable "bref_layer_version" {
     type = string
 }
 
-variable "ingest_bucket" {
-}
+variable "ingest_bucket" {}
 
-variable "output_bucket" {
-}
+variable "output_bucket" {}

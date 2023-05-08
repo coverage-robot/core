@@ -1,6 +1,6 @@
-variable "lambda_role" {
-    type = string
-}
+variable "lambda_role" {}
+
+variable "analysis_queue" {}
 
 variable "environment" {
     type = string
