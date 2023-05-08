@@ -22,16 +22,67 @@ provider "aws" {
 }
 
 locals {
-    region = "eu-west-2"
+    environment    = terraform.workspace
+    region         = "eu-west-2"
+    logging_policy = {
+        Effect = "Allow"
+        Action = [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+        ]
+        Resource = ["arn:aws:logs:*:*:*"]
+    }
 }
 
-module "remote" {
-    # Manage the remote state for Terraform, using Terraform.
-    source = "./remote"
+module "queue" {
+    source      = "./queue"
+    environment = local.environment
 }
 
-module "core" {
-    source      = "./core"
+module "bucket" {
+    source      = "./bucket"
+    environment = local.environment
+}
+
+module "ingest" {
+    source      = "../services/ingest/infrastructure"
+    environment = local.environment
     region      = local.region
-    environment = terraform.workspace
+
+    ingest_bucket = module.bucket.ingest_bucket
+    output_bucket = module.bucket.output_bucket
+
+    policy_statements = [
+        local.logging_policy,
+        {
+            Effect = "Allow"
+            Action = [
+                "sqs:SendMessage"
+            ]
+            Resource = [
+                module.queue.analysis_queue.arn
+            ]
+        }
+    ]
+
+    # The layer version needs to be kept inline with Bref's release, so that the layers
+    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
+    bref_layer_version = "21"
+}
+
+module "analyse" {
+    source      = "../services/analyse/infrastructure"
+    environment = local.environment
+    region      = local.region
+
+    analysis_queue = module.queue.analysis_queue
+
+    policy_statements = [
+        local.logging_policy
+    ]
+
+    # The layer version needs to be kept inline with Bref's release, so that the layers
+    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
+    bref_layer_version = "21"
 }

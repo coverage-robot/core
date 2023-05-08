@@ -1,26 +1,44 @@
-resource "aws_iam_policy" "output_bucket_policy" {
-    name   = "ingest-coverage-output-policy"
-    path   = "/"
-    policy = jsonencode({
+resource "aws_iam_role" "ingest_policy" {
+    name               = "ingest-service-policy"
+    assume_role_policy = jsonencode({
         Version   = "2012-10-17"
         Statement = [
-
             {
-                Effect = "Allow"
-                Action = [
-                    "s3:PutObject"
-                ]
-                Resource = [
-                    "${var.output_bucket.arn}/*"
-                ]
+                Action    = "sts:AssumeRole"
+                Effect    = "Allow"
+                Principal = {
+                    Service = "lambda.amazonaws.com"
+                }
             }
         ]
     })
 }
 
-resource "aws_iam_role_policy_attachment" "attach_output_bucket_policy" {
-    role       = var.lambda_role
-    policy_arn = aws_iam_policy.output_bucket_policy.arn
+resource "aws_iam_policy" "ingest_service_policy" {
+    name   = "ingest-service-policy"
+    path   = "/"
+    policy = jsonencode({
+        Version   = "2012-10-17"
+        Statement = concat(
+            var.policy_statements,
+            [
+                {
+                    Effect = "Allow"
+                    Action = [
+                        "s3:PutObject"
+                    ]
+                    Resource = [
+                        "${var.output_bucket.arn}/*"
+                    ]
+                }
+            ]
+        )
+    })
+}
+
+resource "aws_iam_role_policy_attachment" "attach_lamdba_logging_policy" {
+    role       = aws_iam_role.ingest_policy.name
+    policy_arn = aws_iam_policy.ingest_service_policy.arn
 }
 
 data "archive_file" "deployment" {
@@ -35,14 +53,15 @@ data "archive_file" "deployment" {
     ]
 }
 
-resource "aws_lambda_function" "ingest" {
+resource "aws_lambda_function" "service" {
     filename         = "${path.module}/deployment.zip"
     source_code_hash = data.archive_file.deployment.output_base64sha256
     function_name    = format("coverage-ingest-%s", var.environment)
-    role             = var.lambda_role
+    role             = aws_iam_role.ingest_policy.arn
     runtime          = "provided.al2"
     handler          = "App\\Handler\\IngestHandler"
     architectures    = ["arm64"]
+    timeout          = 28
     layers           = [
         format(
             "arn:aws:lambda:%s:534081306603:layer:arm-php-82:%s",
@@ -55,7 +74,7 @@ resource "aws_lambda_function" "ingest" {
 resource "aws_lambda_permission" "allow_bucket" {
     statement_id  = "AllowExecutionFromS3Bucket"
     action        = "lambda:InvokeFunction"
-    function_name = aws_lambda_function.ingest.arn
+    function_name = aws_lambda_function.service.arn
     principal     = "s3.amazonaws.com"
     source_arn    = var.ingest_bucket.arn
 }
@@ -64,7 +83,7 @@ resource "aws_s3_bucket_notification" "ingest_trigger" {
     bucket = var.ingest_bucket.id
 
     lambda_function {
-        lambda_function_arn = aws_lambda_function.ingest.arn
+        lambda_function_arn = aws_lambda_function.service.arn
         events              = ["s3:ObjectCreated:*"]
     }
 

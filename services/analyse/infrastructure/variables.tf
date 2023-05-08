@@ -1,4 +1,4 @@
-variable "lambda_role" {}
+variable "policy_statements" {}
 
 variable "analysis_queue" {}
 
