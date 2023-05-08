@@ -6,7 +6,6 @@ public/bundles/
 var/
 vendor/
 .terraform/
-.serverless/
 phpunit.xml
 .phpunit.cache
 .phpcs-cache
