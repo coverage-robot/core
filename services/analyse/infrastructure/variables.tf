@@ -9,7 +9,3 @@ variable "environment" {
 variable "region" {
     type = string
 }
-
-variable "bref_layer_version" {
-    type = string
-}

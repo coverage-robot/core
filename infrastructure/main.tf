@@ -65,10 +65,6 @@ module "ingest" {
             ]
         }
     ]
-
-    # The layer version needs to be kept inline with Bref's release, so that the layers
-    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
-    bref_layer_version = "21"
 }
 
 module "analyse" {
@@ -81,8 +77,4 @@ module "analyse" {
     policy_statements = [
         local.logging_policy
     ]
-
-    # The layer version needs to be kept inline with Bref's release, so that the layers
-    # match the runtime. See https://runtimes.bref.sh/?region=eu-west-2&version=2.0.4.
-    bref_layer_version = "21"
 }

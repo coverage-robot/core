@@ -1,3 +1,8 @@
+locals {
+    bref_layers = jsondecode(file("${path.module}/../vendor/bref/bref/layers.json"))
+    php_version = "arm-php-82"
+}
+
 resource "aws_iam_role" "ingest_policy" {
     name               = "ingest-service-policy"
     assume_role_policy = jsonencode({
@@ -64,9 +69,9 @@ resource "aws_lambda_function" "service" {
     timeout          = 28
     layers           = [
         format(
-            "arn:aws:lambda:%s:534081306603:layer:arm-php-82:%s",
+            "arn:aws:lambda:%s:534081306603:layer:${local.php_version}:%s",
             var.region,
-            var.bref_layer_version
+            local.bref_layers[local.php_version][var.region]
         )
     ]
 }
