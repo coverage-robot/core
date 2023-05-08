@@ -62,6 +62,7 @@ jobs:
                 working-directory: ${{ github.workspace }}/services
                 run: |
                     for f in *; do
+                        cd "${{ github.workspace }}/services"
                         if [ -d "$f" ]; then
                             composer=(`find "$f" -maxdepth 1 -name "composer.json"`)
                             if [ ${#composer[@]} -gt 0 ]; then
