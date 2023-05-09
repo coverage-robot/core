@@ -176,7 +176,7 @@ jobs:
         name: "Cleanup"
         runs-on: ubuntu-latest
         if: always() && needs.build.result == 'success'
-        needs: [ build, ingest-tests ]
+        needs: [ build, plan ]
 
         steps:
             -   uses: geekyeggo/delete-artifact@v2
