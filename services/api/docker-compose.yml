@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  app:
+    image: bref/php-82-fpm-dev:2
+    ports: [ '8000:8000' ]
+    volumes:
+      - .:/var/task
+    environment:
+      HANDLER: public/index.php
