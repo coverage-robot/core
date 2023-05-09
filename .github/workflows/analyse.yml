@@ -104,6 +104,18 @@ jobs:
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
 
+            -   name: Run Terraform Format
+                uses: dflook/terraform-fmt-check@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
+
+            -   name: Run Terraform Validate
+                uses: dflook/terraform-validate@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
+
     analyse-tests:
         name: "Analyse Tests"
         runs-on: ubuntu-latest
@@ -169,7 +181,7 @@ jobs:
 
             -   name: Extract build package
                 run: umask 644 && unzip -q build.zip -d ./
-                
+
             -   uses: aws-actions/configure-aws-credentials@v1
                 with:
                     aws-region: eu-west-2

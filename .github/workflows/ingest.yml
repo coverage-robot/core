@@ -104,6 +104,18 @@ jobs:
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
 
+            -   name: Run Terraform Format
+                uses: dflook/terraform-fmt-check@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
+
+            -   name: Run Terraform Validate
+                uses: dflook/terraform-validate@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
+
     ingest-tests:
         name: "Ingest Tests"
         runs-on: ubuntu-latest
