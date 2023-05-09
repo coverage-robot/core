@@ -179,15 +179,15 @@ jobs:
                     workspace: ${{ env.workspace }}
                     add_github_comment: true
                     path: ${{ env.working-directory }}/infrastructure
-
-    cleanup:
-        name: "Cleanup"
-        runs-on: ubuntu-latest
-        if: always() && needs.build.result == 'success'
-        needs: [ build, plan ]
-
-        steps:
-            -   uses: geekyeggo/delete-artifact@v2
-                with:
-                    name: |
-                        build
+#
+#    cleanup:
+#        name: "Cleanup"
+#        runs-on: ubuntu-latest
+#        if: always() && needs.build.result == 'success'
+#        needs: [ build, plan ]
+#
+#        steps:
+#            -   uses: geekyeggo/delete-artifact@v2
+#                with:
+#                    name: |
+#                        build
