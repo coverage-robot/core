@@ -50,20 +50,12 @@ module "ingest" {
     environment = local.environment
     region      = local.region
 
-    ingest_bucket = module.bucket.ingest_bucket
-    output_bucket = module.bucket.output_bucket
+    ingest_bucket  = module.bucket.ingest_bucket
+    output_bucket  = module.bucket.output_bucket
+    analysis_queue = module.queue.analysis_queue
 
     policy_statements = [
-        local.logging_policy,
-        {
-            Effect = "Allow"
-            Action = [
-                "sqs:SendMessage"
-            ]
-            Resource = [
-                module.queue.analysis_queue.arn
-            ]
-        }
+        local.logging_policy
     ]
 }
 

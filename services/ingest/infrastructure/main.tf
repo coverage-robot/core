@@ -30,10 +30,28 @@ resource "aws_iam_policy" "ingest_service_policy" {
                 {
                     Effect = "Allow"
                     Action = [
+                        "s3:GetObject"
+                    ]
+                    Resource = [
+                        "${var.ingest_bucket.arn}/*"
+                    ]
+                },
+                {
+                    Effect = "Allow"
+                    Action = [
                         "s3:PutObject"
                     ]
                     Resource = [
                         "${var.output_bucket.arn}/*"
+                    ]
+                },
+                {
+                    Effect = "Allow"
+                    Action = [
+                        "sqs:*"
+                    ]
+                    Resource = [
+                        var.analysis_queue.arn
                     ]
                 }
             ]
@@ -74,6 +92,12 @@ resource "aws_lambda_function" "service" {
             local.bref_layers[local.php_version][var.region]
         )
     ]
+
+    environment {
+        variables = {
+            "ANALYSIS_QUEUE_DSN" = var.analysis_queue.url
+        }
+    }
 }
 
 resource "aws_lambda_permission" "allow_bucket" {
