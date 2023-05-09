@@ -157,7 +157,15 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-            -   uses: actions/checkout@v3
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
+
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
 
             -   uses: aws-actions/configure-aws-credentials@v1
                 with:
