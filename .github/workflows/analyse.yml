@@ -167,6 +167,9 @@ jobs:
                     name: build
                     path: ${{ env.working-directory }}
 
+            -   name: Extract build package
+                run: umask 644 && unzip -q build.zip -d ./
+                
             -   uses: aws-actions/configure-aws-credentials@v1
                 with:
                     aws-region: eu-west-2
