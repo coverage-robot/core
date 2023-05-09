@@ -1,6 +1,47 @@
 locals {
     bref_layers = jsondecode(file("${path.module}/../vendor/bref/bref/layers.json"))
-    php_version = "arm-php-82"
+    layer       = format(
+        "arn:aws:lambda:%s:534081306603:layer:${var.php_version}:%s",
+        var.region,
+        local.bref_layers[var.php_version][var.region]
+    )
+}
+
+terraform {
+    required_providers {
+        aws = {
+            source  = "hashicorp/aws"
+            version = "~> 4.16"
+        }
+    }
+
+    required_version = ">= 1.2.0"
+
+    backend "s3" {
+        bucket         = "tf-coverage-state"
+        key            = "state/ingest/terraform.tfstate"
+        region         = "eu-west-2"
+        encrypt        = true
+        dynamodb_table = "tf-coverage-locks"
+    }
+}
+
+provider "aws" {
+    region = var.region
+}
+
+data "terraform_remote_state" "core" {
+    backend = "s3"
+
+    workspace = var.environment
+
+    config = {
+        bucket         = "tf-coverage-state"
+        key            = "state/core/terraform.tfstate"
+        region         = "eu-west-2"
+        encrypt        = true
+        dynamodb_table = "tf-coverage-locks"
+    }
 }
 
 resource "aws_iam_role" "ingest_policy" {
@@ -24,38 +65,44 @@ resource "aws_iam_policy" "ingest_service_policy" {
     path   = "/"
     policy = jsonencode({
         Version   = "2012-10-17"
-        Statement = concat(
-            var.policy_statements,
-            [
-                {
-                    Effect = "Allow"
-                    Action = [
-                        "s3:GetObject"
-                    ]
-                    Resource = [
-                        "${var.ingest_bucket.arn}/*"
-                    ]
-                },
-                {
-                    Effect = "Allow"
-                    Action = [
-                        "s3:PutObject"
-                    ]
-                    Resource = [
-                        "${var.output_bucket.arn}/*"
-                    ]
-                },
-                {
-                    Effect = "Allow"
-                    Action = [
-                        "sqs:*"
-                    ]
-                    Resource = [
-                        var.analysis_queue.arn
-                    ]
-                }
-            ]
-        )
+        Statement = [
+            {
+                Effect = "Allow"
+                Action = [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ]
+                Resource = ["arn:aws:logs:*:*:*"]
+            },
+            {
+                Effect = "Allow"
+                Action = [
+                    "s3:GetObject"
+                ]
+                Resource = [
+                    "${data.terraform_remote_state.core.outputs.ingest_bucket.arn}/*"
+                ]
+            },
+            {
+                Effect = "Allow"
+                Action = [
+                    "s3:PutObject"
+                ]
+                Resource = [
+                    "${data.terraform_remote_state.core.outputs.output_bucket.arn}/*"
+                ]
+            },
+            {
+                Effect = "Allow"
+                Action = [
+                    "sqs:*"
+                ]
+                Resource = [
+                    data.terraform_remote_state.core.outputs.analysis_queue.arn
+                ]
+            }
+        ]
     })
 }
 
@@ -85,17 +132,11 @@ resource "aws_lambda_function" "service" {
     handler          = "App\\Handler\\IngestHandler"
     architectures    = ["arm64"]
     timeout          = 28
-    layers           = [
-        format(
-            "arn:aws:lambda:%s:534081306603:layer:${local.php_version}:%s",
-            var.region,
-            local.bref_layers[local.php_version][var.region]
-        )
-    ]
+    layers           = [local.layer]
 
     environment {
         variables = {
-            "ANALYSIS_QUEUE_DSN" = var.analysis_queue.url
+            "ANALYSIS_QUEUE_DSN" = data.terraform_remote_state.core.outputs.analysis_queue.url
         }
     }
 }
@@ -105,11 +146,11 @@ resource "aws_lambda_permission" "allow_bucket" {
     action        = "lambda:InvokeFunction"
     function_name = aws_lambda_function.service.arn
     principal     = "s3.amazonaws.com"
-    source_arn    = var.ingest_bucket.arn
+    source_arn    = data.terraform_remote_state.core.outputs.ingest_bucket.arn
 }
 
 resource "aws_s3_bucket_notification" "ingest_trigger" {
-    bucket = var.ingest_bucket.id
+    bucket = data.terraform_remote_state.core.outputs.ingest_bucket.id
 
     lambda_function {
         lambda_function_arn = aws_lambda_function.service.arn
