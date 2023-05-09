@@ -1,6 +1,47 @@
 locals {
     bref_layers = jsondecode(file("${path.module}/../vendor/bref/bref/layers.json"))
-    php_version = "arm-php-82"
+    layer       = format(
+        "arn:aws:lambda:%s:534081306603:layer:${var.php_version}:%s",
+        var.region,
+        local.bref_layers[var.php_version][var.region]
+    )
+}
+
+terraform {
+    required_providers {
+        aws = {
+            source  = "hashicorp/aws"
+            version = "~> 4.16"
+        }
+    }
+
+    required_version = ">= 1.2.0"
+
+    backend "s3" {
+        bucket         = "tf-coverage-state"
+        key            = "state/analyse/terraform.tfstate"
+        region         = "eu-west-2"
+        encrypt        = true
+        dynamodb_table = "tf-coverage-locks"
+    }
+}
+
+provider "aws" {
+    region = var.region
+}
+
+data "terraform_remote_state" "core" {
+    backend = "s3"
+
+    workspace = var.environment
+
+    config = {
+        bucket         = "tf-coverage-state"
+        key            = "state/core/terraform.tfstate"
+        region         = "eu-west-2"
+        encrypt        = true
+        dynamodb_table = "tf-coverage-locks"
+    }
 }
 
 resource "aws_iam_role" "analyse_role" {
@@ -24,22 +65,28 @@ resource "aws_iam_policy" "analyse_service_policy" {
     path   = "/"
     policy = jsonencode({
         Version   = "2012-10-17"
-        Statement = concat(
-            var.policy_statements,
-            [
-                {
-                    Effect = "Allow"
-                    Action = [
-                        "sqs:ReceiveMessage",
-                        "sqs:DeleteMessage",
-                        "sqs:GetQueueAttributes"
-                    ]
-                    Resource = [
-                        var.analysis_queue.arn
-                    ]
-                }
-            ]
-        )
+        Statement = [
+            {
+                Effect = "Allow"
+                Action = [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ]
+                Resource = ["arn:aws:logs:*:*:*"]
+            },
+            {
+                Effect = "Allow"
+                Action = [
+                    "sqs:ReceiveMessage",
+                    "sqs:DeleteMessage",
+                    "sqs:GetQueueAttributes"
+                ]
+                Resource = [
+                    data.terraform_remote_state.core.outputs.analysis_queue.arn
+                ]
+            }
+        ]
     })
 }
 
@@ -71,18 +118,12 @@ resource "aws_lambda_function" "service" {
     handler       = "App\\Handler\\AnalyseHandler"
     architectures = ["arm64"]
 
-    layers = [
-        format(
-            "arn:aws:lambda:%s:534081306603:layer:${local.php_version}:%s",
-            var.region,
-            local.bref_layers[local.php_version][var.region]
-        )
-    ]
+    layers = [local.layer]
 }
 
 resource "aws_lambda_event_source_mapping" "analysis_trigger" {
     function_name                      = aws_lambda_function.service.arn
-    event_source_arn                   = var.analysis_queue.arn
+    event_source_arn                   = data.terraform_remote_state.core.outputs.analysis_queue.arn
     batch_size                         = 1
     maximum_batching_window_in_seconds = 60
     enabled                            = true

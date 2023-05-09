@@ -1,15 +1,14 @@
-variable "policy_statements" {}
-
-variable "analysis_queue" {}
+variable "region" {
+    type    = string
+    default = "eu-west-2"
+}
 
 variable "environment" {
-    type = string
+    type    = string
+    default = "dev"
 }
 
-variable "region" {
-    type = string
+variable "php_version" {
+    type    = string
+    default = "arm-php-82"
 }
-
-variable "ingest_bucket" {}
-
-variable "output_bucket" {}
