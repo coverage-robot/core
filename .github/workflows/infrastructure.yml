@@ -40,10 +40,17 @@ jobs:
         steps:
             -   uses: actions/checkout@v3
 
-            -   name: Run Format
-                id: format
-                continue-on-error: true
-                run: terraform fmt -check
+            -   name: Run Terraform Format
+                uses: dflook/terraform-fmt-check@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}
+
+            -   name: Run Terraform Validate
+                uses: dflook/terraform-validate@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}
 
             -   name: Run Checkov
                 uses: bridgecrewio/checkov-action@v12
