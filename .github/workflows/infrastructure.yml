@@ -6,12 +6,14 @@ on:
             - master
         paths:
             - 'infrastructure/**'
+            - '.github/workflows/infrastructure.yml'
 
     pull_request:
         branches:
             - master
         paths:
             - 'infrastructure/**'
+            - '.github/workflows/infrastructure.yml'
 
     workflow_dispatch:
 

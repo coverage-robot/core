@@ -170,7 +170,7 @@ jobs:
                 with:
                     workspace: ${{ env.workspace }}
                     add_github_comment: true
-                    path: ${{ env.working-directory }}
+                    path: ${{ env.working-directory }}/infastructure
 
     cleanup:
         name: "Cleanup"
