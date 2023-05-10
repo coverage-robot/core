@@ -161,7 +161,7 @@ jobs:
     plan:
         name: Plan
         runs-on: ubuntu-latest
-        needs: ingest-tests
+        needs: api-tests
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
