@@ -26,55 +26,55 @@ class UploadServiceTest extends TestCase
     private static function validatablePayloadDataProvider(): array
     {
         return [
-            "With pull request" => [
+            'With pull request' => [
                 [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "commit" => 2,
-                    "pullRequest" => 12,
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'pullRequest' => 12,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                 ],
                 true
             ],
-            "Without to pull request" => [
+            'Without to pull request' => [
                 [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "commit" => 2,
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                 ],
                 true
             ],
-            "Without commit" => [
+            'Without commit' => [
                 [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                 ],
                 false
             ],
-            "Without to file name" => [
+            'Without to file name' => [
                 [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "commit" => 2,
-                    "parent" => "d",
-                    "provider" => "github"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github'
                 ],
                 false
             ],
-            "Without owner or repository" => [
+            'Without owner or repository' => [
                 [
-                    "commit" => 2,
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                 ],
                 false
             ],

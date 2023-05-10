@@ -30,13 +30,13 @@ class UploadController extends AbstractController
         }
 
         $signedUrl = $this->uploadService->buildSignedUploadUrl(
-            $body["owner"],
-            $body["repository"],
-            $body["fileName"],
-            $body["pullRequest"] ?? null,
-            $body["commit"],
-            $body["parent"],
-            $body["provider"]
+            (string)$body['owner'],
+            (string)$body['repository'],
+            (string)$body['fileName'],
+            $body['pullRequest'] ? (string)$body['pullRequest'] : null,
+            (string)$body['commit'],
+            (string)$body['parent'],
+            (string)$body['provider']
         );
 
         return $this->json($signedUrl);

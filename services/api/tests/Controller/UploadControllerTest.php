@@ -24,18 +24,18 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
             ->with(
-                $body["owner"],
-                $body["repository"],
-                $body["fileName"],
-                $body["pullRequest"] ?? null,
-                $body["commit"],
-                $body["parent"],
-                $body["provider"]
+                $body['owner'],
+                $body['repository'],
+                $body['fileName'],
+                $body['pullRequest'] ?? null,
+                $body['commit'],
+                $body['parent'],
+                $body['provider']
             )
             ->willReturn(
                 new SignedUrl(
                     'mock-signed-url',
-                    new DateTimeImmutable("2023-05-10 10:10:10")
+                    new DateTimeImmutable('2023-05-10 10:10:10')
                 )
             );
 
@@ -81,25 +81,25 @@ class UploadControllerTest extends KernelTestCase
     private static function validPayloadDataProvider(): array
     {
         return [
-            "With pull request" => [
+            'With pull request' => [
                  [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "commit" => 2,
-                    "pullRequest" => 12,
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'pullRequest' => 12,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                  ]
             ],
-            "Without to pull request" => [
+            'Without to pull request' => [
                 [
-                    "owner" => "1",
-                    "repository" => "a",
-                    "commit" => 2,
-                    "parent" => "d",
-                    "provider" => "github",
-                    "fileName" => "test.xml"
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml'
                 ]
             ]
         ];

@@ -30,7 +30,7 @@ class UploadService
     ): SignedUrl {
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-        $uploadKey = sprintf("%s/%s/%s.%s", $owner, $repository, $commit, $fileExtension);
+        $uploadKey = sprintf('%s/%s/%s.%s', $owner, $repository, $commit, $fileExtension);
 
         $input = new PutObjectRequest([
             'Bucket' => sprintf(
@@ -48,7 +48,7 @@ class UploadService
             ]
         ]);
 
-        $expiry = new DateTimeImmutable(sprintf("+%s min", self::EXPIRY_MINUTES));
+        $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
 
         return new SignedUrl(
             $this->s3Client->presign(
@@ -62,12 +62,12 @@ class UploadService
     public function validatePayload(array $payload): bool
     {
         if (
-            isset($payload["owner"]) &&
-            isset($payload["repository"]) &&
-            isset($payload["fileName"]) &&
-            isset($payload["commit"]) &&
-            isset($payload["parent"]) &&
-            isset($payload["provider"])
+            isset($payload['owner']) &&
+            isset($payload['repository']) &&
+            isset($payload['fileName']) &&
+            isset($payload['commit']) &&
+            isset($payload['parent']) &&
+            isset($payload['provider'])
         ) {
             return true;
         }
