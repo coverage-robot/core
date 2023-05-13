@@ -2,11 +2,13 @@
 
 namespace App\Tests\Service;
 
+use App\Exception\SigningException;
 use App\Service\EnvironmentService;
 use App\Service\UploadService;
 use AsyncAws\S3\S3Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class UploadServiceTest extends TestCase
 {
@@ -15,15 +17,22 @@ class UploadServiceTest extends TestCase
     {
         $uploadService = new UploadService(
             $this->createMock(S3Client::class),
-            $this->createMock(EnvironmentService::class)
+            $this->createMock(EnvironmentService::class),
+            new NullLogger()
         );
 
-        $isValid = $uploadService->validatePayload($body);
+        if (!$expectedValidity) {
+            $this->expectException(SigningException::class);
+        }
 
-        $this->assertEquals($expectedValidity, $isValid);
+        $validParameters = $uploadService->validatePayload($body);
+
+        if ($expectedValidity) {
+            $this->assertEquals($body, $validParameters);
+        }
     }
 
-    private static function validatablePayloadDataProvider(): array
+    public static function validatablePayloadDataProvider(): array
     {
         return [
             'With pull request' => [

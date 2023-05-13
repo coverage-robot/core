@@ -29,7 +29,7 @@ defaults:
 env:
     php-version: "8.2"
     working-directory: './services/api'
-    workspace: 'dev'
+    workspace: 'prod'
 
 jobs:
     build:
@@ -65,7 +65,7 @@ jobs:
             - name: Install Composer dependencies
               run: composer install --prefer-dist --no-progress
 
-                # For Psalm's symfony plugin, which requires the test containers
+              # For Psalm's symfony plugin, which requires the test containers
             - name: Warm testing environment cache
               run: php bin/console cache:warmup --env=test
 
@@ -165,7 +165,7 @@ jobs:
                   fi
               shell: bash
 
-            - uses: ryanmab/coverage-action@0.1
+            - uses: ryanmab/coverage-action@0.1.1
               with:
                 files: |
                     ${{ env.working-directory }}/coverage.xml
@@ -183,6 +183,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: api-tests
+        if: github.ref != 'refs/heads/master'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -218,6 +219,53 @@ jobs:
                   workspace: ${{ env.workspace }}
                   add_github_comment: true
                   path: ${{ env.working-directory }}/infrastructure
+                  var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+
+    deployment:
+      name: Deployment
+      runs-on: ubuntu-latest
+      needs: api-tests
+      if: github.ref == 'refs/heads/master'
+      environment: api-prod
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      permissions:
+        id-token: write
+        contents: read
+        pull-requests: write
+      steps:
+        -   uses: actions/checkout@v3
+
+        -   uses: shivammathur/setup-php@v2
+            with:
+              php-version: ${{ env.php-version }}
+
+        -   name: Setup environment variables
+            uses: SpicyPizza/create-envfile@v1.3
+            with:
+              envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+              directory: ${{ env.working-directory }}
+              file_name: .env.local
+              fail_on_empty: false
+
+        -   name: Install Composer dependencies
+            run: composer install --prefer-dist --optimize-autoloader --no-dev --no-scripts
+
+        -   name: Clear platform cache
+            run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
+
+        -   name: Compile environment variables
+            run: composer dump-env ${{ env.workspace }}
+
+        -   name: Warm platform cache
+            run: php bin/console cache:warmup --env=${{ env.workspace }}
+
+        -   name: Run Apply
+            uses: dflook/terraform-apply@v1
+            with:
+              workspace: ${{ env.workspace }}
+              path: ${{ env.working-directory }}/infrastructure
+              var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
     cleanup:
         name: "Cleanup"

@@ -2,21 +2,90 @@
 
 namespace App\Service;
 
+use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
+use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @psalm-type SigningParameters = array{
+ *     owner: mixed,
+ *     repository: mixed,
+ *     fileName: mixed,
+ *     pullRequest?: mixed,
+ *     commit: mixed,
+ *     parent: mixed,
+ *     provider: mixed
+ * }
+ */
 class UploadService
 {
     private const TARGET_BUCKET = 'coverage-ingest-%s';
 
-    private const EXPIRY_MINUTES = 30;
+    private const EXPIRY_MINUTES = 5;
+
+    private const REQUIRED_FIELDS = [
+        'owner',
+        'repository',
+        'provider',
+        'fileName',
+        'commit',
+        'parent'
+    ];
 
     public function __construct(
         private readonly S3Client $s3Client,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentService $environmentService,
+        private readonly LoggerInterface $uploadLogger
     ) {
+    }
+
+    /**
+     * @param Request $request
+     * @return SigningParameters
+     * @throws SigningException
+     */
+    public function getSigningParametersFromRequest(Request $request): array
+    {
+        $body = $request->toArray();
+
+        if (!isset($body['data']) || !is_array($body['data'])) {
+            $this->uploadLogger->info(
+                'No data key found in request body.',
+                [
+                    'parameters' => $body
+                ]
+            );
+
+            throw SigningException::invalidPayload(['data']);
+        }
+
+        /** @var array{ data: array<array-key, mixed> } $body */
+        $parameters = $body['data'];
+
+        $this->uploadLogger->info(
+            'Beginning to generate signed url for upload request.',
+            [
+                'parameters' => $parameters
+            ]
+        );
+
+        try {
+            return $this->validatePayload($parameters);
+        } catch (SigningException $exception) {
+            $this->uploadLogger->error(
+                $exception->getMessage(),
+                [
+                    'parameters' => $parameters
+                ]
+            );
+
+            throw $exception;
+        }
     }
 
     public function buildSignedUploadUrl(
@@ -30,7 +99,14 @@ class UploadService
     ): SignedUrl {
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-        $uploadKey = sprintf('%s/%s/%s.%s', $owner, $repository, $commit, $fileExtension);
+        $uploadKey = sprintf(
+            '%s/%s/%s/%s.%s',
+            $owner,
+            $repository,
+            $commit,
+            Uuid::uuid4()->toString(),
+            $fileExtension
+        );
 
         $input = new PutObjectRequest([
             'Bucket' => sprintf(
@@ -82,19 +158,18 @@ class UploadService
         return $metaData;
     }
 
-    public function validatePayload(array $payload): bool
+    /**
+     * @param array $parameters
+     * @return SigningParameters
+     * @throws SigningException
+     */
+    public function validatePayload(array $parameters): array
     {
-        if (
-            isset($payload['owner']) &&
-            isset($payload['repository']) &&
-            isset($payload['fileName']) &&
-            isset($payload['commit']) &&
-            isset($payload['parent']) &&
-            isset($payload['provider'])
-        ) {
-            return true;
+        if (array_diff(self::REQUIRED_FIELDS, array_keys($parameters)) === []) {
+            /** @var SigningParameters $parameters */
+            return $parameters;
         }
 
-        return false;
+        throw SigningException::invalidPayload(array_diff(self::REQUIRED_FIELDS, array_keys($parameters)));
     }
 }

@@ -17,16 +17,20 @@ terraform {
   }
 }
 
+locals {
+  environment = var.environment != "" ? var.environment : terraform.workspace
+}
+
 provider "aws" {
   region = var.region
 }
 
 module "queue" {
   source      = "./queue"
-  environment = var.environment
+  environment = local.environment
 }
 
 module "bucket" {
   source      = "./bucket"
-  environment = var.environment
+  environment = local.environment
 }

@@ -5,7 +5,7 @@ variable "region" {
 
 variable "environment" {
   type    = string
-  default = "dev"
+  default = ""
 }
 
 variable "php_version" {
