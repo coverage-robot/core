@@ -7,6 +7,7 @@ use App\Service\UploadService;
 use AsyncAws\S3\S3Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class UploadServiceTest extends TestCase
 {
@@ -15,7 +16,8 @@ class UploadServiceTest extends TestCase
     {
         $uploadService = new UploadService(
             $this->createMock(S3Client::class),
-            $this->createMock(EnvironmentService::class)
+            $this->createMock(EnvironmentService::class),
+            new NullLogger()
         );
 
         $isValid = $uploadService->validatePayload($body);
@@ -23,7 +25,7 @@ class UploadServiceTest extends TestCase
         $this->assertEquals($expectedValidity, $isValid);
     }
 
-    private static function validatablePayloadDataProvider(): array
+    public static function validatablePayloadDataProvider(): array
     {
         return [
             'With pull request' => [
