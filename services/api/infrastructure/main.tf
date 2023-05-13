@@ -75,6 +75,16 @@ resource "aws_iam_policy" "api_service_policy" {
         ]
         Resource = ["arn:aws:logs:*:*:*"]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl"
+        ]
+        Resource = [
+          "${data.terraform_remote_state.core.outputs.ingest_bucket.arn}/*"
+        ]
+      }
     ]
   })
 }
@@ -106,4 +116,13 @@ resource "aws_lambda_function" "service" {
   architectures    = ["arm64"]
   timeout          = 28
   layers           = [local.layer]
+}
+
+resource "aws_lambda_function_url" "service_url" {
+  authorization_type = "NONE"
+  function_name      = aws_lambda_function.service.function_name
+  cors {
+    allow_methods = ["GET"]
+    allow_origins = ["*"]
+  }
 }
