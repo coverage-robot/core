@@ -157,7 +157,7 @@ jobs:
                     fi
                 shell: bash
 
-            -   uses: ryanmab/coverage-action@v0.1
+            -   uses: ryanmab/coverage-action@0.1
                 with:
                     files: |
                         ${{ env.working-directory }}/coverage.xml
