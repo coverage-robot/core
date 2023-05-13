@@ -20,7 +20,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
-            ->willReturn($body["data"]);
+            ->willReturn($body['data']);
 
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
@@ -59,7 +59,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
-            ->willThrowException(SigningException::invalidPayload(["mock"]));
+            ->willThrowException(SigningException::invalidPayload(['mock']));
 
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
