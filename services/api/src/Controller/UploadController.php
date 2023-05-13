@@ -29,6 +29,13 @@ class UploadController extends AbstractController
                     'parameters' => $body
                 ]
             );
+
+            return $this->json(
+                [
+                    'error' => 'Invalid payload',
+                ],
+                400
+            );
         }
 
         /** @var array{ data: array<array-key, mixed> } $body */

@@ -7,6 +7,7 @@ use App\Model\SignedUrl;
 use App\Service\UploadService;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,13 +25,13 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
             ->with(
-                $body['owner'],
-                $body['repository'],
-                $body['fileName'],
-                $body['pullRequest'] ?? null,
-                $body['commit'],
-                $body['parent'],
-                $body['provider']
+                $body['data']['owner'],
+                $body['data']['repository'],
+                $body['data']['fileName'],
+                $body['data']['pullRequest'] ?? null,
+                $body['data']['commit'],
+                $body['data']['parent'],
+                $body['data']['provider']
             )
             ->willReturn(
                 new SignedUrl(
@@ -39,7 +40,7 @@ class UploadControllerTest extends KernelTestCase
                 )
             );
 
-        $uploadController = new UploadController($uploadService);
+        $uploadController = new UploadController($uploadService, new NullLogger());
 
         $uploadController->setContainer($this->getContainer());
 
@@ -66,7 +67,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
 
-        $uploadController = new UploadController($uploadService);
+        $uploadController = new UploadController($uploadService, new NullLogger());
 
         $uploadController->setContainer($this->getContainer());
 
@@ -83,23 +84,27 @@ class UploadControllerTest extends KernelTestCase
         return [
             'With pull request' => [
                  [
-                    'owner' => '1',
-                    'repository' => 'a',
-                    'commit' => 2,
-                    'pullRequest' => 12,
-                    'parent' => 'd',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml'
+                    'data' => [
+                        'owner' => '1',
+                        'repository' => 'a',
+                        'commit' => 2,
+                        'pullRequest' => 12,
+                        'parent' => 'd',
+                        'provider' => 'github',
+                        'fileName' => 'test.xml'
+                    ]
                  ]
             ],
             'Without to pull request' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
-                    'commit' => 2,
-                    'parent' => 'd',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml'
+                    'data' => [
+                        'owner' => '1',
+                        'repository' => 'a',
+                        'commit' => 2,
+                        'parent' => 'd',
+                        'provider' => 'github',
+                        'fileName' => 'test.xml'
+                    ]
                 ]
             ]
         ];
