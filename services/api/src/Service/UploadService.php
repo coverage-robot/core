@@ -66,8 +66,7 @@ class UploadService
         string $commit,
         string $parent,
         string $provider
-    ): array
-    {
+    ): array {
         $metaData = [
             'owner' => $owner,
             'repository' => $repository,

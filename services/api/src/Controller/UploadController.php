@@ -22,21 +22,21 @@ class UploadController extends AbstractController
     {
         $body = $request->toArray();
 
-        if (!array_key_exists("data", $body)) {
+        if (!array_key_exists('data', $body)) {
             $this->uploadLogger->info(
-                "No data key found in request body.",
+                'No data key found in request body.',
                 [
-                    "parameters" => $body
+                    'parameters' => $body
                 ]
             );
         }
 
-        $body = $body["data"];
+        $body = $body['data'];
 
         $this->uploadLogger->info(
-            "Beginning to generate signed url for upload request.",
+            'Beginning to generate signed url for upload request.',
             [
-                "parameters" => $body
+                'parameters' => $body
             ]
         );
 
