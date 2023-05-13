@@ -219,6 +219,7 @@ jobs:
                   workspace: ${{ env.workspace }}
                   add_github_comment: true
                   path: ${{ env.working-directory }}/infrastructure
+                  var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
     deployment:
       name: Deployment
@@ -254,7 +255,8 @@ jobs:
             uses: dflook/terraform-apply@v1
             with:
               workspace: ${{ env.workspace }}
-              path: ${{ env.working-directory }}
+              path: ${{ env.working-directory }}/infrastructure
+              var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
     cleanup:
         name: "Cleanup"

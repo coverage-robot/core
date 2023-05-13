@@ -83,6 +83,7 @@ jobs:
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
+                    var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
 
     deployment:
         name: Deployment
@@ -110,3 +111,4 @@ jobs:
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
+                    var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
