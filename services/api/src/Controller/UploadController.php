@@ -22,7 +22,7 @@ class UploadController extends AbstractController
     {
         $body = $request->toArray();
 
-        if (!array_key_exists('data', $body)) {
+        if (!isset($body['data']) || !is_array($body['data'])) {
             $this->uploadLogger->info(
                 'No data key found in request body.',
                 [
