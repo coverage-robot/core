@@ -31,12 +31,13 @@ class UploadController extends AbstractController
             );
         }
 
-        $body = $body['data'];
+        /** @var array{ data: array<array-key, mixed> } $body */
+        $parameters = $body['data'];
 
         $this->uploadLogger->info(
             'Beginning to generate signed url for upload request.',
             [
-                'parameters' => $body
+                'parameters' => $parameters
             ]
         );
 
@@ -49,14 +50,24 @@ class UploadController extends AbstractController
             );
         }
 
+        /** @var array{
+         *     owner: mixed,
+         *     repository: mixed,
+         *     fileName: mixed,
+         *     pullRequest?: mixed,
+         *     commit: mixed,
+         *     parent: mixed,
+         *     provider: mixed
+         * } $parameters
+         */
         $signedUrl = $this->uploadService->buildSignedUploadUrl(
-            (string)$body['owner'],
-            (string)$body['repository'],
-            (string)$body['fileName'],
-            isset($body['pullRequest']) ? (string)$body['pullRequest'] : null,
-            (string)$body['commit'],
-            (string)$body['parent'],
-            (string)$body['provider']
+            (string)$parameters['owner'],
+            (string)$parameters['repository'],
+            (string)$parameters['fileName'],
+            isset($parameters['pullRequest']) ? (string)$body['pullRequest'] : null,
+            (string)$parameters['commit'],
+            (string)$parameters['parent'],
+            (string)$parameters['provider']
         );
 
         return $this->json($signedUrl);
