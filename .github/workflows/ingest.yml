@@ -240,6 +240,12 @@ jobs:
                 with:
                     php-version: ${{ env.php-version }}
 
+            -   uses: aws-actions/configure-aws-credentials@v1
+                with:
+                    aws-region: eu-west-2
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
             -   name: Setup environment variables
                 uses: SpicyPizza/create-envfile@v1.3
                 with:
