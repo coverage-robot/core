@@ -37,7 +37,7 @@ locals {
 data "terraform_remote_state" "core" {
   backend = "s3"
 
-  workspace = var.environment
+  workspace = local.environment
 
   config = {
     bucket         = "tf-coverage-state"
