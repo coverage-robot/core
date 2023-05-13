@@ -28,12 +28,12 @@ class UploadService
     private const EXPIRY_MINUTES = 5;
 
     private const REQUIRED_FIELDS = [
-        "owner",
-        "repository",
-        "provider",
-        "fileName",
-        "commit",
-        "parent"
+        'owner',
+        'repository',
+        'provider',
+        'fileName',
+        'commit',
+        'parent'
     ];
 
     public function __construct(
@@ -60,7 +60,7 @@ class UploadService
                 ]
             );
 
-            throw SigningException::invalidPayload(["data"]);
+            throw SigningException::invalidPayload(['data']);
         }
 
         /** @var array{ data: array<array-key, mixed> } $body */
