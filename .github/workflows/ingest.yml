@@ -29,7 +29,7 @@ defaults:
 env:
     php-version: "8.2"
     working-directory: './services/ingest'
-    workspace: 'dev'
+    workspace: ${{ (github.ref === 'refs/heads/master' && 'prod') || 'dev' }}
 
 jobs:
     build:
@@ -183,6 +183,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: ingest-tests
+        if: env.workspace == 'dev'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -218,6 +219,42 @@ jobs:
                     workspace: ${{ env.workspace }}
                     add_github_comment: true
                     path: ${{ env.working-directory }}/infrastructure
+
+    deployment:
+        name: Deployment
+        runs-on: ubuntu-latest
+        needs: lint
+        if: env.workspace != 'dev'
+        environment: ingest-${{ env.workspace }}
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+
+            -   name: Setup environment variables
+                uses: SpicyPizza/create-envfile@v1.3
+                with:
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.local
+                    fail_on_empty: false
+
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress
+
+            -   name: Run Apply
+                uses: dflook/terraform-apply@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}
 
     cleanup:
         name: "Cleanup"
