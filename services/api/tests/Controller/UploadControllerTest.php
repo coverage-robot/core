@@ -3,6 +3,7 @@
 namespace Controller;
 
 use App\Controller\UploadController;
+use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Service\UploadService;
 use DateTimeImmutable;
@@ -18,9 +19,8 @@ class UploadControllerTest extends KernelTestCase
     {
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
-            ->method('validatePayload')
-            ->with($body)
-            ->willReturn(true);
+            ->method('getSigningParametersFromRequest')
+            ->willReturn($body["data"]);
 
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
@@ -44,9 +44,7 @@ class UploadControllerTest extends KernelTestCase
 
         $uploadController->setContainer($this->getContainer());
 
-        $request = new Request([], [], [], [], [], [], json_encode($body));
-
-        $response = $uploadController->handleUpload($request);
+        $response = $uploadController->handleUpload($this->createMock(Request::class));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(
@@ -60,9 +58,8 @@ class UploadControllerTest extends KernelTestCase
     {
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
-            ->method('validatePayload')
-            ->with($body)
-            ->willReturn(false);
+            ->method('getSigningParametersFromRequest')
+            ->willThrowException(SigningException::invalidPayload(["mock"]));
 
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
@@ -71,12 +68,10 @@ class UploadControllerTest extends KernelTestCase
 
         $uploadController->setContainer($this->getContainer());
 
-        $request = new Request([], [], [], [], [], [], json_encode($body));
-
-        $response = $uploadController->handleUpload($request);
+        $response = $uploadController->handleUpload($this->createMock(Request::class));
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('{"error":"Invalid payload"}', $response->getContent());
+        $this->assertEquals('{"error":"Invalid payload. Missing fields: mock."}', $response->getContent());
     }
 
     public static function validPayloadDataProvider(): array
