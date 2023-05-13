@@ -159,8 +159,8 @@ jobs:
 
             - uses: ryanmab/coverage-action@v0.1
               with:
-              files: |
-                  ${{ env.working-directory }}/coverage.xml
+                files: |
+                    ${{ env.working-directory }}/coverage.xml
 
             - name: Upload coverage to artifact storage
               if: ${{ github.actor != 'dependabot[bot]' }}
