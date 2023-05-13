@@ -29,7 +29,7 @@ defaults:
 env:
     php-version: "8.2"
     working-directory: './services/analyse'
-    workspace: ${{ (github.ref === 'refs/heads/master' && 'prod') || 'dev' }}
+    workspace: 'prod'
 
 jobs:
     build:
@@ -183,7 +183,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: analyse-tests
-        if: env.workspace == 'dev'
+        if: github.ref != 'refs/heads/master'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -225,7 +225,7 @@ jobs:
         name: Deployment
         runs-on: ubuntu-latest
         needs: lint
-        if: env.workspace != 'dev'
+        if: github.ref == 'refs/heads/master'
         environment: analyse-${{ env.workspace }}
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

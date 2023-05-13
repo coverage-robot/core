@@ -27,7 +27,7 @@ defaults:
 
 env:
     working-directory: './infrastructure'
-    workspace: ${{ (github.ref === 'refs/heads/master' && 'prod') || 'dev' }}
+    workspace: 'prod'
 
 jobs:
     lint:
@@ -62,7 +62,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: lint
-        if: env.workspace == 'dev'
+        if: github.ref != 'refs/heads/master'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -89,7 +89,7 @@ jobs:
         name: Deployment
         runs-on: ubuntu-latest
         needs: lint
-        if: env.workspace != 'dev'
+        if: github.ref == 'refs/heads/master'
         environment: infrastructure-${{ env.workspace }}
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
