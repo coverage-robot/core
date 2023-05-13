@@ -30,6 +30,10 @@ provider "aws" {
   region = var.region
 }
 
+locals {
+  environment = var.environment != "" ? var.environment : terraform.workspace
+}
+
 data "terraform_remote_state" "core" {
   backend = "s3"
 
@@ -126,7 +130,7 @@ data "archive_file" "deployment" {
 resource "aws_lambda_function" "service" {
   filename         = "${path.module}/deployment.zip"
   source_code_hash = data.archive_file.deployment.output_base64sha256
-  function_name    = format("coverage-ingest-%s", var.environment)
+  function_name    = format("coverage-ingest-%s", local.environment)
   role             = aws_iam_role.ingest_policy.arn
   runtime          = "provided.al2"
   handler          = "App\\Handler\\IngestHandler"

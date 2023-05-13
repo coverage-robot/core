@@ -30,10 +30,14 @@ provider "aws" {
   region = var.region
 }
 
+locals {
+  environment = var.environment != "" ? var.environment : terraform.workspace
+}
+
 data "terraform_remote_state" "core" {
   backend = "s3"
 
-  workspace = var.environment
+  workspace = local.environment
 
   config = {
     bucket         = "tf-coverage-state"
@@ -111,7 +115,7 @@ resource "aws_lambda_function" "service" {
   filename         = "${path.module}/deployment.zip"
   source_code_hash = data.archive_file.deployment.output_base64sha256
 
-  function_name = format("coverage-analyse-%s", var.environment)
+  function_name = format("coverage-analyse-%s", local.environment)
   role          = aws_iam_role.analyse_role.arn
   timeout       = 28
   runtime       = "provided.al2"
