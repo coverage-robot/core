@@ -100,9 +100,10 @@ class UploadService
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
         $uploadKey = sprintf(
-            '%s/%s/%s.%s',
+            '%s/%s/%s/%s.%s',
             $owner,
             $repository,
+            $commit,
             Uuid::uuid4()->toString(),
             $fileExtension
         );
