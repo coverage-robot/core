@@ -54,6 +54,14 @@ jobs:
                   file_name: .env.local
                   fail_on_empty: false
 
+            - name: Setup test environment variables
+              uses: SpicyPizza/create-envfile@v1.3
+              with:
+                envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                directory: ${{ env.working-directory }}
+                file_name: .env.test.local
+                fail_on_empty: false
+
             - name: Install Composer dependencies
               run: composer install --prefer-dist --no-progress
 

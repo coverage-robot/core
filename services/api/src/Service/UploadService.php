@@ -38,14 +38,14 @@ class UploadService
                 $this->environmentService->getEnvironment()->value
             ),
             'Key' => $uploadKey,
-            'Metadata' => [
-                'owner' => $owner,
-                'repository' => $repository,
-                'pullrequest' => $pullRequest,
-                'commit' => $commit,
-                'parent' => $parent,
-                'provider' => $provider
-            ]
+            'Metadata' => $this->getMetadata(
+                $owner,
+                $repository,
+                $pullRequest,
+                $commit,
+                $parent,
+                $provider
+            )
         ]);
 
         $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
@@ -57,6 +57,29 @@ class UploadService
             ),
             $expiry
         );
+    }
+
+    private function getMetadata(
+        string $owner,
+        string $repository,
+        string|null $pullRequest,
+        string $commit,
+        string $parent,
+        string $provider
+    ): array {
+        $metaData = [
+            'owner' => $owner,
+            'repository' => $repository,
+            'commit' => $commit,
+            'parent' => $parent,
+            'provider' => $provider
+        ];
+
+        if ($pullRequest) {
+            $metaData['pullRequest'] = $pullRequest;
+        }
+
+        return $metaData;
     }
 
     public function validatePayload(array $payload): bool
