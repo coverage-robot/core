@@ -79,7 +79,7 @@ class UploadControllerTest extends KernelTestCase
         $this->assertEquals('{"error":"Invalid payload"}', $response->getContent());
     }
 
-    private static function validPayloadDataProvider(): array
+    public static function validPayloadDataProvider(): array
     {
         return [
             'With pull request' => [
