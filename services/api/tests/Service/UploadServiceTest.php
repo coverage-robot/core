@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Exception\SigningException;
 use App\Service\EnvironmentService;
 use App\Service\UploadService;
 use AsyncAws\S3\S3Client;
@@ -20,9 +21,15 @@ class UploadServiceTest extends TestCase
             new NullLogger()
         );
 
-        $isValid = $uploadService->validatePayload($body);
+        if (!$expectedValidity) {
+            $this->expectException(SigningException::class);
+        }
 
-        $this->assertEquals($expectedValidity, $isValid);
+        $validParameters = $uploadService->validatePayload($body);
+
+        if ($expectedValidity) {
+            $this->assertEquals($body, $validParameters);
+        }
     }
 
     public static function validatablePayloadDataProvider(): array
