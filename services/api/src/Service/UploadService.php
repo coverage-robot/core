@@ -8,6 +8,7 @@ use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -98,7 +99,13 @@ class UploadService
     ): SignedUrl {
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-        $uploadKey = sprintf('%s/%s/%s.%s', $owner, $repository, $commit, $fileExtension);
+        $uploadKey = sprintf(
+            '%s/%s/%s.%s',
+            $owner,
+            $repository,
+            Uuid::uuid4()->toString(),
+            $fileExtension
+        );
 
         $input = new PutObjectRequest([
             'Bucket' => sprintf(

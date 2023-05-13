@@ -13,6 +13,7 @@
         "async-aws/s3": "^1.13",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
+        "ramsey/uuid": "^4.7",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
         "symfony/flex": "^2",
