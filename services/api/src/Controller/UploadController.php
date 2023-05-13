@@ -64,7 +64,7 @@ class UploadController extends AbstractController
             (string)$parameters['owner'],
             (string)$parameters['repository'],
             (string)$parameters['fileName'],
-            isset($parameters['pullRequest']) ? (string)$body['pullRequest'] : null,
+            isset($parameters['pullRequest']) ? (string)$parameters['pullRequest'] : null,
             (string)$parameters['commit'],
             (string)$parameters['parent'],
             (string)$parameters['provider']
