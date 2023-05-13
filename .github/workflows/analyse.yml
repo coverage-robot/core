@@ -273,6 +273,9 @@ jobs:
                     path: ${{ env.working-directory }}/infrastructure
                     var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
+                    # The plan will already have been generated on the PR, so approving here should be fine
+                    auto_approve: true
+
     cleanup:
         name: "Cleanup"
         runs-on: ubuntu-latest

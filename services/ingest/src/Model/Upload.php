@@ -31,7 +31,7 @@ class Upload implements JsonSerializable
         private readonly string $repository,
         private readonly string $commit,
         private readonly string $parent,
-        private readonly string|int $pullRequest,
+        private readonly string|int|null $pullRequest,
         ?DateTimeInterface $ingestTime = null
     ) {
         $this->provider = ProviderEnum::from($provider);
@@ -68,7 +68,7 @@ class Upload implements JsonSerializable
         return $this->repository;
     }
 
-    public function getPullRequest(): int|string
+    public function getPullRequest(): int|string|null
     {
         return $this->pullRequest;
     }
@@ -95,7 +95,7 @@ class Upload implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return [
+        $fields = [
             'uploadId' => $this->uploadId,
             'provider' => $this->provider->value,
             'owner' => $this->owner,
@@ -103,7 +103,12 @@ class Upload implements JsonSerializable
             'ingestTime' => $this->ingestTime->format(DateTimeInterface::ATOM),
             'commit' => $this->commit,
             'parent' => $this->parent,
-            'pullRequest' => $this->pullRequest
         ];
+
+        if ($this->pullRequest) {
+            $fields['pullRequest'] = $this->pullRequest;
+        }
+
+        return $fields;
     }
 }
