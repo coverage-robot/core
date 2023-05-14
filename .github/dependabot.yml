@@ -13,7 +13,7 @@ updates:
             interval: "daily"
         reviewers:
             - "ryanmab"
-            -
+
     -   package-ecosystem: "composer"
         directory: "services/analyse"
         schedule:
