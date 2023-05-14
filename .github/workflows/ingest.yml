@@ -266,6 +266,13 @@ jobs:
             -   name: Warm platform cache
                 run: php bin/console cache:warmup --env=${{ env.workspace }}
 
+            -   name: Add BigQuery Service Account
+                uses: DamianReeves/write-file-action@v1.2
+                with:
+                    path: ${{ env.working-directory }}/config/bigquery.json
+                    write-mode: overwrite
+                    contents: ${{ secrets.BIGQUERY_SERVICE_ACCOUNT }}
+
             -   name: Run Apply
                 uses: dflook/terraform-apply@v1
                 with:
