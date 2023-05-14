@@ -157,12 +157,7 @@ jobs:
 
             - name: Run PHPUnit
               run: |
-                  if "${{ github.actor != 'dependabot[bot]' }}" = "true";
-                  then
-                      composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
-                  else
-                      composer test:unit
-                  fi
+                composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
               shell: bash
 
             - uses: ryanmab/coverage-action@0.1.1
