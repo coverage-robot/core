@@ -24,11 +24,11 @@ class TotalCommitCoverageByTagQuery implements QueryInterface
             ROUND(
                 (
                     SUM(IF(state = "covered", 1, 0)) + 
-                    SUM(IF(state = "partial", 1, 0))) / 
-                    SUM(IF(state = "uncovered", 1, 0)
-                ) * 100, 
-                2
-            ) as coveragePercentage
+                    SUM(IF(state = "partial", 1, 0))
+                ) / 
+                COUNT(*)
+            ) * 100, 
+            2) as coveragePercentage
         FROM
             tagLineCoverage
         GROUP BY
