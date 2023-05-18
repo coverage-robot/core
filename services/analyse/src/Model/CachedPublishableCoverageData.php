@@ -29,7 +29,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
     /**
      * @var CommitTagCoverage[]|null
      */
-    private array $totalCommitTagCoverage;
+    private ?array $totalCommitTagCoverage;
 
     public function getTotalUploads(): int
     {
@@ -97,6 +97,9 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
         return $this->commitLineCoverage;
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getTagCoverage(): array
     {
         if (is_null($this->totalCommitTagCoverage)) {
