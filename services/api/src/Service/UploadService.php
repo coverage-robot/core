@@ -33,6 +33,7 @@ class UploadService
         'repository',
         'provider',
         'fileName',
+        'tag',
         'commit',
         'parent'
     ];
