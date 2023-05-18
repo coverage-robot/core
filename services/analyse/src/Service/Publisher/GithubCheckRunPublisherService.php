@@ -64,7 +64,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     $owner,
                     $repository,
                     [
-                        'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
+                        'name' => sprintf('Coverage - %s%%', $coverageData->getTotalCoveragePercentage()),
                         'head_sha' => $commit,
                         'status' => 'completed',
                         'conclusion' => 'success',
@@ -96,7 +96,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $repository,
                 $existingCheckRun,
                 [
-                    'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
+                    'name' => sprintf('Coverage - %s%%', $coverageData->getTotalCoveragePercentage()),
                     'status' => 'completed',
                     'conclusion' => 'success',
                     'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),

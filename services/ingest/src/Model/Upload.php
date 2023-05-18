@@ -32,6 +32,7 @@ class Upload implements JsonSerializable
         private readonly string $commit,
         private readonly string $parent,
         private readonly string|int|null $pullRequest,
+        private readonly string $tag,
         ?DateTimeInterface $ingestTime = null
     ) {
         $this->provider = ProviderEnum::from($provider);
@@ -88,6 +89,11 @@ class Upload implements JsonSerializable
         return $this->parent;
     }
 
+    public function getTag(): string
+    {
+        return $this->tag;
+    }
+
     public function __toString(): string
     {
         return 'Upload #' . $this->uploadId;
@@ -103,6 +109,7 @@ class Upload implements JsonSerializable
             'ingestTime' => $this->ingestTime->format(DateTimeInterface::ATOM),
             'commit' => $this->commit,
             'parent' => $this->parent,
+            'tag' => $this->tag
         ];
 
         if ($this->pullRequest) {

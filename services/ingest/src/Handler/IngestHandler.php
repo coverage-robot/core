@@ -44,6 +44,7 @@ class IngestHandler extends S3Handler
             $commit = $source->getMetadata()['commit'];
             $parent = $source->getMetadata()['parent'];
             $pullRequest = $source->getMetadata()['pullrequest'] ?? null;
+            $tag = $source->getMetadata()['tag'];
 
             $this->handlerLogger->info(
                 sprintf(
@@ -65,6 +66,7 @@ class IngestHandler extends S3Handler
                     $commit,
                     $parent,
                     $pullRequest,
+                    $tag,
                     $coverageFile->getEventTime()
                 );
 

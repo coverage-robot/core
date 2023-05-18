@@ -54,15 +54,36 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             $coverageData->getTotalUploads()
         );
 
-        if ($coverageData->getCoveragePercentage()) {
-            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getCoveragePercentage());
+        if ($coverageData->getTotalCoveragePercentage()) {
+            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getTotalCoveragePercentage());
         }
 
-        if ($coverageData->getCoveragePercentage()) {
+        if ($coverageData->getTotalCoveragePercentage()) {
             $body .= sprintf(
                 'Consisting of *%s* covered lines, out of *%s* total lines.',
                 $coverageData->getAtLeastPartiallyCoveredLines(),
                 $coverageData->getTotalLines()
+            );
+        }
+
+        if ($coverageData->getTagCoverage()) {
+            $body .= sprintf(
+                <<<MARKDOWN
+                | Tag | Coverage |
+                | --- | --- |
+                %s
+                MARKDOWN,
+                implode(
+                    "\n",
+                    array_map(
+                        fn (array $tagCoverage) => sprintf(
+                            '| %s | %s%% |',
+                            $tagCoverage['tag'],
+                            $tagCoverage['coveragePercentage']
+                        ),
+                        $coverageData->getTagCoverage()
+                    )
+                )
             );
         }
 

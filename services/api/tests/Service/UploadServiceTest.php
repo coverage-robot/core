@@ -43,7 +43,8 @@ class UploadServiceTest extends TestCase
                     'pullRequest' => 12,
                     'parent' => 'd',
                     'provider' => 'github',
-                    'fileName' => 'test.xml'
+                    'fileName' => 'test.xml',
+                    'tag' => 'frontend'
                 ],
                 true
             ],
@@ -54,7 +55,8 @@ class UploadServiceTest extends TestCase
                     'commit' => 2,
                     'parent' => 'd',
                     'provider' => 'github',
-                    'fileName' => 'test.xml'
+                    'fileName' => 'test.xml',
+                    'tag' => 'backend'
                 ],
                 true
             ],
@@ -64,7 +66,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'a',
                     'parent' => 'd',
                     'provider' => 'github',
-                    'fileName' => 'test.xml'
+                    'fileName' => 'test.xml',
+                    'tag' => 'frontend'
                 ],
                 false
             ],
@@ -74,13 +77,27 @@ class UploadServiceTest extends TestCase
                     'repository' => 'a',
                     'commit' => 2,
                     'parent' => 'd',
-                    'provider' => 'github'
+                    'provider' => 'github',
+                    'tag' => 'backend'
                 ],
                 false
             ],
             'Without owner or repository' => [
                 [
                     'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml',
+                    'tag' => 'frontend'
+                ],
+                false
+            ],
+            'Without tag' => [
+                [
+                    'owner' => '1',
+                    'repository' => 'a',
+                    'commit' => 2,
+                    'pullRequest' => 12,
                     'parent' => 'd',
                     'provider' => 'github',
                     'fileName' => 'test.xml'

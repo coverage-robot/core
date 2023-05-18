@@ -2,6 +2,13 @@
 
 namespace App\Model;
 
+use App\Query\CommitLineCoverageQuery;
+use App\Query\TotalCommitCoverageByTagQuery;
+
+/**
+ * @psalm-import-type CommitLineCoverage from CommitLineCoverageQuery
+ * @psalm-import-type CommitTagCoverage from TotalCommitCoverageByTagQuery
+ */
 interface PublishableCoverageDataInterface
 {
     public function getTotalUploads(): int;
@@ -12,7 +19,15 @@ interface PublishableCoverageDataInterface
 
     public function getUncoveredLines(): int;
 
-    public function getCoveragePercentage(): float;
+    public function getTotalCoveragePercentage(): float;
 
+    /**
+     * @return CommitLineCoverage[]
+     */
     public function getCommitLineCoverage(): array;
+
+    /**
+     * @return CommitTagCoverage[]
+     */
+    public function getTagCoverage(): array;
 }

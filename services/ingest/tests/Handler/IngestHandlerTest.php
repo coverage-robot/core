@@ -94,6 +94,7 @@ class IngestHandlerTest extends TestCase
                 'commit' => '1',
                 'parent' => '2',
                 'pullrequest' => 1234,
+                'tag' => 'frontend',
                 'owner' => 'ryanmab',
                 'repository' => 'portfolio'
             ]);
