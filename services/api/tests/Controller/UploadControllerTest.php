@@ -31,6 +31,7 @@ class UploadControllerTest extends KernelTestCase
                 $body['data']['pullRequest'] ?? null,
                 $body['data']['commit'],
                 $body['data']['parent'],
+                $body['data']['tag'],
                 $body['data']['provider']
             )
             ->willReturn(
@@ -85,6 +86,7 @@ class UploadControllerTest extends KernelTestCase
                         'commit' => 2,
                         'pullRequest' => 12,
                         'parent' => 'd',
+                        'tag' => 'mock-tag',
                         'provider' => 'github',
                         'fileName' => 'test.xml'
                     ]
@@ -97,6 +99,7 @@ class UploadControllerTest extends KernelTestCase
                         'repository' => 'a',
                         'commit' => 2,
                         'parent' => 'd',
+                        'tag' => 'mock-tag',
                         'provider' => 'github',
                         'fileName' => 'test.xml'
                     ]

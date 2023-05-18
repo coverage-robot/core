@@ -165,6 +165,7 @@ jobs:
                 files: |
                     ${{ env.working-directory }}/coverage.xml
                 tag: api-service
+              continue-on-error: true
 
             - name: Upload coverage to artifact storage
               if: ${{ github.actor != 'dependabot[bot]' }}
