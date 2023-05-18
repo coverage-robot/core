@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Exception\QueryException;
 use App\Query\CommitLineCoverageQuery;
+use App\Query\TotalCommitCoverageByTagQuery;
 use App\Query\TotalCommitCoverageQuery;
 use App\Query\TotalCommitUploadsQuery;
 use App\Service\QueryService;
@@ -11,6 +12,7 @@ use App\Service\QueryService;
 /**
  * @psalm-import-type CommitCoverage from TotalCommitCoverageQuery
  * @psalm-import-type CommitLineCoverage from CommitLineCoverageQuery
+ * @psalm-import-type CommitTagCoverage from TotalCommitCoverageByTagQuery
  */
 abstract class AbstractPublishableCoverageData implements PublishableCoverageDataInterface
 {
@@ -48,6 +50,22 @@ abstract class AbstractPublishableCoverageData implements PublishableCoverageDat
         }
 
         throw QueryException::typeMismatch(gettype($commitCoverage), 'array');
+    }
+
+    /**
+     * @return CommitTagCoverage[]
+     * @throws QueryException
+     */
+    protected function getTotalCommitTagCoverage(): array
+    {
+        $coverageByTag = $this->queryService->runQuery(TotalCommitCoverageByTagQuery::class, $this->upload);
+
+        if (is_array($coverageByTag)) {
+            /** @var CommitTagCoverage[] $coverageByTag */
+            return $coverageByTag;
+        }
+
+        throw QueryException::typeMismatch(gettype($coverageByTag), 'array');
     }
 
     /**

@@ -62,12 +62,12 @@ class CachedPublishableCoverageDataTest extends TestCase
                 'coveragePercentage' => 97
             ]);
 
-        $this->assertEquals(97, $this->cachedPublishableCoverageData->getCoveragePercentage());
+        $this->assertEquals(97, $this->cachedPublishableCoverageData->getTotalCoveragePercentage());
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertEquals(97, $this->cachedPublishableCoverageData->getCoveragePercentage());
+        $this->assertEquals(97, $this->cachedPublishableCoverageData->getTotalCoveragePercentage());
     }
 
     public function testGetUncoveredLines()

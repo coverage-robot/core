@@ -4,11 +4,13 @@ namespace App\Model;
 
 use App\Exception\QueryException;
 use App\Query\CommitLineCoverageQuery;
+use App\Query\TotalCommitCoverageByTagQuery;
 use App\Query\TotalCommitCoverageQuery;
 
 /**
  * @psalm-import-type CommitCoverage from TotalCommitCoverageQuery
  * @psalm-import-type CommitLineCoverage from CommitLineCoverageQuery
+ * @psalm-import-type CommitTagCoverage from TotalCommitCoverageByTagQuery
  */
 class CachedPublishableCoverageData extends AbstractPublishableCoverageData
 {
@@ -23,6 +25,11 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
      * @var CommitLineCoverage[]|null
      */
     private ?array $commitLineCoverage = null;
+
+    /**
+     * @var CommitTagCoverage[]|null
+     */
+    private array $totalCommitTagCoverage;
 
     public function getTotalUploads(): int
     {
@@ -72,7 +79,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
     /**
      * @throws QueryException
      */
-    public function getCoveragePercentage(): float
+    public function getTotalCoveragePercentage(): float
     {
         if (is_null($this->totalCommitCoverage)) {
             $this->totalCommitCoverage = parent::getTotalCommitCoverage();
@@ -88,5 +95,14 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
         }
 
         return $this->commitLineCoverage;
+    }
+
+    public function getTagCoverage(): array
+    {
+        if (is_null($this->totalCommitTagCoverage)) {
+            $this->totalCommitTagCoverage = parent::getTotalCommitTagCoverage();
+        }
+
+        return $this->totalCommitTagCoverage;
     }
 }

@@ -12,7 +12,9 @@ interface PublishableCoverageDataInterface
 
     public function getUncoveredLines(): int;
 
-    public function getCoveragePercentage(): float;
+    public function getTotalCoveragePercentage(): float;
 
     public function getCommitLineCoverage(): array;
+
+    public function getTagCoverage(): array;
 }
