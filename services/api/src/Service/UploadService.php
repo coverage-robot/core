@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  *     pullRequest?: mixed,
  *     commit: mixed,
  *     parent: mixed,
+ *     tag: mixed,
  *     provider: mixed
  * }
  */
