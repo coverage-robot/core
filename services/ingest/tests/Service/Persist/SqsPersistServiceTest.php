@@ -57,6 +57,7 @@ class SqsPersistServiceTest extends TestCase
                     '1',
                     '2',
                     1234,
+                    'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 )
             ],
@@ -70,6 +71,7 @@ class SqsPersistServiceTest extends TestCase
                     '3',
                     '4',
                     1234,
+                    'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
             ]

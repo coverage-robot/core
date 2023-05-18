@@ -36,7 +36,8 @@ class BigQueryPersistServiceTest extends TestCase
             '',
             '',
             '',
-            1
+            1,
+            'mock-tag'
         );
 
         $insertResponse = $this->createMock(InsertResponse::class);
@@ -76,7 +77,8 @@ class BigQueryPersistServiceTest extends TestCase
                                     'key' => 'lineHits',
                                     'value' => '1'
                                 ]
-                            ]
+                            ],
+                            'tag' => 'mock-tag'
                         ]
                     ]
                 ]

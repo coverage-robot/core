@@ -46,7 +46,8 @@ class S3PersistServiceTest extends TestCase
                             'provider' => 'github',
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repo',
-                            'pullRequest' => 1234
+                            'pullRequest' => 1234,
+                            'tag' => 'backend'
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -69,6 +70,7 @@ class S3PersistServiceTest extends TestCase
                 '1',
                 '2',
                 1234,
+                'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')
             )
         );
@@ -100,7 +102,8 @@ class S3PersistServiceTest extends TestCase
                             'provider' => 'github',
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repo',
-                            'pullRequest' => 1234
+                            'pullRequest' => 1234,
+                            'tag' => 'backend'
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
@@ -125,6 +128,7 @@ class S3PersistServiceTest extends TestCase
                 '1',
                 '2',
                 1234,
+                'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')
             )
         );
