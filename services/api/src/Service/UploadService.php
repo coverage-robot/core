@@ -96,6 +96,7 @@ class UploadService
         string|null $pullRequest,
         string $commit,
         string $parent,
+        string $tag,
         string $provider
     ): SignedUrl {
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -121,6 +122,7 @@ class UploadService
                 $pullRequest,
                 $commit,
                 $parent,
+                $tag,
                 $provider
             )
         ]);
@@ -142,6 +144,7 @@ class UploadService
         string|null $pullRequest,
         string $commit,
         string $parent,
+        string $tag,
         string $provider
     ): array {
         $metaData = [
@@ -149,6 +152,7 @@ class UploadService
             'repository' => $repository,
             'commit' => $commit,
             'parent' => $parent,
+            'tag' => $tag,
             'provider' => $provider
         ];
 
