@@ -160,7 +160,7 @@ jobs:
                     composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
                 shell: bash
 
-            -   uses: ryanmab/coverage-action@0.1.3
+            -   uses: ryanmab/coverage-action@0.1.4
                 with:
                     files: |
                         ${{ env.working-directory }}/coverage.xml
