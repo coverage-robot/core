@@ -21,14 +21,13 @@ class TotalCommitCoverageByTagQuery implements QueryInterface
         {$this->getNamedSubqueries($table, $upload)}
         SELECT
             tag,
-            (
-                ROUND(
-                    (
-                        SUM(IF(state = "covered", 1, 0)) + 
-                        SUM(IF(state = "partial", 1, 0))
-                    ) / 
-                    COUNT(*)
-                ) * 100, 
+            ROUND(
+                (
+                    SUM(IF(state = "covered", 1, 0)) + 
+                    SUM(IF(state = "partial", 1, 0))
+                ) / 
+                COUNT(*)
+                * 100, 
                 2
             ) as coveragePercentage
         FROM
