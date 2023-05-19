@@ -60,7 +60,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
 
         if ($coverageData->getTotalCoveragePercentage()) {
             $body .= sprintf(
-                'Consisting of *%s* covered lines, out of *%s* total lines.',
+                'Consisting of *%s* covered lines, out of *%s* total lines.\n\r',
                 $coverageData->getAtLeastPartiallyCoveredLines(),
                 $coverageData->getTotalLines()
             );
