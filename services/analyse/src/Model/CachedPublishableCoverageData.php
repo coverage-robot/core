@@ -29,7 +29,7 @@ class CachedPublishableCoverageData extends AbstractPublishableCoverageData
     /**
      * @var CommitTagCoverage[]|null
      */
-    private ?array $totalCommitTagCoverage;
+    private ?array $totalCommitTagCoverage = null;
 
     public function getTotalUploads(): int
     {
