@@ -5,6 +5,7 @@ services:
     image: bref/php-82-fpm-dev:2
     ports: [ '8000:8000' ]
     volumes:
-      - .:/var/task
+      - .:/var/task:ro
+      - ./var:/var/task/var
     environment:
       HANDLER: public/index.php

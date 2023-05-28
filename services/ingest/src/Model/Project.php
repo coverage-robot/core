@@ -67,6 +67,11 @@ class Project implements JsonSerializable
         $this->files[] = $file;
     }
 
+    public function toString(): string
+    {
+        return 'Project#' . $this->getGeneratedAt()?->format(DateTimeInterface::ATOM);
+    }
+
     public function jsonSerialize(): array
     {
         return [

@@ -62,6 +62,6 @@ class Upload
 
     public function __toString(): string
     {
-        return 'Upload #' . $this->uploadId;
+        return 'Upload#' . $this->uploadId;
     }
 }

@@ -1,0 +1,13 @@
+when@dev:
+  async_aws:
+    config:
+      region: eu-west-2
+
+    clients:
+      s3:
+        config:
+          endpoint: "http://localstack:4566"
+          pathStyleEndpoint: true
+
+when@prod:
+  async_aws:
