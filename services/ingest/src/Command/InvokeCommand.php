@@ -31,7 +31,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the ingest handler')]
 class InvokeCommand extends Command
 {
-    private const BUCKET = "coverage-ingest-%s";
+    private const BUCKET = 'coverage-ingest-%s';
 
     public function __construct(
         private readonly IngestHandler $handler,
