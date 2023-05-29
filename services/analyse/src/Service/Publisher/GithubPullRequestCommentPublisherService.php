@@ -70,16 +70,20 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         if ($coverageData->getTagCoverage()) {
             $body .= sprintf(
                 <<<MARKDOWN
-                | Tag | Coverage |
-                | --- | --- |
+                | Tag | Lines | Covered | Partial | Uncovered | Coverage |
+                | --- | --- | --- | --- | --- | --- |
                 %s
                 MARKDOWN,
                 implode(
                     "\n",
                     array_map(
                         fn (TagCoverageQueryResult $tag) => sprintf(
-                            '| %s | %s%% |',
+                            '| %s | %s | %s | %s | %s | %s%% |',
                             $tag->getTag(),
+                            $tag->getLines(),
+                            $tag->getCovered(),
+                            $tag->getPartial(),
+                            $tag->getUncovered(),
                             $tag->getCoveragePercentage()
                         ),
                         $coverageData->getTagCoverage()->getTags()
