@@ -3,25 +3,17 @@
 namespace App\Query;
 
 use App\Exception\QueryException;
+use App\Model\QueryResult\TotalCoverageQueryResult;
 use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 
-/**
- * @psalm-type CommitCoverage = array{
- *     coveragePercentage: float,
- *     lines: int,
- *     covered: int,
- *     partial: int,
- *     uncovered: int
- * }
- */
-class TotalCommitCoverageQuery extends CommitLineCoverageQuery
+class TotalCoverageQuery extends AbstractCoverageQuery
 {
     public function getQuery(string $table, Upload $upload): string
     {
         return <<<SQL
-        {$this->getNamedSubqueries($table, $upload)}
+        {$this->getNamedQueries($table, $upload)}
         SELECT
             SUM(lines) as lines,
             SUM(covered) as covered,
@@ -33,9 +25,9 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
         SQL;
     }
 
-    public function getNamedSubqueries(string $table, Upload $upload): string
+    public function getNamedQueries(string $table, Upload $upload): string
     {
-        $parent = parent::getNamedSubqueries($table, $upload);
+        $parent = parent::getNamedQueries($table, $upload);
         return <<<SQL
         {$parent},
         summedCoverage AS (
@@ -54,28 +46,16 @@ class TotalCommitCoverageQuery extends CommitLineCoverageQuery
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): array
+    public function parseResults(QueryResults $results): TotalCoverageQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $rows = $results->rows();
+        /** @var array $coverageValues */
+        $coverageValues = $results->rows()
+            ->current();
 
-        /** @var array|null $coverageValues */
-        $coverageValues = $rows->current() ?? null;
-
-        if (
-            is_float($coverageValues['coveragePercentage'] ?? null) &&
-            is_int($coverageValues['lines'] ?? null) &&
-            is_int($coverageValues['covered'] ?? null) &&
-            is_int($coverageValues['partial'] ?? null) &&
-            is_int($coverageValues['uncovered'] ?? null)
-        ) {
-            /** @var CommitCoverage $coverageValues */
-            return $coverageValues;
-        }
-
-        throw QueryException::typeMismatch(gettype($coverageValues), 'array');
+        return TotalCoverageQueryResult::from($coverageValues);
     }
 }

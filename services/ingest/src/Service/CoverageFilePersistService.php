@@ -27,8 +27,18 @@ class CoverageFilePersistService
     {
         $successful = true;
 
-        /** @var PersistServiceInterface $service */
         foreach ($this->persistServices as $service) {
+            if (!$service instanceof PersistServiceInterface) {
+                $this->persistServiceLogger->critical(
+                    'Persist service does not implement the correct interface.',
+                    [
+                        'persistService' => $service::class
+                    ]
+                );
+
+                continue;
+            }
+
             $this->persistServiceLogger->info(
                 sprintf(
                     'Persisting %s into storage using %s',

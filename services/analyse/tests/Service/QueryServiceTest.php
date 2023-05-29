@@ -4,9 +4,11 @@ namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
+use App\Model\QueryResult\IntegerQueryResult;
+use App\Model\QueryResult\TotalCoverageQueryResult;
 use App\Model\Upload;
-use App\Query\TotalCommitCoverageQuery;
-use App\Query\TotalCommitUploadsQuery;
+use App\Query\TotalCoverageQuery;
+use App\Query\TotalUploadsQuery;
 use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
@@ -26,15 +28,21 @@ class QueryServiceTest extends TestCase
             [
                 MockQueryFactory::createMock(
                     $this,
-                    TotalCommitCoverageQuery::class,
-                    TotalCommitCoverageQuery::class === $query ? 'mock-query' : null,
-                    ['mock-result']
+                    TotalCoverageQuery::class,
+                    TotalCoverageQuery::class === $query ? 'mock-query' : null,
+                    TotalCoverageQueryResult::from([
+                        'lines' => 6,
+                        'covered' => 1,
+                        'partial' => 2,
+                        'uncovered' => 3,
+                        'coveragePercentage' => 0
+                    ])
                 ),
                 MockQueryFactory::createMock(
                     $this,
-                    TotalCommitUploadsQuery::class,
-                    TotalCommitUploadsQuery::class === $query ? 'mock-query' : null,
-                    99
+                    TotalUploadsQuery::class,
+                    TotalUploadsQuery::class === $query ? 'mock-query' : null,
+                    IntegerQueryResult::from(99)
                 ),
             ]
         );
@@ -62,11 +70,11 @@ class QueryServiceTest extends TestCase
     {
         return [
             'Total commit coverage query' => [
-                TotalCommitCoverageQuery::class,
+                TotalCoverageQuery::class,
                 null
             ],
             'Total commit uploads query' => [
-                TotalCommitUploadsQuery::class,
+                TotalUploadsQuery::class,
                 null
             ],
             'Invalid query' => [

@@ -3,11 +3,12 @@
 namespace App\Query;
 
 use App\Exception\QueryException;
+use App\Model\QueryResult\IntegerQueryResult;
 use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 
-class TotalCommitUploadsQuery implements QueryInterface
+class TotalUploadsQuery implements QueryInterface
 {
     public function getQuery(string $table, Upload $upload): string
     {
@@ -23,7 +24,7 @@ class TotalCommitUploadsQuery implements QueryInterface
         SQL;
     }
 
-    public function getNamedSubqueries(string $table, Upload $upload): string
+    public function getNamedQueries(string $table, Upload $upload): string
     {
         return '';
     }
@@ -32,21 +33,20 @@ class TotalCommitUploadsQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): int
+    public function parseResults(QueryResults $results): IntegerQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $rows = $results->rows();
+        /** @var array $row */
+        $row = $results->rows()
+            ->current();
 
-        /** @var mixed|null $totalUploads */
-        $totalUploads = $rows->current()['totalUploads'] ?? null;
-
-        if (is_int($totalUploads)) {
-            return $totalUploads;
+        if (is_int($row['totalUploads'])) {
+            return IntegerQueryResult::from($row['totalUploads']);
         }
 
-        throw QueryException::typeMismatch(gettype($totalUploads), 'int');
+        throw QueryException::typeMismatch(gettype($row['totalUploads']), 'int');
     }
 }

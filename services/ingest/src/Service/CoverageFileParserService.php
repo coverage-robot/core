@@ -38,6 +38,12 @@ class CoverageFileParserService
             }
 
             if (!$strategy->supports($coverageFile)) {
+                $this->parseStrategyLogger->info(
+                    sprintf(
+                        'Not parsing using %s, as it does not support content',
+                        $strategy::class
+                    )
+                );
                 continue;
             }
 

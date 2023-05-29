@@ -7,6 +7,7 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
+use App\Model\QueryResult\TagCoverageQueryResult;
 use App\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
-        private readonly LoggerInterface $publisherLogger
+        private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
     }
 
@@ -54,11 +55,11 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             $coverageData->getTotalUploads()
         );
 
-        if ($coverageData->getTotalCoveragePercentage()) {
-            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getTotalCoveragePercentage());
+        if ($coverageData->getCoveragePercentage()) {
+            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getCoveragePercentage());
         }
 
-        if ($coverageData->getTotalCoveragePercentage()) {
+        if ($coverageData->getCoveragePercentage()) {
             $body .= sprintf(
                 "Consisting of *%s* covered lines, out of *%s* total lines.\n\r",
                 $coverageData->getAtLeastPartiallyCoveredLines(),
@@ -76,12 +77,12 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
                 implode(
                     "\n",
                     array_map(
-                        fn (array $tagCoverage) => sprintf(
+                        fn (TagCoverageQueryResult $tag) => sprintf(
                             '| %s | %s%% |',
-                            $tagCoverage['tag'],
-                            $tagCoverage['coveragePercentage']
+                            $tag->getTag(),
+                            $tag->getCoveragePercentage()
                         ),
-                        $coverageData->getTagCoverage()
+                        $coverageData->getTagCoverage()->getTags()
                     )
                 )
             );
@@ -118,7 +119,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
                 );
 
             if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->publisherLogger->critical(
+                $this->pullRequestPublisherLogger->critical(
                     sprintf(
                         '%s status code returned while attempting to create a new pull request comment for results.',
                         (string)$this->client->getLastResponse()?->getStatusCode()
@@ -142,7 +143,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             );
 
         if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-            $this->publisherLogger->critical(
+            $this->pullRequestPublisherLogger->critical(
                 sprintf(
                     '%s status code returned while updating pull request comment with new results.',
                     (string)$this->client->getLastResponse()?->getStatusCode()

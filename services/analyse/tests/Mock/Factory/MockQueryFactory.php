@@ -2,6 +2,7 @@
 
 namespace App\Tests\Mock\Factory;
 
+use App\Model\QueryResult\QueryResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +19,7 @@ class MockQueryFactory
         TestCase $testCase,
         string $queryClass,
         ?string $queryString,
-        mixed $parsedResults
+        QueryResultInterface $parsedResults
     ): MockObject {
         $mockQuery = $testCase->getMockBuilder($queryClass)
             ->disableOriginalConstructor()

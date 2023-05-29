@@ -12,7 +12,7 @@ class BigQueryPersistService implements PersistServiceInterface
 {
     public function __construct(
         private readonly BigQueryClient $bigQueryClient,
-        private readonly LoggerInterface $persistServiceLogger
+        private readonly LoggerInterface $bigQueryPersistServiceLogger
     ) {
     }
 
@@ -26,7 +26,7 @@ class BigQueryPersistService implements PersistServiceInterface
         $insertResponse = $table->insertRows($rows);
 
         if (!$insertResponse->isSuccessful()) {
-            $this->persistServiceLogger->critical(
+            $this->bigQueryPersistServiceLogger->critical(
                 sprintf(
                     '%s row error(s) while attempting to persist coverage file (%s) into BigQuery.',
                     (string)$upload,
@@ -40,7 +40,7 @@ class BigQueryPersistService implements PersistServiceInterface
             return false;
         }
 
-        $this->persistServiceLogger->info(
+        $this->bigQueryPersistServiceLogger->info(
             sprintf(
                 'Persisting %s (%s rows) into BigQuery was successful',
                 (string)$upload,

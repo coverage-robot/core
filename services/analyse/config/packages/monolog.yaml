@@ -5,7 +5,7 @@ monolog:
             path: "php://stderr"
             formatter: Monolog\Formatter\LineFormatter
 
-    channels: [ 'handler' ]
+    channels: [ 'handler', 'pull_request_publisher', 'check_run_publisher', 'publisher_service' ]
 
 services:
     Monolog\Formatter\LineFormatter:
