@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Enum\ProviderEnum;
 use App\Handler\AnalyseHandler;
+use App\Model\Upload;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
@@ -47,7 +48,7 @@ class InvokeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $body = [
+            $upload = new Upload([
                 'uploadId' => 'mock-uuid',
                 'provider' => ProviderEnum::GITHUB->value,
                 'commit' => $input->getArgument('commit'),
@@ -55,7 +56,7 @@ class InvokeCommand extends Command
                 'owner' => $input->getArgument('owner'),
                 'repository' => $input->getArgument('repository'),
                 'pullRequest' => $input->getArgument('pullRequest')
-            ];
+            ]);
 
             $this->handler->handleSqs(
                 new SqsEvent([
@@ -63,7 +64,7 @@ class InvokeCommand extends Command
                         [
                             'eventSource' => 'aws:sqs',
                             'messageId' => 'mock',
-                            'body' => json_encode($body),
+                            'body' => json_encode($upload),
                             'messageAttributes' => []
                         ]
                     ]

@@ -3,8 +3,9 @@
 namespace App\Model;
 
 use App\Enum\ProviderEnum;
+use JsonSerializable;
 
-class Upload
+class Upload implements JsonSerializable
 {
     private string $uploadId;
     private string $commit;
@@ -63,5 +64,23 @@ class Upload
     public function __toString(): string
     {
         return 'Upload#' . $this->uploadId;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $fields = [
+            'uploadId' => $this->uploadId,
+            'provider' => $this->provider->value,
+            'owner' => $this->owner,
+            'repository' => $this->repository,
+            'commit' => $this->commit,
+            'parent' => $this->parent
+        ];
+
+        if ($this->pullRequest) {
+            $fields['pullRequest'] = $this->pullRequest;
+        }
+
+        return $fields;
     }
 }
