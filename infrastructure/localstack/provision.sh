@@ -25,10 +25,10 @@ pip install terraform-local
 echo "Applying ephemeral infrastructure."
 
 # Finally, apply the infrastructure
-cd /usr/infrastructure
+cd /usr/infrastructure || return
 
-/usr/local/bin/tflocal init
-/usr/local/bin/tflocal workspace select -or-create dev
-/usr/local/bin/tflocal apply -auto-approve -lock=false
+tflocal init -upgrade
+tflocal workspace select -or-create dev
+tflocal apply -auto-approve -lock=false
 
 echo "--- Provisioning complete ---"
