@@ -7,7 +7,7 @@ echo "--- Provisioning resources in Localstack environment ---"
 echo "Configuring Terraform infrastructure directory."
 
 # First, setup the infrastructure directory, with the required overrides
-mkdir /usr/infrastructure
+mkdir -p /usr/infrastructure
 cp -r /tmp/infrastructure/* /usr/infrastructure
 cp /usr/infrastructure/localstack/override.tf /usr/infrastructure/localstack_override.tf
 rm -rf /usr/infrastructure/.terraform || true

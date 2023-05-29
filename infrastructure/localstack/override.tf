@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "./.localstack"
+    path = "./.localstack/localstack.tfstate"
     workspace_dir = "./.localstack/localstack.tfstate.d"
   }
 }
