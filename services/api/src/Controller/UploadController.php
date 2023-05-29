@@ -29,16 +29,7 @@ class UploadController extends AbstractController
             /** @var SigningParameters $parameters */
             $parameters = $this->uploadService->getSigningParametersFromRequest($request);
 
-            $signedUrl = $this->uploadService->buildSignedUploadUrl(
-                (string)$parameters['owner'],
-                (string)$parameters['repository'],
-                (string)$parameters['fileName'],
-                isset($parameters['pullRequest']) ? (string)$parameters['pullRequest'] : null,
-                (string)$parameters['commit'],
-                (string)$parameters['parent'],
-                (string)$parameters['tag'],
-                (string)$parameters['provider']
-            );
+            $signedUrl = $this->uploadService->buildSignedUploadUrl($parameters);
 
             $this->uploadLogger->info(
                 'Successfully generated signed url for upload request.',

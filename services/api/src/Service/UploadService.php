@@ -4,40 +4,20 @@ namespace App\Service;
 
 use App\Exception\SigningException;
 use App\Model\SignedUrl;
+use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @psalm-type SigningParameters = array{
- *     owner: mixed,
- *     repository: mixed,
- *     fileName: mixed,
- *     pullRequest?: mixed,
- *     commit: mixed,
- *     parent: mixed,
- *     tag: mixed,
- *     provider: mixed
- * }
- */
 class UploadService
 {
     private const TARGET_BUCKET = 'coverage-ingest-%s';
 
     private const EXPIRY_MINUTES = 5;
-
-    private const REQUIRED_FIELDS = [
-        'owner',
-        'repository',
-        'provider',
-        'fileName',
-        'tag',
-        'commit',
-        'parent'
-    ];
 
     public function __construct(
         private readonly S3Client $s3Client,
@@ -47,11 +27,9 @@ class UploadService
     }
 
     /**
-     * @param Request $request
-     * @return SigningParameters
      * @throws SigningException
      */
-    public function getSigningParametersFromRequest(Request $request): array
+    public function getSigningParametersFromRequest(Request $request): SigningParameters
     {
         $body = $request->toArray();
 
@@ -63,7 +41,9 @@ class UploadService
                 ]
             );
 
-            throw SigningException::invalidPayload(['data']);
+            throw SigningException::invalidParameters(
+                new InvalidArgumentException('No data key found in request body.')
+            );
         }
 
         /** @var array{ data: array<array-key, mixed> } $body */
@@ -77,7 +57,7 @@ class UploadService
         );
 
         try {
-            return $this->validatePayload($parameters);
+            return $this->getSigningParameters($parameters);
         } catch (SigningException $exception) {
             $this->uploadLogger->error(
                 $exception->getMessage(),
@@ -90,43 +70,25 @@ class UploadService
         }
     }
 
-    public function buildSignedUploadUrl(
-        string $owner,
-        string $repository,
-        string $fileName,
-        string|null $pullRequest,
-        string $commit,
-        string $parent,
-        string $tag,
-        string $provider
-    ): SignedUrl {
-        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-
+    public function buildSignedUploadUrl(SigningParameters $signingParameters): SignedUrl
+    {
         $uploadKey = sprintf(
             '%s/%s/%s/%s.%s',
-            $owner,
-            $repository,
-            $commit,
+            $signingParameters->getOwner(),
+            $signingParameters->getRepository(),
+            $signingParameters->getCommit(),
             Uuid::uuid4()->toString(),
-            $fileExtension
+            pathinfo($signingParameters->getFileName(), PATHINFO_EXTENSION)
         );
 
-        $input = new PutObjectRequest([
-            'Bucket' => sprintf(
+        $input = $this->getSignedPutRequest(
+            sprintf(
                 self::TARGET_BUCKET,
                 $this->environmentService->getEnvironment()->value
             ),
-            'Key' => $uploadKey,
-            'Metadata' => $this->getMetadata(
-                $owner,
-                $repository,
-                $pullRequest,
-                $commit,
-                $parent,
-                $tag,
-                $provider
-            )
-        ]);
+            $uploadKey,
+            $signingParameters
+        );
 
         $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
 
@@ -139,43 +101,31 @@ class UploadService
         );
     }
 
-    private function getMetadata(
-        string $owner,
-        string $repository,
-        string|null $pullRequest,
-        string $commit,
-        string $parent,
-        string $tag,
-        string $provider
-    ): array {
-        $metaData = [
-            'owner' => $owner,
-            'repository' => $repository,
-            'commit' => $commit,
-            'parent' => $parent,
-            'tag' => $tag,
-            'provider' => $provider
-        ];
-
-        if ($pullRequest) {
-            $metaData['pullRequest'] = $pullRequest;
-        }
-
-        return $metaData;
-    }
-
     /**
-     * @param array $parameters
-     * @return SigningParameters
      * @throws SigningException
      */
-    public function validatePayload(array $parameters): array
+    private function getSigningParameters(array $parameters): SigningParameters
     {
-        if (array_diff(self::REQUIRED_FIELDS, array_keys($parameters)) === []) {
-            /** @var SigningParameters $parameters */
-            return $parameters;
-        }
+        return new SigningParameters($parameters);
+    }
 
-        throw SigningException::invalidPayload(array_diff(self::REQUIRED_FIELDS, array_keys($parameters)));
+    private function getSignedPutRequest(
+        string $bucket,
+        string $key,
+        SigningParameters $signingParameters
+    ): PutObjectRequest {
+        return new PutObjectRequest([
+            'Bucket' => $bucket,
+            'Key' => $key,
+            'Metadata' => [
+                'owner' => $signingParameters->getOwner(),
+                'repository' => $signingParameters->getRepository(),
+                'pullrequest' => $signingParameters->getPullRequest(),
+                'commit' => $signingParameters->getCommit(),
+                'parent' => $signingParameters->getParent(),
+                'tag' => $signingParameters->getTag(),
+                'provider' => $signingParameters->getProvider()->value
+            ]
+        ]);
     }
 }

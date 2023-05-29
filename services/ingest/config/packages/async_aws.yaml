@@ -1,4 +1,4 @@
-when@dev:
+when@dev: &aws_dev
   async_aws:
     config:
       region: eu-west-2
@@ -8,6 +8,8 @@ when@dev:
         config:
           endpoint: "http://localstack:4566"
           pathStyleEndpoint: true
+
+when@test: *aws_dev
 
 when@prod:
   async_aws:
