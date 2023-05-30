@@ -25,6 +25,10 @@ class PullRequestCommentFormatterService
 
     private function getTagCoverageTable(PublishableCoverageDataInterface $data): string
     {
+        if (count($data->getTagCoverage()->getTags()) == 0) {
+            return "";
+        }
+
         return sprintf(
             <<<MARKDOWN
             | Tag | Lines | Covered | Partial | Uncovered | Coverage |
@@ -34,7 +38,7 @@ class PullRequestCommentFormatterService
             implode(
                 "\n",
                 array_map(
-                    fn (TagCoverageQueryResult $tag) => sprintf(
+                    static fn (TagCoverageQueryResult $tag) => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
                         $tag->getTag(),
                         $tag->getLines(),
@@ -43,7 +47,8 @@ class PullRequestCommentFormatterService
                         $tag->getUncovered(),
                         $tag->getCoveragePercentage()
                     ),
-                    $data->getTagCoverage()->getTags()
+                    $data->getTagCoverage()
+                        ->getTags()
                 )
             )
         );

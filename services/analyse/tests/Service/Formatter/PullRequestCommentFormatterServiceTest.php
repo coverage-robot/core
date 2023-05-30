@@ -132,6 +132,25 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'parent' => 'mock-parent',
                     'pullRequest' => 1,
                 ])
+            ],
+            "No uploaded tags" => [
+                [
+                    'getTotalUploads' => 10,
+                    'getTotalLines' => 100,
+                    'getAtLeastPartiallyCoveredLines' => 50,
+                    'getUncoveredLines' => 50,
+                    'getCoveragePercentage' => 50.0,
+                    'getTagCoverage' => TotalTagCoverageQueryResult::from([]),
+                ],
+                new Upload([
+                    'uploadId' => 'mock-upload',
+                    'provider' => ProviderEnum::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit-3',
+                    'parent' => 'mock-parent',
+                    'pullRequest' => 1,
+                ])
             ]
         ];
     }
