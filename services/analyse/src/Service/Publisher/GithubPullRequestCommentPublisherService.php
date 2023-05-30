@@ -7,16 +7,17 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\QueryResult\TagCoverageQueryResult;
 use App\Model\Upload;
+use App\Service\Formatter\PullRequestCommentFormatterService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClient $client,
-        private readonly LoggerInterface $pullRequestPublisherLogger
+        private readonly GithubAppInstallationClient        $client,
+        private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
+        private readonly LoggerInterface                    $pullRequestPublisherLogger
     ) {
     }
 
@@ -42,57 +43,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             $upload->getOwner(),
             $upload->getRepository(),
             $pullRequest,
-            $this->buildCommentBody($upload, $coverageData)
+            $this->pullRequestCommentFormatter->format($upload, $coverageData)
         );
-    }
-
-    private function buildCommentBody(Upload $upload, PublishableCoverageDataInterface $coverageData): string
-    {
-        $body = "### New Coverage Information\n\r";
-        $body .= sprintf(
-            "This is for %s commit. Which has had %s uploads. \n\r",
-            $upload->getCommit(),
-            $coverageData->getTotalUploads()
-        );
-
-        if ($coverageData->getCoveragePercentage()) {
-            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getCoveragePercentage());
-        }
-
-        if ($coverageData->getCoveragePercentage()) {
-            $body .= sprintf(
-                "Consisting of *%s* covered lines, out of *%s* total lines.\n\r",
-                $coverageData->getAtLeastPartiallyCoveredLines(),
-                $coverageData->getTotalLines()
-            );
-        }
-
-        if ($coverageData->getTagCoverage()) {
-            $body .= sprintf(
-                <<<MARKDOWN
-                | Tag | Lines | Covered | Partial | Uncovered | Coverage |
-                | --- | --- | --- | --- | --- | --- |
-                %s
-                MARKDOWN,
-                implode(
-                    "\n",
-                    array_map(
-                        fn (TagCoverageQueryResult $tag) => sprintf(
-                            '| %s | %s | %s | %s | %s | %s%% |',
-                            $tag->getTag(),
-                            $tag->getLines(),
-                            $tag->getCovered(),
-                            $tag->getPartial(),
-                            $tag->getUncovered(),
-                            $tag->getCoveragePercentage()
-                        ),
-                        $coverageData->getTagCoverage()->getTags()
-                    )
-                )
-            );
-        }
-
-        return $body;
     }
 
     private function upsertComment(

@@ -22,6 +22,7 @@ class TotalTagCoverageQueryResult implements QueryResultInterface
     {
         $lines = [];
 
+        /** @var array $result */
         foreach ($results as $result) {
             $lines[] = TagCoverageQueryResult::from($result);
         }
