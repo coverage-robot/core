@@ -4,6 +4,8 @@ namespace App\Tests\Mock\Factory;
 
 use App\Model\PublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
+use App\Model\Upload;
+use App\Service\QueryService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -11,11 +13,18 @@ class MockPublishableCoverageDataFactory
 {
     public static function createMock(
         TestCase $test,
-        array $methodsAndReturns = []
+        array $methodsAndReturns = [],
+        ?QueryService $queryService = null,
+        ?Upload $upload = null
     ): PublishableCoverageDataInterface|MockObject {
         $data = $test->getMockBuilder(PublishableCoverageData::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(array_keys($methodsAndReturns))
+            ->setConstructorArgs([
+                $queryService ?? self::getMockQueryService($test),
+                $upload ?? self::getMockUpload($test)
+            ])
+            ->onlyMethods(
+                array_keys($methodsAndReturns)
+            )
             ->getMock();
 
         foreach ($methodsAndReturns as $method => $return) {
@@ -24,5 +33,19 @@ class MockPublishableCoverageDataFactory
         }
 
         return $data;
+    }
+
+    private static function getMockQueryService(TestCase $test): QueryService|MockObject
+    {
+        return $test->getMockBuilder(QueryService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private static function getMockUpload(TestCase $test): Upload|MockObject
+    {
+        return $test->getMockBuilder(Upload::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

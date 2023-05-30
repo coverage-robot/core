@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClient        $client,
+        private readonly GithubAppInstallationClient $client,
         private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
-        private readonly LoggerInterface                    $pullRequestPublisherLogger
+        private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
     }
 
