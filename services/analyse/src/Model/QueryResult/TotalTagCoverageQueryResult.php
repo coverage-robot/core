@@ -18,16 +18,16 @@ class TotalTagCoverageQueryResult implements QueryResultInterface
     /**
      * @throws QueryException
      */
-    public static function from(ItemIterator $results): self
+    public static function from(ItemIterator|array $results): self
     {
-        $lines = [];
+        $tags = [];
 
         /** @var array $result */
         foreach ($results as $result) {
-            $lines[] = TagCoverageQueryResult::from($result);
+            $tags[] = TagCoverageQueryResult::from($result);
         }
 
-        return new self($lines);
+        return new self($tags);
     }
 
     public function getTags(): array

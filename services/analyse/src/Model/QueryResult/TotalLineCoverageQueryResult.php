@@ -18,7 +18,7 @@ class TotalLineCoverageQueryResult implements QueryResultInterface
     /**
      * @throws QueryException
      */
-    public static function from(ItemIterator $results): self
+    public static function from(ItemIterator|array $results): self
     {
         $lines = [];
 
