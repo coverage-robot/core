@@ -44,7 +44,7 @@ class SigningParameters implements JsonSerializable
             $this->tag = (string)$data['tag'];
             $this->commit = (string)$data['commit'];
             $this->parent = (string)$data['parent'];
-            $this->pullRequest = (string)$data['pullRequest'];
+            $this->pullRequest = isset($data['pullRequest']) ? (string)$data['pullRequest'] : null;
         } catch (Exception $e) {
             throw SigningException::invalidParameters($e);
         }
