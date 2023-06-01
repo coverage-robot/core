@@ -88,7 +88,7 @@ class BigQueryPersistServiceTest extends TestCase
         $mockBigQueryDataset = $this->createMock(Dataset::class);
         $mockBigQueryDataset->expects($this->once())
             ->method('table')
-            ->with('line_coverage')
+            ->with('mock-table')
             ->willReturn($mockTable);
 
         $mockBigQueryClient = $this->createMock(BigQueryClient::class);
