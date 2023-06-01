@@ -30,7 +30,7 @@ class UploadServiceTest extends TestCase
             $this->expectException(SigningException::class);
         }
 
-        $request = new Request([], [], [], [], [], [], json_encode(["data" => $parameters]));
+        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
 
         $signingParameters = $uploadService->getSigningParametersFromRequest($request);
 
