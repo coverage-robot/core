@@ -78,9 +78,10 @@ jobs:
                     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-            - uses: 'google-github-actions/auth@v1'
+            - uses: google-github-actions/auth@v1
               with:
-                  credentials_json: '${{ secrets.GCP_TF_SERVICE_ACCOUNT }}'
+                  workload_identity_provider: ${{ secrets.GCP_TF_WORKLOAD_IDENTITY_PROVIDER }}
+                  service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
 
             -   name: Run Plan
                 uses: dflook/terraform-plan@v1
