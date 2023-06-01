@@ -4,12 +4,12 @@ variable "aws_region" {
 }
 
 variable "gcp_region" {
-  type = string
+  type    = string
   default = "europe-west2"
 }
 
 variable "gcp_project" {
-  type = string
+  type    = string
   default = "coverage-384615"
 }
 

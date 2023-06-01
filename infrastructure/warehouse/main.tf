@@ -1,7 +1,7 @@
 resource "google_bigquery_dataset" "environment_dataset" {
-  dataset_id                  = var.environment
-  friendly_name               = var.environment
-  description                 = "Dataset for ${var.environment} environment"
+  dataset_id    = var.environment
+  friendly_name = var.environment
+  description   = "Dataset for ${var.environment} environment"
 
   labels = {
     environment = var.environment
@@ -9,8 +9,8 @@ resource "google_bigquery_dataset" "environment_dataset" {
 }
 
 resource "google_bigquery_table" "line_coverage" {
-  dataset_id = google_bigquery_dataset.environment_dataset.dataset_id
-  table_id   = "line_coverage"
+  dataset_id          = google_bigquery_dataset.environment_dataset.dataset_id
+  table_id            = "line_coverage"
   deletion_protection = false
 
   schema = <<EOF
