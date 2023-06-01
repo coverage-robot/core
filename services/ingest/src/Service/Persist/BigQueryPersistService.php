@@ -18,8 +18,8 @@ class BigQueryPersistService implements PersistServiceInterface
 
     public function persist(Upload $upload): bool
     {
-        $table = $this->bigQueryClient->getLineAnalyticsDataset()
-            ->table('lines');
+        $table = $this->bigQueryClient->getEnvironmentDataset()
+            ->table($_ENV['BIGQUERY_LINE_COVERAGE_TABLE']);
 
         $rows = $this->buildRows($upload);
 

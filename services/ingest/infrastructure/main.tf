@@ -140,7 +140,10 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
-      "ANALYSIS_QUEUE_DSN" = data.terraform_remote_state.core.outputs.analysis_queue.url
+      "ANALYSIS_QUEUE_DSN"           = data.terraform_remote_state.core.outputs.analysis_queue.url,
+      "BIGQUERY_PROJECT"             = data.terraform_remote_state.core.outputs.environment_dataset.project,
+      "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
+      "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
     }
   }
 }
