@@ -37,12 +37,12 @@ class TagCoverageQueryResult extends CoverageQueryResult
             is_int($result['uncovered'] ?? null)
         ) {
             return new self(
-                $result['tag'],
-                $result['coveragePercentage'],
-                $result['lines'],
-                $result['covered'],
-                $result['partial'],
-                $result['uncovered']
+                (string)$result['tag'],
+                (float)$result['coveragePercentage'],
+                (int)$result['lines'],
+                (int)$result['covered'],
+                (int)$result['partial'],
+                (int)$result['uncovered']
             );
         }
 

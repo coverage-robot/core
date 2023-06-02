@@ -69,7 +69,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
     public static function coverageDataProvider(): array
     {
         return [
-            "Single tag" => [
+            'Single tag' => [
                 [
                     'getTotalUploads' => 10,
                     'getTotalLines' => 100,
@@ -97,7 +97,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'pullRequest' => 1,
                 ])
             ],
-            "Multiple tags" => [
+            'Multiple tags' => [
                 [
                     'getTotalUploads' => 10,
                     'getTotalLines' => 100,
@@ -133,7 +133,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'pullRequest' => 1,
                 ])
             ],
-            "No uploaded tags" => [
+            'No uploaded tags' => [
                 [
                     'getTotalUploads' => 10,
                     'getTotalLines' => 100,

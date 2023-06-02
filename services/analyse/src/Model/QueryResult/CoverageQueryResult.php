@@ -28,11 +28,11 @@ class CoverageQueryResult implements QueryResultInterface
             is_int($result['uncovered'] ?? null)
         ) {
             return new self(
-                $result['coveragePercentage'],
-                $result['lines'],
-                $result['covered'],
-                $result['partial'],
-                $result['uncovered']
+                (float)$result['coveragePercentage'],
+                (int)$result['lines'],
+                (int)$result['covered'],
+                (int)$result['partial'],
+                (int)$result['uncovered']
             );
         }
 

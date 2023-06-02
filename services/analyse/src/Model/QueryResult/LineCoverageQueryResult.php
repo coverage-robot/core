@@ -22,9 +22,9 @@ class LineCoverageQueryResult implements QueryResultInterface
             is_string($row['state'] ?? null)
         ) {
             return new self(
-                $row['fileName'],
-                $row['lineNumber'],
-                LineStateEnum::from($row['state'])
+                (string)$row['fileName'],
+                (int)$row['lineNumber'],
+                LineStateEnum::from((string)$row['state'])
             );
         }
 

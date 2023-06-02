@@ -4,9 +4,9 @@ namespace App\Enum;
 
 enum LineStateEnum: string
 {
-    case COVERED = "covered";
+    case COVERED = 'covered';
 
-    case PARTIAL = "partial";
+    case PARTIAL = 'partial';
 
-    case UNCOVERED = "uncovered";
+    case UNCOVERED = 'uncovered';
 }
