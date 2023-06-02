@@ -162,6 +162,7 @@ jobs:
 
             -   uses: ryanmab/coverage-action@0.1.8
                 with:
+                    working-directory: ${{ env.working-directory }}
                     files: |
                         ${{ env.working-directory }}/coverage.xml
                     tag: analyse-service
