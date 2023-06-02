@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
+use App\Model\QueryResult\QueryResultInterface;
 use App\Model\Upload;
 use App\Query\QueryInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -24,11 +25,11 @@ class QueryService
     /**
      * @param class-string $queryClass
      * @param Upload $upload
-     * @return array|string|int|float
+     * @return QueryResultInterface
      *
      * @throws QueryException
      */
-    public function runQuery(string $queryClass, Upload $upload): array|string|int|float
+    public function runQuery(string $queryClass, Upload $upload): QueryResultInterface
     {
         foreach ($this->queries as $query) {
             if (
@@ -44,7 +45,7 @@ class QueryService
         );
     }
 
-    private function runQueryAndParseResult(QueryInterface $query, Upload $upload): string|array|int|float
+    private function runQueryAndParseResult(QueryInterface $query, Upload $upload): QueryResultInterface
     {
         /** @var QueryInterface $query */
         $job = $this->bigQueryClient->query(

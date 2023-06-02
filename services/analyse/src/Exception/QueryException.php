@@ -16,4 +16,9 @@ class QueryException extends Exception
             )
         );
     }
+
+    public static function invalidQueryResult(): self
+    {
+        return new self('Query result is invalid.');
+    }
 }

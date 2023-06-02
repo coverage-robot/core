@@ -5,7 +5,7 @@ monolog:
             path: "php://stderr"
             formatter: Monolog\Formatter\LineFormatter
 
-    channels: [ 'handler', 'parse_strategy', 'persist_service' ]
+    channels: [ 'handler', 'parse_strategy', 'persist_service', 'big_query_persist_service', 's3_persist_service', 'sqs_persist_service' ]
 
 services:
     Monolog\Formatter\LineFormatter:

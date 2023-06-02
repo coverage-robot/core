@@ -3,41 +3,26 @@
 namespace App\Query;
 
 use App\Exception\QueryException;
+use App\Model\QueryResult\TotalLineCoverageQueryResult;
 use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 
-/**
- * @psalm-type CommitTagCoverage = array{
- *     coveragePercentage: float,
- *     tag: string,
- * }
- */
-class TotalCommitCoverageByTagQuery implements QueryInterface
+class TotalLineCoverageQuery extends AbstractCoverageQuery
 {
     public function getQuery(string $table, Upload $upload): string
     {
         return <<<SQL
-        {$this->getNamedSubqueries($table, $upload)}
+        {$this->getNamedQueries($table, $upload)}
         SELECT
-            tag,
-            ROUND(
-                (
-                    SUM(IF(state = "covered", 1, 0)) + 
-                    SUM(IF(state = "partial", 1, 0))
-                ) / 
-                COUNT(*)
-                * 100, 
-                2
-            ) as coveragePercentage
+            *
         FROM
-            tagLineCoverage
-        GROUP BY
-            tag
+            lineCoverage
         SQL;
     }
 
-    public function getNamedSubqueries(string $table, Upload $upload): string
+
+    public function getNamedQueries(string $table, Upload $upload): string
     {
         return <<<SQL
         WITH unnested AS (
@@ -78,10 +63,9 @@ class TotalCommitCoverageByTagQuery implements QueryInterface
                 owner = '{$upload->getOwner()}' AND
                 repository = '{$upload->getRepository()}'
         ),
-        tagLineCoverage AS (
+        lineCoverage AS (
             SELECT
                 fileName,
-                tag,
                 lineNumber,
                 IF(
                     SUM(hits) = 0,
@@ -96,7 +80,6 @@ class TotalCommitCoverageByTagQuery implements QueryInterface
                 unnested
             GROUP BY
                 fileName,
-                tag,
                 lineNumber
         )
         SQL;
@@ -106,27 +89,14 @@ class TotalCommitCoverageByTagQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): array
+    public function parseResults(QueryResults $results): TotalLineCoverageQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $tagCoverage = [];
-
-        /** @var array[] $rows */
         $rows = $results->rows();
 
-        foreach ($rows as $row) {
-            if (
-                is_float($row['coveragePercentage'] ?? null) &&
-                is_string($row['tag'] ?? null)
-            ) {
-                /** @var CommitTagCoverage $row */
-                $tagCoverage[] = $row;
-            }
-        }
-
-        return $tagCoverage;
+        return TotalLineCoverageQueryResult::from($rows);
     }
 }

@@ -2,110 +2,85 @@
 
 namespace App\Model;
 
-use App\Exception\QueryException;
-use App\Query\CommitLineCoverageQuery;
-use App\Query\TotalCommitCoverageByTagQuery;
-use App\Query\TotalCommitCoverageQuery;
+use App\Model\QueryResult\TotalLineCoverageQueryResult;
+use App\Model\QueryResult\TotalTagCoverageQueryResult;
 
-/**
- * @psalm-import-type CommitCoverage from TotalCommitCoverageQuery
- * @psalm-import-type CommitLineCoverage from CommitLineCoverageQuery
- * @psalm-import-type CommitTagCoverage from TotalCommitCoverageByTagQuery
- */
-class CachedPublishableCoverageData extends AbstractPublishableCoverageData
+class CachedPublishableCoverageData extends PublishableCoverageData
 {
     private ?int $totalUploads = null;
 
-    /**
-     * @var CommitCoverage|null
-     */
-    private ?array $totalCommitCoverage = null;
+    private ?int $totalLines = null;
 
-    /**
-     * @var CommitLineCoverage[]|null
-     */
-    private ?array $commitLineCoverage = null;
+    private ?int $atLeastPartiallyCoveredLines = null;
 
-    /**
-     * @var CommitTagCoverage[]|null
-     */
-    private ?array $totalCommitTagCoverage = null;
+    private ?int $uncoveredLines = null;
+
+    private ?float $coveragePercentage = null;
+
+    private ?TotalTagCoverageQueryResult $tagCoverage = null;
+
+    private ?TotalLineCoverageQueryResult $lineCoverage = null;
 
     public function getTotalUploads(): int
     {
-        if (is_null($this->totalUploads)) {
+        if (!$this->totalUploads) {
             $this->totalUploads = parent::getTotalUploads();
         }
 
         return $this->totalUploads;
     }
 
-    /**
-     * @throws QueryException
-     */
     public function getTotalLines(): int
     {
-        if (is_null($this->totalCommitCoverage)) {
-            $this->totalCommitCoverage = parent::getTotalCommitCoverage();
+        if (!$this->totalLines) {
+            $this->totalLines = parent::getTotalLines();
         }
 
-        return $this->totalCommitCoverage['lines'];
+        return $this->totalLines;
     }
 
-    /**
-     * @throws QueryException
-     */
     public function getAtLeastPartiallyCoveredLines(): int
     {
-        if (is_null($this->totalCommitCoverage)) {
-            $this->totalCommitCoverage = parent::getTotalCommitCoverage();
+        if (!$this->atLeastPartiallyCoveredLines) {
+            $this->atLeastPartiallyCoveredLines = parent::getAtLeastPartiallyCoveredLines();
         }
 
-        return $this->totalCommitCoverage['covered'] + $this->totalCommitCoverage['partial'];
+        return $this->atLeastPartiallyCoveredLines;
     }
 
-    /**
-     * @throws QueryException
-     */
     public function getUncoveredLines(): int
     {
-        if (is_null($this->totalCommitCoverage)) {
-            $this->totalCommitCoverage = parent::getTotalCommitCoverage();
+        if (!$this->uncoveredLines) {
+            $this->uncoveredLines = parent::getUncoveredLines();
         }
 
-        return $this->totalCommitCoverage['uncovered'];
+        return $this->uncoveredLines;
     }
 
-    /**
-     * @throws QueryException
-     */
-    public function getTotalCoveragePercentage(): float
+    public function getCoveragePercentage(): float
     {
-        if (is_null($this->totalCommitCoverage)) {
-            $this->totalCommitCoverage = parent::getTotalCommitCoverage();
+        if (!$this->coveragePercentage) {
+            $this->coveragePercentage = parent::getCoveragePercentage();
         }
 
-        return $this->totalCommitCoverage['coveragePercentage'];
+        return $this->coveragePercentage;
     }
 
-    public function getCommitLineCoverage(): array
+    public function getTagCoverage(): TotalTagCoverageQueryResult
     {
-        if (is_null($this->commitLineCoverage)) {
-            $this->commitLineCoverage = parent::getCommitLineCoverage();
+        if (!$this->tagCoverage) {
+            $this->tagCoverage = parent::getTagCoverage();
         }
 
-        return $this->commitLineCoverage;
+        return $this->tagCoverage;
     }
 
-    /**
-     * @throws QueryException
-     */
-    public function getTagCoverage(): array
+    public function getLineCoverage(): TotalLineCoverageQueryResult
     {
-        if (is_null($this->totalCommitTagCoverage)) {
-            $this->totalCommitTagCoverage = parent::getTotalCommitTagCoverage();
+        if (!$this->lineCoverage) {
+            $this->lineCoverage = parent::getLineCoverage();
         }
 
-        return $this->totalCommitTagCoverage;
+        return $this->lineCoverage;
     }
 }

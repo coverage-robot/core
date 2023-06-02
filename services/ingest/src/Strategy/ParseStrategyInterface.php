@@ -15,7 +15,7 @@ interface ParseStrategyInterface
      * There is no particular specification as to **how** the file should be
      * confirmed as capable of being handled by a given strategy. But it can be assumed
      * that if this method returns true, the parser will do a best-effort attempt
-     * to produce a valid model of the coverage data,
+     * to produce a valid model of the coverage data.
      *
      * @param string $content
      * @return bool

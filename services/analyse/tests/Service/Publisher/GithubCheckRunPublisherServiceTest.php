@@ -10,6 +10,7 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
 use App\Service\Publisher\GithubCheckRunPublisherService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -33,7 +34,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
             new NullLogger()
         );
 
-        $isSupported = $publisher->supports($upload, $this->createMock(PublishableCoverageDataInterface::class));
+        $isSupported = $publisher->supports($upload, MockPublishableCoverageDataFactory::createMock($this));
 
         $this->assertEquals($expectedSupport, $isSupported);
     }

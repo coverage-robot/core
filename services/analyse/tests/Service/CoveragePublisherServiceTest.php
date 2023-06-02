@@ -9,6 +9,7 @@ use App\Service\Publisher\GithubCheckRunPublisherService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CoveragePublisherServiceTest extends TestCase
 {
@@ -39,7 +40,7 @@ class CoveragePublisherServiceTest extends TestCase
             $mockedPublishers[] = $mockPublisher;
         }
 
-        $coveragePublisherService = new CoveragePublisherService($mockedPublishers);
+        $coveragePublisherService = new CoveragePublisherService($mockedPublishers, new NullLogger());
         $coveragePublisherService->publish($mockUpload, $mockPublishableCoverageData);
 
         $this->assertTrue($coveragePublisherService->publish($mockUpload, $mockPublishableCoverageData));

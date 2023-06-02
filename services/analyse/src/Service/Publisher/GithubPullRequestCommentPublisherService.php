@@ -8,6 +8,7 @@ use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
+use App\Service\Formatter\PullRequestCommentFormatterService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +16,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
-        private readonly LoggerInterface $publisherLogger
+        private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
+        private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
     }
 
@@ -41,53 +43,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             $upload->getOwner(),
             $upload->getRepository(),
             $pullRequest,
-            $this->buildCommentBody($upload, $coverageData)
+            $this->pullRequestCommentFormatter->format($upload, $coverageData)
         );
-    }
-
-    private function buildCommentBody(Upload $upload, PublishableCoverageDataInterface $coverageData): string
-    {
-        $body = "### New Coverage Information\n\r";
-        $body .= sprintf(
-            "This is for %s commit. Which has had %s uploads. \n\r",
-            $upload->getCommit(),
-            $coverageData->getTotalUploads()
-        );
-
-        if ($coverageData->getTotalCoveragePercentage()) {
-            $body .= sprintf("Total coverage is: **%s%%**\n\r", $coverageData->getTotalCoveragePercentage());
-        }
-
-        if ($coverageData->getTotalCoveragePercentage()) {
-            $body .= sprintf(
-                "Consisting of *%s* covered lines, out of *%s* total lines.\n\r",
-                $coverageData->getAtLeastPartiallyCoveredLines(),
-                $coverageData->getTotalLines()
-            );
-        }
-
-        if ($coverageData->getTagCoverage()) {
-            $body .= sprintf(
-                <<<MARKDOWN
-                | Tag | Coverage |
-                | --- | --- |
-                %s
-                MARKDOWN,
-                implode(
-                    "\n",
-                    array_map(
-                        fn (array $tagCoverage) => sprintf(
-                            '| %s | %s%% |',
-                            $tagCoverage['tag'],
-                            $tagCoverage['coveragePercentage']
-                        ),
-                        $coverageData->getTagCoverage()
-                    )
-                )
-            );
-        }
-
-        return $body;
     }
 
     private function upsertComment(
@@ -118,7 +75,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
                 );
 
             if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->publisherLogger->critical(
+                $this->pullRequestPublisherLogger->critical(
                     sprintf(
                         '%s status code returned while attempting to create a new pull request comment for results.',
                         (string)$this->client->getLastResponse()?->getStatusCode()
@@ -142,7 +99,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             );
 
         if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-            $this->publisherLogger->critical(
+            $this->pullRequestPublisherLogger->critical(
                 sprintf(
                     '%s status code returned while updating pull request comment with new results.',
                     (string)$this->client->getLastResponse()?->getStatusCode()

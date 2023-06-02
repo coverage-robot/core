@@ -11,7 +11,7 @@ class SqsPersistService implements PersistServiceInterface
 {
     public function __construct(
         private readonly MessageBusInterface $messageBus,
-        private readonly LoggerInterface $persistServiceLogger
+        private readonly LoggerInterface $sqsPersistServiceLogger
     ) {
     }
 
@@ -21,7 +21,7 @@ class SqsPersistService implements PersistServiceInterface
 
         $sent = !is_null($envelope->last(SentStamp::class));
 
-        $this->persistServiceLogger->info(
+        $this->sqsPersistServiceLogger->info(
             sprintf(
                 'Persisting %s to SQS was %s',
                 (string)$upload,

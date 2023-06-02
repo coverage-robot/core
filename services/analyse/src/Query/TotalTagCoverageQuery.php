@@ -3,32 +3,40 @@
 namespace App\Query;
 
 use App\Exception\QueryException;
+use App\Model\QueryResult\TotalTagCoverageQueryResult;
 use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 
-/**
- * @psalm-type CommitLineCoverage = array{
- *     fileName: string,
- *     lineNumber: int,
- *     state: 'uncovered' | 'partial' | 'covered'
- * }
- */
-class CommitLineCoverageQuery implements QueryInterface
+class TotalTagCoverageQuery implements QueryInterface
 {
     public function getQuery(string $table, Upload $upload): string
     {
         return <<<SQL
-        {$this->getNamedSubqueries($table, $upload)}
+        {$this->getNamedQueries($table, $upload)}
         SELECT
-            *
+            tag,
+            COUNT(*) as lines,
+            SUM(IF(state = "covered", 1, 0)) as covered,
+            SUM(IF(state = "partial", 1, 0)) as partial,
+            SUM(IF(state = "uncovered", 1, 0)) as uncovered,
+            ROUND(
+                (
+                    SUM(IF(state = "covered", 1, 0)) + 
+                    SUM(IF(state = "partial", 1, 0))
+                ) / 
+                COUNT(*)
+                * 100, 
+                2
+            ) as coveragePercentage
         FROM
-            lineCoverage
+            tagLineCoverage
+        GROUP BY
+            tag
         SQL;
     }
 
-
-    public function getNamedSubqueries(string $table, Upload $upload): string
+    public function getNamedQueries(string $table, Upload $upload): string
     {
         return <<<SQL
         WITH unnested AS (
@@ -69,9 +77,10 @@ class CommitLineCoverageQuery implements QueryInterface
                 owner = '{$upload->getOwner()}' AND
                 repository = '{$upload->getRepository()}'
         ),
-        lineCoverage AS (
+        tagLineCoverage AS (
             SELECT
                 fileName,
+                tag,
                 lineNumber,
                 IF(
                     SUM(hits) = 0,
@@ -86,6 +95,7 @@ class CommitLineCoverageQuery implements QueryInterface
                 unnested
             GROUP BY
                 fileName,
+                tag,
                 lineNumber
         )
         SQL;
@@ -95,27 +105,14 @@ class CommitLineCoverageQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): array
+    public function parseResults(QueryResults $results): TotalTagCoverageQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $lineCoverage = [];
-
-        /** @var array[] $rows */
         $rows = $results->rows();
 
-        foreach ($rows as $row) {
-            if (
-                is_string($row['fileName'] ?? null) &&
-                is_int($row['lineNumber'] ?? null) &&
-                is_string($row['state'] ?? null)
-            ) {
-                $lineCoverage[] = $row;
-            }
-        }
-
-        return $lineCoverage;
+        return TotalTagCoverageQueryResult::from($rows);
     }
 }

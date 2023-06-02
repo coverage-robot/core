@@ -21,7 +21,7 @@ class S3PersistService implements PersistServiceInterface
     public function __construct(
         private readonly S3Client $s3Client,
         private readonly EnvironmentService $environmentService,
-        private readonly LoggerInterface $persistServiceLogger
+        private readonly LoggerInterface $s3PersistServiceLogger
     ) {
     }
 
@@ -52,7 +52,7 @@ class S3PersistService implements PersistServiceInterface
 
             $response->resolve();
 
-            $this->persistServiceLogger->info(
+            $this->s3PersistServiceLogger->info(
                 sprintf(
                     'Persisting %s into BigQuery was %s',
                     (string)$upload,
@@ -62,7 +62,7 @@ class S3PersistService implements PersistServiceInterface
 
             return $response->info()['status'] === Response::HTTP_OK;
         } catch (HttpException $exception) {
-            $this->persistServiceLogger->info(
+            $this->s3PersistServiceLogger->info(
                 sprintf(
                     'Exception while persisting %s into S3',
                     (string)$upload

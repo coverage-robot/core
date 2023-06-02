@@ -8,6 +8,7 @@ use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\Upload;
+use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
 use Github\Api\Issue;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -21,6 +22,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
     {
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
+            new PullRequestCommentFormatterService(),
             new NullLogger()
         );
 
@@ -35,6 +37,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
+            new PullRequestCommentFormatterService(),
             new NullLogger()
         );
 
@@ -92,6 +95,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
+            new PullRequestCommentFormatterService(),
             new NullLogger()
         );
 

@@ -17,7 +17,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
-        private readonly LoggerInterface $publisherLogger
+        private readonly LoggerInterface $checkRunPublisherLogger
     ) {
     }
 
@@ -64,7 +64,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     $owner,
                     $repository,
                     [
-                        'name' => sprintf('Coverage - %s%%', $coverageData->getTotalCoveragePercentage()),
+                        'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
                         'head_sha' => $commit,
                         'status' => 'completed',
                         'conclusion' => 'success',
@@ -77,7 +77,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 );
 
             if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->publisherLogger->critical(
+                $this->checkRunPublisherLogger->critical(
                     sprintf(
                         '%s status code returned while attempting to create a new check run for results.',
                         (string)$this->client->getLastResponse()?->getStatusCode()
@@ -96,7 +96,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $repository,
                 $existingCheckRun,
                 [
-                    'name' => sprintf('Coverage - %s%%', $coverageData->getTotalCoveragePercentage()),
+                    'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
                     'status' => 'completed',
                     'conclusion' => 'success',
                     'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
@@ -108,7 +108,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             );
 
         if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-            $this->publisherLogger->critical(
+            $this->checkRunPublisherLogger->critical(
                 sprintf(
                     '%s status code returned while attempting to update existing check run with new results.',
                     (string)$this->client->getLastResponse()?->getStatusCode()
