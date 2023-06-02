@@ -5,6 +5,7 @@ namespace Controller;
 use App\Controller\UploadController;
 use App\Exception\SigningException;
 use App\Model\SignedUrl;
+use App\Model\SigningParameters;
 use App\Service\UploadService;
 use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -17,23 +18,16 @@ class UploadControllerTest extends KernelTestCase
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleUpload(array $body): void
     {
+        $parameters = new SigningParameters($body['data']);
+
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
-            ->willReturn($body['data']);
+            ->willReturn($parameters);
 
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
-            ->with(
-                $body['data']['owner'],
-                $body['data']['repository'],
-                $body['data']['fileName'],
-                $body['data']['pullRequest'] ?? null,
-                $body['data']['commit'],
-                $body['data']['parent'],
-                $body['data']['tag'],
-                $body['data']['provider']
-            )
+            ->with($parameters)
             ->willReturn(
                 new SignedUrl(
                     'mock-signed-url',
@@ -54,13 +48,12 @@ class UploadControllerTest extends KernelTestCase
         );
     }
 
-    #[DataProvider('validPayloadDataProvider')]
-    public function testHandleUploadWithInvalidBody(array $body): void
+    public function testHandleUploadWithInvalidBody(): void
     {
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
-            ->willThrowException(SigningException::invalidPayload(['mock']));
+            ->willThrowException(SigningException::invalidParameters());
 
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
@@ -72,7 +65,10 @@ class UploadControllerTest extends KernelTestCase
         $response = $uploadController->handleUpload($this->createMock(Request::class));
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertEquals('{"error":"Invalid payload. Missing fields: mock."}', $response->getContent());
+        $this->assertEquals(
+            '{"error":"Parameters provided for signing do not match expectation."}',
+            $response->getContent()
+        );
     }
 
     public static function validPayloadDataProvider(): array

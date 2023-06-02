@@ -10,5 +10,6 @@ phpunit.xml
 .phpunit.cache
 .phpcs-cache
 .idea/
+.localstack/
 bigquery.json
 github.pem

@@ -7,11 +7,15 @@ use Exception;
 class SigningException extends Exception
 {
     /**
-     * @param array<array-key, string> $missingFields
+     * @param Exception|null $exception
      * @return self
      */
-    public static function invalidPayload(array $missingFields): self
+    public static function invalidParameters(?Exception $exception = null): self
     {
-        return new self('Invalid payload. Missing fields: ' . implode(', ', $missingFields) . '.');
+        return new self(
+            'Parameters provided for signing do not match expectation.',
+            0,
+            $exception
+        );
     }
 }

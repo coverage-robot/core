@@ -3,17 +3,19 @@
 namespace App\Tests\Service;
 
 use App\Exception\SigningException;
+use App\Model\SigningParameters;
 use App\Service\EnvironmentService;
 use App\Service\UploadService;
 use AsyncAws\S3\S3Client;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\Request;
 
 class UploadServiceTest extends TestCase
 {
-    #[DataProvider('validatablePayloadDataProvider')]
-    public function testValidatePayload(array $body, bool $expectedValidity): void
+    #[DataProvider('signingParametersDataProvider')]
+    public function testGetSigningParametersFromRequest(array $parameters, bool $isParameterSetValid): void
     {
         $uploadService = new UploadService(
             $this->createMock(S3Client::class),
@@ -21,18 +23,18 @@ class UploadServiceTest extends TestCase
             new NullLogger()
         );
 
-        if (!$expectedValidity) {
+        if (!$isParameterSetValid) {
             $this->expectException(SigningException::class);
         }
 
-        $validParameters = $uploadService->validatePayload($body);
+        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
 
-        if ($expectedValidity) {
-            $this->assertEquals($body, $validParameters);
-        }
+        $signingParameters = $uploadService->getSigningParametersFromRequest($request);
+
+        $this->assertEquals(new SigningParameters($parameters), $signingParameters);
     }
 
-    public static function validatablePayloadDataProvider(): array
+    public static function signingParametersDataProvider(): array
     {
         return [
             'With pull request' => [
