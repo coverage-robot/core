@@ -58,9 +58,33 @@ resource "google_bigquery_table" "line_coverage" {
     "description": "The type of the line coverage."
   },
   {
+    "name": "tag",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The user provided tag of the coverage file."
+  },
+  {
+    "name": "owner",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The repository owner for the VCS provider."
+  },
+  {
+    "name": "repository",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The repository name for the VCS provider."
+  },
+  {
+    "name": "provider",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The VCS provider."
+  },
+  {
     "name": "metadata",
     "type": "RECORD",
-    "mode": "REQUIRED",
+    "mode": "REPEATED",
     "description": "The lines metadata.",
     "fields": [
         {

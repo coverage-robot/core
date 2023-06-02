@@ -37,14 +37,14 @@ class SigningParameters implements JsonSerializable
         }
 
         try {
-            $this->owner = $data['owner'];
-            $this->repository = $data['repository'];
-            $this->provider = ProviderEnum::from($data['provider']);
-            $this->fileName = $data['fileName'];
-            $this->tag = $data['tag'];
-            $this->commit = $data['commit'];
-            $this->parent = $data['parent'];
-            $this->pullRequest = $data['pullRequest'] ?? null;
+            $this->owner = (string)$data['owner'];
+            $this->repository = (string)$data['repository'];
+            $this->provider = ProviderEnum::from((string)$data['provider']);
+            $this->fileName = (string)$data['fileName'];
+            $this->tag = (string)$data['tag'];
+            $this->commit = (string)$data['commit'];
+            $this->parent = (string)$data['parent'];
+            $this->pullRequest = isset($data['pullRequest']) ? (string)$data['pullRequest'] : null;
         } catch (Exception $e) {
             throw SigningException::invalidParameters($e);
         }

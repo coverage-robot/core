@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @psalm-import-type SigningParameters from UploadService
- */
 class UploadController extends AbstractController
 {
     public function __construct(
@@ -26,7 +23,6 @@ class UploadController extends AbstractController
     public function handleUpload(Request $request): JsonResponse
     {
         try {
-            /** @var SigningParameters $parameters */
             $parameters = $this->uploadService->getSigningParametersFromRequest($request);
 
             $signedUrl = $this->uploadService->buildSignedUploadUrl($parameters);
