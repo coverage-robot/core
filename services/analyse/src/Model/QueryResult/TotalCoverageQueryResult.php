@@ -9,7 +9,7 @@ class TotalCoverageQueryResult extends CoverageQueryResult
     public static function from(array $result): self
     {
         if (
-            is_float($result['coveragePercentage'] ?? null) &&
+            is_numeric($result['coveragePercentage'] ?? null) &&
             is_int($result['lines'] ?? null) &&
             is_int($result['covered'] ?? null) &&
             is_int($result['partial'] ?? null) &&

@@ -41,7 +41,7 @@ class CachedPublishableCoverageDataTest extends TestCase
                     'covered' => 1,
                     'partial' => 2,
                     'uncovered' => 3,
-                    'coveragePercentage' => 0
+                    'coveragePercentage' => 0.0
                 ])
             );
 
@@ -63,15 +63,15 @@ class CachedPublishableCoverageDataTest extends TestCase
                 'covered' => 1,
                 'partial' => 2,
                 'uncovered' => 3,
-                'coveragePercentage' => 97
+                'coveragePercentage' => 97.1
             ]));
 
-        $this->assertEquals(97, $this->cachedPublishableCoverageData->getCoveragePercentage());
+        $this->assertEquals(97.1, $this->cachedPublishableCoverageData->getCoveragePercentage());
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertEquals(97, $this->cachedPublishableCoverageData->getCoveragePercentage());
+        $this->assertEquals(97.1, $this->cachedPublishableCoverageData->getCoveragePercentage());
     }
 
     public function testGetUncoveredLines()
@@ -84,7 +84,7 @@ class CachedPublishableCoverageDataTest extends TestCase
                 'covered' => 1,
                 'partial' => 2,
                 'uncovered' => 3,
-                'coveragePercentage' => 97
+                'coveragePercentage' => 97.0
             ]));
 
         $this->assertEquals(3, $this->cachedPublishableCoverageData->getUncoveredLines());
@@ -105,7 +105,7 @@ class CachedPublishableCoverageDataTest extends TestCase
                 'covered' => 1,
                 'partial' => 2,
                 'uncovered' => 3,
-                'coveragePercentage' => 97
+                'coveragePercentage' => 97.0
             ]));
 
         $this->assertEquals(6, $this->cachedPublishableCoverageData->getTotalLines());

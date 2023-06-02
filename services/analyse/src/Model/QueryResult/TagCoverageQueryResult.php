@@ -30,7 +30,7 @@ class TagCoverageQueryResult extends CoverageQueryResult
     {
         if (
             is_string($result['tag'] ?? null) &&
-            is_float($result['coveragePercentage'] ?? null) &&
+            is_numeric($result['coveragePercentage'] ?? null) &&
             is_int($result['lines'] ?? null) &&
             is_int($result['covered'] ?? null) &&
             is_int($result['partial'] ?? null) &&
