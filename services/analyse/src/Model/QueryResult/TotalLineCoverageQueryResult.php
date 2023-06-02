@@ -26,7 +26,7 @@ class TotalLineCoverageQueryResult implements QueryResultInterface
             if (!is_array($result)) {
                 continue;
             }
-            
+
             $lines[] = LineCoverageQueryResult::from($result);
         }
 
