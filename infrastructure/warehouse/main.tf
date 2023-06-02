@@ -84,7 +84,7 @@ resource "google_bigquery_table" "line_coverage" {
   {
     "name": "metadata",
     "type": "RECORD",
-    "mode": "REQUIRED",
+    "mode": "REPEATED",
     "description": "The lines metadata.",
     "fields": [
         {
