@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.65"
+    }
   }
 
   required_version = ">= 1.2.0"
@@ -22,7 +26,12 @@ locals {
 }
 
 provider "aws" {
-  region = var.region
+  region = var.aws_region
+}
+
+provider "google" {
+  project = var.gcp_project
+  region  = var.gcp_region
 }
 
 module "queue" {
@@ -32,5 +41,10 @@ module "queue" {
 
 module "bucket" {
   source      = "./bucket"
+  environment = local.environment
+}
+
+module "warehouse" {
+  source      = "./warehouse"
   environment = local.environment
 }
