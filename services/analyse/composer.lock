@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "64aa920b48c8a5a8bb2fa36b84462cac",
+    "content-hash": "35dcc8fdbfaa7e473196cbcce10904fe",
     "packages": [
         {
             "name": "bref/bref",
@@ -4643,16 +4643,16 @@
         },
         {
             "name": "symfony/runtime",
-            "version": "v6.2.8",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/runtime.git",
-                "reference": "f8b0751b33888329be8f8f0481bb81d279ec4157"
+                "reference": "d998ab9da99e2ebca719dee00e8469996deeec53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/runtime/zipball/f8b0751b33888329be8f8f0481bb81d279ec4157",
-                "reference": "f8b0751b33888329be8f8f0481bb81d279ec4157",
+                "url": "https://api.github.com/repos/symfony/runtime/zipball/d998ab9da99e2ebca719dee00e8469996deeec53",
+                "reference": "d998ab9da99e2ebca719dee00e8469996deeec53",
                 "shasum": ""
             },
             "require": {
@@ -4702,7 +4702,7 @@
                 "runtime"
             ],
             "support": {
-                "source": "https://github.com/symfony/runtime/tree/v6.2.8"
+                "source": "https://github.com/symfony/runtime/tree/v6.3.0"
             },
             "funding": [
                 {
@@ -4718,7 +4718,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-03-14T15:48:35+00:00"
+            "time": "2023-03-14T15:56:29+00:00"
         },
         {
             "name": "symfony/service-contracts",
