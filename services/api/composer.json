@@ -14,7 +14,7 @@
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "ramsey/uuid": "^4.7",
-        "symfony/console": "6.2.*",
+        "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.2.*",
