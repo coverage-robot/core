@@ -135,6 +135,8 @@ jobs:
         needs: lint
 
         steps:
+            - uses: actions/checkout@v3
+             
             - name: Make services folder structure
               working-directory: "./"
               run: mkdir -p ${{ env.working-directory }}
@@ -159,8 +161,6 @@ jobs:
               run: |
                 composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
               shell: bash
-
-            - uses: actions/checkout@v3
 
             - uses: ryanmab/coverage-action@0.1.8
               with:
