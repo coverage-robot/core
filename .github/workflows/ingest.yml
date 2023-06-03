@@ -150,7 +150,7 @@ jobs:
             -   name: Extract build package
                 run: |
                     umask 644 
-                    unzip -o -q build.zip -d ./
+                    unzip -q build.zip -d ./
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
@@ -164,7 +164,6 @@ jobs:
 
             -   uses: ryanmab/coverage-action@0.1.8
                 with:
-                    working-directory: ${{ env.working-directory }}
                     files: |
                         ${{ env.working-directory }}/coverage.xml
                     tag: ingest-service
