@@ -135,6 +135,8 @@ jobs:
         needs: lint
 
         steps:
+            - uses: actions/checkout@v3
+        
             -   name: Make services folder structure
                 working-directory: "./"
                 run: mkdir -p ${{ env.working-directory }}
@@ -148,7 +150,7 @@ jobs:
             -   name: Extract build package
                 run: |
                     umask 644 
-                    unzip -q build.zip -d ./
+                    unzip -o -q build.zip -d ./
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
