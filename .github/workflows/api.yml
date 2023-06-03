@@ -135,8 +135,6 @@ jobs:
         needs: lint
 
         steps:
-            - uses: actions/checkout@v3
-             
             - name: Make services folder structure
               working-directory: "./"
               run: mkdir -p ${{ env.working-directory }}
