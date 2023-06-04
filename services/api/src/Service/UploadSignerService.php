@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Model\SignedUrl;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
-use DateTimeInterface;
+use DateTimeImmutable;
 
 class UploadSignerService
 {
@@ -14,7 +14,7 @@ class UploadSignerService
     ) {
     }
 
-    public function sign(string $uploadId, PutObjectRequest $input, DateTimeInterface $expiry): SignedUrl
+    public function sign(string $uploadId, PutObjectRequest $input, DateTimeImmutable $expiry): SignedUrl
     {
         return new SignedUrl(
             $uploadId,
@@ -27,7 +27,7 @@ class UploadSignerService
      * Sign the S3 PUT request, so that it can be returned, and then used to
      * upload the coverage file to S3.
      */
-    private function signS3Request(PutObjectRequest $input, DateTimeInterface $expiry): string
+    private function signS3Request(PutObjectRequest $input, DateTimeImmutable $expiry): string
     {
         return $this->s3Client->presign(
             $input,
