@@ -7,33 +7,33 @@ resource "aws_s3_bucket" "coverage_ingest" {
 }
 
 resource "aws_s3_bucket_versioning" "ingest_versioning" {
-    bucket = aws_s3_bucket.coverage_ingest.id
+  bucket = aws_s3_bucket.coverage_ingest.id
 
-    versioning_configuration {
-        status = "Enabled"
-    }
+  versioning_configuration {
+    status = "Enabled"
+  }
 
-    depends_on = [
-        aws_s3_bucket.coverage_ingest
-    ]
+  depends_on = [
+    aws_s3_bucket.coverage_ingest
+  ]
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "ingest_lifecycle" {
-    bucket = aws_s3_bucket.coverage_ingest.id
+  bucket = aws_s3_bucket.coverage_ingest.id
 
-    rule {
-        id = "delete-ingested-coverage-files"
+  rule {
+    id = "delete-ingested-coverage-files"
 
-        noncurrent_version_expiration {
-            noncurrent_days = 1
-        }
-
-        status = "Enabled"
+    noncurrent_version_expiration {
+      noncurrent_days = 1
     }
 
-    depends_on = [
-        aws_s3_bucket.coverage_ingest
-    ]
+    status = "Enabled"
+  }
+
+  depends_on = [
+    aws_s3_bucket.coverage_ingest
+  ]
 }
 
 resource "aws_s3_bucket" "coverage_output" {
