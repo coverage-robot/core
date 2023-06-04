@@ -9,13 +9,12 @@ use AsyncAws\S3\S3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CoverageFileRetrievalServiceTest extends TestCase
 {
     public function testIngestFromS3(): void
     {
-        $mockResponse = $this->createMock(GetObjectOutput::class);
-
         $mockS3Client = $this->createMock(S3Client::class);
         $mockS3Client->expects($this->once())
             ->method('getObject')
@@ -25,9 +24,9 @@ class CoverageFileRetrievalServiceTest extends TestCase
                     'Key' => 'mock-key',
                 ])
             )
-            ->willReturn($mockResponse);
+            ->willReturn($this->createMock(GetObjectOutput::class));
 
-        $coverageFileRetrievalService = new CoverageFileRetrievalService($mockS3Client);
+        $coverageFileRetrievalService = new CoverageFileRetrievalService($mockS3Client, new NullLogger());
 
         $coverageFileRetrievalService->ingestFromS3(
             new Bucket('mock-bucket', 'mock-arn'),
