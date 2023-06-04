@@ -8,8 +8,8 @@ use JsonSerializable;
 class SignedUrl implements JsonSerializable
 {
     public function __construct(
-        private readonly string $signedUrl,
         private readonly string $uploadId,
+        private readonly string $signedUrl,
         private readonly DateTimeInterface $expiration
     ) {
     }

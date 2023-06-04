@@ -30,8 +30,8 @@ class UploadControllerTest extends KernelTestCase
             ->with($parameters)
             ->willReturn(
                 new SignedUrl(
-                    'mock-signed-url',
                     'mock-upload-id',
+                    'mock-signed-url',
                     new DateTimeImmutable('2023-05-10 10:10:10')
                 )
             );
