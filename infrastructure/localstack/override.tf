@@ -13,6 +13,6 @@ provider "google" {
 }
 
 module "warehouse" {
-  source      = "./warehouse"
-  count = 0
+  source = "./warehouse"
+  count  = 0
 }
