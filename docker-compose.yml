@@ -4,21 +4,21 @@ services:
   ingest:
     extends:
       file: services/ingest/docker-compose.yml
-      service: ingest
+      service: lambda
     links:
       - localstack
 
   analyse:
     extends:
       file: services/analyse/docker-compose.yml
-      service: analyse
+      service: lambda
     links:
       - localstack
 
   api:
     extends:
       file: services/api/docker-compose.yml
-      service: api
+      service: lambda
     links:
       - localstack
 
@@ -26,7 +26,7 @@ services:
     container_name: "localstack"
     image: localstack/localstack
     ports:
-      - "127.0.0.1:4566:4566"
+      - "4566:4566"
       - "4510-4559:4510-4559"
     environment:
       - DEBUG=1

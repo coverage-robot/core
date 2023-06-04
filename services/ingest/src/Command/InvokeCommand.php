@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Copy a local coverage file, with the required metadata, into the S3 bucket in Localstack:
  *
- * `awslocal s3 cp <file> s3://coverage-ingest-dev --metadata provider=,commit=,parent=,repository=,owner=,tag=`
+ * `awslocal s3 cp <file> s3://coverage-ingest-dev --metadata '{\"provider\":\"github\",\"commit\":\"\",\"parent\":\"[\\\"\\\",\\\"\\\"]\",\"repository\":\"\",\"owner\":\"\",\"tag\":\"\",\"uploadid\":\"\"}'`
  *
  * Invoke the handler in a Docker container, closely simulating the Lambda environment:
  *

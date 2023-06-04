@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  analyse:
+  lambda:
     image: bref/php-82-fpm-dev:2
     volumes:
       - .:/var/task:ro
