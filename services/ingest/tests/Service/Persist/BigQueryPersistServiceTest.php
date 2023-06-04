@@ -35,7 +35,7 @@ class BigQueryPersistServiceTest extends TestCase
             '',
             '',
             '',
-            '',
+            [],
             1,
             'mock-tag'
         );
@@ -54,7 +54,7 @@ class BigQueryPersistServiceTest extends TestCase
                         'data' => [
                             'uploadId' => $upload->getUploadId(),
                             'commit' => '',
-                            'parent' => '',
+                            'parent' => [],
                             'provider' => 'github',
                             'owner' => '',
                             'repository' => '',

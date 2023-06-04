@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Enum\ProviderEnum;
 use App\Exception\SigningException;
 use Exception;
+use JsonException;
 use JsonSerializable;
 
 class SigningParameters implements JsonSerializable
@@ -15,7 +16,7 @@ class SigningParameters implements JsonSerializable
     private string $fileName;
     private string $tag;
     private string $commit;
-    private string $parent;
+    private array $parent;
     private ?string $pullRequest;
 
     /**
@@ -43,7 +44,7 @@ class SigningParameters implements JsonSerializable
             $this->fileName = (string)$data['fileName'];
             $this->tag = (string)$data['tag'];
             $this->commit = (string)$data['commit'];
-            $this->parent = (string)$data['parent'];
+            $this->parent = is_array($data['parent']) ? $data['parent'] : (array)$data['parent'];
             $this->pullRequest = isset($data['pullRequest']) ? (string)$data['pullRequest'] : null;
         } catch (Exception $e) {
             throw SigningException::invalidParameters($e);
@@ -80,7 +81,7 @@ class SigningParameters implements JsonSerializable
         return $this->commit;
     }
 
-    public function getParent(): string
+    public function getParent(): array
     {
         return $this->parent;
     }
@@ -90,13 +91,16 @@ class SigningParameters implements JsonSerializable
         return $this->pullRequest;
     }
 
+    /**
+     * @throws JsonException
+     */
     public function jsonSerialize(): array
     {
         $parameters = [
             'owner' => $this->owner,
             'repository' => $this->repository,
             'commit' => $this->commit,
-            'parent' => $this->parent,
+            'parent' => json_encode($this->parent, JSON_THROW_ON_ERROR),
             'tag' => $this->tag,
             'provider' => $this->provider,
             'fileName' => $this->fileName

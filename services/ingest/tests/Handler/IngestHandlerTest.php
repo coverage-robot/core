@@ -8,7 +8,6 @@ use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\UniqueIdGeneratorService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use AsyncAws\Core\Stream\ResultStream;
@@ -31,11 +30,6 @@ class IngestHandlerTest extends TestCase
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
-        $mockUniqueIdGenerator = $this->createMock(UniqueIdGeneratorService::class);
-        $mockUniqueIdGenerator->expects($this->exactly(count($coverageFiles)))
-            ->method('generate')
-            ->willReturn('mock-uuid');
-
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
@@ -53,7 +47,7 @@ class IngestHandlerTest extends TestCase
                 self::callback(
                     static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
-                        $upload->getParent() === '2'
+                        $upload->getParent() === [2]
                 ),
             );
 
@@ -61,7 +55,6 @@ class IngestHandlerTest extends TestCase
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,
-            $mockUniqueIdGenerator,
             new NullLogger()
         );
 
@@ -90,9 +83,10 @@ class IngestHandlerTest extends TestCase
             ->willReturn($mockStream);
         $mockResponse->method('getMetadata')
             ->willReturn([
+                'uploadid' => 'mock-uuid',
                 'provider' => ProviderEnum::GITHUB->value,
                 'commit' => '1',
-                'parent' => '2',
+                'parent' => json_encode([2]),
                 'pullrequest' => 1234,
                 'tag' => 'frontend',
                 'owner' => 'ryanmab',

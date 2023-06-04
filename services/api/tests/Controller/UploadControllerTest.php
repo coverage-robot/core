@@ -31,6 +31,7 @@ class UploadControllerTest extends KernelTestCase
             ->willReturn(
                 new SignedUrl(
                     'mock-signed-url',
+                    'mock-upload-id',
                     new DateTimeImmutable('2023-05-10 10:10:10')
                 )
             );
@@ -43,7 +44,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals(
-            '{"signedUrl":"mock-signed-url","expiration":"2023-05-10T10:10:10+00:00"}',
+            '{"uploadId":"mock-upload-id","signedUrl":"mock-signed-url","expiration":"2023-05-10T10:10:10+00:00"}',
             $response->getContent()
         );
     }

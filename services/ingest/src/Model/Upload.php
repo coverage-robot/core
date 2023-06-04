@@ -12,17 +12,6 @@ class Upload implements JsonSerializable
     private readonly DateTimeImmutable $ingestTime;
     private readonly ProviderEnum $provider;
 
-    /**
-     * @param Project $project
-     * @param string $uploadId
-     * @param string $provider
-     * @param string $owner
-     * @param string $repository
-     * @param string $commit
-     * @param string $parent
-     * @param string|int $pullRequest
-     * @param DateTimeInterface|null $ingestTime
-     */
     public function __construct(
         private readonly Project $project,
         private readonly string $uploadId,
@@ -30,7 +19,7 @@ class Upload implements JsonSerializable
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
-        private readonly string $parent,
+        private readonly array $parent,
         private readonly string|int|null $pullRequest,
         private readonly string $tag,
         ?DateTimeInterface $ingestTime = null
@@ -84,7 +73,7 @@ class Upload implements JsonSerializable
         return $this->commit;
     }
 
-    public function getParent(): string
+    public function getParent(): array
     {
         return $this->parent;
     }

@@ -40,7 +40,7 @@ class S3PersistServiceTest extends TestCase
                         'Metadata' => [
                             'sourceFormat' => $coverage->getSourceFormat()->value,
                             'commit' => '1',
-                            'parent' => '2',
+                            'parent' => ['2'],
                             'ingestTime' => '2023-05-02T12:00:00+00:00',
                             'uploadId' => 'mock-uuid',
                             'provider' => 'github',
@@ -68,7 +68,7 @@ class S3PersistServiceTest extends TestCase
                 'mock-owner',
                 'mock-repo',
                 '1',
-                '2',
+                ['2'],
                 1234,
                 'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')
@@ -96,7 +96,7 @@ class S3PersistServiceTest extends TestCase
                         'Metadata' => [
                             'sourceFormat' => $coverage->getSourceFormat()->value,
                             'commit' => '1',
-                            'parent' => '2',
+                            'parent' => ['2'],
                             'ingestTime' => '2023-05-02T12:00:00+00:00',
                             'uploadId' => 'mock-uuid',
                             'provider' => 'github',
@@ -126,7 +126,7 @@ class S3PersistServiceTest extends TestCase
                 'mock-owner',
                 'mock-repo',
                 '1',
-                '2',
+                ['2'],
                 1234,
                 'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')

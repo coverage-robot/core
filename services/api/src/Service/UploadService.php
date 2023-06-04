@@ -9,8 +9,8 @@ use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use JsonException;
 use Psr\Log\LoggerInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 
 class UploadService
@@ -22,6 +22,7 @@ class UploadService
     public function __construct(
         private readonly S3Client $s3Client,
         private readonly EnvironmentService $environmentService,
+        private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
         private readonly LoggerInterface $uploadLogger
     ) {
     }
@@ -72,12 +73,14 @@ class UploadService
 
     public function buildSignedUploadUrl(SigningParameters $signingParameters): SignedUrl
     {
+        $uploadId = $this->uniqueIdGeneratorService->generate();
+
         $uploadKey = sprintf(
             '%s/%s/%s/%s.%s',
             $signingParameters->getOwner(),
             $signingParameters->getRepository(),
             $signingParameters->getCommit(),
-            Uuid::uuid4()->toString(),
+            $uploadId,
             pathinfo($signingParameters->getFileName(), PATHINFO_EXTENSION)
         );
 
@@ -87,12 +90,14 @@ class UploadService
                 $this->environmentService->getEnvironment()->value
             ),
             $uploadKey,
+            $uploadId,
             $signingParameters
         );
 
         $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
 
         return new SignedUrl(
+            $uploadId,
             $this->s3Client->presign(
                 $input,
                 $expiry,
@@ -109,22 +114,21 @@ class UploadService
         return new SigningParameters($parameters);
     }
 
+    /**
+     * @throws JsonException
+     */
     private function getSignedPutRequest(
         string $bucket,
         string $key,
+        string $uploadId,
         SigningParameters $signingParameters
     ): PutObjectRequest {
         return new PutObjectRequest([
             'Bucket' => $bucket,
             'Key' => $key,
             'Metadata' => [
-                'owner' => $signingParameters->getOwner(),
-                'repository' => $signingParameters->getRepository(),
-                'pullrequest' => $signingParameters->getPullRequest(),
-                'commit' => $signingParameters->getCommit(),
-                'parent' => $signingParameters->getParent(),
-                'tag' => $signingParameters->getTag(),
-                'provider' => $signingParameters->getProvider()->value
+                'uploadid' => $uploadId,
+                ...$signingParameters->jsonSerialize()
             ]
         ]);
     }
