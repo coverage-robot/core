@@ -40,7 +40,7 @@ class S3PersistServiceTest extends TestCase
                         'Metadata' => [
                             'sourceFormat' => $coverage->getSourceFormat()->value,
                             'commit' => '1',
-                            'parent' => ['2'],
+                            'parent' => json_encode(['2']),
                             'ingestTime' => '2023-05-02T12:00:00+00:00',
                             'uploadId' => 'mock-uuid',
                             'provider' => 'github',
@@ -96,7 +96,7 @@ class S3PersistServiceTest extends TestCase
                         'Metadata' => [
                             'sourceFormat' => $coverage->getSourceFormat()->value,
                             'commit' => '1',
-                            'parent' => ['2'],
+                            'parent' => json_encode(['2']),
                             'ingestTime' => '2023-05-02T12:00:00+00:00',
                             'uploadId' => 'mock-uuid',
                             'provider' => 'github',

@@ -43,7 +43,8 @@ class S3PersistService implements PersistServiceInterface
                         'ContentType' => 'application/json',
                         'Metadata' => [
                             'sourceFormat' => $project->getSourceFormat()->value,
-                            ...$upload->jsonSerialize()
+                            ...$upload->jsonSerialize(),
+                            'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
                         ],
                         'Body' => json_encode($project, JSON_THROW_ON_ERROR),
                     ]
