@@ -86,7 +86,15 @@ class IngestHandler extends S3Handler
                             $uploadId
                         )
                     );
+
+                    return;
                 }
+
+                // Finally, delete the coverage file now that we've successfully ingested it
+                $this->coverageFileRetrievalService->deleteIngestedFile(
+                    $coverageFile->getBucket(),
+                    $coverageFile->getObject()
+                );
             } catch (ParseException $e) {
                 $this->handlerLogger->error(
                     sprintf('Exception received while attempting to parse %s.', $uploadId),

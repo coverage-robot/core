@@ -11,9 +11,9 @@ output "analysis_queue" {
 }
 
 output "environment_dataset" {
-  value = module.warehouse.environment_dataset
+  value = length(module.warehouse) > 0 ? module.warehouse.environment_dataset : null
 }
 
 output "line_coverage_table" {
-  value = module.warehouse.line_coverage_table
+  value = length(module.warehouse) > 0 ? module.warehouse.line_coverage_table : null
 }

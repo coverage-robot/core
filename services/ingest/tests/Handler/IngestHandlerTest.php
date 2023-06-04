@@ -28,7 +28,7 @@ class IngestHandlerTest extends TestCase
      * @throws InvalidLambdaEvent
      */
     #[DataProvider('validS3EventDataProvider')]
-    public function testHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
+    public function testSuccessfullyHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
@@ -40,6 +40,10 @@ class IngestHandlerTest extends TestCase
                 )
             );
 
+        $mockCoverageFileRetrievalService->expects($this->exactly(count($expectedOutputKeys)))
+            ->method('deleteIngestedFile')
+            ->willReturn(true);
+
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
             ->method('persist')
@@ -49,7 +53,39 @@ class IngestHandlerTest extends TestCase
                         $upload->getCommit() === '1' &&
                         $upload->getParent() === [2]
                 ),
+            )
+            ->willReturn(true);
+
+        $handler = new IngestHandler(
+            $mockCoverageFileRetrievalService,
+            $this->getRealCoverageFileParserService(),
+            $mockCoverageFilePersistService,
+            new NullLogger()
+        );
+
+        $handler->handleS3($event, Context::fake());
+    }
+
+    #[DataProvider('validS3EventDataProvider')]
+    public function testHandleS3FailsToPersist(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
+    {
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService->method('ingestFromS3')
+            ->willReturnOnConsecutiveCalls(
+                ...array_map(
+                    [$this, 'getMockS3ObjectResponse'],
+                    $coverageFiles
+                )
             );
+
+        // The handler never attempts to delete the ingested file unless _everything_ succeeds
+        // (including persisting the upload to all destinations)
+        $mockCoverageFileRetrievalService->expects($this->never())
+            ->method('deleteIngestedFile');
+
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService->method('persist')
+            ->willReturn(false);
 
         $handler = new IngestHandler(
             $mockCoverageFileRetrievalService,
