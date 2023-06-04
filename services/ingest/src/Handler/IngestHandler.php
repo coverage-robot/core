@@ -44,7 +44,7 @@ class IngestHandler extends S3Handler
 
             /** @var string[] $parent */
             $parent = json_decode($source->getMetadata()['parent'], true, JSON_THROW_ON_ERROR);
-            
+
             $this->handlerLogger->info(
                 sprintf(
                     'Starting to ingest %s with id of %s.',
