@@ -25,13 +25,13 @@ resource "google_bigquery_table" "line_coverage" {
     "name": "commit",
     "type": "STRING",
     "mode": "REQUIRED",
-    "description": "The commit SHA which the coverage was generated for."
+    "description": "The commit hash which the coverage was generated for."
   },
   {
     "name": "parent",
     "type": "STRING",
-    "mode": "REQUIRED",
-    "description": "The parent commit SHA of the commit the coverage was generated for."
+    "mode": "REPEATED",
+    "description": "The parent commit hash(es) of the commit the coverage was generated for."
   },
   {
     "name": "sourceFormat",

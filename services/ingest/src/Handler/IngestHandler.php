@@ -7,7 +7,6 @@ use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\UniqueIdGeneratorService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
@@ -20,7 +19,6 @@ class IngestHandler extends S3Handler
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
-        private readonly UniqueIdGeneratorService $uniqueIdGenerator,
         private readonly LoggerInterface $handlerLogger
     ) {
     }
@@ -31,20 +29,21 @@ class IngestHandler extends S3Handler
     public function handleS3(S3Event $event, Context $context): void
     {
         foreach ($event->getRecords() as $coverageFile) {
-            $uploadId = $this->uniqueIdGenerator->generate();
-
             $source = $this->coverageFileRetrievalService->ingestFromS3(
                 $coverageFile->getBucket(),
                 $coverageFile->getObject()
             );
 
+            $uploadId = $source->getMetadata()['uploadid'];
             $provider = $source->getMetadata()['provider'];
             $owner = $source->getMetadata()['owner'];
             $repository = $source->getMetadata()['repository'];
             $commit = $source->getMetadata()['commit'];
-            $parent = $source->getMetadata()['parent'];
             $pullRequest = $source->getMetadata()['pullrequest'] ?? null;
             $tag = $source->getMetadata()['tag'];
+
+            /** @var string[] $parent */
+            $parent = json_decode($source->getMetadata()['parent'], true, JSON_THROW_ON_ERROR);
 
             $this->handlerLogger->info(
                 sprintf(
