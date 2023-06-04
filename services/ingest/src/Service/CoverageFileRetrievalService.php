@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Exception\RetrievalException;
+use AsyncAws\Core\Exception\Http\ClientException;
 use AsyncAws\S3\Exception\InvalidObjectStateException;
 use AsyncAws\S3\Exception\NoSuchKeyException;
 use AsyncAws\S3\Input\DeleteObjectRequest;
@@ -59,7 +60,9 @@ class CoverageFileRetrievalService
                 ])
             );
 
-            if ($response->info()['status'] !== Response::HTTP_OK) {
+            $response->resolve();
+
+            if ($response->info()['status'] !== Response::HTTP_NO_CONTENT) {
                 $this->retrievalLogger->warning(
                     'Non-successful HTTP code returned when attempting to delete ingested file.',
                     [
@@ -73,7 +76,7 @@ class CoverageFileRetrievalService
             }
 
             return true;
-        } catch (NoSuchKeyException | InvalidObjectStateException $exception) {
+        } catch (NoSuchKeyException | InvalidObjectStateException | ClientException $exception) {
             $this->retrievalLogger->error(
                 'Failed to delete ingested file.',
                 [
