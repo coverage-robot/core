@@ -6,7 +6,6 @@ use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
-use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use JsonException;
@@ -20,7 +19,7 @@ class UploadService
     private const EXPIRY_MINUTES = 5;
 
     public function __construct(
-        private readonly S3Client $s3Client,
+        private readonly UploadSignerService $uploadSignerService,
         private readonly EnvironmentService $environmentService,
         private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
         private readonly LoggerInterface $uploadLogger
@@ -96,14 +95,7 @@ class UploadService
 
         $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
 
-        return new SignedUrl(
-            $uploadId,
-            $this->s3Client->presign(
-                $input,
-                $expiry,
-            ),
-            $expiry
-        );
+        return $this->uploadSignerService->sign($uploadId, $input, $expiry);
     }
 
     /**
@@ -127,8 +119,9 @@ class UploadService
             'Bucket' => $bucket,
             'Key' => $key,
             'Metadata' => [
+                ...$signingParameters->jsonSerialize(),
                 'uploadid' => $uploadId,
-                ...$signingParameters->jsonSerialize()
+                'provider' => $signingParameters->getProvider()->value
             ]
         ]);
     }
