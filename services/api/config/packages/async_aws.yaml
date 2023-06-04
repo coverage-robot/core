@@ -1,0 +1,15 @@
+when@dev: &aws_dev
+  async_aws:
+    config:
+      region: eu-west-2
+
+    clients:
+      s3:
+        config:
+          endpoint: '%env(S3_ENDPOINT)%'
+          pathStyleEndpoint: true
+
+when@test: *aws_dev
+
+when@prod:
+  async_aws:
