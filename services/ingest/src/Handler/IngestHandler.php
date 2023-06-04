@@ -39,10 +39,12 @@ class IngestHandler extends S3Handler
             $owner = $source->getMetadata()['owner'];
             $repository = $source->getMetadata()['repository'];
             $commit = $source->getMetadata()['commit'];
-            $parent = json_decode($source->getMetadata()['parent'], true, JSON_THROW_ON_ERROR);
             $pullRequest = $source->getMetadata()['pullrequest'] ?? null;
             $tag = $source->getMetadata()['tag'];
 
+            /** @var string[] $parent */
+            $parent = json_decode($source->getMetadata()['parent'], true, JSON_THROW_ON_ERROR);
+            
             $this->handlerLogger->info(
                 sprintf(
                     'Starting to ingest %s with id of %s.',
