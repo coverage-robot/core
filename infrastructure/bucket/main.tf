@@ -36,6 +36,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "ingest_lifecycle" {
       noncurrent_days = 1
     }
 
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+
     status = "Enabled"
   }
 
