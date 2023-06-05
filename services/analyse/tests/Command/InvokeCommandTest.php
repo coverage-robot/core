@@ -13,15 +13,15 @@ class InvokeCommandTest extends KernelTestCase
 {
     public function testInvokeSuccessfully(): void
     {
-        $mockIngestHandler = $this->createMock(AnalyseHandler::class);
+        $mockAnalyseHandler = $this->createMock(AnalyseHandler::class);
 
-        $mockIngestHandler->expects($this->once())
+        $mockAnalyseHandler->expects($this->once())
             ->method('handleSqs');
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(AnalyseHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(AnalyseHandler::class, $mockAnalyseHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
@@ -30,7 +30,7 @@ class InvokeCommandTest extends KernelTestCase
             'parent' => 'mock-parent',
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
-            'pullRequest' => 'mock-pull-request',
+            'pullRequest' => 'mock-pull-request'
         ]);
 
         $commandTester->assertCommandIsSuccessful();
@@ -38,16 +38,16 @@ class InvokeCommandTest extends KernelTestCase
 
     public function testInvokeFailure(): void
     {
-        $mockIngestHandler = $this->createMock(AnalyseHandler::class);
+        $mockAnalyseHandler = $this->createMock(AnalyseHandler::class);
 
-        $mockIngestHandler->expects($this->once())
+        $mockAnalyseHandler->expects($this->once())
             ->method('handleSqs')
             ->willThrowException(new InvalidLambdaEvent('sqs', ''));
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(AnalyseHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(AnalyseHandler::class, $mockAnalyseHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
@@ -56,7 +56,7 @@ class InvokeCommandTest extends KernelTestCase
             'parent' => 'mock-parent',
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
-            'pullRequest' => 'mock-pull-request',
+            'pullRequest' => 'mock-pull-request'
         ]);
 
         $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());

@@ -90,7 +90,8 @@ class UploadServiceTest extends TestCase
                         'provider' => 'github',
                         'fileName' => 'test.xml',
                         'pullRequest' => '12',
-                        'uploadid' => 'mock-uuid'
+                        'uploadid' => 'mock-uuid',
+                        'ref' => 'mock-branch-reference'
                     ]
                 ]),
                 $this->isInstanceOf(DateTimeImmutable::class)
@@ -111,6 +112,7 @@ class UploadServiceTest extends TestCase
                 'commit' => 2,
                 'pullRequest' => 12,
                 'parent' => 'd',
+                'ref' => 'mock-branch-reference',
                 'provider' => 'github',
                 'fileName' => 'test.xml',
                 'tag' => 'frontend'
@@ -123,8 +125,8 @@ class UploadServiceTest extends TestCase
         return [
             'With pull request' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'd',
@@ -133,8 +135,8 @@ class UploadServiceTest extends TestCase
                     'tag' => 'frontend'
                 ],
                 new SigningParameters([
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'd',
@@ -145,8 +147,8 @@ class UploadServiceTest extends TestCase
             ],
             'Without to pull request' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'parent' => 'd',
                     'provider' => 'github',
@@ -154,19 +156,19 @@ class UploadServiceTest extends TestCase
                     'tag' => 'backend'
                 ],
                 new SigningParameters([
-                        'owner' => '1',
-                        'repository' => 'a',
-                        'commit' => 2,
-                        'parent' => 'd',
-                        'provider' => 'github',
-                        'fileName' => 'test.xml',
-                        'tag' => 'backend'
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
+                    'commit' => 2,
+                    'parent' => 'd',
+                    'provider' => 'github',
+                    'fileName' => 'test.xml',
+                    'tag' => 'backend'
                 ])
             ],
             'Without commit' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'parent' => 'd',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
@@ -176,8 +178,8 @@ class UploadServiceTest extends TestCase
             ],
             'Without to file name' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'parent' => 'd',
                     'provider' => 'github',
@@ -197,8 +199,8 @@ class UploadServiceTest extends TestCase
             ],
             'Without tag' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'd',
@@ -209,8 +211,8 @@ class UploadServiceTest extends TestCase
             ],
             'Multiple parents' => [
                 [
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => ['d', 'e'],
@@ -219,8 +221,8 @@ class UploadServiceTest extends TestCase
                     'tag' => 'frontend'
                 ],
                 new SigningParameters([
-                    'owner' => '1',
-                    'repository' => 'a',
+                    'owner' => 'mock-owner-id',
+                    'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => ['d', 'e'],

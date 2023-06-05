@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Invoke the handler in a Docker container, closely simulating the Lambda environment:
  *
- * `docker-compose run --rm analyse php bin/console app:invoke <commit> <pullRequest> <repository> <owner> <parent> -vv`
+ * `docker-compose run --rm analyse php bin/console app:invoke <commit> <pullRequest> <repository> <owner> <ref> <parent> -vv`
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the analysis handler')]
 class InvokeCommand extends Command
@@ -37,6 +37,7 @@ class InvokeCommand extends Command
             ->addArgument('pullRequest', InputArgument::REQUIRED, 'The pull request the commit belongs to')
             ->addArgument('repository', InputArgument::REQUIRED, 'The repository the commit belongs to')
             ->addArgument('owner', InputArgument::REQUIRED, 'The owner of the repository')
+            ->addArgument('ref', InputArgument::OPTIONAL, 'The ref of the commit to analyse', 'mock-ref')
             ->addArgument(
                 'parent',
                 InputArgument::OPTIONAL,
@@ -53,6 +54,7 @@ class InvokeCommand extends Command
                 'provider' => ProviderEnum::GITHUB->value,
                 'commit' => $input->getArgument('commit'),
                 'parent' => $input->getArgument('parent'),
+                'ref' => $input->getArgument('ref'),
                 'owner' => $input->getArgument('owner'),
                 'repository' => $input->getArgument('repository'),
                 'pullRequest' => $input->getArgument('pullRequest')

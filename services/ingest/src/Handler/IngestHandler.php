@@ -39,6 +39,7 @@ class IngestHandler extends S3Handler
             $owner = $source->getMetadata()['owner'];
             $repository = $source->getMetadata()['repository'];
             $commit = $source->getMetadata()['commit'];
+            $ref = $source->getMetadata()['ref'];
             $pullRequest = $source->getMetadata()['pullrequest'] ?? null;
             $tag = $source->getMetadata()['tag'];
 
@@ -64,6 +65,7 @@ class IngestHandler extends S3Handler
                     $repository,
                     $commit,
                     $parent,
+                    $ref,
                     $pullRequest,
                     $tag,
                     $coverageFile->getEventTime()

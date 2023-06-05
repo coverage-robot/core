@@ -20,6 +20,7 @@ class Upload implements JsonSerializable
         private readonly string $repository,
         private readonly string $commit,
         private readonly array $parent,
+        private readonly string $ref,
         private readonly string|int|null $pullRequest,
         private readonly string $tag,
         ?DateTimeInterface $ingestTime = null
@@ -56,6 +57,11 @@ class Upload implements JsonSerializable
     public function getRepository(): string
     {
         return $this->repository;
+    }
+
+    public function getRef(): string
+    {
+        return $this->ref;
     }
 
     public function getPullRequest(): int|string|null
@@ -98,6 +104,7 @@ class Upload implements JsonSerializable
             'ingestTime' => $this->ingestTime->format(DateTimeInterface::ATOM),
             'commit' => $this->commit,
             'parent' => $this->parent,
+            'ref' => $this->ref,
             'tag' => $this->tag
         ];
 

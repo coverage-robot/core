@@ -94,6 +94,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit',
                     'parent' => 'mock-parent',
+                    'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])
             ],
@@ -130,6 +131,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit-2',
                     'parent' => 'mock-parent',
+                    'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])
             ],
@@ -149,6 +151,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit-3',
                     'parent' => 'mock-parent',
+                    'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])
             ]

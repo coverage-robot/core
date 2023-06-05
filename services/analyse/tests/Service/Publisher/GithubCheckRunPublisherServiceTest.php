@@ -166,7 +166,8 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                         'owner' => 'mock-owner',
                         'repository' => 'mock-repository',
                         'commit' => 'mock-commit',
-                        'parent' => 'mock-parent'
+                        'parent' => 'mock-parent',
+                        'ref' => 'mock-ref',
                     ]
                 ),
                 true

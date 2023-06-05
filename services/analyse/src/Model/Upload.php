@@ -10,6 +10,7 @@ class Upload implements JsonSerializable
     private string $uploadId;
     private string $commit;
     private array $parent;
+    private string $ref;
     private ?int $pullRequest;
     private string $owner;
     private string $repository;
@@ -23,6 +24,7 @@ class Upload implements JsonSerializable
         $this->repository = (string)$data['repository'];
         $this->commit = (string)$data['commit'];
         $this->parent = (array)$data['parent'];
+        $this->ref = (string)$data['ref'];
         $this->pullRequest = isset($data['pullRequest']) ? (int)$data['pullRequest'] : null;
     }
 
@@ -56,6 +58,11 @@ class Upload implements JsonSerializable
         return $this->parent;
     }
 
+    public function getRef(): string
+    {
+        return $this->ref;
+    }
+
     public function getPullRequest(): ?int
     {
         return $this->pullRequest;
@@ -74,7 +81,8 @@ class Upload implements JsonSerializable
             'owner' => $this->owner,
             'repository' => $this->repository,
             'commit' => $this->commit,
-            'parent' => $this->parent
+            'parent' => $this->parent,
+            'ref' => $this->ref
         ];
 
         if ($this->pullRequest) {
