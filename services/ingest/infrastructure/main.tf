@@ -82,7 +82,8 @@ resource "aws_iam_policy" "ingest_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:GetObject"
+          "s3:GetObject",
+          "s3:DeleteObject"
         ]
         Resource = [
           "${data.terraform_remote_state.core.outputs.ingest_bucket.arn}/*"
