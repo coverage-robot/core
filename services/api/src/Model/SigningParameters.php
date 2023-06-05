@@ -17,6 +17,7 @@ class SigningParameters implements JsonSerializable
     private string $tag;
     private string $commit;
     private array $parent;
+    private string $ref;
     private ?string $pullRequest;
 
     /**
@@ -32,7 +33,8 @@ class SigningParameters implements JsonSerializable
             !isset($data['fileName']) ||
             !isset($data['tag']) ||
             !isset($data['commit']) ||
-            !isset($data['parent'])
+            !isset($data['parent']) ||
+            !isset($data['ref'])
         ) {
             throw SigningException::invalidParameters();
         }
@@ -45,6 +47,7 @@ class SigningParameters implements JsonSerializable
             $this->tag = (string)$data['tag'];
             $this->commit = (string)$data['commit'];
             $this->parent = is_array($data['parent']) ? $data['parent'] : (array)$data['parent'];
+            $this->ref = (string)$data['ref'];
             $this->pullRequest = isset($data['pullRequest']) ? (string)$data['pullRequest'] : null;
         } catch (Exception $e) {
             throw SigningException::invalidParameters($e);
@@ -86,6 +89,11 @@ class SigningParameters implements JsonSerializable
         return $this->parent;
     }
 
+    public function getRef(): string
+    {
+        return $this->ref;
+    }
+
     public function getPullRequest(): ?string
     {
         return $this->pullRequest;
@@ -101,6 +109,7 @@ class SigningParameters implements JsonSerializable
             'repository' => $this->repository,
             'commit' => $this->commit,
             'parent' => json_encode($this->parent, JSON_THROW_ON_ERROR),
+            'ref' => $this->ref,
             'tag' => $this->tag,
             'provider' => $this->provider,
             'fileName' => $this->fileName

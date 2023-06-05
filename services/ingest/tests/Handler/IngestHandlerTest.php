@@ -126,7 +126,8 @@ class IngestHandlerTest extends TestCase
                 'pullrequest' => 1234,
                 'tag' => 'frontend',
                 'owner' => 'ryanmab',
-                'repository' => 'portfolio'
+                'repository' => 'portfolio',
+                'ref' => 'mock-branch-reference',
             ]);
 
         return $mockResponse;

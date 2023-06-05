@@ -36,6 +36,7 @@ class BigQueryPersistServiceTest extends TestCase
             '',
             '',
             [],
+            'mock-branch-reference',
             1,
             'mock-tag'
         );
@@ -58,6 +59,7 @@ class BigQueryPersistServiceTest extends TestCase
                             'provider' => 'github',
                             'owner' => '',
                             'repository' => '',
+                            'ref' => 'mock-branch-reference',
                             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
                             'sourceFormat' => CoverageFormatEnum::LCOV,
                             'fileName' => 'mock-file',

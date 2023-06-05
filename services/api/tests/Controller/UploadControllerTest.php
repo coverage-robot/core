@@ -78,11 +78,12 @@ class UploadControllerTest extends KernelTestCase
             'With pull request' => [
                  [
                     'data' => [
-                        'owner' => '1',
-                        'repository' => 'a',
-                        'commit' => 2,
+                        'owner' => 'mock-owner-id',
+                        'repository' => 'mock-repository-name',
+                        'commit' => 1234,
                         'pullRequest' => 12,
-                        'parent' => 'd',
+                        'parent' => 'mock-parent-hash',
+                        'ref' => 'mock-branch-reference',
                         'tag' => 'mock-tag',
                         'provider' => 'github',
                         'fileName' => 'test.xml'
@@ -92,10 +93,11 @@ class UploadControllerTest extends KernelTestCase
             'Without to pull request' => [
                 [
                     'data' => [
-                        'owner' => '1',
-                        'repository' => 'a',
-                        'commit' => 2,
-                        'parent' => 'd',
+                        'owner' => 'mock-owner-id',
+                        'repository' => 'mock-repository-name',
+                        'commit' => 2345,
+                        'parent' => 'mock-parent-hash',
+                        'ref' => 'mock-branch-reference',
                         'tag' => 'mock-tag',
                         'provider' => 'github',
                         'fileName' => 'test.xml'

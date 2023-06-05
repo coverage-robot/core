@@ -23,6 +23,7 @@ class AnalyseHandlerTest extends TestCase
             'commit' => 'mock-commit',
             'parent' => 'mock-parent-commit',
             'owner' => 'mock-owner',
+            'ref' => 'mock-ref',
             'repository' => 'mock-repository'
         ];
 

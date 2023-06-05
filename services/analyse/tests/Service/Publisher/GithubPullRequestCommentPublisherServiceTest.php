@@ -163,6 +163,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                         'repository' => 'mock-repository',
                         'commit' => 'mock-commit',
                         'parent' => 'mock-parent',
+                        'ref' => 'mock-ref',
                         'pullRequest' => '1234'
                     ]
                 ),
@@ -176,7 +177,8 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                         'owner' => 'mock-owner',
                         'repository' => 'mock-repository',
                         'commit' => 'mock-commit',
-                        'parent' => 'mock-parent'
+                        'parent' => 'mock-parent',
+                        'ref' => 'mock-ref',
                     ]
                 ),
                 false

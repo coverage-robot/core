@@ -34,6 +34,12 @@ resource "google_bigquery_table" "line_coverage" {
     "description": "The parent commit hash(es) of the commit the coverage was generated for."
   },
   {
+    "name": "ref",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The ref (e.g. branch) in the VCS provider."
+  },
+  {
     "name": "sourceFormat",
     "type": "STRING",
     "mode": "REQUIRED",

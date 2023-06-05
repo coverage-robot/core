@@ -82,6 +82,7 @@ class BigQueryPersistService implements PersistServiceInterface
             'repository' => $upload->getRepository(),
             'commit' => $upload->getCommit(),
             'parent' => $upload->getParent(),
+            'ref' => $upload->getRef(),
             'tag' => $upload->getTag(),
             'sourceFormat' => $project->getSourceFormat(),
             'fileName' => $file->getFileName(),
