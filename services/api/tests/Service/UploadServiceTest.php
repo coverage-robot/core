@@ -85,7 +85,7 @@ class UploadServiceTest extends TestCase
                         'owner' => '1',
                         'repository' => 'a',
                         'commit' => '2',
-                        'parent' => '["d"]',
+                        'parent' => '["mock-parent-hash"]',
                         'tag' => 'frontend',
                         'provider' => 'github',
                         'fileName' => 'test.xml',
@@ -111,7 +111,7 @@ class UploadServiceTest extends TestCase
                 'repository' => 'a',
                 'commit' => 2,
                 'pullRequest' => 12,
-                'parent' => 'd',
+                'parent' => 'mock-parent-hash',
                 'ref' => 'mock-branch-reference',
                 'provider' => 'github',
                 'fileName' => 'test.xml',
@@ -129,7 +129,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
@@ -139,7 +140,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
@@ -150,7 +152,8 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'backend'
@@ -159,7 +162,8 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'backend'
@@ -169,7 +173,8 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
@@ -181,7 +186,8 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'tag' => 'backend'
                 ],
@@ -190,7 +196,8 @@ class UploadServiceTest extends TestCase
             'Without owner or repository' => [
                 [
                     'commit' => 2,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
@@ -203,7 +210,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
-                    'parent' => 'd',
+                    'parent' => 'mock-parent-hash',
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml'
                 ],
@@ -215,7 +223,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
-                    'parent' => ['d', 'e'],
+                    'parent' => ['mock-parent-hash', 'e'],
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
@@ -225,7 +234,8 @@ class UploadServiceTest extends TestCase
                     'repository' => 'mock-repository-name',
                     'commit' => 2,
                     'pullRequest' => 12,
-                    'parent' => ['d', 'e'],
+                    'parent' => ['mock-parent-hash', 'e'],
+                    'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
