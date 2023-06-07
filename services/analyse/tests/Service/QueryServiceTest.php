@@ -8,7 +8,6 @@ use App\Model\QueryResult\IntegerQueryResult;
 use App\Model\QueryResult\QueryResultInterface;
 use App\Model\QueryResult\TotalCoverageQueryResult;
 use App\Model\QueryResult\TotalTagCoverageQueryResult;
-use App\Model\Upload;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -16,6 +15,7 @@ use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

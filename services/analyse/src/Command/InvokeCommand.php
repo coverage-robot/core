@@ -43,7 +43,7 @@ class InvokeCommand extends Command
                 'parent',
                 InputArgument::OPTIONAL,
                 'The parent of the commit to analyse',
-                'mock-parent-commit'
+                '["mock-parent-commit"]'
             );
     }
 
