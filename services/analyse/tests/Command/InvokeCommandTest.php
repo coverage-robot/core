@@ -29,6 +29,7 @@ class InvokeCommandTest extends KernelTestCase
             'commit' => 'mock-commit',
             'parent' => '["mock-parent"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'repository' => 'mock-repository',
             'pullRequest' => 'mock-pull-request'
         ]);
@@ -55,6 +56,7 @@ class InvokeCommandTest extends KernelTestCase
             'commit' => 'mock-commit',
             'parent' => '["mock-parent"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'repository' => 'mock-repository',
             'pullRequest' => 'mock-pull-request'
         ]);

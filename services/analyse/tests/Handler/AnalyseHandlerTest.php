@@ -24,6 +24,7 @@ class AnalyseHandlerTest extends TestCase
             'commit' => 'mock-commit',
             'parent' => '["mock-parent-commit"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'ref' => 'mock-ref',
             'repository' => 'mock-repository',
             'ingestTime' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),

@@ -4,8 +4,8 @@ namespace App\Tests\Mock\Factory;
 
 use App\Model\PublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\QueryService;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

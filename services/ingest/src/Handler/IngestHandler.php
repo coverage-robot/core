@@ -40,7 +40,7 @@ class IngestHandler extends S3Handler
                 sprintf(
                     'Starting to ingest %s for %s.',
                     $coverageFile->getObject()->getKey(),
-                    $upload
+                    (string)$upload
                 )
             );
 

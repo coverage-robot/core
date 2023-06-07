@@ -4,15 +4,15 @@ namespace App\Tests\Service\Publisher;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
-use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\Publisher\GithubCheckRunPublisherService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -159,17 +159,16 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     {
         return [
             [
-                new Upload(
-                    [
-                        'uploadId' => 'mock-uuid',
-                        'provider' => ProviderEnum::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'parent' => 'mock-parent',
-                        'ref' => 'mock-ref',
-                    ]
-                ),
+                Upload::from([
+                    'uploadId' => 'mock-uuid',
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
+                    'ref' => 'mock-ref',
+                ]),
                 true
             ]
         ];
