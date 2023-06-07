@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
-use App\Enum\ProviderEnum;
 use App\Exception\SigningException;
 use Exception;
 use JsonException;
 use JsonSerializable;
+use Packages\Models\Enum\ProviderEnum;
 
 class SigningParameters implements JsonSerializable
 {

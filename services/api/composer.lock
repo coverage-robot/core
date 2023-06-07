@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc3b42f541ab49c17b76d5d99c7c7ad2",
+    "content-hash": "7666d83adea469137e5f21bbbb480780",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -1285,6 +1285,25 @@
                 "source": "https://github.com/Riverline/multipart-parser/tree/2.1.1"
             },
             "time": "2023-04-28T18:53:59+00:00"
+        },
+        {
+            "name": "ryanmab/models",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/models",
+                "reference": "f0c4076bc4977686f5cf3bb497a45ff4f972bac3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Models\\": "src/"
+                }
+            },
+            "description": "Shared models across the services",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "symfony/cache",
