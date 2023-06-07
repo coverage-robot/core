@@ -3,8 +3,8 @@
 namespace App\Query;
 
 use App\Model\QueryResult\QueryResultInterface;
-use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.coverage_query')]

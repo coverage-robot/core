@@ -16,7 +16,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
 {
     public function __construct(
         protected readonly QueryService $queryService,
-        protected readonly Upload $upload
+        protected readonly \Packages\Models\Model\Upload $upload
     ) {
     }
 

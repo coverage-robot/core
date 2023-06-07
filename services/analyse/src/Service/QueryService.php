@@ -5,8 +5,8 @@ namespace App\Service;
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
 use App\Model\QueryResult\QueryResultInterface;
-use App\Model\Upload;
 use App\Query\QueryInterface;
+use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class QueryService

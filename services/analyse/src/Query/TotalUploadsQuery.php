@@ -4,9 +4,9 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryResult\IntegerQueryResult;
-use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Models\Model\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {

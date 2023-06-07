@@ -3,7 +3,7 @@
 namespace App\Service\Publisher;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
+use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.publisher_service')]

@@ -5,7 +5,7 @@ namespace App\Service\Formatter;
 
 use App\Model\PublishableCoverageDataInterface;
 use App\Model\QueryResult\TagCoverageQueryResult;
-use App\Model\Upload;
+use Packages\Models\Model\Upload;
 
 class PullRequestCommentFormatterService
 {
@@ -13,12 +13,12 @@ class PullRequestCommentFormatterService
     {
         return <<<MARKDOWN
         ### New Coverage Information
-        This is for {$upload->getCommit()} commit. Which has had {$data->getTotalUploads()} uploads. 
-        
+        This is for {$upload->getCommit()} commit. Which has had {$data->getTotalUploads()} uploads.
+
         Total coverage is: **{$data->getCoveragePercentage()}%**
-        
+
         Consisting of *{$data->getAtLeastPartiallyCoveredLines()}* covered lines, out of *{$data->getTotalLines()}* total lines.
-        
+
         {$this->getTagCoverageTable($data)}
         MARKDOWN;
     }

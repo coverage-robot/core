@@ -7,8 +7,8 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\Formatter\PullRequestCommentFormatterService;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -4,12 +4,12 @@ namespace App\Service\Publisher;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
-use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Models\Enum\ProviderEnum;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -2,8 +2,8 @@
 
 namespace App\Model\QueryResult;
 
-use App\Enum\LineStateEnum;
 use App\Exception\QueryException;
+use Packages\Models\Enum\LineStateEnum;
 
 class LineCoverageQueryResult implements QueryResultInterface
 {

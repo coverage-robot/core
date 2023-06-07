@@ -4,29 +4,34 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryResult\TotalTagCoverageQueryResult;
-use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Models\Enum\LineStateEnum;
+use Packages\Models\Model\Upload;
 
 class TotalTagCoverageQuery implements QueryInterface
 {
     public function getQuery(string $table, Upload $upload): string
     {
+        $covered = LineStateEnum::COVERED->value;
+        $partial = LineStateEnum::PARTIAL->value;
+        $uncovered = LineStateEnum::UNCOVERED->value;
+
         return <<<SQL
         {$this->getNamedQueries($table, $upload)}
         SELECT
             tag,
             COUNT(*) as lines,
-            SUM(IF(state = "covered", 1, 0)) as covered,
-            SUM(IF(state = "partial", 1, 0)) as partial,
-            SUM(IF(state = "uncovered", 1, 0)) as uncovered,
+            SUM(IF(state = "{$covered}", 1, 0)) as covered,
+            SUM(IF(state = "{$partial}", 1, 0)) as partial,
+            SUM(IF(state = "{$uncovered}", 1, 0)) as uncovered,
             ROUND(
                 (
-                    SUM(IF(state = "covered", 1, 0)) + 
-                    SUM(IF(state = "partial", 1, 0))
-                ) / 
+                    SUM(IF(state = "{$covered}", 1, 0)) +
+                    SUM(IF(state = "{$partial}", 1, 0))
+                ) /
                 COUNT(*)
-                * 100, 
+                * 100,
                 2
             ) as coveragePercentage
         FROM
@@ -38,6 +43,10 @@ class TotalTagCoverageQuery implements QueryInterface
 
     public function getNamedQueries(string $table, Upload $upload): string
     {
+        $covered = LineStateEnum::COVERED->value;
+        $partial = LineStateEnum::PARTIAL->value;
+        $uncovered = LineStateEnum::UNCOVERED->value;
+
         return <<<SQL
         WITH unnested AS (
             SELECT
@@ -84,11 +93,11 @@ class TotalTagCoverageQuery implements QueryInterface
                 lineNumber,
                 IF(
                     SUM(hits) = 0,
-                    "uncovered",
+                    "{$uncovered}",
                     IF (
                         MAX(isPartiallyHit) = 1,
-                        "partial",
-                        "covered"
+                        "{$partial}",
+                        "{$covered}"
                     )
                 ) as state
             FROM

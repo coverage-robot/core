@@ -4,14 +4,20 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryResult\TotalCoverageQueryResult;
-use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Models\Enum\LineStateEnum;
+use Packages\Models\Model\Upload;
 
 class TotalCoverageQuery extends AbstractCoverageQuery
 {
     public function getQuery(string $table, Upload $upload): string
     {
+
+        $covered = LineStateEnum::COVERED->value;
+        $partial = LineStateEnum::PARTIAL->value;
+        $uncovered = LineStateEnum::UNCOVERED->value;
+
         return <<<SQL
         {$this->getNamedQueries($table, $upload)}
         SELECT
@@ -28,14 +34,19 @@ class TotalCoverageQuery extends AbstractCoverageQuery
     public function getNamedQueries(string $table, Upload $upload): string
     {
         $parent = parent::getNamedQueries($table, $upload);
+
+        $covered = LineStateEnum::COVERED->value;
+        $partial = LineStateEnum::PARTIAL->value;
+        $uncovered = LineStateEnum::UNCOVERED->value;
+
         return <<<SQL
         {$parent},
         summedCoverage AS (
             SELECT
                 COUNT(*) as lines,
-                SUM(IF(state = "covered", 1, 0)) as covered,
-                SUM(IF(state = "partial", 1, 0)) as partial,
-                SUM(IF(state = "uncovered", 1, 0)) as uncovered,
+                SUM(IF(state = "{$covered}", 1, 0)) as covered,
+                SUM(IF(state = "{$partial}", 1, 0)) as partial,
+                SUM(IF(state = "{$uncovered}", 1, 0)) as uncovered,
             FROM
                 lineCoverage
         )

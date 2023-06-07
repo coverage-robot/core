@@ -4,9 +4,10 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryResult\TotalLineCoverageQueryResult;
-use App\Model\Upload;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Models\Enum\LineStateEnum;
+use Packages\Models\Model\Upload;
 
 class TotalLineCoverageQuery extends AbstractCoverageQuery
 {
@@ -24,6 +25,10 @@ class TotalLineCoverageQuery extends AbstractCoverageQuery
 
     public function getNamedQueries(string $table, Upload $upload): string
     {
+        $covered = LineStateEnum::COVERED->value;
+        $partial = LineStateEnum::PARTIAL->value;
+        $uncovered = LineStateEnum::UNCOVERED->value;
+
         return <<<SQL
         WITH unnested AS (
             SELECT
@@ -69,11 +74,11 @@ class TotalLineCoverageQuery extends AbstractCoverageQuery
                 lineNumber,
                 IF(
                     SUM(hits) = 0,
-                    "uncovered",
+                    "{$uncovered}",
                     IF (
                         MAX(isPartiallyHit) = 1,
-                        "partial",
-                        "covered"
+                        "{$partial}",
+                        "{$covered}"
                     )
                 ) as state
             FROM
