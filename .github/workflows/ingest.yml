@@ -256,7 +256,9 @@ jobs:
                 # Install Composer dependencies, with symlinks mirrored (e.g. dependencies from the packages folder
                 # are copied directly into the vendor folder, rather than symlinked - as Terraform doesn't like that during archiving)
             -   name: Install Composer dependencies
-                run: COMPOSER_MIRROR_PATH_REPOS=1 composer install --prefer-dist --optimize-autoloader --no-dev --no-scripts
+                run: composer install --prefer-dist --optimize-autoloader --no-dev --no-scripts
+                env:
+                    COMPOSER_MIRROR_PATH_REPOS: 1
 
             -   name: Clear platform cache
                 run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
