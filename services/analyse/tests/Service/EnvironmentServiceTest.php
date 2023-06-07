@@ -2,9 +2,9 @@
 
 namespace Service;
 
-use App\Enum\EnvironmentEnum;
 use App\Kernel;
 use App\Service\EnvironmentService;
+use Packages\Models\Enum\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class EnvironmentServiceTest extends TestCase
     #[DataProvider('environmentDataProvider')]
     public function testGetEnvironment(
         string $environmentValue,
-        EnvironmentEnum $expectedEnvironment
+        Environment $expectedEnvironment
     ): void {
         $mockKernel = $this->createMock(Kernel::class);
         $mockKernel->expects($this->once())
@@ -30,10 +30,10 @@ class EnvironmentServiceTest extends TestCase
     public static function environmentDataProvider(): array
     {
         return array_combine(
-            array_column(EnvironmentEnum::cases(), 'name'),
+            array_column(Environment::cases(), 'name'),
             array_map(
-                static fn(EnvironmentEnum $environment) => [$environment->value, $environment],
-                EnvironmentEnum::cases()
+                static fn(Environment $environment) => [$environment->value, $environment],
+                Environment::cases()
             )
         );
     }

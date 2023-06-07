@@ -4,17 +4,15 @@ when@dev: &messenger_dev
             transports:
                 analysis:
                     dsn: '%env(ANALYSIS_QUEUE_DSN)%'
-                    #dsn: 'sqs://localstack:4566?sslmode=disable'
                     serializer: App\Service\Event\AnalysisTransportSerializer
                     options:
                         region: 'eu-west-2'
-                        #queue_name: coverage-analysis-queue-dev
                         access_key: 'mock'
                         secret_key: 'mock'
                         endpoint: http://localstack:4566/
 
             routing:
-                App\Model\Upload: analysis
+                Packages\Models\Model\Upload: analysis
 
 when@test: *messenger_dev
 
@@ -27,4 +25,4 @@ when@prod:
                     serializer: App\Service\Event\AnalysisTransportSerializer
 
             routing:
-                App\Model\Upload: analysis
+                Packages\Models\Model\Upload: analysis

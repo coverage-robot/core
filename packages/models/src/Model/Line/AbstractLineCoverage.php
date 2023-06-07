@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Model\Line;
+namespace Packages\Models\Model\Line;
 
-use App\Enum\LineTypeEnum;
 use JsonSerializable;
+use Packages\Models\Enum\LineType;
 
 abstract class AbstractLineCoverage implements JsonSerializable
 {
@@ -13,7 +13,7 @@ abstract class AbstractLineCoverage implements JsonSerializable
     ) {
     }
 
-    abstract public function getType(): LineTypeEnum;
+    abstract public function getType(): LineType;
 
     /**
      * Build a unique line identifier, which can be used for indexing a lookups.
@@ -48,7 +48,7 @@ abstract class AbstractLineCoverage implements JsonSerializable
     {
         return sprintf(
             '%s#%s',
-            ucfirst(strtolower($this->getType()->name)),
+            ucfirst(strtolower($this->getType()->value)),
             $this->getUniqueLineIdentifier()
         );
     }
@@ -56,7 +56,7 @@ abstract class AbstractLineCoverage implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'type' => $this->getType()->name,
+            'type' => $this->getType()->value,
             'lineNumber' => $this->getLineNumber(),
             'lineHits' => $this->getLineHits()
         ];

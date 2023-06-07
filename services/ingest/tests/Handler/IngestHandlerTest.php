@@ -2,9 +2,7 @@
 
 namespace App\Tests\Handler;
 
-use App\Enum\ProviderEnum;
 use App\Handler\IngestHandler;
-use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
@@ -15,6 +13,8 @@ use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -120,7 +120,7 @@ class IngestHandlerTest extends TestCase
         $mockResponse->method('getMetadata')
             ->willReturn([
                 'uploadid' => 'mock-uuid',
-                'provider' => ProviderEnum::GITHUB->value,
+                'provider' => Provider::GITHUB->value,
                 'commit' => '1',
                 'parent' => json_encode([2]),
                 'pullrequest' => 1234,

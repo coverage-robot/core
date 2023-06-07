@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Model\CachedPublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
+use Packages\Models\Model\Upload;
 
 class CoverageAnalyserService
 {

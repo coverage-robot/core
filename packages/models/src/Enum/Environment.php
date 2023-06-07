@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enum;
+namespace Packages\Models\Enum;
 
-enum EnvironmentEnum: string
+enum Environment: string
 {
     case TESTING = 'test';
     case DEVELOPMENT = 'dev';

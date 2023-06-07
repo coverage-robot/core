@@ -2,7 +2,7 @@
 
 namespace App\Strategy;
 
-use App\Model\Project;
+use Packages\Models\Model\Project;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.parser_strategy')]

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enum;
+namespace Packages\Models\Enum;
 
-enum LineStateEnum: string
+enum LineState: string
 {
     case COVERED = 'covered';
 

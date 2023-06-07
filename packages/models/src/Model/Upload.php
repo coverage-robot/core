@@ -1,32 +1,28 @@
 <?php
 
-namespace App\Model;
+namespace Packages\Models\Model;
 
-use App\Enum\ProviderEnum;
 use DateTimeImmutable;
 use DateTimeInterface;
 use JsonSerializable;
+use Packages\Models\Enum\Provider;
 
 class Upload implements JsonSerializable
 {
     private readonly DateTimeImmutable $ingestTime;
-    private readonly ProviderEnum $provider;
 
     public function __construct(
-        private readonly Project $project,
-        private readonly string $uploadId,
-        string $provider,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $commit,
-        private readonly array $parent,
-        private readonly string $ref,
+        private readonly string          $uploadId,
+        private readonly Provider        $provider,
+        private readonly string          $owner,
+        private readonly string          $repository,
+        private readonly string          $commit,
+        private readonly array           $parent,
+        private readonly string          $ref,
         private readonly string|int|null $pullRequest,
-        private readonly string $tag,
-        ?DateTimeInterface $ingestTime = null
+        private readonly string          $tag,
+        ?DateTimeInterface               $ingestTime = null
     ) {
-        $this->provider = ProviderEnum::from($provider);
-
         if ($ingestTime) {
             $this->ingestTime = DateTimeImmutable::createFromInterface($ingestTime);
             return;
@@ -34,17 +30,12 @@ class Upload implements JsonSerializable
         $this->ingestTime = new DateTimeImmutable();
     }
 
-    public function getProject(): Project
-    {
-        return $this->project;
-    }
-
     public function getUploadId(): string
     {
         return $this->uploadId;
     }
 
-    public function getProvider(): ProviderEnum
+    public function getProvider(): Provider
     {
         return $this->provider;
     }
@@ -92,6 +83,30 @@ class Upload implements JsonSerializable
     public function __toString(): string
     {
         return 'Upload#' . $this->uploadId;
+    }
+
+    public static function from(array $data): self
+    {
+        // Convert all keys to lower case, in an attempt to make the interface compatible
+        // with all array formats
+        $data = array_change_key_case($data);
+
+        return new self(
+            (string)$data['uploadid'],
+            Provider::from((string)$data['provider']),
+            (string)$data['owner'],
+            (string)$data['repository'],
+            (string)$data['commit'],
+            is_array($data['parent']) ?
+                $data['parent'] :
+                json_decode($data['parent'], true, 512, JSON_THROW_ON_ERROR),
+            (string)$data['ref'],
+            isset($data['pullrequest']) ? (int)$data['pullrequest'] : null,
+            (string)$data['tag'],
+            isset($data['ingesttime']) ?
+                DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime']) :
+                new DateTimeImmutable()
+        );
     }
 
     public function jsonSerialize(): array

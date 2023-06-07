@@ -5,10 +5,10 @@ namespace App\Tests\Model;
 use App\Model\CachedPublishableCoverageData;
 use App\Model\QueryResult\IntegerQueryResult;
 use App\Model\QueryResult\TotalCoverageQueryResult;
-use App\Model\Upload;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\QueryService;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

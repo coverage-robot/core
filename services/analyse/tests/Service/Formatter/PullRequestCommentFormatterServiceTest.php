@@ -2,11 +2,11 @@
 
 namespace App\Tests\Service\Formatter;
 
-use App\Enum\ProviderEnum;
 use App\Model\QueryResult\TotalTagCoverageQueryResult;
-use App\Model\Upload;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -87,13 +87,14 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                         ]
                     ]),
                 ],
-                new Upload([
+                Upload::from([
                     'uploadId' => 'mock-upload',
-                    'provider' => ProviderEnum::GITHUB->value,
+                    'provider' => Provider::GITHUB->value,
                     'owner' => 'mock-owner',
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit',
-                    'parent' => 'mock-parent',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
                     'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])
@@ -124,13 +125,14 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                         ]
                     ]),
                 ],
-                new Upload([
+                Upload::from([
                     'uploadId' => 'mock-upload',
-                    'provider' => ProviderEnum::GITHUB->value,
+                    'provider' => Provider::GITHUB->value,
                     'owner' => 'mock-owner',
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit-2',
-                    'parent' => 'mock-parent',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
                     'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])
@@ -144,13 +146,14 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getCoveragePercentage' => 50.0,
                     'getTagCoverage' => TotalTagCoverageQueryResult::from([]),
                 ],
-                new Upload([
+                Upload::from([
                     'uploadId' => 'mock-upload',
-                    'provider' => ProviderEnum::GITHUB->value,
+                    'provider' => Provider::GITHUB->value,
                     'owner' => 'mock-owner',
                     'repository' => 'mock-repository',
                     'commit' => 'mock-commit-3',
-                    'parent' => 'mock-parent',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
                     'ref' => 'mock-ref',
                     'pullRequest' => 1,
                 ])

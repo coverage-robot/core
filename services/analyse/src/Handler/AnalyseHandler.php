@@ -2,13 +2,13 @@
 
 namespace App\Handler;
 
-use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use JsonException;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
 class AnalyseHandler extends SqsHandler
@@ -31,7 +31,7 @@ class AnalyseHandler extends SqsHandler
                     continue;
                 }
 
-                $upload = new Upload($body);
+                $upload = Upload::from($body);
 
                 $this->handlerLogger->info(sprintf('Starting analysis on %s.', (string)$upload));
 

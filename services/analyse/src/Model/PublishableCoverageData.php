@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Exception\QueryException;
 use App\Model\QueryResult\IntegerQueryResult;
 use App\Model\QueryResult\TotalCoverageQueryResult;
 use App\Model\QueryResult\TotalLineCoverageQueryResult;
@@ -11,6 +12,7 @@ use App\Query\TotalLineCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\QueryService;
+use Packages\Models\Model\Upload;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
 {
@@ -20,6 +22,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     ) {
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getTotalUploads(): int
     {
         /** @var IntegerQueryResult $totalUploads */
@@ -28,6 +33,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $totalUploads->getResult();
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getTotalLines(): int
     {
         /** @var TotalCoverageQueryResult $totalCoverage */
@@ -36,6 +44,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $totalCoverage->getLines();
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getAtLeastPartiallyCoveredLines(): int
     {
         /** @var TotalCoverageQueryResult $totalCoverage */
@@ -44,6 +55,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $totalCoverage->getPartial() + $totalCoverage->getCovered();
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getUncoveredLines(): int
     {
         /** @var TotalCoverageQueryResult $totalCoverage */
@@ -52,6 +66,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $totalCoverage->getUncovered();
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getCoveragePercentage(): float
     {
         /** @var TotalCoverageQueryResult $totalCoverage */
@@ -60,6 +77,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $totalCoverage->getCoveragePercentage();
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getTagCoverage(): TotalTagCoverageQueryResult
     {
         /** @var TotalTagCoverageQueryResult $tags */
@@ -68,6 +88,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         return $tags;
     }
 
+    /**
+     * @throws QueryException
+     */
     public function getLineCoverage(): TotalLineCoverageQueryResult
     {
         /**

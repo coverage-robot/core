@@ -3,12 +3,13 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
-use App\Model\Upload;
 use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use JsonException;
+use Packages\Models\Model\Project;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,11 +31,9 @@ class S3PersistService implements PersistServiceInterface
      * @return bool
      * @throws JsonException
      */
-    public function persist(Upload $upload): bool
+    public function persist(Upload $upload, Project $project): bool
     {
         try {
-            $project = $upload->getProject();
-
             $response = $this->s3Client->putObject(
                 new PutObjectRequest(
                     [

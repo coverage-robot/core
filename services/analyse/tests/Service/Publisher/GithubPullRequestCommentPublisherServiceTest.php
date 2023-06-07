@@ -4,13 +4,13 @@ namespace App\Tests\Service\Publisher;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
-use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
 use Github\Api\Issue;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -155,32 +155,30 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
     {
         return [
             [
-                new Upload(
-                    [
-                        'uploadId' => 'mock-uuid',
-                        'provider' => ProviderEnum::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'parent' => 'mock-parent',
-                        'ref' => 'mock-ref',
-                        'pullRequest' => '1234'
-                    ]
-                ),
+                Upload::from([
+                    'uploadId' => 'mock-uuid',
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
+                    'ref' => 'mock-ref',
+                    'pullRequest' => '1234'
+                ]),
                 true
             ],
             [
-                new Upload(
-                    [
-                        'uploadId' => 'mock-uuid',
-                        'provider' => ProviderEnum::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'parent' => 'mock-parent',
-                        'ref' => 'mock-ref',
-                    ]
-                ),
+                Upload::from([
+                    'uploadId' => 'mock-uuid',
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
+                    'ref' => 'mock-ref',
+                ]),
                 false
             ]
         ];

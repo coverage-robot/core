@@ -5,8 +5,8 @@ namespace App\Service;
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
 use App\Model\QueryResult\QueryResultInterface;
-use App\Model\Upload;
 use App\Query\QueryInterface;
+use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class QueryService
@@ -40,9 +40,7 @@ class QueryService
             }
         }
 
-        throw new QueryException(
-            sprintf('No query found with class name of %s.', $queryClass)
-        );
+        throw new QueryException(sprintf('No query found with class name of %s.', $queryClass));
     }
 
     private function runQueryAndParseResult(QueryInterface $query, Upload $upload): QueryResultInterface

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Line;
+namespace Packages\Models\Model\Line;
 
-use App\Enum\LineTypeEnum;
+use Packages\Models\Enum\LineType;
 
 class MethodCoverage extends AbstractLineCoverage
 {
@@ -24,9 +24,9 @@ class MethodCoverage extends AbstractLineCoverage
         return $this->getName();
     }
 
-    public function getType(): LineTypeEnum
+    public function getType(): LineType
     {
-        return LineTypeEnum::METHOD;
+        return LineType::METHOD;
     }
 
     public function jsonSerialize(): array

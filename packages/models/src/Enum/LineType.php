@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Enum;
+namespace Packages\Models\Enum;
 
-enum LineTypeEnum: string
+enum LineType: string
 {
     case UNKNOWN = 'UNKNOWN';
     case STATEMENT = 'STATEMENT';

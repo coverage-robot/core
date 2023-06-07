@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model;
+namespace Packages\Models\Model;
 
-use App\Model\Line\AbstractLineCoverage;
 use JsonSerializable;
 use OutOfBoundsException;
+use Packages\Models\Model\Line\AbstractLineCoverage;
 
 class File implements JsonSerializable
 {

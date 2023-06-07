@@ -3,17 +3,17 @@
 namespace App\Tests\Service\Persist;
 
 use App\Client\BigQueryClient;
-use App\Enum\CoverageFormatEnum;
-use App\Enum\LineTypeEnum;
-use App\Enum\ProviderEnum;
-use App\Model\File;
-use App\Model\Line\StatementCoverage;
-use App\Model\Project;
-use App\Model\Upload;
 use App\Service\Persist\BigQueryPersistService;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
 use Google\Cloud\BigQuery\Table;
+use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Enum\LineType;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\File;
+use Packages\Models\Model\Line\StatementCoverage;
+use Packages\Models\Model\Project;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
@@ -25,13 +25,12 @@ class BigQueryPersistServiceTest extends TestCase
         $fileCoverage = new File('mock-file');
         $fileCoverage->setLineCoverage(new StatementCoverage(1, 1));
 
-        $coverage = new Project(CoverageFormatEnum::LCOV);
+        $coverage = new Project(CoverageFormat::LCOV);
         $coverage->addFile($fileCoverage);
 
         $upload = new Upload(
-            $coverage,
             Uuid::uuid4()->toString(),
-            ProviderEnum::GITHUB->value,
+            Provider::GITHUB,
             '',
             '',
             '',
@@ -61,15 +60,15 @@ class BigQueryPersistServiceTest extends TestCase
                             'repository' => '',
                             'ref' => 'mock-branch-reference',
                             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-                            'sourceFormat' => CoverageFormatEnum::LCOV,
+                            'sourceFormat' => CoverageFormat::LCOV,
                             'fileName' => 'mock-file',
                             'generatedAt' => null,
-                            'type' => LineTypeEnum::STATEMENT,
+                            'type' => LineType::STATEMENT,
                             'lineNumber' => 1,
                             'metadata' => [
                                 [
                                     'key' => 'type',
-                                    'value' => LineTypeEnum::STATEMENT->value,
+                                    'value' => LineType::STATEMENT->value,
                                 ],
                                 [
                                     'key' => 'lineNumber',
@@ -100,6 +99,6 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient, new NullLogger());
 
-        $bigQueryPersistService->persist($upload);
+        $bigQueryPersistService->persist($upload, $coverage);
     }
 }

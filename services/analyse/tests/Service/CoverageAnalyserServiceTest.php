@@ -3,9 +3,9 @@
 namespace App\Tests\Service;
 
 use App\Model\CachedPublishableCoverageData;
-use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
 use App\Service\QueryService;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 
 class CoverageAnalyserServiceTest extends TestCase

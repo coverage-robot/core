@@ -2,14 +2,15 @@
 
 namespace App\Tests\Handler;
 
-use App\Enum\ProviderEnum;
 use App\Handler\AnalyseHandler;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
+use DateTimeImmutable;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -19,15 +20,17 @@ class AnalyseHandlerTest extends TestCase
     {
         $body = [
             'uploadId' => 'mock-uuid',
-            'provider' => ProviderEnum::GITHUB->value,
+            'provider' => Provider::GITHUB->value,
             'commit' => 'mock-commit',
-            'parent' => 'mock-parent-commit',
+            'parent' => '["mock-parent-commit"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'ref' => 'mock-ref',
-            'repository' => 'mock-repository'
+            'repository' => 'mock-repository',
+            'ingestTime' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
         ];
 
-        $upload = new Upload($body);
+        $upload = Upload::from($body);
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
 

@@ -27,8 +27,9 @@ class InvokeCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'commit' => 'mock-commit',
-            'parent' => 'mock-parent',
+            'parent' => '["mock-parent"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'repository' => 'mock-repository',
             'pullRequest' => 'mock-pull-request'
         ]);
@@ -53,8 +54,9 @@ class InvokeCommandTest extends KernelTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'commit' => 'mock-commit',
-            'parent' => 'mock-parent',
+            'parent' => '["mock-parent"]',
             'owner' => 'mock-owner',
+            'tag' => 'mock-tag',
             'repository' => 'mock-repository',
             'pullRequest' => 'mock-pull-request'
         ]);

@@ -17,6 +17,7 @@
         "bref/symfony-bridge": "^0.2.1",
         "google/cloud-bigquery": "^1.24",
         "ramsey/uuid": "^4.7",
+        "ryanmab/models": "*",
         "symfony/amazon-sqs-messenger": "6.3.*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
@@ -83,6 +84,12 @@
     "conflict": {
         "symfony/symfony": "*"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../packages/models"
+        }
+    ],
     "extra": {
         "symfony": {
             "allow-contrib": false,

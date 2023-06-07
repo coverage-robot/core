@@ -3,10 +3,10 @@
 namespace App\Tests\Service;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\Upload;
 use App\Service\CoveragePublisherService;
 use App\Service\Publisher\GithubCheckRunPublisherService;
 use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

@@ -14,6 +14,7 @@
         "google/cloud-bigquery": "^1.24",
         "knplabs/github-api": "^3.11",
         "lcobucci/jwt": "^5.0",
+        "ryanmab/models": "*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
@@ -78,6 +79,12 @@
     "conflict": {
         "symfony/symfony": "*"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../packages/models"
+        }
+    ],
     "extra": {
         "symfony": {
             "allow-contrib": false,

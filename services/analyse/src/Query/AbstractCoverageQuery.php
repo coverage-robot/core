@@ -2,7 +2,7 @@
 
 namespace App\Query;
 
-use App\Model\Upload;
+use Packages\Models\Model\Upload;
 
 abstract class AbstractCoverageQuery implements QueryInterface
 {

@@ -2,13 +2,13 @@
 
 namespace App\Tests\Service\Persist;
 
-use App\Enum\CoverageFormatEnum;
-use App\Enum\ProviderEnum;
-use App\Model\Project;
-use App\Model\Upload;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\SqsPersistService;
 use DateTimeImmutable;
+use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Project;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -19,7 +19,7 @@ use Symfony\Component\Messenger\Stamp\SentStamp;
 class SqsPersistServiceTest extends TestCase
 {
     #[DataProvider('uploadDataProvider')]
-    public function testPersist(Upload $upload): void
+    public function testPersist(Upload $upload, Project $project): void
     {
         $messageBus = $this->createMock(MessageBus::class);
         $messageBus->expects($this->once())
@@ -32,7 +32,7 @@ class SqsPersistServiceTest extends TestCase
 
         $sqsPersistService = new SqsPersistService($messageBus, new NullLogger());
 
-        $successful = $sqsPersistService->persist($upload);
+        $successful = $sqsPersistService->persist($upload, $project);
 
         $this->assertTrue($successful);
     }
@@ -49,9 +49,8 @@ class SqsPersistServiceTest extends TestCase
         return [
             [
                 new Upload(
-                    new Project(CoverageFormatEnum::LCOV),
                     'mock-uuid-1',
-                    ProviderEnum::GITHUB->value,
+                    Provider::GITHUB,
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -60,13 +59,13 @@ class SqsPersistServiceTest extends TestCase
                     1234,
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
-                )
+                ),
+                new Project(CoverageFormat::LCOV),
             ],
             [
                 new Upload(
-                    new Project(CoverageFormatEnum::CLOVER),
                     'mock-uuid-1',
-                    ProviderEnum::GITHUB->value,
+                    Provider::GITHUB,
                     'mock-owner',
                     'mock-repo',
                     '3',
@@ -76,6 +75,7 @@ class SqsPersistServiceTest extends TestCase
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
+                new Project(CoverageFormat::CLOVER),
             ]
         ];
     }

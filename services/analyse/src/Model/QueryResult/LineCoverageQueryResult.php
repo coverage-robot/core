@@ -2,15 +2,15 @@
 
 namespace App\Model\QueryResult;
 
-use App\Enum\LineStateEnum;
 use App\Exception\QueryException;
+use Packages\Models\Enum\LineState;
 
 class LineCoverageQueryResult implements QueryResultInterface
 {
     public function __construct(
         private readonly string $fileName,
         private readonly int $lineNumber,
-        private readonly LineStateEnum $state
+        private readonly LineState $state
     ) {
     }
 
@@ -24,7 +24,7 @@ class LineCoverageQueryResult implements QueryResultInterface
             return new self(
                 (string)$row['fileName'],
                 (int)$row['lineNumber'],
-                LineStateEnum::from((string)$row['state'])
+                LineState::from((string)$row['state'])
             );
         }
 
@@ -41,7 +41,7 @@ class LineCoverageQueryResult implements QueryResultInterface
         return $this->lineNumber;
     }
 
-    public function getState(): LineStateEnum
+    public function getState(): LineState
     {
         return $this->state;
     }

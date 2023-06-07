@@ -2,12 +2,7 @@
 
 namespace App\Tests\Service\Persist;
 
-use App\Enum\CoverageFormatEnum;
-use App\Enum\EnvironmentEnum;
-use App\Enum\ProviderEnum;
 use App\Exception\PersistException;
-use App\Model\Project;
-use App\Model\Upload;
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
@@ -15,6 +10,11 @@ use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
+use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Project;
+use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -23,7 +23,7 @@ class S3PersistServiceTest extends TestCase
     public function testPersist(): void
     {
         $coverage = new Project(
-            CoverageFormatEnum::CLOVER,
+            CoverageFormat::CLOVER,
             new DateTimeImmutable()
         );
 
@@ -58,14 +58,13 @@ class S3PersistServiceTest extends TestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
+            MockEnvironmentServiceFactory::getMock($this, Environment::DEVELOPMENT),
             new NullLogger()
         );
         $S3PersistService->persist(
             new Upload(
-                $coverage,
                 'mock-uuid',
-                ProviderEnum::GITHUB->value,
+                Provider::GITHUB,
                 'mock-owner',
                 'mock-repo',
                 '1',
@@ -74,14 +73,15 @@ class S3PersistServiceTest extends TestCase
                 1234,
                 'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')
-            )
+            ),
+            $coverage
         );
     }
 
     public function testFailingToPersist(): void
     {
         $coverage = new Project(
-            CoverageFormatEnum::CLOVER,
+            CoverageFormat::CLOVER,
             new DateTimeImmutable()
         );
 
@@ -118,14 +118,13 @@ class S3PersistServiceTest extends TestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::DEVELOPMENT),
+            MockEnvironmentServiceFactory::getMock($this, Environment::DEVELOPMENT),
             new NullLogger()
         );
         $S3PersistService->persist(
             new Upload(
-                $coverage,
                 'mock-uuid',
-                ProviderEnum::GITHUB->value,
+                Provider::GITHUB,
                 'mock-owner',
                 'mock-repo',
                 '1',
@@ -134,7 +133,8 @@ class S3PersistServiceTest extends TestCase
                 1234,
                 'backend',
                 new DateTimeImmutable('2023-05-02 12:00:00')
-            )
+            ),
+            $coverage,
         );
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Exception\ParseException;
-use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
+use Packages\Models\Model\Project;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
