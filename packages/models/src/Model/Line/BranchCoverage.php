@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Line;
+namespace Packages\Models\Model\Line;
 
-use App\Enum\LineTypeEnum;
+use Packages\Models\Enum\LineTypeEnum;
 
 class BranchCoverage extends AbstractLineCoverage
 {

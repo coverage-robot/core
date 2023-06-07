@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace Packages\Models\Model;
 
-use App\Enum\CoverageFormatEnum;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use JsonSerializable;
+use Packages\Models\Enum\CoverageFormatEnum;
 
 class Project implements JsonSerializable
 {

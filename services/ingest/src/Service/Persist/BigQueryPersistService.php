@@ -3,9 +3,10 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
-use App\Model\File;
-use App\Model\Line\AbstractLineCoverage;
-use App\Model\Upload;
+use Packages\Models\Model\File;
+use Packages\Models\Model\Line\AbstractLineCoverage;
+use Packages\Models\Model\Project;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
 class BigQueryPersistService implements PersistServiceInterface
@@ -16,12 +17,12 @@ class BigQueryPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Upload $upload): bool
+    public function persist(Upload $upload, Project $project): bool
     {
         $table = $this->bigQueryClient->getEnvironmentDataset()
             ->table($_ENV['BIGQUERY_LINE_COVERAGE_TABLE']);
 
-        $rows = $this->buildRows($upload);
+        $rows = $this->buildRows($upload, $project);
 
         $insertResponse = $table->insertRows($rows);
 
@@ -51,16 +52,16 @@ class BigQueryPersistService implements PersistServiceInterface
         return true;
     }
 
-    private function buildRows(Upload $upload): array
+    private function buildRows(Upload $upload, Project $project): array
     {
         return array_reduce(
-            $upload->getProject()->getFiles(),
+            $project->getFiles(),
             function (array $carry, File $file) use ($upload): array {
                 return [
                     ...$carry,
                     ...array_map(
                         fn(AbstractLineCoverage $line): array => [
-                            'data' => $this->buildRow($upload, $file, $line)
+                            'data' => $this->buildRow($upload, $project, $file, $line)
                         ],
                         $file->getAllLineCoverage()
                     )
@@ -70,10 +71,8 @@ class BigQueryPersistService implements PersistServiceInterface
         );
     }
 
-    private function buildRow(Upload $upload, File $file, AbstractLineCoverage $line): array
+    private function buildRow(Upload $upload, Project $project, File $file, AbstractLineCoverage $line): array
     {
-        $project = $upload->getProject();
-
         return [
             'uploadId' => $upload->getUploadId(),
             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),

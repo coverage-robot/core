@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Model;
+namespace Packages\Models\Model;
 
-use App\Enum\ProviderEnum;
 use DateTimeImmutable;
 use DateTimeInterface;
 use JsonSerializable;
+use Packages\Models\Enum\ProviderEnum;
 
 class Upload implements JsonSerializable
 {
     private readonly DateTimeImmutable $ingestTime;
-    private readonly ProviderEnum $provider;
 
     public function __construct(
-        private readonly Project $project,
         private readonly string $uploadId,
-        string $provider,
+        private readonly ProviderEnum $provider,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
@@ -25,18 +23,11 @@ class Upload implements JsonSerializable
         private readonly string $tag,
         ?DateTimeInterface $ingestTime = null
     ) {
-        $this->provider = ProviderEnum::from($provider);
-
         if ($ingestTime) {
             $this->ingestTime = DateTimeImmutable::createFromInterface($ingestTime);
             return;
         }
         $this->ingestTime = new DateTimeImmutable();
-    }
-
-    public function getProject(): Project
-    {
-        return $this->project;
     }
 
     public function getUploadId(): string
@@ -92,6 +83,22 @@ class Upload implements JsonSerializable
     public function __toString(): string
     {
         return 'Upload#' . $this->uploadId;
+    }
+
+    public static function from(array $data): self
+    {
+        return new self(
+            (string)$data['uploadId'],
+            ProviderEnum::from((string)$data['provider']),
+            (string)$data['owner'],
+            (string)$data['repository'],
+            (string)$data['commit'],
+            is_array($data['parent']) ? $data['parent'] : json_decode($data['parent'], true, JSON_THROW_ON_ERROR),
+            (string)$data['ref'],
+            isset($data['pullRequest']) ? (int)$data['pullRequest'] : null,
+            (string)$data['tag'],
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingestTime'])
+        );
     }
 
     public function jsonSerialize(): array

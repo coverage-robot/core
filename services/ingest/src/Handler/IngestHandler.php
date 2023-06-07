@@ -3,7 +3,6 @@
 namespace App\Handler;
 
 use App\Exception\ParseException;
-use App\Model\Upload;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
@@ -11,6 +10,7 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
 class IngestHandler extends S3Handler
@@ -34,47 +34,23 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $uploadId = $source->getMetadata()['uploadid'];
-            $provider = $source->getMetadata()['provider'];
-            $owner = $source->getMetadata()['owner'];
-            $repository = $source->getMetadata()['repository'];
-            $commit = $source->getMetadata()['commit'];
-            $ref = $source->getMetadata()['ref'];
-            $pullRequest = $source->getMetadata()['pullrequest'] ?? null;
-            $tag = $source->getMetadata()['tag'];
-
-            /** @var string[] $parent */
-            $parent = json_decode($source->getMetadata()['parent'], true, JSON_THROW_ON_ERROR);
+            $upload = Upload::from($source->getMetadata());
 
             $this->handlerLogger->info(
                 sprintf(
-                    'Starting to ingest %s with id of %s.',
+                    'Starting to ingest %s for %s.',
                     $coverageFile->getObject()->getKey(),
-                    $uploadId
+                    $upload
                 )
             );
 
             try {
                 $coverage = $this->coverageFileParserService->parse($source->getBody()->getContentAsString());
 
-                $upload = new Upload(
-                    $coverage,
-                    $uploadId,
-                    $provider,
-                    $owner,
-                    $repository,
-                    $commit,
-                    $parent,
-                    $ref,
-                    $pullRequest,
-                    $tag,
-                    $coverageFile->getEventTime()
-                );
-
                 $this->handlerLogger->info(
                     sprintf(
                         'Successfully parsed %s using %s parser.',
-                        $uploadId,
+                        $upload,
                         $coverage->getSourceFormat()->value
                     )
                 );
@@ -85,7 +61,7 @@ class IngestHandler extends S3Handler
                     $this->handlerLogger->error(
                         sprintf(
                             'Failed to fully persist %s into storage.',
-                            $uploadId
+                            $upload
                         )
                     );
 
@@ -99,7 +75,7 @@ class IngestHandler extends S3Handler
                 );
             } catch (ParseException $e) {
                 $this->handlerLogger->error(
-                    sprintf('Exception received while attempting to parse %s.', $uploadId),
+                    sprintf('Exception received while attempting to parse %s.', $upload),
                     [
                         'exception' => $e
                     ]

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Model\Line;
+namespace Packages\Models\Model\Line;
 
-use App\Enum\LineTypeEnum;
 use JsonSerializable;
+use Packages\Models\Enum\LineTypeEnum;
 
 abstract class AbstractLineCoverage implements JsonSerializable
 {

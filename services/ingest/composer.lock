@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bfd04c085a666fae6b70c39c21f14cf2",
+    "content-hash": "503724222a55f40ee4bc09243886368b",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -2111,6 +2111,25 @@
                 }
             ],
             "time": "2022-10-12T17:22:51+00:00"
+        },
+        {
+            "name": "ryanmab/models",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/models",
+                "reference": "f0c4076bc4977686f5cf3bb497a45ff4f972bac3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Models\\": "src/"
+                }
+            },
+            "description": "Shared models across the services",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "symfony/amazon-sqs-messenger",

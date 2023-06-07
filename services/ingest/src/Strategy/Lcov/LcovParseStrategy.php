@@ -2,15 +2,15 @@
 
 namespace App\Strategy\Lcov;
 
-use App\Enum\CoverageFormatEnum;
 use App\Exception\ParseException;
-use App\Model\File;
-use App\Model\Line\BranchCoverage;
-use App\Model\Line\MethodCoverage;
-use App\Model\Line\StatementCoverage;
-use App\Model\Project;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
+use Packages\Models\Enum\CoverageFormatEnum;
+use Packages\Models\Model\File;
+use Packages\Models\Model\Line\BranchCoverage;
+use Packages\Models\Model\Line\MethodCoverage;
+use Packages\Models\Model\Line\StatementCoverage;
+use Packages\Models\Model\Project;
 use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
