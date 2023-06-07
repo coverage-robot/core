@@ -97,11 +97,15 @@ class Upload implements JsonSerializable
             (string)$data['owner'],
             (string)$data['repository'],
             (string)$data['commit'],
-            is_array($data['parent']) ? $data['parent'] : json_decode($data['parent'], true, 512, JSON_THROW_ON_ERROR),
+            is_array($data['parent']) ?
+                $data['parent'] :
+                json_decode($data['parent'], true, 512, JSON_THROW_ON_ERROR),
             (string)$data['ref'],
             isset($data['pullrequest']) ? (int)$data['pullrequest'] : null,
             (string)$data['tag'],
-            $data['ingesttime'] ? DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime']) : new DateTimeImmutable()
+            isset($data['ingesttime']) ?
+                DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime']) :
+                new DateTimeImmutable()
         );
     }
 
