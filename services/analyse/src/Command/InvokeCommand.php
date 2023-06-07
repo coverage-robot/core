@@ -41,7 +41,8 @@ class InvokeCommand extends Command
             ->addArgument(
                 'tag',
                 InputArgument::OPTIONAL,
-                'The tag of the coverage file which is being analysed', 'mock-tag'
+                'The tag of the coverage file which is being analysed',
+                'mock-tag'
             )
             ->addArgument('ref', InputArgument::OPTIONAL, 'The ref of the commit to analyse', 'mock-ref')
             ->addArgument(
