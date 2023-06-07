@@ -12,16 +12,16 @@ class Upload implements JsonSerializable
     private readonly DateTimeImmutable $ingestTime;
 
     public function __construct(
-        private readonly string          $uploadId,
-        private readonly Provider        $provider,
-        private readonly string          $owner,
-        private readonly string          $repository,
-        private readonly string          $commit,
-        private readonly array           $parent,
-        private readonly string          $ref,
+        private readonly string $uploadId,
+        private readonly Provider $provider,
+        private readonly string $owner,
+        private readonly string $repository,
+        private readonly string $commit,
+        private readonly array $parent,
+        private readonly string $ref,
         private readonly string|int|null $pullRequest,
-        private readonly string          $tag,
-        ?DateTimeInterface               $ingestTime = null
+        private readonly string $tag,
+        ?DateTimeInterface $ingestTime = null
     ) {
         if ($ingestTime) {
             $this->ingestTime = DateTimeImmutable::createFromInterface($ingestTime);

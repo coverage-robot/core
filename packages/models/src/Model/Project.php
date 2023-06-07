@@ -23,7 +23,7 @@ class Project implements JsonSerializable
      */
     public function __construct(
         private readonly CoverageFormat $sourceFormat,
-        int|DateTimeImmutable|null      $generatedAt = null
+        int|DateTimeImmutable|null $generatedAt = null
     ) {
         if ($generatedAt !== null) {
             $this->setGeneratedAt($generatedAt);
