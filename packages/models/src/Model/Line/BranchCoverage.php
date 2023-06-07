@@ -2,7 +2,7 @@
 
 namespace Packages\Models\Model\Line;
 
-use Packages\Models\Enum\LineTypeEnum;
+use Packages\Models\Enum\LineType;
 
 class BranchCoverage extends AbstractLineCoverage
 {
@@ -40,9 +40,9 @@ class BranchCoverage extends AbstractLineCoverage
         return $this->branchHits;
     }
 
-    public function getType(): LineTypeEnum
+    public function getType(): LineType
     {
-        return LineTypeEnum::BRANCH;
+        return LineType::BRANCH;
     }
 
     public function jsonSerialize(): array

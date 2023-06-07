@@ -2,7 +2,7 @@
 
 namespace Packages\Models\Enum;
 
-enum CoverageFormatEnum: string
+enum CoverageFormat: string
 {
     case LCOV = 'LCOV';
 

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service;
 
-use App\Enum\EnvironmentEnum;
 use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
@@ -13,6 +12,7 @@ use App\Service\UploadSignerService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
+use Packages\Models\Enum\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -100,7 +100,7 @@ class UploadServiceTest extends TestCase
 
         $uploadService = new UploadService(
             $mockUploadSignerService,
-            MockEnvironmentServiceFactory::getMock($this, EnvironmentEnum::PRODUCTION),
+            MockEnvironmentServiceFactory::getMock($this, Environment::PRODUCTION),
             $mockUniqueIdGeneratorService,
             new NullLogger()
         );

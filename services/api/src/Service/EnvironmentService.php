@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Enum\EnvironmentEnum;
 use App\Kernel;
+use Packages\Models\Enum\Environment;
 
 class EnvironmentService
 {
@@ -11,8 +11,8 @@ class EnvironmentService
     {
     }
 
-    public function getEnvironment(): EnvironmentEnum
+    public function getEnvironment(): Environment
     {
-        return EnvironmentEnum::from($this->kernel->getEnvironment());
+        return Environment::from($this->kernel->getEnvironment());
     }
 }

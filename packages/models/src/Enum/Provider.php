@@ -2,7 +2,7 @@
 
 namespace Packages\Models\Enum;
 
-enum ProviderEnum: string
+enum Provider: string
 {
     case GITHUB = 'github';
 }

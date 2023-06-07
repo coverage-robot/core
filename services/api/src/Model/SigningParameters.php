@@ -6,13 +6,13 @@ use App\Exception\SigningException;
 use Exception;
 use JsonException;
 use JsonSerializable;
-use Packages\Models\Enum\ProviderEnum;
+use Packages\Models\Enum\Provider;
 
 class SigningParameters implements JsonSerializable
 {
     private string $owner;
     private string $repository;
-    private ProviderEnum $provider;
+    private Provider $provider;
     private string $fileName;
     private string $tag;
     private string $commit;
@@ -42,7 +42,7 @@ class SigningParameters implements JsonSerializable
         try {
             $this->owner = (string)$data['owner'];
             $this->repository = (string)$data['repository'];
-            $this->provider = ProviderEnum::from((string)$data['provider']);
+            $this->provider = Provider::from((string)$data['provider']);
             $this->fileName = (string)$data['fileName'];
             $this->tag = (string)$data['tag'];
             $this->commit = (string)$data['commit'];
@@ -64,7 +64,7 @@ class SigningParameters implements JsonSerializable
         return $this->repository;
     }
 
-    public function getProvider(): ProviderEnum
+    public function getProvider(): Provider
     {
         return $this->provider;
     }

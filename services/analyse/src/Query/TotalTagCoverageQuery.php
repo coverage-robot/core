@@ -6,16 +6,16 @@ use App\Exception\QueryException;
 use App\Model\QueryResult\TotalTagCoverageQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Enum\LineStateEnum;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 
 class TotalTagCoverageQuery implements QueryInterface
 {
     public function getQuery(string $table, Upload $upload): string
     {
-        $covered = LineStateEnum::COVERED->value;
-        $partial = LineStateEnum::PARTIAL->value;
-        $uncovered = LineStateEnum::UNCOVERED->value;
+        $covered = LineState::COVERED->value;
+        $partial = LineState::PARTIAL->value;
+        $uncovered = LineState::UNCOVERED->value;
 
         return <<<SQL
         {$this->getNamedQueries($table, $upload)}
@@ -43,9 +43,9 @@ class TotalTagCoverageQuery implements QueryInterface
 
     public function getNamedQueries(string $table, Upload $upload): string
     {
-        $covered = LineStateEnum::COVERED->value;
-        $partial = LineStateEnum::PARTIAL->value;
-        $uncovered = LineStateEnum::UNCOVERED->value;
+        $covered = LineState::COVERED->value;
+        $partial = LineState::PARTIAL->value;
+        $uncovered = LineState::UNCOVERED->value;
 
         return <<<SQL
         WITH unnested AS (

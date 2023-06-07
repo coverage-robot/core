@@ -5,7 +5,7 @@ namespace App\Strategy\Clover;
 use App\Exception\ParseException;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
-use Packages\Models\Enum\CoverageFormatEnum;
+use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\BranchCoverage;
 use Packages\Models\Model\Line\MethodCoverage;
@@ -74,7 +74,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Project(CoverageFormatEnum::CLOVER);
+        $project = new Project(CoverageFormat::CLOVER);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {

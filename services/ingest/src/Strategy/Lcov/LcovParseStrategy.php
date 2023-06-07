@@ -5,7 +5,7 @@ namespace App\Strategy\Lcov;
 use App\Exception\ParseException;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
-use Packages\Models\Enum\CoverageFormatEnum;
+use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\BranchCoverage;
 use Packages\Models\Model\Line\MethodCoverage;
@@ -99,7 +99,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Project(CoverageFormatEnum::LCOV);
+        $project = new Project(CoverageFormat::LCOV);
 
         foreach ($records as $record) {
             $record = trim($record);

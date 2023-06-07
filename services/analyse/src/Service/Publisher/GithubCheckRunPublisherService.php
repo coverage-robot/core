@@ -8,7 +8,7 @@ use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Models\Enum\ProviderEnum;
+use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     public function supports(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
-        return $upload->getProvider() === ProviderEnum::GITHUB;
+        return $upload->getProvider() === Provider::GITHUB;
     }
 
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
