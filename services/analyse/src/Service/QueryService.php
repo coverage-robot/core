@@ -40,9 +40,7 @@ class QueryService
             }
         }
 
-        throw new QueryException(
-            sprintf('No query found with class name of %s.', $queryClass)
-        );
+        throw new QueryException(sprintf('No query found with class name of %s.', $queryClass));
     }
 
     private function runQueryAndParseResult(QueryInterface $query, Upload $upload): QueryResultInterface
