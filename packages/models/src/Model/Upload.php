@@ -87,17 +87,21 @@ class Upload implements JsonSerializable
 
     public static function from(array $data): self
     {
+        // Convert all keys to lower case, in an attempt to make the interface compatible
+        // with all array formats
+        $data = array_change_key_case($data);
+
         return new self(
-            (string)$data['uploadId'],
+            (string)$data['uploadid'],
             ProviderEnum::from((string)$data['provider']),
             (string)$data['owner'],
             (string)$data['repository'],
             (string)$data['commit'],
             is_array($data['parent']) ? $data['parent'] : json_decode($data['parent'], true, JSON_THROW_ON_ERROR),
             (string)$data['ref'],
-            isset($data['pullRequest']) ? (int)$data['pullRequest'] : null,
+            isset($data['pullrequest']) ? (int)$data['pullrequest'] : null,
             (string)$data['tag'],
-            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingestTime'])
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime'])
         );
     }
 
