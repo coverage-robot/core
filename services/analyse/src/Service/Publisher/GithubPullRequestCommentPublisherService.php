@@ -4,10 +4,10 @@ namespace App\Service\Publisher;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
-use App\Enum\ProviderEnum;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Formatter\PullRequestCommentFormatterService;
+use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             return false;
         }
 
-        return $upload->getProvider() === ProviderEnum::GITHUB;
+        return $upload->getProvider() === Provider::GITHUB;
     }
 
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool

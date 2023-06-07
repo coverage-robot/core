@@ -2,12 +2,12 @@
 
 namespace App\Command;
 
-use App\Enum\ProviderEnum;
 use App\Handler\AnalyseHandler;
-use App\Model\Upload;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,9 +50,9 @@ class InvokeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $upload = new Upload([
+            $upload = Upload::from([
                 'uploadId' => 'mock-uuid',
-                'provider' => ProviderEnum::GITHUB->value,
+                'provider' => Provider::GITHUB->value,
                 'commit' => $input->getArgument('commit'),
                 'parent' => $input->getArgument('parent'),
                 'ref' => $input->getArgument('ref'),
