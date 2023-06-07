@@ -56,7 +56,7 @@ class BigQueryPersistService implements PersistServiceInterface
     {
         return array_reduce(
             $project->getFiles(),
-            function (array $carry, File $file) use ($upload): array {
+            function (array $carry, File $file) use ($upload, $project): array {
                 return [
                     ...$carry,
                     ...array_map(

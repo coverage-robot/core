@@ -50,18 +50,18 @@ class IngestHandler extends S3Handler
                 $this->handlerLogger->info(
                     sprintf(
                         'Successfully parsed %s using %s parser.',
-                        $upload,
+                        (string)$upload,
                         $coverage->getSourceFormat()->value
                     )
                 );
 
-                $persisted = $this->coverageFilePersistService->persist($upload);
+                $persisted = $this->coverageFilePersistService->persist($upload, $coverage);
 
                 if (!$persisted) {
                     $this->handlerLogger->error(
                         sprintf(
                             'Failed to fully persist %s into storage.',
-                            $upload
+                            (string)$upload
                         )
                     );
 
@@ -75,7 +75,7 @@ class IngestHandler extends S3Handler
                 );
             } catch (ParseException $e) {
                 $this->handlerLogger->error(
-                    sprintf('Exception received while attempting to parse %s.', $upload),
+                    sprintf('Exception received while attempting to parse %s.', (string)$upload),
                     [
                         'exception' => $e
                     ]
