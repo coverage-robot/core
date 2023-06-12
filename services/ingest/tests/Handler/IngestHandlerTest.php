@@ -267,7 +267,47 @@ class IngestHandlerTest extends TestCase
                 [
                     'mock-uuid.json'
                 ]
-            ]
+            ],
+            'Empty files (Lcov and Clover)' => [
+                new S3Event([
+                    'Records' => [
+                        [
+                            'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
+                                ],
+                                'object' => [
+                                    'key' => 'some-path/lcov/empty.info'
+                                ]
+                            ]
+                        ],
+                        [
+                            'eventSource' => 'aws:s3',
+                            'eventTime' => '2023-05-02 12:00:00',
+                            's3' => [
+                                'bucket' => [
+                                    'name' => 'mock-bucket',
+                                    'arn' => 'mock-arn'
+                                ],
+                                'object' => [
+                                    'key' => 'some-path/clover/empty-jest.xml'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]),
+                [
+                    file_get_contents(__DIR__ . '/../Fixture/Lcov/empty.info'),
+                    file_get_contents(__DIR__ . '/../Fixture/Clover/empty-jest.xml'),
+                ],
+                [
+                    'some-path/lcov/mock-uuid.json',
+                    'some-path/clover/mock-uuid.json'
+                ]
+            ],
         ];
     }
 }
