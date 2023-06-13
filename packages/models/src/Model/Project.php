@@ -46,8 +46,25 @@ class Project implements JsonSerializable
     public function setGeneratedAt(int|DateTimeImmutable|null $generatedAt): void
     {
         if (gettype($generatedAt) === 'integer') {
-            $this->generatedAt = new DateTimeImmutable();
-            $this->generatedAt = $this->generatedAt->setTimestamp($generatedAt);
+            $currentTimestamp = (new DateTimeImmutable())->getTimestamp();
+            if ($generatedAt > $currentTimestamp) {
+                // The timestamp MUST be in microseconds (since the timestamp is larger than
+                // the current timestamp, which is in seconds)
+                $generatedAt = $generatedAt / 1000;
+            }
+
+            // Format the generated date using Epoch time (in seconds), making sure to clamp the
+            // timestamp, so it doesn't exceed the current time (coverage can't have been generated
+            // in the future!)
+            $this->generatedAt = DateTimeImmutable::createFromFormat(
+                'U.u',
+                number_format(
+                    min($currentTimestamp,$generatedAt),
+                    3,
+                    '.',
+                    ''
+                )
+            );
             return;
         }
 
