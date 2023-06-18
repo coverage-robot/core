@@ -1,31 +1,26 @@
 <?php
 
-namespace App\Service\Publisher;
+namespace App\Service\Publisher\Github;
 
-use App\Client\Github\GithubAppClient;
-use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
-use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubCheckRunPublisherService implements PublisherServiceInterface
+class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
 {
-    public function __construct(
-        private readonly GithubAppInstallationClient $client,
-        private readonly LoggerInterface $checkRunPublisherLogger
-    ) {
-    }
-
     public function supports(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
         return $upload->getProvider() === Provider::GITHUB;
     }
 
+    /**
+     * Publish a check run to the PR, or commit, with the total coverage percentage.
+     */
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
         if (!$this->supports($upload, $coverageData)) {
@@ -52,13 +47,37 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
         $api = $this->client->repo();
 
-        $existingCheckRun = $this->getExistingCheckRunId(
-            $owner,
-            $repository,
-            $commit
-        );
+        try {
+            $existingCheckRun = $this->getCheckRun(
+                $owner,
+                $repository,
+                $commit
+            );
 
-        if (!$existingCheckRun) {
+            $api->checkRuns()
+                ->update(
+                    $owner,
+                    $repository,
+                    $existingCheckRun,
+                    [
+                        'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
+                        'status' => 'completed',
+                        'conclusion' => 'success',
+                        'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                    ]
+                );
+
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
+                $this->checkPublisherLogger->critical(
+                    sprintf(
+                        '%s status code returned while attempting to update existing check run with new results.',
+                        (string)$this->client->getLastResponse()?->getStatusCode()
+                    )
+                );
+
+                return false;
+            }
+        } catch (RuntimeException) {
             $api->checkRuns()
                 ->create(
                     $owner,
@@ -77,7 +96,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 );
 
             if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->checkRunPublisherLogger->critical(
+                $this->checkPublisherLogger->critical(
                     sprintf(
                         '%s status code returned while attempting to create a new check run for results.',
                         (string)$this->client->getLastResponse()?->getStatusCode()
@@ -86,59 +105,9 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
                 return false;
             }
-
-            return true;
-        }
-
-        $api->checkRuns()
-            ->update(
-                $owner,
-                $repository,
-                $existingCheckRun,
-                [
-                    'name' => sprintf('Coverage - %s%%', $coverageData->getCoveragePercentage()),
-                    'status' => 'completed',
-                    'conclusion' => 'success',
-                    'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                    'output' => [
-                        'title' => 'Coverage',
-                        'summary' => 'Coverage Analysis Complete.'
-                    ]
-                ]
-            );
-
-        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-            $this->checkRunPublisherLogger->critical(
-                sprintf(
-                    '%s status code returned while attempting to update existing check run with new results.',
-                    (string)$this->client->getLastResponse()?->getStatusCode()
-                )
-            );
-
-            return false;
         }
 
         return true;
-    }
-
-    private function getExistingCheckRunId(string $owner, string $repository, string $commit): ?int
-    {
-        $api = $this->client->repo();
-
-        /** @var array{ id: int, app: array{ id: string } }[] $checkRuns */
-        $checkRuns = $api->checkRuns()->allForReference($owner, $repository, $commit)['check_runs'] ?? [];
-        $checkRuns = array_filter(
-            $checkRuns,
-            static fn(array $checkRun) => isset($checkRun['id']) &&
-                isset($checkRun['app']['id']) &&
-                $checkRun['app']['id'] == GithubAppClient::APP_ID
-        );
-
-        if (!empty($checkRuns)) {
-            return reset($checkRuns)['id'];
-        }
-
-        return null;
     }
 
     public static function getPriority(): int

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Service\Publisher;
+namespace App\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Formatter\PullRequestCommentFormatterService;
+use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
@@ -30,6 +31,9 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         return $upload->getProvider() === Provider::GITHUB;
     }
 
+    /**
+     * Publish a PR comment with segmented breakdowns extracted from the uploaded coverage data.
+     */
     public function publish(Upload $upload, PublishableCoverageDataInterface $coverageData): bool
     {
         if (!$this->supports($upload, $coverageData)) {

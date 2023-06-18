@@ -4,6 +4,7 @@ namespace App\Client\Github;
 
 use Github\Api\Apps;
 use Github\Api\Issue;
+use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\AuthMethod;
 use Github\Client;
@@ -84,5 +85,10 @@ class GithubAppInstallationClient extends Client
     public function apps(): Apps
     {
         return new Apps($this->githubAppClient);
+    }
+
+    public function pullRequest(): PullRequest
+    {
+        return new PullRequest($this);
     }
 }

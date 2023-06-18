@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Service\Publisher;
+namespace App\Tests\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\Publisher\GithubCheckRunPublisherService;
-use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use App\Service\Publisher\Github\GithubCheckRunPublisherService;
+use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
@@ -168,6 +168,20 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     'parent' => '["mock-parent"]',
                     'tag' => 'mock-tag',
                     'ref' => 'mock-ref',
+                ]),
+                true
+            ],
+            [
+                Upload::from([
+                    'uploadId' => 'mock-uuid',
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit',
+                    'parent' => '["mock-parent"]',
+                    'tag' => 'mock-tag',
+                    'ref' => 'mock-ref',
+                    'pullRequest' => 123
                 ]),
                 true
             ]

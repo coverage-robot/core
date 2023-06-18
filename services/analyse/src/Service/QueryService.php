@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
+use App\Model\QueryParameterBag;
 use App\Model\QueryResult\QueryResultInterface;
 use App\Query\QueryInterface;
 use Packages\Models\Model\Upload;
@@ -29,29 +30,37 @@ class QueryService
      *
      * @throws QueryException
      */
-    public function runQuery(string $queryClass, Upload $upload): QueryResultInterface
-    {
+    public function runQuery(
+        string $queryClass,
+        Upload $upload,
+        ?QueryParameterBag $parameterBag = null
+    ): QueryResultInterface {
         foreach ($this->queries as $query) {
             if (
                 $query instanceof $queryClass &&
                 is_subclass_of($query, QueryInterface::class)
             ) {
-                return $this->runQueryAndParseResult($query, $upload);
+                return $this->runQueryAndParseResult($query, $upload, $parameterBag);
             }
         }
 
         throw new QueryException(sprintf('No query found with class name of %s.', $queryClass));
     }
 
-    private function runQueryAndParseResult(QueryInterface $query, Upload $upload): QueryResultInterface
-    {
-        /** @var QueryInterface $query */
-        $job = $this->bigQueryClient->query(
-            $query->getQuery(
-                $this->bigQueryClient->getTable(),
-                $upload
-            )
+    private function runQueryAndParseResult(
+        QueryInterface $query,
+        Upload $upload,
+        ?QueryParameterBag $parameterBag = null
+    ): QueryResultInterface {
+        $sql = $query->getQuery(
+            $this->bigQueryClient->getTable(),
+            $upload,
+            $parameterBag
         );
+
+        $sql = preg_replace('/^\h*\v+/m', '', trim($sql));
+
+        $job = $this->bigQueryClient->query($sql);
 
         $results = $this->bigQueryClient->runQuery($job);
 

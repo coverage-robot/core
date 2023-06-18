@@ -2,23 +2,25 @@
 
 namespace App\Query;
 
+use App\Model\QueryParameterBag;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 
-abstract class AbstractCoverageQuery implements QueryInterface
+abstract class AbstractLineCoverageQuery implements QueryInterface
 {
-    public function getQuery(string $table, Upload $upload): string
+    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
     {
-        return <<<SQL
-        {$this->getNamedQueries($table, $upload)}
-        SELECT
-            *
-        FROM
-            lineCoverage
-        SQL;
+        return '';
     }
 
-    public function getNamedQueries(string $table, Upload $upload): string
+    abstract public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string;
+
+    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
+        $covered = LineState::COVERED->value;
+        $partial = LineState::PARTIAL->value;
+        $uncovered = LineState::UNCOVERED->value;
+
         return <<<SQL
         WITH unnested AS (
             SELECT
@@ -57,25 +59,28 @@ abstract class AbstractCoverageQuery implements QueryInterface
                 commit = '{$upload->getCommit()}' AND
                 owner = '{$upload->getOwner()}' AND
                 repository = '{$upload->getRepository()}'
+                {$this->getUnnestQueryFiltering($parameterBag)}
         ),
         lineCoverage AS (
             SELECT
                 fileName,
                 lineNumber,
+                tag,
                 IF(
                     SUM(hits) = 0,
-                    "uncovered",
+                    "{$uncovered}",
                     IF (
                         MAX(isPartiallyHit) = 1,
-                        "partial",
-                        "covered"
+                        "{$partial}",
+                        "{$covered}"
                     )
                 ) as state
             FROM
                 unnested
             GROUP BY
                 fileName,
-                lineNumber
+                lineNumber,
+                tag
         )
         SQL;
     }

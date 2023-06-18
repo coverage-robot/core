@@ -4,10 +4,12 @@ namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
 use App\Exception\QueryException;
+use App\Model\QueryResult\CoverageQueryResult;
 use App\Model\QueryResult\IntegerQueryResult;
+use App\Model\QueryResult\MultiLineCoverageQueryResult;
+use App\Model\QueryResult\MultiTagCoverageQueryResult;
 use App\Model\QueryResult\QueryResultInterface;
-use App\Model\QueryResult\TotalCoverageQueryResult;
-use App\Model\QueryResult\TotalTagCoverageQueryResult;
+use App\Query\LineCoverageQuery;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -15,6 +17,7 @@ use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +37,7 @@ class QueryServiceTest extends TestCase
                     TotalCoverageQuery::class,
                     TotalCoverageQuery::class,
                     TotalCoverageQuery::class === $query ?
-                        $queryResult : $this->createMock(TotalCoverageQueryResult::class)
+                        $queryResult : $this->createMock(CoverageQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
@@ -47,7 +50,14 @@ class QueryServiceTest extends TestCase
                     TotalTagCoverageQuery::class,
                     TotalTagCoverageQuery::class,
                     TotalTagCoverageQuery::class === $query ?
-                        $queryResult : $this->createMock(TotalTagCoverageQueryResult::class)
+                        $queryResult : $this->createMock(MultiTagCoverageQueryResult::class)
+                ),
+                MockQueryFactory::createMock(
+                    $this,
+                    LineCoverageQuery::class,
+                    LineCoverageQuery::class,
+                    LineCoverageQuery::class === $query ?
+                        $queryResult : $this->createMock(MultiLineCoverageQueryResult::class)
                 )
             ]
         );
@@ -80,13 +90,19 @@ class QueryServiceTest extends TestCase
                     $this,
                     TotalCoverageQuery::class,
                     null,
-                    $this->createMock(TotalCoverageQueryResult::class)
+                    $this->createMock(CoverageQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
                     TotalUploadsQuery::class,
                     null,
                     $this->createMock(IntegerQueryResult::class)
+                ),
+                MockQueryFactory::createMock(
+                    $this,
+                    LineCoverageQuery::class,
+                    null,
+                    $this->createMock(MultiLineCoverageQueryResult::class)
                 ),
             ]
         );
@@ -111,9 +127,9 @@ class QueryServiceTest extends TestCase
     public static function queryDataProvider(): array
     {
         return [
-            'Total commit coverage query' => [
+            'Total coverage query' => [
                 TotalCoverageQuery::class,
-                TotalCoverageQueryResult::from([
+                CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
                     'partial' => 2,
@@ -124,6 +140,21 @@ class QueryServiceTest extends TestCase
             'Total commit uploads query' => [
                 TotalUploadsQuery::class,
                 IntegerQueryResult::from(99)
+            ],
+            'Diff coverage query' => [
+                LineCoverageQuery::class,
+                MultiLineCoverageQueryResult::from([
+                    [
+                        'fileName' => 'test-file-1',
+                        'lineNumber' => 1,
+                        'state' => LineState::UNCOVERED->value
+                    ],
+                    [
+                        'fileName' => 'test-file-2',
+                        'lineNumber' => 2,
+                        'state' => LineState::COVERED->value
+                    ],
+                ])
             ],
         ];
     }

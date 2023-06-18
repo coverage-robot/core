@@ -2,7 +2,8 @@
 
 namespace App\Tests\Service\Formatter;
 
-use App\Model\QueryResult\TotalTagCoverageQueryResult;
+use App\Model\QueryResult\MultiFileCoverageQueryResult;
+use App\Model\QueryResult\MultiTagCoverageQueryResult;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Packages\Models\Enum\Provider;
@@ -24,33 +25,44 @@ class PullRequestCommentFormatterServiceTest extends TestCase
 
         $markdown = $formatter->format($upload, $publishableCoverageData);
 
+        $files = $publishableCoverageData
+            ->getLeastCoveredDiffFiles(PullRequestCommentFormatterService::MAX_IMPACTED_FILES)
+            ->getFiles();
+
+        $tags = $publishableCoverageData->getTagCoverage()
+            ->getTags();
+
         $this->assertStringContainsString(
             sprintf(
-                'This is for %s commit. Which has had %s uploads.',
+                '> Merging #%s, with **%s** uploaded coverage files on %s',
+                $upload->getPullRequest(),
+                $publishableCoverageData->getTotalUploads(),
                 $upload->getCommit(),
-                $publishableCoverageData->getTotalUploads()
             ),
             $markdown
         );
 
         $this->assertStringContainsString(
             sprintf(
-                'Total coverage is: **%s%%**',
-                $publishableCoverageData->getCoveragePercentage()
+                '| %s%% | %s%% |',
+                $publishableCoverageData->getCoveragePercentage(),
+                $publishableCoverageData->getDiffCoveragePercentage()
             ),
             $markdown
         );
 
-        $this->assertStringContainsString(
-            sprintf(
-                'Consisting of *%s* covered lines, out of *%s* total lines.',
-                $publishableCoverageData->getAtLeastPartiallyCoveredLines(),
-                $publishableCoverageData->getTotalLines()
-            ),
-            $markdown
-        );
+        foreach ($files as $file) {
+            $this->assertStringContainsString(
+                sprintf(
+                    '| %s | %s%% |',
+                    $file->getFileName(),
+                    $file->getCoveragePercentage()
+                ),
+                $markdown
+            );
+        }
 
-        foreach ($publishableCoverageData->getTagCoverage()->getTags() as $tag) {
+        foreach ($tags as $tag) {
             $this->assertStringContainsString(
                 sprintf(
                     '| %s | %s | %s | %s | %s | %s%% |',
@@ -76,7 +88,26 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getAtLeastPartiallyCoveredLines' => 50,
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
-                    'getTagCoverage' => TotalTagCoverageQueryResult::from([
+                    'getDiffCoveragePercentage' => 50.0,
+                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([
+                        [
+                            'fileName' => 'mock-file',
+                            'coveragePercentage' => 50.0,
+                            'lines' => 100,
+                            'covered' => 50,
+                            'partial' => 0,
+                            'uncovered' => 50
+                        ],
+                        [
+                            'fileName' => 'mock-file-2',
+                            'coveragePercentage' => 0.0,
+                            'lines' => 5,
+                            'covered' => 0,
+                            'partial' => 0,
+                            'uncovered' => 5
+                        ]
+                    ]),
+                    'getTagCoverage' => MultiTagCoverageQueryResult::from([
                         [
                             'tag' => 'mock',
                             'coveragePercentage' => 50.0,
@@ -106,7 +137,26 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getAtLeastPartiallyCoveredLines' => 50,
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
-                    'getTagCoverage' => TotalTagCoverageQueryResult::from([
+                    'getDiffCoveragePercentage' => 50.0,
+                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([
+                        [
+                            'fileName' => 'mock-file',
+                            'coveragePercentage' => 50.0,
+                            'lines' => 100,
+                            'covered' => 49,
+                            'partial' => 1,
+                            'uncovered' => 50
+                        ],
+                        [
+                            'fileName' => 'mock-file-2',
+                            'coveragePercentage' => 0.0,
+                            'lines' => 5,
+                            'covered' => 0,
+                            'partial' => 0,
+                            'uncovered' => 5
+                        ]
+                    ]),
+                    'getTagCoverage' => MultiTagCoverageQueryResult::from([
                         [
                             'tag' => 'mock-service-1',
                             'coveragePercentage' => 50.5,
@@ -144,7 +194,9 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getAtLeastPartiallyCoveredLines' => 50,
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
-                    'getTagCoverage' => TotalTagCoverageQueryResult::from([]),
+                    'getDiffCoveragePercentage' => 0.0,
+                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([]),
+                    'getTagCoverage' => MultiTagCoverageQueryResult::from([]),
                 ],
                 Upload::from([
                     'uploadId' => 'mock-upload',
