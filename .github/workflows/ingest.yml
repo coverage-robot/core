@@ -48,7 +48,7 @@ jobs:
                 run: composer validate
 
             -   name: Setup environment variables
-                uses: SpicyPizza/create-envfile@v1.3
+                uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_ENV: "dev"
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
@@ -57,7 +57,7 @@ jobs:
                     fail_on_empty: false
 
             - name: Setup test environment variables
-              uses: SpicyPizza/create-envfile@v1.3
+              uses: SpicyPizza/create-envfile@v2.0
               with:
                   envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
                   directory: ${{ env.working-directory }}
@@ -246,7 +246,7 @@ jobs:
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
             -   name: Setup environment variables
-                uses: SpicyPizza/create-envfile@v1.3
+                uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
                     directory: ${{ env.working-directory }}
