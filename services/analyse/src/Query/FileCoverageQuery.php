@@ -20,8 +20,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
-
-
+        
         $limit = self::getLimit($parameterBag);
 
         return <<<SQL
