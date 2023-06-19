@@ -25,7 +25,7 @@ class BigQueryPersistServiceTest extends TestCase
         $fileCoverage = new File('mock-file');
         $fileCoverage->setLineCoverage(new StatementCoverage(1, 1));
 
-        $coverage = new Project(CoverageFormat::LCOV);
+        $coverage = new Project(CoverageFormat::LCOV, 'mock/project/root');
         $coverage->addFile($fileCoverage);
 
         $upload = new Upload(

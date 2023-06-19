@@ -121,6 +121,7 @@ class IngestHandlerTest extends TestCase
             ->willReturn([
                 'uploadid' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
+                'projectroot' => 'mock/project/root/',
                 'commit' => '1',
                 'parent' => json_encode([2]),
                 'pullrequest' => 1234,

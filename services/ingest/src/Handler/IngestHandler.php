@@ -34,7 +34,10 @@ class IngestHandler extends S3Handler
                 $coverageFile->getObject()
             );
 
-            $upload = Upload::from($source->getMetadata());
+            $metadata = $source->getMetadata();
+
+            $upload = Upload::from($metadata);
+            $projectRoot = $metadata["projectroot"];
 
             $this->handlerLogger->info(
                 sprintf(
@@ -45,7 +48,10 @@ class IngestHandler extends S3Handler
             );
 
             try {
-                $coverage = $this->coverageFileParserService->parse($source->getBody()->getContentAsString());
+                $coverage = $this->coverageFileParserService->parse(
+                    $projectRoot,
+                    $source->getBody()->getContentAsString()
+                );
 
                 $this->handlerLogger->info(
                     sprintf(

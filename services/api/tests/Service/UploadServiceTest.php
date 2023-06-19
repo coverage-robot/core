@@ -88,10 +88,11 @@ class UploadServiceTest extends TestCase
                         'parent' => '["mock-parent-hash"]',
                         'tag' => 'frontend',
                         'provider' => 'github',
-                        'fileName' => 'test.xml',
+                        'fileName' => 'some/root/test.xml',
                         'pullRequest' => '12',
                         'uploadid' => 'mock-uuid',
-                        'ref' => 'mock-branch-reference'
+                        'ref' => 'mock-branch-reference',
+                        'projectRoot' => 'some/root/'
                     ]
                 ]),
                 $this->isInstanceOf(DateTimeImmutable::class)
@@ -106,7 +107,7 @@ class UploadServiceTest extends TestCase
         );
 
         $uploadService->buildSignedUploadUrl(
-            new SigningParameters([
+            SigningParameters::from([
                 'owner' => '1',
                 'repository' => 'a',
                 'commit' => 2,
@@ -114,8 +115,9 @@ class UploadServiceTest extends TestCase
                 'parent' => 'mock-parent-hash',
                 'ref' => 'mock-branch-reference',
                 'provider' => 'github',
-                'fileName' => 'test.xml',
-                'tag' => 'frontend'
+                'fileName' => 'some/root/test.xml',
+                'tag' => 'frontend',
+                'projectRoot' => 'some/root/'
             ])
         );
     }

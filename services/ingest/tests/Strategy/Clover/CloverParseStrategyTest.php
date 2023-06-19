@@ -14,6 +14,7 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
         return [
             ...parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Clover', 'xml'),
             'Does not handle invalid file' => [
+                'mock/project/root',
                 'invalid-file-content',
                 false,
                 []

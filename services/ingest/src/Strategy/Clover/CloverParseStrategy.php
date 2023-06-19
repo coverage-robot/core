@@ -64,7 +64,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         return true;
     }
 
-    public function parse(string $content): Project
+    public function parse(string $projectRoot, string $content): Project
     {
         libxml_use_internal_errors(true);
 
@@ -74,7 +74,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Project(CoverageFormat::CLOVER);
+        $project = new Project(CoverageFormat::CLOVER, $projectRoot);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -115,7 +115,8 @@ class CloverParseStrategy implements ParseStrategyInterface
                 $coverage->setGeneratedAt((int)$reader->getAttribute('timestamp'));
                 break;
             case self::FILE:
-                $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
+                $path = $this->getRelativeFilePath($reader, $coverage);
+
                 if ($path === null) {
                     break;
                 }
@@ -148,5 +149,22 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         return $coverage;
+    }
+
+    private function getRelativeFilePath(XMLReader $reader, Project $coverage): ?string
+    {
+        $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
+
+        if ($path === null) {
+            return null;
+        }
+
+        // Trim the root from the files path, so that we store each file path relative
+        // to the project root
+        if (substr($path, 0, strlen($coverage->getRoot())) == $coverage->getRoot()) {
+            $path = substr($path, strlen($coverage->getRoot()));
+        }
+
+        return trim($path, '/');
     }
 }

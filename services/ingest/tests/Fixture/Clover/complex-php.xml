@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1681657109">
   <project timestamp="1681657109">
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Client\SentryClient.php">
-      <class name="App\Client\SentryClient" namespace="global">
+    <file name="mock/project/root/services/backend/src/Client/SentryClient.php">
+      <class name="App/Client/SentryClient" namespace="global">
         <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="15" coveredelements="15"/>
       </class>
       <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
@@ -22,8 +22,8 @@
       <line num="35" type="stmt" count="4"/>
       <metrics loc="38" ncloc="38" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="15" coveredelements="15"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Client\StoryblokClient.php">
-      <class name="App\Client\StoryblokClient" namespace="global">
+    <file name="mock/project/root/services/backend/src/Client/StoryblokClient.php">
+      <class name="App/Client/StoryblokClient" namespace="global">
         <metrics complexity="7" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="33" coveredelements="33"/>
       </class>
       <line num="15" type="method" name="__construct" visibility="public" complexity="3" crap="3" count="9"/>
@@ -61,8 +61,8 @@
       <line num="78" type="stmt" count="1"/>
       <metrics loc="81" ncloc="72" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="33" coveredelements="33"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Command\DumpRoutesSnapshotCommand.php">
-      <class name="App\Command\DumpRoutesSnapshotCommand" namespace="global">
+    <file name="mock/project/root/services/backend/src/Command/DumpRoutesSnapshotCommand.php">
+      <class name="App/Command/DumpRoutesSnapshotCommand" namespace="global">
         <metrics complexity="10" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="35" elements="43" coveredelements="37"/>
       </class>
       <line num="26" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -110,8 +110,8 @@
       <line num="94" type="stmt" count="1"/>
       <metrics loc="97" ncloc="95" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="35" elements="43" coveredelements="37"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Command\DumpSchemaCommand.php">
-      <class name="App\Command\DumpSchemaCommand" namespace="global">
+    <file name="mock/project/root/services/backend/src/Command/DumpSchemaCommand.php">
+      <class name="App/Command/DumpSchemaCommand" namespace="global">
         <metrics complexity="15" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="40" elements="46" coveredelements="43"/>
       </class>
       <line num="22" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
@@ -162,8 +162,8 @@
       <line num="107" type="stmt" count="2"/>
       <metrics loc="110" ncloc="99" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="40" elements="46" coveredelements="43"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Command\ValidateSchemaCommand.php">
-      <class name="App\Command\ValidateSchemaCommand" namespace="global">
+    <file name="mock/project/root/services/backend/src/Command/ValidateSchemaCommand.php">
+      <class name="App/Command/ValidateSchemaCommand" namespace="global">
         <metrics complexity="10" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="27" coveredelements="27"/>
       </class>
       <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
@@ -195,47 +195,47 @@
       <line num="67" type="stmt" count="2"/>
       <metrics loc="70" ncloc="69" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="27" coveredelements="27"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\ApiExceptionEnum.php">
+    <file name="mock/project/root/services/backend/src/Constant/ApiExceptionEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\ApiResolver.php">
-      <class name="App\Constant\ApiResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/ApiResolver.php">
+      <class name="App/Constant/ApiResolver" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="41" ncloc="32" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\ApiType.php">
-      <class name="App\Constant\ApiType" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/ApiType.php">
+      <class name="App/Constant/ApiType" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="76" ncloc="53" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\ContactForm.php">
-      <class name="App\Constant\ContactForm" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/ContactForm.php">
+      <class name="App/Constant/ContactForm" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\EnvironmentTypeEnum.php">
+    <file name="mock/project/root/services/backend/src/Constant/EnvironmentTypeEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\SentryConfiguration.php">
-      <class name="App\Constant\SentryConfiguration" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/SentryConfiguration.php">
+      <class name="App/Constant/SentryConfiguration" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\StatisticEnum.php">
+    <file name="mock/project/root/services/backend/src/Constant/StatisticEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\StoryblokConfiguration.php">
-      <class name="App\Constant\StoryblokConfiguration" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/StoryblokConfiguration.php">
+      <class name="App/Constant/StoryblokConfiguration" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Constant\StoryblokContentTypeEnum.php">
-      <class name="App\Constant\StoryblokContentTypeEnum" namespace="global">
+    <file name="mock/project/root/services/backend/src/Constant/StoryblokContentTypeEnum.php">
+      <class name="App/Constant/StoryblokContentTypeEnum" namespace="global">
         <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="8" elements="13" coveredelements="10"/>
       </class>
       <line num="21" type="method" name="toQueryName" visibility="public" complexity="2" crap="2" count="14"/>
@@ -253,8 +253,8 @@
       <line num="60" type="stmt" count="0"/>
       <metrics loc="64" ncloc="37" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="8" elements="13" coveredelements="10"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Controller\ApiController.php">
-      <class name="App\Controller\ApiController" namespace="global">
+    <file name="mock/project/root/services/backend/src/Controller/ApiController.php">
+      <class name="App/Controller/ApiController" namespace="global">
         <metrics complexity="3" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="10" elements="19" coveredelements="11"/>
       </class>
       <line num="15" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="8"/>
@@ -278,8 +278,8 @@
       <line num="45" type="stmt" count="8"/>
       <metrics loc="48" ncloc="48" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="10" elements="19" coveredelements="11"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Controller\DefaultController.php">
-      <class name="App\Controller\DefaultController" namespace="global">
+    <file name="mock/project/root/services/backend/src/Controller/DefaultController.php">
+      <class name="App/Controller/DefaultController" namespace="global">
         <metrics complexity="4" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
       </class>
       <line num="15" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
@@ -303,8 +303,8 @@
       <line num="46" type="stmt" count="3"/>
       <metrics loc="49" ncloc="49" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Exception\AbstractApiException.php">
-      <class name="App\Exception\AbstractApiException" namespace="global">
+    <file name="mock/project/root/services/backend/src/Exception/AbstractApiException.php">
+      <class name="App/Exception/AbstractApiException" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="2" elements="7" coveredelements="3"/>
       </class>
       <line num="12" type="method" name="isClientSafe" visibility="public" complexity="1" crap="1" count="1"/>
@@ -316,36 +316,36 @@
       <line num="26" type="stmt" count="0"/>
       <metrics loc="29" ncloc="25" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="2" elements="7" coveredelements="3"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Exception\ModelException.php">
-      <class name="App\Exception\ModelException" namespace="global">
+    <file name="mock/project/root/services/backend/src/Exception/ModelException.php">
+      <class name="App/Exception/ModelException" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
       </class>
       <line num="10" type="method" name="getDecodeException" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="12" type="stmt" count="0"/>
       <metrics loc="15" ncloc="15" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Exception\NotFoundException.php">
-      <class name="App\Exception\NotFoundException" namespace="global">
+    <file name="mock/project/root/services/backend/src/Exception/NotFoundException.php">
+      <class name="App/Exception/NotFoundException" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
       </class>
       <line num="7" type="method" name="getException" visibility="public" complexity="1" crap="1" count="4"/>
       <line num="9" type="stmt" count="4"/>
       <metrics loc="12" ncloc="12" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Exception\ResolverNotFoundException.php">
-      <class name="App\Exception\ResolverNotFoundException" namespace="global">
+    <file name="mock/project/root/services/backend/src/Exception/ResolverNotFoundException.php">
+      <class name="App/Exception/ResolverNotFoundException" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Kernel.php">
-      <class name="App\Kernel" namespace="global">
+    <file name="mock/project/root/services/backend/src/Kernel.php">
+      <class name="App/Kernel" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="12" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\Notification\AbstractNotification.php">
-      <class name="App\Model\Notification\AbstractNotification" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/Notification/AbstractNotification.php">
+      <class name="App/Model/Notification/AbstractNotification" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
       </class>
       <line num="10" type="method" name="jsonSerialize" visibility="public" complexity="1" crap="1" count="1"/>
@@ -358,8 +358,8 @@
       <line num="18" type="stmt" count="1"/>
       <metrics loc="32" ncloc="29" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\Notification\EmailBasedNotification.php">
-      <class name="App\Model\Notification\EmailBasedNotification" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/Notification/EmailBasedNotification.php">
+      <class name="App/Model/Notification/EmailBasedNotification" namespace="global">
         <metrics complexity="5" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="10" coveredelements="10"/>
       </class>
       <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
@@ -374,8 +374,8 @@
       <line num="38" type="stmt" count="1"/>
       <metrics loc="41" ncloc="35" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="10" coveredelements="10"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\Notification\UnidirectionalJsonTransportSerializer.php">
-      <class name="App\Model\Notification\UnidirectionalJsonTransportSerializer" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/Notification/UnidirectionalJsonTransportSerializer.php">
+      <class name="App/Model/Notification/UnidirectionalJsonTransportSerializer" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="9" elements="12" coveredelements="10"/>
       </class>
       <line num="23" type="method" name="decode" visibility="public" complexity="1" crap="2" count="0"/>
@@ -392,8 +392,8 @@
       <line num="45" type="stmt" count="1"/>
       <metrics loc="48" ncloc="36" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="9" elements="12" coveredelements="10"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\SentryIssue.php">
-      <class name="App\Model\SentryIssue" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/SentryIssue.php">
+      <class name="App/Model/SentryIssue" namespace="global">
         <metrics complexity="6" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="22" coveredelements="22"/>
       </class>
       <line num="31" type="method" name="__construct" visibility="public" complexity="5" crap="5" count="4"/>
@@ -420,8 +420,8 @@
       <line num="56" type="stmt" count="4"/>
       <metrics loc="59" ncloc="56" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="22" coveredelements="22"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\SentryRelease.php">
-      <class name="App\Model\SentryRelease" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/SentryRelease.php">
+      <class name="App/Model/SentryRelease" namespace="global">
         <metrics complexity="6" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
       </class>
       <line num="25" type="method" name="__construct" visibility="public" complexity="5" crap="5" count="10"/>
@@ -442,8 +442,8 @@
       <line num="44" type="stmt" count="7"/>
       <metrics loc="47" ncloc="44" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\SentryUser.php">
-      <class name="App\Model\SentryUser" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/SentryUser.php">
+      <class name="App/Model/SentryUser" namespace="global">
         <metrics complexity="4" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="12" coveredelements="0"/>
       </class>
       <line num="21" type="method" name="__construct" visibility="public" complexity="3" crap="12" count="0"/>
@@ -459,8 +459,8 @@
       <line num="35" type="stmt" count="0"/>
       <metrics loc="38" ncloc="35" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="12" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Model\StoryblokPost.php">
-      <class name="App\Model\StoryblokPost" namespace="global">
+    <file name="mock/project/root/services/backend/src/Model/StoryblokPost.php">
+      <class name="App/Model/StoryblokPost" namespace="global">
         <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="6" elements="10" coveredelements="6"/>
       </class>
       <line num="25" type="method" name="__construct" visibility="public" complexity="4" crap="4.59" count="8"/>
@@ -475,8 +475,8 @@
       <line num="36" type="stmt" count="0"/>
       <metrics loc="40" ncloc="37" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="6" elements="10" coveredelements="6"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\AbstractSimpleBufferedFieldResolver.php">
-      <class name="App\Resolver\AbstractSimpleBufferedFieldResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/AbstractSimpleBufferedFieldResolver.php">
+      <class name="App/Resolver/AbstractSimpleBufferedFieldResolver" namespace="global">
         <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="26" coveredelements="26"/>
       </class>
       <line num="35" type="method" name="resolve" visibility="public" complexity="2" crap="2" count="9"/>
@@ -507,11 +507,11 @@
       <line num="77" type="stmt" count="9"/>
       <metrics loc="92" ncloc="49" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="26" coveredelements="26"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\BufferedFieldResolverInterface.php">
+    <file name="mock/project/root/services/backend/src/Resolver/BufferedFieldResolverInterface.php">
       <metrics loc="19" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\DefaultFieldResolver.php">
-      <class name="App\Resolver\DefaultFieldResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/DefaultFieldResolver.php">
+      <class name="App/Resolver/DefaultFieldResolver" namespace="global">
         <metrics complexity="19" methods="7" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="62" elements="84" coveredelements="67"/>
       </class>
       <line num="26" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="11"/>
@@ -600,11 +600,11 @@
       <line num="219" type="stmt" count="4"/>
       <metrics loc="222" ncloc="158" classes="1" methods="7" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="62" elements="84" coveredelements="67"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\FieldResolverInterface.php">
+    <file name="mock/project/root/services/backend/src/Resolver/FieldResolverInterface.php">
       <metrics loc="18" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Mutation\ContactForm\SubmitResolver.php">
-      <class name="App\Resolver\Mutation\ContactForm\SubmitResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Mutation/ContactForm/SubmitResolver.php">
+      <class name="App/Resolver/Mutation/ContactForm/SubmitResolver" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="10" coveredelements="10"/>
       </class>
       <line num="15" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
@@ -619,8 +619,8 @@
       <line num="35" type="stmt" count="1"/>
       <metrics loc="38" ncloc="36" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="10" coveredelements="10"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\ArticlesResolver.php">
-      <class name="App\Resolver\Query\ArticlesResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/ArticlesResolver.php">
+      <class name="App/Resolver/Query/ArticlesResolver" namespace="global">
         <metrics complexity="6" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
       </class>
       <line num="14" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="8"/>
@@ -636,8 +636,8 @@
       <line num="37" type="stmt" count="4"/>
       <metrics loc="40" ncloc="35" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\ProjectsResolver.php">
-      <class name="App\Resolver\Query\ProjectsResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/ProjectsResolver.php">
+      <class name="App/Resolver/Query/ProjectsResolver" namespace="global">
         <metrics complexity="6" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
       </class>
       <line num="14" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="8"/>
@@ -653,8 +653,8 @@
       <line num="37" type="stmt" count="4"/>
       <metrics loc="40" ncloc="35" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\StatisticsResolver.php">
-      <class name="App\Resolver\Query\StatisticsResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/StatisticsResolver.php">
+      <class name="App/Resolver/Query/StatisticsResolver" namespace="global">
         <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="10" coveredelements="10"/>
       </class>
       <line num="12" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
@@ -669,8 +669,8 @@
       <line num="36" type="stmt" count="1"/>
       <metrics loc="40" ncloc="33" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="10" coveredelements="10"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\Statistics\ErrorsResolver.php">
-      <class name="App\Resolver\Query\Statistics\ErrorsResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/Statistics/ErrorsResolver.php">
+      <class name="App/Resolver/Query/Statistics/ErrorsResolver" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </class>
       <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -682,8 +682,8 @@
       <line num="32" type="stmt" count="2"/>
       <metrics loc="35" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\Statistics\LastReleaseResolver.php">
-      <class name="App\Resolver\Query\Statistics\LastReleaseResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/Statistics/LastReleaseResolver.php">
+      <class name="App/Resolver/Query/Statistics/LastReleaseResolver" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="9" coveredelements="9"/>
       </class>
       <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -697,8 +697,8 @@
       <line num="33" type="stmt" count="2"/>
       <metrics loc="36" ncloc="28" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="9" coveredelements="9"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Resolver\Query\Statistics\ReleasesResolver.php">
-      <class name="App\Resolver\Query\Statistics\ReleasesResolver" namespace="global">
+    <file name="mock/project/root/services/backend/src/Resolver/Query/Statistics/ReleasesResolver.php">
+      <class name="App/Resolver/Query/Statistics/ReleasesResolver" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </class>
       <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -710,8 +710,8 @@
       <line num="32" type="stmt" count="2"/>
       <metrics loc="35" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\ApiRequestHandlerService.php">
-      <class name="App\Service\ApiRequestHandlerService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/ApiRequestHandlerService.php">
+      <class name="App/Service/ApiRequestHandlerService" namespace="global">
         <metrics complexity="10" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="38" coveredelements="38"/>
       </class>
       <line num="31" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="16"/>
@@ -754,8 +754,8 @@
       <line num="115" type="stmt" count="13"/>
       <metrics loc="118" ncloc="92" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="38" coveredelements="38"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\EnvironmentConfigurationService.php">
-      <class name="App\Service\EnvironmentConfigurationService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/EnvironmentConfigurationService.php">
+      <class name="App/Service/EnvironmentConfigurationService" namespace="global">
         <metrics complexity="13" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="31" coveredelements="31"/>
       </class>
       <line num="12" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="35"/>
@@ -791,8 +791,8 @@
       <line num="80" type="stmt" count="2"/>
       <metrics loc="84" ncloc="74" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="31" coveredelements="31"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\IdentityService.php">
-      <class name="App\Service\IdentityService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/IdentityService.php">
+      <class name="App/Service/IdentityService" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="6" coveredelements="6"/>
       </class>
       <line num="11" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="10"/>
@@ -803,8 +803,8 @@
       <line num="28" type="stmt" count="10"/>
       <metrics loc="31" ncloc="23" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="6" coveredelements="6"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\NotificationDispatcherService.php">
-      <class name="App\Service\NotificationDispatcherService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/NotificationDispatcherService.php">
+      <class name="App/Service/NotificationDispatcherService" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
       </class>
       <line num="12" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -820,8 +820,8 @@
       <line num="28" type="stmt" count="2"/>
       <metrics loc="31" ncloc="31" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="11" coveredelements="11"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\PostFetcherService\AbstractPostFetcherService.php">
-      <class name="App\Service\PostFetcherService\AbstractPostFetcherService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/PostFetcherService/AbstractPostFetcherService.php">
+      <class name="App/Service/PostFetcherService/AbstractPostFetcherService" namespace="global">
         <metrics complexity="15" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="95" coveredstatements="94" elements="100" coveredelements="98"/>
       </class>
       <line num="20" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="14"/>
@@ -926,8 +926,8 @@
       <line num="219" type="stmt" count="2"/>
       <metrics loc="222" ncloc="173" classes="1" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="95" coveredstatements="94" elements="100" coveredelements="98"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\PostFetcherService\ArticlePostFetcherService.php">
-      <class name="App\Service\PostFetcherService\ArticlePostFetcherService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/PostFetcherService/ArticlePostFetcherService.php">
+      <class name="App/Service/PostFetcherService/ArticlePostFetcherService" namespace="global">
         <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="34" coveredelements="34"/>
       </class>
       <line num="20" type="method" name="getFolder" visibility="protected" complexity="1" crap="1" count="7"/>
@@ -966,8 +966,8 @@
       <line num="63" type="stmt" count="7"/>
       <metrics loc="66" ncloc="60" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="34" coveredelements="34"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\PostFetcherService\ProjectPostFetcherService.php">
-      <class name="App\Service\PostFetcherService\ProjectPostFetcherService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/PostFetcherService/ProjectPostFetcherService.php">
+      <class name="App/Service/PostFetcherService/ProjectPostFetcherService" namespace="global">
         <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="15" elements="18" coveredelements="18"/>
       </class>
       <line num="20" type="method" name="getFolder" visibility="protected" complexity="1" crap="1" count="7"/>
@@ -990,8 +990,8 @@
       <line num="47" type="stmt" count="7"/>
       <metrics loc="50" ncloc="44" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="15" elements="18" coveredelements="18"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\SentryService.php">
-      <class name="App\Service\SentryService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/SentryService.php">
+      <class name="App/Service/SentryService" namespace="global">
         <metrics complexity="9" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="39" elements="44" coveredelements="44"/>
       </class>
       <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="20"/>
@@ -1040,11 +1040,11 @@
       <line num="119" type="stmt" count="5"/>
       <metrics loc="122" ncloc="96" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="39" elements="44" coveredelements="44"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\TypeRegistryInterface.php">
+    <file name="mock/project/root/services/backend/src/Service/TypeRegistryInterface.php">
       <metrics loc="52" ncloc="21" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Service\TypeRegistryService.php">
-      <class name="App\Service\TypeRegistryService" namespace="global">
+    <file name="mock/project/root/services/backend/src/Service/TypeRegistryService.php">
+      <class name="App/Service/TypeRegistryService" namespace="global">
         <metrics complexity="17" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="49" elements="55" coveredelements="55"/>
       </class>
       <line num="28" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="27"/>
@@ -1104,8 +1104,8 @@
       <line num="157" type="stmt" count="8"/>
       <metrics loc="161" ncloc="122" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="49" elements="55" coveredelements="55"/>
     </file>
-    <file name="C:\Users\ryan\Desktop\Projects\RyanMaber\portfolio\services\backend\src\Subscriber\IdentitySubscriber.php">
-      <class name="App\Subscriber\IdentitySubscriber" namespace="global">
+    <file name="mock/project/root/services/backend/src/Subscriber/IdentitySubscriber.php">
+      <class name="App/Subscriber/IdentitySubscriber" namespace="global">
         <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="12" coveredelements="12"/>
       </class>
       <line num="18" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>

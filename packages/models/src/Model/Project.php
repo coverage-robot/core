@@ -23,6 +23,7 @@ class Project implements JsonSerializable
      */
     public function __construct(
         private readonly CoverageFormat $sourceFormat,
+        private readonly string $root,
         int|DateTimeImmutable|null $generatedAt = null
     ) {
         if ($generatedAt !== null) {
@@ -33,6 +34,11 @@ class Project implements JsonSerializable
     public function getSourceFormat(): CoverageFormat
     {
         return $this->sourceFormat;
+    }
+
+    public function getRoot(): string
+    {
+        return $this->root;
     }
 
     public function getGeneratedAt(): ?DateTimeImmutable
@@ -59,7 +65,7 @@ class Project implements JsonSerializable
             $this->generatedAt = DateTimeImmutable::createFromFormat(
                 'U.u',
                 number_format(
-                    min($currentTimestamp,$generatedAt),
+                    min($currentTimestamp, $generatedAt),
                     3,
                     '.',
                     ''
@@ -93,8 +99,13 @@ class Project implements JsonSerializable
     {
         return [
             'sourceFormat' => $this->sourceFormat,
+            'root' => $this->root,
             'generatedAt' => $this->getGeneratedAt()?->format(DateTimeInterface::ATOM),
             'files' => $this->getFiles()
         ];
     }
+
+    /**
+     * @return string
+     */
 }

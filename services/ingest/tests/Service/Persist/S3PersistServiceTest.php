@@ -24,6 +24,7 @@ class S3PersistServiceTest extends TestCase
     {
         $coverage = new Project(
             CoverageFormat::CLOVER,
+            'mock/project/root',
             new DateTimeImmutable()
         );
 
@@ -82,6 +83,7 @@ class S3PersistServiceTest extends TestCase
     {
         $coverage = new Project(
             CoverageFormat::CLOVER,
+            'mock/project/root',
             new DateTimeImmutable()
         );
 

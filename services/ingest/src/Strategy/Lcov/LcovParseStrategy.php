@@ -91,7 +91,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $content): Project
+    public function parse(string $projectRoot, string $content): Project
     {
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
@@ -99,7 +99,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Project(CoverageFormat::LCOV);
+        $project = new Project(CoverageFormat::LCOV, $projectRoot);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -127,7 +127,9 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         switch ($type) {
             case self::FILE:
-                $coverage->addFile(new File($data));
+                $path = $this->getRelativeFilePath($data, $coverage);
+
+                $coverage->addFile(new File($path));
                 break;
             case self::LINE_DATA:
                 $latestFile->setLineCoverage(
@@ -201,5 +203,16 @@ class LcovParseStrategy implements ParseStrategyInterface
         }
 
         return sprintf('/%s/', self::COVERAGE_DATA_VALIDATION[$type]);
+    }
+
+    private function getRelativeFilePath(string $path, Project $coverage): ?string
+    {
+        // Trim the root from the files path, so that we store each file path relative
+        // to the project root
+        if (substr($path, 0, strlen($coverage->getRoot())) == $coverage->getRoot()) {
+            $path = substr($path, strlen($coverage->getRoot()));
+        }
+
+        return trim($path, '/');
     }
 }

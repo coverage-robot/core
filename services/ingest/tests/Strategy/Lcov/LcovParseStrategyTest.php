@@ -14,6 +14,7 @@ class LcovParseStrategyTest extends AbstractParseStrategyTestCase
         return [
             ...parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Lcov', 'info'),
             'Does not handle invalid file' => [
+                'mock/project/root',
                 'invalid-file-content',
                 false,
                 []

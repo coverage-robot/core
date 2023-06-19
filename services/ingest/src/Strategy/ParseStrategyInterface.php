@@ -26,8 +26,9 @@ interface ParseStrategyInterface
      * Parse an arbitrary string (which is presumed to be a coverage file) using a given
      * strategy.
      *
+     * @param string $projectRoot
      * @param string $content
      * @return Project
      */
-    public function parse(string $content): Project;
+    public function parse(string $projectRoot, string $content): Project;
 }
