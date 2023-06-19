@@ -18,12 +18,11 @@ class Project implements JsonSerializable
     private array $files = [];
 
     /**
-     * @param int|DateTimeImmutable $generatedAt
      * @throws Exception
      */
     public function __construct(
         private readonly CoverageFormat $sourceFormat,
-        private readonly string $root,
+        private readonly string $root = '',
         int|DateTimeImmutable|null $generatedAt = null
     ) {
         if ($generatedAt !== null) {

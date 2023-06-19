@@ -29,6 +29,9 @@ class CloverParseStrategy implements ParseStrategyInterface
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function supports(string $content): bool
     {
         libxml_use_internal_errors(true);
@@ -64,6 +67,9 @@ class CloverParseStrategy implements ParseStrategyInterface
         return true;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function parse(string $projectRoot, string $content): Project
     {
         libxml_use_internal_errors(true);
@@ -78,9 +84,9 @@ class CloverParseStrategy implements ParseStrategyInterface
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
-                // We don't want to parse if it's a closing tag as the XML reader will
-                // let the parser use it as if it's the opening element, and that will
-                // cause duplicate files to be tracked.
+                // We don't want to parse the node if it's a closing tag, as the XML
+                // reader will let the parser use the element with all the properties
+                // from the opening tags, and that will cause duplicate files to be tracked.
                 continue;
             }
 
@@ -161,7 +167,7 @@ class CloverParseStrategy implements ParseStrategyInterface
 
         // Trim the root from the files path, so that we store each file path relative
         // to the project root
-        if (substr($path, 0, strlen($coverage->getRoot())) == $coverage->getRoot()) {
+        if (str_starts_with($path, $coverage->getRoot())) {
             $path = substr($path, strlen($coverage->getRoot()));
         }
 

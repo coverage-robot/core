@@ -209,7 +209,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     {
         // Trim the root from the files path, so that we store each file path relative
         // to the project root
-        if (substr($path, 0, strlen($coverage->getRoot())) == $coverage->getRoot()) {
+        if (str_starts_with($path, $coverage->getRoot())) {
             $path = substr($path, strlen($coverage->getRoot()));
         }
 
