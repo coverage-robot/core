@@ -21,9 +21,9 @@ use Packages\Models\Model\Upload;
 class PublishableCoverageData implements PublishableCoverageDataInterface
 {
     public function __construct(
-        protected readonly QueryService      $queryService,
+        protected readonly QueryService $queryService,
         protected readonly DiffParserService $diffReader,
-        protected readonly Upload            $upload
+        protected readonly Upload $upload
     ) {
     }
 
@@ -113,8 +113,8 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     }
 
     /**
-    * @throws QueryException
-    */
+     * @throws QueryException
+     */
     public function getLeastCoveredDiffFiles(int $limit): MultiFileCoverageQueryResult
     {
         $params = new QueryParameterBag();

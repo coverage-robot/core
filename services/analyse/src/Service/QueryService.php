@@ -58,11 +58,12 @@ class QueryService
             $parameterBag
         );
 
+        // Normalise the SQL to remove any whitespace and empty lines
         $sql = preg_replace('/^\h*\v+/m', '', trim($sql));
 
-        $job = $this->bigQueryClient->query($sql);
-
-        $results = $this->bigQueryClient->runQuery($job);
+        $results = $this->bigQueryClient->runQuery(
+            $this->bigQueryClient->query($sql)
+        );
 
         $results->waitUntilComplete();
 

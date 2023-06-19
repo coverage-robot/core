@@ -1,5 +1,5 @@
 <?php
-//@phpcs:ignoreFile
+// phpcs:ignoreFile
 
 namespace App\Service\Formatter;
 

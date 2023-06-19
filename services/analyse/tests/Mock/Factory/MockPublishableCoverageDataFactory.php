@@ -13,11 +13,11 @@ use PHPUnit\Framework\TestCase;
 class MockPublishableCoverageDataFactory
 {
     public static function createMock(
-        TestCase           $test,
-        array              $methodsAndReturns = [],
-        ?QueryService      $queryService = null,
+        TestCase $test,
+        array $methodsAndReturns = [],
+        ?QueryService $queryService = null,
         ?DiffParserService $diffReader = null,
-        ?Upload            $upload = null
+        ?Upload $upload = null
     ): PublishableCoverageDataInterface|MockObject {
         $data = $test->getMockBuilder(PublishableCoverageData::class)
             ->setConstructorArgs([

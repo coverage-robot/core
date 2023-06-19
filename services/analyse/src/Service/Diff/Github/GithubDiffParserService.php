@@ -42,8 +42,7 @@ class GithubDiffParserService implements DiffParserServiceInterface
         $addedLines = [];
 
         foreach ($files as $diff) {
-            // Trim the prefix attached by the unified diff ("b/")
-            $file = substr($diff->getTo(), 2);
+            $file = $this->trimPrefix($diff->getTo());
 
             foreach ($diff->getChunks() as $chunk) {
                 $offset = 0;
@@ -63,6 +62,11 @@ class GithubDiffParserService implements DiffParserServiceInterface
         }
 
         return $addedLines;
+    }
+
+    public static function getProvider(): string
+    {
+        return Provider::GITHUB->value;
     }
 
     /**
@@ -93,6 +97,7 @@ class GithubDiffParserService implements DiffParserServiceInterface
      */
     private function getCommitDiff(string $owner, string $repository, string $sha): string
     {
+        /** @var array<array-key, object{ files: array }> $commit */
         $commit = $this->client->repo()
             ->commits()
             ->show(
@@ -101,16 +106,17 @@ class GithubDiffParserService implements DiffParserServiceInterface
                 $sha
             );
 
+        /** @var array<array-key, array> $files */
         $files = $commit['files'] ?? [];
 
-        if (!$files) {
+        if (empty($files)) {
             throw new RuntimeException('Unable to generate diff using commit.');
         }
 
         return array_reduce(
             $files,
-            fn (string $patch, array $file) => <<<DIFF
-                $patch
+            fn (string $diff, array $file) => <<<DIFF
+                $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}
                 {$file['patch']}
@@ -119,8 +125,18 @@ class GithubDiffParserService implements DiffParserServiceInterface
         );
     }
 
-    public static function getProvider(): string
+    /**
+     * Trim the prefix which unified diffs apply to the beginning of the file path.
+     *
+     * These are either "a/" or "b/", depending on whether the file is the original,
+     * or the new version.
+     */
+    private function trimPrefix(string $path): string
     {
-        return Provider::GITHUB->value;
+        if (str_starts_with($path, 'a/') || str_starts_with($path, 'b/')) {
+            return substr($path, 2);
+        }
+
+        return $path;
     }
 }
