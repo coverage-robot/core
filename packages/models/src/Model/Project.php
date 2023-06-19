@@ -104,8 +104,4 @@ class Project implements JsonSerializable
             'files' => $this->getFiles()
         ];
     }
-
-    /**
-     * @return string
-     */
 }
