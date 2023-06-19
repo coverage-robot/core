@@ -82,7 +82,6 @@ class PullRequestCommentFormatterService
             | File | Diff Coverage |
             | --- | --- |
             %s
-            | ... | ... |
             <td colspan=3>
             MARKDOWN,
             implode(
