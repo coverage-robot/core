@@ -39,20 +39,20 @@ class IngestHandler extends S3Handler
     public function handleS3(S3Event $event, Context $context): void
     {
         foreach ($event->getRecords() as $coverageFile) {
-            $source = $this->retrieveFile($coverageFile);
-            $upload = Upload::from($source->getMetadata());
-
-            $this->handlerLogger->info(
-                sprintf(
-                    'Starting to ingest %s for %s.',
-                    $coverageFile->getObject()->getKey(),
-                    (string)$upload
-                )
-            );
-
-            $projectRoot = $this->getProjectRoot($source);
-
             try {
+                $source = $this->retrieveFile($coverageFile);
+                $upload = Upload::from($source->getMetadata());
+
+                $this->handlerLogger->info(
+                    sprintf(
+                        'Starting to ingest %s for %s.',
+                        $coverageFile->getObject()->getKey(),
+                        (string)$upload
+                    )
+                );
+
+                $projectRoot = $this->getProjectRoot($source);
+
                 $coverage = $this->parseFile(
                     $projectRoot,
                     $source->getBody()->getContentAsString()
@@ -69,7 +69,7 @@ class IngestHandler extends S3Handler
                         $coverage->getSourceFormat()->value
                     )
                 );
-            } catch (ParseException | PersistException | DeletionException $e) {
+            } catch (RetrievalException | ParseException | PersistException | DeletionException $e) {
                 $this->handlerLogger->error(
                     sprintf('Failed to successfully ingest %s.', (string)$upload),
                     [
