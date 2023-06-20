@@ -87,8 +87,8 @@ class Upload implements JsonSerializable
 
     public static function from(array $data): self
     {
-        // Convert all keys to lower case, in an attempt to make the interface compatible
-        // with all array formats
+        // Convert all keys to lower case to unify key lookups and account for
+        // S3 metadata which will have already done this
         $data = array_change_key_case($data);
 
         return new self(

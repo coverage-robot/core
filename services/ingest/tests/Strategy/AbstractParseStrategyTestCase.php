@@ -50,7 +50,7 @@ abstract class AbstractParseStrategyTestCase extends TestCase
                 [
                     ...$fixtures,
                     sprintf('Can handle %s', basename($path)) => [
-                        "mock/project/root",
+                        'mock/project/root',
                         file_get_contents($path),
                         true,
                         json_decode(

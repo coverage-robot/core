@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Exception\DeletionException;
 use App\Exception\RetrievalException;
 use AsyncAws\Core\Exception\Http\ClientException;
+use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Exception\InvalidObjectStateException;
 use AsyncAws\S3\Exception\NoSuchKeyException;
 use AsyncAws\S3\Input\DeleteObjectRequest;
@@ -25,6 +27,8 @@ class CoverageFileRetrievalService
 
     /**
      * Ingest a file from an S3 bucket.
+     *
+     * @throws RetrievalException
      */
     public function ingestFromS3(Bucket $bucket, BucketObject $object): GetObjectOutput
     {
@@ -46,11 +50,14 @@ class CoverageFileRetrievalService
     }
 
     /**
-     * Mark an ingested file as deleted in S3 so that it can be cleaned up later. There's
-     * versioning and a lifecycle policy on the buckets, meaning the files will still remain
-     * for a short period (days) after deletion, with a delete marker.
+     * Mark an ingested file as deleted in S3 so that it can be cleaned up later.
+     *
+     * There's versioning and a lifecycle policy on the buckets, meaning the files
+     * will still remain for a short period (days) after deletion, with a delete marker.
+     *
+     * @throws DeletionException
      */
-    public function deleteIngestedFile(Bucket $bucket, BucketObject $object): bool
+    public function deleteFromS3(Bucket $bucket, BucketObject $object): bool
     {
         try {
             $response = $this->s3Client->deleteObject(
@@ -62,21 +69,23 @@ class CoverageFileRetrievalService
 
             $response->resolve();
 
-            if ($response->info()['status'] !== Response::HTTP_NO_CONTENT) {
-                $this->retrievalLogger->warning(
-                    'Non-successful HTTP code returned when attempting to delete ingested file.',
-                    [
-                        'status' => $response->info()['status'],
-                        'bucket' => $bucket->getName(),
-                        'key' => $object->getKey(),
-                    ]
+            $statusCode = $response->info()['status'];
+
+            if ($statusCode !== Response::HTTP_NO_CONTENT) {
+                throw new DeletionException(
+                    sprintf(
+                        'Non-successful HTTP code (%s) returned when deleting ingested file.',
+                        $statusCode
+                    )
                 );
-
-                return false;
             }
-
-            return true;
-        } catch (NoSuchKeyException | InvalidObjectStateException | ClientException $exception) {
+        } catch (
+            NoSuchKeyException |
+            InvalidObjectStateException |
+            ClientException |
+            HttpException |
+            DeletionException $exception
+        ) {
             $this->retrievalLogger->error(
                 'Failed to delete ingested file.',
                 [
@@ -86,7 +95,9 @@ class CoverageFileRetrievalService
                 ]
             );
 
-            return false;
+            throw DeletionException::from($exception);
         }
+
+        return true;
     }
 }
