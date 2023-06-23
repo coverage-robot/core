@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service\Formatter;
 
-use App\Model\QueryResult\MultiFileCoverageQueryResult;
-use App\Model\QueryResult\MultiTagCoverageQueryResult;
+use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\MultiTagCoverageQueryResult;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Packages\Models\Enum\Provider;

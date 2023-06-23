@@ -3,7 +3,7 @@
 namespace App\Query;
 
 use App\Model\QueryParameterBag;
-use App\Model\QueryResult\QueryResultInterface;
+use App\Query\Result\QueryResultInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;

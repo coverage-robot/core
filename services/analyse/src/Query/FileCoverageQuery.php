@@ -4,7 +4,7 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Model\QueryResult\MultiFileCoverageQueryResult;
+use App\Query\Result\MultiFileCoverageQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -20,7 +20,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
-        
+
         $limit = self::getLimit($parameterBag);
 
         return <<<SQL

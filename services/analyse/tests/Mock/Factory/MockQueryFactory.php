@@ -2,7 +2,7 @@
 
 namespace App\Tests\Mock\Factory;
 
-use App\Model\QueryResult\QueryResultInterface;
+use App\Query\Result\QueryResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

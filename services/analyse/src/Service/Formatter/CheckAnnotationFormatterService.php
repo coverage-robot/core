@@ -2,7 +2,7 @@
 
 namespace App\Service\Formatter;
 
-use App\Model\QueryResult\LineCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use Packages\Models\Enum\LineState;
 
 class CheckAnnotationFormatterService

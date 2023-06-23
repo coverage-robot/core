@@ -4,7 +4,7 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Model\QueryResult\IntegerQueryResult;
+use App\Query\Result\IntegerQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;

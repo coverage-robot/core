@@ -5,7 +5,7 @@ namespace App\Tests\Service\Publisher\Github;
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
-use App\Model\QueryResult\MultiLineCoverageQueryResult;
+use App\Query\Result\MultiLineCoverageQueryResult;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Publisher\Github\GithubCheckAnnotationPublisherService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;

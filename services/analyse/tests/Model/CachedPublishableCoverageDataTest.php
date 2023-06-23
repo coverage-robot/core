@@ -3,8 +3,8 @@
 namespace App\Tests\Model;
 
 use App\Model\CachedPublishableCoverageData;
-use App\Model\QueryResult\CoverageQueryResult;
-use App\Model\QueryResult\IntegerQueryResult;
+use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\IntegerQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\DiffParserService;

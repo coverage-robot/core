@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Model\QueryResult\MultiFileCoverageQueryResult;
-use App\Model\QueryResult\MultiLineCoverageQueryResult;
-use App\Model\QueryResult\MultiTagCoverageQueryResult;
+use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\MultiLineCoverageQueryResult;
+use App\Query\Result\MultiTagCoverageQueryResult;
 
 interface PublishableCoverageDataInterface
 {

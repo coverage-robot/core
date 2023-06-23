@@ -47,7 +47,7 @@ trait ScopeAwareTrait
 
             $filtering .= '(';
             foreach (array_keys($fileLineNumbers) as $fileName) {
-                $lineNumbers = implode(",", $fileLineNumbers[$fileName]);
+                $lineNumbers = implode(',', $fileLineNumbers[$fileName]);
 
                 $filtering .= <<<SQL
                     (

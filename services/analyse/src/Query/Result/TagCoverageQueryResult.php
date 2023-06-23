@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Model\QueryResult;
+namespace App\Query\Result;
 
 use App\Exception\QueryException;
 
-class FileCoverageQueryResult extends CoverageQueryResult
+class TagCoverageQueryResult extends CoverageQueryResult
 {
     private function __construct(
-        private readonly string $fileName,
+        private readonly string $tag,
         readonly float $coveragePercentage,
         readonly int $lines,
         readonly int $covered,
@@ -23,10 +23,13 @@ class FileCoverageQueryResult extends CoverageQueryResult
         );
     }
 
+    /**
+     * @throws QueryException
+     */
     public static function from(array $result): self
     {
         if (
-            is_string($result['fileName'] ?? null) &&
+            is_string($result['tag'] ?? null) &&
             is_numeric($result['coveragePercentage'] ?? null) &&
             is_int($result['lines'] ?? null) &&
             is_int($result['covered'] ?? null) &&
@@ -34,7 +37,7 @@ class FileCoverageQueryResult extends CoverageQueryResult
             is_int($result['uncovered'] ?? null)
         ) {
             return new self(
-                (string)$result['fileName'],
+                (string)$result['tag'],
                 (float)$result['coveragePercentage'],
                 (int)$result['lines'],
                 (int)$result['covered'],
@@ -46,8 +49,8 @@ class FileCoverageQueryResult extends CoverageQueryResult
         throw QueryException::invalidQueryResult();
     }
 
-    public function getFileName(): string
+    public function getTag(): string
     {
-        return $this->fileName;
+        return $this->tag;
     }
 }

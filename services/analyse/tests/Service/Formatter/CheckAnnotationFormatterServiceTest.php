@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service\Formatter;
 
-use App\Model\QueryResult\LineCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use Packages\Models\Enum\LineState;
 use PHPUnit\Framework\Attributes\DataProvider;

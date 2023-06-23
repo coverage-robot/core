@@ -4,13 +4,13 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
-use App\Model\QueryResult\CoverageQueryResult;
-use App\Model\QueryResult\IntegerQueryResult;
-use App\Model\QueryResult\MultiFileCoverageQueryResult;
-use App\Model\QueryResult\MultiLineCoverageQueryResult;
-use App\Model\QueryResult\MultiTagCoverageQueryResult;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
+use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\IntegerQueryResult;
+use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\MultiLineCoverageQueryResult;
+use App\Query\Result\MultiTagCoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;

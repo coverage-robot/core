@@ -4,8 +4,8 @@
 namespace App\Service\Formatter;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\QueryResult\FileCoverageQueryResult;
-use App\Model\QueryResult\TagCoverageQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\TagCoverageQueryResult;
 use Packages\Models\Model\Upload;
 
 class PullRequestCommentFormatterService

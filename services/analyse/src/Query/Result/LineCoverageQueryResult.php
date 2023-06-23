@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\QueryResult;
+namespace App\Query\Result;
 
 use App\Exception\QueryException;
 use Packages\Models\Enum\LineState;

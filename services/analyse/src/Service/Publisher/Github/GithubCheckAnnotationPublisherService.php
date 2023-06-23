@@ -5,7 +5,7 @@ namespace App\Service\Publisher\Github;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\QueryResult\LineCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
