@@ -22,7 +22,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
 {
     public function __construct(
         protected readonly QueryService $queryService,
-        protected readonly DiffParserService $diffReader,
+        protected readonly DiffParserService $diffParser,
         protected readonly Upload $upload
     ) {
     }
@@ -101,7 +101,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = new QueryParameterBag();
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffReader->get($this->upload)
+            $this->diffParser->get($this->upload)
         );
 
         /**
@@ -120,7 +120,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = new QueryParameterBag();
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffReader->get($this->upload)
+            $this->diffParser->get($this->upload)
         );
         $params->set(
             QueryParameter::LIMIT,
@@ -143,7 +143,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = new QueryParameterBag();
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffReader->get($this->upload)
+            $this->diffParser->get($this->upload)
         );
 
         /**

@@ -13,14 +13,14 @@ class DiffParserService
      * @param array<array-key, DiffParserServiceInterface> $readers
      */
     public function __construct(
-        #[TaggedIterator('app.diff_reader', defaultIndexMethod: 'getProvider')]
-        private readonly iterable $readers
+        #[TaggedIterator('app.diff_parser', defaultIndexMethod: 'getProvider')]
+        private readonly iterable $parsers
     ) {
     }
 
     public function get(Upload $upload): array
     {
-        $reader = (iterator_to_array($this->readers)[$upload->getProvider()->value]) ?? null;
+        $reader = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;
 
         if (!$reader instanceof DiffParserServiceInterface) {
             throw new RuntimeException(

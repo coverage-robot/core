@@ -5,7 +5,7 @@ namespace App\Service\Diff;
 use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.diff_reader')]
+#[AutoconfigureTag('app.diff_parser')]
 interface DiffParserServiceInterface
 {
     /**
