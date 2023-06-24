@@ -7,7 +7,7 @@ use App\Query\TotalTagCoverageQuery;
 
 class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
-    public static function getExpectedSqls(): array
+    public static function getExpectedQueries(): array
     {
         return [
             <<<SQL

@@ -17,7 +17,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     /**
      * @inheritDoc
      */
-    public static function getExpectedSqls(): array
+    public static function getExpectedQueries(): array
     {
         return [
             <<<SQL

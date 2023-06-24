@@ -18,7 +18,7 @@ abstract class AbstractQueryTestCase extends TestCase
      *
      * @return string[]
      */
-    abstract public static function getExpectedSqls(): array;
+    abstract public static function getExpectedQueries(): array;
 
     /**
      * Get the query parameters that will be passed to the query.
@@ -59,7 +59,7 @@ abstract class AbstractQueryTestCase extends TestCase
     }
 
     /**
-     * Build an array of data which matches the expectedSQL outputs against the
+     * Build an array of data which matches the expected SQL outputs against the
      * provided parameters as inputs, which can be provided to the query test.
      */
     public static function queryParametersAndOutputsDataProvider(): array
@@ -69,7 +69,7 @@ abstract class AbstractQueryTestCase extends TestCase
                 $sql,
                 $parameters
             ],
-            static::getExpectedSqls(),
+            static::getExpectedQueries(),
             static::getQueryParameters()
         );
     }

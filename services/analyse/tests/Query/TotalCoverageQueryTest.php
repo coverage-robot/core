@@ -7,7 +7,7 @@ use App\Query\TotalCoverageQuery;
 
 class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
-    public static function getExpectedSqls(): array
+    public static function getExpectedQueries(): array
     {
         return [
             <<<SQL

@@ -9,7 +9,7 @@ use App\Query\QueryInterface;
 
 class LineCoverageQueryTest extends AbstractQueryTestCase
 {
-    public static function getExpectedSqls(): array
+    public static function getExpectedQueries(): array
     {
         return [
             <<<SQL
