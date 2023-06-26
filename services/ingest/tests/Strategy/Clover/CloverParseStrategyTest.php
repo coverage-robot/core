@@ -2,6 +2,7 @@
 
 namespace App\Tests\Strategy\Clover;
 
+use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
@@ -24,6 +25,6 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new CloverParseStrategy(new NullLogger());
+        return new CloverParseStrategy(new NullLogger(), new PathFixingService());
     }
 }

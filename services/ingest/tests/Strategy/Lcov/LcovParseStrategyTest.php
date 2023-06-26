@@ -2,6 +2,7 @@
 
 namespace App\Tests\Strategy\Lcov;
 
+use App\Service\PathFixingService;
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
@@ -24,6 +25,6 @@ class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new LcovParseStrategy(new NullLogger());
+        return new LcovParseStrategy(new NullLogger(), new PathFixingService());
     }
 }

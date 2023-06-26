@@ -3,6 +3,7 @@
 namespace App\Strategy\Clover;
 
 use App\Exception\ParseException;
+use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
 use Packages\Models\Enum\CoverageFormat;
@@ -25,7 +26,8 @@ class CloverParseStrategy implements ParseStrategyInterface
     private const CONDITION = 'cond';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger
+        private readonly LoggerInterface $parseStrategyLogger,
+        private readonly PathFixingService $pathFixingService
     ) {
     }
 
@@ -121,11 +123,13 @@ class CloverParseStrategy implements ParseStrategyInterface
                 $coverage->setGeneratedAt((int)$reader->getAttribute('timestamp'));
                 break;
             case self::FILE:
-                $path = $this->getRelativeFilePath($reader, $coverage);
+                $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
 
                 if ($path === null) {
                     break;
                 }
+
+                $path = $this->pathFixingService->removePathRoot($path, $coverage->getRoot());
 
                 $coverage->addFile(new File($path));
                 break;
@@ -155,22 +159,5 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         return $coverage;
-    }
-
-    private function getRelativeFilePath(XMLReader $reader, Project $coverage): ?string
-    {
-        $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
-
-        if ($path === null) {
-            return null;
-        }
-
-        // Trim the root from the files path, so that we store each file path relative
-        // to the project root
-        if (str_starts_with($path, $coverage->getRoot())) {
-            $path = substr($path, strlen($coverage->getRoot()));
-        }
-
-        return trim($path, '/');
     }
 }

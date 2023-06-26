@@ -8,6 +8,7 @@ use App\Handler\IngestHandler;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
+use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use AsyncAws\Core\Stream\ResultStream;
@@ -144,8 +145,8 @@ class IngestHandlerTest extends TestCase
     {
         return new CoverageFileParserService(
             [
-                new LcovParseStrategy(new NullLogger()),
-                new CloverParseStrategy(new NullLogger())
+                new LcovParseStrategy(new NullLogger(), new PathFixingService()),
+                new CloverParseStrategy(new NullLogger(), new PathFixingService())
             ],
             new NullLogger()
         );
