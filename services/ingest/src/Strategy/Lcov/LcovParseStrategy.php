@@ -206,11 +206,4 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         return sprintf('/%s/', self::COVERAGE_DATA_VALIDATION[$type]);
     }
-
-    private function getRelativeFilePath(string $path, Project $coverage): ?string
-    {
-        // Trim the root from the files path, so that we store each file path relative
-        // to the project root
-
-    }
 }
