@@ -69,7 +69,16 @@ class IngestHandler extends S3Handler
                         $coverage->getSourceFormat()->value
                     )
                 );
-            } catch (RetrievalException | ParseException | PersistException | DeletionException $e) {
+            } catch (RetrievalException $e) {
+                $this->handlerLogger->error(
+                    'Failed to retrieve coverage file.',
+                    [
+                        'exception' => $e,
+                        'bucket'    => $coverageFile->getBucket(),
+                        'key'       => $coverageFile->getObject()
+                    ]
+                );
+            } catch (ParseException | PersistException | DeletionException $e) {
                 $this->handlerLogger->error(
                     sprintf('Failed to successfully ingest %s.', (string)$upload),
                     [
@@ -111,7 +120,7 @@ class IngestHandler extends S3Handler
             );
         }
 
-        return (string)$metadata['projectroot'];
+        return $metadata['projectroot'];
     }
 
     /**
