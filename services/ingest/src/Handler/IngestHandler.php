@@ -83,7 +83,7 @@ class IngestHandler extends S3Handler
                     'Failed to successfully ingest coverage.',
                     [
                         'exception' => $e,
-                        'upload'    => $upload
+                        'upload'    => $upload ?? null
                     ]
                 );
             }
