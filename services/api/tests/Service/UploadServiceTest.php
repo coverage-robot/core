@@ -129,6 +129,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'mock-parent-hash',
@@ -137,9 +138,10 @@ class UploadServiceTest extends TestCase
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
                 ],
-                new SigningParameters([
+                SigningParameters::from([
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'mock-parent-hash',
@@ -153,6 +155,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'parent' => 'mock-parent-hash',
                     'ref' => 'mock-branch-reference',
@@ -160,9 +163,10 @@ class UploadServiceTest extends TestCase
                     'fileName' => 'test.xml',
                     'tag' => 'backend'
                 ],
-                new SigningParameters([
+                SigningParameters::from([
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'parent' => 'mock-parent-hash',
                     'ref' => 'mock-branch-reference',
@@ -175,6 +179,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'parent' => 'mock-parent-hash',
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
@@ -187,6 +192,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'parent' => 'mock-parent-hash',
                     'ref' => 'mock-branch-reference',
@@ -198,6 +204,7 @@ class UploadServiceTest extends TestCase
             'Without owner or repository' => [
                 [
                     'commit' => 2,
+                    'projectRoot' => 'some/root/',
                     'parent' => 'mock-parent-hash',
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
@@ -210,6 +217,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => 'mock-parent-hash',
@@ -223,6 +231,7 @@ class UploadServiceTest extends TestCase
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => ['mock-parent-hash', 'e'],
@@ -231,9 +240,10 @@ class UploadServiceTest extends TestCase
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
                 ],
-                new SigningParameters([
+                SigningParameters::from([
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
+                    'projectRoot' => 'some/root/',
                     'commit' => 2,
                     'pullRequest' => 12,
                     'parent' => ['mock-parent-hash', 'e'],
