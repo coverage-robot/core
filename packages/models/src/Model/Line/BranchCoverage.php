@@ -57,7 +57,8 @@ class BranchCoverage extends AbstractLineCoverage
             [
                 // If there's at least 1 branch with no hits then its partially covered, so long as
                 // not every branch has no hits (as that's completely uncovered)
-                'partial' => count($branchesWithNoHits) > 0 && count($this->getBranchHits()) > $branchesWithNoHits,
+                'partial' => count($branchesWithNoHits) > 0 &&
+                    count($this->getBranchHits()) > count($branchesWithNoHits),
                 'branchHits' => $this->getBranchHits()
             ]
         );

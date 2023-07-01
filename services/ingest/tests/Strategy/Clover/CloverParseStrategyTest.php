@@ -2,6 +2,7 @@
 
 namespace App\Tests\Strategy\Clover;
 
+use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
@@ -14,6 +15,7 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
         return [
             ...parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Clover', 'xml'),
             'Does not handle invalid file' => [
+                'mock/project/root',
                 'invalid-file-content',
                 false,
                 []
@@ -23,6 +25,6 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new CloverParseStrategy(new NullLogger());
+        return new CloverParseStrategy(new NullLogger(), new PathFixingService());
     }
 }

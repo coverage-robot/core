@@ -3,6 +3,7 @@
 namespace App\Strategy\Lcov;
 
 use App\Exception\ParseException;
+use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
 use Packages\Models\Enum\CoverageFormat;
@@ -42,7 +43,8 @@ class LcovParseStrategy implements ParseStrategyInterface
     public const END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger
+        private readonly LoggerInterface $parseStrategyLogger,
+        private readonly PathFixingService $pathFixingService
     ) {
     }
 
@@ -91,7 +93,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $content): Project
+    public function parse(string $projectRoot, string $content): Project
     {
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
@@ -99,7 +101,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Project(CoverageFormat::LCOV);
+        $project = new Project(CoverageFormat::LCOV, $projectRoot);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -127,7 +129,9 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         switch ($type) {
             case self::FILE:
-                $coverage->addFile(new File($data));
+                $path = $this->pathFixingService->removePathRoot($data, $coverage->getRoot());
+
+                $coverage->addFile(new File($path));
                 break;
             case self::LINE_DATA:
                 $latestFile->setLineCoverage(

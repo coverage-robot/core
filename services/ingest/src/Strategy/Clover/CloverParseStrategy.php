@@ -3,6 +3,7 @@
 namespace App\Strategy\Clover;
 
 use App\Exception\ParseException;
+use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
 use Packages\Models\Enum\CoverageFormat;
@@ -25,10 +26,14 @@ class CloverParseStrategy implements ParseStrategyInterface
     private const CONDITION = 'cond';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger
+        private readonly LoggerInterface $parseStrategyLogger,
+        private readonly PathFixingService $pathFixingService
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function supports(string $content): bool
     {
         libxml_use_internal_errors(true);
@@ -64,7 +69,10 @@ class CloverParseStrategy implements ParseStrategyInterface
         return true;
     }
 
-    public function parse(string $content): Project
+    /**
+     * @inheritDoc
+     */
+    public function parse(string $projectRoot, string $content): Project
     {
         libxml_use_internal_errors(true);
 
@@ -74,13 +82,13 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Project(CoverageFormat::CLOVER);
+        $project = new Project(CoverageFormat::CLOVER, $projectRoot);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
-                // We don't want to parse if it's a closing tag as the XML reader will
-                // let the parser use it as if it's the opening element, and that will
-                // cause duplicate files to be tracked.
+                // We don't want to parse the node if it's a closing tag, as the XML
+                // reader will let the parser use the element with all the properties
+                // from the opening tags, and that will cause duplicate files to be tracked.
                 continue;
             }
 
@@ -116,9 +124,12 @@ class CloverParseStrategy implements ParseStrategyInterface
                 break;
             case self::FILE:
                 $path = $reader->getAttribute('path') ?? $reader->getAttribute('name');
+
                 if ($path === null) {
                     break;
                 }
+
+                $path = $this->pathFixingService->removePathRoot($path, $coverage->getRoot());
 
                 $coverage->addFile(new File($path));
                 break;

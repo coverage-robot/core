@@ -18,7 +18,7 @@ class UploadControllerTest extends KernelTestCase
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleUpload(array $body): void
     {
-        $parameters = new SigningParameters($body['data']);
+        $parameters = SigningParameters::from($body['data']);
 
         $uploadService = $this->createMock(UploadService::class);
         $uploadService->expects($this->once())
@@ -86,7 +86,8 @@ class UploadControllerTest extends KernelTestCase
                         'ref' => 'mock-branch-reference',
                         'tag' => 'mock-tag',
                         'provider' => 'github',
-                        'fileName' => 'test.xml'
+                        'fileName' => 'some/root/test.xml',
+                        'projectRoot' => 'some/root/'
                     ]
                  ]
             ],
@@ -100,7 +101,8 @@ class UploadControllerTest extends KernelTestCase
                         'ref' => 'mock-branch-reference',
                         'tag' => 'mock-tag',
                         'provider' => 'github',
-                        'fileName' => 'test.xml'
+                        'fileName' => 'some/root/test.xml',
+                        'projectRoot' => 'some/root/'
                     ]
                 ]
             ]

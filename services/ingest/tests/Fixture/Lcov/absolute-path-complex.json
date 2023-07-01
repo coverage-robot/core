@@ -1,10 +1,10 @@
 {
-    "sourceFormat": "CLOVER",
+    "sourceFormat": "LCOV",
     "root": "mock\/project\/root",
-    "generatedAt": "2023-04-19T22:02:20+00:00",
+    "generatedAt": null,
     "files": [
         {
-            "fileName": "services\/frontend\/src\/App.tsx",
+            "fileName": "src\/App.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -120,9 +120,8 @@
                     "type": "BRANCH",
                     "lineNumber": 60,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -139,8 +138,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/config\/constants.ts",
+            "fileName": "src\/config\/constants.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 3,
+                    "lineHits": 3,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -150,10 +155,10 @@
                     "type": "BRANCH",
                     "lineNumber": 3,
                     "lineHits": 3,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        3,
+                        3
                     ]
                 },
                 {
@@ -189,19 +194,25 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/config\/global.d.ts",
+            "fileName": "src\/config\/global.d.ts",
             "lines": []
         },
         {
-            "fileName": "services\/frontend\/src\/config\/graphql.ts",
+            "fileName": "src\/config\/graphql.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 160,
+                    "lineHits": 0,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "BRANCH",
                     "lineNumber": 160,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        2,
+                        0,
                         0
                     ]
                 },
@@ -218,8 +229,50 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/config\/routes.tsx",
+            "fileName": "src\/config\/routes.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 0,
+                    "name": "(anonymous_11)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 0,
+                    "name": "(anonymous_12)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 9,
+                    "lineHits": 2,
+                    "name": "(anonymous_13)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -249,9 +302,9 @@
                     "type": "BRANCH",
                     "lineNumber": 9,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
+                        2,
                         2
                     ]
                 },
@@ -273,12 +326,18 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/config\/storyblok.d.ts",
+            "fileName": "src\/config\/storyblok.d.ts",
             "lines": []
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/AboutPage.tsx",
+            "fileName": "src\/features\/about\/AboutPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -327,8 +386,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/ContactSection.tsx",
+            "fileName": "src\/features\/about\/components\/ContactSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -367,8 +432,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/HeadingSection.tsx",
+            "fileName": "src\/features\/about\/components\/HeadingSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -397,8 +468,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/LiveStatsSection.tsx",
+            "fileName": "src\/features\/about\/components\/LiveStatsSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -442,8 +519,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/MapSection.tsx",
+            "fileName": "src\/features\/about\/components\/MapSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 10,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -497,8 +580,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/Tile\/ErrorCountTile.tsx",
+            "fileName": "src\/features\/about\/components\/Tile\/ErrorCountTile.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -540,8 +629,8 @@
                     "lineHits": 2,
                     "partial": false,
                     "branchHits": [
-                        1,
-                        6
+                        4,
+                        3
                     ]
                 },
                 {
@@ -562,8 +651,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/Tile\/LastReleaseTile.tsx",
+            "fileName": "src\/features\/about\/components\/Tile\/LastReleaseTile.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 4,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -610,7 +705,7 @@
                     "lineHits": 4,
                     "partial": false,
                     "branchHits": [
-                        1,
+                        8,
                         6
                     ]
                 },
@@ -628,9 +723,8 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -647,8 +741,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/about\/components\/Tile\/ReleasesCountTile.tsx",
+            "fileName": "src\/features\/about\/components\/Tile\/ReleasesCountTile.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -690,8 +790,8 @@
                     "lineHits": 2,
                     "partial": false,
                     "branchHits": [
-                        1,
-                        6
+                        4,
+                        3
                     ]
                 },
                 {
@@ -712,8 +812,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/articles\/library\/ArticlesPage.tsx",
+            "fileName": "src\/features\/articles\/library\/ArticlesPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -752,8 +858,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/articles\/library\/components\/ArticlesSection.tsx",
+            "fileName": "src\/features\/articles\/library\/components\/ArticlesSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 27,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -798,9 +916,9 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        7,
+                        0,
                         0
                     ]
                 },
@@ -818,12 +936,48 @@
                     "type": "STATEMENT",
                     "lineNumber": 35,
                     "lineHits": 0
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 24,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 26,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 41,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/articles\/library\/components\/HeadingSection.tsx",
+            "fileName": "src\/features\/articles\/library\/components\/HeadingSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -852,8 +1006,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/articles\/viewer\/ArticlePage.tsx",
+            "fileName": "src\/features\/articles\/viewer\/ArticlePage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 124,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -948,9 +1114,9 @@
                     "type": "BRANCH",
                     "lineNumber": 31,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        3,
+                        0,
                         0
                     ]
                 },
@@ -968,9 +1134,9 @@
                     "type": "BRANCH",
                     "lineNumber": 53,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        2,
+                        0,
                         0
                     ]
                 },
@@ -978,9 +1144,9 @@
                     "type": "BRANCH",
                     "lineNumber": 56,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        2,
+                        0,
                         0
                     ]
                 },
@@ -1013,12 +1179,68 @@
                     "type": "STATEMENT",
                     "lineNumber": 165,
                     "lineHits": 0
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 27,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 74,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 90,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 97,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 105,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/error\/GenericErrorPage.tsx",
+            "fileName": "src\/features\/error\/GenericErrorPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1047,8 +1269,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/error\/NotFoundPage.tsx",
+            "fileName": "src\/features\/error\/NotFoundPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1077,8 +1305,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/HomePage.tsx",
+            "fileName": "src\/features\/home\/HomePage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 10,
+                    "lineHits": 0,
+                    "name": "(anonymous_6)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 20,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1138,9 +1378,9 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        4,
+                        0,
                         0
                     ]
                 },
@@ -1152,8 +1392,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/ArticlesSection.tsx",
+            "fileName": "src\/features\/home\/components\/ArticlesSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1192,8 +1438,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/ContactSection.tsx",
+            "fileName": "src\/features\/home\/components\/ContactSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1237,8 +1489,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/CoverSection.tsx",
+            "fileName": "src\/features\/home\/components\/CoverSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1277,8 +1535,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/ExperienceSection.tsx",
+            "fileName": "src\/features\/home\/components\/ExperienceSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1312,8 +1576,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/HeadingSection.tsx",
+            "fileName": "src\/features\/home\/components\/HeadingSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 11,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1352,8 +1622,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/home\/components\/SkillsSection.tsx",
+            "fileName": "src\/features\/home\/components\/SkillsSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 11,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1412,8 +1688,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/projects\/library\/ProjectsPage.tsx",
+            "fileName": "src\/features\/projects\/library\/ProjectsPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1452,8 +1734,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/projects\/library\/components\/HeadingSection.tsx",
+            "fileName": "src\/features\/projects\/library\/components\/HeadingSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1482,8 +1770,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/projects\/library\/components\/ProjectsSection.tsx",
+            "fileName": "src\/features\/projects\/library\/components\/ProjectsSection.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 27,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1528,9 +1828,9 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        7,
+                        0,
                         0
                     ]
                 },
@@ -1548,12 +1848,54 @@
                     "type": "STATEMENT",
                     "lineNumber": 35,
                     "lineHits": 0
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 24,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 26,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 41,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/features\/projects\/viewer\/ProjectPage.tsx",
+            "fileName": "src\/features\/projects\/viewer\/ProjectPage.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 20,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 109,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1643,9 +1985,9 @@
                     "type": "BRANCH",
                     "lineNumber": 29,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        3,
+                        0,
                         0
                     ]
                 },
@@ -1663,9 +2005,9 @@
                     "type": "BRANCH",
                     "lineNumber": 49,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        4,
+                        0,
                         0
                     ]
                 },
@@ -1703,12 +2045,64 @@
                     "type": "STATEMENT",
                     "lineNumber": 150,
                     "lineHits": 2
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 68,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 83,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 89,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Author\/Author.tsx",
+            "fileName": "src\/shared\/components\/Author\/Author.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 16,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1757,8 +2151,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Author\/index.ts",
+            "fileName": "src\/shared\/components\/Author\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 1,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1767,8 +2167,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Button\/Button.tsx",
+            "fileName": "src\/shared\/components\/Button\/Button.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 19,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1808,12 +2214,66 @@
                     "type": "STATEMENT",
                     "lineNumber": 40,
                     "lineHits": 7
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 14,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 17,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        10,
+                        9
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        19,
+                        9
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 35,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        19,
+                        8
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Button\/index.ts",
+            "fileName": "src\/shared\/components\/Button\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 16,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1822,8 +2282,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Card\/Card.tsx",
+            "fileName": "src\/shared\/components\/Card\/Card.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 14,
+                    "lineHits": 38,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1848,10 +2314,9 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 38,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        28
                     ]
                 },
                 {
@@ -1868,12 +2333,46 @@
                     "type": "STATEMENT",
                     "lineNumber": 42,
                     "lineHits": 15
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 15,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        25
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 19,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        19
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 38,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        0,
+                        38
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Card\/index.ts",
+            "fileName": "src\/shared\/components\/Card\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 38,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1882,8 +2381,38 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ContactForm\/ContactForm.tsx",
+            "fileName": "src\/shared\/components\/ContactForm\/ContactForm.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 5,
+                    "name": "(anonymous_14)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 24,
+                    "lineHits": 2,
+                    "name": "(anonymous_15)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 42,
+                    "lineHits": 1,
+                    "name": "(anonymous_16)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 42,
+                    "lineHits": 1,
+                    "name": "(anonymous_17)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 79,
+                    "lineHits": 1,
+                    "name": "(anonymous_18)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -1943,10 +2472,12 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 2,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
-                        2,
-                        2
+                        0,
+                        1,
+                        1,
+                        0
                     ]
                 },
                 {
@@ -1990,8 +2521,8 @@
                     "lineHits": 1,
                     "partial": false,
                     "branchHits": [
-                        2,
-                        7
+                        3,
+                        4
                     ]
                 },
                 {
@@ -2003,9 +2534,8 @@
                     "type": "BRANCH",
                     "lineNumber": 56,
                     "lineHits": 5,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -2028,12 +2558,58 @@
                     "type": "STATEMENT",
                     "lineNumber": 91,
                     "lineHits": 1
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 63,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        4,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 67,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        11,
+                        13
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 74,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        11,
+                        13
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 85,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        1,
+                        3
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Figure\/Figure.tsx",
+            "fileName": "src\/shared\/components\/Figure\/Figure.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 12,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2063,12 +2639,28 @@
                     "type": "STATEMENT",
                     "lineNumber": 29,
                     "lineHits": 5
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 21,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        1,
+                        1
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Footer\/Footer.tsx",
+            "fileName": "src\/shared\/components\/Footer\/Footer.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2112,8 +2704,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Footer\/index.ts",
+            "fileName": "src\/shared\/components\/Footer\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2122,8 +2720,44 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Header\/Header.tsx",
+            "fileName": "src\/shared\/components\/Header\/Header.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 25,
+                    "lineHits": 8,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 30,
+                    "lineHits": 2,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 31,
+                    "lineHits": 2,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 47,
+                    "lineHits": 4,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 51,
+                    "lineHits": 2,
+                    "name": "(anonymous_11)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 58,
+                    "lineHits": 6,
+                    "name": "(anonymous_12)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2238,12 +2872,48 @@
                     "type": "STATEMENT",
                     "lineNumber": 77,
                     "lineHits": 1
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 40,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8,
+                        6
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 41,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        6,
+                        2
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 67,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        6,
+                        4
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Header\/index.ts",
+            "fileName": "src\/shared\/components\/Header\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2252,8 +2922,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Input\/Input.tsx",
+            "fileName": "src\/shared\/components\/Input\/Input.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 11,
+                    "lineHits": 8,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2283,9 +2959,8 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 8,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -2297,8 +2972,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Input\/index.ts",
+            "fileName": "src\/shared\/components\/Input\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 8,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2307,8 +2988,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Label\/Label.tsx",
+            "fileName": "src\/shared\/components\/Label\/Label.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 9,
+                    "lineHits": 3,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2347,8 +3034,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Label\/index.ts",
+            "fileName": "src\/shared\/components\/Label\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 3,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2357,8 +3050,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Loader\/Loader.tsx",
+            "fileName": "src\/shared\/components\/Loader\/Loader.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2382,8 +3081,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Loader\/index.ts",
+            "fileName": "src\/shared\/components\/Loader\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 2,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2392,8 +3097,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/PostCard\/PostCard.tsx",
+            "fileName": "src\/shared\/components\/PostCard\/PostCard.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 8,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 58,
+                    "lineHits": 6,
+                    "name": "(anonymous_3)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2468,12 +3185,60 @@
                     "type": "STATEMENT",
                     "lineNumber": 66,
                     "lineHits": 3
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 31,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        8,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 38,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8,
+                        2
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 53,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8,
+                        2
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/PostCard\/PostCardContainer.tsx",
+            "fileName": "src\/shared\/components\/PostCard\/PostCardContainer.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 5,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 31,
+                    "lineHits": 2,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 45,
+                    "lineHits": 6,
+                    "name": "(anonymous_3)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2528,12 +3293,79 @@
                     "type": "STATEMENT",
                     "lineNumber": 54,
                     "lineHits": 3
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 17,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        5
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        5,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 32,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 33,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        2
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ProgressBar\/ProgressBar.tsx",
+            "fileName": "src\/shared\/components\/ProgressBar\/ProgressBar.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 9,
+                    "lineHits": 1,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 1,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 17,
+                    "lineHits": 0,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 25,
+                    "lineHits": 1,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 28,
+                    "lineHits": 1,
+                    "name": "(anonymous_11)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2548,9 +3380,8 @@
                     "type": "BRANCH",
                     "lineNumber": 9,
                     "lineHits": 1,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -2573,9 +3404,8 @@
                     "type": "BRANCH",
                     "lineNumber": 14,
                     "lineHits": 1,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -2637,8 +3467,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ProgressBar\/index.ts",
+            "fileName": "src\/shared\/components\/ProgressBar\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2647,8 +3483,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/RecentArticlesContainer\/RecentArticlesContainer.tsx",
+            "fileName": "src\/shared\/components\/RecentArticlesContainer\/RecentArticlesContainer.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 4,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 26,
+                    "lineHits": 2,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2688,10 +3536,9 @@
                     "type": "BRANCH",
                     "lineNumber": 15,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        2
                     ]
                 },
                 {
@@ -2705,8 +3552,8 @@
                     "lineHits": 2,
                     "partial": false,
                     "branchHits": [
-                        2,
-                        9
+                        7,
+                        10
                     ]
                 },
                 {
@@ -2728,12 +3575,54 @@
                     "type": "STATEMENT",
                     "lineNumber": 48,
                     "lineHits": 1
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        1,
+                        2
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 36,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        2,
+                        2
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 40,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        2,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ScrollReset\/ScrollReset.ts",
+            "fileName": "src\/shared\/components\/ScrollReset\/ScrollReset.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 4,
+                    "lineHits": 0,
+                    "name": "(anonymous_0)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2777,8 +3666,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ScrollReset\/index.ts",
+            "fileName": "src\/shared\/components\/ScrollReset\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2787,8 +3682,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Section\/Container.tsx",
+            "fileName": "src\/shared\/components\/Section\/Container.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 12,
+                    "lineHits": 10,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2813,10 +3714,9 @@
                     "type": "BRANCH",
                     "lineNumber": 17,
                     "lineHits": 10,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        7
                     ]
                 },
                 {
@@ -2828,12 +3728,45 @@
                     "type": "STATEMENT",
                     "lineNumber": 20,
                     "lineHits": 10
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 13,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        9
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 15,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 16,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        10
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Section\/Heading.tsx",
+            "fileName": "src\/shared\/components\/Section\/Heading.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 26,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2868,12 +3801,36 @@
                     "type": "STATEMENT",
                     "lineNumber": 20,
                     "lineHits": 26
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 14,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        4
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 16,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        21
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Section\/Section.tsx",
+            "fileName": "src\/shared\/components\/Section\/Section.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 17,
+                    "lineHits": 5,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2933,12 +3890,36 @@
                     "type": "STATEMENT",
                     "lineNumber": 39,
                     "lineHits": 12
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 18,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 19,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        4
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Section\/index.ts",
+            "fileName": "src\/shared\/components\/Section\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 41,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2947,8 +3928,68 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/SkillsDescriptor\/SkillsDescriptor.tsx",
+            "fileName": "src\/shared\/components\/SkillsDescriptor\/SkillsDescriptor.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 5,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 26,
+                    "lineHits": 4,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 26,
+                    "lineHits": 6,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 33,
+                    "lineHits": 1,
+                    "name": "(anonymous_11)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 40,
+                    "lineHits": 4,
+                    "name": "(anonymous_12)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 43,
+                    "lineHits": 1,
+                    "name": "(anonymous_13)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 43,
+                    "lineHits": 1,
+                    "name": "(anonymous_14)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 48,
+                    "lineHits": 4,
+                    "name": "(anonymous_15)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 58,
+                    "lineHits": 10,
+                    "name": "(anonymous_16)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 67,
+                    "lineHits": 0,
+                    "name": "(anonymous_17)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -2978,10 +4019,9 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 5,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        2
                     ]
                 },
                 {
@@ -2998,10 +4038,11 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
+                        4,
                         1,
-                        2
+                        0
                     ]
                 },
                 {
@@ -3028,9 +4069,9 @@
                     "type": "BRANCH",
                     "lineNumber": 35,
                     "lineHits": 1,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
-                        1,
+                        0,
                         1
                     ]
                 },
@@ -3043,9 +4084,8 @@
                     "type": "BRANCH",
                     "lineNumber": 41,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -3063,10 +4103,10 @@
                     "type": "BRANCH",
                     "lineNumber": 48,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        4,
+                        1
                     ]
                 },
                 {
@@ -3103,12 +4143,38 @@
                     "type": "STATEMENT",
                     "lineNumber": 88,
                     "lineHits": 1
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 65,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        4,
+                        6
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 76,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        10,
+                        10
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/SkillsDescriptor\/index.ts",
+            "fileName": "src\/shared\/components\/SkillsDescriptor\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 4,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3117,8 +4183,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/SocialIcons\/ShareIcons.tsx",
+            "fileName": "src\/shared\/components\/SocialIcons\/ShareIcons.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3157,8 +4229,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/SocialIcons\/index.ts",
+            "fileName": "src\/shared\/components\/SocialIcons\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 3,
+                    "lineHits": 1,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3172,8 +4250,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/StatTile\/StatTile.tsx",
+            "fileName": "src\/shared\/components\/StatTile\/StatTile.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 6,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 46,
+                    "lineHits": 4,
+                    "name": "(anonymous_3)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3218,10 +4308,9 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        2
                     ]
                 },
                 {
@@ -3248,12 +4337,38 @@
                     "type": "STATEMENT",
                     "lineNumber": 62,
                     "lineHits": 4
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 40,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        6,
+                        5
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 56,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        4,
+                        4
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/StatTile\/index.ts",
+            "fileName": "src\/shared\/components\/StatTile\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 10,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3262,8 +4377,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/StoryblokContent\/StoryblokContent.tsx",
+            "fileName": "src\/shared\/components\/StoryblokContent\/StoryblokContent.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 3,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 2,
@@ -3282,8 +4403,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/StoryblokContent\/index.tsx",
+            "fileName": "src\/shared\/components\/StoryblokContent\/index.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 3,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3292,8 +4419,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Template\/DefaultTemplate.tsx",
+            "fileName": "src\/shared\/components\/Template\/DefaultTemplate.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 3,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3327,8 +4460,26 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Template\/DynamicTemplate.tsx",
+            "fileName": "src\/shared\/components\/Template\/DynamicTemplate.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 10,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 11,
+                    "lineHits": 0,
+                    "name": "(anonymous_3)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 14,
+                    "lineHits": 0,
+                    "name": "(anonymous_4)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3377,8 +4528,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Template\/MetaTags.tsx",
+            "fileName": "src\/shared\/components\/Template\/MetaTags.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 3,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 16,
+                    "lineHits": 3,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3403,10 +4566,10 @@
                     "type": "BRANCH",
                     "lineNumber": 15,
                     "lineHits": 3,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        3,
+                        3
                     ]
                 },
                 {
@@ -3418,12 +4581,128 @@
                     "type": "STATEMENT",
                     "lineNumber": 20,
                     "lineHits": 3
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 23,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 24,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        3,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 26,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 27,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 28,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 29,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 30,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        3,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 31,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 32,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        3,
+                        3
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Template\/RightSidebarTemplate.tsx",
+            "fileName": "src\/shared\/components\/Template\/RightSidebarTemplate.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3453,12 +4732,40 @@
                     "type": "STATEMENT",
                     "lineNumber": 23,
                     "lineHits": 0
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Template\/index.ts",
+            "fileName": "src\/shared\/components\/Template\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 3,
+                    "name": "(anonymous_0)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3482,8 +4789,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Textarea\/Textarea.tsx",
+            "fileName": "src\/shared\/components\/Textarea\/Textarea.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 10,
+                    "lineHits": 6,
+                    "name": "(anonymous_2)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3532,8 +4845,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Textarea\/index.ts",
+            "fileName": "src\/shared\/components\/Textarea\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 6,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3542,8 +4861,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Timeline\/Marker.tsx",
+            "fileName": "src\/shared\/components\/Timeline\/Marker.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 16,
+                    "lineHits": 8,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 89,
+                    "lineHits": 2,
+                    "name": "(anonymous_9)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3588,9 +4919,8 @@
                     "type": "BRANCH",
                     "lineNumber": 21,
                     "lineHits": 8,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -3613,12 +4943,128 @@
                     "type": "STATEMENT",
                     "lineNumber": 89,
                     "lineHits": 2
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 31,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        40,
+                        24
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 36,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        8,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 40,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        8,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 42,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 45,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 52,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 59,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 64,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 71,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 81,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8,
+                        8
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 84,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        8,
+                        6
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Timeline\/Timeline.tsx",
+            "fileName": "src\/shared\/components\/Timeline\/Timeline.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 14,
+                    "lineHits": 4,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3662,8 +5108,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Timeline\/index.ts",
+            "fileName": "src\/shared\/components\/Timeline\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 10,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3672,8 +5124,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Tooltip\/Tooltip.tsx",
+            "fileName": "src\/shared\/components\/Tooltip\/Tooltip.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 11,
+                    "lineHits": 10,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3698,9 +5156,8 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 5,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -3712,8 +5169,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/Tooltip\/index.ts",
+            "fileName": "src\/shared\/components\/Tooltip\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 10,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3722,8 +5185,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ValidationError\/ValidationError.tsx",
+            "fileName": "src\/shared\/components\/ValidationError\/ValidationError.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 15,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3738,22 +5207,37 @@
                     "type": "BRANCH",
                     "lineNumber": 8,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        10
                     ]
                 },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 9,
                     "lineHits": 15
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 11,
+                    "lineHits": 0,
+                    "partial": false,
+                    "branchHits": [
+                        15,
+                        5
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/components\/ValidationError\/index.ts",
+            "fileName": "src\/shared\/components\/ValidationError\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 15,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3762,8 +5246,38 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/hooks\/useMediaQuery.ts",
+            "fileName": "src\/shared\/hooks\/useMediaQuery.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 3,
+                    "lineHits": 8,
+                    "name": "useMediaQuery"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 4,
+                    "lineHits": 12,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 14,
+                    "lineHits": 4,
+                    "name": "handleChange"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 18,
+                    "lineHits": 4,
+                    "name": "(anonymous_3)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 31,
+                    "lineHits": 4,
+                    "name": "(anonymous_4)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3778,10 +5292,9 @@
                     "type": "BRANCH",
                     "lineNumber": 6,
                     "lineHits": 12,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        12
                     ]
                 },
                 {
@@ -3823,10 +5336,10 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 4,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
-                        1,
-                        1
+                        0,
+                        4
                     ]
                 },
                 {
@@ -3848,10 +5361,10 @@
                     "type": "BRANCH",
                     "lineNumber": 32,
                     "lineHits": 4,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
-                        1,
-                        1
+                        0,
+                        4
                     ]
                 },
                 {
@@ -3877,8 +5390,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/fomatNaturalLanguageDate\/formatNaturalLanguageDate.ts",
+            "fileName": "src\/shared\/utilities\/fomatNaturalLanguageDate\/formatNaturalLanguageDate.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 16,
+                    "name": "(anonymous_0)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -3923,20 +5442,19 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 16,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        4
                     ]
                 },
                 {
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        3,
+                        1
                     ]
                 },
                 {
@@ -3948,10 +5466,10 @@
                     "type": "BRANCH",
                     "lineNumber": 18,
                     "lineHits": 12,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        2,
+                        10
                     ]
                 },
                 {
@@ -3963,10 +5481,10 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 10,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        2,
+                        8
                     ]
                 },
                 {
@@ -3978,10 +5496,10 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 8,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        2,
+                        6
                     ]
                 },
                 {
@@ -3993,10 +5511,10 @@
                     "type": "BRANCH",
                     "lineNumber": 24,
                     "lineHits": 6,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        2,
+                        4
                     ]
                 },
                 {
@@ -4008,9 +5526,9 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 4,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
+                        2,
                         2
                     ]
                 },
@@ -4033,10 +5551,10 @@
                     "type": "BRANCH",
                     "lineNumber": 33,
                     "lineHits": 12,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        6,
+                        6
                     ]
                 },
                 {
@@ -4047,7 +5565,7 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/fomatNaturalLanguageDate\/index.ts",
+            "fileName": "src\/shared\/utilities\/fomatNaturalLanguageDate\/index.ts",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4062,8 +5580,44 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/getGlobalNavigation\/getGlobalNavigation.tsx",
+            "fileName": "src\/shared\/utilities\/getGlobalNavigation\/getGlobalNavigation.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 7,
+                    "lineHits": 7,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 13,
+                    "lineHits": 28,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 28,
+                    "lineHits": 28,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 43,
+                    "lineHits": 7,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 49,
+                    "lineHits": 28,
+                    "name": "(anonymous_11)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 49,
+                    "lineHits": 14,
+                    "name": "(anonymous_12)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4113,10 +5667,9 @@
                     "type": "BRANCH",
                     "lineNumber": 29,
                     "lineHits": 28,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        14
                     ]
                 },
                 {
@@ -4148,11 +5701,31 @@
                     "type": "STATEMENT",
                     "lineNumber": 64,
                     "lineHits": 2
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 35,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        14,
+                        0
+                    ]
+                },
+                {
+                    "type": "BRANCH",
+                    "lineNumber": 51,
+                    "lineHits": 0,
+                    "partial": true,
+                    "branchHits": [
+                        14,
+                        0
+                    ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/getGlobalNavigation\/index.tsx",
+            "fileName": "src\/shared\/utilities\/getGlobalNavigation\/index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4167,8 +5740,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/identity\/generateIdentity.ts",
+            "fileName": "src\/shared\/utilities\/identity\/generateIdentity.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 5,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4198,9 +5777,8 @@
                     "type": "BRANCH",
                     "lineNumber": 7,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
                         1
                     ]
                 },
@@ -4217,8 +5795,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/identity\/getIdentity.ts",
+            "fileName": "src\/shared\/utilities\/identity\/getIdentity.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 3,
+                    "lineHits": 1,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4237,8 +5821,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/identity\/index.ts",
+            "fileName": "src\/shared\/utilities\/identity\/index.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 4,
+                    "lineHits": 1,
+                    "name": "(anonymous_0)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 4,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4257,7 +5853,7 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/renderStoryblokContent\/index.tsx",
+            "fileName": "src\/shared\/utilities\/renderStoryblokContent\/index.tsx",
             "lines": [
                 {
                     "type": "STATEMENT",
@@ -4272,8 +5868,32 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/renderStoryblokContent\/renderStoryblokContent.tsx",
+            "fileName": "src\/shared\/utilities\/renderStoryblokContent\/renderStoryblokContent.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 8,
+                    "lineHits": 2,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 9,
+                    "lineHits": 2,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 20,
+                    "lineHits": 34,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 30,
+                    "lineHits": 19,
+                    "name": "(anonymous_10)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4343,9 +5963,8 @@
                     "type": "BRANCH",
                     "lineNumber": 23,
                     "lineHits": 34,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -4358,10 +5977,9 @@
                     "type": "BRANCH",
                     "lineNumber": 27,
                     "lineHits": 34,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        14
                     ]
                 },
                 {
@@ -4373,10 +5991,10 @@
                     "type": "BRANCH",
                     "lineNumber": 31,
                     "lineHits": 19,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        5,
+                        14
                     ]
                 },
                 {
@@ -4388,10 +6006,9 @@
                     "type": "BRANCH",
                     "lineNumber": 40,
                     "lineHits": 20,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        1
+                        7
                     ]
                 },
                 {
@@ -4413,10 +6030,10 @@
                     "type": "BRANCH",
                     "lineNumber": 47,
                     "lineHits": 13,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        2,
+                        11
                     ]
                 },
                 {
@@ -4437,8 +6054,56 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/renderStoryblokContent\/renderers\/blocks.tsx",
+            "fileName": "src\/shared\/utilities\/renderStoryblokContent\/renderers\/blocks.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 32,
+                    "lineHits": 3,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 33,
+                    "lineHits": 1,
+                    "name": "(anonymous_3)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 38,
+                    "lineHits": 1,
+                    "name": "(anonymous_4)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 41,
+                    "lineHits": 1,
+                    "name": "(anonymous_5)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 42,
+                    "lineHits": 0,
+                    "name": "(anonymous_6)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 43,
+                    "lineHits": 1,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 44,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 54,
+                    "lineHits": 7,
+                    "name": "(anonymous_9)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4518,9 +6183,8 @@
                     "type": "BRANCH",
                     "lineNumber": 55,
                     "lineHits": 7,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -4537,8 +6201,62 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/renderStoryblokContent\/renderers\/marks.tsx",
+            "fileName": "src\/shared\/utilities\/renderStoryblokContent\/renderers\/marks.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 29,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 30,
+                    "lineHits": 1,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 31,
+                    "lineHits": 1,
+                    "name": "(anonymous_3)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 32,
+                    "lineHits": 0,
+                    "name": "(anonymous_4)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 33,
+                    "lineHits": 0,
+                    "name": "(anonymous_5)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 34,
+                    "lineHits": 0,
+                    "name": "(anonymous_6)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 35,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 40,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 43,
+                    "lineHits": 2,
+                    "name": "(anonymous_9)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 2,
@@ -4583,9 +6301,9 @@
                     "type": "BRANCH",
                     "lineNumber": 36,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        4,
+                        0,
                         0
                     ]
                 },
@@ -4603,9 +6321,8 @@
                     "type": "BRANCH",
                     "lineNumber": 44,
                     "lineHits": 2,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -4622,8 +6339,86 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/renderStoryblokContent\/renderers\/richtext.tsx",
+            "fileName": "src\/shared\/utilities\/renderStoryblokContent\/renderers\/richtext.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 14,
+                    "lineHits": 2,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 15,
+                    "lineHits": 1,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 18,
+                    "lineHits": 3,
+                    "name": "(anonymous_3)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 19,
+                    "lineHits": 0,
+                    "name": "(anonymous_4)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 20,
+                    "lineHits": 0,
+                    "name": "(anonymous_5)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 21,
+                    "lineHits": 0,
+                    "name": "(anonymous_6)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 22,
+                    "lineHits": 0,
+                    "name": "(anonymous_7)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 23,
+                    "lineHits": 0,
+                    "name": "(anonymous_8)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 24,
+                    "lineHits": 1,
+                    "name": "(anonymous_9)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 25,
+                    "lineHits": 0,
+                    "name": "(anonymous_10)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 26,
+                    "lineHits": 6,
+                    "name": "(anonymous_11)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 27,
+                    "lineHits": 0,
+                    "name": "(anonymous_12)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 30,
+                    "lineHits": 13,
+                    "name": "(anonymous_13)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4693,9 +6488,9 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        2,
+                        0,
                         0
                     ]
                 },
@@ -4718,9 +6513,8 @@
                     "type": "BRANCH",
                     "lineNumber": 33,
                     "lineHits": 13,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -4737,8 +6531,14 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/withHandledApiErrors\/ApiErrorHandler.tsx",
+            "fileName": "src\/shared\/utilities\/withHandledApiErrors\/ApiErrorHandler.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 6,
+                    "lineHits": 3,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4763,9 +6563,9 @@
                     "type": "BRANCH",
                     "lineNumber": 7,
                     "lineHits": 3,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
+                        3,
                         2
                     ]
                 },
@@ -4782,8 +6582,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/withHandledApiErrors\/errors.ts",
+            "fileName": "src\/shared\/utilities\/withHandledApiErrors\/errors.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 10,
+                    "lineHits": 3,
+                    "name": "(anonymous_0)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 12,
+                    "lineHits": 3,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 2,
@@ -4803,17 +6615,35 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 3,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        0,
-                        2
+                        3,
+                        1
                     ]
                 }
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/withHandledApiErrors\/index.tsx",
+            "fileName": "src\/shared\/utilities\/withHandledApiErrors\/index.tsx",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 1,
+                    "lineHits": 5,
+                    "name": "(anonymous_1)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 2,
+                    "lineHits": 0,
+                    "name": "(anonymous_2)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 3,
+                    "lineHits": 0,
+                    "name": "(anonymous_3)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4832,8 +6662,20 @@
             ]
         },
         {
-            "fileName": "services\/frontend\/src\/shared\/utilities\/withHandledApiErrors\/withHandledApiErrors.ts",
+            "fileName": "src\/shared\/utilities\/withHandledApiErrors\/withHandledApiErrors.ts",
             "lines": [
+                {
+                    "type": "METHOD",
+                    "lineNumber": 4,
+                    "lineHits": 0,
+                    "name": "(anonymous_0)"
+                },
+                {
+                    "type": "METHOD",
+                    "lineNumber": 12,
+                    "lineHits": 0,
+                    "name": "(anonymous_1)"
+                },
                 {
                     "type": "STATEMENT",
                     "lineNumber": 1,
@@ -4848,9 +6690,8 @@
                     "type": "BRANCH",
                     "lineNumber": 5,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },
@@ -4863,9 +6704,9 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        2,
+                        0,
                         0
                     ]
                 },
@@ -4873,9 +6714,8 @@
                     "type": "BRANCH",
                     "lineNumber": 16,
                     "lineHits": 0,
-                    "partial": true,
+                    "partial": false,
                     "branchHits": [
-                        1,
                         0
                     ]
                 },

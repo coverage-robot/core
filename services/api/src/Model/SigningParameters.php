@@ -10,48 +10,18 @@ use Packages\Models\Enum\Provider;
 
 class SigningParameters implements JsonSerializable
 {
-    private string $owner;
-    private string $repository;
-    private Provider $provider;
-    private string $fileName;
-    private string $tag;
-    private string $commit;
-    private array $parent;
-    private string $ref;
-    private ?string $pullRequest;
-
-    /**
-     * @param array $data
-     * @throws SigningException
-     */
-    public function __construct(array $data)
-    {
-        if (
-            !isset($data['owner']) ||
-            !isset($data['repository']) ||
-            !isset($data['provider']) ||
-            !isset($data['fileName']) ||
-            !isset($data['tag']) ||
-            !isset($data['commit']) ||
-            !isset($data['parent']) ||
-            !isset($data['ref'])
-        ) {
-            throw SigningException::invalidParameters();
-        }
-
-        try {
-            $this->owner = (string)$data['owner'];
-            $this->repository = (string)$data['repository'];
-            $this->provider = Provider::from((string)$data['provider']);
-            $this->fileName = (string)$data['fileName'];
-            $this->tag = (string)$data['tag'];
-            $this->commit = (string)$data['commit'];
-            $this->parent = is_array($data['parent']) ? $data['parent'] : (array)$data['parent'];
-            $this->ref = (string)$data['ref'];
-            $this->pullRequest = isset($data['pullRequest']) ? (string)$data['pullRequest'] : null;
-        } catch (Exception $e) {
-            throw SigningException::invalidParameters($e);
-        }
+    public function __construct(
+        private readonly string $owner,
+        private readonly string $repository,
+        private readonly Provider $provider,
+        private readonly string $fileName,
+        private readonly string $projectRoot,
+        private readonly string $tag,
+        private readonly string $commit,
+        private readonly array $parent,
+        private readonly string $ref,
+        private readonly ?string $pullRequest
+    ) {
     }
 
     public function getOwner(): string
@@ -72,6 +42,11 @@ class SigningParameters implements JsonSerializable
     public function getFileName(): string
     {
         return $this->fileName;
+    }
+
+    public function getProjectRoot(): string
+    {
+        return $this->projectRoot;
     }
 
     public function getTag(): string
@@ -100,6 +75,43 @@ class SigningParameters implements JsonSerializable
     }
 
     /**
+     * @throws SigningException
+     */
+    public static function from(array $data): self
+    {
+        if (
+            !isset($data['owner']) ||
+            !isset($data['repository']) ||
+            !isset($data['provider']) ||
+            !isset($data['fileName']) ||
+            !isset($data['projectRoot']) ||
+            !isset($data['tag']) ||
+            !isset($data['commit']) ||
+            !isset($data['parent']) ||
+            !isset($data['ref'])
+        ) {
+            throw SigningException::invalidParameters();
+        }
+
+        try {
+            return new SigningParameters(
+                (string)$data['owner'],
+                (string)$data['repository'],
+                Provider::from((string)$data['provider']),
+                (string)$data['fileName'],
+                (string)$data['projectRoot'],
+                (string)$data['tag'],
+                (string)$data['commit'],
+                is_array($data['parent']) ? $data['parent'] : (array)$data['parent'],
+                (string)$data['ref'],
+                isset($data['pullRequest']) ? (string)$data['pullRequest'] : null
+            );
+        } catch (Exception $e) {
+            throw SigningException::invalidParameters($e);
+        }
+    }
+
+    /**
      * @throws JsonException
      */
     public function jsonSerialize(): array
@@ -112,7 +124,8 @@ class SigningParameters implements JsonSerializable
             'ref' => $this->ref,
             'tag' => $this->tag,
             'provider' => $this->provider,
-            'fileName' => $this->fileName
+            'fileName' => $this->fileName,
+            'projectRoot' => $this->projectRoot,
         ];
 
         if ($this->pullRequest) {

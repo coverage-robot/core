@@ -10,21 +10,25 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractParseStrategyTestCase extends TestCase
 {
     #[DataProvider('coverageFilesDataProvider')]
-    public function testSupports(string $contents, bool $expectedSupport): void
+    public function testSupports(string $projectRoot, string $contents, bool $expectedSupport): void
     {
         $parser = $this->getParserStrategy();
         $this->assertEquals($expectedSupport, $parser->supports($contents));
     }
 
     #[DataProvider('coverageFilesDataProvider')]
-    public function testParse(string $contents, bool $expectedSupport, array $expectedCoverage): void
-    {
+    public function testParse(
+        string $projectRoot,
+        string $contents,
+        bool $expectedSupport,
+        array $expectedCoverage
+    ): void {
         $parser = $this->getParserStrategy();
         if (!$expectedSupport) {
             $this->expectException(ParseException::class);
         }
 
-        $projectCoverage = $parser->parse($contents);
+        $projectCoverage = $parser->parse($projectRoot, $contents);
 
         if ($expectedSupport) {
             $this->assertSame(
@@ -46,6 +50,7 @@ abstract class AbstractParseStrategyTestCase extends TestCase
                 [
                     ...$fixtures,
                     sprintf('Can handle %s', basename($path)) => [
+                        'mock/project/root',
                         file_get_contents($path),
                         true,
                         json_decode(

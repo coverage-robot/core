@@ -60,7 +60,7 @@ class SqsPersistServiceTest extends TestCase
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
-                new Project(CoverageFormat::LCOV),
+                new Project(CoverageFormat::LCOV, ''),
             ],
             [
                 new Upload(
@@ -75,7 +75,7 @@ class SqsPersistServiceTest extends TestCase
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
-                new Project(CoverageFormat::CLOVER),
+                new Project(CoverageFormat::CLOVER, ''),
             ]
         ];
     }

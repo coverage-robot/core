@@ -23,7 +23,7 @@ class CoverageFileParserService
      *
      * @throws ParseException
      */
-    public function parse(string $coverageFile): Project
+    public function parse(string $projectRoot, string $coverageFile): Project
     {
         foreach ($this->parserStrategies as $strategy) {
             if (!$strategy instanceof ParseStrategyInterface) {
@@ -47,7 +47,7 @@ class CoverageFileParserService
                 continue;
             }
 
-            return $strategy->parse($coverageFile);
+            return $strategy->parse($projectRoot, $coverageFile);
         }
 
         throw new ParseException('No strategy found which supports coverage file content.');

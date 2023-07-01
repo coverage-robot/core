@@ -21,7 +21,7 @@ class CoverageFileParserServiceTest extends TestCase
     #[DataProvider('strategyDataProvider')]
     public function testParsingSupportedFiles(string $expectedStrategy): void
     {
-        $coverage = new Project(CoverageFormat::CLOVER);
+        $coverage = new Project(CoverageFormat::CLOVER, 'mock/project/root');
 
         $mockedStrategies = [];
         foreach (self::STRATEGIES as $strategy) {
@@ -33,14 +33,14 @@ class CoverageFileParserServiceTest extends TestCase
 
             $mockStrategy->expects($this->exactly($expectedStrategy === $strategy ? 1 : 0))
                 ->method('parse')
-                ->with('mock-file')
+                ->with('mock-path', 'mock-file')
                 ->willReturn($coverage);
 
             $mockedStrategies[] = $mockStrategy;
         }
 
         $coverageFileParserService = new CoverageFileParserService($mockedStrategies, new NullLogger());
-        $this->assertEquals($coverage, $coverageFileParserService->parse('mock-file'));
+        $this->assertEquals($coverage, $coverageFileParserService->parse('mock-path', 'mock-file'));
     }
 
     public static function strategyDataProvider(): array

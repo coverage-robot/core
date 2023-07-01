@@ -57,7 +57,7 @@ class UploadService
         );
 
         try {
-            return $this->getSigningParameters($parameters);
+            return SigningParameters::from($parameters);
         } catch (SigningException $exception) {
             $this->uploadLogger->error(
                 $exception->getMessage(),
@@ -96,14 +96,6 @@ class UploadService
         $expiry = new DateTimeImmutable(sprintf('+%s min', self::EXPIRY_MINUTES));
 
         return $this->uploadSignerService->sign($uploadId, $input, $expiry);
-    }
-
-    /**
-     * @throws SigningException
-     */
-    private function getSigningParameters(array $parameters): SigningParameters
-    {
-        return new SigningParameters($parameters);
     }
 
     /**

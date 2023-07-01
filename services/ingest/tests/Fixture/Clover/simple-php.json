@@ -1,5 +1,6 @@
 {
     "sourceFormat": "CLOVER",
+    "root": "mock/project/root",
     "generatedAt": "2023-04-16T14:58:29+00:00",
     "files": [
         {

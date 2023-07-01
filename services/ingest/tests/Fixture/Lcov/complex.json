@@ -1,5 +1,6 @@
 {
     "sourceFormat": "LCOV",
+    "root": "mock\/project\/root",
     "generatedAt": null,
     "files": [
         {
@@ -2355,7 +2356,7 @@
                     "type": "BRANCH",
                     "lineNumber": 38,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         0,
                         38
@@ -2471,7 +2472,7 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 2,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         0,
                         1,
@@ -3189,7 +3190,7 @@
                     "type": "BRANCH",
                     "lineNumber": 31,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         8,
                         0
@@ -3306,7 +3307,7 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         5,
                         0
@@ -3599,7 +3600,7 @@
                     "type": "BRANCH",
                     "lineNumber": 40,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -4037,7 +4038,7 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         4,
                         1,
@@ -4068,7 +4069,7 @@
                     "type": "BRANCH",
                     "lineNumber": 35,
                     "lineHits": 1,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -4615,7 +4616,7 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         3,
                         0
@@ -4665,7 +4666,7 @@
                     "type": "BRANCH",
                     "lineNumber": 30,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         3,
                         0
@@ -4957,7 +4958,7 @@
                     "type": "BRANCH",
                     "lineNumber": 36,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         8,
                         0
@@ -4967,7 +4968,7 @@
                     "type": "BRANCH",
                     "lineNumber": 40,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         8,
                         0
@@ -5335,7 +5336,7 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 4,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         0,
                         4
@@ -5360,7 +5361,7 @@
                     "type": "BRANCH",
                     "lineNumber": 32,
                     "lineHits": 4,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         0,
                         4
@@ -5705,7 +5706,7 @@
                     "type": "BRANCH",
                     "lineNumber": 35,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         14,
                         0
@@ -5715,7 +5716,7 @@
                     "type": "BRANCH",
                     "lineNumber": 51,
                     "lineHits": 0,
-                    "partial": false,
+                    "partial": true,
                     "branchHits": [
                         14,
                         0
