@@ -80,9 +80,10 @@ class IngestHandler extends S3Handler
                 );
             } catch (ParseException | PersistException | DeletionException $e) {
                 $this->handlerLogger->error(
-                    sprintf('Failed to successfully ingest %s.', (string)$upload),
+                    'Failed to successfully ingest coverage.',
                     [
-                        'exception' => $e
+                        'exception' => $e,
+                        'upload'    => $upload
                     ]
                 );
             }
