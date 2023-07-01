@@ -59,7 +59,7 @@ trait ScopeAwareTrait
             $filtering = substr($filtering, 0, -3) . ')';
         }
 
-        return !empty($filtering) ? "AND $filtering" : '';
+        return !empty($filtering) ? 'AND ' . $filtering : '';
     }
 
     private static function getLimit(?QueryParameterBag $parameterBag): string
@@ -67,7 +67,7 @@ trait ScopeAwareTrait
         $limit = '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {
-            $limit = "LIMIT {$parameterBag->get(QueryParameter::LIMIT)}";
+            $limit = 'LIMIT ' . $parameterBag->get(QueryParameter::LIMIT);
         }
 
         return $limit;
