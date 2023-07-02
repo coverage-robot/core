@@ -27,7 +27,7 @@ abstract class AbstractLineCoverage implements JsonSerializable
      *
      * @return string
      *
-     * @see MethodCoverage::getUniqueLineIdentifier()
+     * @see Method::getUniqueLineIdentifier()
      */
     public function getUniqueLineIdentifier(): string
     {

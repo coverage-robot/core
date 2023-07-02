@@ -4,7 +4,7 @@ namespace Packages\Models\Model\Line;
 
 use Packages\Models\Enum\LineType;
 
-class MethodCoverage extends AbstractLineCoverage
+class Method extends AbstractLineCoverage
 {
     public function __construct(
         int $lineNumber,

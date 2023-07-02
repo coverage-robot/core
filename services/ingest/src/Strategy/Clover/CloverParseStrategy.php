@@ -9,9 +9,9 @@ use LibXMLError;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\BranchCoverage;
-use Packages\Models\Model\Line\MethodCoverage;
-use Packages\Models\Model\Line\StatementCoverage;
+use Packages\Models\Model\Line\Branch;
+use Packages\Models\Model\Line\Method;
+use Packages\Models\Model\Line\Statement;
 use Psr\Log\LoggerInterface;
 use XMLReader;
 
@@ -142,9 +142,9 @@ class CloverParseStrategy implements ParseStrategyInterface
 
                 end($files)->setLineCoverage(
                     match ($type) {
-                        self::METHOD => new MethodCoverage($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
-                        self::STATEMENT => new StatementCoverage($lineNumber, $lineHits),
-                        self::CONDITION => new BranchCoverage(
+                        self::METHOD => new Method($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
+                        self::STATEMENT => new Statement($lineNumber, $lineHits),
+                        self::CONDITION => new Branch(
                             $lineNumber,
                             $lineHits,
                             [
