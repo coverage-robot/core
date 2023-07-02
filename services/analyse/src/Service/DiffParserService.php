@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 class DiffParserService
 {
     /**
-     * @param array<array-key, DiffParserServiceInterface> $readers
+     * @param array<array-key, DiffParserServiceInterface> $parsers
      */
     public function __construct(
         #[TaggedIterator('app.diff_parser', defaultIndexMethod: 'getProvider')]

@@ -24,7 +24,7 @@ abstract class AbstractGithubCheckPublisherService implements PublisherServiceIn
             ->allForReference($owner, $repository, $commit)['check_runs'];
 
         $checkRuns = array_filter(
-            $checkRuns ?? [],
+            $checkRuns,
             static fn(array $checkRun) => isset($checkRun['id']) &&
                 isset($checkRun['app']['id']) &&
                 $checkRun['app']['id'] == GithubAppClient::APP_ID

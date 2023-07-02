@@ -54,7 +54,7 @@ class GithubCheckAnnotationPublisherService extends AbstractGithubCheckPublisher
     }
 
     private function addAnnotations(
-        string $checkRun,
+        int $checkRun,
         Upload $upload,
         PublishableCoverageDataInterface $coverageData
     ): bool {

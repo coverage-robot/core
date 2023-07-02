@@ -42,7 +42,7 @@ trait ScopeAwareTrait
         $filtering = '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::LINE_SCOPE)) {
-            /** @var array $fileLineNumbers */
+            /** @var array<array-key, list{int}> $fileLineNumbers */
             $fileLineNumbers = $parameterBag->get(QueryParameter::LINE_SCOPE);
 
             $filtering .= '(';
@@ -67,7 +67,7 @@ trait ScopeAwareTrait
         $limit = '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {
-            $limit = 'LIMIT ' . $parameterBag->get(QueryParameter::LIMIT);
+            $limit = 'LIMIT ' . (string)$parameterBag->get(QueryParameter::LIMIT);
         }
 
         return $limit;

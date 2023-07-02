@@ -24,7 +24,7 @@ class QueryParameterBag
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, mixed $value): void
+    public function set(QueryParameter $key, array|int|string $value): void
     {
         $this->parameters[$key] = $value;
     }
