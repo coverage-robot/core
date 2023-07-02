@@ -6,7 +6,7 @@ use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use Packages\Models\Enum\CoverageFormat;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -21,7 +21,7 @@ class CoverageFileParserServiceTest extends TestCase
     #[DataProvider('strategyDataProvider')]
     public function testParsingSupportedFiles(string $expectedStrategy): void
     {
-        $coverage = new Project(CoverageFormat::CLOVER, 'mock/project/root');
+        $coverage = new Coverage(CoverageFormat::CLOVER, 'mock/project/root');
 
         $mockedStrategies = [];
         foreach (self::STRATEGIES as $strategy) {

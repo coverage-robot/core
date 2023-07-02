@@ -7,11 +7,11 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\BranchCoverage;
 use Packages\Models\Model\Line\MethodCoverage;
 use Packages\Models\Model\Line\StatementCoverage;
-use Packages\Models\Model\Project;
 use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
@@ -93,7 +93,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Project
+    public function parse(string $projectRoot, string $content): Coverage
     {
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
@@ -101,7 +101,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Project(CoverageFormat::LCOV, $projectRoot);
+        $project = new Coverage(CoverageFormat::LCOV, $projectRoot);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -119,7 +119,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         return $project;
     }
 
-    private function handleLine(Project $coverage, string $type, string $data): Project
+    private function handleLine(Coverage $coverage, string $type, string $data): Coverage
     {
         $files = $coverage->getFiles();
 

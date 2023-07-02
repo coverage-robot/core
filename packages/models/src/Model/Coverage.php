@@ -8,7 +8,7 @@ use Exception;
 use JsonSerializable;
 use Packages\Models\Enum\CoverageFormat;
 
-class Project implements JsonSerializable
+class Coverage implements JsonSerializable
 {
     private ?DateTimeImmutable $generatedAt = null;
 

@@ -16,7 +16,7 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use JsonException;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -130,7 +130,7 @@ class IngestHandler extends S3Handler
      *
      * @throws ParseException
      */
-    private function parseFile(string $projectRoot, string $content): Project
+    private function parseFile(string $projectRoot, string $content): Coverage
     {
         return $this->coverageFileParserService->parse(
             $projectRoot,
@@ -148,7 +148,7 @@ class IngestHandler extends S3Handler
      *
      * @throws PersistException
      */
-    private function persistCoverage(Upload $upload, Project $coverage): bool
+    private function persistCoverage(Upload $upload, Coverage $coverage): bool
     {
         return $this->coverageFilePersistService->persist($upload, $coverage);
     }

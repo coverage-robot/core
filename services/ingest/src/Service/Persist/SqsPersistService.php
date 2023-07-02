@@ -2,7 +2,7 @@
 
 namespace App\Service\Persist;
 
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -16,7 +16,7 @@ class SqsPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Upload $upload, Project $project): bool
+    public function persist(Upload $upload, Coverage $project): bool
     {
         $envelope = $this->messageBus->dispatch($upload);
 

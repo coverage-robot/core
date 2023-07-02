@@ -7,7 +7,7 @@ use App\Service\Persist\SqsPersistService;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ use Symfony\Component\Messenger\Stamp\SentStamp;
 class SqsPersistServiceTest extends TestCase
 {
     #[DataProvider('uploadDataProvider')]
-    public function testPersist(Upload $upload, Project $project): void
+    public function testPersist(Upload $upload, Coverage $project): void
     {
         $messageBus = $this->createMock(MessageBus::class);
         $messageBus->expects($this->once())
@@ -60,7 +60,7 @@ class SqsPersistServiceTest extends TestCase
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
-                new Project(CoverageFormat::LCOV, ''),
+                new Coverage(CoverageFormat::LCOV, ''),
             ],
             [
                 new Upload(
@@ -75,7 +75,7 @@ class SqsPersistServiceTest extends TestCase
                     'mock-tag',
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
                 ),
-                new Project(CoverageFormat::CLOVER, ''),
+                new Coverage(CoverageFormat::CLOVER, ''),
             ]
         ];
     }

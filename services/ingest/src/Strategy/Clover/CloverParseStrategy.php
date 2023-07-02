@@ -7,11 +7,11 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\BranchCoverage;
 use Packages\Models\Model\Line\MethodCoverage;
 use Packages\Models\Model\Line\StatementCoverage;
-use Packages\Models\Model\Project;
 use Psr\Log\LoggerInterface;
 use XMLReader;
 
@@ -72,7 +72,7 @@ class CloverParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Project
+    public function parse(string $projectRoot, string $content): Coverage
     {
         libxml_use_internal_errors(true);
 
@@ -82,7 +82,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Project(CoverageFormat::CLOVER, $projectRoot);
+        $project = new Coverage(CoverageFormat::CLOVER, $projectRoot);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -111,7 +111,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         throw new ParseException('Unable to build XML reader.');
     }
 
-    private function handleNode(Project $coverage, XMLReader $reader): Project
+    private function handleNode(Coverage $coverage, XMLReader $reader): Coverage
     {
         switch ($reader->name) {
             case self::PROJECT:

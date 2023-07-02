@@ -3,9 +3,9 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLineCoverage;
-use Packages\Models\Model\Project;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +17,7 @@ class BigQueryPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Upload $upload, Project $project): bool
+    public function persist(Upload $upload, Coverage $project): bool
     {
         $table = $this->bigQueryClient->getEnvironmentDataset()
             ->table($_ENV['BIGQUERY_LINE_COVERAGE_TABLE']);
@@ -52,7 +52,7 @@ class BigQueryPersistService implements PersistServiceInterface
         return true;
     }
 
-    private function buildRows(Upload $upload, Project $project): array
+    private function buildRows(Upload $upload, Coverage $project): array
     {
         return array_reduce(
             $project->getFiles(),
@@ -71,7 +71,7 @@ class BigQueryPersistService implements PersistServiceInterface
         );
     }
 
-    private function buildRow(Upload $upload, Project $project, File $file, AbstractLineCoverage $line): array
+    private function buildRow(Upload $upload, Coverage $project, File $file, AbstractLineCoverage $line): array
     {
         return [
             'uploadId' => $upload->getUploadId(),
