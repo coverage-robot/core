@@ -174,8 +174,9 @@ class LcovParseStrategy implements ParseStrategyInterface
                         break;
                     }
 
-                    // The line we already have tracked is not a branch (it wont be when running through the individual line data),
-                    // meaning we should convert it to a branch now we officially know its type isn't a simple statement
+                    // The line we already have tracked is not a branch (it wont be when running through the
+                    // individual line data), meaning we should convert it to a branch now we officially know its
+                    // type isn't a simple statement
                     $latestFile->setLine(
                         new Branch(
                             $line->getLineNumber(),
