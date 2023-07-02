@@ -75,10 +75,10 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             SELECT
                 *,
                 IF(
-                    hits = 0,
+                    SUM(hits) = 0,
                     "uncovered",
                     IF (
-                        isPartiallyHit = 1,
+                        MIN(isPartiallyHit) = 1,
                         "partial",
                         "covered"
                     )
@@ -87,7 +87,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 lineCoverage
             GROUP BY
                 fileName,
-                lineNumber,
+                lineNumber
             SQL,
             <<<SQL
             WITH unnested AS (
@@ -146,10 +146,10 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             SELECT
                 *,
                 IF(
-                    hits = 0,
+                    SUM(hits) = 0,
                     "uncovered",
                     IF (
-                        isPartiallyHit = 1,
+                        MIN(isPartiallyHit) = 1,
                         "partial",
                         "covered"
                     )
@@ -158,7 +158,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 lineCoverage
             GROUP BY
                 fileName,
-                lineNumber,
+                lineNumber
             SQL
         ];
     }

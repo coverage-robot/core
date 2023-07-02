@@ -69,10 +69,10 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
             SELECT
                 *,
                 IF(
-                    hits = 0,
+                    SUM(hits) = 0,
                     "{$uncovered}",
                     IF (
-                        isPartiallyHit = 1,
+                        MIN(isPartiallyHit) = 1,
                         "{$partial}",
                         "{$covered}"
                     )

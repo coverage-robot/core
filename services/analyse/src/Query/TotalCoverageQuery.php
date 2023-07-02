@@ -44,10 +44,10 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
             SELECT
                 *,
                 IF(
-                    hits = 0,
+                    SUM(hits) = 0,
                     "{$uncovered}",
                     IF (
-                        isPartiallyHit = 1,
+                        MIN(isPartiallyHit) = 1,
                         "{$partial}",
                         "{$covered}"
                     )
@@ -61,9 +61,9 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         summedCoverage AS (
             SELECT
                 COUNT(*) as lines,
-                COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
-                COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
-                COALESCE(SUM(IF(state = "{$uncovered}", 1, 0)), 0) as uncovered,
+                COALESCE(IF(state = "{$covered}", 1, 0), 0) as covered,
+                COALESCE(IF(state = "{$partial}", 1, 0), 0) as partial,
+                COALESCE(IF(state = "{$uncovered}", 1, 0), 0) as uncovered,
             FROM
                 lineCoverageWithState
         )

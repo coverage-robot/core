@@ -66,9 +66,6 @@ class TotalTagCoverageQuery extends AbstractLineCoverageQuery
                 ) as state
             FROM
                 lineCoverage
-            GROUP BY
-                fileName,
-                lineNumber
         )
         SQL;
     }

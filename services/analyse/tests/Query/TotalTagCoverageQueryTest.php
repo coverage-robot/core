@@ -78,9 +78,6 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     ) as state
                 FROM
                     lineCoverage
-                GROUP BY
-                    fileName,
-                    lineNumber
             )
             SELECT
                 tag,
