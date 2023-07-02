@@ -82,7 +82,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ),
             lineCoverageWithState AS (
                 SELECT
-                    *,
+                    fileName,
+                    lineNumber,
                     IF(
                         SUM(hits) = 0,
                         "uncovered",
@@ -188,7 +189,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ),
             lineCoverageWithState AS (
                 SELECT
-                    *,
+                    fileName,
+                    lineNumber,
                     IF(
                         SUM(hits) = 0,
                         "uncovered",
@@ -288,7 +290,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ),
             lineCoverageWithState AS (
                 SELECT
-                    *,
+                    fileName,
+                    lineNumber,
                     IF(
                         SUM(hits) = 0,
                         "uncovered",
