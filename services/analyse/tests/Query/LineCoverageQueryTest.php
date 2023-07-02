@@ -73,7 +73,8 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     tag
             )
             SELECT
-                *,
+                fileName,
+                lineNumber,
                 IF(
                     SUM(hits) = 0,
                     "uncovered",
@@ -144,7 +145,8 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     tag
             )
             SELECT
-                *,
+                fileName,
+                lineNumber,
                 IF(
                     SUM(hits) = 0,
                     "uncovered",

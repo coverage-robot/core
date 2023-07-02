@@ -67,7 +67,8 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         {$parent},
         lineCoverageWithState AS (
             SELECT
-                *,
+                fileName,
+                lineNumber,
                 IF(
                     SUM(hits) = 0,
                     "{$uncovered}",

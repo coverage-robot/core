@@ -66,7 +66,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             ),
             lineCoverageWithState AS (
                 SELECT
-                    *,
+                    fileName,
+                    lineNumber,
                     IF(
                         SUM(hits) = 0,
                         "uncovered",
@@ -85,9 +86,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             summedCoverage AS (
                 SELECT
                     COUNT(*) as lines,
-                    COALESCE(IF(state = "covered", 1, 0), 0) as covered,
-                    COALESCE(IF(state = "partial", 1, 0), 0) as partial,
-                    COALESCE(IF(state = "uncovered", 1, 0), 0) as uncovered,
+                    SUM(COALESCE(IF(state = "covered", 1, 0), 0)) as covered,
+                    SUM(COALESCE(IF(state = "partial", 1, 0), 0)) as partial,
+                    SUM(COALESCE(IF(state = "uncovered", 1, 0), 0)) as uncovered,
                 FROM
                     lineCoverageWithState
             )

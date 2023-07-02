@@ -24,7 +24,8 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         return <<<SQL
         {$this->getNamedQueries($table, $upload, $parameterBag)}
         SELECT
-            *,
+            fileName,
+            lineNumber,
             IF(
                 SUM(hits) = 0,
                 "{$uncovered}",
