@@ -82,7 +82,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Coverage(CoverageFormat::CLOVER, $projectRoot);
+        $coverage = new Coverage(CoverageFormat::CLOVER, $projectRoot);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -92,10 +92,10 @@ class CloverParseStrategy implements ParseStrategyInterface
                 continue;
             }
 
-            $project = $this->handleNode($project, $reader);
+            $coverage = $this->handleNode($coverage, $reader);
         }
 
-        return $project;
+        return $coverage;
     }
 
     protected function buildXmlReader(string $content): XMLReader

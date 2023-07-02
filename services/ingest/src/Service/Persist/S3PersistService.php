@@ -28,10 +28,11 @@ class S3PersistService implements PersistServiceInterface
 
     /**
      * @param Upload $upload
+     * @param Coverage $coverage
      * @return bool
      * @throws JsonException
      */
-    public function persist(Upload $upload, Coverage $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         try {
             $response = $this->s3Client->putObject(
@@ -41,11 +42,11 @@ class S3PersistService implements PersistServiceInterface
                         'Key' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $project->getSourceFormat()->value,
+                            'sourceFormat' => $coverage->getSourceFormat()->value,
                             ...$upload->jsonSerialize(),
                             'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
                         ],
-                        'Body' => json_encode($project, JSON_THROW_ON_ERROR),
+                        'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
                 )
             );

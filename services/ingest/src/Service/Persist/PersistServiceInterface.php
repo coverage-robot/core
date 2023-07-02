@@ -14,10 +14,10 @@ interface PersistServiceInterface
      * BigQuery.
      *
      * @param Upload $upload
-     * @param Coverage $project
+     * @param Coverage $coverage
      * @return bool
      */
-    public function persist(Upload $upload, Coverage $project): bool;
+    public function persist(Upload $upload, Coverage $coverage): bool;
 
     /**
      * Priories the specific persistence service when injected into the main coverage persist

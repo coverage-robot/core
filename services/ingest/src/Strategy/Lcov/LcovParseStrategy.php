@@ -101,7 +101,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Coverage(CoverageFormat::LCOV, $projectRoot);
+        $coverage = new Coverage(CoverageFormat::LCOV, $projectRoot);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -113,10 +113,10 @@ class LcovParseStrategy implements ParseStrategyInterface
 
             preg_match(self::LINE_STRUCTURE, $record, $matches);
 
-            $project = $this->handleLine($project, $matches['type'], $matches['data']);
+            $coverage = $this->handleLine($coverage, $matches['type'], $matches['data']);
         }
 
-        return $project;
+        return $coverage;
     }
 
     private function handleLine(Coverage $coverage, string $type, string $data): Coverage

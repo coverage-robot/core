@@ -16,7 +16,7 @@ class SqsPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Upload $upload, Coverage $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         $envelope = $this->messageBus->dispatch($upload);
 

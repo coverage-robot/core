@@ -19,7 +19,7 @@ use Symfony\Component\Messenger\Stamp\SentStamp;
 class SqsPersistServiceTest extends TestCase
 {
     #[DataProvider('uploadDataProvider')]
-    public function testPersist(Upload $upload, Coverage $project): void
+    public function testPersist(Upload $upload, Coverage $coverage): void
     {
         $messageBus = $this->createMock(MessageBus::class);
         $messageBus->expects($this->once())
@@ -32,7 +32,7 @@ class SqsPersistServiceTest extends TestCase
 
         $sqsPersistService = new SqsPersistService($messageBus, new NullLogger());
 
-        $successful = $sqsPersistService->persist($upload, $project);
+        $successful = $sqsPersistService->persist($upload, $coverage);
 
         $this->assertTrue($successful);
     }

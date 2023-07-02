@@ -22,9 +22,10 @@ class CoverageFilePersistService
      * Persist a parsed project's coverage file into all supported services.
      *
      * @param Upload $upload
+     * @param Coverage $coverage
      * @return bool
      */
-    public function persist(Upload $upload, Coverage $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         $successful = true;
 
@@ -49,7 +50,7 @@ class CoverageFilePersistService
             );
 
             try {
-                $successful = $service->persist($upload, $project) && $successful;
+                $successful = $service->persist($upload, $coverage) && $successful;
 
                 $this->persistServiceLogger->info(
                     sprintf(
