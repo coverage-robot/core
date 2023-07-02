@@ -55,21 +55,32 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
                     fileName,
                     lineNumber,
                     tag
+            ),
+            lineCoverageWithState AS (
+                SELECT
+                    *,
+                    IF(
+                        hits = 0,
+                        "uncovered",
+                        IF (
+                            isPartiallyHit = 1,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    lineCoverage
+                GROUP BY
+                    fileName,
+                    lineNumber
             ),
             summedCoverage AS (
                 SELECT
@@ -78,7 +89,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                     COALESCE(SUM(IF(state = "partial", 1, 0)), 0) as partial,
                     COALESCE(SUM(IF(state = "uncovered", 1, 0)), 0) as uncovered,
                 FROM
-                    lineCoverage
+                    lineCoverageWithState
             )
             SELECT
                 SUM(lines) as lines,

@@ -71,21 +71,32 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
                     fileName,
                     lineNumber,
                     tag
+            ),
+            lineCoverageWithState AS (
+                SELECT
+                    *,
+                    IF(
+                        hits = 0,
+                        "uncovered",
+                        IF (
+                            isPartiallyHit = 1,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    lineCoverage
+                GROUP BY
+                    fileName,
+                    lineNumber
             )
             SELECT
                 fileName,
@@ -101,7 +112,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     2
                 ) as coveragePercentage
             FROM
-                lineCoverage
+                lineCoverageWithState
             GROUP BY
                 fileName
             ORDER BY
@@ -166,21 +177,32 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
                     fileName,
                     lineNumber,
                     tag
+            ),
+            lineCoverageWithState AS (
+                SELECT
+                    *,
+                    IF(
+                        hits = 0,
+                        "uncovered",
+                        IF (
+                            isPartiallyHit = 1,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    lineCoverage
+                GROUP BY
+                    fileName,
+                    lineNumber
             )
             SELECT
                 fileName,
@@ -196,7 +218,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     2
                 ) as coveragePercentage
             FROM
-                lineCoverage
+                lineCoverageWithState
             GROUP BY
                 fileName
             ORDER BY
@@ -255,21 +277,32 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
                     fileName,
                     lineNumber,
                     tag
+            ),
+            lineCoverageWithState AS (
+                SELECT
+                    *,
+                    IF(
+                        hits = 0,
+                        "uncovered",
+                        IF (
+                            isPartiallyHit = 1,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    lineCoverage
+                GROUP BY
+                    fileName,
+                    lineNumber
             )
             SELECT
                 fileName,
@@ -285,7 +318,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     2
                 ) as coveragePercentage
             FROM
-                lineCoverage
+                lineCoverageWithState
             GROUP BY
                 fileName
             ORDER BY

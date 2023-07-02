@@ -63,15 +63,8 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
@@ -80,9 +73,21 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     tag
             )
             SELECT
-                *
+                *,
+                IF(
+                    hits = 0,
+                    "uncovered",
+                    IF (
+                        isPartiallyHit = 1,
+                        "partial",
+                        "covered"
+                    )
+                ) as state
             FROM
                 lineCoverage
+            GROUP BY
+                fileName,
+                lineNumber,
             SQL,
             <<<SQL
             WITH unnested AS (
@@ -129,15 +134,8 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     fileName,
                     lineNumber,
                     tag,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MAX(isPartiallyHit) = 1,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                    SUM(hits) as hits,
+                    MIN(isPartiallyHit) as isPartiallyHit
                 FROM
                     unnested
                 GROUP BY
@@ -146,9 +144,21 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     tag
             )
             SELECT
-                *
+                *,
+                IF(
+                    hits = 0,
+                    "uncovered",
+                    IF (
+                        isPartiallyHit = 1,
+                        "partial",
+                        "covered"
+                    )
+                ) as state
             FROM
                 lineCoverage
+            GROUP BY
+                fileName,
+                lineNumber,
             SQL
         ];
     }
