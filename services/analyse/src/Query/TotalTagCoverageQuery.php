@@ -36,9 +36,37 @@ class TotalTagCoverageQuery extends AbstractLineCoverageQuery
                 2
             ) as coveragePercentage
         FROM
-            lineCoverage
+            lineCoverageWithState
         GROUP BY
             tag
+        SQL;
+    }
+
+    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    {
+        $parent = parent::getNamedQueries($table, $upload, $parameterBag);
+
+        $covered = LineState::COVERED->value;
+        $partial = LineState::PARTIAL->value;
+        $uncovered = LineState::UNCOVERED->value;
+
+        return <<<SQL
+        {$parent},
+        lineCoverageWithState AS (
+            SELECT
+                *,
+                IF(
+                    hits = 0,
+                    "{$uncovered}",
+                    IF (
+                        isPartiallyHit = 1,
+                        "{$partial}",
+                        "{$covered}"
+                    )
+                ) as state
+            FROM
+                lineCoverage
+        )
         SQL;
     }
 

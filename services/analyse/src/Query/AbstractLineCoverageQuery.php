@@ -3,7 +3,6 @@
 namespace App\Query;
 
 use App\Model\QueryParameterBag;
-use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 
 abstract class AbstractLineCoverageQuery implements QueryInterface
@@ -17,10 +16,6 @@ abstract class AbstractLineCoverageQuery implements QueryInterface
 
     public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
-        $covered = LineState::COVERED->value;
-        $partial = LineState::PARTIAL->value;
-        $uncovered = LineState::UNCOVERED->value;
-
         return <<<SQL
         WITH unnested AS (
             SELECT
@@ -66,15 +61,8 @@ abstract class AbstractLineCoverageQuery implements QueryInterface
                 fileName,
                 lineNumber,
                 tag,
-                IF(
-                    SUM(hits) = 0,
-                    "{$uncovered}",
-                    IF (
-                        MAX(isPartiallyHit) = 1,
-                        "{$partial}",
-                        "{$covered}"
-                    )
-                ) as state
+                SUM(hits) as hits,
+                MIN(isPartiallyHit) as isPartiallyHit
             FROM
                 unnested
             GROUP BY
