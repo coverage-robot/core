@@ -91,7 +91,7 @@ class Coverage implements JsonSerializable
 
     public function toString(): string
     {
-        return 'Project#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
+        return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
     }
 
     public function jsonSerialize(): array

@@ -5,7 +5,7 @@ namespace App\Service\Persist;
 use App\Client\BigQueryClient;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLineCoverage;
+use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
@@ -60,10 +60,10 @@ class BigQueryPersistService implements PersistServiceInterface
                 return [
                     ...$carry,
                     ...array_map(
-                        fn(AbstractLineCoverage $line): array => [
+                        fn(AbstractLine $line): array => [
                             'data' => $this->buildRow($upload, $coverage, $file, $line)
                         ],
-                        $file->getAllLineCoverage()
+                        $file->getAllLines()
                     )
                 ];
             },
@@ -71,7 +71,7 @@ class BigQueryPersistService implements PersistServiceInterface
         );
     }
 
-    private function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLineCoverage $line): array
+    private function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLine $line): array
     {
         return [
             'uploadId' => $upload->getUploadId(),

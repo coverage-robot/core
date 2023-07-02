@@ -23,7 +23,7 @@ class BigQueryPersistServiceTest extends TestCase
     public function testPersist(): void
     {
         $fileCoverage = new File('mock-file');
-        $fileCoverage->setLineCoverage(new Statement(1, 1));
+        $fileCoverage->setLine(new Statement(1, 1));
 
         $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
         $coverage->addFile($fileCoverage);

@@ -134,7 +134,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                 $coverage->addFile(new File($path));
                 break;
             case self::LINE_DATA:
-                $latestFile->setLineCoverage(
+                $latestFile->setLine(
                     new Statement(
                         (int)$extractedData['lineNumber'],
                         (int)$extractedData['lineHits'],
@@ -146,7 +146,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                 try {
                     $line = $latestFile->getSpecificLineCoverage($extractedData['name']);
 
-                    $latestFile->setLineCoverage(
+                    $latestFile->setLine(
                         new Method(
                             $line->getLineNumber(),
                             (int)$extractedData['lineHits'] ?: $line->getLineHits(),
@@ -154,7 +154,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                         )
                     );
                 } catch (OutOfBoundsException) {
-                    $latestFile->setLineCoverage(
+                    $latestFile->setLine(
                         new Method(
                             (int)$extractedData['lineNumber'],
                             0,
@@ -174,7 +174,9 @@ class LcovParseStrategy implements ParseStrategyInterface
                         break;
                     }
 
-                    $latestFile->setLineCoverage(
+                    // The line we already have tracked is not a branch (it wont be when running through the individual line data),
+                    // meaning we should convert it to a branch now we officially know its type isn't a simple statement
+                    $latestFile->setLine(
                         new Branch(
                             $line->getLineNumber(),
                             $line->getLineHits(),
@@ -184,7 +186,8 @@ class LcovParseStrategy implements ParseStrategyInterface
                         )
                     );
                 } catch (OutOfBoundsException) {
-                    $latestFile->setLineCoverage(
+                    // No coverage been tracked for this branch yet, meaning we should set it up
+                    $latestFile->setLine(
                         new Branch(
                             (int)$lineNumber,
                             0,

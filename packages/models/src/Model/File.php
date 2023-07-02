@@ -4,13 +4,13 @@ namespace Packages\Models\Model;
 
 use JsonSerializable;
 use OutOfBoundsException;
-use Packages\Models\Model\Line\AbstractLineCoverage;
+use Packages\Models\Model\Line\AbstractLine;
 
 class File implements JsonSerializable
 {
     /**
      * @param string $fileName
-     * @param array<array-key, AbstractLineCoverage> $lines
+     * @param array<array-key, AbstractLine> $lines
      */
     public function __construct(
         private readonly string $fileName,
@@ -23,12 +23,12 @@ class File implements JsonSerializable
         return $this->fileName;
     }
 
-    public function getAllLineCoverage(): array
+    public function getAllLines(): array
     {
         return array_values($this->lines);
     }
 
-    public function getSpecificLineCoverage(string $lineIdentifier): AbstractLineCoverage
+    public function getSpecificLineCoverage(string $lineIdentifier): AbstractLine
     {
         if (!array_key_exists($lineIdentifier, $this->lines)) {
             throw new OutOfBoundsException(
@@ -39,7 +39,7 @@ class File implements JsonSerializable
         return $this->lines[$lineIdentifier];
     }
 
-    public function setLineCoverage(AbstractLineCoverage $line): void
+    public function setLine(AbstractLine $line): void
     {
         $this->lines[$line->getUniqueLineIdentifier()] = $line;
     }
@@ -53,7 +53,7 @@ class File implements JsonSerializable
     {
         return [
             'fileName' => $this->getFileName(),
-            'lines' => $this->getAllLineCoverage()
+            'lines' => $this->getAllLines()
         ];
     }
 }
