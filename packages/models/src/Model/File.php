@@ -28,7 +28,7 @@ class File implements JsonSerializable
         return array_values($this->lines);
     }
 
-    public function getSpecificLineCoverage(string $lineIdentifier): AbstractLine
+    public function getLine(string $lineIdentifier): AbstractLine
     {
         if (!array_key_exists($lineIdentifier, $this->lines)) {
             throw new OutOfBoundsException(

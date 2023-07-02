@@ -144,7 +144,7 @@ class LcovParseStrategy implements ParseStrategyInterface
             case self::FUNCTION:
             case self::FUNCTION_DATA:
                 try {
-                    $line = $latestFile->getSpecificLineCoverage($extractedData['name']);
+                    $line = $latestFile->getLine($extractedData['name']);
 
                     $latestFile->setLine(
                         new Method(
@@ -167,7 +167,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                 $lineNumber = $extractedData['lineNumber'];
 
                 try {
-                    $line = $latestFile->getSpecificLineCoverage($lineNumber);
+                    $line = $latestFile->getLine($lineNumber);
 
                     if ($line instanceof Branch) {
                         $line->addToBranchHits((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
