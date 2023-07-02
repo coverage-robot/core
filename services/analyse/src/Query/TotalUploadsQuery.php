@@ -3,14 +3,15 @@
 namespace App\Query;
 
 use App\Exception\QueryException;
-use App\Model\QueryResult\IntegerQueryResult;
+use App\Model\QueryParameterBag;
+use App\Query\Result\IntegerQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {
-    public function getQuery(string $table, Upload $upload): string
+    public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
         SELECT
@@ -24,7 +25,7 @@ class TotalUploadsQuery implements QueryInterface
         SQL;
     }
 
-    public function getNamedQueries(string $table, Upload $upload): string
+    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
         return '';
     }

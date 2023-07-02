@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Model\QueryResult;
+namespace App\Query\Result;
 
 use App\Exception\QueryException;
 use Google\Cloud\Core\Iterator\ItemIterator;
 
-class TotalTagCoverageQueryResult implements QueryResultInterface
+class MultiTagCoverageQueryResult implements QueryResultInterface
 {
     /**
      * @param TagCoverageQueryResult[] $tags

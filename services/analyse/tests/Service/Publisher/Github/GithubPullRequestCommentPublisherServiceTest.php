@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Service\Publisher;
+namespace App\Tests\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Formatter\PullRequestCommentFormatterService;
-use App\Service\Publisher\GithubPullRequestCommentPublisherService;
+use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use Github\Api\Issue;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;

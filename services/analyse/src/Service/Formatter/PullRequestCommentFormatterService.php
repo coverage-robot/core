@@ -4,29 +4,44 @@
 namespace App\Service\Formatter;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Model\QueryResult\TagCoverageQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\TagCoverageQueryResult;
 use Packages\Models\Model\Upload;
 
 class PullRequestCommentFormatterService
 {
+    public const MAX_IMPACTED_FILES = 10;
+
     public function format(Upload $upload, PublishableCoverageDataInterface $data): string
     {
         return <<<MARKDOWN
-        ### New Coverage Information
-        This is for {$upload->getCommit()} commit. Which has had {$data->getTotalUploads()} uploads.
+        ## Coverage Report
+        > Merging #{$upload->getPullRequest()}, with **{$data->getTotalUploads()}** uploaded coverage files on {$upload->getCommit()}
 
-        Total coverage is: **{$data->getCoveragePercentage()}%**
+        | Total Coverage | Diff Coverage |
+        | --- | --- |
+        | {$data->getCoveragePercentage()}% | {$data->getDiffCoveragePercentage()}% |
 
-        Consisting of *{$data->getAtLeastPartiallyCoveredLines()}* covered lines, out of *{$data->getTotalLines()}* total lines.
+        <details>
+          <summary>Tags</summary>
 
-        {$this->getTagCoverageTable($data)}
+          {$this->getTagCoverageTable($upload, $data)}
+        </details>
+
+        <details>
+          <summary>Impacted Files</summary>
+
+          {$this->getFileImpactTable($upload, $data)}
+        </details>
+
+        *Last update to `{$upload->getTag()}` at {$upload->getIngestTime()->format('H:i')}*
         MARKDOWN;
     }
 
-    private function getTagCoverageTable(PublishableCoverageDataInterface $data): string
+    private function getTagCoverageTable(Upload $upload, PublishableCoverageDataInterface $data): string
     {
         if (count($data->getTagCoverage()->getTags()) == 0) {
-            return "";
+            return "> No uploaded tags in #{$upload->getPullRequest()}";
         }
 
         return sprintf(
@@ -49,6 +64,35 @@ class PullRequestCommentFormatterService
                     ),
                     $data->getTagCoverage()
                         ->getTags()
+                )
+            )
+        );
+    }
+
+    private function getFileImpactTable(Upload $upload, PublishableCoverageDataInterface $data): string
+    {
+        $files = $data->getLeastCoveredDiffFiles(self::MAX_IMPACTED_FILES)->getFiles();
+
+        if (count($files) == 0) {
+            return "> No impacted files in #{$upload->getPullRequest()}";
+        }
+
+        return sprintf(
+            <<<MARKDOWN
+            | File | Diff Coverage |
+            | --- | --- |
+            %s
+            <td colspan=3>
+            MARKDOWN,
+            implode(
+                "\n",
+                array_map(
+                    static fn (FileCoverageQueryResult $tag) => sprintf(
+                        '| %s | %s%% |',
+                        $tag->getFileName(),
+                        $tag->getCoveragePercentage(),
+                    ),
+                    $files
                 )
             )
         );

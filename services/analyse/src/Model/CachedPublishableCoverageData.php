@@ -2,8 +2,9 @@
 
 namespace App\Model;
 
-use App\Model\QueryResult\TotalLineCoverageQueryResult;
-use App\Model\QueryResult\TotalTagCoverageQueryResult;
+use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\MultiLineCoverageQueryResult;
+use App\Query\Result\MultiTagCoverageQueryResult;
 
 class CachedPublishableCoverageData extends PublishableCoverageData
 {
@@ -17,9 +18,16 @@ class CachedPublishableCoverageData extends PublishableCoverageData
 
     private ?float $coveragePercentage = null;
 
-    private ?TotalTagCoverageQueryResult $tagCoverage = null;
+    private ?MultiTagCoverageQueryResult $tagCoverage = null;
 
-    private ?TotalLineCoverageQueryResult $lineCoverage = null;
+    private ?float $diffCoveragePercentage = null;
+
+    private ?MultiLineCoverageQueryResult $diffLineCoverage = null;
+
+    /**
+     * @var array<int, MultiFileCoverageQueryResult>
+     */
+    private array $leastCoveredDiffFiles = [];
 
     public function getTotalUploads(): int
     {
@@ -66,7 +74,7 @@ class CachedPublishableCoverageData extends PublishableCoverageData
         return $this->coveragePercentage;
     }
 
-    public function getTagCoverage(): TotalTagCoverageQueryResult
+    public function getTagCoverage(): MultiTagCoverageQueryResult
     {
         if (!$this->tagCoverage) {
             $this->tagCoverage = parent::getTagCoverage();
@@ -75,12 +83,30 @@ class CachedPublishableCoverageData extends PublishableCoverageData
         return $this->tagCoverage;
     }
 
-    public function getLineCoverage(): TotalLineCoverageQueryResult
+    public function getDiffCoveragePercentage(): float
     {
-        if (!$this->lineCoverage) {
-            $this->lineCoverage = parent::getLineCoverage();
+        if (!$this->diffCoveragePercentage) {
+            $this->diffCoveragePercentage = parent::getDiffCoveragePercentage();
         }
 
-        return $this->lineCoverage;
+        return $this->diffCoveragePercentage;
+    }
+
+    public function getLeastCoveredDiffFiles(int $limit): MultiFileCoverageQueryResult
+    {
+        if (!array_key_exists($limit, $this->leastCoveredDiffFiles)) {
+            $this->leastCoveredDiffFiles[$limit] = parent::getLeastCoveredDiffFiles($limit);
+        }
+
+        return $this->leastCoveredDiffFiles[$limit];
+    }
+
+    public function getDiffLineCoverage(): MultiLineCoverageQueryResult
+    {
+        if (!$this->diffLineCoverage) {
+            $this->diffLineCoverage = parent::getDiffLineCoverage();
+        }
+
+        return $this->diffLineCoverage;
     }
 }

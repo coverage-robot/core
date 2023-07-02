@@ -16,3 +16,6 @@ services:
         public: true
 
     Psr\Container\ContainerInterface: '@service_container'
+
+    SebastianBergmann\Diff\Parser:
+        autowire: true

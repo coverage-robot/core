@@ -4,6 +4,7 @@ namespace App\Tests\Mock\Factory;
 
 use App\Model\PublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
+use App\Service\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -15,11 +16,13 @@ class MockPublishableCoverageDataFactory
         TestCase $test,
         array $methodsAndReturns = [],
         ?QueryService $queryService = null,
+        ?DiffParserService $diffParser = null,
         ?Upload $upload = null
     ): PublishableCoverageDataInterface|MockObject {
         $data = $test->getMockBuilder(PublishableCoverageData::class)
             ->setConstructorArgs([
                 $queryService ?? self::getMockQueryService($test),
+                $diffParser ?? self::getMockDiffParser($test),
                 $upload ?? self::getMockUpload($test)
             ])
             ->onlyMethods(
@@ -38,6 +41,13 @@ class MockPublishableCoverageDataFactory
     private static function getMockQueryService(TestCase $test): QueryService|MockObject
     {
         return $test->getMockBuilder(QueryService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private static function getMockDiffParser(TestCase $test): DiffParserService|MockObject
+    {
+        return $test->getMockBuilder(DiffParserService::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

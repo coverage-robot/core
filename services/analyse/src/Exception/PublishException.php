@@ -10,4 +10,9 @@ class PublishException extends RuntimeException
     {
         return new PublishException('Publisher is not supported for upload.');
     }
+
+    public static function notFoundException(string $entity): PublishException
+    {
+        return new PublishException(sprintf('Publisher did not find %s', $entity));
+    }
 }

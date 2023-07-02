@@ -3,10 +3,11 @@
 namespace App\Tests\Model;
 
 use App\Model\CachedPublishableCoverageData;
-use App\Model\QueryResult\IntegerQueryResult;
-use App\Model\QueryResult\TotalCoverageQueryResult;
+use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\IntegerQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
+use App\Service\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,7 +27,8 @@ class CachedPublishableCoverageDataTest extends TestCase
 
         $this->cachedPublishableCoverageData = new CachedPublishableCoverageData(
             $this->mockQueryService,
-            $this->createMock(Upload::class)
+            $this->createMock(DiffParserService::class),
+            $this->createMock(Upload::class),
         );
     }
 
@@ -36,7 +38,7 @@ class CachedPublishableCoverageDataTest extends TestCase
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
             ->willReturn(
-                TotalCoverageQueryResult::from([
+                CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
                     'partial' => 2,
@@ -58,7 +60,7 @@ class CachedPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(TotalCoverageQueryResult::from([
+            ->willReturn(CoverageQueryResult::from([
                 'lines' => 6,
                 'covered' => 1,
                 'partial' => 2,
@@ -79,7 +81,7 @@ class CachedPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(TotalCoverageQueryResult::from([
+            ->willReturn(CoverageQueryResult::from([
                 'lines' => 6,
                 'covered' => 1,
                 'partial' => 2,
@@ -100,7 +102,7 @@ class CachedPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(TotalCoverageQueryResult::from([
+            ->willReturn(CoverageQueryResult::from([
                 'lines' => 6,
                 'covered' => 1,
                 'partial' => 2,
