@@ -2,9 +2,11 @@
 
 namespace App\Query;
 
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\BigQuery\QueryResults;
+use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -23,6 +25,9 @@ interface QueryInterface
 
     /**
      * Parse the results of the query.
+     *
+     * @throws QueryException
+     * @throws GoogleException
      */
     public function parseResults(QueryResults $results): QueryResultInterface;
 }

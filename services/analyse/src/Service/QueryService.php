@@ -7,7 +7,9 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class QueryService
@@ -19,7 +21,8 @@ class QueryService
     public function __construct(
         private readonly BigQueryClient $bigQueryClient,
         #[TaggedIterator('app.coverage_query')]
-        private readonly iterable $queries
+        private readonly iterable $queries,
+        private readonly LoggerInterface $queryServiceLogger
     ) {
     }
 
@@ -47,6 +50,10 @@ class QueryService
         throw new QueryException(sprintf('No query found with class name of %s.', $queryClass));
     }
 
+    /**
+     * @throws GoogleException
+     * @throws QueryException
+     */
     private function runQueryAndParseResult(
         QueryInterface $query,
         Upload $upload,
@@ -67,6 +74,37 @@ class QueryService
 
         $results->waitUntilComplete();
 
-        return $query->parseResults($results);
+        try {
+            return $query->parseResults($results);
+        } catch (QueryException $e) {
+            $this->queryServiceLogger->critical(
+                sprintf(
+                    'Query %s failed to parse results for %s.',
+                    $query::class,
+                    (string)$upload
+                ),
+                [
+                    'exception' => $e,
+                    'sql' => $sql,
+                    'results' => $results
+                ]
+            );
+
+            throw $e;
+        } catch (GoogleException $e) {
+            $this->queryServiceLogger->critical(
+                sprintf(
+                    'Query %s produced exception when executing %s.',
+                    $query::class,
+                    (string)$upload
+                ),
+                [
+                    'exception' => $e,
+                    'sql' => $sql
+                ]
+            );
+
+            throw $e;
+        }
     }
 }

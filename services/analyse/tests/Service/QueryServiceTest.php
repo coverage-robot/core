@@ -21,6 +21,7 @@ use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class QueryServiceTest extends TestCase
 {
@@ -59,7 +60,8 @@ class QueryServiceTest extends TestCase
                     LineCoverageQuery::class === $query ?
                         $queryResult : $this->createMock(MultiLineCoverageQueryResult::class)
                 )
-            ]
+            ],
+            new NullLogger()
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -104,7 +106,8 @@ class QueryServiceTest extends TestCase
                     null,
                     $this->createMock(MultiLineCoverageQueryResult::class)
                 ),
-            ]
+            ],
+            new NullLogger()
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
