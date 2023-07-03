@@ -35,7 +35,7 @@ class CoverageQueryResult implements QueryResultInterface
                 (int)$result['uncovered']
             );
         }
-        
+
         throw QueryException::invalidQueryResult();
     }
 
