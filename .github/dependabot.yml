@@ -3,55 +3,55 @@ updates:
     -   package-ecosystem: "composer"
         directory: "services/ingest"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "terraform"
         directory: "services/ingest/infrastructure"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "composer"
         directory: "services/analyse"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "terraform"
         directory: "services/analyse/infrastructure"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "composer"
         directory: "services/api"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "terraform"
         directory: "services/api/infrastructure"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "terraform"
         directory: "infrastructure"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
 
     -   package-ecosystem: "github-actions"
         directory: "/"
         schedule:
-            interval: "daily"
+            interval: "weekly"
         reviewers:
             - "ryanmab"
