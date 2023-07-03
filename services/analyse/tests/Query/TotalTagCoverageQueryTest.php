@@ -82,9 +82,9 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             SELECT
                 tag,
                 COUNT(*) as lines,
-                SUM(IF(state = "covered", 1, 0)) as covered,
-                SUM(IF(state = "partial", 1, 0)) as partial,
-                SUM(IF(state = "uncovered", 1, 0)) as uncovered,
+                COALESCE(SUM(IF(state = "covered", 1, 0)), 0) as covered,
+                COALESCE(SUM(IF(state = "partial", 1, 0)), 0) as partial,
+                COALESCE(SUM(IF(state = "uncovered", 1, 0)), 0) as uncovered,
                 ROUND(
                     (
                         SUM(IF(state = "covered", 1, 0)) +
