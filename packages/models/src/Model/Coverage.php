@@ -8,7 +8,7 @@ use Exception;
 use JsonSerializable;
 use Packages\Models\Enum\CoverageFormat;
 
-class Project implements JsonSerializable
+class Coverage implements JsonSerializable
 {
     private ?DateTimeImmutable $generatedAt = null;
 
@@ -91,7 +91,7 @@ class Project implements JsonSerializable
 
     public function toString(): string
     {
-        return 'Project#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
+        return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
     }
 
     public function jsonSerialize(): array

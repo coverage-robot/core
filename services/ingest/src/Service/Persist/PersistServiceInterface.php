@@ -2,7 +2,7 @@
 
 namespace App\Service\Persist;
 
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -14,10 +14,10 @@ interface PersistServiceInterface
      * BigQuery.
      *
      * @param Upload $upload
-     * @param Project $project
+     * @param Coverage $coverage
      * @return bool
      */
-    public function persist(Upload $upload, Project $project): bool;
+    public function persist(Upload $upload, Coverage $coverage): bool;
 
     /**
      * Priories the specific persistence service when injected into the main coverage persist

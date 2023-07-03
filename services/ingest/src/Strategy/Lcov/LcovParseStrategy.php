@@ -7,11 +7,11 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\BranchCoverage;
-use Packages\Models\Model\Line\MethodCoverage;
-use Packages\Models\Model\Line\StatementCoverage;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Line\Branch;
+use Packages\Models\Model\Line\Method;
+use Packages\Models\Model\Line\Statement;
 use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
@@ -93,7 +93,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Project
+    public function parse(string $projectRoot, string $content): Coverage
     {
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
@@ -101,7 +101,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $project = new Project(CoverageFormat::LCOV, $projectRoot);
+        $coverage = new Coverage(CoverageFormat::LCOV, $projectRoot);
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -113,13 +113,13 @@ class LcovParseStrategy implements ParseStrategyInterface
 
             preg_match(self::LINE_STRUCTURE, $record, $matches);
 
-            $project = $this->handleLine($project, $matches['type'], $matches['data']);
+            $coverage = $this->handleLine($coverage, $matches['type'], $matches['data']);
         }
 
-        return $project;
+        return $coverage;
     }
 
-    private function handleLine(Project $coverage, string $type, string $data): Project
+    private function handleLine(Coverage $coverage, string $type, string $data): Coverage
     {
         $files = $coverage->getFiles();
 
@@ -134,8 +134,8 @@ class LcovParseStrategy implements ParseStrategyInterface
                 $coverage->addFile(new File($path));
                 break;
             case self::LINE_DATA:
-                $latestFile->setLineCoverage(
-                    new StatementCoverage(
+                $latestFile->setLine(
+                    new Statement(
                         (int)$extractedData['lineNumber'],
                         (int)$extractedData['lineHits'],
                     )
@@ -144,18 +144,18 @@ class LcovParseStrategy implements ParseStrategyInterface
             case self::FUNCTION:
             case self::FUNCTION_DATA:
                 try {
-                    $line = $latestFile->getSpecificLineCoverage($extractedData['name']);
+                    $line = $latestFile->getLine($extractedData['name']);
 
-                    $latestFile->setLineCoverage(
-                        new MethodCoverage(
+                    $latestFile->setLine(
+                        new Method(
                             $line->getLineNumber(),
                             (int)$extractedData['lineHits'] ?: $line->getLineHits(),
                             $extractedData['name']
                         )
                     );
                 } catch (OutOfBoundsException) {
-                    $latestFile->setLineCoverage(
-                        new MethodCoverage(
+                    $latestFile->setLine(
+                        new Method(
                             (int)$extractedData['lineNumber'],
                             0,
                             $extractedData['name']
@@ -167,15 +167,18 @@ class LcovParseStrategy implements ParseStrategyInterface
                 $lineNumber = $extractedData['lineNumber'];
 
                 try {
-                    $line = $latestFile->getSpecificLineCoverage($lineNumber);
+                    $line = $latestFile->getLine($lineNumber);
 
-                    if ($line instanceof BranchCoverage) {
+                    if ($line instanceof Branch) {
                         $line->addToBranchHits((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
                         break;
                     }
 
-                    $latestFile->setLineCoverage(
-                        new BranchCoverage(
+                    // The line we already have tracked is not a branch (it wont be when running through the
+                    // individual line data), meaning we should convert it to a branch now we officially know its
+                    // type isn't a simple statement
+                    $latestFile->setLine(
+                        new Branch(
                             $line->getLineNumber(),
                             $line->getLineHits(),
                             [
@@ -184,8 +187,9 @@ class LcovParseStrategy implements ParseStrategyInterface
                         )
                     );
                 } catch (OutOfBoundsException) {
-                    $latestFile->setLineCoverage(
-                        new BranchCoverage(
+                    // No coverage been tracked for this branch yet, meaning we should set it up
+                    $latestFile->setLine(
+                        new Branch(
                             (int)$lineNumber,
                             0,
                             [(int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']]

@@ -5,7 +5,7 @@ namespace Packages\Models\Model\Line;
 use JsonSerializable;
 use Packages\Models\Enum\LineType;
 
-abstract class AbstractLineCoverage implements JsonSerializable
+abstract class AbstractLine implements JsonSerializable
 {
     public function __construct(
         private readonly int $lineNumber,
@@ -27,7 +27,7 @@ abstract class AbstractLineCoverage implements JsonSerializable
      *
      * @return string
      *
-     * @see MethodCoverage::getUniqueLineIdentifier()
+     * @see Method::getUniqueLineIdentifier()
      */
     public function getUniqueLineIdentifier(): string
     {

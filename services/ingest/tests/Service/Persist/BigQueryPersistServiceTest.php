@@ -10,9 +10,9 @@ use Google\Cloud\BigQuery\Table;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\StatementCoverage;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -23,9 +23,9 @@ class BigQueryPersistServiceTest extends TestCase
     public function testPersist(): void
     {
         $fileCoverage = new File('mock-file');
-        $fileCoverage->setLineCoverage(new StatementCoverage(1, 1));
+        $fileCoverage->setLine(new Statement(1, 1));
 
-        $coverage = new Project(CoverageFormat::LCOV, 'mock/project/root');
+        $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
         $coverage->addFile($fileCoverage);
 
         $upload = new Upload(

@@ -3,9 +3,9 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLineCoverage;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
@@ -17,12 +17,12 @@ class BigQueryPersistService implements PersistServiceInterface
     ) {
     }
 
-    public function persist(Upload $upload, Project $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         $table = $this->bigQueryClient->getEnvironmentDataset()
             ->table($_ENV['BIGQUERY_LINE_COVERAGE_TABLE']);
 
-        $rows = $this->buildRows($upload, $project);
+        $rows = $this->buildRows($upload, $coverage);
 
         $insertResponse = $table->insertRows($rows);
 
@@ -52,18 +52,18 @@ class BigQueryPersistService implements PersistServiceInterface
         return true;
     }
 
-    private function buildRows(Upload $upload, Project $project): array
+    private function buildRows(Upload $upload, Coverage $coverage): array
     {
         return array_reduce(
-            $project->getFiles(),
-            function (array $carry, File $file) use ($upload, $project): array {
+            $coverage->getFiles(),
+            function (array $carry, File $file) use ($upload, $coverage): array {
                 return [
                     ...$carry,
                     ...array_map(
-                        fn(AbstractLineCoverage $line): array => [
-                            'data' => $this->buildRow($upload, $project, $file, $line)
+                        fn(AbstractLine $line): array => [
+                            'data' => $this->buildRow($upload, $coverage, $file, $line)
                         ],
-                        $file->getAllLineCoverage()
+                        $file->getAllLines()
                     )
                 ];
             },
@@ -71,7 +71,7 @@ class BigQueryPersistService implements PersistServiceInterface
         );
     }
 
-    private function buildRow(Upload $upload, Project $project, File $file, AbstractLineCoverage $line): array
+    private function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLine $line): array
     {
         return [
             'uploadId' => $upload->getUploadId(),
@@ -83,10 +83,10 @@ class BigQueryPersistService implements PersistServiceInterface
             'parent' => $upload->getParent(),
             'ref' => $upload->getRef(),
             'tag' => $upload->getTag(),
-            'sourceFormat' => $project->getSourceFormat(),
+            'sourceFormat' => $coverage->getSourceFormat(),
             'fileName' => $file->getFileName(),
-            'generatedAt' => $project->getGeneratedAt() ?
-                $project->getGeneratedAt()?->format('Y-m-d H:i:s') :
+            'generatedAt' => $coverage->getGeneratedAt() ?
+                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
                 null,
             'type' => $line->getType(),
             'lineNumber' => $line->getLineNumber(),

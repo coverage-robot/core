@@ -4,7 +4,7 @@ namespace Packages\Models\Model\Line;
 
 use Packages\Models\Enum\LineType;
 
-class BranchCoverage extends AbstractLineCoverage
+class Branch extends AbstractLine
 {
     /**
      * @param int $lineNumber

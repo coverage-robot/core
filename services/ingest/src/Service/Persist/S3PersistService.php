@@ -8,7 +8,7 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use JsonException;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,10 +28,11 @@ class S3PersistService implements PersistServiceInterface
 
     /**
      * @param Upload $upload
+     * @param Coverage $coverage
      * @return bool
      * @throws JsonException
      */
-    public function persist(Upload $upload, Project $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         try {
             $response = $this->s3Client->putObject(
@@ -41,11 +42,11 @@ class S3PersistService implements PersistServiceInterface
                         'Key' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
                         'ContentType' => 'application/json',
                         'Metadata' => [
-                            'sourceFormat' => $project->getSourceFormat()->value,
+                            'sourceFormat' => $coverage->getSourceFormat()->value,
                             ...$upload->jsonSerialize(),
                             'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
                         ],
-                        'Body' => json_encode($project, JSON_THROW_ON_ERROR),
+                        'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
                     ]
                 )
             );

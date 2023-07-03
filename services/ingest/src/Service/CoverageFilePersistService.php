@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Exception\PersistException;
 use App\Service\Persist\PersistServiceInterface;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -22,9 +22,10 @@ class CoverageFilePersistService
      * Persist a parsed project's coverage file into all supported services.
      *
      * @param Upload $upload
+     * @param Coverage $coverage
      * @return bool
      */
-    public function persist(Upload $upload, Project $project): bool
+    public function persist(Upload $upload, Coverage $coverage): bool
     {
         $successful = true;
 
@@ -49,7 +50,7 @@ class CoverageFilePersistService
             );
 
             try {
-                $successful = $service->persist($upload, $project) && $successful;
+                $successful = $service->persist($upload, $coverage) && $successful;
 
                 $this->persistServiceLogger->info(
                     sprintf(

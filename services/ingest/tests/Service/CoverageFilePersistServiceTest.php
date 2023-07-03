@@ -6,7 +6,7 @@ use App\Exception\PersistException;
 use App\Service\CoverageFilePersistService;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\S3PersistService;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -36,7 +36,7 @@ class CoverageFilePersistServiceTest extends TestCase
         $this->assertTrue(
             $coverageFilePersistService->persist(
                 $this->createMock(Upload::class),
-                $this->createMock(Project::class)
+                $this->createMock(Coverage::class)
             )
         );
     }
@@ -64,7 +64,7 @@ class CoverageFilePersistServiceTest extends TestCase
         $this->assertFalse(
             $coverageFilePersistService->persist(
                 $this->createMock(Upload::class),
-                $this->createMock(Project::class)
+                $this->createMock(Coverage::class)
             )
         );
     }

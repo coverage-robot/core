@@ -7,11 +7,11 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Line\BranchCoverage;
-use Packages\Models\Model\Line\MethodCoverage;
-use Packages\Models\Model\Line\StatementCoverage;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Line\Branch;
+use Packages\Models\Model\Line\Method;
+use Packages\Models\Model\Line\Statement;
 use Psr\Log\LoggerInterface;
 use XMLReader;
 
@@ -72,7 +72,7 @@ class CloverParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Project
+    public function parse(string $projectRoot, string $content): Coverage
     {
         libxml_use_internal_errors(true);
 
@@ -82,7 +82,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $project = new Project(CoverageFormat::CLOVER, $projectRoot);
+        $coverage = new Coverage(CoverageFormat::CLOVER, $projectRoot);
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -92,10 +92,10 @@ class CloverParseStrategy implements ParseStrategyInterface
                 continue;
             }
 
-            $project = $this->handleNode($project, $reader);
+            $coverage = $this->handleNode($coverage, $reader);
         }
 
-        return $project;
+        return $coverage;
     }
 
     protected function buildXmlReader(string $content): XMLReader
@@ -111,7 +111,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         throw new ParseException('Unable to build XML reader.');
     }
 
-    private function handleNode(Project $coverage, XMLReader $reader): Project
+    private function handleNode(Coverage $coverage, XMLReader $reader): Coverage
     {
         switch ($reader->name) {
             case self::PROJECT:
@@ -140,11 +140,11 @@ class CloverParseStrategy implements ParseStrategyInterface
                 $lineNumber = (int)$reader->getAttribute('num');
                 $lineHits = (int)$reader->getAttribute('count');
 
-                end($files)->setLineCoverage(
+                end($files)->setLine(
                     match ($type) {
-                        self::METHOD => new MethodCoverage($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
-                        self::STATEMENT => new StatementCoverage($lineNumber, $lineHits),
-                        self::CONDITION => new BranchCoverage(
+                        self::METHOD => new Method($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
+                        self::STATEMENT => new Statement($lineNumber, $lineHits),
+                        self::CONDITION => new Branch(
                             $lineNumber,
                             $lineHits,
                             [

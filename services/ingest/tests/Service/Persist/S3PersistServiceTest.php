@@ -13,7 +13,7 @@ use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Project;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -22,7 +22,7 @@ class S3PersistServiceTest extends TestCase
 {
     public function testPersist(): void
     {
-        $coverage = new Project(
+        $coverage = new Coverage(
             CoverageFormat::CLOVER,
             'mock/project/root',
             new DateTimeImmutable()
@@ -81,7 +81,7 @@ class S3PersistServiceTest extends TestCase
 
     public function testFailingToPersist(): void
     {
-        $coverage = new Project(
+        $coverage = new Coverage(
             CoverageFormat::CLOVER,
             'mock/project/root',
             new DateTimeImmutable()
