@@ -120,7 +120,6 @@
                     "type": "BRANCH",
                     "lineNumber": 60,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -150,7 +149,6 @@
                     "type": "BRANCH",
                     "lineNumber": 3,
                     "lineHits": 3,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -199,7 +197,6 @@
                     "type": "BRANCH",
                     "lineNumber": 160,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -249,7 +246,6 @@
                     "type": "BRANCH",
                     "lineNumber": 9,
                     "lineHits": 2,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -538,7 +534,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 2,
-                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -608,7 +603,6 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 4,
-                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -628,7 +622,6 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 2,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -688,7 +681,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 2,
-                    "partial": false,
                     "branchHits": [
                         1,
                         6
@@ -798,7 +790,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         7,
                         0
@@ -948,7 +939,6 @@
                     "type": "BRANCH",
                     "lineNumber": 31,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         3,
                         0
@@ -968,7 +958,6 @@
                     "type": "BRANCH",
                     "lineNumber": 53,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -978,7 +967,6 @@
                     "type": "BRANCH",
                     "lineNumber": 56,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -1138,7 +1126,6 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         4,
                         0
@@ -1528,7 +1515,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         7,
                         0
@@ -1643,7 +1629,6 @@
                     "type": "BRANCH",
                     "lineNumber": 29,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         3,
                         0
@@ -1663,7 +1648,6 @@
                     "type": "BRANCH",
                     "lineNumber": 49,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         4,
                         0
@@ -1848,7 +1832,6 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 38,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -1943,7 +1926,6 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 2,
-                    "partial": false,
                     "branchHits": [
                         2,
                         2
@@ -1988,7 +1970,6 @@
                     "type": "BRANCH",
                     "lineNumber": 51,
                     "lineHits": 1,
-                    "partial": false,
                     "branchHits": [
                         2,
                         7
@@ -2003,7 +1984,6 @@
                     "type": "BRANCH",
                     "lineNumber": 56,
                     "lineHits": 5,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2283,7 +2263,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 8,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -2548,7 +2527,6 @@
                     "type": "BRANCH",
                     "lineNumber": 9,
                     "lineHits": 1,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2573,7 +2551,6 @@
                     "type": "BRANCH",
                     "lineNumber": 14,
                     "lineHits": 1,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2688,7 +2665,6 @@
                     "type": "BRANCH",
                     "lineNumber": 15,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2703,7 +2679,6 @@
                     "type": "BRANCH",
                     "lineNumber": 19,
                     "lineHits": 2,
-                    "partial": false,
                     "branchHits": [
                         2,
                         9
@@ -2813,7 +2788,6 @@
                     "type": "BRANCH",
                     "lineNumber": 17,
                     "lineHits": 10,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2978,7 +2952,6 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 5,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -2998,7 +2971,6 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": false,
                     "branchHits": [
                         1,
                         2
@@ -3028,7 +3000,6 @@
                     "type": "BRANCH",
                     "lineNumber": 35,
                     "lineHits": 1,
-                    "partial": false,
                     "branchHits": [
                         1,
                         1
@@ -3043,7 +3014,6 @@
                     "type": "BRANCH",
                     "lineNumber": 41,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3063,7 +3033,6 @@
                     "type": "BRANCH",
                     "lineNumber": 48,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3218,7 +3187,6 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 6,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3403,7 +3371,6 @@
                     "type": "BRANCH",
                     "lineNumber": 15,
                     "lineHits": 3,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3588,7 +3555,6 @@
                     "type": "BRANCH",
                     "lineNumber": 21,
                     "lineHits": 8,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -3698,7 +3664,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 5,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3738,7 +3703,6 @@
                     "type": "BRANCH",
                     "lineNumber": 8,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3778,7 +3742,6 @@
                     "type": "BRANCH",
                     "lineNumber": 6,
                     "lineHits": 12,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3823,7 +3786,6 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 4,
-                    "partial": false,
                     "branchHits": [
                         1,
                         1
@@ -3848,7 +3810,6 @@
                     "type": "BRANCH",
                     "lineNumber": 32,
                     "lineHits": 4,
-                    "partial": false,
                     "branchHits": [
                         1,
                         1
@@ -3923,7 +3884,6 @@
                     "type": "BRANCH",
                     "lineNumber": 11,
                     "lineHits": 16,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -3933,7 +3893,6 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3948,7 +3907,6 @@
                     "type": "BRANCH",
                     "lineNumber": 18,
                     "lineHits": 12,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3963,7 +3921,6 @@
                     "type": "BRANCH",
                     "lineNumber": 20,
                     "lineHits": 10,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3978,7 +3935,6 @@
                     "type": "BRANCH",
                     "lineNumber": 22,
                     "lineHits": 8,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -3993,7 +3949,6 @@
                     "type": "BRANCH",
                     "lineNumber": 24,
                     "lineHits": 6,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4008,7 +3963,6 @@
                     "type": "BRANCH",
                     "lineNumber": 26,
                     "lineHits": 4,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4033,7 +3987,6 @@
                     "type": "BRANCH",
                     "lineNumber": 33,
                     "lineHits": 12,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4113,7 +4066,6 @@
                     "type": "BRANCH",
                     "lineNumber": 29,
                     "lineHits": 28,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -4198,7 +4150,6 @@
                     "type": "BRANCH",
                     "lineNumber": 7,
                     "lineHits": 2,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -4343,7 +4294,6 @@
                     "type": "BRANCH",
                     "lineNumber": 23,
                     "lineHits": 34,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -4358,7 +4308,6 @@
                     "type": "BRANCH",
                     "lineNumber": 27,
                     "lineHits": 34,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -4373,7 +4322,6 @@
                     "type": "BRANCH",
                     "lineNumber": 31,
                     "lineHits": 19,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4388,7 +4336,6 @@
                     "type": "BRANCH",
                     "lineNumber": 40,
                     "lineHits": 20,
-                    "partial": true,
                     "branchHits": [
                         0,
                         1
@@ -4413,7 +4360,6 @@
                     "type": "BRANCH",
                     "lineNumber": 47,
                     "lineHits": 13,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4518,7 +4464,6 @@
                     "type": "BRANCH",
                     "lineNumber": 55,
                     "lineHits": 7,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -4583,7 +4528,6 @@
                     "type": "BRANCH",
                     "lineNumber": 36,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         4,
                         0
@@ -4603,7 +4547,6 @@
                     "type": "BRANCH",
                     "lineNumber": 44,
                     "lineHits": 2,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -4693,7 +4636,6 @@
                     "type": "BRANCH",
                     "lineNumber": 25,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -4718,7 +4660,6 @@
                     "type": "BRANCH",
                     "lineNumber": 33,
                     "lineHits": 13,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -4763,7 +4704,6 @@
                     "type": "BRANCH",
                     "lineNumber": 7,
                     "lineHits": 3,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4803,7 +4743,6 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 3,
-                    "partial": true,
                     "branchHits": [
                         0,
                         2
@@ -4848,7 +4787,6 @@
                     "type": "BRANCH",
                     "lineNumber": 5,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
@@ -4863,7 +4801,6 @@
                     "type": "BRANCH",
                     "lineNumber": 12,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         2,
                         0
@@ -4873,7 +4810,6 @@
                     "type": "BRANCH",
                     "lineNumber": 16,
                     "lineHits": 0,
-                    "partial": true,
                     "branchHits": [
                         1,
                         0
