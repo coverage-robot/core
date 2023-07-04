@@ -3,6 +3,7 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
+use App\Service\BigQueryMetadataBuilderService;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
@@ -13,6 +14,7 @@ class BigQueryPersistService implements PersistServiceInterface
 {
     public function __construct(
         private readonly BigQueryClient $bigQueryClient,
+        private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly LoggerInterface $bigQueryPersistServiceLogger
     ) {
     }
@@ -90,14 +92,7 @@ class BigQueryPersistService implements PersistServiceInterface
                 null,
             'type' => $line->getType(),
             'lineNumber' => $line->getLineNumber(),
-            'metadata' => array_map(
-                static fn($key, $value) => [
-                    'key' => (string)$key,
-                    'value' => (string)$value
-                ],
-                array_keys($line->jsonSerialize()),
-                array_values($line->jsonSerialize())
-            )
+            'metadata' => $this->bigQueryMetadataBuilderService->buildMetadata($line)
         ];
     }
 

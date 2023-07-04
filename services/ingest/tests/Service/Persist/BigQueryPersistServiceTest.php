@@ -3,6 +3,7 @@
 namespace App\Tests\Service\Persist;
 
 use App\Client\BigQueryClient;
+use App\Service\BigQueryMetadataBuilderService;
 use App\Service\Persist\BigQueryPersistService;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
@@ -12,6 +13,7 @@ use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
+use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +26,7 @@ class BigQueryPersistServiceTest extends TestCase
     {
         $fileCoverage = new File('mock-file');
         $fileCoverage->setLine(new Statement(1, 1));
+        $fileCoverage->setLine(new Branch(2, 1, [0 => 0, 1 => 1]));
 
         $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
         $coverage->addFile($fileCoverage);
@@ -81,6 +84,42 @@ class BigQueryPersistServiceTest extends TestCase
                             ],
                             'tag' => 'mock-tag'
                         ]
+                    ],
+                    [
+                        'data' => [
+                            'uploadId' => $upload->getUploadId(),
+                            'commit' => '',
+                            'parent' => [],
+                            'provider' => 'github',
+                            'owner' => '',
+                            'repository' => '',
+                            'ref' => 'mock-branch-reference',
+                            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+                            'sourceFormat' => CoverageFormat::LCOV,
+                            'fileName' => 'mock-file',
+                            'generatedAt' => null,
+                            'type' => LineType::BRANCH,
+                            'lineNumber' => 2,
+                            'metadata' => [
+                                [
+                                    'key' => 'type',
+                                    'value' => LineType::BRANCH->value,
+                                ],
+                                [
+                                    'key' => 'lineNumber',
+                                    'value' => '2'
+                                ],
+                                [
+                                    'key' => 'lineHits',
+                                    'value' => '1'
+                                ],
+                                [
+                                    'key' => 'branchHits',
+                                    'value' => '[0,1]'
+                                ]
+                            ],
+                            'tag' => 'mock-tag'
+                        ]
                     ]
                 ]
             )
@@ -97,7 +136,11 @@ class BigQueryPersistServiceTest extends TestCase
             ->method('getEnvironmentDataset')
             ->willReturn($mockBigQueryDataset);
 
-        $bigQueryPersistService = new BigQueryPersistService($mockBigQueryClient, new NullLogger());
+        $bigQueryPersistService = new BigQueryPersistService(
+            $mockBigQueryClient,
+            new BigQueryMetadataBuilderService(new NullLogger()),
+            new NullLogger()
+        );
 
         $bigQueryPersistService->persist($upload, $coverage);
     }
