@@ -28,22 +28,26 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         WHERE
                             key = "lineHits"
                     ) AS hits,
-                    IF (
-                        type = "BRANCH",
-                        (
-                            SELECT
-                              IF (
-                                value <> '',
-                                CAST(value AS int),
-                                0
-                              )
-                            FROM
-                              UNNEST(metadata)
-                            WHERE
-                              KEY = "partial"
-                        ),
-                        0
-                    ) AS isPartiallyHit
+                    ARRAY(
+                        SELECT
+                            SUM(CAST(branchHits AS INT64))
+                        FROM
+                            UNNEST(
+                                JSON_VALUE_ARRAY(
+                                    (
+                                        SELECT
+                                            value
+                                        FROM
+                                            UNNEST(metadata)
+                                        WHERE
+                                            KEY = "branchHits"
+                                    )
+                                ) 
+                            ) AS branchHits WITH OFFSET AS branchIndex
+                        GROUP BY
+                            branchIndex,
+                            branchHits
+                    ) as branchHits
                 FROM
                     `mock-table`
                 WHERE
@@ -58,37 +62,50 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     lineNumber IN (10,11,12)
                 ))
             ),
-            lineCoverage AS (
+            branchingLines AS (
                 SELECT
                     fileName,
                     lineNumber,
-                    tag,
                     SUM(hits) as hits,
-                    MIN(isPartiallyHit) as isPartiallyHit
-                FROM
-                    unnested
-                GROUP BY
+                    branchIndex,
+                    SUM(branchHit) > 0 as isBranchedLineHit
+                FROM 
+                    unnested,
+                    UNNEST(
+                        IF(
+                            ARRAY_LENGTH(branchHits) = 0,
+                            [hits],
+                            branchHits    
+                        )
+                    ) AS branchHit WITH OFFSET AS branchIndex
+                GROUP BY 
                     fileName,
                     lineNumber,
-                    tag
+                    branchIndex
+            ),
+            lines AS (
+                SELECT
+                    fileName,
+                    lineNumber,
+                    IF(
+                        SUM(hits) = 0,
+                        "uncovered",
+                        IF (
+                            MIN(CAST(isBranchedLineHit AS INT64)) = 0,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    branchingLines
+                GROUP BY
+                    fileName,
+                    lineNumber
             )
             SELECT
-                fileName,
-                lineNumber,
-                IF(
-                    SUM(hits) = 0,
-                    "uncovered",
-                    IF (
-                        MIN(isPartiallyHit) = 1,
-                        "partial",
-                        "covered"
-                    )
-                ) as state
+                *
             FROM
-                lineCoverage
-            GROUP BY
-                fileName,
-                lineNumber
+                lines
             SQL,
             <<<SQL
             WITH unnested AS (
@@ -106,22 +123,26 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         WHERE
                             key = "lineHits"
                     ) AS hits,
-                    IF (
-                        type = "BRANCH",
-                        (
-                            SELECT
-                              IF (
-                                value <> '',
-                                CAST(value AS int),
-                                0
-                              )
-                            FROM
-                              UNNEST(metadata)
-                            WHERE
-                              KEY = "partial"
-                        ),
-                        0
-                    ) AS isPartiallyHit
+                    ARRAY(
+                        SELECT
+                            SUM(CAST(branchHits AS INT64))
+                        FROM
+                            UNNEST(
+                                JSON_VALUE_ARRAY(
+                                    (
+                                        SELECT
+                                            value
+                                        FROM
+                                            UNNEST(metadata)
+                                        WHERE
+                                            KEY = "branchHits"
+                                    )
+                                ) 
+                            ) AS branchHits WITH OFFSET AS branchIndex
+                        GROUP BY
+                            branchIndex,
+                            branchHits
+                    ) as branchHits
                 FROM
                     `mock-table`
                 WHERE
@@ -130,37 +151,50 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     repository = 'mock-repository'
                     
             ),
-            lineCoverage AS (
+            branchingLines AS (
                 SELECT
                     fileName,
                     lineNumber,
-                    tag,
                     SUM(hits) as hits,
-                    MIN(isPartiallyHit) as isPartiallyHit
-                FROM
-                    unnested
-                GROUP BY
+                    branchIndex,
+                    SUM(branchHit) > 0 as isBranchedLineHit
+                FROM 
+                    unnested,
+                    UNNEST(
+                        IF(
+                            ARRAY_LENGTH(branchHits) = 0,
+                            [hits],
+                            branchHits    
+                        )
+                    ) AS branchHit WITH OFFSET AS branchIndex
+                GROUP BY 
                     fileName,
                     lineNumber,
-                    tag
+                    branchIndex
+            ),
+            lines AS (
+                SELECT
+                    fileName,
+                    lineNumber,
+                    IF(
+                        SUM(hits) = 0,
+                        "uncovered",
+                        IF (
+                            MIN(CAST(isBranchedLineHit AS INT64)) = 0,
+                            "partial",
+                            "covered"
+                        )
+                    ) as state
+                FROM
+                    branchingLines
+                GROUP BY
+                    fileName,
+                    lineNumber
             )
             SELECT
-                fileName,
-                lineNumber,
-                IF(
-                    SUM(hits) = 0,
-                    "uncovered",
-                    IF (
-                        MIN(isPartiallyHit) = 1,
-                        "partial",
-                        "covered"
-                    )
-                ) as state
+                *
             FROM
-                lineCoverage
-            GROUP BY
-                fileName,
-                lineNumber
+                lines
             SQL
         ];
     }

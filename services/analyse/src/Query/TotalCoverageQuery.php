@@ -40,25 +40,6 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
 
         return <<<SQL
         {$parent},
-        lineCoverageWithState AS (
-            SELECT
-                fileName,
-                lineNumber,
-                IF(
-                    SUM(hits) = 0,
-                    "{$uncovered}",
-                    IF (
-                        MIN(isPartiallyHit) = 1,
-                        "{$partial}",
-                        "{$covered}"
-                    )
-                ) as state
-            FROM
-                lineCoverage
-            GROUP BY
-                fileName,
-                lineNumber
-        ),
         summedCoverage AS (
             SELECT
                 COUNT(*) as lines,
@@ -66,7 +47,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
                 COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
                 COALESCE(SUM(IF(state = "{$uncovered}", 1, 0)), 0) as uncovered,
             FROM
-                lineCoverageWithState
+                lines
         )
         SQL;
     }
