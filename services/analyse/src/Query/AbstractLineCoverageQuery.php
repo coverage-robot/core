@@ -3,72 +3,60 @@
 namespace App\Query;
 
 use App\Model\QueryParameterBag;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 
-abstract class AbstractLineCoverageQuery implements QueryInterface
+abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
-    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
-    {
-        return '';
-    }
-
-    abstract public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string;
-
     public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
+        $parent = parent::getNamedQueries($table, $upload, $parameterBag);
+
+        $covered = LineState::COVERED->value;
+        $partial = LineState::PARTIAL->value;
+        $uncovered = LineState::UNCOVERED->value;
+
         return <<<SQL
-        WITH unnested AS (
-            SELECT
-                *,
-                (
-                    SELECT
-                    IF (
-                      value <> '',
-                      CAST(value AS int),
-                      0
-                    )
-                    FROM
-                        UNNEST(metadata)
-                    WHERE
-                        key = "lineHits"
-                ) AS hits,
-                IF (
-                    type = "BRANCH",
-                    (
-                        SELECT
-                          IF (
-                            value <> '',
-                            CAST(value AS int),
-                            0
-                          )
-                        FROM
-                          UNNEST(metadata)
-                        WHERE
-                          KEY = "partial"
-                    ),
-                    0
-                ) AS isPartiallyHit
-            FROM
-                `$table`
-            WHERE
-                commit = '{$upload->getCommit()}' AND
-                owner = '{$upload->getOwner()}' AND
-                repository = '{$upload->getRepository()}'
-                {$this->getUnnestQueryFiltering($parameterBag)}
-        ),
-        lineCoverage AS (
+        {$parent},
+        branchingLines AS (
             SELECT
                 fileName,
                 lineNumber,
-                tag,
                 SUM(hits) as hits,
-                MIN(isPartiallyHit) as isPartiallyHit
+                branchIndex,
+                SUM(branchHit) > 0 as isBranchedLineHit
+            FROM 
+                unnested,
+                UNNEST(
+                    IF(
+                        ARRAY_LENGTH(branchHits) = 0,
+                        [hits],
+                        branchHits    
+                    )
+                ) AS branchHit WITH OFFSET AS branchIndex
+            GROUP BY 
+                fileName,
+                lineNumber,
+                branchIndex
+        ),
+        lines AS (
+            SELECT
+                fileName,
+                lineNumber,
+                IF(
+                    SUM(hits) = 0,
+                    "{$uncovered}",
+                    IF (
+                        MIN(CAST(isBranchedLineHit AS INT64)) = 0,
+                        "{$partial}",
+                        "{$covered}"
+                    )
+                ) as state
             FROM
-                unnested
+                branchingLines
             GROUP BY
                 fileName,
-                lineNumber,
-                tag
+                lineNumber
         )
         SQL;
     }

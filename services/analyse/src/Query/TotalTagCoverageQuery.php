@@ -10,10 +10,11 @@ use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 
-class TotalTagCoverageQuery extends AbstractLineCoverageQuery
+class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
     {
+
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
@@ -36,7 +37,7 @@ class TotalTagCoverageQuery extends AbstractLineCoverageQuery
                 2
             ) as coveragePercentage
         FROM
-            lineCoverageWithState
+            lines
         GROUP BY
             tag
         SQL;
@@ -52,20 +53,49 @@ class TotalTagCoverageQuery extends AbstractLineCoverageQuery
 
         return <<<SQL
         {$parent},
-        lineCoverageWithState AS (
+        branchingLines AS (
             SELECT
-                *,
+                fileName,
+                lineNumber,
+                tag,
+                SUM(hits) as hits,
+                branchIndex,
+                SUM(branchHit) > 0 as isBranchedLineHit
+            FROM 
+                unnested,
+                UNNEST(
+                    IF(
+                        ARRAY_LENGTH(branchHits) = 0,
+                        [hits],
+                        branchHits    
+                    )
+                ) AS branchHit WITH OFFSET AS branchIndex
+            GROUP BY 
+                fileName,
+                lineNumber,
+                tag,
+                branchIndex
+        ),
+        lines AS (
+            SELECT
+                tag,
+                fileName,
+                lineNumber,
                 IF(
-                    hits = 0,
+                    SUM(hits) = 0,
                     "{$uncovered}",
                     IF (
-                        isPartiallyHit = 1,
+                        MIN(CAST(isBranchedLineHit AS INT64)) = 0,
                         "{$partial}",
                         "{$covered}"
                     )
                 ) as state
             FROM
-                lineCoverage
+                branchingLines
+            GROUP BY
+                tag,
+                fileName,
+                lineNumber
         )
         SQL;
     }
