@@ -120,6 +120,13 @@ resource "aws_lambda_function" "service" {
   architectures    = ["arm64"]
   timeout          = 28
   layers           = [local.layer]
+  environment {
+    variables = {
+      // This is where PHP will look for *.ini files during startup
+      PHP_INI_SCAN_DIR = "/var/task/config/bref"
+      BREF_PING_DISABLE = "1"
+    }
+  }
 }
 
 resource "aws_lambda_function_url" "service_url" {
