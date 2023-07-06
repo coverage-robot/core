@@ -20,13 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * To simulate production, the handler must be invoked from an S3 event, using a file available from S3 Localstack.
  *
- * Copy a local coverage file, with the required metadata, into the S3 bucket in Localstack:
- *
- * `awslocal s3 cp <file> s3://coverage-ingest-dev --metadata '{\"provider\":\"github\",\"commit\":\"\",\"parent\":\"[\\\"\\\",\\\"\\\"]\",\"repository\":\"\",\"owner\":\"\",\"tag\":\"\",\"uploadid\":\"\"}'`
- *
- * Invoke the handler in a Docker container, closely simulating the Lambda environment:
- *
- * `docker-compose run --rm ingest php bin/console app:invoke <file> -vv`
+ * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the ingest handler')]
 class InvokeCommand extends Command

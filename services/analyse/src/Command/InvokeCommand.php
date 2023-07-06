@@ -21,8 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Invoke the handler in a Docker container, closely simulating the Lambda environment:
  *
- * `docker-compose run --rm analyse php bin/console app:invoke <commit> <pullRequest> <repository>
- * <owner> <tag> <ref> <parent> -vv`
+ * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the analysis handler')]
 class InvokeCommand extends Command
