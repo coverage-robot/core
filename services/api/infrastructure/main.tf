@@ -123,7 +123,7 @@ resource "aws_lambda_function" "service" {
   environment {
     variables = {
       // This is where PHP will look for *.ini files during startup
-      PHP_INI_SCAN_DIR = "/var/task/config/bref"
+      PHP_INI_SCAN_DIR  = "/var/task/config/bref"
       BREF_PING_DISABLE = "1"
     }
   }

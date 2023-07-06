@@ -15,16 +15,16 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', enumType: Provider::class)]
-    private ?Provider $Provider = null;
+    private ?Provider $provider = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Owner = null;
+    private ?string $owner = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Repository = null;
+    private ?string $repository = null;
 
     #[ORM\Column(length: 255)]
-    private bool $Enabled = true;
+    private bool $enabled = true;
 
     #[ORM\Column(length: 100)]
     private ?string $token = null;
@@ -48,47 +48,47 @@ class Project
 
     public function getOwner(): ?string
     {
-        return $this->Owner;
+        return $this->owner;
     }
 
-    public function setOwner(string $Owner): static
+    public function setOwner(string $owner): static
     {
-        $this->Owner = $Owner;
+        $this->owner = $owner;
 
         return $this;
     }
     public function getRepository(): ?string
     {
-        return $this->Repository;
+        return $this->repository;
     }
 
-    public function setRepository(string $Repository): static
+    public function setRepository(string $repository): static
     {
-        $this->Repository = $Repository;
+        $this->repository = $repository;
 
         return $this;
     }
 
     public function getProvider(): ?Provider
     {
-        return $this->Provider;
+        return $this->provider;
     }
 
-    public function setProvider(?Provider $Provider): Project
+    public function setProvider(?Provider $provider): Project
     {
-        $this->Provider = $Provider;
+        $this->provider = $provider;
 
         return $this;
     }
 
     public function isEnabled(): bool
     {
-        return $this->Enabled;
+        return $this->enabled;
     }
 
-    public function setEnabled(bool $Enabled): Project
+    public function setEnabled(bool $enabled): Project
     {
-        $this->Enabled = $Enabled;
+        $this->enabled = $enabled;
 
         return $this;
     }
