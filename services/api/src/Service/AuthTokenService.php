@@ -2,14 +2,17 @@
 
 namespace App\Service;
 
+use App\Exception\AuthenticationException;
 use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
-use Exception\AuthenticationException;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
 class AuthTokenService
 {
+    public const TOKEN_LENGTH = 12;
+    public const MAX_TOKEN_RETRIES = 3;
+
     public function __construct(
         private readonly ProjectRepository $projectRepository,
         private readonly Randomizer $randomizer
@@ -24,7 +27,13 @@ class AuthTokenService
      */
     public function getProjectTokenFromRequest(Request $request): ?string
     {
-        if (!$request->headers->has('Authorization') || !str_starts_with($request->headers->get('Authorization'), 'Basic ')) {
+        if (!$request->headers->has('Authorization')) {
+            return null;
+        }
+
+        $authHeader = $request->headers->get('Authorization');
+
+        if (!is_string($authHeader) || !str_starts_with($authHeader, 'Basic ')) {
             return null;
         }
 
@@ -65,13 +74,12 @@ class AuthTokenService
         $attempts = 0;
 
         do {
-            $projectToken = bin2hex($this->randomizer->getBytes(12));
+            $projectToken = bin2hex($this->randomizer->getBytes(self::TOKEN_LENGTH));
 
-            $isUnique = $this->projectRepository
-                    ->findOneBy(['token' => $projectToken]) === null;
-
+            $isUnique = $this->projectRepository->findOneBy(['token' => $projectToken]) === null;
+            
             $attempts++;
-        } while ($attempts <= 3 && !$isUnique);
+        } while ($attempts < self::MAX_TOKEN_RETRIES && !$isUnique);
 
         if (!$isUnique) {
             throw AuthenticationException::failedToCreateProjectToken($attempts);

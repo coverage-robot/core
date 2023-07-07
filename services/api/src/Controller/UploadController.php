@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
-use Exception\AuthenticationException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
