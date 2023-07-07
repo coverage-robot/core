@@ -46,7 +46,7 @@ class AuthTokenService
         );
 
         // Remove the trailing colon from the token - which will have been added for the username:password pattern
-        return trim($token, ":");
+        return trim($token, ':');
     }
 
     /**
@@ -77,7 +77,7 @@ class AuthTokenService
             $projectToken = bin2hex($this->randomizer->getBytes(self::TOKEN_LENGTH));
 
             $isUnique = $this->projectRepository->findOneBy(['token' => $projectToken]) === null;
-            
+
             $attempts++;
         } while ($attempts < self::MAX_TOKEN_RETRIES && !$isUnique);
 

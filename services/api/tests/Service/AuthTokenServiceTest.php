@@ -70,7 +70,7 @@ class AuthTokenServiceTest extends TestCase
 
         $this->assertTrue($authTokenService->validateParametersWithProjectToken(
             $parameters,
-            "mock-token"
+            'mock-token'
         ));
     }
 
@@ -106,7 +106,7 @@ class AuthTokenServiceTest extends TestCase
 
         $this->assertFalse($authTokenService->validateParametersWithProjectToken(
             $parameters,
-            "mock-token"
+            'mock-token'
         ));
     }
 
@@ -137,7 +137,7 @@ class AuthTokenServiceTest extends TestCase
 
         $this->assertFalse($authTokenService->validateParametersWithProjectToken(
             $parameters,
-            "mock-token"
+            'mock-token'
         ));
     }
 
@@ -202,20 +202,20 @@ class AuthTokenServiceTest extends TestCase
     public static function authorizationHeaderDataProvider(): array
     {
         return [
-            "No Authorization" => [
+            'No Authorization' => [
                 null,
                 null
             ],
-            "Basic Authorization with username" => [
-                sprintf("Basic %s", base64_encode("mock-token:")),
-                "mock-token"
+            'Basic Authorization with username' => [
+                sprintf('Basic %s', base64_encode('mock-token:')),
+                'mock-token'
             ],
-            "Basic Authorization with password" => [
-                sprintf("Basic %s", base64_encode(":mock-token")),
-                "mock-token"
+            'Basic Authorization with password' => [
+                sprintf('Basic %s', base64_encode(':mock-token')),
+                'mock-token'
             ],
-            "Bearer Authorization" => [
-                sprintf("Bearer %s", base64_encode("some-invalid-bearer-token")),
+            'Bearer Authorization' => [
+                sprintf('Bearer %s', base64_encode('some-invalid-bearer-token')),
                 null
             ],
         ];
