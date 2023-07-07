@@ -37,10 +37,11 @@ class AuthTokenService
             return null;
         }
 
+
         // Decode the encoded token from the request header.
         $token = base64_decode(
             substr(
-                $request->headers->get('Authorization'),
+                (string)$authHeader,
                 6
             )
         );
@@ -67,6 +68,7 @@ class AuthTokenService
 
     /**
      * Create a new unique project token.
+     *
      * @throws AuthenticationException
      */
     public function createNewProjectToken(): string
