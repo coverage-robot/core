@@ -178,7 +178,7 @@ class UploadControllerTest extends KernelTestCase
                         'provider' => 'github',
                         'fileName' => 'some/root/test.xml',
                         'projectRoot' => 'some/root/'
-                    ])
+                ])
             ]
         ];
     }
