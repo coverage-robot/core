@@ -20,11 +20,24 @@ class AuthTokenService
      * Attempt to retrieve the project token from a request.
      *
      * In practice this performs a lookup in the request headers for the
-     * 'token' key.
+     * 'Authorization' key, and decodes it based on the Basic schema pattern.
      */
     public function getProjectTokenFromRequest(Request $request): ?string
     {
-        return  $request->headers->get('token');
+        if (!$request->headers->has('Authorization') || !str_starts_with($request->headers->get('Authorization'), 'Basic ')) {
+            return null;
+        }
+
+        // Decode the encoded token from the request header.
+        $token = base64_decode(
+            substr(
+                $request->headers->get('Authorization'),
+                6
+            )
+        );
+
+        // Remove the trailing colon from the token - which will have been added for the username:password pattern
+        return trim($token, ":");
     }
 
     /**
