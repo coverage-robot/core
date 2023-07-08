@@ -18,7 +18,7 @@ variable "database_username" {
 }
 
 variable "database_password" {
-  type = string
+  type      = string
   sensitive = true
 }
 variable "database_host" {
