@@ -11,7 +11,6 @@ services:
       - ../../packages:/var/task/vendor/ryanmab
     environment:
       HANDLER: public/index.php
-      PHP_INI_SCAN_DIR: /var/task/config/bref
 
   database:
     image: mysql:8.0.33
