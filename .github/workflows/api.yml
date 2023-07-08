@@ -219,6 +219,9 @@ jobs:
                   add_github_comment: true
                   path: ${{ env.working-directory }}/infrastructure
                   var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+                  variables: |
+                    database_username=${{ secrets.API_SERVICE_DB_USERNAME }}
+                    database_password=${{ secrets.API_SERVICE_DB_PASSWORD }}
 
     deployment:
       name: Deployment
@@ -275,6 +278,9 @@ jobs:
               workspace: ${{ env.workspace }}
               path: ${{ env.working-directory }}/infrastructure
               var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+              variables: |
+                database_username=${{ secrets.API_SERVICE_DB_USERNAME }}
+                database_password=${{ secrets.API_SERVICE_DB_PASSWORD }}
 
               # The plan will already have been generated on the PR, so approving here should be fine
               auto_approve: true
