@@ -33,7 +33,7 @@ when@prod:
         dbal:
             options:
                 # Connect to the database via SSL
-                !php/const PDO::MYSQL_ATTR_SSL_CA: /opt/ssl/cert.pem
+                !php/const PDO::MYSQL_ATTR_SSL_CA: /opt/bref/ssl/cert.pem
 
         orm:
             auto_generate_proxy_classes: false
