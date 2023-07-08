@@ -5,6 +5,7 @@ doctrine:
         port: 3306
         user: '%env(resolve:DATABASE_USERNAME)%'
         password: '%env(resolve:DATABASE_PASSWORD)%'
+        server_version: '8.0'
 
     orm:
         auto_generate_proxy_classes: true
