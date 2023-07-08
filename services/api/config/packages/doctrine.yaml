@@ -1,6 +1,10 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+        dbname: '%env(resolve:DATABASE_NAME)%'
+        host: '%env(resolve:DATABASE_HOST)%'
+        port: 3306
+        user: '%env(resolve:DATABASE_USERNAME)%'
+        password: '%env(resolve:DATABASE_PASSWORD)%'
 
     orm:
         auto_generate_proxy_classes: true

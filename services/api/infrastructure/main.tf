@@ -126,15 +126,6 @@ resource "aws_lambda_function" "service" {
       // This is where PHP will look for *.ini files during startup
       PHP_INI_SCAN_DIR  = "/var/task/config/bref"
       BREF_PING_DISABLE = "1"
-
-      // Build the DSN for the database connection
-      DATABASE_URL = (format(
-        "mysql://%s:%s@%s:3306/%s",
-        var.database_username,
-        var.database_password,
-        var.database_host,
-        data.terraform_remote_state.core.outputs.coverage_api_db.name
-      ))
     }
   }
 }
