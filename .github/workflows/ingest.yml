@@ -162,8 +162,9 @@ jobs:
                     composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
                 shell: bash
 
-            -   uses: ryanmab/coverage-action@v0.0.2
+            -   uses: ryanmab/coverage-action@v0.0.3
                 with:
+                    token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
                         ${{ env.working-directory }}/coverage.xml
                     tag: ingest-service

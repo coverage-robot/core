@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 4.65"
     }
+    planetscale = {
+      source  = "koslib/planetscale"
+      version = "~> 0.5"
+    }
   }
 
   required_version = ">= 1.2.0"
@@ -34,6 +38,11 @@ provider "google" {
   region  = var.gcp_region
 }
 
+provider "planetscale" {
+  service_token_id = var.planetscale_service_token_id
+  service_token    = var.planetscale_service_token
+}
+
 module "queue" {
   source      = "./queue"
   environment = local.environment
@@ -47,4 +56,12 @@ module "bucket" {
 module "warehouse" {
   source      = "./warehouse"
   environment = local.environment
+}
+
+module "database" {
+  source      = "./database"
+  environment = local.environment
+
+  organisation = var.planetscale_organisation
+  region       = "eu-west"
 }

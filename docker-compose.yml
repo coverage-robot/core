@@ -20,7 +20,12 @@ services:
       file: services/api/docker-compose.yml
       service: lambda
     links:
-      - localstack
+      - api_db
+
+  api_db:
+    extends:
+      file: services/api/docker-compose.yml
+      service: database
 
   localstack:
     container_name: "localstack"
@@ -41,3 +46,7 @@ services:
       # Mount the default volumes for cache and sockets
       - "./infrastructure/.localstack/var:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+
+volumes:
+  api_db:
+    driver: local

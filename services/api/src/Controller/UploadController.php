@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
+use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +17,7 @@ class UploadController extends AbstractController
 {
     public function __construct(
         private readonly UploadService $uploadService,
+        private readonly AuthTokenService $authTokenService,
         private readonly LoggerInterface $uploadLogger
     ) {
     }
@@ -24,6 +27,12 @@ class UploadController extends AbstractController
     {
         try {
             $parameters = $this->uploadService->getSigningParametersFromRequest($request);
+
+            $token = $this->authTokenService->getProjectTokenFromRequest($request);
+
+            if (!$token || !$this->authTokenService->validateParametersWithProjectToken($parameters, $token)) {
+                throw AuthenticationException::invalidProjectToken();
+            }
 
             $signedUrl = $this->uploadService->buildSignedUploadUrl($parameters);
 
@@ -36,6 +45,13 @@ class UploadController extends AbstractController
             );
 
             return $this->json($signedUrl);
+        } catch (AuthenticationException $e) {
+            return $this->json(
+                [
+                    'error' => $e->getMessage()
+                ],
+                Response::HTTP_UNAUTHORIZED
+            );
         } catch (SigningException $e) {
             return $this->json(
                 [

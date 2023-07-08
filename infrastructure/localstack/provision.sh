@@ -29,6 +29,6 @@ cd /usr/infrastructure || return
 
 tflocal init -upgrade
 tflocal workspace select -or-create dev
-tflocal apply -auto-approve -lock=false
+tflocal apply -auto-approve -lock=false -var-file="dev.tfvars"
 
 echo "--- Provisioning complete ---"

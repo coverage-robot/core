@@ -9,8 +9,21 @@ variable "gcp_region" {
 }
 
 variable "gcp_project" {
-  type    = string
-  default = "coverage-384615"
+  type = string
+}
+
+variable "planetscale_service_token_id" {
+  type      = string
+  sensitive = true
+}
+
+variable "planetscale_service_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "planetscale_organisation" {
+  type = string
 }
 
 variable "environment" {

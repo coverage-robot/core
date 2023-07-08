@@ -7,5 +7,14 @@ services:
     volumes:
       - .:/var/task:ro
       - ./var:/var/task/var
+      - ./config/migrations:/var/task/config/migrations
+      - ../../packages:/var/task/vendor/ryanmab
     environment:
       HANDLER: public/index.php
+      PHP_INI_SCAN_DIR: /var/task/config/bref
+
+  database:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_DATABASE: coverage-api-dev
+      MYSQL_ROOT_PASSWORD: root
