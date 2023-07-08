@@ -13,8 +13,8 @@ provider "google" {
 }
 
 provider "planetscale" {
-  service_token_id = ""
-  service_token    = ""
+  service_token_id = "mock"
+  service_token    = "mock"
 }
 
 module "warehouse" {

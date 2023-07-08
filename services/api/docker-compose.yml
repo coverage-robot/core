@@ -16,5 +16,5 @@ services:
   database:
     image: mysql:8.0.33
     environment:
-      MYSQL_DATABASE: coverage-api
+      MYSQL_DATABASE: coverage-api-dev
       MYSQL_ROOT_PASSWORD: root
