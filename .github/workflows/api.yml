@@ -220,9 +220,6 @@ jobs:
                   add_github_comment: true
                   path: ${{ env.working-directory }}/infrastructure
                   var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
-                  variables: |
-                    database_username = "${{ secrets.API_SERVICE_DB_USERNAME }}"
-                    database_password = "${{ secrets.API_SERVICE_DB_PASSWORD }}"
 
     deployment:
       name: Deployment
@@ -253,6 +250,8 @@ jobs:
             uses: SpicyPizza/create-envfile@v2.0
             with:
               envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+              envkey_DATABASE_USERNAME: ${{ secrets.API_SERVICE_DB_USERNAME }}
+              envkey_DATABASE_PASSWORD: ${{ secrets.API_SERVICE_DB_PASSWORD }}
               directory: ${{ env.working-directory }}
               file_name: .env.local
               fail_on_empty: false
@@ -279,9 +278,6 @@ jobs:
               workspace: ${{ env.workspace }}
               path: ${{ env.working-directory }}/infrastructure
               var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
-              variables: |
-                database_username = "${{ secrets.API_SERVICE_DB_USERNAME }}"
-                database_password = "${{ secrets.API_SERVICE_DB_PASSWORD }}"
 
               # The plan will already have been generated on the PR, so approving here should be fine
               auto_approve: true
