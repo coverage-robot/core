@@ -5,6 +5,8 @@ doctrine:
         port: 3306
         user: '%env(resolve:DATABASE_USERNAME)%'
         password: '%env(resolve:DATABASE_PASSWORD)%'
+
+        driver: pdo_mysql
         server_version: '8.0'
 
     orm:
