@@ -90,8 +90,8 @@ jobs:
                     path: ${{ env.working-directory }}
                     var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
                     variables: |
-                        planetscale_service_token_id=${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
-                        planetscale_service_token=${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+                        planetscale_service_token_id = ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
+                        planetscale_service_token = ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
 
     deployment:
         name: Deployment
@@ -126,5 +126,5 @@ jobs:
                     path: ${{ env.working-directory }}
                     var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
                     variables: |
-                        planetscale_service_token_id=${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
-                        planetscale_service_token=${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+                        planetscale_service_token_id = ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
+                        planetscale_service_token = ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
