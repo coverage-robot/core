@@ -6,6 +6,7 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Service\Diff\DiffParserServiceInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
@@ -14,7 +15,8 @@ class GithubDiffParserService implements DiffParserServiceInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
-        private readonly Parser $parser
+        private readonly Parser $parser,
+        private readonly LoggerInterface $diffParserLogger
     ) {
     }
 
@@ -24,6 +26,16 @@ class GithubDiffParserService implements DiffParserServiceInterface
     public function get(Upload $upload): array
     {
         $this->client->authenticateAsRepositoryOwner($upload->getOwner());
+
+        $this->diffParserLogger->info(
+            sprintf('Fetching diff from GitHub for %s.', (string)$upload),
+            [
+                'owner' => $upload->getOwner(),
+                'repository' => $upload->getRepository(),
+                'commit' => $upload->getCommit(),
+                'pull_request' => $upload->getPullRequest()
+            ]
+        );
 
         $diff = $upload->getPullRequest() ?
             $this->getPullRequestDiff(
@@ -46,11 +58,12 @@ class GithubDiffParserService implements DiffParserServiceInterface
 
             foreach ($diff->getChunks() as $chunk) {
                 $offset = 0;
+
                 foreach ($chunk->getLines() as $line) {
                     if ($line->getType() === Line::ADDED) {
                         $addedLines[$file] = [
                             ...($addedLines[$file] ?? []),
-                            $chunk->getStart() + $offset
+                            $chunk->getEnd() + $offset
                         ];
                     }
 
@@ -60,6 +73,17 @@ class GithubDiffParserService implements DiffParserServiceInterface
                 }
             }
         }
+
+        $this->diffParserLogger->info(
+            sprintf('Diff for %s has %s files with added lines.', (string)$upload, count($addedLines)),
+            [
+                'owner' => $upload->getOwner(),
+                'repository' => $upload->getRepository(),
+                'commit' => $upload->getCommit(),
+                'pullRequest' => $upload->getPullRequest(),
+                $addedLines
+            ]
+        );
 
         return $addedLines;
     }
@@ -77,6 +101,15 @@ class GithubDiffParserService implements DiffParserServiceInterface
      */
     private function getPullRequestDiff(string $owner, string $repository, int $pullRequest): string
     {
+        $this->diffParserLogger->info(
+            sprintf('Fetching pull request diff for %s pull request in %s repository.', $pullRequest, $repository),
+            [
+                'owner' => $owner,
+                'repository' => $repository,
+                'pullRequest' => $pullRequest
+            ]
+        );
+
         /** @var string $diff */
         $diff = $this->client->pullRequest()
             ->configure('diff')
@@ -97,6 +130,15 @@ class GithubDiffParserService implements DiffParserServiceInterface
      */
     private function getCommitDiff(string $owner, string $repository, string $sha): string
     {
+        $this->diffParserLogger->info(
+            sprintf('Fetching commit diff for %s commit in %s repository.', $sha, $repository),
+            [
+                'owner' => $owner,
+                'repository' => $repository,
+                'commit' => $sha
+            ]
+        );
+
         /** @var array<array-key, object{ files: array }> $commit */
         $commit = $this->client->repo()
             ->commits()
@@ -110,7 +152,9 @@ class GithubDiffParserService implements DiffParserServiceInterface
         $files = $commit['files'] ?? [];
 
         if (empty($files)) {
-            throw new RuntimeException('Unable to generate diff using commit.');
+            throw new RuntimeException(
+                sprintf('Unable to generate diff using commit for %s in %s repository.', $sha, $repository)
+            );
         }
 
         return array_reduce(

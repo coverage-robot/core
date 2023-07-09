@@ -6,3 +6,4 @@ services:
     volumes:
       - .:/var/task:ro
       - ./var:/var/task/var
+      - ../../packages:/var/task/vendor/ryanmab
