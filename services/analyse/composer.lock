@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bref/bref",
-            "version": "2.0.10",
+            "version": "2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "7adb96556f5b23acecddf109326df03570859c9c"
+                "reference": "56e49531a38fefb61c2d8b5013e22fb0cab1af1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/7adb96556f5b23acecddf109326df03570859c9c",
-                "reference": "7adb96556f5b23acecddf109326df03570859c9c",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/56e49531a38fefb61c2d8b5013e22fb0cab1af1e",
+                "reference": "56e49531a38fefb61c2d8b5013e22fb0cab1af1e",
                 "shasum": ""
             },
             "require": {
@@ -70,7 +70,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.0.10"
+                "source": "https://github.com/brefphp/bref/tree/2.0.11"
             },
             "funding": [
                 {
@@ -82,25 +82,25 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-03T12:16:28+00:00"
+            "time": "2023-07-05T17:53:48+00:00"
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "0.2.1",
+            "version": "0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
-                "reference": "a2e67cfb49ee7028e2bb354521d9638a8a212d7d"
+                "reference": "f3a15f8686bcb050bdb60009110079bad46668d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/a2e67cfb49ee7028e2bb354521d9638a8a212d7d",
-                "reference": "a2e67cfb49ee7028e2bb354521d9638a8a212d7d",
+                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/f3a15f8686bcb050bdb60009110079bad46668d3",
+                "reference": "f3a15f8686bcb050bdb60009110079bad46668d3",
                 "shasum": ""
             },
             "require": {
                 "bref/bref": "^1.2|^2.0",
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "symfony/filesystem": "^5.2|^6.0",
                 "symfony/http-kernel": "^5.2|^6.0",
                 "symfony/psr-http-message-bridge": "^2.1",
@@ -113,6 +113,7 @@
                 "symfony/config": "^5.2|^6.0",
                 "symfony/dependency-injection": "^5.2|^6.0",
                 "symfony/framework-bundle": "^5.2|^6.0",
+                "symfony/phpunit-bridge": "^6.0",
                 "symfony/process": "^5.2|^6.0"
             },
             "type": "library",
@@ -136,7 +137,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/0.2.1"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/0.2.2"
             },
             "funding": [
                 {
@@ -144,7 +145,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-15T13:25:54+00:00"
+            "time": "2023-07-05T08:52:00+00:00"
         },
         {
             "name": "brick/math",
