@@ -1,10 +1,19 @@
 locals {
   bref_layers = jsondecode(file("${path.module}/../vendor/bref/bref/layers.json"))
-  layer = format(
-    "arn:aws:lambda:%s:534081306603:layer:${var.php_version}:%s",
-    var.region,
-    local.bref_layers[var.php_version][var.region]
-  )
+  bref_extension_layers = jsondecode(file("${path.module}/../vendor/bref/extra-bref-extensions/layers.json"))
+
+  layers = [
+    format(
+      "arn:aws:lambda:%s:534081306603:layer:${var.php_version}:%s",
+      var.region,
+      local.bref_layers[var.php_version][var.region]
+    ),
+    format(
+      "arn:aws:lambda:%s:403367587399:layer::%s",
+      var.region,
+      local.bref_extension_layers["gd-php-82"][var.region]
+    )
+  ]
 }
 
 terraform {
@@ -119,7 +128,7 @@ resource "aws_lambda_function" "service" {
   handler          = "public/index.php"
   architectures    = ["arm64"]
   timeout          = 28
-  layers           = [local.layer]
+  layers           = local.layers
 
   environment {
     variables = {
