@@ -8,8 +8,8 @@ use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use JsonException;
 use JsonSerializable;
-use Packages\Models\Enum\CoverageEventSource;
 use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Models\Enum\EventBus\CoverageEventSource;
 
 class EventBridgeEventService
 {
@@ -30,7 +30,7 @@ class EventBridgeEventService
                         'EventBusName' => $_ENV['EVENT_BUS'],
                         'Source' => CoverageEventSource::ANALYSE->value,
                         'DetailType' => $event->value,
-                        'Detail' => json_encode($detail, JSON_THROW_ON_ERROR),
+                        'Detail' => json_encode($detail, JSON_THROW_ON_ERROR)
                     ])
                 ],
             ])

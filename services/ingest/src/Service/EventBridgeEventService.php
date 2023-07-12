@@ -8,7 +8,7 @@ use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use JsonException;
 use JsonSerializable;
-use Packages\Models\Enum\CoverageEventSource;
+use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 
 class EventBridgeEventService

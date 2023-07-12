@@ -96,7 +96,7 @@ class EventHandler extends S3Handler
                     'Failed to successfully delete ingested coverage file.',
                     [
                         'exception' => $e,
-                        'upload'    => $upload
+                        'upload'    => $upload ?? null
                     ]
                 );
             }
