@@ -43,8 +43,8 @@ provider "planetscale" {
   service_token    = var.planetscale_service_token
 }
 
-module "queue" {
-  source      = "./queue"
+module "events" {
+  source      = "./events"
   environment = local.environment
 }
 
@@ -63,5 +63,5 @@ module "database" {
   environment = local.environment
 
   organisation = var.planetscale_organisation
-  region       = "eu-west"
+  region       = var.planetscale_region
 }

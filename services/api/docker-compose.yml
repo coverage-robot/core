@@ -12,6 +12,15 @@ services:
     environment:
       HANDLER: public/index.php
 
+  event_listener:
+    image: bref/php-82-fpm-dev:2
+    volumes:
+      - .:/var/task:ro
+      - ./var:/var/task/var
+      - ../../packages:/var/task/vendor/ryanmab
+    environment:
+      HANDLER: App\Handler\EventHandler
+
   database:
     image: mysql:8.0.33
     environment:

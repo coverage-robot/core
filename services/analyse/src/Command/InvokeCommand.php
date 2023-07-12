@@ -2,10 +2,11 @@
 
 namespace App\Command;
 
-use App\Handler\AnalyseHandler;
+use App\Handler\EventHandler;
 use Bref\Context\Context;
+use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
-use Bref\Event\Sqs\SqsEvent;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -26,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the analysis handler')]
 class InvokeCommand extends Command
 {
-    public function __construct(private readonly AnalyseHandler $handler)
+    public function __construct(private readonly EventHandler $handler)
     {
         parent::__construct();
     }
@@ -67,16 +68,10 @@ class InvokeCommand extends Command
                 'pullRequest' => $input->getArgument('pullRequest')
             ]);
 
-            $this->handler->handleSqs(
-                new SqsEvent([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:sqs',
-                            'messageId' => 'mock',
-                            'body' => json_encode($upload),
-                            'messageAttributes' => []
-                        ]
-                    ]
+            $this->handler->handleEventBridge(
+                new EventBridgeEvent([
+                    'detail-type' => CoverageEvent::INGEST_SUCCESS,
+                    'detail' => $upload->jsonSerialize()
                 ]),
                 Context::fake()
             );

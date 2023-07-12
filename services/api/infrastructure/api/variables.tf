@@ -12,3 +12,7 @@ variable "php_version" {
   type    = string
   default = "php-82"
 }
+
+variable "deployment_hash" {
+  type = string
+}

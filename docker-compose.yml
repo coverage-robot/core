@@ -22,6 +22,13 @@ services:
     links:
       - api_db
 
+  api_event_listener:
+    extends:
+      file: services/api/docker-compose.yml
+      service: event_listener
+    links:
+      - api_db
+
   api_db:
     extends:
       file: services/api/docker-compose.yml
@@ -36,7 +43,8 @@ services:
     environment:
       - DEBUG=1
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - SERVICES=s3,sqs,iam
+      - SERVICES=s3,iam,events
+      - DISABLE_EVENTS=0
       - HOSTNAME_EXTERNAL=localstack
     volumes:
       # Mount volumes for Localstack provisioning

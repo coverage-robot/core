@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Handler\IngestHandler;
+use App\Handler\EventHandler;
 use App\Service\EnvironmentService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
@@ -28,7 +28,7 @@ class InvokeCommand extends Command
     private const BUCKET = 'coverage-ingest-%s';
 
     public function __construct(
-        private readonly IngestHandler $handler,
+        private readonly EventHandler $handler,
         private readonly EnvironmentService $environmentService
     ) {
         parent::__construct();

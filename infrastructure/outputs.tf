@@ -6,8 +6,8 @@ output "output_bucket" {
   value = module.bucket.output_bucket
 }
 
-output "analysis_queue" {
-  value = module.queue.analysis_queue
+output "coverage_event_bus" {
+  value = module.events.coverage_event_bus
 }
 
 output "environment_dataset" {

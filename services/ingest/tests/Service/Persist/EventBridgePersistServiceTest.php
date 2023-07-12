@@ -2,37 +2,33 @@
 
 namespace App\Tests\Service\Persist;
 
+use App\Service\EventBridgeEventService;
 use App\Service\Persist\BigQueryPersistService;
-use App\Service\Persist\SqsPersistService;
+use App\Service\Persist\EventBridgePersistService;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBus;
-use Symfony\Component\Messenger\Stamp\SentStamp;
 
-class SqsPersistServiceTest extends TestCase
+class EventBridgePersistServiceTest extends TestCase
 {
     #[DataProvider('uploadDataProvider')]
     public function testPersist(Upload $upload, Coverage $coverage): void
     {
-        $messageBus = $this->createMock(MessageBus::class);
-        $messageBus->expects($this->once())
-            ->method('dispatch')
-            ->with($upload)
-            ->willReturn(Envelope::wrap(
-                $upload,
-                [new SentStamp('')]
-            ));
+        $eventService = $this->createMock(EventBridgeEventService::class);
+        $eventService->expects($this->once())
+            ->method('publishEvent')
+            ->with(CoverageEvent::INGEST_SUCCESS, $upload)
+            ->willReturn(true);
 
-        $sqsPersistService = new SqsPersistService($messageBus, new NullLogger());
+        $eventBridgePersistService = new EventBridgePersistService($eventService, new NullLogger());
 
-        $successful = $sqsPersistService->persist($upload, $coverage);
+        $successful = $eventBridgePersistService->persist($upload, $coverage);
 
         $this->assertTrue($successful);
     }
@@ -41,7 +37,7 @@ class SqsPersistServiceTest extends TestCase
     {
         // The SQS message should **always** be persisted after the BigQuery data
         // as been persisted.
-        $this->assertTrue(SqsPersistService::getPriority() < BigQueryPersistService::getPriority());
+        $this->assertTrue(EventBridgePersistService::getPriority() < BigQueryPersistService::getPriority());
     }
 
     public static function uploadDataProvider(): array
