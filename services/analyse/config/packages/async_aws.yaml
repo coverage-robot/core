@@ -1,0 +1,9 @@
+when@dev: &aws_dev
+  async_aws:
+    config:
+      region: eu-west-2
+
+when@test: *aws_dev
+
+when@prod:
+  async_aws:
