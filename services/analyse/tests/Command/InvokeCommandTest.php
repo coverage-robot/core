@@ -2,7 +2,7 @@
 
 namespace App\Tests\Command;
 
-use App\Handler\AnalyseHandler;
+use App\Handler\EventHandler;
 use Bref\Event\InvalidLambdaEvent;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -13,15 +13,15 @@ class InvokeCommandTest extends KernelTestCase
 {
     public function testInvokeSuccessfully(): void
     {
-        $mockAnalyseHandler = $this->createMock(AnalyseHandler::class);
+        $mockEventHandler = $this->createMock(EventHandler::class);
 
-        $mockAnalyseHandler->expects($this->once())
-            ->method('handleSqs');
+        $mockEventHandler->expects($this->once())
+            ->method('handleEventBridge');
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(AnalyseHandler::class, $mockAnalyseHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockEventHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
@@ -39,16 +39,16 @@ class InvokeCommandTest extends KernelTestCase
 
     public function testInvokeFailure(): void
     {
-        $mockAnalyseHandler = $this->createMock(AnalyseHandler::class);
+        $mockAnalyseHandler = $this->createMock(EventHandler::class);
 
         $mockAnalyseHandler->expects($this->once())
-            ->method('handleSqs')
+            ->method('handleEventBridge')
             ->willThrowException(new InvalidLambdaEvent('sqs', ''));
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(AnalyseHandler::class, $mockAnalyseHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockAnalyseHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);

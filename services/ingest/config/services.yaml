@@ -10,8 +10,8 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Handler\IngestHandler:
-        # The controller must be public so that Bref is able to run it through the Symfony
+    App\Handler\EventHandler:
+        # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
         public: true
 

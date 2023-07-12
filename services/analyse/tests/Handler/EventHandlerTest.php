@@ -2,19 +2,21 @@
 
 namespace App\Tests\Handler;
 
-use App\Handler\AnalyseHandler;
+use App\Handler\EventHandler;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoveragePublisherService;
+use App\Service\EventBridgeEventService;
 use Bref\Context\Context;
-use Bref\Event\Sqs\SqsEvent;
+use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class AnalyseHandlerTest extends TestCase
+class EventHandlerTest extends TestCase
 {
     public function testHandleSqs(): void
     {
@@ -33,6 +35,9 @@ class AnalyseHandlerTest extends TestCase
         $upload = Upload::from($body);
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockPublishableCoverageData->expects($this->once())
+            ->method('getCoveragePercentage')
+            ->willReturn(100.0);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
 
@@ -48,19 +53,27 @@ class AnalyseHandlerTest extends TestCase
             ->with($upload, $mockPublishableCoverageData)
             ->willReturn(true);
 
-        $handler = new AnalyseHandler(new NullLogger(), $mockCoverageAnalyserService, $mockCoveragePublisherService);
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService->expects($this->once())
+            ->method('publishEvent')
+            ->with(CoverageEvent::ANALYSE_SUCCESS, [
+                'upload' => $upload->jsonSerialize(),
+                'coveragePercentage' => 100.0,
+            ]);
 
-        $handler->handleSqs(
-            new SqsEvent(
+        $handler = new EventHandler(
+            new NullLogger(),
+            $mockCoverageAnalyserService,
+            $mockCoveragePublisherService,
+            $mockEventBridgeEventService,
+            new NullLogger()
+        );
+
+        $handler->handleEventBridge(
+            new EventBridgeEvent(
                 [
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:sqs',
-                            'messageId' => 'mock',
-                            'body' => json_encode($body),
-                            'messageAttributes' => []
-                        ]
-                    ]
+                    'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
+                    'detail' => $upload->jsonSerialize()
                 ]
             ),
             Context::fake()

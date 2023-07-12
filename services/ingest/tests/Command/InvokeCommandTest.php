@@ -2,7 +2,7 @@
 
 namespace App\Tests\Command;
 
-use App\Handler\IngestHandler;
+use App\Handler\EventHandler;
 use Bref\Event\InvalidLambdaEvent;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -13,7 +13,7 @@ class InvokeCommandTest extends KernelTestCase
 {
     public function testInvokeSuccessfully(): void
     {
-        $mockIngestHandler = $this->createMock(IngestHandler::class);
+        $mockIngestHandler = $this->createMock(EventHandler::class);
 
         $mockIngestHandler->expects($this->once())
             ->method('handleS3');
@@ -21,7 +21,7 @@ class InvokeCommandTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(IngestHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockIngestHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
@@ -34,7 +34,7 @@ class InvokeCommandTest extends KernelTestCase
 
     public function testInvokeFailure(): void
     {
-        $mockIngestHandler = $this->createMock(IngestHandler::class);
+        $mockIngestHandler = $this->createMock(EventHandler::class);
 
         $mockIngestHandler->expects($this->once())
             ->method('handleS3')
@@ -43,7 +43,7 @@ class InvokeCommandTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(IngestHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockIngestHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);

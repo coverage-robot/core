@@ -13,3 +13,8 @@ services:
             - '../src/Kernel.php'
 
     Random\Randomizer: ~
+
+    App\Handler\EventHandler:
+        # The handler must be public so that Bref is able to run it through the Symfony
+        # runtime
+        public: true

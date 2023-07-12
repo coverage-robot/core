@@ -8,6 +8,11 @@ variable "gcp_region" {
   default = "europe-west2"
 }
 
+variable "planetscale_region" {
+  type    = string
+  default = "eu-west"
+}
+
 variable "gcp_project" {
   type = string
 }
