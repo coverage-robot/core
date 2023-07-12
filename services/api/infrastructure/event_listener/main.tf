@@ -62,7 +62,7 @@ resource "aws_lambda_function" "events" {
   function_name    = format("coverage-api-event-listener-%s", var.environment)
   role             = aws_iam_role.api_policy.arn
   runtime          = "provided.al2"
-  handler          = "public/index.php"
+  handler          = "App\\Handler\\EventHandler"
   architectures    = ["arm64"]
   timeout          = 28
   layers = [
