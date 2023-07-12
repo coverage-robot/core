@@ -4,10 +4,11 @@ namespace App\Tests\Handler;
 
 use App\Exception\DeletionException;
 use App\Exception\PersistException;
-use App\Handler\IngestHandler;
+use App\Handler\EventHandler;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
+use App\Service\EventBridgeEventService;
 use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
@@ -17,6 +18,7 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -24,7 +26,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class IngestHandlerTest extends TestCase
+class EventHandlerTest extends TestCase
 {
     /**
      * @throws Exception
@@ -59,10 +61,17 @@ class IngestHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $handler = new IngestHandler(
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService
+            ->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
+            ->method('publishEvent')
+            ->with(CoverageEvent::INGEST_FAILURE);
+
+        $handler = new EventHandler(
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,
+            $mockEventBridgeEventService,
             new NullLogger()
         );
 
@@ -92,10 +101,17 @@ class IngestHandlerTest extends TestCase
                 PersistException::from(new Exception('Failed to persist'))
             );
 
-        $handler = new IngestHandler(
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService
+            ->expects($this->exactly(count($coverageFiles)))
+            ->method('publishEvent')
+            ->with(CoverageEvent::INGEST_FAILURE);
+
+        $handler = new EventHandler(
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,
+            $mockEventBridgeEventService,
             new NullLogger()
         );
 
@@ -131,10 +147,15 @@ class IngestHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $handler = new IngestHandler(
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
+            ->method('publishEvent');
+
+        $handler = new EventHandler(
             $mockCoverageFileRetrievalService,
             $this->getRealCoverageFileParserService(),
             $mockCoverageFilePersistService,
+            $mockEventBridgeEventService,
             new NullLogger()
         );
 

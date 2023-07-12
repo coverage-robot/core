@@ -10,5 +10,5 @@ variable "environment" {
 
 variable "php_version" {
   type    = string
-  default = "arm-php-82-fpm"
+  default = "php-82"
 }

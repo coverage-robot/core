@@ -9,6 +9,8 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "async-aws/async-aws-bundle": "^1.10",
+        "async-aws/event-bridge": "^1.5",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "google/cloud-bigquery": "^1.24",

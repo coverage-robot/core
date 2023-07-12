@@ -10,6 +10,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SebastianBergmann\Diff\Parser;
 
 class GithubDiffParserServiceTest extends TestCase
@@ -21,15 +22,16 @@ class GithubDiffParserServiceTest extends TestCase
 
         $parser = new GithubDiffParserService(
             $mockApiClient,
-            new Parser()
+            new Parser(),
+            new NullLogger()
         );
 
         $mockUpload = $this->getMockUpload();
 
-        $mockUpload->expects($this->atLeast(1))
+        $mockUpload->expects($this->exactly(4))
             ->method('getPullRequest')
             ->willReturn(1);
-        $mockUpload->expects($this->never())
+        $mockUpload->expects($this->exactly(2))
             ->method('getCommit');
 
         $mockApiClient->expects($this->once())
@@ -88,12 +90,13 @@ class GithubDiffParserServiceTest extends TestCase
 
         $parser = new GithubDiffParserService(
             $mockApiClient,
-            new Parser()
+            new Parser(),
+            new NullLogger()
         );
 
         $mockUpload = $this->getMockUpload();
 
-        $mockUpload->expects($this->once())
+        $mockUpload->expects($this->exactly(3))
             ->method('getPullRequest')
             ->willReturn(null);
         $mockUpload->expects($this->atLeast(1))
@@ -139,6 +142,31 @@ class GithubDiffParserServiceTest extends TestCase
                                              line-5
                                                  line-6
                         DIFF
+                    ],
+                    [
+                        'filename' => 'file-3.php',
+                        'patch' => <<<DIFF
+                        @@ -170,7 +170,7 @@
+                                     line-1
+                                 line-2
+
+                        -            line-3
+                        +            line-3.
+                                         line-4
+                                             line-5
+                                                 line-6
+                        @@ -180,5 +182,7 @@
+                                     line-1
+                                 line-2
+
+                        -            line-3
+                        +            line-3.
+                        +            line-4.
+                        +            line-5.
+                                         line-6
+                                             line-7
+                                                 line-8
+                        DIFF
                     ]
                 ]
             ]);
@@ -149,6 +177,7 @@ class GithubDiffParserServiceTest extends TestCase
             [
                 'file-1.php' => [173],
                 'file-2.php' => [173],
+                'file-3.php' => [173,185,186,187],
             ],
             $addedLines
         );
@@ -158,7 +187,8 @@ class GithubDiffParserServiceTest extends TestCase
     {
         $parser = new GithubDiffParserService(
             $this->createMock(GithubAppInstallationClient::class),
-            new Parser()
+            new Parser(),
+            new NullLogger()
         );
 
         $this->assertEquals(
@@ -170,10 +200,10 @@ class GithubDiffParserServiceTest extends TestCase
     private function getMockUpload(): Upload|MockObject
     {
         $mockUpload = $this->createMock(Upload::class);
-        $mockUpload->expects($this->exactly(2))
+        $mockUpload->expects($this->exactly(4))
             ->method('getOwner')
             ->willReturn('mock-owner');
-        $mockUpload->expects($this->once())
+        $mockUpload->expects($this->exactly(3))
             ->method('getRepository')
             ->willReturn('mock-repository');
 

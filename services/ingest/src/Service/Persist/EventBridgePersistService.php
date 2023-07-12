@@ -2,35 +2,40 @@
 
 namespace App\Service\Persist;
 
+use App\Service\EventBridgeEventService;
+use JsonException;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\SentStamp;
 
-class SqsPersistService implements PersistServiceInterface
+class EventBridgePersistService implements PersistServiceInterface
 {
     public function __construct(
-        private readonly MessageBusInterface $messageBus,
+        private readonly EventBridgeEventService $eventBridgeEventService,
         private readonly LoggerInterface $sqsPersistServiceLogger
     ) {
     }
 
+    /**
+     * @throws JsonException
+     */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
-        $envelope = $this->messageBus->dispatch($upload);
-
-        $sent = !is_null($envelope->last(SentStamp::class));
+        $published = $this->eventBridgeEventService->publishEvent(
+            CoverageEvent::INGEST_SUCCESS,
+            $upload
+        );
 
         $this->sqsPersistServiceLogger->info(
             sprintf(
-                'Persisting %s to SQS was %s',
+                'Persisting %s to EventBridge was %s',
                 (string)$upload,
-                $sent ? 'successful' : 'failed'
+                $published ? 'successful' : 'failed'
             )
         );
 
-        return $sent;
+        return $published;
     }
 
     public static function getPriority(): int

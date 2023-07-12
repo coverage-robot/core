@@ -9,6 +9,7 @@ use App\Exception\RetrievalException;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
+use App\Service\EventBridgeEventService;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
@@ -16,17 +17,19 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use JsonException;
+use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-class IngestHandler extends S3Handler
+class EventHandler extends S3Handler
 {
     public function __construct(
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
+        private readonly EventBridgeEventService $eventBridgeEventService,
         private readonly LoggerInterface $handlerLogger
     ) {
     }
@@ -78,9 +81,19 @@ class IngestHandler extends S3Handler
                         'key'       => $coverageFile->getObject()
                     ]
                 );
-            } catch (ParseException | PersistException | DeletionException $e) {
+            } catch (ParseException | PersistException $e) {
                 $this->handlerLogger->error(
                     'Failed to successfully ingest coverage.',
+                    [
+                        'exception' => $e,
+                        'upload'    => $upload ?? null
+                    ]
+                );
+
+                $this->eventBridgeEventService->publishEvent(CoverageEvent::INGEST_FAILURE, $upload);
+            } catch (DeletionException $e) {
+                $this->handlerLogger->error(
+                    'Failed to successfully delete ingested coverage file.',
                     [
                         'exception' => $e,
                         'upload'    => $upload ?? null
