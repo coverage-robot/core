@@ -17,7 +17,7 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "analyse_role" {
-  name = "analyse-service-role"
+  name = "analyse-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -33,7 +33,7 @@ resource "aws_iam_role" "analyse_role" {
 }
 
 resource "aws_iam_policy" "analyse_policy" {
-  name = "analyse-service-policy"
+  name = "analyse-policy"
   path = "/"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -46,17 +46,6 @@ resource "aws_iam_policy" "analyse_policy" {
           "logs:PutLogEvents"
         ]
         Resource = ["arn:aws:logs:*:*:*"]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "sqs:ReceiveMessage",
-          "sqs:DeleteMessage",
-          "sqs:GetQueueAttributes"
-        ]
-        Resource = [
-          data.terraform_remote_state.core.outputs.analysis_queue.arn
-        ]
       }
     ]
   })
@@ -96,7 +85,7 @@ resource "aws_lambda_function" "analyse" {
 }
 
 
-resource "aws_cloudwatch_event_rule" "event_listener" {
+resource "aws_cloudwatch_event_rule" "service" {
   name           = "coverage-analyse-${var.environment}"
   event_bus_name = data.terraform_remote_state.core.outputs.coverage_event_bus.name
 
@@ -112,7 +101,7 @@ resource "aws_cloudwatch_event_rule" "event_listener" {
 resource "aws_cloudwatch_event_target" "event_listener" {
   event_bus_name = data.terraform_remote_state.core.outputs.coverage_event_bus.name
 
-  rule      = aws_cloudwatch_event_rule.event_listener.name
+  rule      = aws_cloudwatch_event_rule.service.name
   target_id = "coverage-analyse-service"
   arn       = aws_lambda_function.analyse.arn
 }
@@ -121,5 +110,5 @@ resource "aws_lambda_permission" "lambda_permissions" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.analyse.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.event_listener.arn
+  source_arn    = aws_cloudwatch_event_rule.service.arn
 }
