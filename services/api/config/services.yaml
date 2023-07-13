@@ -18,3 +18,14 @@ services:
         # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
         public: true
+
+    PUGX\Poser\Render\:
+        resource: '../vendor/badges/poser/src/Render'
+
+    PUGX\Poser\Poser:
+        arguments:
+            $renders:
+                - '@PUGX\Poser\Render\SvgPlasticRender'
+                - '@PUGX\Poser\Render\SvgFlatSquareRender'
+                - '@PUGX\Poser\Render\SvgForTheBadgeRenderer'
+                - '@PUGX\Poser\Render\SvgFlatRender'

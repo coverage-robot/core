@@ -28,10 +28,10 @@ class UploadController extends AbstractController
         try {
             $parameters = $this->uploadService->getSigningParametersFromRequest($request);
 
-            $token = $this->authTokenService->getProjectTokenFromRequest($request);
+            $token = $this->authTokenService->getUploadTokenFromRequest($request);
 
-            if (!$token || !$this->authTokenService->validateParametersWithProjectToken($parameters, $token)) {
-                throw AuthenticationException::invalidProjectToken();
+            if (!$token || !$this->authTokenService->validateParametersWithUploadToken($parameters, $token)) {
+                throw AuthenticationException::invalidUploadToken();
             }
 
             $signedUrl = $this->uploadService->buildSignedUploadUrl($parameters);

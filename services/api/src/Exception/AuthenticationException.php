@@ -10,15 +10,13 @@ class AuthenticationException extends Exception
      * @param Exception|null $exception
      * @return self
      */
-    public static function invalidProjectToken(): self
+    public static function invalidUploadToken(): self
     {
-        return new self('The provided project token is invalid.');
+        return new self('The provided upload token is invalid.');
     }
 
-    public static function failedToCreateProjectToken(int $attempts): self
+    public static function invalidGraphToken(): self
     {
-        return new self(
-            sprintf('Failed to generate project token after %s attempts.', $attempts)
-        );
+        return new self('The provided graph token is invalid.');
     }
 }

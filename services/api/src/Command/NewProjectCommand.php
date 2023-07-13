@@ -13,8 +13,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:new_token', description: 'Create a new token for a project')]
-class NewProjectTokenCommand extends Command
+#[AsCommand(name: 'app:new_project', description: 'Create a new project with tokens')]
+class NewProjectCommand extends Command
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
@@ -44,16 +44,18 @@ class NewProjectTokenCommand extends Command
         /** @var string $owner */
         $owner = $input->getArgument('owner');
 
-        $token = $this->authTokenService->createNewProjectToken();
+        $uploadToken = $this->authTokenService->createNewUploadToken();
+        $graphToken = $this->authTokenService->createNewUploadToken();
 
         $project = (new Project())->setProvider(Provider::from($provider))
             ->setRepository($repository)
             ->setOwner($owner)
-            ->setToken($token);
+            ->setUploadToken($uploadToken)
+            ->setGraphToken($graphToken);
 
         $this->projectRepository->save($project, true);
 
-        $output->writeln(sprintf('New token setup: %s', $token));
+        $output->writeln(sprintf('New upload token: %s, New graph token: %s', $uploadToken, $graphToken));
 
         return Command::SUCCESS;
     }
