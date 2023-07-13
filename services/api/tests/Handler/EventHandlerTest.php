@@ -19,7 +19,7 @@ class EventHandlerTest extends TestCase
     {
         $event = new EventBridgeEvent([
             'detail-type' => $event,
-            'detail' => ""
+            'detail' => ''
         ]);
 
         $container = $this->createMock(ContainerInterface::class);
@@ -41,6 +41,9 @@ class EventHandlerTest extends TestCase
 
     public static function eventsDataProvider(): array
     {
-        return array_map(static fn (CoverageEvent $event) => [$event->value, $event === CoverageEvent::INGEST_SUCCESS], CoverageEvent::cases());
+        return array_map(
+            static fn (CoverageEvent $event) => [$event->value, $event === CoverageEvent::INGEST_SUCCESS],
+            CoverageEvent::cases()
+        );
     }
 }

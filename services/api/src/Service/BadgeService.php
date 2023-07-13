@@ -7,7 +7,7 @@ use PUGX\Poser\Poser;
 
 class BadgeService
 {
-    public const BADGE_LABEL = "coverage";
+    public const BADGE_LABEL = 'coverage';
 
     public function __construct(private readonly Poser $poser)
     {
@@ -18,8 +18,8 @@ class BadgeService
         return (string)$this->poser->generate(
             self::BADGE_LABEL,
             $project->getCoveragePercentage() !== null ?
-                sprintf("%s%%", number_format($project->getCoveragePercentage(), 2)) :
-                "unknown",
+                sprintf('%s%%', number_format(floatval($project->getCoveragePercentage()), 2)) :
+                'unknown',
             $this->getHex($project->getCoveragePercentage() ?? 0),
             'flat'
         );
@@ -38,6 +38,6 @@ class BadgeService
 
         $h = $r * 0x10000 + $g * 0x100 + $b * 0x1;
 
-        return substr('000000' . base_convert($h, 10, 16), -6);
+        return substr('000000' . base_convert((string)$h, 10, 16), -6);
     }
 }

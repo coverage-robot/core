@@ -17,9 +17,14 @@ class BadgeServiceTest extends TestCase
 
         $poser->expects($this->once())
             ->method('generate')
-            ->with(BadgeService::BADGE_LABEL, $coveragePercentage !== null ?
-                sprintf("%s%%", number_format($coveragePercentage, 2)) :
-                "unknown", $expectedHex, 'flat');
+            ->with(
+                BadgeService::BADGE_LABEL,
+                $coveragePercentage !== null ?
+                    sprintf('%s%%', number_format($coveragePercentage, 2)) :
+                    'unknown',
+                $expectedHex,
+                'flat'
+            );
 
         $badgeService = new BadgeService($poser);
 
@@ -36,23 +41,23 @@ class BadgeServiceTest extends TestCase
         return [
             [
                 99,
-                "05ff00"
+                '05ff00'
             ],
             [
                 1,
-                "ff0500"
+                'ff0500'
             ],
             [
                 100,
-                "00ff00"
+                '00ff00'
             ],
             [
                 null,
-                "ff0000"
+                'ff0000'
             ],
             [
                 34.64,
-                "ffb100"
+                'ffb100'
             ]
         ];
     }

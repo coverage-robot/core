@@ -32,8 +32,8 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        "upload" => [],
-                        "coveragePercentage" => "not-a-float"
+                        'upload' => [],
+                        'coveragePercentage' => 'not-a-float'
                     ])
                 ]
             )
@@ -58,7 +58,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        "upload" => Upload::from([
+                        'upload' => Upload::from([
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -68,7 +68,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'parent' => [],
                             'tag' => 'mock-tag',
                         ]),
-                        "coveragePercentage" => 99
+                        'coveragePercentage' => 99
                     ])
                 ]
             )
@@ -95,7 +95,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        "upload" => Upload::from([
+                        'upload' => Upload::from([
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -105,7 +105,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'parent' => [],
                             'tag' => 'mock-tag',
                         ]),
-                        "coveragePercentage" => 99
+                        'coveragePercentage' => 99
                     ])
                 ]
             )
@@ -138,7 +138,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        "upload" => Upload::from([
+                        'upload' => Upload::from([
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -148,7 +148,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'parent' => [],
                             'tag' => 'mock-tag',
                         ]),
-                        "coveragePercentage" => 99
+                        'coveragePercentage' => 99
                     ])
                 ]
             )

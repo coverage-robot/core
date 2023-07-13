@@ -27,7 +27,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
     public function process(EventBridgeEvent $event): void
     {
         /** @var array $detail */
-        $detail = json_decode($event->getDetail(), true, JSON_THROW_ON_ERROR);
+        $detail = json_decode((string)$event->getDetail(), true, JSON_THROW_ON_ERROR);
 
         if (
             !isset($detail['upload']) ||
@@ -80,7 +80,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
         $project->setCoveragePercentage($coveragePercentage);
 
         $this->eventHandlerLogger->info(
-            sprintf('Coverage percentage (%s%%) persisted against Project#%s', $coveragePercentage, $project->getId()),
+            sprintf('Coverage percentage (%s%%) persisted against Project#%s', $coveragePercentage, $project->getId() ?? "null"),
             [
                 'detailType' => $event->getDetailType(),
                 'detail' => $event->getDetail(),

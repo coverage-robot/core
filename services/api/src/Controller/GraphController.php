@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Exception\GraphException;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
@@ -42,6 +43,7 @@ class GraphController extends AbstractController
             );
         }
 
+        /** @var Project $project */
         $project = $this->projectRepository->findOneBy([
             'provider' => $provider,
             'owner' => $owner,
