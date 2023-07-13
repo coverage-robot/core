@@ -32,7 +32,16 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        'upload' => [],
+                        'upload' => [
+                            'provider' => Provider::GITHUB->value,
+                            'owner' => 'mock-owner',
+                            'repository' => 'mock-repository',
+                            'commit' => 'mock-commit',
+                            'uploadId' => 'mock-uploadId',
+                            'ref' => 'not-main-ref',
+                            'parent' => [],
+                            'tag' => 'mock-tag',
+                        ],
                         'coveragePercentage' => 'not-a-float'
                     ])
                 ]
