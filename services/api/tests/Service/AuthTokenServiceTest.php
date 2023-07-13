@@ -4,6 +4,7 @@ namespace App\Tests\Service;
 
 use App\Entity\Project;
 use App\Exception\AuthenticationException;
+use App\Exception\TokenException;
 use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
@@ -62,7 +63,7 @@ class AuthTokenServiceTest extends TestCase
                 'provider' => Provider::GITHUB,
                 'repository' => 'mock-repository',
                 'owner' => 'mock-owner',
-                'token' => 'mock-token'
+                'uploadToken' => 'mock-token'
             ])
             ->willReturn($project);
 
@@ -98,7 +99,7 @@ class AuthTokenServiceTest extends TestCase
                 'provider' => Provider::GITHUB,
                 'repository' => 'mock-repository',
                 'owner' => 'mock-owner',
-                'token' => 'mock-token'
+                'uploadToken' => 'mock-token'
             ])
             ->willReturn($project);
 
@@ -129,7 +130,7 @@ class AuthTokenServiceTest extends TestCase
                 'provider' => Provider::GITHUB,
                 'repository' => 'mock-repository',
                 'owner' => 'mock-owner',
-                'token' => 'mock-token'
+                'uploadToken' => 'mock-token'
             ])
             ->willReturn(null);
 
@@ -193,7 +194,7 @@ class AuthTokenServiceTest extends TestCase
             );
 
         $this->expectExceptionObject(
-            AuthenticationException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
+            TokenException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
         );
 
         $authTokenService->createNewUploadToken();

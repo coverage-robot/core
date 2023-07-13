@@ -113,7 +113,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"The provided project token is invalid."}',
+            '{"error":"The provided upload token is invalid."}',
             $response->getContent()
         );
     }
@@ -145,7 +145,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"The provided project token is invalid."}',
+            '{"error":"The provided upload token is invalid."}',
             $response->getContent()
         );
     }
