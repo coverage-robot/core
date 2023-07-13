@@ -4,7 +4,7 @@ namespace App\Tests\Service\Event;
 
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use App\Service\Event\IngestSuccessEventProcessor;
+use App\Service\Event\AnalyseSuccessEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
@@ -22,7 +22,7 @@ class IngestSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new IngestSuccessEventProcessor(
+        $eventProcessor = new AnalyseSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -48,7 +48,7 @@ class IngestSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new IngestSuccessEventProcessor(
+        $eventProcessor = new AnalyseSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -85,7 +85,7 @@ class IngestSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new IngestSuccessEventProcessor(
+        $eventProcessor = new AnalyseSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -128,7 +128,7 @@ class IngestSuccessEventProcessorTest extends TestCase
             ->method('setCoveragePercentage')
             ->with(99);
 
-        $eventProcessor = new IngestSuccessEventProcessor(
+        $eventProcessor = new AnalyseSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
