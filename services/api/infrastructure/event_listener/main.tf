@@ -74,10 +74,10 @@ resource "aws_lambda_function" "events" {
       local.bref_layers["arm-${var.php_version}"][var.region]
     ),
     format(
-      "arn:aws:lambda:%s:403367587399:layer:%s:%s",
+      "arn:aws:lambda:%s:403367587399:layer:gd-%s:%s",
       var.region,
       var.php_version,
-      local.bref_extension_layers["gd-php-82"][var.region]
+      local.bref_extension_layers["gd-${var.php_version}"][var.region]
     )
   ]
 
