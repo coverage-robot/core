@@ -80,7 +80,11 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
         $project->setCoveragePercentage($coveragePercentage);
 
         $this->eventHandlerLogger->info(
-            sprintf('Coverage percentage (%s%%) persisted against Project#%s', $coveragePercentage, $project->getId() ?? "null"),
+            sprintf(
+                'Coverage percentage (%s%%) persisted against Project#%s',
+                $coveragePercentage,
+                $project->getId() ?? 'null'
+            ),
             [
                 'detailType' => $event->getDetailType(),
                 'detail' => $event->getDetail(),
