@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Exception\GraphException;
 use App\Model\GraphParameters;
+use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\BadgeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +16,8 @@ class GraphController extends AbstractController
 {
     public function __construct(
         private readonly BadgeService $badgeService,
-        private readonly AuthTokenService $authTokenService
+        private readonly AuthTokenService $authTokenService,
+        private readonly ProjectRepository $projectRepository
     ) {
     }
 
@@ -40,8 +42,14 @@ class GraphController extends AbstractController
             );
         }
 
+        $project = $this->projectRepository->findOneBy([
+            'provider' => $provider,
+            'owner' => $owner,
+            'repository' => $repository,
+        ]);
+
         return new Response(
-            $this->badgeService->getBadge(),
+            $this->badgeService->getBadge($project),
             Response::HTTP_OK
         );
     }

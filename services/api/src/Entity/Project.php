@@ -47,6 +47,9 @@ class Project
     #[ORM\Column(length: 100, unique: true)]
     private ?string $graphToken = null;
 
+    #[ORM\Column(options: ["default" => null], nullable: true)]
+    private ?float $coveragePercentage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +122,17 @@ class Project
     {
         $this->enabled = $enabled;
 
+        return $this;
+    }
+
+    public function getCoveragePercentage(): ?float
+    {
+        return $this->coveragePercentage;
+    }
+
+    public function setCoveragePercentage(?float $coveragePercentage): Project
+    {
+        $this->coveragePercentage = $coveragePercentage;
         return $this;
     }
 }
