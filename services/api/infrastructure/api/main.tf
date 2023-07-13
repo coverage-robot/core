@@ -1,5 +1,5 @@
 locals {
-  bref_layers = jsondecode(file("${path.module}/../../vendor/bref/bref/layers.json"))
+  bref_layers           = jsondecode(file("${path.module}/../../vendor/bref/bref/layers.json"))
   bref_extension_layers = jsondecode(file("${path.module}/../../vendor/bref/extra-php-extensions/layers.json"))
 }
 
