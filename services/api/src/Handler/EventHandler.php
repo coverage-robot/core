@@ -22,12 +22,12 @@ class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterf
 
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
-        $handlerClass = match (CoverageEvent::from($event->getDetailType())) {
-            CoverageEvent::ANALYSE_SUCCESS => AnalyseSuccessEventProcessor::class,
+        $handlerClass = match ($event->getDetailType()) {
+            CoverageEvent::ANALYSE_SUCCESS->value => AnalyseSuccessEventProcessor::class,
             default => null,
         };
 
-        if (!$handlerClass) {
+        if ($handlerClass === null) {
             $this->eventHandlerLogger->warning(
                 'Event skipped as it was not a known event.',
                 [
