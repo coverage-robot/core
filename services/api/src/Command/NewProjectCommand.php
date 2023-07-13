@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'app:new_project', description: 'Create a new project with tokens')]
-class NewProject extends Command
+class NewProjectCommand extends Command
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,

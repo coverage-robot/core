@@ -87,10 +87,7 @@ resource "aws_cloudwatch_event_rule" "event_listener" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "INGEST_SUCCESS",
-      "INGEST_FAILURE",
-      "ANALYSE_SUCCESS",
-      "ANALYSE_FAILURE"
+      "INGEST_SUCCESS"
     ]
   }
   EOF
