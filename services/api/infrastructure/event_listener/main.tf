@@ -1,6 +1,6 @@
 locals {
   bref_layers           = jsondecode(file("${path.module}/../../vendor/bref/bref/layers.json"))
-  bref_extension_layers = jsondecode(file("${path.module}/../vendor/bref/extra-bref-extensions/layers.json"))
+  bref_extension_layers = jsondecode(file("${path.module}/../../vendor/bref/extra-bref-extensions/layers.json"))
 }
 
 data "terraform_remote_state" "core" {
