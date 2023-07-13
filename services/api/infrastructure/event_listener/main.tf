@@ -68,13 +68,15 @@ resource "aws_lambda_function" "events" {
   timeout          = 28
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
+      "arn:aws:lambda:%s:534081306603:layer:arm-%s:%s",
       var.region,
+      var.php_version,
       local.bref_layers["arm-${var.php_version}"][var.region]
     ),
     format(
-      "arn:aws:lambda:%s:403367587399:layer::%s",
+      "arn:aws:lambda:%s:403367587399:layer:%s:%s",
       var.region,
+      var.php_version,
       local.bref_extension_layers["gd-php-82"][var.region]
     )
   ]
