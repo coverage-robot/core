@@ -38,10 +38,10 @@ class UploadControllerTest extends KernelTestCase
 
         $authTokenService = $this->createMock(AuthTokenService::class);
         $authTokenService->expects($this->once())
-            ->method('getProjectTokenFromRequest')
+            ->method('getUploadTokenFromRequest')
             ->willReturn('mock-project-token');
         $authTokenService->expects($this->once())
-            ->method('validateParametersWithProjectToken')
+            ->method('validateParametersWithUploadToken')
             ->with($parameters, 'mock-project-token')
             ->willReturn(true);
 
@@ -70,9 +70,9 @@ class UploadControllerTest extends KernelTestCase
 
         $authTokenService = $this->createMock(AuthTokenService::class);
         $authTokenService->expects($this->never())
-            ->method('getProjectTokenFromRequest');
+            ->method('getUploadTokenFromRequest');
         $authTokenService->expects($this->never())
-            ->method('validateParametersWithProjectToken');
+            ->method('validateParametersWithUploadToken');
 
         $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
 
@@ -100,10 +100,10 @@ class UploadControllerTest extends KernelTestCase
 
         $authTokenService = $this->createMock(AuthTokenService::class);
         $authTokenService->expects($this->once())
-            ->method('getProjectTokenFromRequest')
+            ->method('getUploadTokenFromRequest')
             ->willReturn(null);
         $authTokenService->expects($this->never())
-            ->method('validateParametersWithProjectToken');
+            ->method('validateParametersWithUploadToken');
 
         $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
 
@@ -131,10 +131,10 @@ class UploadControllerTest extends KernelTestCase
 
         $authTokenService = $this->createMock(AuthTokenService::class);
         $authTokenService->expects($this->once())
-            ->method('getProjectTokenFromRequest')
+            ->method('getUploadTokenFromRequest')
             ->willReturn('mock-token');
         $authTokenService->expects($this->once())
-            ->method('validateParametersWithProjectToken')
+            ->method('validateParametersWithUploadToken')
             ->willReturn(false);
 
         $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());

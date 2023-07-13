@@ -31,7 +31,7 @@ class AuthTokenServiceTest extends TestCase
     {
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
 
-        $token = $authTokenService->getProjectTokenFromRequest(
+        $token = $authTokenService->getUploadTokenFromRequest(
             new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [])
         );
 
@@ -68,7 +68,7 @@ class AuthTokenServiceTest extends TestCase
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
 
-        $this->assertTrue($authTokenService->validateParametersWithProjectToken(
+        $this->assertTrue($authTokenService->validateParametersWithUploadToken(
             $parameters,
             'mock-token'
         ));
@@ -104,7 +104,7 @@ class AuthTokenServiceTest extends TestCase
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
 
-        $this->assertFalse($authTokenService->validateParametersWithProjectToken(
+        $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
             'mock-token'
         ));
@@ -135,7 +135,7 @@ class AuthTokenServiceTest extends TestCase
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
 
-        $this->assertFalse($authTokenService->validateParametersWithProjectToken(
+        $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
             'mock-token'
         ));
@@ -152,7 +152,7 @@ class AuthTokenServiceTest extends TestCase
             ->method('findOneBy')
             ->willReturn(null);
 
-        $generatedToken = $authTokenService->createNewProjectToken();
+        $generatedToken = $authTokenService->createNewUploadToken();
 
         $this->assertIsString($generatedToken);
         $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
@@ -174,7 +174,7 @@ class AuthTokenServiceTest extends TestCase
                 null
             );
 
-        $generatedToken = $authTokenService->createNewProjectToken();
+        $generatedToken = $authTokenService->createNewUploadToken();
 
         $this->assertIsString($generatedToken);
         $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
@@ -193,10 +193,10 @@ class AuthTokenServiceTest extends TestCase
             );
 
         $this->expectExceptionObject(
-            AuthenticationException::failedToCreateProjectToken(AuthTokenService::MAX_TOKEN_RETRIES)
+            AuthenticationException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
         );
 
-        $authTokenService->createNewProjectToken();
+        $authTokenService->createNewUploadToken();
     }
 
     public static function authorizationHeaderDataProvider(): array

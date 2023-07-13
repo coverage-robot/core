@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Packages\Models\Enum\Provider;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
+#[ORM\UniqueConstraint(
+    columns: ['provider', 'owner', 'repository']
+)]
 class Project
 {
     #[ORM\Id]
@@ -26,23 +29,49 @@ class Project
     #[ORM\Column(length: 255)]
     private bool $enabled = true;
 
-    #[ORM\Column(length: 100)]
-    private ?string $token = null;
+    /**
+     * A unique token used to authenticate requests for new uploads.
+     *
+     * This token **is** sensitive (as it provides access to upload new reports) and should always be stored
+     * securely, and not in plain text by users.
+     */
+    #[ORM\Column(length: 100, unique: true)]
+    private ?string $uploadToken = null;
+
+    /**
+     * A unique token used to authenticate requests for graphs and badges.
+     *
+     * This token **is not** sensitive (as it is provided in the URL parameters), but only has access
+     * to non-sensitive content.
+     */
+    #[ORM\Column(length: 100, unique: true)]
+    private ?string $graphToken = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getToken(): ?string
+    public function getUploadToken(): ?string
     {
-        return $this->token;
+        return $this->uploadToken;
     }
 
-    public function setToken(string $token): static
+    public function setUploadToken(string $uploadToken): static
     {
-        $this->token = $token;
+        $this->uploadToken = $uploadToken;
 
+        return $this;
+    }
+
+    public function getGraphToken(): ?string
+    {
+        return $this->graphToken;
+    }
+
+    public function setGraphToken(?string $graphToken): Project
+    {
+        $this->graphToken = $graphToken;
         return $this;
     }
 

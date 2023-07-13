@@ -8,7 +8,7 @@ use JsonException;
 use JsonSerializable;
 use Packages\Models\Enum\Provider;
 
-class SigningParameters implements JsonSerializable
+class SigningParameters implements ParametersInterface, JsonSerializable
 {
     public function __construct(
         private readonly string $owner,
