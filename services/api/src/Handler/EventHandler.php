@@ -2,8 +2,8 @@
 
 namespace App\Handler;
 
+use App\Service\Event\AnalyseSuccessEventProcessor;
 use App\Service\Event\EventProcessorInterface;
-use App\Service\Event\IngestSuccessEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
@@ -23,7 +23,7 @@ class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterf
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
         $handlerClass = match (CoverageEvent::from($event->getDetailType())) {
-            CoverageEvent::INGEST_SUCCESS => IngestSuccessEventProcessor::class,
+            CoverageEvent::ANALYSE_SUCCESS => AnalyseSuccessEventProcessor::class,
             default => null,
         };
 
@@ -47,7 +47,7 @@ class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterf
     public static function getSubscribedServices(): array
     {
         return [
-            IngestSuccessEventProcessor::class
+            AnalyseSuccessEventProcessor::class
         ];
     }
 }

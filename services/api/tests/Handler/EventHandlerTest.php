@@ -42,7 +42,7 @@ class EventHandlerTest extends TestCase
     public static function eventsDataProvider(): array
     {
         return array_map(
-            static fn (CoverageEvent $event) => [$event->value, $event === CoverageEvent::INGEST_SUCCESS],
+            static fn (CoverageEvent $event) => [$event->value, $event === CoverageEvent::ANALYSE_SUCCESS],
             CoverageEvent::cases()
         );
     }
