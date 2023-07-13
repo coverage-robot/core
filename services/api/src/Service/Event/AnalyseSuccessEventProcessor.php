@@ -31,8 +31,7 @@ class AnalyseSuccessEventProcessor implements EventProcessorInterface
 
         if (
             !isset($detail['upload']) ||
-            !isset($detail['coveragePercentage']) ||
-            !is_numeric($detail['coveragePercentage'])
+            !isset($detail['coveragePercentage'])
         ) {
             $this->eventHandlerLogger->warning(
                 'Event skipped as it was malformed.',

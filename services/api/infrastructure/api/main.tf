@@ -1,5 +1,6 @@
 locals {
   bref_layers = jsondecode(file("${path.module}/../../vendor/bref/bref/layers.json"))
+  bref_extension_layers = jsondecode(file("${path.module}/../../vendor/bref/extra-php-extensions/layers.json"))
 }
 
 data "terraform_remote_state" "core" {
@@ -80,6 +81,12 @@ resource "aws_lambda_function" "api" {
       "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}-fpm:%s",
       var.region,
       local.bref_layers["arm-${var.php_version}-fpm"][var.region]
+    ),
+    format(
+      "arn:aws:lambda:%s:403367587399:layer:gd-%s:%s",
+      var.region,
+      var.php_version,
+      local.bref_extension_layers["gd-${var.php_version}"][var.region]
     )
   ]
 
