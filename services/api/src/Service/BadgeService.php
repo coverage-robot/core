@@ -7,7 +7,7 @@ use PUGX\Poser\Poser;
 
 class BadgeService
 {
-    private const BADGE_LABEL = "coverage";
+    public const BADGE_LABEL = "coverage";
 
     public function __construct(private readonly Poser $poser)
     {

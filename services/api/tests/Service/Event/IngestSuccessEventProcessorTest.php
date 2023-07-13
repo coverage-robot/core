@@ -122,7 +122,7 @@ class IngestSuccessEventProcessorTest extends TestCase
             ->willReturn($project);
         $mockProjectRepository->expects($this->once())
             ->method('save')
-            ->with($project);
+            ->with($project, true);
 
         $project->expects($this->once())
             ->method('setCoveragePercentage')
