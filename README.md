@@ -1,1 +1,1 @@
-<img src="https://5g4fctc7ysvibfijbbsg2hcqfm0utifb.lambda-url.eu-west-2.on.aws/graph/github/ryanmab/coverage?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc">
+<img src="https://5g4fctc7ysvibfijbbsg2hcqfm0utifb.lambda-url.eu-west-2.on.aws/graph/github/ryanmab/coverage/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc">
