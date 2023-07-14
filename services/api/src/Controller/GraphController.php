@@ -25,7 +25,12 @@ class GraphController extends AbstractController
     /**
      * @throws GraphException
      */
-    #[Route('/graph/{provider}/{owner}/{repository}', name: 'badge', methods: ['GET'])]
+    #[Route(
+        '/graph/{provider}/{owner}/{repository}/{type}',
+        name: 'badge',
+        requirements: ['type' => '(.+)\.svg'],
+        methods: ['GET']
+    )]
     public function badge(string $provider, string $owner, string $repository, Request $request): Response
     {
         $parameters = GraphParameters::from([
@@ -52,7 +57,10 @@ class GraphController extends AbstractController
 
         return new Response(
             $this->badgeService->getBadge($project),
-            Response::HTTP_OK
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'image/svg+xml',
+            ]
         );
     }
 }
