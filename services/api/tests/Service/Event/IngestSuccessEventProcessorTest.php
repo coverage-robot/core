@@ -8,7 +8,6 @@ use App\Service\Event\AnalyseSuccessEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -67,7 +66,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
                     'detail' => json_encode([
-                        'upload' => Upload::from([
+                        'upload' => [
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -76,7 +75,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'ref' => 'not-main-ref',
                             'parent' => [],
                             'tag' => 'mock-tag',
-                        ]),
+                        ],
                         'coveragePercentage' => 99
                     ])
                 ]
@@ -103,8 +102,8 @@ class IngestSuccessEventProcessorTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => json_encode([
-                        'upload' => Upload::from([
+                    'detail' => [
+                        'upload' => [
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -113,9 +112,9 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'ref' => 'main',
                             'parent' => [],
                             'tag' => 'mock-tag',
-                        ]),
+                        ],
                         'coveragePercentage' => 99
-                    ])
+                    ]
                 ]
             )
         );
@@ -146,8 +145,8 @@ class IngestSuccessEventProcessorTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => json_encode([
-                        'upload' => Upload::from([
+                    'detail' => [
+                        'upload' => [
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
                             'repository' => 'mock-repository',
@@ -156,9 +155,9 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'ref' => 'main',
                             'parent' => [],
                             'tag' => 'mock-tag',
-                        ]),
+                        ],
                         'coveragePercentage' => 99
-                    ])
+                    ]
                 ]
             )
         );
