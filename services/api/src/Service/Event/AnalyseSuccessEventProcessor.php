@@ -26,12 +26,13 @@ class AnalyseSuccessEventProcessor implements EventProcessorInterface
      */
     public function process(EventBridgeEvent $event): void
     {
-        /** @var array $detail */
-        $detail = json_decode((string)$event->getDetail(), true, JSON_THROW_ON_ERROR);
+        $detail = $event->getDetail();
 
         if (
+            !is_array($detail) ||
             !isset($detail['upload']) ||
-            !isset($detail['coveragePercentage'])
+            !isset($detail['coveragePercentage']) ||
+            !is_numeric($detail['coveragePercentage'])
         ) {
             $this->eventHandlerLogger->warning(
                 'Event skipped as it was malformed.',
