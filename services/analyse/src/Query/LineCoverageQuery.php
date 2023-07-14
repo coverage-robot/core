@@ -8,16 +8,15 @@ use App\Query\Result\MultiLineCoverageQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Upload;
 
 class LineCoverageQuery extends AbstractLineCoverageQuery
 {
     use ScopeAwareTrait;
 
-    public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
-        {$this->getNamedQueries($table, $upload, $parameterBag)}
+        {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             *
         FROM

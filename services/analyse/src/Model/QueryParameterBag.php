@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Enum\QueryParameter;
+use Packages\Models\Model\Upload;
 use WeakMap;
 
 class QueryParameterBag
@@ -24,8 +25,17 @@ class QueryParameterBag
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, array|int|string $value): void
+    public function set(QueryParameter $key, mixed $value): void
     {
         $this->parameters[$key] = $value;
+    }
+
+    public static function fromUpload(Upload $upload): self
+    {
+        $parameters = new self();
+        $parameters->set(QueryParameter::UPLOAD, $upload);
+        $parameters->set(QueryParameter::COMMIT, $upload->getRepository());
+
+        return $parameters;
     }
 }

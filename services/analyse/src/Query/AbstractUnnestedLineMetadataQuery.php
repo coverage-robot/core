@@ -2,6 +2,8 @@
 
 namespace App\Query;
 
+use App\Enum\QueryParameter;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use Packages\Models\Model\Upload;
 
@@ -12,9 +14,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         return '';
     }
 
-    abstract public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string;
+    abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
-    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
         WITH unnested AS (
@@ -55,11 +57,25 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             FROM
                 `$table`
             WHERE
-                commit = '{$upload->getCommit()}' AND
-                owner = '{$upload->getOwner()}' AND
-                repository = '{$upload->getRepository()}'
+                commit = '{$parameterBag->get(QueryParameter::UPLOAD)->getCommit()}' AND
+                owner = '{$parameterBag->get(QueryParameter::UPLOAD)->getOwner()}' AND
+                repository = '{$parameterBag->get(QueryParameter::UPLOAD)->getRepository()}'
                 {$this->getUnnestQueryFiltering($parameterBag)}
         )
         SQL;
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    {
+        if (
+            !$parameterBag ||
+            !$parameterBag->has(QueryParameter::UPLOAD) ||
+            !($parameterBag->get(QueryParameter::UPLOAD) instanceof Upload)
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::UPLOAD);
+        }
     }
 }

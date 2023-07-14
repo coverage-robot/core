@@ -6,6 +6,8 @@ use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
 use App\Query\FileCoverageQuery;
 use App\Query\QueryInterface;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 
 class FileCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -373,6 +375,17 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
+        $upload = Upload::from([
+            'provider' => Provider::GITHUB->value,
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository',
+            'commit' => 'mock-commit',
+            'uploadId' => 'mock-uploadId',
+            'ref' => 'mock-ref',
+            'parent' => [],
+            'tag' => 'mock-tag',
+        ]);
+
         $lineScopedParameters = new QueryParameterBag();
         $lineScopedParameters->set(
             QueryParameter::LINE_SCOPE,
@@ -381,6 +394,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                 'mock-file-2' => [10, 11, 12]
             ]
         );
+        $lineScopedParameters->set(QueryParameter::UPLOAD, $upload);
 
         $limitedParameters = new QueryParameterBag();
         $limitedParameters->set(
@@ -394,11 +408,12 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                 'mock-file-2' => [10, 11, 12]
             ]
         );
+        $limitedParameters->set(QueryParameter::UPLOAD, $upload);
 
         return [
             $lineScopedParameters,
             $limitedParameters,
-            new QueryParameterBag()
+            QueryParameterBag::fromUpload($upload)
         ];
     }
 }

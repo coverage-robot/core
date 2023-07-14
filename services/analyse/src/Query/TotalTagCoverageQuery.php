@@ -8,19 +8,17 @@ use App\Query\Result\MultiTagCoverageQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Upload;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
-    public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
 
         return <<<SQL
-        {$this->getNamedQueries($table, $upload, $parameterBag)}
+        {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             tag,
             COUNT(*) as lines,
@@ -43,9 +41,9 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         SQL;
     }
 
-    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $parent = parent::getNamedQueries($table, $upload, $parameterBag);
+        $parent = parent::getNamedQueries($table, $parameterBag);
 
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;

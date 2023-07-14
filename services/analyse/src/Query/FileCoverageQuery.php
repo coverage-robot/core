@@ -9,13 +9,12 @@ use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Upload;
 
 class FileCoverageQuery extends AbstractLineCoverageQuery
 {
     use ScopeAwareTrait;
 
-    public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
@@ -24,7 +23,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $limit = self::getLimit($parameterBag);
 
         return <<<SQL
-        {$this->getNamedQueries($table, $upload, $parameterBag)}
+        {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             fileName,
             COUNT(*) as lines,
