@@ -74,13 +74,13 @@ resource "aws_lambda_function" "api" {
   role             = aws_iam_role.api_role.arn
   runtime          = "provided.al2"
   handler          = "public/index.php"
-  architectures    = ["arm64"]
+  architectures    = ["x86_64"]
   timeout          = 28
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}-fpm:%s",
+      "arn:aws:lambda:%s:534081306603:layer:${var.php_version}-fpm:%s",
       var.region,
-      local.bref_layers["arm-${var.php_version}-fpm"][var.region]
+      local.bref_layers["${var.php_version}-fpm"][var.region]
     ),
     format(
       "arn:aws:lambda:%s:403367587399:layer:gd-%s:%s",
