@@ -33,8 +33,15 @@ class QueryParameterBag
     public static function fromUpload(Upload $upload): self
     {
         $parameters = new self();
+
+        // Store the main upload model in the parameter bag
         $parameters->set(QueryParameter::UPLOAD, $upload);
-        $parameters->set(QueryParameter::COMMIT, $upload->getRepository());
+
+        // Extract core parameters from upload model for ease of use
+        $parameters->set(QueryParameter::COMMIT, $upload->getCommit());
+        $parameters->set(QueryParameter::OWNER, $upload->getOwner());
+        $parameters->set(QueryParameter::REPOSITORY, $upload->getRepository());
+        $parameters->set(QueryParameter::PROVIDER, $upload->getProvider());
 
         return $parameters;
     }

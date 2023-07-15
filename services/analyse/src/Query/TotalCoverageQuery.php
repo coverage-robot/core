@@ -53,7 +53,16 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
 
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag = null): string
     {
-        return self::getLineScope($parameterBag);
+        $parent = parent::getUnnestQueryFiltering($parameterBag);
+        $carryforward = self::getCarryforwardTagsScope($parameterBag);
+        $lineScope = self::getLineScope($parameterBag);
+
+        return <<<SQL
+        (
+            {$parent} {$carryforward}
+        )
+        {$lineScope}
+        SQL;
     }
 
     /**

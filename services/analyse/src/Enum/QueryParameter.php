@@ -17,6 +17,17 @@ enum QueryParameter
     case LINE_SCOPE;
 
     /**
+     * ```
+     * [
+     *     "commit-sha" => ["tag-name", "tag-name-2"]
+     *     "commit-sha-2" => ["tag-name-3"],
+     *     "commit-sha-3" => ["tag-name-4", "tag-name-5"],
+     * ]
+     * ```
+     */
+    case CARRYFORWARD_TAGS;
+
+    /**
      * The limit to apply on query results.
      */
     case LIMIT;
@@ -24,4 +35,12 @@ enum QueryParameter
     case UPLOAD;
 
     case COMMIT;
+
+    case REPOSITORY;
+
+    case OWNER;
+
+    case PROVIDER;
+
+    case REF;
 }

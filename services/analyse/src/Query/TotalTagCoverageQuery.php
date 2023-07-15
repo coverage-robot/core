@@ -2,15 +2,19 @@
 
 namespace App\Query;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
+    use ScopeAwareTrait;
+
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -94,6 +98,18 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 tag,
                 fileName,
                 lineNumber
+        )
+        SQL;
+    }
+
+    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
+    {
+        $carryforward = self::getCarryforwardTagsScope($parameterBag);
+
+        return <<<SQL
+        (
+            commit = '{$parameterBag->get(QueryParameter::UPLOAD)->getCommit()}'
+            {$carryforward}
         )
         SQL;
     }

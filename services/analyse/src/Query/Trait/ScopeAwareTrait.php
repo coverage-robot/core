@@ -72,4 +72,53 @@ trait ScopeAwareTrait
 
         return $limit;
     }
+
+    private static function getCommitScope(?QueryParameterBag $parameterBag): string
+    {
+        $filtering = '';
+
+        if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
+            /** @var array<array-key, string> $commits */
+            $commits = $parameterBag->get(QueryParameter::COMMIT);
+
+            if (is_string($commits)) {
+                return <<<SQL
+                    AND commit = "{$commits}"
+                SQL;
+            }
+
+            $filtering .= '(';
+            foreach ($commits as $commit) {
+                $filtering .= <<<SQL
+                    commit = "{$commit}" OR
+                SQL;
+            }
+            $filtering = substr($filtering, 0, -3) . ')';
+        }
+
+        return !empty($filtering) ? 'AND ' . $filtering : '';
+    }
+
+
+    private static function getCarryforwardTagsScope(?QueryParameterBag $parameterBag): string
+    {
+        $filtering = '';
+
+        if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
+            /** @var array<string, list{string}> $tags */
+            $carryforward = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
+
+            $filtering .= '(';
+            foreach ($carryforward as $commit => $tags) {
+                $tags = implode('","', $tags);
+
+                $filtering .= <<<SQL
+                    (commit = "{$commit}" AND tag IN ("{$tags}")) OR
+                SQL;
+            }
+            $filtering = substr($filtering, 0, -3) . ')';
+        }
+
+        return !empty($filtering) ? 'OR ' . $filtering : '';
+    }
 }

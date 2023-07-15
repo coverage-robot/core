@@ -10,7 +10,8 @@ class CoverageAnalyserService
 {
     public function __construct(
         private readonly QueryService $queryService,
-        private readonly DiffParserService $diffParser
+        private readonly DiffParserService $diffParser,
+        private readonly CarryforwardTagService $carryforwardTagService
     ) {
     }
 
@@ -19,6 +20,7 @@ class CoverageAnalyserService
         return new CachedPublishableCoverageData(
             $this->queryService,
             $this->diffParser,
+            $this->carryforwardTagService,
             $upload
         );
     }
