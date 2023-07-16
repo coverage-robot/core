@@ -7,7 +7,7 @@ use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\IntegerQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
-use App\Service\DiffParserService;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;

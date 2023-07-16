@@ -4,6 +4,7 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use Packages\Models\Enum\Provider;
 
 trait ScopeAwareTrait
 {
@@ -30,11 +31,11 @@ trait ScopeAwareTrait
         }
 
         if ($parameterBag && $parameterBag->has(QueryParameter::PROVIDER)) {
-            /** @var string $provider */
-            $provider = $parameterBag->get(QueryParameter::PROVIDER)->value;
+            /** @var Provider|null $provider */
+            $provider = $parameterBag->get(QueryParameter::PROVIDER);
 
             $filters[] = <<<SQL
-            provider = "{$provider}"
+            provider = "{$provider?->value}"
             SQL;
         }
 
@@ -44,7 +45,7 @@ trait ScopeAwareTrait
     private static function getCommitScope(?QueryParameterBag $parameterBag): string
     {
         if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
-            /** @var array<array-key, string> $commits */
+            /** @var string|string[] $commits */
             $commits = $parameterBag->get(QueryParameter::COMMIT);
 
             if (is_string($commits)) {

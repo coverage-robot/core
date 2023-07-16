@@ -3,8 +3,8 @@
 namespace App\Handler;
 
 use App\Service\CoverageAnalyserService;
-use App\Service\CoveragePublisherService;
 use App\Service\EventBridgeEventService;
+use App\Service\Publisher\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;

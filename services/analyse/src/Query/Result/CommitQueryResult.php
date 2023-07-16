@@ -3,7 +3,6 @@
 namespace App\Query\Result;
 
 use App\Exception\QueryException;
-use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Model\Tag;
 
 class CommitQueryResult implements QueryResultInterface
@@ -21,7 +20,7 @@ class CommitQueryResult implements QueryResultInterface
     /**
      * @throws QueryException
      */
-    public static function from(ItemIterator|array $result): self
+    public static function from(array $result): self
     {
         if (
             is_string($result['commit'] ?? null) &&
@@ -31,7 +30,7 @@ class CommitQueryResult implements QueryResultInterface
                 (string)$result['commit'],
                 array_map(
                     fn (string $name) => new Tag($name, (string)$result['commit']),
-                    $result['tags']
+                    (array)$result['tags']
                 )
             );
         }

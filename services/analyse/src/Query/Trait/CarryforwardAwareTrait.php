@@ -37,7 +37,7 @@ trait CarryforwardAwareTrait
     private static function getCarryforwardTagsScope(?QueryParameterBag $parameterBag): string
     {
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var array<string, list{Tag}> $tags */
+            /** @var array<string, list{Tag}> $carryforward */
             $carryforward = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
             if (empty($carryforward)) {

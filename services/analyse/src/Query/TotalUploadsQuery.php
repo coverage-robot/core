@@ -6,23 +6,26 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\IntegerQueryResult;
+use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {
+    use ScopeAwareTrait;
+
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
+        $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
+
         return <<<SQL
         SELECT
             COUNT(DISTINCT uploadId) as totalUploads
         FROM
             `$table`
         WHERE
-            commit = '{$parameterBag->get(QueryParameter::UPLOAD)->getCommit()}' AND
-            owner = '{$parameterBag->get(QueryParameter::UPLOAD)->getOwner()}' AND
-            repository = '{$parameterBag->get(QueryParameter::UPLOAD)->getRepository()}'
+            {$repositoryScope}
         SQL;
     }
 

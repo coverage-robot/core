@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service;
 
+use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
-use App\Service\DiffParserService;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;

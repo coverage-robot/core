@@ -14,17 +14,19 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
-use App\Service\CarryforwardTagService;
-use App\Service\DiffParserService;
+use App\Service\Carryforward\CarryforwardTagServiceInterface;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
 {
     public function __construct(
         protected readonly QueryService $queryService,
         protected readonly DiffParserService $diffParser,
-        protected readonly CarryforwardTagService $carryforwardTagService,
+        #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
+        protected readonly CarryforwardTagServiceInterface $carryforwardTagService,
         protected readonly Upload $upload
     ) {
     }

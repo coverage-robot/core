@@ -4,10 +4,30 @@ namespace App\Service\History\Github;
 
 use App\Client\Github\GithubAppInstallationClient;
 use App\Service\History\CommitHistoryServiceInterface;
+use App\Service\ProviderAwareInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 
-class GithubCommitHistoryService implements CommitHistoryServiceInterface
+/**
+ * @psalm-type Result = array{
+ *     data: array{
+ *          repository: array{
+ *                  ref: array{
+ *                      target: array{
+ *                          history: array{
+ *                              edges: array{
+ *                                  node: array{
+ *                                      oid: string
+ *                                  }
+ *                              }[]
+ *                          }
+ *                      }
+ *                  }
+ *              }
+ *          }
+ *     }
+ */
+class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
     private const MAX_COMMITS = 30;
 
@@ -24,6 +44,9 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface
 
         $this->githubClient->authenticateAsRepositoryOwner($upload->getOwner());
 
+        /**
+         * @var Result $result
+         */
         $result = $this->githubClient->graphql()
             ->execute(
                 <<<GQL
@@ -53,9 +76,14 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface
                 GQL
             );
 
-        $commits = array_map(static fn(array $commit) => $commit["node"]["oid"],$result['data']['repository']['ref']['target']['history']['edges']);
+        $result = $result['data']['repository']['ref']['target']['history']['edges'] ?? [];
 
-        return $commits;
+        $commits = array_map(
+            static fn(array $commit) => $commit['node']['oid'] ?? null,
+            $result
+        );
+
+        return array_filter($commits);
     }
 
     public static function getProvider(): string

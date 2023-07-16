@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\History;
 
-use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Models\Model\Upload;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;

@@ -3,7 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\CoveragePublisherService;
+use App\Service\Publisher\CoveragePublisherService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use Packages\Models\Model\Upload;

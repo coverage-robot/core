@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\CommitHistoryService;
+use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

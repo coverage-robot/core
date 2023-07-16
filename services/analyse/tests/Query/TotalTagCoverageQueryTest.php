@@ -243,7 +243,8 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         return new TotalTagCoverageQuery();
     }
 
-    public static function getQueryParameters(): array {
+    public static function getQueryParameters(): array
+    {
         $upload = Upload::from([
             'provider' => Provider::GITHUB->value,
             'owner' => 'mock-owner',

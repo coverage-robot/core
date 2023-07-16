@@ -4,7 +4,7 @@ namespace App\Tests\Service;
 
 use App\Model\CachedPublishableCoverageData;
 use App\Service\CoverageAnalyserService;
-use App\Service\DiffParserService;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;

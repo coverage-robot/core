@@ -12,9 +12,4 @@ interface CommitHistoryServiceInterface
      * @return string[]
      */
     public function getPrecedingCommits(Upload $upload): array;
-
-    /**
-     * Get the provider that the diff parser supports.
-     */
-    public static function getProvider(): string;
 }

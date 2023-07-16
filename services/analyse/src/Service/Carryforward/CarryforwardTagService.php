@@ -1,51 +1,33 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Carryforward;
 
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\CommitTagsQuery;
 use App\Query\Result\CommitCollectionQueryResult;
+use App\Query\Result\CommitQueryResult;
+use App\Service\History\CommitHistoryService;
+use App\Service\QueryService;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
-use WeakMap;
 
-class CarryforwardTagService
+class CarryforwardTagService implements CarryforwardTagServiceInterface
 {
-    private WeakMap $cache;
-
     public function __construct(
         private readonly CommitHistoryService $commitHistoryService,
         private readonly QueryService $queryService,
         private readonly LoggerInterface $carryforwardLogger
     ) {
-        $this->cache = new WeakMap();
     }
 
     /**
-     * @return Tag[]
      * @throws QueryException
      */
     public function getTagsToCarryforward(Upload $upload): array
     {
-        if (isset($this->cache[$upload])) {
-            $this->carryforwardLogger->info(
-                sprintf(
-                    "Using cached value of %s commits to carryfoward tags for %s",
-                    count($this->cache[$upload]),
-                    (string)$upload
-                ),
-                [
-                    'upload' => $upload,
-                    'tags' => $this->cache[$upload]
-                ]
-            );
-
-            return $this->cache[$upload];
-        }
-
         $commits = $this->commitHistoryService->getPrecedingCommits($upload);
 
         $params = QueryParameterBag::fromUpload($upload);
@@ -58,9 +40,9 @@ class CarryforwardTagService
         );
 
         /**
-         * @var CommitCollectionQueryResult $commitsAndTags
+         * @var CommitCollectionQueryResult $commitTags
          */
-        $commitsAndTags = $this->queryService->runQuery(
+        $commitTags = $this->queryService->runQuery(
             CommitTagsQuery::class,
             $params
         );
@@ -68,7 +50,9 @@ class CarryforwardTagService
         $carryforwardTags = [];
         $carried = [$upload->getTag()];
 
-        foreach ($commitsAndTags->getCommits() as $commitAndTag) {
+        /** @var CommitQueryResult $commitAndTag */
+        foreach ($commitTags->getCommits() as $commitAndTag) {
+            /** @var Tag[] $tagsNotSeen */
             $tagsNotSeen = array_udiff(
                 $commitAndTag->getTags(),
                 $carried,
@@ -79,20 +63,14 @@ class CarryforwardTagService
                 continue;
             }
 
-            $carryforwardTags[$commitAndTag->getCommit()] = [
-                ...($carryforwardTags[$commitAndTag->getCommit()] ?? []),
-                ...$tagsNotSeen
-            ];
+            $carryforwardTags[$commitAndTag->getCommit()] += $tagsNotSeen;
 
-            $carried = [
-                ...$carried,
-                ...$tagsNotSeen
-            ];
+            $carried += $tagsNotSeen;
         }
 
         $this->carryforwardLogger->info(
             sprintf(
-                "%s commits being used to carryfoward tags for %s",
+                '%s commits being used to carryfoward tags for %s',
                 count($carryforwardTags),
                 (string)$upload
             ),
@@ -102,8 +80,6 @@ class CarryforwardTagService
             ]
         );
 
-        $this->cache[$upload] = $carryforwardTags;
-
-        return $this->cache[$upload];
+        return $carryforwardTags;
     }
 }

@@ -4,7 +4,7 @@ namespace App\Tests\Mock\Factory;
 
 use App\Model\PublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\DiffParserService;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
