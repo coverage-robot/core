@@ -7,6 +7,7 @@ use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\TotalCoverageQuery;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 
 class TotalCoverageQueryTest extends AbstractQueryTestCase
@@ -15,109 +16,295 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
     {
         return [
             <<<SQL
-            WITH unnested AS (
+            WITH
+              unnested AS (
                 SELECT
-                    *,
-                    (
-                        SELECT
-                        IF (
-                          value <> '',
-                          CAST(value AS int),
-                          0
+                  *,
+                  (
+                    SELECT
+                      IF (
+                        value <> '',
+                        CAST(value AS int),
+                        0
+                      )
+                    FROM
+                      UNNEST(metadata)
+                    WHERE
+                      key = "lineHits"
+                  ) AS hits,
+                  ARRAY(
+                    SELECT
+                      SUM(
+                        CAST(branchHits AS INT64)
+                      )
+                    FROM
+                      UNNEST(
+                        JSON_VALUE_ARRAY(
+                          (
+                            SELECT
+                              value
+                            FROM
+                              UNNEST(metadata)
+                            WHERE
+                              KEY = "branchHits"
+                          )
                         )
-                        FROM
-                            UNNEST(metadata)
-                        WHERE
-                            key = "lineHits"
-                    ) AS hits,
-                    ARRAY(
-                        SELECT
-                            SUM(CAST(branchHits AS INT64))
-                        FROM
-                            UNNEST(
-                                JSON_VALUE_ARRAY(
-                                    (
-                                        SELECT
-                                            value
-                                        FROM
-                                            UNNEST(metadata)
-                                        WHERE
-                                            KEY = "branchHits"
-                                    )
-                                ) 
-                            ) AS branchHits WITH OFFSET AS branchIndex
-                        GROUP BY
-                            branchIndex,
-                            branchHits
-                    ) as branchHits
+                      ) AS branchHits
+                    WITH
+                      OFFSET AS branchIndex
+                    GROUP BY
+                      branchIndex,
+                      branchHits
+                  ) as branchHits
                 FROM
-                    `mock-table`
+                  `mock-table`
                 WHERE
-                    commit = 'mock-commit' AND
-                    owner = 'mock-owner' AND
-                    repository = 'mock-repository'
-                    
-            ),
-            branchingLines AS (
+                  (
+                    1 = 1
+                    AND commit = "mock-commit"
+                    AND repository = "mock-repository"
+                    AND owner = "mock-owner"
+                    AND provider = "github"
+                  )
+              ),
+              branchingLines AS (
                 SELECT
-                    fileName,
-                    lineNumber,
-                    SUM(hits) as hits,
-                    branchIndex,
-                    SUM(branchHit) > 0 as isBranchedLineHit
-                FROM 
-                    unnested,
-                    UNNEST(
-                        IF(
-                            ARRAY_LENGTH(branchHits) = 0,
-                            [hits],
-                            branchHits    
-                        )
-                    ) AS branchHit WITH OFFSET AS branchIndex
-                GROUP BY 
-                    fileName,
-                    lineNumber,
-                    branchIndex
-            ),
-            lines AS (
-                SELECT
-                    fileName,
-                    lineNumber,
+                  fileName,
+                  lineNumber,
+                  SUM(hits) as hits,
+                  branchIndex,
+                  SUM(branchHit) > 0 as isBranchedLineHit
+                FROM
+                  unnested,
+                  UNNEST(
                     IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MIN(CAST(isBranchedLineHit AS INT64)) = 0,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
-                FROM
-                    branchingLines
+                      ARRAY_LENGTH(branchHits) = 0,
+                      [hits],
+                      branchHits
+                    )
+                  ) AS branchHit
+                WITH
+                  OFFSET AS branchIndex
                 GROUP BY
-                    fileName,
-                    lineNumber
-            ),
-            summedCoverage AS (
+                  fileName,
+                  lineNumber,
+                  branchIndex
+              ),
+              lines AS (
                 SELECT
-                    COUNT(*) as lines,
-                    COALESCE(SUM(IF(state = "covered", 1, 0)), 0) as covered,
-                    COALESCE(SUM(IF(state = "partial", 1, 0)), 0) as partial,
-                    COALESCE(SUM(IF(state = "uncovered", 1, 0)), 0) as uncovered,
+                  fileName,
+                  lineNumber,
+                  IF(
+                    SUM(hits) = 0,
+                    "uncovered",
+                    IF (
+                      MIN(
+                        CAST(isBranchedLineHit AS INT64)
+                      ) = 0,
+                      "partial",
+                      "covered"
+                    )
+                  ) as state
                 FROM
-                    lines
-            )
+                  branchingLines
+                GROUP BY
+                  fileName,
+                  lineNumber
+              ),
+              summedCoverage AS (
+                SELECT
+                  COUNT(*) as lines,
+                  COALESCE(
+                    SUM(
+                      IF(state = "covered", 1, 0)
+                    ),
+                    0
+                  ) as covered,
+                  COALESCE(
+                    SUM(
+                      IF(state = "partial", 1, 0)
+                    ),
+                    0
+                  ) as partial,
+                  COALESCE(
+                    SUM(
+                      IF(state = "uncovered", 1, 0)
+                    ),
+                    0
+                  ) as uncovered,
+                FROM
+                  lines
+              )
             SELECT
-                SUM(lines) as lines,
-                SUM(covered) as covered,
-                SUM(partial) as partial,
-                SUM(uncovered) as uncovered,
-                ROUND((SUM(covered) + SUM(partial)) / IF(SUM(lines) = 0, 1, SUM(lines)) * 100, 2) as coveragePercentage
+              SUM(lines) as lines,
+              SUM(covered) as covered,
+              SUM(partial) as partial,
+              SUM(uncovered) as uncovered,
+              ROUND(
+                (
+                  SUM(covered) + SUM(partial)
+                ) / IF(
+                  SUM(lines) = 0,
+                  1,
+                  SUM(lines)
+                ) * 100,
+                2
+              ) as coveragePercentage
             FROM
-                summedCoverage
+              summedCoverage
             SQL,
             <<<SQL
-
+            WITH
+              unnested AS (
+                SELECT
+                  *,
+                  (
+                    SELECT
+                      IF (
+                        value <> '',
+                        CAST(value AS int),
+                        0
+                      )
+                    FROM
+                      UNNEST(metadata)
+                    WHERE
+                      key = "lineHits"
+                  ) AS hits,
+                  ARRAY(
+                    SELECT
+                      SUM(
+                        CAST(branchHits AS INT64)
+                      )
+                    FROM
+                      UNNEST(
+                        JSON_VALUE_ARRAY(
+                          (
+                            SELECT
+                              value
+                            FROM
+                              UNNEST(metadata)
+                            WHERE
+                              KEY = "branchHits"
+                          )
+                        )
+                      ) AS branchHits
+                    WITH
+                      OFFSET AS branchIndex
+                    GROUP BY
+                      branchIndex,
+                      branchHits
+                  ) as branchHits
+                FROM
+                  `mock-table`
+                WHERE
+                  (
+                    1 = 1
+                    AND commit = "mock-commit"
+                    AND repository = "mock-repository"
+                    AND owner = "mock-owner"
+                    AND provider = "github"
+                    OR (
+                      (
+                        (
+                          commit = "mock-commit"
+                          AND tag IN ("1", "2")
+                        )
+                        OR (
+                          commit = "mock-commit-2"
+                          AND tag IN ("3", "4")
+                        )
+                      )
+                      AND repository = "mock-repository"
+                      AND owner = "mock-owner"
+                      AND provider = "github"
+                    )
+                  )
+              ),
+              branchingLines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  SUM(hits) as hits,
+                  branchIndex,
+                  SUM(branchHit) > 0 as isBranchedLineHit
+                FROM
+                  unnested,
+                  UNNEST(
+                    IF(
+                      ARRAY_LENGTH(branchHits) = 0,
+                      [hits],
+                      branchHits
+                    )
+                  ) AS branchHit
+                WITH
+                  OFFSET AS branchIndex
+                GROUP BY
+                  fileName,
+                  lineNumber,
+                  branchIndex
+              ),
+              lines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  IF(
+                    SUM(hits) = 0,
+                    "uncovered",
+                    IF (
+                      MIN(
+                        CAST(isBranchedLineHit AS INT64)
+                      ) = 0,
+                      "partial",
+                      "covered"
+                    )
+                  ) as state
+                FROM
+                  branchingLines
+                GROUP BY
+                  fileName,
+                  lineNumber
+              ),
+              summedCoverage AS (
+                SELECT
+                  COUNT(*) as lines,
+                  COALESCE(
+                    SUM(
+                      IF(state = "covered", 1, 0)
+                    ),
+                    0
+                  ) as covered,
+                  COALESCE(
+                    SUM(
+                      IF(state = "partial", 1, 0)
+                    ),
+                    0
+                  ) as partial,
+                  COALESCE(
+                    SUM(
+                      IF(state = "uncovered", 1, 0)
+                    ),
+                    0
+                  ) as uncovered,
+                FROM
+                  lines
+              )
+            SELECT
+              SUM(lines) as lines,
+              SUM(covered) as covered,
+              SUM(partial) as partial,
+              SUM(uncovered) as uncovered,
+              ROUND(
+                (
+                  SUM(covered) + SUM(partial)
+                ) / IF(
+                  SUM(lines) = 0,
+                  1,
+                  SUM(lines)
+                ) * 100,
+                2
+              ) as coveragePercentage
+            FROM
+              summedCoverage
             SQL
         ];
     }
@@ -137,8 +324,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
         $carryforward = QueryParameterBag::fromUpload($upload);
         $carryforward->set(QueryParameter::CARRYFORWARD_TAGS, [
-            'mock-commit' => ['1', '2'],
-            'mock-commit-2' => ['3', '4'],
+            'mock-commit' => [new Tag('1', 'mock-commit'), new Tag('2', 'mock-commit')],
+            'mock-commit-2' => [new Tag('3', 'mock-commit-2'),new Tag('4', 'mock-commit-2')],
         ]);
 
         return [

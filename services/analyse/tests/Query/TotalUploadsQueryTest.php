@@ -12,13 +12,13 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-                COUNT(DISTINCT uploadId) as totalUploads
+              COUNT(DISTINCT uploadId) as totalUploads
             FROM
-                `mock-table`
+              `mock-table`
             WHERE
-                commit = 'mock-commit' AND
-                owner = 'mock-owner' AND
-                repository = 'mock-repository'
+              AND repository = "mock-repository"
+              AND owner = "mock-owner"
+              AND provider = "github"
             SQL
         ];
     }
