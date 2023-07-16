@@ -2,6 +2,7 @@
 
 namespace App\Exception;
 
+use App\Enum\QueryParameter;
 use Exception;
 
 class QueryException extends Exception
@@ -15,6 +16,11 @@ class QueryException extends Exception
                 $receivedType
             )
         );
+    }
+
+    public static function invalidParameters(QueryParameter $parameter): self
+    {
+        return new self(sprintf('Invalid parameter %s.', $parameter->name));
     }
 
     public static function invalidQueryResult(): self

@@ -35,7 +35,6 @@ class QueryService
      */
     public function runQuery(
         string $queryClass,
-        Upload $upload,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
         foreach ($this->queries as $query) {
@@ -43,7 +42,7 @@ class QueryService
                 $query instanceof $queryClass &&
                 is_subclass_of($query, QueryInterface::class)
             ) {
-                return $this->runQueryAndParseResult($query, $upload, $parameterBag);
+                return $this->runQueryAndParseResult($query, $parameterBag);
             }
         }
 
@@ -56,17 +55,9 @@ class QueryService
      */
     private function runQueryAndParseResult(
         QueryInterface $query,
-        Upload $upload,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
-        $sql = $query->getQuery(
-            $this->bigQueryClient->getTable(),
-            $upload,
-            $parameterBag
-        );
-
-        // Normalise the SQL to remove any whitespace and empty lines
-        $sql = preg_replace('/^\h*\v+/m', '', trim($sql));
+        $sql = $this->getSql($query, $parameterBag);
 
         $results = $this->bigQueryClient->runQuery(
             $this->bigQueryClient->query($sql)
@@ -79,14 +70,14 @@ class QueryService
         } catch (QueryException $e) {
             $this->queryServiceLogger->critical(
                 sprintf(
-                    'Query %s failed to parse results for %s.',
-                    $query::class,
-                    (string)$upload
+                    'Query %s failed to parse results.',
+                    $query::class
                 ),
                 [
                     'exception' => $e,
                     'sql' => $sql,
-                    'results' => $results
+                    'results' => $results,
+                    'parameterBag' => $parameterBag
                 ]
             );
 
@@ -94,17 +85,33 @@ class QueryService
         } catch (GoogleException $e) {
             $this->queryServiceLogger->critical(
                 sprintf(
-                    'Query %s produced exception when executing %s.',
+                    'Query %s produced exception when executing.',
                     $query::class,
-                    (string)$upload
                 ),
                 [
                     'exception' => $e,
-                    'sql' => $sql
+                    'sql' => $sql,
+                    'parameterBag' => $parameterBag
                 ]
             );
 
             throw $e;
         }
+    }
+
+    /**
+     * @throws QueryException
+     */
+    private function getSql(QueryInterface $query, ?QueryParameterBag $parameterBag = null): string
+    {
+        $query->validateParameters($parameterBag);
+
+        $sql = $query->getQuery(
+            $this->bigQueryClient->getTable(),
+            $parameterBag
+        );
+
+        // Normalise the SQL to remove any whitespace and empty lines
+        return preg_replace('/^\h*\v+/m', '', trim($sql));
     }
 }

@@ -28,7 +28,18 @@ abstract class AbstractQueryTestCase extends TestCase
     public static function getQueryParameters(): array
     {
         return [
-            new QueryParameterBag()
+            QueryParameterBag::fromUpload(
+                Upload::from([
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'commit' => 'mock-commit',
+                    'uploadId' => 'mock-uploadId',
+                    'ref' => 'mock-ref',
+                    'parent' => [],
+                    'tag' => 'mock-tag',
+                ])
+            )
         ];
     }
 
@@ -39,16 +50,6 @@ abstract class AbstractQueryTestCase extends TestCase
 
         $builtSql = $query->getQuery(
             'mock-table',
-            Upload::from([
-                'provider' => Provider::GITHUB->value,
-                'owner' => 'mock-owner',
-                'repository' => 'mock-repository',
-                'commit' => 'mock-commit',
-                'uploadId' => 'mock-uploadId',
-                'ref' => 'mock-ref',
-                'parent' => [],
-                'tag' => 'mock-tag',
-            ]),
             $parameters
         );
 

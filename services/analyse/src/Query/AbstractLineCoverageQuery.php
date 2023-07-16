@@ -4,13 +4,12 @@ namespace App\Query;
 
 use App\Model\QueryParameterBag;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Upload;
 
 abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
-    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $parent = parent::getNamedQueries($table, $upload, $parameterBag);
+        $parent = parent::getNamedQueries($table, $parameterBag);
 
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;

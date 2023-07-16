@@ -20,4 +20,8 @@ enum QueryParameter
      * The limit to apply on query results.
      */
     case LIMIT;
+
+    case UPLOAD;
+
+    case COMMIT;
 }

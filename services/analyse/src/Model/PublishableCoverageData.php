@@ -33,7 +33,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getTotalUploads(): int
     {
         /** @var IntegerQueryResult $totalUploads */
-        $totalUploads = $this->queryService->runQuery(TotalUploadsQuery::class, $this->upload);
+        $totalUploads = $this->queryService->runQuery(
+            TotalUploadsQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $totalUploads->getResult();
     }
@@ -44,7 +47,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getTotalLines(): int
     {
         /** @var CoverageQueryResult $totalCoverage */
-        $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $this->upload);
+        $totalCoverage = $this->queryService->runQuery(
+            TotalCoverageQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $totalCoverage->getLines();
     }
@@ -55,7 +61,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getAtLeastPartiallyCoveredLines(): int
     {
         /** @var CoverageQueryResult $totalCoverage */
-        $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $this->upload);
+        $totalCoverage = $this->queryService->runQuery(
+            TotalCoverageQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $totalCoverage->getPartial() + $totalCoverage->getCovered();
     }
@@ -66,7 +75,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getUncoveredLines(): int
     {
         /** @var CoverageQueryResult $totalCoverage */
-        $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $this->upload);
+        $totalCoverage = $this->queryService->runQuery(
+            TotalCoverageQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $totalCoverage->getUncovered();
     }
@@ -77,7 +89,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getCoveragePercentage(): float
     {
         /** @var CoverageQueryResult $totalCoverage */
-        $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $this->upload);
+        $totalCoverage = $this->queryService->runQuery(
+            TotalCoverageQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $totalCoverage->getCoveragePercentage();
     }
@@ -88,7 +103,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getTagCoverage(): MultiTagCoverageQueryResult
     {
         /** @var MultiTagCoverageQueryResult $tags */
-        $tags = $this->queryService->runQuery(TotalTagCoverageQuery::class, $this->upload);
+        $tags = $this->queryService->runQuery(
+            TotalTagCoverageQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
 
         return $tags;
     }
@@ -98,7 +116,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffCoveragePercentage(): float
     {
-        $params = new QueryParameterBag();
+        $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->upload)
@@ -107,7 +125,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         /**
          * @var CoverageQueryResult $diffCoverage
          */
-        $diffCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $this->upload, $params);
+        $diffCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 
         return $diffCoverage->getCoveragePercentage();
     }
@@ -117,7 +135,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getLeastCoveredDiffFiles(int $limit): MultiFileCoverageQueryResult
     {
-        $params = new QueryParameterBag();
+        $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->upload)
@@ -130,7 +148,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         /**
          * @var MultiFileCoverageQueryResult $files
          */
-        $files = $this->queryService->runQuery(FileCoverageQuery::class, $this->upload, $params);
+        $files = $this->queryService->runQuery(FileCoverageQuery::class, $params);
 
         return $files;
     }
@@ -140,7 +158,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffLineCoverage(): MultiLineCoverageQueryResult
     {
-        $params = new QueryParameterBag();
+        $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->upload)
@@ -149,7 +167,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         /**
          * @var MultiLineCoverageQueryResult $lines
          */
-        $lines = $this->queryService->runQuery(LineCoverageQuery::class, $this->upload, $params);
+        $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
         return $lines;
     }

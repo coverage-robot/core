@@ -2,6 +2,7 @@
 
 namespace App\Query;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\IntegerQueryResult;
@@ -11,7 +12,7 @@ use Packages\Models\Model\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {
-    public function getQuery(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
         SELECT
@@ -19,13 +20,13 @@ class TotalUploadsQuery implements QueryInterface
         FROM
             `$table`
         WHERE
-            commit = '{$upload->getCommit()}' AND
-            owner = '{$upload->getOwner()}' AND
-            repository = '{$upload->getRepository()}'
+            commit = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getCommit()}' AND
+            owner = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getOwner()}' AND
+            repository = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getRepository()}'
         SQL;
     }
 
-    public function getNamedQueries(string $table, Upload $upload, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return '';
     }
@@ -49,5 +50,16 @@ class TotalUploadsQuery implements QueryInterface
         }
 
         throw QueryException::typeMismatch(gettype($row['totalUploads']), 'int');
+    }
+
+    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    {
+        if (
+            !$parameterBag ||
+            !$parameterBag->has(QueryParameter::UPLOAD) ||
+            !($parameterBag->get(QueryParameter::UPLOAD) instanceof Upload)
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::UPLOAD);
+        }
     }
 }

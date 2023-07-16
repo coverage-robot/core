@@ -3,7 +3,9 @@
 namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
+use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\IntegerQueryResult;
@@ -76,7 +78,10 @@ class QueryServiceTest extends TestCase
             ->with($mockQueryJobConfiguration)
             ->willReturn($this->createMock(QueryResults::class));
 
-        $result = $queryService->runQuery($query, $this->createMock(Upload::class));
+        $queryParameterBag = new QueryParameterBag();
+        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+
+        $result = $queryService->runQuery($query, $queryParameterBag);
 
         $this->assertEquals($queryResult, $result);
     }
@@ -124,7 +129,7 @@ class QueryServiceTest extends TestCase
 
         $this->expectException(QueryException::class);
 
-        $queryService->runQuery('invalid-query', $this->createMock(Upload::class));
+        $queryService->runQuery('invalid-query');
     }
 
     public static function queryDataProvider(): array
