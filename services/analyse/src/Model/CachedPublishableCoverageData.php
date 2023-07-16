@@ -29,6 +29,11 @@ class CachedPublishableCoverageData extends PublishableCoverageData
      */
     private array $leastCoveredDiffFiles = [];
 
+    /**
+     * @var string[]
+     */
+    private array $carriedforwardTags = [];
+
     public function getTotalUploads(): int
     {
         if (!$this->totalUploads) {
@@ -108,5 +113,14 @@ class CachedPublishableCoverageData extends PublishableCoverageData
         }
 
         return $this->diffLineCoverage;
+    }
+
+    public function getCarriedforwardTags(): array
+    {
+        if (!$this->carriedforwardTags) {
+            $this->carriedforwardTags = parent::getCarriedforwardTags();
+        }
+
+        return $this->carriedforwardTags;
     }
 }

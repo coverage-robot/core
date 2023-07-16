@@ -53,4 +53,6 @@ interface PublishableCoverageDataInterface
      * Get the total coverage percentage for each tag.
      */
     public function getTagCoverage(): MultiTagCoverageQueryResult;
+
+    public function getCarriedforwardTags(): array;
 }

@@ -17,6 +17,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\CarryforwardTagService;
 use App\Service\DiffParserService;
 use App\Service\QueryService;
+use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
@@ -190,5 +191,27 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
         return $lines;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getCarriedforwardTags(): array
+    {
+        $tags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
+
+        return array_merge(
+            ...array_map(
+                static fn (string $commit, array $tags) => array_fill_keys(
+                    array_map(
+                        static fn(Tag $tag) => $tag->getName(),
+                        $tags
+                    ),
+                    $commit
+                ),
+                array_keys($tags),
+                array_values($tags)
+            )
+        );
     }
 }

@@ -22,6 +22,7 @@ class QueryService
         private readonly BigQueryClient $bigQueryClient,
         #[TaggedIterator('app.coverage_query')]
         private readonly iterable $queries,
+        private readonly QueryBuilderService $queryBuilderService,
         private readonly LoggerInterface $queryServiceLogger
     ) {
     }
@@ -57,15 +58,19 @@ class QueryService
         QueryInterface $query,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
-        $sql = $this->getSql($query, $parameterBag);
-
-        $results = $this->bigQueryClient->runQuery(
-            $this->bigQueryClient->query($sql)
+        $sql = $this->queryBuilderService->build(
+            $query,
+            $this->bigQueryClient->getTable(),
+            $parameterBag
         );
 
-        $results->waitUntilComplete();
-
         try {
+            $results = $this->bigQueryClient->runQuery(
+                $this->bigQueryClient->query($sql)
+            );
+
+            $results->waitUntilComplete();
+
             return $query->parseResults($results);
         } catch (QueryException $e) {
             $this->queryServiceLogger->critical(
@@ -76,7 +81,7 @@ class QueryService
                 [
                     'exception' => $e,
                     'sql' => $sql,
-                    'results' => $results,
+                    'results' => $results ?? null,
                     'parameterBag' => $parameterBag
                 ]
             );
@@ -97,21 +102,5 @@ class QueryService
 
             throw $e;
         }
-    }
-
-    /**
-     * @throws QueryException
-     */
-    private function getSql(QueryInterface $query, ?QueryParameterBag $parameterBag = null): string
-    {
-        $query->validateParameters($parameterBag);
-
-        $sql = $query->getQuery(
-            $this->bigQueryClient->getTable(),
-            $parameterBag
-        );
-
-        // Normalise the SQL to remove any whitespace and empty lines
-        return preg_replace('/^\h*\v+/m', '', trim($sql));
     }
 }

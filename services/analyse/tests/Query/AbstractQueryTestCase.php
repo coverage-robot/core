@@ -4,6 +4,9 @@ namespace App\Tests\Query;
 
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
+use App\Service\QueryBuilderService;
+use Doctrine\SqlFormatter\NullHighlighter;
+use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -46,12 +49,13 @@ abstract class AbstractQueryTestCase extends TestCase
     #[DataProvider('queryParametersAndOutputsDataProvider')]
     public function testGetQuery(string $expectedSql, QueryParameterBag $parameters): void
     {
+        $queryBuilder = new QueryBuilderService(
+            new SqlFormatter(new NullHighlighter())
+        );
+
         $query = $this->getQueryClass();
 
-        $builtSql = $query->getQuery(
-            'mock-table',
-            $parameters
-        );
+        $builtSql = $queryBuilder->build($query, 'mock-table', $parameters);
 
         $this->assertEquals(
             $expectedSql,

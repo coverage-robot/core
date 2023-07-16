@@ -2,18 +2,17 @@
 
 namespace App\Query;
 
-use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\MultiTagCoverageQueryResult;
-use App\Query\Trait\ScopeAwareTrait;
+use App\Query\Trait\CarryforwardAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
-    use ScopeAwareTrait;
+    use CarryforwardAwareTrait;
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -104,13 +103,12 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
     {
-        $carryforward = self::getCarryforwardTagsScope($parameterBag);
+        $parent = parent::getUnnestQueryFiltering($parameterBag);
+        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '' ;
 
         return <<<SQL
-        (
-            commit = '{$parameterBag->get(QueryParameter::UPLOAD)->getCommit()}'
-            {$carryforward}
-        )
+        {$parent}
+        {$carryforwardScope}
         SQL;
     }
 

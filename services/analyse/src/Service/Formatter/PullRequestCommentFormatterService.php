@@ -34,7 +34,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($upload, $data)}
         </details>
 
-        *Last update to `{$upload->getTag()}` at {$upload->getIngestTime()->format('H:i')}*
+        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i')}*
         MARKDOWN;
     }
 
@@ -43,6 +43,8 @@ class PullRequestCommentFormatterService
         if (count($data->getTagCoverage()->getTags()) == 0) {
             return "> No uploaded tags in #{$upload->getPullRequest()}";
         }
+
+        $carriedForwardTags = $data->getCarriedForwardTags();
 
         return sprintf(
             <<<MARKDOWN
@@ -55,7 +57,11 @@ class PullRequestCommentFormatterService
                 array_map(
                     static fn (TagCoverageQueryResult $tag) => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
-                        $tag->getTag(),
+                        sprintf(
+                            '%s%s',
+                            $tag->getTag(),
+                            array_key_exists($tag->getTag(), $carriedForwardTags) ? sprintf('<br><sub>(Carried forward from %s)</sub>', $carriedForwardTags[$tag->getTag()]) : ''
+                        ),
                         $tag->getLines(),
                         $tag->getCovered(),
                         $tag->getPartial(),

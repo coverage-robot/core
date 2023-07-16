@@ -5,6 +5,8 @@ namespace App\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Trait\CarryforwardAwareTrait;
+use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -13,6 +15,8 @@ use Packages\Models\Enum\LineState;
 class FileCoverageQuery extends AbstractLineCoverageQuery
 {
     use ScopeAwareTrait;
+    use DiffAwareTrait;
+    use CarryforwardAwareTrait;
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -57,11 +61,14 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($parameterBag);
-        $carryforward = self::getCarryforwardTagsScope($parameterBag);
-        $lineScope = self::getLineScope($parameterBag);
+        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '';
+        $lineScope = !empty($scope = self::getLineScope($parameterBag)) ? 'AND ' . $scope : '' ;
 
         return <<<SQL
-        ({$parent} {$carryforward})
+        (
+            {$parent}
+            {$carryforwardScope}
+        )
         {$lineScope}
         SQL;
     }

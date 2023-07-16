@@ -19,3 +19,10 @@ services:
 
     SebastianBergmann\Diff\Parser:
         autowire: true
+
+    Doctrine\SqlFormatter\NullHighlighter: ~
+
+    Doctrine\SqlFormatter\SqlFormatter:
+        autowire: true
+        arguments:
+            $highlighter: '@Doctrine\SqlFormatter\NullHighlighter'

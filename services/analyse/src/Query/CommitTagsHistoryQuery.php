@@ -5,7 +5,6 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\CommitTreeQueryResult;
 use App\Query\Result\MultiCommitQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
@@ -19,19 +18,17 @@ class CommitTagsHistoryQuery implements QueryInterface
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $commitScope = self::getCommitScope($parameterBag);
+        $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
         SELECT
             commit,
             ARRAY_AGG(DISTINCT tag) as tags
         FROM
-            {$table}
+            `{$table}`
         WHERE
-            1 = 1
             {$commitScope} AND
-            repository = '{$parameterBag->get(QueryParameter::REPOSITORY)}' AND
-            owner = '{$parameterBag->get(QueryParameter::OWNER)}' AND
-            provider = '{$parameterBag->get(QueryParameter::PROVIDER)->value}'
+            {$repositoryScope}
         GROUP BY
             commit
         SQL;

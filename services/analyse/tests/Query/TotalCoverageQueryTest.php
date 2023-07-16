@@ -2,8 +2,12 @@
 
 namespace App\Tests\Query;
 
+use App\Enum\QueryParameter;
+use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\TotalCoverageQuery;
+use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 
 class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -111,7 +115,35 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 ROUND((SUM(covered) + SUM(partial)) / IF(SUM(lines) = 0, 1, SUM(lines)) * 100, 2) as coveragePercentage
             FROM
                 summedCoverage
+            SQL,
+            <<<SQL
+
             SQL
+        ];
+    }
+
+    public static function getQueryParameters(): array
+    {
+        $upload =  Upload::from([
+            'provider' => Provider::GITHUB->value,
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository',
+            'commit' => 'mock-commit',
+            'uploadId' => 'mock-uploadId',
+            'ref' => 'mock-ref',
+            'parent' => [],
+            'tag' => 'mock-tag',
+        ]);
+
+        $carryforward = QueryParameterBag::fromUpload($upload);
+        $carryforward->set(QueryParameter::CARRYFORWARD_TAGS, [
+            'mock-commit' => ['1', '2'],
+            'mock-commit-2' => ['3', '4'],
+        ]);
+
+        return [
+            QueryParameterBag::fromUpload($upload),
+            $carryforward,
         ];
     }
 
