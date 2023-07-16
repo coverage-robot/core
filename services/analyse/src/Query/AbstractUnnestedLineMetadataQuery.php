@@ -57,9 +57,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             FROM
                 `$table`
             WHERE
-                commit = '{$parameterBag->get(QueryParameter::UPLOAD)->getCommit()}' AND
-                owner = '{$parameterBag->get(QueryParameter::UPLOAD)->getOwner()}' AND
-                repository = '{$parameterBag->get(QueryParameter::UPLOAD)->getRepository()}'
+                commit = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getCommit()}' AND
+                owner = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getOwner()}' AND
+                repository = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getRepository()}'
                 {$this->getUnnestQueryFiltering($parameterBag)}
         )
         SQL;
