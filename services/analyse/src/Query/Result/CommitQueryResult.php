@@ -4,12 +4,13 @@ namespace App\Query\Result;
 
 use App\Exception\QueryException;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Packages\Models\Model\Tag;
 
 class CommitQueryResult implements QueryResultInterface
 {
     /**
      * @param string $commit
-     * @param string[] $tags
+     * @param Tag[] $tags
      */
     private function __construct(
         private readonly string $commit,
@@ -28,7 +29,10 @@ class CommitQueryResult implements QueryResultInterface
         ) {
             return new self(
                 (string)$result['commit'],
-                (array)$result['tags'],
+                array_map(
+                    fn (string $name) => new Tag($name, (string)$result['commit']),
+                    $result['tags']
+                )
             );
         }
 

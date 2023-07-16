@@ -7,17 +7,16 @@ use App\Exception\QueryException;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\IntegerQueryResult;
-use App\Query\Result\MultiFileCoverageQueryResult;
-use App\Query\Result\MultiLineCoverageQueryResult;
-use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\CarryforwardTagService;
 use App\Service\DiffParserService;
 use App\Service\QueryService;
-use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
@@ -50,9 +49,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getTotalLines(): int
     {
         $params = QueryParameterBag::fromUpload($this->upload);
-
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -66,9 +66,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getAtLeastPartiallyCoveredLines(): int
     {
         $params = QueryParameterBag::fromUpload($this->upload);
-
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -82,9 +83,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getUncoveredLines(): int
     {
         $params = QueryParameterBag::fromUpload($this->upload);
-
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -98,9 +100,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getCoveragePercentage(): float
     {
         $params = QueryParameterBag::fromUpload($this->upload);
-
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -111,14 +114,15 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getTagCoverage(): MultiTagCoverageQueryResult
+    public function getTagCoverage(): TagCoverageCollectionQueryResult
     {
         $params = QueryParameterBag::fromUpload($this->upload);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
-
-        /** @var MultiTagCoverageQueryResult $tags */
+        /** @var TagCoverageCollectionQueryResult $tags */
         $tags = $this->queryService->runQuery(TotalTagCoverageQuery::class, $params);
 
         return $tags;
@@ -134,9 +138,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->upload)
         );
-
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /**
          * @var CoverageQueryResult $diffCoverage
@@ -149,7 +154,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getLeastCoveredDiffFiles(int $limit): MultiFileCoverageQueryResult
+    public function getLeastCoveredDiffFiles(int $limit): FileCoverageCollectionQueryResult
     {
         $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
@@ -160,11 +165,13 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::LIMIT,
             $limit
         );
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /**
-         * @var MultiFileCoverageQueryResult $files
+         * @var FileCoverageCollectionQueryResult $files
          */
         $files = $this->queryService->runQuery(FileCoverageQuery::class, $params);
 
@@ -174,44 +181,23 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getDiffLineCoverage(): MultiLineCoverageQueryResult
+    public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
         $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->upload)
         );
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-        $params->set(QueryParameter::CARRYFORWARD_TAGS, $carryforwardTags);
-
+        $params->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
 
         /**
-         * @var MultiLineCoverageQueryResult $lines
+         * @var LineCoverageCollectionQueryResult $lines
          */
         $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
         return $lines;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getCarriedforwardTags(): array
-    {
-        $tags = $this->carryforwardTagService->getTagsToCarryforward($this->upload);
-
-        return array_merge(
-            ...array_map(
-                static fn (string $commit, array $tags) => array_fill_keys(
-                    array_map(
-                        static fn(Tag $tag) => $tag->getName(),
-                        $tags
-                    ),
-                    $commit
-                ),
-                array_keys($tags),
-                array_values($tags)
-            )
-        );
     }
 }

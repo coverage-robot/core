@@ -5,13 +5,13 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\MultiCommitQueryResult;
+use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\Provider;
 
-class CommitTagsHistoryQuery implements QueryInterface
+class CommitTagsQuery implements QueryInterface
 {
     use ScopeAwareTrait;
 
@@ -45,7 +45,7 @@ class CommitTagsHistoryQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): MultiCommitQueryResult
+    public function parseResults(QueryResults $results): CommitCollectionQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -54,7 +54,7 @@ class CommitTagsHistoryQuery implements QueryInterface
         /** @var array $commits */
         $commits = $results->rows();
 
-        return MultiCommitQueryResult::from($commits);
+        return CommitCollectionQueryResult::from($commits);
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void

@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service\Formatter;
 
-use App\Query\Result\MultiFileCoverageQueryResult;
-use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Packages\Models\Enum\Provider;
@@ -89,7 +89,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
                     'getDiffCoveragePercentage' => 50.0,
-                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([
+                    'getLeastCoveredDiffFiles' => FileCoverageCollectionQueryResult::from([
                         [
                             'fileName' => 'mock-file',
                             'coveragePercentage' => 50.0,
@@ -107,7 +107,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'uncovered' => 5
                         ]
                     ]),
-                    'getTagCoverage' => MultiTagCoverageQueryResult::from([
+                    'getTagCoverage' => TagCoverageCollectionQueryResult::from([
                         [
                             'tag' => 'mock',
                             'coveragePercentage' => 50.0,
@@ -138,7 +138,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
                     'getDiffCoveragePercentage' => 50.0,
-                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([
+                    'getLeastCoveredDiffFiles' => FileCoverageCollectionQueryResult::from([
                         [
                             'fileName' => 'mock-file',
                             'coveragePercentage' => 50.0,
@@ -156,7 +156,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'uncovered' => 5
                         ]
                     ]),
-                    'getTagCoverage' => MultiTagCoverageQueryResult::from([
+                    'getTagCoverage' => TagCoverageCollectionQueryResult::from([
                         [
                             'tag' => 'mock-service-1',
                             'coveragePercentage' => 50.5,
@@ -195,8 +195,8 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     'getUncoveredLines' => 50,
                     'getCoveragePercentage' => 50.0,
                     'getDiffCoveragePercentage' => 0.0,
-                    'getLeastCoveredDiffFiles' => MultiFileCoverageQueryResult::from([]),
-                    'getTagCoverage' => MultiTagCoverageQueryResult::from([]),
+                    'getLeastCoveredDiffFiles' => FileCoverageCollectionQueryResult::from([]),
+                    'getTagCoverage' => TagCoverageCollectionQueryResult::from([]),
                 ],
                 Upload::from([
                     'uploadId' => 'mock-upload',

@@ -4,7 +4,7 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\MultiLineCoverageQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
@@ -45,7 +45,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): MultiLineCoverageQueryResult
+    public function parseResults(QueryResults $results): LineCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -54,6 +54,6 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         /** @var array $lines */
         $lines = $results->rows();
 
-        return MultiLineCoverageQueryResult::from($lines);
+        return LineCoverageCollectionQueryResult::from($lines);
     }
 }

@@ -20,11 +20,10 @@ class Tag
         return $this->commit;
     }
 
-
     public static function from(array $data): self
     {
         return new self(
-            (string)$data['tag'],
+            (string)($data['tag'] ?? $data['name']),
             (string)$data['commit']
         );
     }

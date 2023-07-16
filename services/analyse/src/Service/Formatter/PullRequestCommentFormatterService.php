@@ -44,8 +44,6 @@ class PullRequestCommentFormatterService
             return "> No uploaded tags in #{$upload->getPullRequest()}";
         }
 
-        $carriedForwardTags = $data->getCarriedForwardTags();
-
         return sprintf(
             <<<MARKDOWN
             | Tag | Lines | Covered | Partial | Uncovered | Coverage |
@@ -59,8 +57,8 @@ class PullRequestCommentFormatterService
                         '| %s | %s | %s | %s | %s | %s%% |',
                         sprintf(
                             '%s%s',
-                            $tag->getTag(),
-                            array_key_exists($tag->getTag(), $carriedForwardTags) ? sprintf('<br><sub>(Carried forward from %s)</sub>', $carriedForwardTags[$tag->getTag()]) : ''
+                            $tag->getTag()->getName(),
+                            $tag->getTag()->getCommit() != $upload->getCommit() ? sprintf('<br><sub>(Carried forward from %s)</sub>', $tag->getTag()->getCommit()) : ''
                         ),
                         $tag->getLines(),
                         $tag->getCovered(),

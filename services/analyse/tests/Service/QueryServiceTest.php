@@ -9,9 +9,9 @@ use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\IntegerQueryResult;
-use App\Query\Result\MultiLineCoverageQueryResult;
-use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\QueryResultInterface;
+use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -53,14 +53,14 @@ class QueryServiceTest extends TestCase
                     TotalTagCoverageQuery::class,
                     TotalTagCoverageQuery::class,
                     TotalTagCoverageQuery::class === $query ?
-                        $queryResult : $this->createMock(MultiTagCoverageQueryResult::class)
+                        $queryResult : $this->createMock(TagCoverageCollectionQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
                     LineCoverageQuery::class,
                     LineCoverageQuery::class,
                     LineCoverageQuery::class === $query ?
-                        $queryResult : $this->createMock(MultiLineCoverageQueryResult::class)
+                        $queryResult : $this->createMock(LineCoverageCollectionQueryResult::class)
                 )
             ],
             new NullLogger()
@@ -109,7 +109,7 @@ class QueryServiceTest extends TestCase
                     $this,
                     LineCoverageQuery::class,
                     null,
-                    $this->createMock(MultiLineCoverageQueryResult::class)
+                    $this->createMock(LineCoverageCollectionQueryResult::class)
                 ),
             ],
             new NullLogger()
@@ -151,7 +151,7 @@ class QueryServiceTest extends TestCase
             ],
             'Diff coverage query' => [
                 LineCoverageQuery::class,
-                MultiLineCoverageQueryResult::from([
+                LineCoverageCollectionQueryResult::from([
                     [
                         'fileName' => 'test-file-1',
                         'lineNumber' => 1,

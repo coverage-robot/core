@@ -19,9 +19,9 @@ enum QueryParameter
     /**
      * ```
      * [
-     *     "commit-sha" => ["tag-name", "tag-name-2"]
-     *     "commit-sha-2" => ["tag-name-3"],
-     *     "commit-sha-3" => ["tag-name-4", "tag-name-5"],
+     *     "commit-sha" => [Tag::class, Tag::class]
+     *     "commit-sha-2" => [Tag::class],
+     *     "commit-sha-3" => [Tag::class, Tag::class],
      * ]
      * ```
      */

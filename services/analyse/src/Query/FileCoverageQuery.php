@@ -4,7 +4,7 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
@@ -77,7 +77,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): MultiFileCoverageQueryResult
+    public function parseResults(QueryResults $results): FileCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -86,6 +86,6 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         /** @var array $files */
         $files = $results->rows();
 
-        return MultiFileCoverageQueryResult::from($files);
+        return FileCoverageCollectionQueryResult::from($files);
     }
 }

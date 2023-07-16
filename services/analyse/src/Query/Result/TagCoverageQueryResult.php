@@ -3,11 +3,12 @@
 namespace App\Query\Result;
 
 use App\Exception\QueryException;
+use Packages\Models\Model\Tag;
 
 class TagCoverageQueryResult extends CoverageQueryResult
 {
     private function __construct(
-        private readonly string $tag,
+        private readonly Tag $tag,
         readonly float $coveragePercentage,
         readonly int $lines,
         readonly int $covered,
@@ -30,26 +31,24 @@ class TagCoverageQueryResult extends CoverageQueryResult
     {
         if (
             is_string($result['tag'] ?? null) &&
-            is_numeric($result['coveragePercentage'] ?? null) &&
-            is_int($result['lines'] ?? null) &&
-            is_int($result['covered'] ?? null) &&
-            is_int($result['partial'] ?? null) &&
-            is_int($result['uncovered'] ?? null)
+            is_string($result['commit'] ?? null)
         ) {
+            $coverage = parent::from($result);
+
             return new self(
-                (string)$result['tag'],
-                (float)$result['coveragePercentage'],
-                (int)$result['lines'],
-                (int)$result['covered'],
-                (int)$result['partial'],
-                (int)$result['uncovered']
+                Tag::from($result),
+                $coverage->getCoveragePercentage(),
+                $coverage->getLines(),
+                $coverage->getCovered(),
+                $coverage->getPartial(),
+                $coverage->getUncovered()
             );
         }
 
         throw QueryException::invalidQueryResult();
     }
 
-    public function getTag(): string
+    public function getTag(): Tag
     {
         return $this->tag;
     }

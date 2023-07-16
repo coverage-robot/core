@@ -5,19 +5,23 @@ namespace App\Service;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\CommitTagsHistoryQuery;
-use App\Query\Result\MultiCommitQueryResult;
+use App\Query\CommitTagsQuery;
+use App\Query\Result\CommitCollectionQueryResult;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
+use WeakMap;
 
 class CarryforwardTagService
 {
+    private WeakMap $cache;
+
     public function __construct(
         private readonly CommitHistoryService $commitHistoryService,
         private readonly QueryService $queryService,
         private readonly LoggerInterface $carryforwardLogger
     ) {
+        $this->cache = new WeakMap();
     }
 
     /**
@@ -26,6 +30,22 @@ class CarryforwardTagService
      */
     public function getTagsToCarryforward(Upload $upload): array
     {
+        if (isset($this->cache[$upload])) {
+            $this->carryforwardLogger->info(
+                sprintf(
+                    "Using cached value of %s commits to carryfoward tags for %s",
+                    count($this->cache[$upload]),
+                    (string)$upload
+                ),
+                [
+                    'upload' => $upload,
+                    'tags' => $this->cache[$upload]
+                ]
+            );
+
+            return $this->cache[$upload];
+        }
+
         $commits = $this->commitHistoryService->getPrecedingCommits($upload);
 
         $params = QueryParameterBag::fromUpload($upload);
@@ -38,18 +58,22 @@ class CarryforwardTagService
         );
 
         /**
-         * @var MultiCommitQueryResult $commitsAndTags
+         * @var CommitCollectionQueryResult $commitsAndTags
          */
         $commitsAndTags = $this->queryService->runQuery(
-            CommitTagsHistoryQuery::class,
+            CommitTagsQuery::class,
             $params
         );
 
         $carryforwardTags = [];
-        $tagsRecorded = [$upload->getTag()->getName()];
+        $carried = [$upload->getTag()];
 
         foreach ($commitsAndTags->getCommits() as $commitAndTag) {
-            $tagsNotSeen = array_diff($commitAndTag->getTags(), $tagsRecorded);
+            $tagsNotSeen = array_udiff(
+                $commitAndTag->getTags(),
+                $carried,
+                static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
+            );
 
             if ($tagsNotSeen === []) {
                 continue;
@@ -57,10 +81,13 @@ class CarryforwardTagService
 
             $carryforwardTags[$commitAndTag->getCommit()] = [
                 ...($carryforwardTags[$commitAndTag->getCommit()] ?? []),
-                ...array_map(static fn(string $tag) => new Tag($tag, $commitAndTag->getCommit()), $tagsNotSeen)
+                ...$tagsNotSeen
             ];
 
-            $tagsRecorded = array_merge($tagsRecorded, $tagsNotSeen);
+            $carried = [
+                ...$carried,
+                ...$tagsNotSeen
+            ];
         }
 
         $this->carryforwardLogger->info(
@@ -75,6 +102,8 @@ class CarryforwardTagService
             ]
         );
 
-        return $carryforwardTags;
+        $this->cache[$upload] = $carryforwardTags;
+
+        return $this->cache[$upload];
     }
 }

@@ -5,13 +5,13 @@ namespace App\Query\Result;
 use App\Exception\QueryException;
 use Google\Cloud\Core\Iterator\ItemIterator;
 
-class MultiFileCoverageQueryResult implements QueryResultInterface
+class LineCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
-     * @param FileCoverageQueryResult[] $files
+     * @param LineCoverageQueryResult[] $lines
      */
     private function __construct(
-        private readonly array $files,
+        private readonly array $lines,
     ) {
     }
 
@@ -20,21 +20,21 @@ class MultiFileCoverageQueryResult implements QueryResultInterface
      */
     public static function from(ItemIterator|array $results): self
     {
-        $files = [];
+        $lines = [];
 
         foreach ($results as $result) {
             if (!is_array($result)) {
                 continue;
             }
 
-            $files[] = FileCoverageQueryResult::from($result);
+            $lines[] = LineCoverageQueryResult::from($result);
         }
 
-        return new self($files);
+        return new self($lines);
     }
 
-    public function getFiles(): array
+    public function getLines(): array
     {
-        return $this->files;
+        return $this->lines;
     }
 }

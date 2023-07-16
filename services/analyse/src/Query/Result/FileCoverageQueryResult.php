@@ -25,21 +25,16 @@ class FileCoverageQueryResult extends CoverageQueryResult
 
     public static function from(array $result): self
     {
-        if (
-            is_string($result['fileName'] ?? null) &&
-            is_numeric($result['coveragePercentage'] ?? null) &&
-            is_int($result['lines'] ?? null) &&
-            is_int($result['covered'] ?? null) &&
-            is_int($result['partial'] ?? null) &&
-            is_int($result['uncovered'] ?? null)
-        ) {
+        if (is_string($result['fileName'] ?? null)) {
+            $coverage = parent::from($result);
+
             return new self(
                 (string)$result['fileName'],
-                (float)$result['coveragePercentage'],
-                (int)$result['lines'],
-                (int)$result['covered'],
-                (int)$result['partial'],
-                (int)$result['uncovered']
+                $coverage->getCoveragePercentage(),
+                $coverage->getLines(),
+                $coverage->getCovered(),
+                $coverage->getPartial(),
+                $coverage->getUncovered()
             );
         }
 

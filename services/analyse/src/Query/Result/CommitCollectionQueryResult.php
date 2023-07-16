@@ -5,7 +5,7 @@ namespace App\Query\Result;
 use App\Exception\QueryException;
 use Google\Cloud\Core\Iterator\ItemIterator;
 
-class MultiCommitQueryResult implements QueryResultInterface
+class CommitCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param CommitQueryResult[] $commits
@@ -20,17 +20,17 @@ class MultiCommitQueryResult implements QueryResultInterface
      */
     public static function from(ItemIterator|array $results): self
     {
-        $files = [];
+        $commits = [];
 
-        foreach ($results as $result) {
-            if (!is_array($result)) {
+        foreach ($results as $row) {
+            if (!is_array($row)) {
                 continue;
             }
 
-            $files[] = CommitQueryResult::from($result);
+            $commits[] = CommitQueryResult::from($row);
         }
 
-        return new self($files);
+        return new self($commits);
     }
 
     public function getCommits(): array
