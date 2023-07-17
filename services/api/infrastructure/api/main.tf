@@ -76,6 +76,7 @@ resource "aws_lambda_function" "api" {
   handler          = "public/index.php"
   architectures    = ["x86_64"]
   timeout          = 28
+  memory_size      = 1024
   layers = [
     format(
       "arn:aws:lambda:%s:534081306603:layer:${var.php_version}-fpm:%s",
