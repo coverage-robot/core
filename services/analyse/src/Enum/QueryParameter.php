@@ -17,11 +17,12 @@ enum QueryParameter
     case LINE_SCOPE;
 
     /**
+     * The tags to carry forward from previous commits (parents to the current upload)
      * ```
      * [
-     *     "commit-sha" => [Tag::class, Tag::class]
-     *     "commit-sha-2" => [Tag::class],
-     *     "commit-sha-3" => [Tag::class, Tag::class],
+     *     new Tag('tag-1', 'commit-1'),
+     *     new Tag('tag-2', 'commit-1'),
+     *     new Tag('tag-3', 'commit-3'),
      * ]
      * ```
      */
@@ -32,15 +33,37 @@ enum QueryParameter
      */
     case LIMIT;
 
+    /**
+     * A full upload model.
+     */
     case UPLOAD;
 
+    /**
+     * A commit hash, or hashes.
+     *
+     * ```php
+     * ['commit-1', 'commit-2', 'commit-3']
+     * ```
+     */
     case COMMIT;
 
+    /**
+     * A repository name.
+     */
     case REPOSITORY;
 
+    /**
+     * A repository owner.
+     */
     case OWNER;
 
-    case PROVIDER;
 
-    case REF;
+    /**
+     * A repository provider.
+     *
+     * ```php
+     * Provider::GITHUB
+     * ```
+     */
+    case PROVIDER;
 }
