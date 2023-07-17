@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Model\CachingPublishableCoverageData;
+use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
@@ -16,6 +17,7 @@ class CoverageAnalyserServiceTest extends TestCase
         $coverageAnalyserService = new CoverageAnalyserService(
             $this->createMock(QueryService::class),
             $this->createMock(DiffParserService::class),
+            $this->createMock(CarryforwardTagService::class)
         );
 
         $data = $coverageAnalyserService->analyse($this->createMock(Upload::class));

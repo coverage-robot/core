@@ -16,7 +16,8 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
             FROM
               `mock-table`
             WHERE
-              repository = "mock-repository"
+              commit = "mock-commit"
+              AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
             SQL

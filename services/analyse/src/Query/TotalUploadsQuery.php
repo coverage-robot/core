@@ -17,6 +17,7 @@ class TotalUploadsQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
+        $commitScope = self::getCommitScope($parameterBag);
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
@@ -25,6 +26,7 @@ class TotalUploadsQuery implements QueryInterface
         FROM
             `$table`
         WHERE
+            {$commitScope} AND
             {$repositoryScope}
         SQL;
     }
