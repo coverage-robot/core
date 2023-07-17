@@ -6,7 +6,7 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 
-class CachedPublishableCoverageData extends PublishableCoverageData
+class CachingPublishableCoverageData extends PublishableCoverageData
 {
     private ?int $totalUploads = null;
 

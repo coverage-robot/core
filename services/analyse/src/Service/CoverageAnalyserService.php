@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Model\CachedPublishableCoverageData;
+use App\Model\CachingPublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
@@ -22,7 +22,7 @@ class CoverageAnalyserService
 
     public function analyse(Upload $upload): PublishableCoverageDataInterface
     {
-        return new CachedPublishableCoverageData(
+        return new CachingPublishableCoverageData(
             $this->queryService,
             $this->diffParser,
             $this->carryforwardTagService,

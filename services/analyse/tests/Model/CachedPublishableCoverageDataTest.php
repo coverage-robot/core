@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model;
 
-use App\Model\CachedPublishableCoverageData;
+use App\Model\CachingPublishableCoverageData;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\IntegerQueryResult;
 use App\Query\TotalCoverageQuery;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class CachedPublishableCoverageDataTest extends TestCase
 {
-    private CachedPublishableCoverageData|MockObject $cachedPublishableCoverageData;
+    private CachingPublishableCoverageData|MockObject $cachedPublishableCoverageData;
 
     private QueryService|MockObject $mockQueryService;
 
@@ -25,7 +25,7 @@ class CachedPublishableCoverageDataTest extends TestCase
 
         $this->mockQueryService = $this->createMock(QueryService::class);
 
-        $this->cachedPublishableCoverageData = new CachedPublishableCoverageData(
+        $this->cachedPublishableCoverageData = new CachingPublishableCoverageData(
             $this->mockQueryService,
             $this->createMock(DiffParserService::class),
             $this->createMock(Upload::class),
