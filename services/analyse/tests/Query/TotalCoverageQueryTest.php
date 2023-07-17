@@ -60,8 +60,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                   `mock-table`
                 WHERE
                   (
-                    1 = 1
-                    AND commit = "mock-commit"
+                    commit = "mock-commit"
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
@@ -198,8 +197,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                   `mock-table`
                 WHERE
                   (
-                    1 = 1
-                    AND commit = "mock-commit"
+                    commit = "mock-commit"
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
@@ -330,8 +328,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             'tag' => 'mock-tag',
         ]);
 
-        $carryforward = QueryParameterBag::fromUpload($upload);
-        $carryforward->set(QueryParameter::CARRYFORWARD_TAGS, [
+        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
             new Tag('1', 'mock-commit'),
             new Tag('2', 'mock-commit'),
             new Tag('3', 'mock-commit-2'),
@@ -340,7 +338,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
         return [
             QueryParameterBag::fromUpload($upload),
-            $carryforward,
+            $carryforwardParameters,
         ];
     }
 

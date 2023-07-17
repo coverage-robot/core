@@ -59,11 +59,12 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 FROM
                   `mock-table`
                 WHERE
-                  1 = 1
-                  AND commit = "mock-commit"
-                  AND repository = "mock-repository"
-                  AND owner = "mock-owner"
-                  AND provider = "github"
+                  (
+                    commit = "mock-commit"
+                    AND repository = "mock-repository"
+                    AND owner = "mock-owner"
+                    AND provider = "github"
+                  )
               ),
               branchingLines AS (
                 SELECT
@@ -199,11 +200,12 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 FROM
                   `mock-table`
                 WHERE
-                  1 = 1
-                  AND commit = "mock-commit"
-                  AND repository = "mock-repository"
-                  AND owner = "mock-owner"
-                  AND provider = "github"
+                  (
+                    commit = "mock-commit"
+                    AND repository = "mock-repository"
+                    AND owner = "mock-owner"
+                    AND provider = "github"
+                  )
                   OR (
                     (
                       (
@@ -339,8 +341,8 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             'tag' => 'mock-tag',
         ]);
 
-        $carryforwardTagParameters = QueryParameterBag::fromUpload($upload);
-        $carryforwardTagParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
+        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
             new Tag('1', 'mock-commit'),
             new Tag('2', 'mock-commit'),
             new Tag('3', 'mock-commit-2'),
@@ -348,7 +350,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         ]);
         return [
             QueryParameterBag::fromUpload($upload),
-            $carryforwardTagParameters
+            $carryforwardParameters
         ];
     }
 }

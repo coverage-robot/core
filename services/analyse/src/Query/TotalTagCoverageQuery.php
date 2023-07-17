@@ -113,7 +113,9 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '' ;
 
         return <<<SQL
-        {$parent}
+        (
+            {$parent}
+        )
         {$carryforwardScope}
         SQL;
     }

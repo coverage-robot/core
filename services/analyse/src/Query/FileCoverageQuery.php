@@ -66,7 +66,9 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
 
         return <<<SQL
         (
-            {$parent}
+            (
+                {$parent}
+            )
             {$carryforwardScope}
         )
         {$lineScope}

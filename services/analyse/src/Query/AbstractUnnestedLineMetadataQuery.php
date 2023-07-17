@@ -14,11 +14,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
     {
-        $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? 'AND ' . $scope : '';
+        $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? $scope : '';
         $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
 
         return <<<SQL
-        1=1
         {$commitScope}
         {$repositoryScope}
         SQL;

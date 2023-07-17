@@ -34,7 +34,9 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
 
         return <<<SQL
         (
-            {$parent}
+            (
+                {$parent}
+            )
             {$carryforwardScope}
         )
         {$lineScope}
