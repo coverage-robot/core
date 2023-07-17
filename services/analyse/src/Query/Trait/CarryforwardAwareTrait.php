@@ -17,8 +17,10 @@ trait CarryforwardAwareTrait
      * In essence, convert this:
      * ```php
      * [
-     *      "commit-sha-1" => ["tag-1", "tag-2", "tag-3"],
-     *      "commit-sha-2" => ["tag-2"],
+     *      new Tag('tag-1', 'commit-sha-1'),
+     *      new Tag('tag-2', 'commit-sha-1'),
+     *      new Tag('tag-3', 'commit-sha-1'),
+     *      new Tag('tag-4', 'commit-sha-2')
      * ]
      * ```
      * into this:
@@ -27,9 +29,12 @@ trait CarryforwardAwareTrait
      * (
      *      owner = "owner" AND
      *      repository = "repository" AND
+     *      provider = "provider" AND
      *      (
-     *           (commit = "commit-sha-1" AND tag IN ("tag-1", "tag-2", "tag-3")) OR
-     *           (commit = "commit-sha-2" AND tag IN ("tag-2"))
+     *           (commit = "commit-sha-1" AND tag = "tag-1") OR
+     *           (commit = "commit-sha-1" AND tag = "tag-2") OR
+     *           (commit = "commit-sha-1" AND tag = "tag-3") OR
+     *           (commit = "commit-sha-2" AND tag = "tag-4") OR
      *      )
      * )
      * ```

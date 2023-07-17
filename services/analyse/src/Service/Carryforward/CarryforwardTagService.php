@@ -46,7 +46,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                 continue;
             }
 
-            $carryforwardTags += $tagsNotSeen;
+            $carryforwardTags += [...$carryforwardTags, ...$tagsNotSeen];
         }
 
         $this->carryforwardLogger->info(

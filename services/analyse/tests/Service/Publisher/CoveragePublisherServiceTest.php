@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\Publisher;
 
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Publisher\CoveragePublisherService;

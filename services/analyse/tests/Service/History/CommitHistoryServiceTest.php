@@ -1,37 +1,32 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\History;
 
-use App\Service\Diff\DiffParserService;
-use App\Service\Diff\Github\GithubDiffParserService;
+use App\Service\History\CommitHistoryService;
+use App\Service\History\Github\GithubCommitHistoryService;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class DiffParserServiceTest extends TestCase
+class CommitHistoryServiceTest extends TestCase
 {
-    public function testGetUsingValidProvider(): void
+    public function testGetPrecedingCommitsUsingValidProvider(): void
     {
-        $diff = [
-            'file-1' => [1,2,3],
-            'file-2' => [4,5,6],
-        ];
+        $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
+        $mockGithubHistoryService->expects($this->once())
+            ->method('getPrecedingCommits')
+            ->willReturn([]);
 
-        $mockParser = $this->createMock(GithubDiffParserService::class);
-        $mockParser->expects($this->once())
-            ->method('get')
-            ->willReturn($diff);
-
-        $diffParser = new DiffParserService(
+        $historyService = new CommitHistoryService(
             [
-                Provider::GITHUB->value => $mockParser,
+                Provider::GITHUB->value => $mockGithubHistoryService,
             ]
         );
 
         $this->assertEquals(
-            $diff,
-            $diffParser->get(
+            [],
+            $historyService->getPrecedingCommits(
                 Upload::from([
                     'provider' => Provider::GITHUB->value,
                     'owner' => 'owner',
@@ -46,21 +41,21 @@ class DiffParserServiceTest extends TestCase
         );
     }
 
-    public function testGetUsingInvalidProvider(): void
+    public function testGetPrecedingCommitsUsingInvalidProvider(): void
     {
-        $mockParser = $this->createMock(GithubDiffParserService::class);
-        $mockParser->expects($this->never())
-            ->method('get');
+        $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
+        $mockGithubHistoryService->expects($this->never())
+            ->method('getPrecedingCommits');
 
-        $diffParser = new DiffParserService(
+        $historyService = new CommitHistoryService(
             [
-                'a-different-provider' => $mockParser,
+                'a-different-provider' => $mockGithubHistoryService,
             ]
         );
 
         $this->expectException(RuntimeException::class);
 
-        $diffParser->get(
+        $historyService->getPrecedingCommits(
             Upload::from([
                 'provider' => Provider::GITHUB->value,
                 'owner' => 'owner',

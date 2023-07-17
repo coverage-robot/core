@@ -15,7 +15,7 @@ class DiffParserService implements DiffParserServiceInterface
     public function __construct(
         #[TaggedIterator(
             'app.diff_parser',
-            exclude: ['CachingDiffParserService'],
+            exclude: ['CachingDiffParserService', 'DiffParserService'],
             defaultIndexMethod: 'getProvider'
         )]
         private readonly iterable $parsers

@@ -6,17 +6,27 @@ use Packages\Models\Model\Upload;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CommitHistoryService
+class CommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * @param array<array-key, CommitHistoryServiceInterface> $parsers
      */
     public function __construct(
-        #[TaggedIterator('app.commit_history', defaultIndexMethod: 'getProvider')]
+        #[TaggedIterator(
+            'app.commit_history',
+            exclude: ['CommitHistoryService'],
+            defaultIndexMethod: 'getProvider'
+        )]
         private readonly iterable $parsers
     ) {
     }
 
+    /**
+     * Get the commits which preceded the given upload - these are the parent commits
+     * of the one recorded during the upload.
+     *
+     * @throws RuntimeException
+     */
     public function getPrecedingCommits(Upload $upload): array
     {
         $service = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;

@@ -8,6 +8,15 @@ use Packages\Models\Enum\Provider;
 
 trait ScopeAwareTrait
 {
+    /**
+     * Build a BQ query filter to scope particular queries to only specific repositories.
+     *
+     * ```sql
+     * owner = "owner" AND
+     * repository = "repository" AND
+     * provider = "provider"
+     * ```
+     */
     private static function getRepositoryScope(?QueryParameterBag $parameterBag): string
     {
         $filters = [];
@@ -42,6 +51,24 @@ trait ScopeAwareTrait
         return implode("\nAND ", $filters);
     }
 
+    /**
+     * Build a BQ query filter to scope particular queries to only specific commit(s).
+     *
+     * This can be either a single commit, or an array of commits.
+     *
+     * For example, convert this:
+     * ```php
+     * [
+     *     'commit-sha-1',
+     *     'commit-sha-2',
+     *     'commit-sha-3',
+     * ]
+     * ```
+     * into:
+     * ```sql
+     * commit IN ('commit-sha-1', 'commit-sha-2', 'commit-sha-3')
+     * ```
+     */
     private static function getCommitScope(?QueryParameterBag $parameterBag): string
     {
         if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
@@ -64,6 +91,14 @@ trait ScopeAwareTrait
         return '';
     }
 
+    /**
+     * Build a simple BigQuery limit clause.
+     *
+     * For example:
+     * ```sql
+     * LIMIT 100
+     * ```
+     */
     private static function getLimit(?QueryParameterBag $parameterBag): string
     {
         if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {

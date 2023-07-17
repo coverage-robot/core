@@ -8,7 +8,6 @@ use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -29,9 +28,8 @@ class QueryService
 
     /**
      * @param class-string $queryClass
-     * @param Upload $upload
-     * @return QueryResultInterface
      *
+     * @throws GoogleException
      * @throws QueryException
      */
     public function runQuery(
