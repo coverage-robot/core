@@ -8,7 +8,7 @@ use Packages\Models\Model\Upload;
 interface CarryforwardTagServiceInterface
 {
     /**
-     * @return array<array-key, array<array-key, Tag>>
+     * @return Tag[]
      */
     public function getTagsToCarryforward(Upload $upload): array;
 }

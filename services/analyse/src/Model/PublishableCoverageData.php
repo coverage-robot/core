@@ -15,7 +15,7 @@ use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
-use App\Service\Diff\DiffParserService;
+use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -24,7 +24,8 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
 {
     public function __construct(
         protected readonly QueryService $queryService,
-        protected readonly DiffParserService $diffParser,
+        #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
+        protected readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
         protected readonly CarryforwardTagServiceInterface $carryforwardTagService,
         protected readonly Upload $upload

@@ -17,7 +17,7 @@ class TotalUploadsQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
+        $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
         SELECT

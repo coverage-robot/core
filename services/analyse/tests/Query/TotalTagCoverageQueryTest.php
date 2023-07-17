@@ -208,11 +208,19 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     (
                       (
                         commit = "mock-commit"
-                        AND tag IN ("1", "2")
+                        AND tag = "1"
+                      )
+                      OR (
+                        commit = "mock-commit"
+                        AND tag = "2"
                       )
                       OR (
                         commit = "mock-commit-2"
-                        AND tag IN ("3", "4")
+                        AND tag = "3"
+                      )
+                      OR (
+                        commit = "mock-commit-2"
+                        AND tag = "4"
                       )
                     )
                     AND repository = "mock-repository"
@@ -333,8 +341,10 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 
         $carryforwardTagParameters = QueryParameterBag::fromUpload($upload);
         $carryforwardTagParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
-            'mock-commit' => [new Tag('1', 'mock-commit'), new Tag('2', 'mock-commit')],
-            'mock-commit-2' => [new Tag('3', 'mock-commit-2'),new Tag('4', 'mock-commit-2')],
+            new Tag('1', 'mock-commit'),
+            new Tag('2', 'mock-commit'),
+            new Tag('3', 'mock-commit-2'),
+            new Tag('4', 'mock-commit-2')
         ]);
         return [
             QueryParameterBag::fromUpload($upload),

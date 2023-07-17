@@ -48,14 +48,13 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         );
 
         $carryforwardTags = [];
-        $carried = [$upload->getTag()];
 
         /** @var CommitQueryResult $commitAndTag */
         foreach ($commitTags->getCommits() as $commitAndTag) {
             /** @var Tag[] $tagsNotSeen */
             $tagsNotSeen = array_udiff(
                 $commitAndTag->getTags(),
-                $carried,
+                [...$carryforwardTags, $upload->getTag()],
                 static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
             );
 
@@ -63,14 +62,12 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                 continue;
             }
 
-            $carryforwardTags[$commitAndTag->getCommit()] += $tagsNotSeen;
-
-            $carried += $tagsNotSeen;
+            $carryforwardTags += $tagsNotSeen;
         }
 
         $this->carryforwardLogger->info(
             sprintf(
-                '%s commits being used to carryfoward tags for %s',
+                '%s tags being carried forward for %s',
                 count($carryforwardTags),
                 (string)$upload
             ),

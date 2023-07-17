@@ -10,7 +10,7 @@ use WeakMap;
 class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
 {
     /**
-     * @var WeakMap<Upload, array<array-key, array<array-key, Tag>>>
+     * @var WeakMap<Upload, Tag[]>
      */
     private WeakMap $cache;
 
@@ -18,7 +18,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
         private readonly CarryforwardTagService $carryforwardTagService
     ) {
         /**
-         * @var WeakMap<Upload, array<array-key, array<array-key, Tag>>>
+         * @var WeakMap<Upload, Tag[]>
          */
         $this->cache = new WeakMap();
     }

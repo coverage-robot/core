@@ -37,22 +37,24 @@ trait CarryforwardAwareTrait
     private static function getCarryforwardTagsScope(?QueryParameterBag $parameterBag): string
     {
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var array<string, list{Tag}> $carryforward */
-            $carryforward = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
+            /** @var Tag[] $carryforwardTags */
+            $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
-            if (empty($carryforward)) {
+            if (empty($carryforwardTags)) {
                 return '';
             }
 
-            $filtering = '';
-            foreach ($carryforward as $commit => $tags) {
-                $tags = implode('","', array_map(static fn(Tag $tag) => $tag->getName(), $tags));
+            $filtering = array_map(
+                static fn(Tag $tag) => <<<SQL
+                (
+                    commit = "{$tag->getCommit()}" AND
+                    tag = "{$tag->getName()}"
+                )
+                SQL,
+                $carryforwardTags
+            );
 
-                $filtering .= <<<SQL
-                (commit = "{$commit}" AND tag IN ("{$tags}")) OR 
-                SQL;
-            }
-            $filtering = substr($filtering, 0, -3);
+            $filtering = implode(' OR ', $filtering);
 
             $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
 
