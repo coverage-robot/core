@@ -28,33 +28,17 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      */
     public function getTagsToCarryforward(Upload $upload): array
     {
-        $commits = $this->commitHistoryService->getPrecedingCommits($upload);
-
-        $params = QueryParameterBag::fromUpload($upload);
-        $params->set(
-            QueryParameter::COMMIT,
-            [
-                $params->get(QueryParameter::COMMIT),
-                ...$commits
-            ]
-        );
-
-        /**
-         * @var CommitCollectionQueryResult $commitTags
-         */
-        $commitTags = $this->queryService->runQuery(
-            CommitTagsQuery::class,
-            $params
-        );
+        $uploadedTags = $this->getCurrentTags($upload);
+        $carryableCommitTags = $this->getParentCommitTags($upload);
 
         $carryforwardTags = [];
 
         /** @var CommitQueryResult $commitAndTag */
-        foreach ($commitTags->getCommits() as $commitAndTag) {
+        foreach ($carryableCommitTags->getCommits() as $commitAndTag) {
             /** @var Tag[] $tagsNotSeen */
             $tagsNotSeen = array_udiff(
                 $commitAndTag->getTags(),
-                [...$carryforwardTags, $upload->getTag()],
+                [...$uploadedTags, ...$carryforwardTags],
                 static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
             );
 
@@ -78,5 +62,45 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         );
 
         return $carryforwardTags;
+    }
+
+    /**
+     * @throws QueryException
+     */
+    private function getCurrentTags(Upload $upload): array
+    {
+        return $this->queryService->runQuery(CommitTagsQuery::class, QueryParameterBag::fromUpload($upload))
+            ->getCommits()[0]
+            ?->getTags()
+            ?? [];
+    }
+
+    /**
+     * @throws QueryException
+     */
+    private function getParentCommitTags(Upload $upload): CommitCollectionQueryResult
+    {
+        $precedingUploadedTags = QueryParameterBag::fromUpload($upload);
+        $precedingUploadedTags->set(
+            QueryParameter::COMMIT,
+            $this->commitHistoryService->getPrecedingCommits($upload)
+        );
+
+        $results = $this->queryService->runQuery(
+            CommitTagsQuery::class,
+            $precedingUploadedTags
+        );
+
+        if (!$results instanceof CommitCollectionQueryResult) {
+            throw new QueryException(
+                sprintf(
+                    'Received incorrect query result. Expected %s, got %s',
+                    CommitCollectionQueryResult::class,
+                    get_class($results)
+                )
+            );
+        }
+
+        return $results;
     }
 }
