@@ -56,7 +56,7 @@ class QueryBuilderServiceTest extends TestCase
                     'SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"',
                     $this->createMock(CoverageQueryResult::class)
                 ),
-                "mock-table",
+                'mock-table',
                 $queryParameters
             )
         );
@@ -81,7 +81,7 @@ class QueryBuilderServiceTest extends TestCase
                 '',
                 $this->createMock(CoverageQueryResult::class)
             ),
-            "mock-table",
+            'mock-table',
             $queryParameters
         );
     }

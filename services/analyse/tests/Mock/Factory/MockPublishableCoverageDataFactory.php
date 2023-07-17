@@ -27,9 +27,7 @@ class MockPublishableCoverageDataFactory
                 $carryforwardTagService ?? self::getMockCarryforwardTagService($test),
                 $upload ?? self::getMockUpload($test),
             ])
-            ->onlyMethods(
-                array_keys($methodsAndReturns)
-            )
+            ->onlyMethods(array_keys($methodsAndReturns))
             ->getMock();
 
         foreach ($methodsAndReturns as $method => $return) {

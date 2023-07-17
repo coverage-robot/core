@@ -30,11 +30,11 @@ class CarryforwardTagServiceTest extends TestCase
                 'uploadId' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
                 'commit' => 'mock-commit',
-                'parent' => ["mock-parent"],
-                'ref' => "mock-ref",
-                'owner' => "owner",
-                'repository' => "repository",
-                'tag' => "tag-4"
+                'parent' => ['mock-parent'],
+                'ref' => 'mock-ref',
+                'owner' => 'owner',
+                'repository' => 'repository',
+                'tag' => 'tag-4'
             ]
         );
 
@@ -91,11 +91,11 @@ class CarryforwardTagServiceTest extends TestCase
                 'uploadId' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
                 'commit' => 'mock-commit',
-                'parent' => ["mock-parent"],
-                'ref' => "mock-ref",
-                'owner' => "owner",
-                'repository' => "repository",
-                'tag' => "tag-4"
+                'parent' => ['mock-parent'],
+                'ref' => 'mock-ref',
+                'owner' => 'owner',
+                'repository' => 'repository',
+                'tag' => 'tag-4'
             ]
         );
 

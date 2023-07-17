@@ -24,8 +24,14 @@ class CachingCarryforwardTagServiceTest extends TestCase
 
         $mockUpload = $this->createMock(Upload::class);
 
-        $this->assertEquals($tags, $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload));
-        $this->assertEquals($tags, $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload));
+        $this->assertEquals(
+            $tags,
+            $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload)
+        );
+        $this->assertEquals(
+            $tags,
+            $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload)
+        );
     }
 
     public function testDoesNotCacheDifferentUploads(): void
@@ -40,8 +46,17 @@ class CachingCarryforwardTagServiceTest extends TestCase
 
         $cachingCarryforwardTagService = new CachingCarryforwardTagService($mockCarryforwardTagService);
 
-        $this->assertEquals($tags, $cachingCarryforwardTagService->getTagsToCarryforward($this->createMock(Upload::class)));
-        $this->assertEquals($tags, $cachingCarryforwardTagService->getTagsToCarryforward($this->createMock(Upload::class)));
-
+        $this->assertEquals(
+            $tags,
+            $cachingCarryforwardTagService->getTagsToCarryforward(
+                $this->createMock(Upload::class)
+            )
+        );
+        $this->assertEquals(
+            $tags,
+            $cachingCarryforwardTagService->getTagsToCarryforward(
+                $this->createMock(Upload::class)
+            )
+        );
     }
 }
