@@ -3,12 +3,16 @@
 namespace App\Tests\Query;
 
 use App\Enum\QueryParameter;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
+use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
+use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -349,8 +353,112 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             new Tag('4', 'mock-commit-2')
         ]);
         return [
-            QueryParameterBag::fromUpload($upload),
+            ...parent::getQueryParameters(),
             $carryforwardParameters
+        ];
+    }
+
+    #[DataProvider('resultsDataProvider')]
+    public function testParseResults(array $queryResult): void
+    {
+        $mockBigQueryResult = $this->createMock(QueryResults::class);
+        $mockBigQueryResult->expects($this->once())
+            ->method('isComplete')
+            ->willReturn(true);
+        $mockBigQueryResult->expects($this->once())
+            ->method('rows')
+            ->willReturn($queryResult);
+
+        $result = $this->getQueryClass()
+            ->parseResults($mockBigQueryResult);
+
+        $this->assertInstanceOf(TagCoverageCollectionQueryResult::class, $result);
+    }
+
+    #[DataProvider('parametersDataProvider')]
+    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
+    {
+        if (!$valid) {
+            $this->expectException(QueryException::class);
+        } else {
+            $this->expectNotToPerformAssertions();
+        }
+
+        $this->getQueryClass()->validateParameters($parameters);
+    }
+
+    public static function resultsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'tag' => '1',
+                        'commit' => 'mock-commit',
+                        'lines' => 1,
+                        'covered' => 1,
+                        'partial' => 0,
+                        'uncovered' => 0,
+                        'coveragePercentage' => 100.0
+                    ],
+                ],
+            ],
+            [
+                [
+                    [
+                        'tag' => '2',
+                        'commit' => 'mock-commit',
+                        'lines' => 1,
+                        'covered' => 0,
+                        'partial' => 1,
+                        'uncovered' => 0,
+                        'coveragePercentage' => 0.0
+                    ],
+                    [
+                        'tag' => '3',
+                        'commit' => 'mock-commit-2',
+                        'lines' => 1,
+                        'covered' => 0,
+                        'partial' => 0,
+                        'uncovered' => 1,
+                        'coveragePercentage' => 0.0
+                    ],
+                    [
+                        'tag' => '4',
+                        'commit' => 'mock-commit-2',
+                        'lines' => 1,
+                        'covered' => 0,
+                        'partial' => 0,
+                        'uncovered' => 1,
+                        'coveragePercentage' => 0.0
+                    ]
+                ],
+            ]
+        ];
+    }
+
+    public static function parametersDataProvider(): array
+    {
+        return [
+            [
+                new QueryParameterBag(),
+                false
+            ],
+            [
+                QueryParameterBag::fromUpload(
+                    Upload::from([
+                        'provider' => Provider::GITHUB->value,
+                        'owner' => 'mock-owner',
+                        'repository' => 'mock-repository',
+                        'commit' => 'mock-commit',
+                        'uploadId' => 'mock-uploadId',
+                        'ref' => 'mock-ref',
+                        'parent' => [],
+                        'tag' => 'mock-tag',
+                    ])
+                ),
+                true
+            ],
         ];
     }
 }

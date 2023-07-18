@@ -3,12 +3,17 @@
 namespace App\Tests\Query;
 
 use App\Enum\QueryParameter;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
+use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
+use Google\Cloud\BigQuery\QueryResults;
+use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -337,7 +342,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
         ]);
 
         return [
-            QueryParameterBag::fromUpload($upload),
+            ...parent::getQueryParameters(),
             $carryforwardParameters,
         ];
     }
@@ -345,5 +350,80 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
     public function getQueryClass(): QueryInterface
     {
         return new TotalCoverageQuery();
+    }
+
+    #[DataProvider('resultsDataProvider')]
+    public function testParseResults(array $queryResult): void
+    {
+        $mockIterator = $this->createMock(ItemIterator::class);
+        $mockIterator->expects($this->once())
+            ->method('current')
+            ->willReturn($queryResult);
+
+        $mockBigQueryResult = $this->createMock(QueryResults::class);
+        $mockBigQueryResult->expects($this->once())
+            ->method('isComplete')
+            ->willReturn(true);
+        $mockBigQueryResult->expects($this->once())
+            ->method('rows')
+            ->willReturn($mockIterator);
+
+        $result = $this->getQueryClass()
+            ->parseResults($mockBigQueryResult);
+
+        $this->assertInstanceOf(CoverageQueryResult::class, $result);
+    }
+
+
+    #[DataProvider('parametersDataProvider')]
+    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
+    {
+        if (!$valid) {
+            $this->expectException(QueryException::class);
+        } else {
+            $this->expectNotToPerformAssertions();
+        }
+
+        $this->getQueryClass()->validateParameters($parameters);
+    }
+
+    public static function resultsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'lines' => 1,
+                    'covered' => 1,
+                    'partial' => 0,
+                    'uncovered' => 0,
+                    'coveragePercentage' => 100.0,
+                ],
+            ]
+        ];
+    }
+
+    public static function parametersDataProvider(): array
+    {
+        return [
+            [
+                new QueryParameterBag(),
+                false
+            ],
+            [
+                QueryParameterBag::fromUpload(
+                    Upload::from([
+                        'provider' => Provider::GITHUB->value,
+                        'owner' => 'mock-owner',
+                        'repository' => 'mock-repository',
+                        'commit' => 'mock-commit',
+                        'uploadId' => 'mock-uploadId',
+                        'ref' => 'mock-ref',
+                        'parent' => [],
+                        'tag' => 'mock-tag',
+                    ])
+                ),
+                true
+            ],
+        ];
     }
 }

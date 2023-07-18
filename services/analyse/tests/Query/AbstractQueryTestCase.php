@@ -63,6 +63,10 @@ abstract class AbstractQueryTestCase extends TestCase
         );
     }
 
+    abstract public function testParseResults(array $queryResult): void;
+
+    abstract public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void;
+
     /**
      * Build an array of data which matches the expected SQL outputs against the
      * provided parameters as inputs, which can be provided to the query test.

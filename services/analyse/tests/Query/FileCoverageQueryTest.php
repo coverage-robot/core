@@ -3,12 +3,16 @@
 namespace App\Tests\Query;
 
 use App\Enum\QueryParameter;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\FileCoverageQuery;
 use App\Query\QueryInterface;
+use App\Query\Result\FileCoverageCollectionQueryResult;
+use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -686,8 +690,100 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
         return [
             $lineScopedParameters,
             $limitedParameters,
-            QueryParameterBag::fromUpload($upload),
+            ...parent::getQueryParameters(),
             $carryforwardParameters
+        ];
+    }
+
+    #[DataProvider('parametersDataProvider')]
+    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
+    {
+        if (!$valid) {
+            $this->expectException(QueryException::class);
+        } else {
+            $this->expectNotToPerformAssertions();
+        }
+
+        $this->getQueryClass()->validateParameters($parameters);
+    }
+
+    #[DataProvider('resultsDataProvider')]
+    public function testParseResults(array $queryResult): void
+    {
+        $mockBigQueryResult = $this->createMock(QueryResults::class);
+        $mockBigQueryResult->expects($this->once())
+            ->method('isComplete')
+            ->willReturn(true);
+        $mockBigQueryResult->expects($this->once())
+            ->method('rows')
+            ->willReturn($queryResult);
+
+        $result = $this->getQueryClass()
+            ->parseResults($mockBigQueryResult);
+
+        $this->assertInstanceOf(FileCoverageCollectionQueryResult::class, $result);
+    }
+
+    public static function resultsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'fileName' => 'mock-file',
+                        'lines' => 1,
+                        'covered' => 1,
+                        'partial' => 0,
+                        'uncovered' => 0,
+                        'coveragePercentage' => 100.0
+                    ],
+                ],
+            ],
+            [
+                [
+                    [
+                        'fileName' => 'mock-file',
+                        'lines' => 1,
+                        'covered' => 1,
+                        'partial' => 0,
+                        'uncovered' => 0,
+                        'coveragePercentage' => 100.0
+                    ],
+                    [
+                        'fileName' => 'mock-file-2',
+                        'lines' => 10,
+                        'covered' => 5,
+                        'partial' => 0,
+                        'uncovered' => 5,
+                        'coveragePercentage' => 50.0
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    public static function parametersDataProvider(): array
+    {
+        return [
+            [
+                new QueryParameterBag(),
+                false
+            ],
+            [
+                QueryParameterBag::fromUpload(
+                    Upload::from([
+                        'provider' => Provider::GITHUB->value,
+                        'owner' => 'mock-owner',
+                        'repository' => 'mock-repository',
+                        'commit' => 'mock-commit',
+                        'uploadId' => 'mock-uploadId',
+                        'ref' => 'mock-ref',
+                        'parent' => [],
+                        'tag' => 'mock-tag',
+                    ])
+                ),
+                true
+            ],
         ];
     }
 }
