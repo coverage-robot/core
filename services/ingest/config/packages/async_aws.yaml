@@ -9,6 +9,10 @@ when@dev: &aws_dev
           endpoint: 'http://localstack:4566'
           pathStyleEndpoint: true
 
+      event-bridge:
+        config:
+          endpoint: 'http://localstack:4587'
+
 when@test: *aws_dev
 
 when@prod:
