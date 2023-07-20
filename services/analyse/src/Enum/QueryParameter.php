@@ -57,13 +57,14 @@ enum QueryParameter
      */
     case OWNER;
 
-
     /**
      * A repository provider.
      *
      * ```php
      * Provider::GITHUB
      * ```
+     *
+     * @see \Packages\Models\Enum\Provider
      */
     case PROVIDER;
 }

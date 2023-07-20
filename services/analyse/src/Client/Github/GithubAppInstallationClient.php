@@ -3,6 +3,7 @@
 namespace App\Client\Github;
 
 use Github\Api\Apps;
+use Github\Api\GraphQL;
 use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
@@ -90,5 +91,10 @@ class GithubAppInstallationClient extends Client
     public function pullRequest(): PullRequest
     {
         return new PullRequest($this);
+    }
+
+    public function graphql(): GraphQL
+    {
+        return new GraphQL($this);
     }
 }
