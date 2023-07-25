@@ -43,6 +43,11 @@ provider "planetscale" {
   service_token    = var.planetscale_service_token
 }
 
+module "routing" {
+  source      = "./routing"
+  environment = local.environment
+}
+
 module "events" {
   source      = "./events"
   environment = local.environment

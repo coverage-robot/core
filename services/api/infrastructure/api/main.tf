@@ -98,6 +98,22 @@ resource "aws_lambda_function" "api" {
   }
 }
 
+resource "aws_apigatewayv2_integration" "integration" {
+  api_id           = data.terraform_remote_state.core.outputs.api_gateway.id
+  integration_type = "AWS_PROXY"
+
+  integration_method     = "POST"
+  integration_uri        = aws_lambda_function.api.arn
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "route" {
+  api_id    = data.terraform_remote_state.core.outputs.api_gateway.id
+  route_key = "$default"
+
+  target = "integrations/${aws_apigatewayv2_integration.integration.id}"
+}
+
 resource "aws_lambda_function_url" "api_url" {
   authorization_type = "NONE"
   function_name      = aws_lambda_function.api.function_name
