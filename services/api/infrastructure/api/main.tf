@@ -117,12 +117,3 @@ resource "aws_apigatewayv2_route" "route" {
 
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
-
-resource "aws_lambda_function_url" "api_url" {
-  authorization_type = "NONE"
-  function_name      = aws_lambda_function.api.function_name
-  cors {
-    allow_methods = ["GET"]
-    allow_origins = ["*"]
-  }
-}
