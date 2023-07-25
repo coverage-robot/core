@@ -105,11 +105,15 @@ resource "aws_apigatewayv2_integration" "integration" {
   integration_method     = "POST"
   integration_uri        = aws_lambda_function.api.arn
   payload_format_version = "2.0"
+
+  request_parameters = {
+    "overwrite:path" = "$request.path.proxy"
+  }
 }
 
 resource "aws_apigatewayv2_route" "route" {
   api_id    = data.terraform_remote_state.core.outputs.api_gateway.id
-  route_key = "$default"
+  route_key = "ANY /api/{proxy+}"
 
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
