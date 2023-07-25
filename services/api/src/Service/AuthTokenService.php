@@ -8,6 +8,7 @@ use App\Model\GraphParameters;
 use App\Model\ParametersInterface;
 use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
+use Psr\Log\LoggerInterface;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +22,8 @@ class AuthTokenService
 
     public function __construct(
         private readonly ProjectRepository $projectRepository,
-        private readonly Randomizer $randomizer
+        private readonly Randomizer $randomizer,
+        private readonly LoggerInterface $authTokenLogger
     ) {
     }
 
@@ -33,19 +35,40 @@ class AuthTokenService
      */
     public function getUploadTokenFromRequest(Request $request): ?string
     {
+        $this->authTokenLogger->info(
+            'Attempting to retrieve upload token from request.',
+            [
+                'headers' => $request->headers->all(),
+                'request' => $request->toArray()
+            ]
+        );
+
         if (!$request->headers->has('Authorization')) {
+            $this->authTokenLogger->info(
+                'No authorization header provided, which means theres no valid upload token for the request.',
+                [
+                    'headers' => $request->headers->all(),
+                    'request' => $request->toArray()
+                ]
+            );
             return null;
         }
 
         $authHeader = $request->headers->get('Authorization');
 
         if (!is_string($authHeader) || !str_starts_with($authHeader, 'Basic ')) {
+            $this->authTokenLogger->info(
+                'Authorization header provided, but in an unsupported wrong format.',
+                [
+                    'headers' => $authHeader,
+                    'request' => $request->toArray()
+                ]
+            );
             return null;
         }
 
-
-        // Decode the encoded token from the request header.
-        $token = base64_decode(
+        // Decode the encoded token from the request header
+        $uploadToken = base64_decode(
             substr(
                 (string)$authHeader,
                 6
@@ -53,7 +76,17 @@ class AuthTokenService
         );
 
         // Remove the trailing colon from the token - which will have been added for the username:password pattern
-        return trim($token, ':');
+        $uploadToken = trim($uploadToken, ':');
+
+        $this->authTokenLogger->info(
+            'Upload token decoded successfully.',
+            [
+                'uploadToken' => $uploadToken,
+                'request' => $request->toArray()
+            ]
+        );
+
+        return $uploadToken;
     }
 
     public function getGraphTokenFromRequest(Request $request): ?string
@@ -61,8 +94,24 @@ class AuthTokenService
         $graphToken = $request->query->get('token');
 
         if (!is_string($graphToken)) {
+            $this->authTokenLogger->info(
+                'Graph token not provided in request.',
+                [
+                    'parameters' => $request->query->all()
+                ]
+            );
+
             return null;
         }
+
+
+        $this->authTokenLogger->info(
+            'Graph token decoded successfully.',
+            [
+                'token' => $graphToken,
+                'parameters' => $request->query->all()
+            ]
+        );
 
         return $graphToken;
     }
@@ -135,6 +184,14 @@ class AuthTokenService
         } while ($attempts < self::MAX_TOKEN_RETRIES && !$isUnique);
 
         if (!$isUnique) {
+            $this->authTokenLogger->critical(
+                sprintf('Failed to create a unique token after %s attempts.', $attempts),
+                [
+                    'attempts' => $attempts,
+                    'tokenType' => $tokenType,
+                ]
+            );
+            
             throw TokenException::failedToCreateToken($attempts);
         }
 

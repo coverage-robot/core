@@ -45,7 +45,7 @@ class NewProjectCommand extends Command
         $owner = $input->getArgument('owner');
 
         $uploadToken = $this->authTokenService->createNewUploadToken();
-        $graphToken = $this->authTokenService->createNewUploadToken();
+        $graphToken = $this->authTokenService->createNewGraphToken();
 
         $project = (new Project())->setProvider(Provider::from($provider))
             ->setRepository($repository)
