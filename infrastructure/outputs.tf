@@ -6,6 +6,18 @@ output "output_bucket" {
   value = module.bucket.output_bucket
 }
 
+output "cloudfront_distribution" {
+  value = module.routing.cloudwatch_distribution
+}
+
+output "api_gateway" {
+  value = module.routing.api_gateway
+}
+
+output "api_gateway_default_stage" {
+  value = module.routing.api_gateway_default_stage
+}
+
 output "coverage_event_bus" {
   value = module.events.coverage_event_bus
 }

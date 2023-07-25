@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -30,10 +31,10 @@ class AuthTokenServiceTest extends TestCase
     #[DataProvider('authorizationHeaderDataProvider')]
     public function testGetProjectTokenFromRequest(?string $authHeader, ?string $expectedResponse): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $token = $authTokenService->getUploadTokenFromRequest(
-            new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [])
+            new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [], content: "{}")
         );
 
         $this->assertEquals($expectedResponse, $token);
@@ -67,7 +68,7 @@ class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->assertTrue($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -103,7 +104,7 @@ class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -134,7 +135,7 @@ class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn(null);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -147,7 +148,7 @@ class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateProjectTokenWithNoRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -165,7 +166,7 @@ class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateProjectTokenWithConsecutiveRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->projectRepository->expects($this->exactly(3))
             ->method('findOneBy')
@@ -183,7 +184,7 @@ class AuthTokenServiceTest extends TestCase
 
     public function testGenerateProjectTokenFailure(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer());
+        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
             ->method('findOneBy')
