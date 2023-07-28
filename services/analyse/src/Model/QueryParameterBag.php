@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Enum\QueryParameter;
+use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use WeakMap;
 
@@ -28,7 +29,10 @@ class QueryParameterBag
      *          Upload :
      *          ($key is QueryParameter::LINE_SCOPE ?
      *              array :
-     *              int
+     *              ($key is QueryParameter::PROVIDER ?
+     *                  Provider :
+     *                  int
+     *              )
      *          )
      *      )
      * )|null
@@ -43,7 +47,7 @@ class QueryParameterBag
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, array|int|string|Upload $value): void
+    public function set(QueryParameter $key, array|int|string|Upload|Provider $value): void
     {
         $this->parameters[$key] = $value;
     }
@@ -51,8 +55,15 @@ class QueryParameterBag
     public static function fromUpload(Upload $upload): self
     {
         $parameters = new self();
+
+        // Store the main upload model in the parameter bag
         $parameters->set(QueryParameter::UPLOAD, $upload);
-        $parameters->set(QueryParameter::COMMIT, $upload->getRepository());
+
+        // Extract core parameters from upload model for ease of use
+        $parameters->set(QueryParameter::COMMIT, $upload->getCommit());
+        $parameters->set(QueryParameter::OWNER, $upload->getOwner());
+        $parameters->set(QueryParameter::REPOSITORY, $upload->getRepository());
+        $parameters->set(QueryParameter::PROVIDER, $upload->getProvider());
 
         return $parameters;
     }

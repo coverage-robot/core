@@ -16,12 +16,7 @@ interface DiffParserServiceInterface
      * on the context of the upload.
      *
      * @param Upload $upload
-     * @return array
+     * @return array<array-key, int[]>
      */
     public function get(Upload $upload): array;
-
-    /**
-     * Get the provider that the diff parser supports.
-     */
-    public static function getProvider(): string;
 }

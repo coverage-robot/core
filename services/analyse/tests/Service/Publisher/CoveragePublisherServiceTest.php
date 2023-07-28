@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\Publisher;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\CoveragePublisherService;
+use App\Service\Publisher\CoveragePublisherService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use Packages\Models\Model\Upload;

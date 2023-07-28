@@ -22,4 +22,14 @@ class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient
     {
         return $this->dataset($_ENV['BIGQUERY_ENVIRONMENT_DATASET']);
     }
+
+    public function getTable(): string
+    {
+        return sprintf(
+            '%s.%s.%s',
+            $_ENV['BIGQUERY_PROJECT'],
+            $_ENV['BIGQUERY_ENVIRONMENT_DATASET'],
+            $_ENV['BIGQUERY_LINE_COVERAGE_TABLE']
+        );
+    }
 }

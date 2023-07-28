@@ -5,7 +5,7 @@ namespace App\Query\Result;
 use App\Exception\QueryException;
 use Google\Cloud\Core\Iterator\ItemIterator;
 
-class MultiTagCoverageQueryResult implements QueryResultInterface
+class TagCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param TagCoverageQueryResult[] $tags

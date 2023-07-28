@@ -4,6 +4,7 @@ namespace App\Service\Diff\Github;
 
 use App\Client\Github\GithubAppInstallationClient;
 use App\Service\Diff\DiffParserServiceInterface;
+use App\Service\ProviderAwareInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
@@ -11,7 +12,7 @@ use RuntimeException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
 
-class GithubDiffParserService implements DiffParserServiceInterface
+class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,

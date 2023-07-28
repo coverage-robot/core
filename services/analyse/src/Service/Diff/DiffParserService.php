@@ -1,23 +1,30 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Diff;
 
-use App\Service\Diff\DiffParserServiceInterface;
+use App\Service\ProviderAwareInterface;
 use Packages\Models\Model\Upload;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class DiffParserService
+class DiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @param array<array-key, DiffParserServiceInterface> $parsers
+     * @param array<array-key, DiffParserServiceInterface&ProviderAwareInterface> $parsers
      */
     public function __construct(
-        #[TaggedIterator('app.diff_parser', defaultIndexMethod: 'getProvider')]
+        #[TaggedIterator(
+            'app.diff_parser',
+            exclude: ['CachingDiffParserService', 'DiffParserService'],
+            defaultIndexMethod: 'getProvider'
+        )]
         private readonly iterable $parsers
     ) {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function get(Upload $upload): array
     {
         $reader = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;

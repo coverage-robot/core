@@ -4,7 +4,9 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\MultiFileCoverageQueryResult;
+use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Trait\CarryforwardAwareTrait;
+use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -13,6 +15,8 @@ use Packages\Models\Enum\LineState;
 class FileCoverageQuery extends AbstractLineCoverageQuery
 {
     use ScopeAwareTrait;
+    use DiffAwareTrait;
+    use CarryforwardAwareTrait;
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -56,14 +60,26 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
 
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag = null): string
     {
-        return self::getLineScope($parameterBag);
+        $parent = parent::getUnnestQueryFiltering($parameterBag);
+        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '';
+        $lineScope = !empty($scope = self::getLineScope($parameterBag)) ? 'AND ' . $scope : '' ;
+
+        return <<<SQL
+        (
+            (
+                {$parent}
+            )
+            {$carryforwardScope}
+        )
+        {$lineScope}
+        SQL;
     }
 
     /**
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): MultiFileCoverageQueryResult
+    public function parseResults(QueryResults $results): FileCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -72,6 +88,6 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         /** @var array $files */
         $files = $results->rows();
 
-        return MultiFileCoverageQueryResult::from($files);
+        return FileCoverageCollectionQueryResult::from($files);
     }
 }

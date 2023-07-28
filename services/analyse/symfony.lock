@@ -1,4 +1,16 @@
 {
+    "async-aws/async-aws-bundle": {
+        "version": "1.11",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "36bc5854429183d4ba6980c916f9e9284deb3a16"
+        },
+        "files": [
+            "./config/packages/async_aws.yaml"
+        ]
+    },
     "bref/symfony-bridge": {
         "version": "0.2",
         "recipe": {

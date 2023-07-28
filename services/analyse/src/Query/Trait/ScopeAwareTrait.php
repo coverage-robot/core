@@ -4,72 +4,107 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use Packages\Models\Enum\Provider;
 
 trait ScopeAwareTrait
 {
     /**
-     * Build a BQ query filter to scope particular queries to a particular diff (as in, lines added
-     * in a file).
+     * Build a BQ query filter to scope particular queries to only specific repositories.
      *
-     * In essence, convert this:
-     * ```php
-     * [
-     *      "path/file.php" => [1, 2, 3],
-     *      "path/file-2.php" => [4, 5, 6],
-     * ]
-     * ```
-     * into this:
      * ```sql
-     * WHERE
-     * (
-     *      (
-     *              fileName LIKE "%path/file.php" AND
-     *              lineNumber IN (1, 2, 3)
-     *      )
-     *      OR
-     *      (
-     *              fileName LIKE "%path/file-2.php" AND
-     *              lineNumber IN (4, 5, 6)
-     *      )
-     * )
+     * owner = "owner" AND
+     * repository = "repository" AND
+     * provider = "provider"
      * ```
-     *
-     * @param QueryParameterBag|null $parameterBag
-     * @return string
      */
-    private static function getLineScope(?QueryParameterBag $parameterBag): string
+    private static function getRepositoryScope(?QueryParameterBag $parameterBag): string
     {
-        $filtering = '';
+        $filters = [];
 
-        if ($parameterBag && $parameterBag->has(QueryParameter::LINE_SCOPE)) {
-            /** @var array<array-key, list{int}> $fileLineNumbers */
-            $fileLineNumbers = $parameterBag->get(QueryParameter::LINE_SCOPE);
+        if ($parameterBag && $parameterBag->has(QueryParameter::REPOSITORY)) {
+            /** @var string $repository */
+            $repository = $parameterBag->get(QueryParameter::REPOSITORY);
 
-            $filtering .= '(';
-            foreach (array_keys($fileLineNumbers) as $fileName) {
-                $lineNumbers = implode(',', $fileLineNumbers[$fileName]);
-
-                $filtering .= <<<SQL
-                    (
-                        fileName LIKE "%{$fileName}" AND
-                        lineNumber IN ($lineNumbers)
-                    ) OR
-                SQL;
-            }
-            $filtering = substr($filtering, 0, -3) . ')';
+            $filters[] = <<<SQL
+            repository = "{$repository}"
+            SQL;
         }
 
-        return !empty($filtering) ? 'AND ' . $filtering : '';
+        if ($parameterBag && $parameterBag->has(QueryParameter::OWNER)) {
+            /** @var string $owner */
+            $owner = $parameterBag->get(QueryParameter::OWNER);
+
+            $filters[] = <<<SQL
+            owner = "{$owner}"
+            SQL;
+        }
+
+        if ($parameterBag && $parameterBag->has(QueryParameter::PROVIDER)) {
+            /** @var Provider|null $provider */
+            $provider = $parameterBag->get(QueryParameter::PROVIDER);
+
+            $filters[] = <<<SQL
+            provider = "{$provider?->value}"
+            SQL;
+        }
+
+        return implode("\nAND ", $filters);
     }
 
-    private static function getLimit(?QueryParameterBag $parameterBag): string
+    /**
+     * Build a BQ query filter to scope particular queries to only specific commit(s).
+     *
+     * This can be either a single commit, or an array of commits.
+     *
+     * For example, convert this:
+     * ```php
+     * [
+     *     'commit-sha-1',
+     *     'commit-sha-2',
+     *     'commit-sha-3',
+     * ]
+     * ```
+     * into:
+     * ```sql
+     * commit IN ('commit-sha-1', 'commit-sha-2', 'commit-sha-3')
+     * ```
+     */
+    private static function getCommitScope(?QueryParameterBag $parameterBag): string
     {
-        $limit = '';
+        if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
+            /** @var string|string[] $commits */
+            $commits = $parameterBag->get(QueryParameter::COMMIT);
 
-        if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {
-            $limit = 'LIMIT ' . (string)$parameterBag->get(QueryParameter::LIMIT);
+            if (is_string($commits)) {
+                return <<<SQL
+                commit = "{$commits}"
+                SQL;
+            }
+
+            $commits = implode('","', $commits);
+
+            return <<<SQL
+            commit IN ("{$commits}")
+            SQL;
         }
 
-        return $limit;
+        return '';
+    }
+
+    /**
+     * Build a simple BigQuery limit clause.
+     *
+     * For example:
+     * ```sql
+     * LIMIT 100
+     * ```
+     */
+    private static function getLimit(?QueryParameterBag $parameterBag): string
+    {
+        if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {
+            return 'LIMIT ' . (string)$parameterBag->get(QueryParameter::LIMIT);
+        }
+
+        return '';
     }
 }

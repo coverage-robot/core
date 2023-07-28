@@ -20,7 +20,7 @@ class Upload implements JsonSerializable
         private readonly array $parent,
         private readonly string $ref,
         private readonly string|int|null $pullRequest,
-        private readonly string $tag,
+        private readonly Tag $tag,
         ?DateTimeInterface $ingestTime = null
     ) {
         if ($ingestTime) {
@@ -75,7 +75,7 @@ class Upload implements JsonSerializable
         return $this->parent;
     }
 
-    public function getTag(): string
+    public function getTag(): Tag
     {
         return $this->tag;
     }
@@ -102,7 +102,10 @@ class Upload implements JsonSerializable
                 json_decode($data['parent'], true, 512, JSON_THROW_ON_ERROR),
             (string)$data['ref'],
             isset($data['pullrequest']) ? (int)$data['pullrequest'] : null,
-            (string)$data['tag'],
+            new Tag(
+                (string)$data['tag'],
+                (string)$data['commit']
+            ),
             isset($data['ingesttime']) ?
                 DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime']) :
                 new DateTimeImmutable()
@@ -120,7 +123,7 @@ class Upload implements JsonSerializable
             'commit' => $this->commit,
             'parent' => $this->parent,
             'ref' => $this->ref,
-            'tag' => $this->tag
+            'tag' => $this->tag->getName()
         ];
 
         if ($this->pullRequest) {

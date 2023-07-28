@@ -2,20 +2,22 @@
 
 namespace App\Tests\Model;
 
-use App\Model\CachedPublishableCoverageData;
+use App\Model\CachingPublishableCoverageData;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\IntegerQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
-use App\Service\DiffParserService;
+use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
+use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CachedPublishableCoverageDataTest extends TestCase
 {
-    private CachedPublishableCoverageData|MockObject $cachedPublishableCoverageData;
+    private CachingPublishableCoverageData|MockObject $cachedPublishableCoverageData;
 
     private QueryService|MockObject $mockQueryService;
 
@@ -25,10 +27,15 @@ class CachedPublishableCoverageDataTest extends TestCase
 
         $this->mockQueryService = $this->createMock(QueryService::class);
 
-        $this->cachedPublishableCoverageData = new CachedPublishableCoverageData(
+        $upload = $this->createMock(Upload::class);
+        $upload->method('getProvider')
+            ->willReturn(Provider::GITHUB);
+
+        $this->cachedPublishableCoverageData = new CachingPublishableCoverageData(
             $this->mockQueryService,
             $this->createMock(DiffParserService::class),
-            $this->createMock(Upload::class),
+            $this->createMock(CarryforwardTagService::class),
+            $upload
         );
     }
 

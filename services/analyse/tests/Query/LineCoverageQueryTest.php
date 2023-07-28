@@ -3,11 +3,17 @@
 namespace App\Tests\Query;
 
 use App\Enum\QueryParameter;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\QueryInterface;
+use App\Query\Result\LineCoverageCollectionQueryResult;
+use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LineCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -15,188 +21,343 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         return [
             <<<SQL
-            WITH unnested AS (
+            WITH
+              unnested AS (
                 SELECT
-                    *,
-                    (
-                        SELECT
-                        IF (
-                          value <> '',
-                          CAST(value AS int),
-                          0
+                  *,
+                  (
+                    SELECT
+                      IF (
+                        value <> '',
+                        CAST(value AS int),
+                        0
+                      )
+                    FROM
+                      UNNEST(metadata)
+                    WHERE
+                      key = "lineHits"
+                  ) AS hits,
+                  ARRAY(
+                    SELECT
+                      SUM(
+                        CAST(branchHits AS INT64)
+                      )
+                    FROM
+                      UNNEST(
+                        JSON_VALUE_ARRAY(
+                          (
+                            SELECT
+                              value
+                            FROM
+                              UNNEST(metadata)
+                            WHERE
+                              KEY = "branchHits"
+                          )
                         )
-                        FROM
-                            UNNEST(metadata)
-                        WHERE
-                            key = "lineHits"
-                    ) AS hits,
-                    ARRAY(
-                        SELECT
-                            SUM(CAST(branchHits AS INT64))
-                        FROM
-                            UNNEST(
-                                JSON_VALUE_ARRAY(
-                                    (
-                                        SELECT
-                                            value
-                                        FROM
-                                            UNNEST(metadata)
-                                        WHERE
-                                            KEY = "branchHits"
-                                    )
-                                ) 
-                            ) AS branchHits WITH OFFSET AS branchIndex
-                        GROUP BY
-                            branchIndex,
-                            branchHits
-                    ) as branchHits
+                      ) AS branchHits
+                    WITH
+                      OFFSET AS branchIndex
+                    GROUP BY
+                      branchIndex,
+                      branchHits
+                  ) as branchHits
                 FROM
-                    `mock-table`
+                  `mock-table`
                 WHERE
-                    commit = 'mock-commit' AND
-                    owner = 'mock-owner' AND
-                    repository = 'mock-repository'
-                    AND (    (
-                    fileName LIKE "%mock-file" AND
-                    lineNumber IN (1,2,3)
-                ) OR    (
-                    fileName LIKE "%mock-file-2" AND
-                    lineNumber IN (10,11,12)
-                ))
-            ),
-            branchingLines AS (
+                  (
+                    (
+                      commit = "mock-commit"
+                      AND repository = "mock-repository"
+                      AND owner = "mock-owner"
+                      AND provider = "github"
+                    )
+                  )
+                  AND (
+                    (
+                      fileName = "mock-file"
+                      AND lineNumber IN (1, 2, 3)
+                    )
+                    OR(
+                      fileName = "mock-file-2"
+                      AND lineNumber IN (10, 11, 12)
+                    )
+                  )
+              ),
+              branchingLines AS (
                 SELECT
-                    fileName,
-                    lineNumber,
-                    SUM(hits) as hits,
-                    branchIndex,
-                    SUM(branchHit) > 0 as isBranchedLineHit
-                FROM 
-                    unnested,
-                    UNNEST(
-                        IF(
-                            ARRAY_LENGTH(branchHits) = 0,
-                            [hits],
-                            branchHits    
-                        )
-                    ) AS branchHit WITH OFFSET AS branchIndex
-                GROUP BY 
-                    fileName,
-                    lineNumber,
-                    branchIndex
-            ),
-            lines AS (
-                SELECT
-                    fileName,
-                    lineNumber,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MIN(CAST(isBranchedLineHit AS INT64)) = 0,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                  fileName,
+                  lineNumber,
+                  SUM(hits) as hits,
+                  branchIndex,
+                  SUM(branchHit) > 0 as isBranchedLineHit
                 FROM
-                    branchingLines
+                  unnested,
+                  UNNEST(
+                    IF(
+                      ARRAY_LENGTH(branchHits) = 0,
+                      [hits],
+                      branchHits
+                    )
+                  ) AS branchHit
+                WITH
+                  OFFSET AS branchIndex
                 GROUP BY
-                    fileName,
-                    lineNumber
-            )
+                  fileName,
+                  lineNumber,
+                  branchIndex
+              ),
+              lines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  IF(
+                    SUM(hits) = 0,
+                    "uncovered",
+                    IF (
+                      MIN(
+                        CAST(isBranchedLineHit AS INT64)
+                      ) = 0,
+                      "partial",
+                      "covered"
+                    )
+                  ) as state
+                FROM
+                  branchingLines
+                GROUP BY
+                  fileName,
+                  lineNumber
+              )
             SELECT
-                *
+              *
             FROM
-                lines
+              lines
             SQL,
             <<<SQL
-            WITH unnested AS (
+            WITH
+              unnested AS (
                 SELECT
-                    *,
-                    (
-                        SELECT
-                        IF (
-                          value <> '',
-                          CAST(value AS int),
-                          0
+                  *,
+                  (
+                    SELECT
+                      IF (
+                        value <> '',
+                        CAST(value AS int),
+                        0
+                      )
+                    FROM
+                      UNNEST(metadata)
+                    WHERE
+                      key = "lineHits"
+                  ) AS hits,
+                  ARRAY(
+                    SELECT
+                      SUM(
+                        CAST(branchHits AS INT64)
+                      )
+                    FROM
+                      UNNEST(
+                        JSON_VALUE_ARRAY(
+                          (
+                            SELECT
+                              value
+                            FROM
+                              UNNEST(metadata)
+                            WHERE
+                              KEY = "branchHits"
+                          )
                         )
-                        FROM
-                            UNNEST(metadata)
-                        WHERE
-                            key = "lineHits"
-                    ) AS hits,
-                    ARRAY(
-                        SELECT
-                            SUM(CAST(branchHits AS INT64))
-                        FROM
-                            UNNEST(
-                                JSON_VALUE_ARRAY(
-                                    (
-                                        SELECT
-                                            value
-                                        FROM
-                                            UNNEST(metadata)
-                                        WHERE
-                                            KEY = "branchHits"
-                                    )
-                                ) 
-                            ) AS branchHits WITH OFFSET AS branchIndex
-                        GROUP BY
-                            branchIndex,
-                            branchHits
-                    ) as branchHits
+                      ) AS branchHits
+                    WITH
+                      OFFSET AS branchIndex
+                    GROUP BY
+                      branchIndex,
+                      branchHits
+                  ) as branchHits
                 FROM
-                    `mock-table`
+                  `mock-table`
                 WHERE
-                    commit = 'mock-commit' AND
-                    owner = 'mock-owner' AND
-                    repository = 'mock-repository'
-                    
-            ),
-            branchingLines AS (
+                  (
+                    (
+                      commit = "mock-commit"
+                      AND repository = "mock-repository"
+                      AND owner = "mock-owner"
+                      AND provider = "github"
+                    )
+                  )
+              ),
+              branchingLines AS (
                 SELECT
-                    fileName,
-                    lineNumber,
-                    SUM(hits) as hits,
-                    branchIndex,
-                    SUM(branchHit) > 0 as isBranchedLineHit
-                FROM 
-                    unnested,
-                    UNNEST(
-                        IF(
-                            ARRAY_LENGTH(branchHits) = 0,
-                            [hits],
-                            branchHits    
-                        )
-                    ) AS branchHit WITH OFFSET AS branchIndex
-                GROUP BY 
-                    fileName,
-                    lineNumber,
-                    branchIndex
-            ),
-            lines AS (
-                SELECT
-                    fileName,
-                    lineNumber,
-                    IF(
-                        SUM(hits) = 0,
-                        "uncovered",
-                        IF (
-                            MIN(CAST(isBranchedLineHit AS INT64)) = 0,
-                            "partial",
-                            "covered"
-                        )
-                    ) as state
+                  fileName,
+                  lineNumber,
+                  SUM(hits) as hits,
+                  branchIndex,
+                  SUM(branchHit) > 0 as isBranchedLineHit
                 FROM
-                    branchingLines
+                  unnested,
+                  UNNEST(
+                    IF(
+                      ARRAY_LENGTH(branchHits) = 0,
+                      [hits],
+                      branchHits
+                    )
+                  ) AS branchHit
+                WITH
+                  OFFSET AS branchIndex
                 GROUP BY
-                    fileName,
-                    lineNumber
-            )
+                  fileName,
+                  lineNumber,
+                  branchIndex
+              ),
+              lines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  IF(
+                    SUM(hits) = 0,
+                    "uncovered",
+                    IF (
+                      MIN(
+                        CAST(isBranchedLineHit AS INT64)
+                      ) = 0,
+                      "partial",
+                      "covered"
+                    )
+                  ) as state
+                FROM
+                  branchingLines
+                GROUP BY
+                  fileName,
+                  lineNumber
+              )
             SELECT
-                *
+              *
             FROM
-                lines
+              lines
+            SQL,
+            <<<SQL
+            WITH
+              unnested AS (
+                SELECT
+                  *,
+                  (
+                    SELECT
+                      IF (
+                        value <> '',
+                        CAST(value AS int),
+                        0
+                      )
+                    FROM
+                      UNNEST(metadata)
+                    WHERE
+                      key = "lineHits"
+                  ) AS hits,
+                  ARRAY(
+                    SELECT
+                      SUM(
+                        CAST(branchHits AS INT64)
+                      )
+                    FROM
+                      UNNEST(
+                        JSON_VALUE_ARRAY(
+                          (
+                            SELECT
+                              value
+                            FROM
+                              UNNEST(metadata)
+                            WHERE
+                              KEY = "branchHits"
+                          )
+                        )
+                      ) AS branchHits
+                    WITH
+                      OFFSET AS branchIndex
+                    GROUP BY
+                      branchIndex,
+                      branchHits
+                  ) as branchHits
+                FROM
+                  `mock-table`
+                WHERE
+                  (
+                    (
+                      commit = "mock-commit"
+                      AND repository = "mock-repository"
+                      AND owner = "mock-owner"
+                      AND provider = "github"
+                    )
+                    OR (
+                      (
+                        (
+                          commit = "mock-commit"
+                          AND tag = "1"
+                        )
+                        OR (
+                          commit = "mock-commit"
+                          AND tag = "2"
+                        )
+                        OR (
+                          commit = "mock-commit-2"
+                          AND tag = "3"
+                        )
+                        OR (
+                          commit = "mock-commit-2"
+                          AND tag = "4"
+                        )
+                      )
+                      AND repository = "mock-repository"
+                      AND owner = "mock-owner"
+                      AND provider = "github"
+                    )
+                  )
+              ),
+              branchingLines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  SUM(hits) as hits,
+                  branchIndex,
+                  SUM(branchHit) > 0 as isBranchedLineHit
+                FROM
+                  unnested,
+                  UNNEST(
+                    IF(
+                      ARRAY_LENGTH(branchHits) = 0,
+                      [hits],
+                      branchHits
+                    )
+                  ) AS branchHit
+                WITH
+                  OFFSET AS branchIndex
+                GROUP BY
+                  fileName,
+                  lineNumber,
+                  branchIndex
+              ),
+              lines AS (
+                SELECT
+                  fileName,
+                  lineNumber,
+                  IF(
+                    SUM(hits) = 0,
+                    "uncovered",
+                    IF (
+                      MIN(
+                        CAST(isBranchedLineHit AS INT64)
+                      ) = 0,
+                      "partial",
+                      "covered"
+                    )
+                  ) as state
+                FROM
+                  branchingLines
+                GROUP BY
+                  fileName,
+                  lineNumber
+              )
+            SELECT
+              *
+            FROM
+              lines
             SQL
         ];
     }
@@ -219,7 +380,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             'tag' => 'mock-tag',
         ]);
 
-        $scopedParameters = new QueryParameterBag();
+        $scopedParameters = QueryParameterBag::fromUpload($upload);
         $scopedParameters->set(
             QueryParameter::LINE_SCOPE,
             [
@@ -227,11 +388,110 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 'mock-file-2' => [10, 11, 12]
             ]
         );
-        $scopedParameters->set(QueryParameter::UPLOAD, $upload);
+
+        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters->set(
+            QueryParameter::CARRYFORWARD_TAGS,
+            [
+                new Tag('1', 'mock-commit'),
+                new Tag('2', 'mock-commit'),
+                new Tag('3', 'mock-commit-2'),
+                new Tag('4', 'mock-commit-2')
+            ]
+        );
 
         return [
             $scopedParameters,
-            QueryParameterBag::fromUpload($upload)
+            ...parent::getQueryParameters(),
+            $carryforwardParameters
+        ];
+    }
+
+    #[DataProvider('resultsDataProvider')]
+    public function testParseResults(array $queryResult): void
+    {
+        $mockBigQueryResult = $this->createMock(QueryResults::class);
+        $mockBigQueryResult->expects($this->once())
+            ->method('isComplete')
+            ->willReturn(true);
+        $mockBigQueryResult->expects($this->once())
+            ->method('rows')
+            ->willReturn($queryResult);
+
+        $result = $this->getQueryClass()
+            ->parseResults($mockBigQueryResult);
+
+        $this->assertInstanceOf(LineCoverageCollectionQueryResult::class, $result);
+    }
+
+    #[DataProvider('parametersDataProvider')]
+    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
+    {
+        if (!$valid) {
+            $this->expectException(QueryException::class);
+        } else {
+            $this->expectNotToPerformAssertions();
+        }
+
+        $this->getQueryClass()->validateParameters($parameters);
+    }
+
+    public static function resultsDataProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'fileName' => 'mock-file',
+                        'lineNumber' => 1,
+                        'state' => LineState::COVERED->value,
+                    ],
+                ],
+            ],
+            [
+                [
+                    [
+                        'fileName' => 'mock-file',
+                        'lineNumber' => 1,
+                        'state' => LineState::COVERED->value,
+                    ],
+                    [
+                        'fileName' => 'mock-file-2',
+                        'lineNumber' => 2,
+                        'state' => LineState::UNCOVERED->value,
+                    ],
+                    [
+                        'fileName' => 'mock-fil-3',
+                        'lineNumber' => 3,
+                        'state' => LineState::PARTIAL->value,
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    public static function parametersDataProvider(): array
+    {
+        return [
+            [
+                new QueryParameterBag(),
+                false
+            ],
+            [
+                QueryParameterBag::fromUpload(
+                    Upload::from([
+                        'provider' => Provider::GITHUB->value,
+                        'owner' => 'mock-owner',
+                        'repository' => 'mock-repository',
+                        'commit' => 'mock-commit',
+                        'uploadId' => 'mock-uploadId',
+                        'ref' => 'mock-ref',
+                        'parent' => [],
+                        'tag' => 'mock-tag',
+                    ])
+                ),
+                true
+            ],
         ];
     }
 }

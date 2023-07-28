@@ -34,7 +34,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($upload, $data)}
         </details>
 
-        *Last update to `{$upload->getTag()}` at {$upload->getIngestTime()->format('H:i')}*
+        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i')}*
         MARKDOWN;
     }
 
@@ -55,7 +55,11 @@ class PullRequestCommentFormatterService
                 array_map(
                     static fn (TagCoverageQueryResult $tag) => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
-                        $tag->getTag(),
+                        sprintf(
+                            '%s%s',
+                            $tag->getTag()->getName(),
+                            $tag->getTag()->getCommit() != $upload->getCommit() ? sprintf('<br><sub>(Carried forward from %s)</sub>', $tag->getTag()->getCommit()) : ''
+                        ),
                         $tag->getLines(),
                         $tag->getCovered(),
                         $tag->getPartial(),

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Service\Diff;
 
+use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
-use App\Service\DiffParserService;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class DiffParserServiceTest extends TestCase
 {
@@ -42,6 +43,34 @@ class DiffParserServiceTest extends TestCase
                     'tag' => 'tag',
                 ])
             )
+        );
+    }
+
+    public function testGetUsingInvalidProvider(): void
+    {
+        $mockParser = $this->createMock(GithubDiffParserService::class);
+        $mockParser->expects($this->never())
+            ->method('get');
+
+        $diffParser = new DiffParserService(
+            [
+                'a-different-provider' => $mockParser,
+            ]
+        );
+
+        $this->expectException(RuntimeException::class);
+
+        $diffParser->get(
+            Upload::from([
+                'provider' => Provider::GITHUB->value,
+                'owner' => 'owner',
+                'repository' => 'repository',
+                'commit' => 'commit',
+                'uploadId' => 'uploadId',
+                'ref' => 'ref',
+                'parent' => [],
+                'tag' => 'tag',
+            ])
         );
     }
 }

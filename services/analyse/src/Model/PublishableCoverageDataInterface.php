@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use App\Query\Result\MultiFileCoverageQueryResult;
-use App\Query\Result\MultiLineCoverageQueryResult;
-use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Query\Result\TagCoverageCollectionQueryResult;
 
 interface PublishableCoverageDataInterface
 {
@@ -42,15 +42,15 @@ interface PublishableCoverageDataInterface
      * Get the coverage percentage for each file in the PR diff, ordered by least covered
      * first.
      */
-    public function getLeastCoveredDiffFiles(int $limit): MultiFileCoverageQueryResult;
+    public function getLeastCoveredDiffFiles(int $limit): FileCoverageCollectionQueryResult;
 
     /**
      * Get the coverage per line of the PR diff.
      */
-    public function getDiffLineCoverage(): MultiLineCoverageQueryResult;
+    public function getDiffLineCoverage(): LineCoverageCollectionQueryResult;
 
     /**
      * Get the total coverage percentage for each tag.
      */
-    public function getTagCoverage(): MultiTagCoverageQueryResult;
+    public function getTagCoverage(): TagCoverageCollectionQueryResult;
 }

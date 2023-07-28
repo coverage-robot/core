@@ -13,6 +13,7 @@
         "async-aws/event-bridge": "^1.5",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
+        "doctrine/sql-formatter": "^1.1",
         "google/cloud-bigquery": "^1.24",
         "knplabs/github-api": "^3.11",
         "lcobucci/jwt": "^5.0",

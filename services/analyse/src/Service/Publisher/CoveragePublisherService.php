@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Publisher;
 
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;

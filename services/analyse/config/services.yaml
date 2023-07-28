@@ -17,5 +17,10 @@ services:
 
     Psr\Container\ContainerInterface: '@service_container'
 
-    SebastianBergmann\Diff\Parser:
-        autowire: true
+    SebastianBergmann\Diff\Parser: ~
+
+    Doctrine\SqlFormatter\NullHighlighter: ~
+
+    Doctrine\SqlFormatter\SqlFormatter:
+        arguments:
+            $highlighter: '@Doctrine\SqlFormatter\NullHighlighter'

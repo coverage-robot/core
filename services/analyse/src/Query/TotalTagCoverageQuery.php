@@ -4,13 +4,16 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\MultiTagCoverageQueryResult;
+use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Trait\CarryforwardAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
+    use CarryforwardAwareTrait;
+
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -21,6 +24,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             tag,
+            commit,
             COUNT(*) as lines,
             COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
             COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
@@ -37,7 +41,8 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         FROM
             lines
         GROUP BY
-            tag
+            tag,
+            commit
         SQL;
     }
 
@@ -56,6 +61,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 fileName,
                 lineNumber,
                 tag,
+                commit,
                 SUM(hits) as hits,
                 branchIndex,
                 SUM(branchHit) > 0 as isBranchedLineHit
@@ -72,11 +78,13 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 fileName,
                 lineNumber,
                 tag,
+                commit,
                 branchIndex
         ),
         lines AS (
             SELECT
                 tag,
+                commit,
                 fileName,
                 lineNumber,
                 IF(
@@ -92,9 +100,23 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 branchingLines
             GROUP BY
                 tag,
+                commit,
                 fileName,
                 lineNumber
         )
+        SQL;
+    }
+
+    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
+    {
+        $parent = parent::getUnnestQueryFiltering($parameterBag);
+        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '' ;
+
+        return <<<SQL
+        (
+            {$parent}
+        )
+        {$carryforwardScope}
         SQL;
     }
 
@@ -102,7 +124,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): MultiTagCoverageQueryResult
+    public function parseResults(QueryResults $results): TagCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -110,6 +132,6 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 
         $rows = $results->rows();
 
-        return MultiTagCoverageQueryResult::from($rows);
+        return TagCoverageCollectionQueryResult::from($rows);
     }
 }

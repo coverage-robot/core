@@ -5,13 +5,22 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Query\Trait\ScopeAwareTrait;
 use Packages\Models\Model\Upload;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
+    use ScopeAwareTrait;
+
     public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
     {
-        return '';
+        $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? $scope : '';
+        $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
+
+        return <<<SQL
+        {$commitScope}
+        {$repositoryScope}
+        SQL;
     }
 
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
@@ -57,9 +66,6 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             FROM
                 `$table`
             WHERE
-                commit = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getCommit()}' AND
-                owner = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getOwner()}' AND
-                repository = '{$parameterBag?->get(QueryParameter::UPLOAD)?->getRepository()}'
                 {$this->getUnnestQueryFiltering($parameterBag)}
         )
         SQL;

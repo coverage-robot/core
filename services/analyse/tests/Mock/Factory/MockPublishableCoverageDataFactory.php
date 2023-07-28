@@ -4,7 +4,8 @@ namespace App\Tests\Mock\Factory;
 
 use App\Model\PublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
-use App\Service\DiffParserService;
+use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,11 +24,10 @@ class MockPublishableCoverageDataFactory
             ->setConstructorArgs([
                 $queryService ?? self::getMockQueryService($test),
                 $diffParser ?? self::getMockDiffParser($test),
-                $upload ?? self::getMockUpload($test)
+                $carryforwardTagService ?? self::getMockCarryforwardTagService($test),
+                $upload ?? self::getMockUpload($test),
             ])
-            ->onlyMethods(
-                array_keys($methodsAndReturns)
-            )
+            ->onlyMethods(array_keys($methodsAndReturns))
             ->getMock();
 
         foreach ($methodsAndReturns as $method => $return) {
@@ -55,6 +55,13 @@ class MockPublishableCoverageDataFactory
     private static function getMockUpload(TestCase $test): Upload|MockObject
     {
         return $test->getMockBuilder(Upload::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    private static function getMockCarryforwardTagService(TestCase $test): CarryforwardTagService|MockObject
+    {
+        return $test->getMockBuilder(CarryforwardTagService::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
