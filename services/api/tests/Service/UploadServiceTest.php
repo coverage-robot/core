@@ -20,6 +20,22 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UploadServiceTest extends TestCase
 {
+    public function testGetMissingSigningParametersFromRequest(): void
+    {
+        $uploadService = new UploadService(
+            $this->createMock(UploadSignerService::class),
+            $this->createMock(EnvironmentService::class),
+            $this->createMock(UniqueIdGeneratorService::class),
+            new NullLogger()
+        );
+
+        $request = new Request([], [], [], [], [], [], json_encode([]));
+
+        $this->expectException(SigningException::class);
+
+        $uploadService->getSigningParametersFromRequest($request);
+    }
+
     #[DataProvider('signingParametersDataProvider')]
     public function testGetSigningParametersFromRequest(array $parameters, ?SigningParameters $expectedParameters): void
     {

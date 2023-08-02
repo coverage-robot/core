@@ -11,7 +11,7 @@ use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class IngestSuccessEventProcessorTest extends TestCase
+class AnalyseSuccessEventProcessorTest extends TestCase
 {
     public function testMalformedEventProcess(): void
     {
@@ -30,7 +30,7 @@ class IngestSuccessEventProcessorTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => json_encode([
+                    'detail' => [
                         'upload' => [
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
@@ -42,7 +42,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'tag' => 'mock-tag',
                         ],
                         'coveragePercentage' => 'not-a-float'
-                    ])
+                    ]
                 ]
             )
         );
@@ -65,7 +65,7 @@ class IngestSuccessEventProcessorTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => json_encode([
+                    'detail' => [
                         'upload' => [
                             'provider' => Provider::GITHUB->value,
                             'owner' => 'mock-owner',
@@ -77,7 +77,7 @@ class IngestSuccessEventProcessorTest extends TestCase
                             'tag' => 'mock-tag',
                         ],
                         'coveragePercentage' => 99
-                    ])
+                    ]
                 ]
             )
         );

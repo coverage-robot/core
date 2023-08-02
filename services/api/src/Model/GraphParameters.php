@@ -3,8 +3,9 @@
 namespace App\Model;
 
 use App\Exception\GraphException;
-use Exception;
+use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
+use ValueError;
 
 class GraphParameters implements ParametersInterface
 {
@@ -49,8 +50,10 @@ class GraphParameters implements ParametersInterface
                 (string)$data['repository'],
                 Provider::from((string)$data['provider'])
             );
-        } catch (Exception $e) {
-            throw GraphException::invalidParameters($e);
+        } catch (ValueError $e) {
+            throw GraphException::invalidParameters(
+                new InvalidArgumentException($e->getMessage())
+            );
         }
     }
 }
