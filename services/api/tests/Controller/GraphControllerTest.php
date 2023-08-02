@@ -22,28 +22,28 @@ class GraphControllerTest extends KernelTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())
-            ->method("getGraphTokenFromRequest")
+            ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
-            ->willReturn("mock-graph-token");
+            ->willReturn('mock-graph-token');
 
         $mockAuthTokenService->expects($this->once())
-            ->method("validateParametersWithGraphToken")
-            ->with($this->isInstanceOf(GraphParameters::class), "mock-graph-token")
+            ->method('validateParametersWithGraphToken')
+            ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
             ->willReturn(true);
 
         $mockProjectRepository->expects($this->once())
-            ->method("findOneBy")
+            ->method('findOneBy')
             ->with([
-                "provider" => Provider::GITHUB->value,
-                "owner" => "owner",
-                "repository" => "repository",
+                'provider' => Provider::GITHUB->value,
+                'owner' => 'owner',
+                'repository' => 'repository',
             ])
             ->willReturn($this->createMock(Project::class));
 
         $mockBadgeService->expects($this->once())
-            ->method("getBadge")
+            ->method('getBadge')
             ->with($this->isInstanceOf(Project::class))
-            ->willReturn("<svg></svg>");
+            ->willReturn('<svg></svg>');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 
@@ -52,7 +52,7 @@ class GraphControllerTest extends KernelTestCase
         $response = $uploadController->badge(Provider::GITHUB->value, 'owner', 'repository', new Request());
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals("<svg></svg>", $response->getContent());
+        $this->assertEquals('<svg></svg>', $response->getContent());
     }
 
     public function testBadgeWithInvalidToken(): void
@@ -62,20 +62,20 @@ class GraphControllerTest extends KernelTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())
-            ->method("getGraphTokenFromRequest")
+            ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
-            ->willReturn("mock-graph-token");
+            ->willReturn('mock-graph-token');
 
         $mockAuthTokenService->expects($this->once())
-            ->method("validateParametersWithGraphToken")
-            ->with($this->isInstanceOf(GraphParameters::class), "mock-graph-token")
+            ->method('validateParametersWithGraphToken')
+            ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
             ->willReturn(false);
 
         $mockProjectRepository->expects($this->never())
-            ->method("findOneBy");
+            ->method('findOneBy');
 
         $mockBadgeService->expects($this->never())
-            ->method("getBadge");
+            ->method('getBadge');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 
@@ -96,18 +96,18 @@ class GraphControllerTest extends KernelTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())
-            ->method("getGraphTokenFromRequest")
+            ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
             ->willReturn(null);
 
         $mockAuthTokenService->expects($this->never())
-            ->method("validateParametersWithGraphToken");
+            ->method('validateParametersWithGraphToken');
 
         $mockProjectRepository->expects($this->never())
-            ->method("findOneBy");
+            ->method('findOneBy');
 
         $mockBadgeService->expects($this->never())
-            ->method("getBadge");
+            ->method('getBadge');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 
@@ -128,18 +128,18 @@ class GraphControllerTest extends KernelTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->never())
-            ->method("getGraphTokenFromRequest")
+            ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
             ->willReturn(null);
 
         $mockAuthTokenService->expects($this->never())
-            ->method("validateParametersWithGraphToken");
+            ->method('validateParametersWithGraphToken');
 
         $mockProjectRepository->expects($this->never())
-            ->method("findOneBy");
+            ->method('findOneBy');
 
         $mockBadgeService->expects($this->never())
-            ->method("getBadge");
+            ->method('getBadge');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 
