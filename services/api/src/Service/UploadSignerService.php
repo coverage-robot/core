@@ -2,15 +2,17 @@
 
 namespace App\Service;
 
+use App\Client\PresignableClientInterface;
 use App\Model\SignedUrl;
 use AsyncAws\S3\Input\PutObjectRequest;
-use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class UploadSignerService
 {
     public function __construct(
-        private readonly S3Client $s3Client
+        #[Autowire(service: 'App\Client\S3Client')]
+        private readonly PresignableClientInterface $client
     ) {
     }
 
@@ -18,7 +20,7 @@ class UploadSignerService
     {
         return new SignedUrl(
             $uploadId,
-            $this->signS3Request($input, $expiry),
+            $this->signRequest($input, $expiry),
             $expiry
         );
     }
@@ -27,9 +29,9 @@ class UploadSignerService
      * Sign the S3 PUT request, so that it can be returned, and then used to
      * upload the coverage file to S3.
      */
-    private function signS3Request(PutObjectRequest $input, DateTimeImmutable $expiry): string
+    private function signRequest(PutObjectRequest $input, DateTimeImmutable $expiry): string
     {
-        return $this->s3Client->presign(
+        return $this->client->presign(
             $input,
             $expiry,
         );
