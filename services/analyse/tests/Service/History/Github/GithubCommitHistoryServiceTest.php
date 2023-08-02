@@ -41,7 +41,7 @@ class GithubCommitHistoryServiceTest extends TestCase
     public static function commitDataProvider(): array
     {
         return [
-            "No commits" => [
+            'No commits' => [
                 [
                     'data' => [
                         'repository' => [
@@ -57,7 +57,7 @@ class GithubCommitHistoryServiceTest extends TestCase
                 ],
                 []
             ],
-            "Multiple commits" => [
+            'Multiple commits' => [
                 [
                     'data' => [
                         'repository' => [
