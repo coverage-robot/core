@@ -10,6 +10,7 @@ use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Result\CommitQueryResult;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
+use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
@@ -69,14 +70,16 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      */
     private function getCurrentTags(Upload $upload): array
     {
-        return $this->queryService->runQuery(CommitTagsQuery::class, QueryParameterBag::fromUpload($upload))
-            ->getCommits()[0]
-            ?->getTags()
-            ?? [];
+        /**
+         * @var CommitCollectionQueryResult $tags
+         */
+        $tags = $this->queryService->runQuery(CommitTagsQuery::class, QueryParameterBag::fromUpload($upload));
+
+        return $tags->getCommits()[0]->getTags();
     }
 
     /**
-     * @throws QueryException
+     * @throws QueryException|GoogleException
      */
     private function getParentCommitTags(Upload $upload): CommitCollectionQueryResult
     {

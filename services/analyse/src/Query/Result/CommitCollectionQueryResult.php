@@ -33,6 +33,9 @@ class CommitCollectionQueryResult implements QueryResultInterface
         return new self($commits);
     }
 
+    /**
+     * @return CommitQueryResult[]
+     */
     public function getCommits(): array
     {
         return $this->commits;
