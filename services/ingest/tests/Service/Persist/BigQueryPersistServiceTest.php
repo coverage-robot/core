@@ -15,6 +15,7 @@ use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Statement;
+use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -40,7 +41,7 @@ class BigQueryPersistServiceTest extends TestCase
             [],
             'mock-branch-reference',
             1,
-            'mock-tag'
+            new Tag('mock-tag', '')
         );
 
         $insertResponse = $this->createMock(InsertResponse::class);

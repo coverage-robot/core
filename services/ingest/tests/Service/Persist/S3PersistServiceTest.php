@@ -14,6 +14,7 @@ use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -72,7 +73,7 @@ class S3PersistServiceTest extends TestCase
                 ['2'],
                 'mock-branch-reference',
                 1234,
-                'backend',
+                new Tag('backend', ''),
                 new DateTimeImmutable('2023-05-02 12:00:00')
             ),
             $coverage
@@ -133,7 +134,7 @@ class S3PersistServiceTest extends TestCase
                 ['2'],
                 'mock-branch-reference',
                 1234,
-                'backend',
+                new Tag('backend', ''),
                 new DateTimeImmutable('2023-05-02 12:00:00')
             ),
             $coverage,
