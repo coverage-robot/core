@@ -34,7 +34,7 @@ class AuthTokenServiceTest extends TestCase
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $token = $authTokenService->getUploadTokenFromRequest(
-            new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [], content: "{}")
+            new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [], content: '{}')
         );
 
         $this->assertEquals($expectedResponse, $token);
