@@ -191,7 +191,7 @@ class AuthTokenService
                     'tokenType' => $tokenType,
                 ]
             );
-            
+
             throw TokenException::failedToCreateToken($attempts);
         }
 
