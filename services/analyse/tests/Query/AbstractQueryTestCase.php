@@ -41,6 +41,7 @@ abstract class AbstractQueryTestCase extends TestCase
                     'ref' => 'mock-ref',
                     'parent' => [],
                     'tag' => 'mock-tag',
+                    'ingestTime' => '2021-01-01T00:00:00+00:00'
                 ])
             )
         ];
