@@ -25,7 +25,7 @@ class TotalUploadsQuery implements QueryInterface
         // is after what we're currently uploading.
         $ingestTimeScope = sprintf(
             'ingestTime <= "%s"',
-            $parameterBag->get(QueryParameter::UPLOAD)
+            $parameterBag?->get(QueryParameter::UPLOAD)
                 ->getIngestTime()
                 ->format('Y-m-d H:i:s')
         );

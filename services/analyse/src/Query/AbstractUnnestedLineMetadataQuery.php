@@ -22,7 +22,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         // is after what we're currently uploading.
         $ingestTimeScope = sprintf(
             'AND ingestTime <= "%s"',
-            $parameterBag->get(QueryParameter::UPLOAD)
+            $parameterBag?->get(QueryParameter::UPLOAD)
                 ->getIngestTime()
                 ->format('Y-m-d H:i:s')
         );

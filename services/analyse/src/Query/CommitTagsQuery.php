@@ -25,7 +25,7 @@ class CommitTagsQuery implements QueryInterface
         // is after what we're currently uploading.
         $ingestTimeScope = sprintf(
             'ingestTime <= "%s"',
-            $parameterBag->get(QueryParameter::UPLOAD)
+            $parameterBag?->get(QueryParameter::UPLOAD)
                 ->getIngestTime()
                 ->format('Y-m-d H:i:s')
         );
@@ -74,6 +74,10 @@ class CommitTagsQuery implements QueryInterface
             throw new QueryException(
                 sprintf('Query %s requires parameters to be provided.', self::class)
             );
+        }
+
+        if (!$parameterBag->has(QueryParameter::UPLOAD)) {
+            throw QueryException::invalidParameters(QueryParameter::UPLOAD);
         }
 
         if (
