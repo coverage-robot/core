@@ -19,6 +19,17 @@ class CarryforwardTagServiceTest extends TestCase
         $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
         $mockQueryService = $this->createMock(QueryService::class);
 
+        $mockCommitHistoryService->expects($this->once())
+            ->method('getPrecedingCommits')
+            ->willReturn([
+                'mock-commit-2',
+                'mock-commit-3',
+                'mock-commit-4',
+                'mock-commit-5',
+                'mock-commit-6',
+                'mock-commit-7'
+            ]);
+
         $carryforwardTagService = new CarryforwardTagService(
             $mockCommitHistoryService,
             $mockQueryService,
@@ -29,7 +40,7 @@ class CarryforwardTagServiceTest extends TestCase
             [
                 'uploadId' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
-                'commit' => 'mock-commit',
+                'commit' => 'mock-commit-1',
                 'parent' => ['mock-parent'],
                 'ref' => 'mock-ref',
                 'owner' => 'owner',
@@ -53,11 +64,15 @@ class CarryforwardTagServiceTest extends TestCase
                         'tags' => ['tag-1', 'tag-2']
                     ],
                     [
-                        'commit' => 'mock-commit-3',
+                        'commit' => 'mock-commit-4',
                         'tags' => [ 'tag-2']
                     ],
                     [
-                        'commit' => 'mock-commit-4',
+                        'commit' => 'mock-commit-5',
+                        'tags' => [ 'tag-4']
+                    ],
+                    [
+                        'commit' => 'mock-commit-7',
                         'tags' => [ 'tag-3']
                     ]
                 ])
@@ -69,7 +84,7 @@ class CarryforwardTagServiceTest extends TestCase
             [
                 new Tag('tag-1', 'mock-commit-2'),
                 new Tag('tag-2', 'mock-commit-2'),
-                new Tag('tag-3', 'mock-commit-4')
+                new Tag('tag-3', 'mock-commit-7')
             ],
             $tags
         );

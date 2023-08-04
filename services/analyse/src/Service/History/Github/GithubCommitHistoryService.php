@@ -40,7 +40,9 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
      */
     public function getPrecedingCommits(Upload $upload): array
     {
-        $maxCommits = self::MAX_COMMITS;
+        // The first commit returned from the API will be the one associated with the
+        // upload, so it needs to be offset by 1 to match the maximum number of commits
+        $maxCommits = self::MAX_COMMITS + 1;
 
         $this->githubClient->authenticateAsRepositoryOwner($upload->getOwner());
 
@@ -79,11 +81,26 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $result = $result['data']['repository']['ref']['target']['history']['edges'] ?? [];
 
         $commits = array_map(
-            static fn(array $commit) => $commit['node']['oid'] ?? null,
+            static function (array $commit) use ($upload): ?string {
+                if (
+                    isset($commit['node']['oid']) &&
+                    $commit['node']['oid'] !== $upload->getCommit()
+                ) {
+                    /**
+                     * The Github API will return the current commit (the one associated with
+                     * this upload), meaning we want to filter that out of the results, so that the
+                     * returned commits are **only** those which preceded the upload
+                     */
+                    return $commit['node']['oid'];
+                }
+
+                return null;
+            },
             $result
         );
 
-        return array_filter($commits);
+        // Remove any nulls and re-index the array
+        return array_values(array_filter($commits));
     }
 
     public static function getProvider(): string
