@@ -140,21 +140,23 @@ class CloverParseStrategy implements ParseStrategyInterface
                 $lineNumber = (int)$reader->getAttribute('num');
                 $lineHits = (int)$reader->getAttribute('count');
 
-                end($files)->setLine(
-                    match ($type) {
-                        self::METHOD => new Method($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
-                        self::STATEMENT => new Statement($lineNumber, $lineHits),
-                        self::CONDITION => new Branch(
-                            $lineNumber,
-                            $lineHits,
-                            [
-                                0 => (int)$reader->getAttribute('falsecount'),
-                                1 => (int)$reader->getAttribute('truecount')
-                            ]
-                        ),
-                        default => throw ParseException::lineTypeParseException($type ?? 'NULL')
-                    }
-                );
+                $line = match ($type) {
+                    self::METHOD => new Method($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
+                    self::STATEMENT => new Statement($lineNumber, $lineHits),
+                    self::CONDITION => new Branch(
+                        $lineNumber,
+                        $lineHits,
+                        [
+                            0 => (int)$reader->getAttribute('falsecount'),
+                            1 => (int)$reader->getAttribute('truecount')
+                        ]
+                    ),
+                    default => null
+                };
+
+                if ($line !== null) {
+                    end($files)->setLine($line);
+                }
                 break;
         }
 

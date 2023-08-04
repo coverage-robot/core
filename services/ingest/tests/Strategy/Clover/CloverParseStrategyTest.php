@@ -19,6 +19,17 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
                 'invalid-file-content',
                 false,
                 []
+            ],
+            'Does not handle invalid schema file' => [
+                'mock/project/root',
+                <<<XML
+                <?xml version="1.0" encoding="UTF-8"?>
+                <coverage generatedAt="abc" clover="-99">
+                  <project timestamp="1686599618433" name="All files"></project>
+                </coverage>
+                XML,
+                false,
+                []
             ]
         ];
     }
