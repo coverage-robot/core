@@ -34,6 +34,7 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
               `mock-table`
             WHERE
               commit = "mock-commit"
+              AND ingestTime <= "2021-01-01 00:00:00"
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
@@ -48,6 +49,7 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
               `mock-table`
             WHERE
               commit IN ("mock-commit", "mock-commit-2")
+              AND ingestTime <= "2021-01-01 00:00:00"
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
@@ -68,6 +70,7 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
             'ref' => 'mock-ref',
             'parent' => [],
             'tag' => 'mock-tag',
+            'ingestTime' => '2021-01-01T00:00:00+00:00'
         ]);
 
         $multipleCommitParameters = QueryParameterBag::fromUpload($upload);
