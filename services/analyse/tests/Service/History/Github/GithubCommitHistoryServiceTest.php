@@ -25,6 +25,10 @@ class GithubCommitHistoryServiceTest extends TestCase
         $githubClient = $this->createMock(GithubAppInstallationClient::class);
         $gqlClient = $this->createMock(GraphQL::class);
 
+        $mockUpload = $this->createMock(Upload::class);
+        $mockUpload->method('getCommit')
+            ->willReturn('uploaded-commit');
+
         $githubClient->expects($this->once())
             ->method('graphql')
             ->willReturn($gqlClient);
@@ -35,7 +39,7 @@ class GithubCommitHistoryServiceTest extends TestCase
 
         $service = new GithubCommitHistoryService($githubClient);
 
-        $this->assertEquals($expectedCommits, $service->getPrecedingCommits($this->createMock(Upload::class)));
+        $this->assertEquals($expectedCommits, $service->getPrecedingCommits($mockUpload));
     }
 
     public static function commitDataProvider(): array
@@ -65,6 +69,11 @@ class GithubCommitHistoryServiceTest extends TestCase
                                 'target' => [
                                     'history' => [
                                         'edges' => [
+                                            [
+                                                'node' => [
+                                                    'oid' => 'uploaded-commit'
+                                                ]
+                                            ],
                                             [
                                                 'node' => [
                                                     'oid' => '1234567890'
