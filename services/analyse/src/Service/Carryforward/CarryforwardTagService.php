@@ -34,11 +34,10 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
         $carryforwardTags = [];
 
-        /** @var CommitQueryResult $commitAndTag */
-        foreach ($carryableCommitTags->getCommits() as $commitAndTag) {
+        foreach ($carryableCommitTags as $tags) {
             /** @var Tag[] $tagsNotSeen */
             $tagsNotSeen = array_udiff(
-                $commitAndTag->getTags(),
+                $tags,
                 [...$uploadedTags, ...$carryforwardTags],
                 static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
             );
@@ -79,14 +78,17 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
+     * @return Tag[][]
      * @throws QueryException|GoogleException
      */
-    private function getParentCommitTags(Upload $upload): CommitCollectionQueryResult
+    private function getParentCommitTags(Upload $upload): array
     {
+        $commitHistory = $this->commitHistoryService->getPrecedingCommits($upload);
+
         $precedingUploadedTags = QueryParameterBag::fromUpload($upload);
         $precedingUploadedTags->set(
             QueryParameter::COMMIT,
-            $this->commitHistoryService->getPrecedingCommits($upload)
+            $commitHistory
         );
 
         $results = $this->queryService->runQuery(
@@ -104,6 +106,23 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             );
         }
 
-        return $results;
+        return $this->mapTagsToCommitHistory($commitHistory, $results);
+    }
+
+    private function mapTagsToCommitHistory(array $commitHistory, CommitCollectionQueryResult $uploadedCommits): array
+    {
+        $history = [];
+
+        foreach ($commitHistory as $commit) {
+            $history[] = array_reduce(
+                $uploadedCommits->getCommits(),
+                static fn (array $tags, CommitQueryResult $result) => $result->getCommit() === $commit ?
+                    [...$tags, ...$result->getTags()] :
+                    $tags,
+                []
+            );
+        }
+
+        return $history;
     }
 }

@@ -79,7 +79,16 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $result = $result['data']['repository']['ref']['target']['history']['edges'] ?? [];
 
         $commits = array_map(
-            static fn(array $commit) => $commit['node']['oid'] ?? null,
+            static function (array $commit) use ($upload): ?string {
+                if (
+                    isset($commit['node']['oid']) &&
+                    $commit['node']['oid'] !== $upload->getCommit()
+                ) {
+                    return $commit['node']['oid'];
+                }
+
+                return null;
+            },
             $result
         );
 
