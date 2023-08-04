@@ -84,6 +84,9 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                     isset($commit['node']['oid']) &&
                     $commit['node']['oid'] !== $upload->getCommit()
                 ) {
+                    // The Github API will return the current commit (the one associated with
+                    // this upload), meaning we want to filter that out of the results, so that the
+                    // returned commits are **only** those which preceded the upload
                     return $commit['node']['oid'];
                 }
 

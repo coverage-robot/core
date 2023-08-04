@@ -25,7 +25,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
-     * @throws QueryException
+     * @throws QueryException|GoogleException
      */
     public function getTagsToCarryforward(Upload $upload): array
     {
@@ -35,7 +35,6 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         $carryforwardTags = [];
 
         foreach ($carryableCommitTags as $tags) {
-            /** @var Tag[] $tagsNotSeen */
             $tagsNotSeen = array_udiff(
                 $tags,
                 [...$uploadedTags, ...$carryforwardTags],
@@ -46,7 +45,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                 continue;
             }
 
-            $carryforwardTags += [...$carryforwardTags, ...$tagsNotSeen];
+            /** @var Tag[] $carryforwardTags */
+            $carryforwardTags = [...$carryforwardTags, ...$tagsNotSeen];
         }
 
         $this->carryforwardLogger->info(
@@ -65,7 +65,9 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
-     * @throws QueryException
+     * Get all of the tags uploaded for a particular upload.
+     *
+     * @throws QueryException|GoogleException
      */
     private function getCurrentTags(Upload $upload): array
     {
@@ -78,6 +80,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
+     * Get the commit history of a particular upload, with the tags that were uploaded at each commit.
+     *
      * @return Tag[][]
      * @throws QueryException|GoogleException
      */
@@ -109,18 +113,31 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         return $this->mapTagsToCommitHistory($commitHistory, $results);
     }
 
+    /**
+     * Map a list of commits (descending order of commit tree) to a list of tagged coverage uploaded
+     * historically.
+     *
+     * This removes non-determinism in the order of commits returned by BigQuery by mapping the data into
+     * a deterministic order taken directly from the History services.
+     *
+     * @param string[] $commitHistory
+     * @return Tag[][]
+     */
     private function mapTagsToCommitHistory(array $commitHistory, CommitCollectionQueryResult $uploadedCommits): array
     {
         $history = [];
 
         foreach ($commitHistory as $commit) {
-            $history[] = array_reduce(
+            /** @var Tag[] $commitTags */
+            $commitTags = array_reduce(
                 $uploadedCommits->getCommits(),
                 static fn (array $tags, CommitQueryResult $result) => $result->getCommit() === $commit ?
                     [...$tags, ...$result->getTags()] :
                     $tags,
                 []
             );
+
+            $history[] = $commitTags;
         }
 
         return $history;
