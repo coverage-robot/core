@@ -34,7 +34,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($upload, $data)}
         </details>
 
-        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i')}*
+        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i e')}*
         MARKDOWN;
     }
 
