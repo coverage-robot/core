@@ -85,7 +85,8 @@ class CommitTagsQuery implements QueryInterface
             !(
                 is_array($parameterBag->get(QueryParameter::COMMIT)) ||
                 is_string($parameterBag->get(QueryParameter::COMMIT))
-            )
+            ) ||
+            empty($parameterBag->get(QueryParameter::COMMIT))
         ) {
             throw QueryException::invalidParameters(QueryParameter::COMMIT);
         }

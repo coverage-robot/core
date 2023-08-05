@@ -89,6 +89,11 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     {
         $commitHistory = $this->commitHistoryService->getPrecedingCommits($upload);
 
+        if ($commitHistory === []) {
+            // No proceeding commits in the tree, so there will no tags to carry forward.
+            return [];
+        }
+
         $precedingUploadedTags = QueryParameterBag::fromUpload($upload);
         $precedingUploadedTags->set(
             QueryParameter::COMMIT,
