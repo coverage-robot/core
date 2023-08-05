@@ -114,26 +114,12 @@ class CarryforwardTagServiceTest extends TestCase
             ]
         );
 
-        $mockQueryService->expects($this->exactly(2))
+        $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
                 CommitCollectionQueryResult::from([
                     [
                         'commit' => 'mock-commit-1',
-                        'tags' => ['tag-4', 'tag-2']
-                    ],
-                ]),
-                CommitCollectionQueryResult::from([
-                    [
-                        'commit' => 'mock-commit-2',
-                        'tags' => ['tag-4', 'tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-3',
-                        'tags' => ['tag-4', 'tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-4',
                         'tags' => ['tag-4', 'tag-2']
                     ],
                 ])
