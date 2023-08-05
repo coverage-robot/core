@@ -1,6 +1,6 @@
 <?php
 
-namespace Service;
+namespace App\Tests\Service;
 
 use App\Kernel;
 use App\Service\EnvironmentService;

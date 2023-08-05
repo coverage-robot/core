@@ -1,6 +1,6 @@
 <?php
 
-namespace Service;
+namespace App\Tests\Service;
 
 use App\Service\EventBridgeEventService;
 use AsyncAws\Core\Test\ResultMockFactory;
