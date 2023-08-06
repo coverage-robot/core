@@ -202,6 +202,9 @@ class LcovParseStrategy implements ParseStrategyInterface
         return $coverage;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getLineValidation(string $type): string
     {
         if (!array_key_exists($type, self::COVERAGE_DATA_VALIDATION)) {
