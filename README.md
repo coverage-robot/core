@@ -1,7 +1,7 @@
-# Coverage Platform
+# Coverage Robot
 ![Coverage](https://coverage.ryanmaber.com/api/graph/github/ryanmab/coverage/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc)
 
-The core coverage platform and architecture for ingesting, analysing, and outputting coverage data onto Version Control platforms.
+The core platform for ingesting, analysing, and outputting coverage data onto Version Control platforms.
 
 ### Architecture
 ![architecture.jpg](resources%2Farchitecture.jpg)
