@@ -5,7 +5,7 @@ and handles the badge requests.
 ### Deployment
 Deployment is handled through Terraform, and is deployed as part of the CI/CD pipeline.
 
-For the deployment of the API, see the [`infrasture/`](./infrastructure) folder.
+For the deployment of the API, see the [`infrastructure/`](./infrastructure) folder.
 
 ### Local Development
 

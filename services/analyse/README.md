@@ -6,7 +6,7 @@ Once the analysis has been completed, the publishers are called to format and pu
 ### Deployment
 Deployment is handled through Terraform, and is deployed as part of the CI/CD pipeline.
 
-For the deployment of the Analyse service, see the [`infrasture/`](./infrastructure) folder.
+For the deployment of the Analyse service, see the [`infrastructure/`](./infrastructure) folder.
 
 ### Local Development
 All of the local containers are managed in the project root's [`docker-compose.yml`](../../docker-compose.yml), but to invoke ingestion you
