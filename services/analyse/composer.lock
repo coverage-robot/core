@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7330869ae8a69603e4184388c4f69a0",
+    "content-hash": "324673d645bda04d0cf6ff8d657665ef",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -461,6 +461,25 @@
                 }
             ],
             "time": "2022-02-21T13:15:14+00:00"
+        },
+        {
+            "name": "coverage-robot/models",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/models",
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Models\\": "src/"
+                }
+            },
+            "description": "Shared models across the services",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "crwlr/query-string",
@@ -2832,25 +2851,6 @@
                 }
             ],
             "time": "2022-10-12T17:22:51+00:00"
-        },
-        {
-            "name": "ryanmab/models",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "../../packages/models",
-                "reference": "f0c4076bc4977686f5cf3bb497a45ff4f972bac3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Packages\\Models\\": "src/"
-                }
-            },
-            "description": "Shared models across the services",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "sebastian/diff",

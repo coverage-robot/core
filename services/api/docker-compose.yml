@@ -13,7 +13,7 @@ services:
       - .:/var/task:ro
       - ./var:/var/task/var
       - ./config/migrations:/var/task/config/migrations
-      - ../../packages:/var/task/vendor/ryanmab
+      - ../../packages:/var/task/vendor/coverage-robot
 
     environment:
       HANDLER: public/index.php
@@ -23,7 +23,7 @@ services:
     volumes:
       - .:/var/task:ro
       - ./var:/var/task/var
-      - ../../packages:/var/task/vendor/ryanmab
+      - ../../packages:/var/task/vendor/coverage-robot
     environment:
       HANDLER: App\Handler\EventHandler
 

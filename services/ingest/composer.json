@@ -1,5 +1,5 @@
 {
-    "name": "ryanmab/coverage",
+    "name": "coverage-robot/core",
     "description": "The ingest coverage service.",
     "type": "project",
     "license": "proprietary",
@@ -18,7 +18,7 @@
         "bref/symfony-bridge": "^0.2.1",
         "google/cloud-bigquery": "^1.24",
         "ramsey/uuid": "^4.7",
-        "ryanmab/models": "*",
+        "coverage-robot/models": "*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
