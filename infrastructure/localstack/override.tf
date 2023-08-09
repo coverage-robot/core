@@ -17,6 +17,8 @@ provider "planetscale" {
   service_token    = "mock"
 }
 
+// Turn off any non-essential services which aren't mocked via Localstack
+
 module "warehouse" {
   source = "./warehouse"
   count  = 0
@@ -24,5 +26,10 @@ module "warehouse" {
 
 module "database" {
   source = "./database"
+  count  = 0
+}
+
+module "routing" {
+  source = "./routing"
   count  = 0
 }

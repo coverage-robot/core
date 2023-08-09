@@ -7,15 +7,15 @@ output "output_bucket" {
 }
 
 output "cloudfront_distribution" {
-  value = module.routing.cloudwatch_distribution
+  value = length(module.warehouse) > 0 ? module.routing.cloudwatch_distribution : null
 }
 
 output "api_gateway" {
-  value = module.routing.api_gateway
+  value = length(module.warehouse) > 0 ? module.routing.api_gateway : null
 }
 
 output "api_gateway_default_stage" {
-  value = module.routing.api_gateway_default_stage
+  value = length(module.warehouse) > 0 ? module.routing.api_gateway_default_stage : null
 }
 
 output "coverage_event_bus" {
