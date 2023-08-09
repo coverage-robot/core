@@ -1,5 +1,5 @@
 {
-    "name": "ryanmab/coverage",
+    "name": "coverage-robot/core",
     "description": "The api coverage service.",
     "type": "project",
     "license": "proprietary",
@@ -19,7 +19,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.15",
         "ramsey/uuid": "^4.7",
-        "ryanmab/models": "*",
+        "coverage-robot/models": "*",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",

@@ -1,5 +1,5 @@
 {
-    "name": "ryanmab/models",
+    "name": "coverage-robot/models",
     "description": "Shared models across the services",
     "type": "library",
     "version": "1.0.0",
