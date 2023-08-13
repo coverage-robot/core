@@ -1,7 +1,7 @@
 resource "aws_cloudfront_distribution" "distribution" {
   enabled         = true
   is_ipv6_enabled = true
-  aliases         = ["coveragerobot.com"]
+  aliases         = ["api.coveragerobot.com"]
 
   origin {
     domain_name = trimprefix(aws_apigatewayv2_api.api_gateway.api_endpoint, "https://")
