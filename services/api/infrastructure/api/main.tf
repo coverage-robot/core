@@ -113,7 +113,7 @@ resource "aws_apigatewayv2_integration" "integration" {
 
 resource "aws_apigatewayv2_route" "route" {
   api_id    = data.terraform_remote_state.core.outputs.api_gateway.id
-  route_key = "ANY /api/{proxy+}"
+  route_key = "ANY /v1/{proxy+}"
 
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
