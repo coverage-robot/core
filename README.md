@@ -1,5 +1,5 @@
 # Coverage Robot
-![Coverage](https://coverage.ryanmaber.com/api/graph/github/coverage-robot/core/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc)
+![Coverage](https://api.coveragerobot.com/v1/graph/github/coverage-robot/core/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc)
 
 The core platform for ingesting, analysing, and outputting coverage data onto Version Control platforms.
 
@@ -10,7 +10,7 @@ The core platform for ingesting, analysing, and outputting coverage data onto Ve
 - [`infastructure/`](infrastructure/)
 
 The _global_ IaC modules to construct the static parts of the infrastructure (e.g. S3 buckets, event buses, caches, etc).
- 
+
 - [`packages/`](packages/)
 
 The _shared_ packages that are used across the microservices.
