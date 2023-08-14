@@ -107,7 +107,7 @@ class UploadService
         string $uploadId,
         SigningParameters $signingParameters
     ): PutObjectRequest {
-        /** @var array<string, string> $meta */
+        /** @var array<string, string> $params */
         $params = $signingParameters->jsonSerialize();
 
         return new PutObjectRequest([
