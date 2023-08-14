@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "ef33ea0e2f9a32a31d829e860eff712641dac73f"
+                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/ef33ea0e2f9a32a31d829e860eff712641dac73f",
-                "reference": "ef33ea0e2f9a32a31d829e860eff712641dac73f",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
+                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.11-dev"
+                    "dev-master": "1.12-dev"
                 }
             },
             "autoload": {
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.11.0"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.0"
             },
             "funding": [
                 {
@@ -73,7 +73,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-20T19:17:40+00:00"
+            "time": "2023-08-07T20:00:50+00:00"
         },
         {
             "name": "async-aws/core",
