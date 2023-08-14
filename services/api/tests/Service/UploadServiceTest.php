@@ -106,7 +106,7 @@ class UploadServiceTest extends TestCase
                         'provider' => 'github',
                         'fileName' => 'some/root/test.xml',
                         'pullRequest' => '12',
-                        'uploadid' => 'mock-uuid',
+                        'uploadId' => 'mock-uuid',
                         'ref' => 'mock-branch-reference',
                         'projectRoot' => 'some/root/'
                     ]

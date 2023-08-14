@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb81a689e43b9811df1ce20bddb99138",
+    "content-hash": "6f82840f7e1a08c4ca61173a95c06903",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -145,16 +145,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "1.14.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "27ce65242cde50ba09323d54708b45cf64a51aa5"
+                "reference": "1486ae6592a8f870da60dfc29bfc98390c7b9092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/27ce65242cde50ba09323d54708b45cf64a51aa5",
-                "reference": "27ce65242cde50ba09323d54708b45cf64a51aa5",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/1486ae6592a8f870da60dfc29bfc98390c7b9092",
+                "reference": "1486ae6592a8f870da60dfc29bfc98390c7b9092",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +168,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.14-dev"
+                    "dev-master": "1.15-dev"
                 }
             },
             "autoload": {
@@ -189,7 +189,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/1.14.0"
+                "source": "https://github.com/async-aws/s3/tree/2.0.0"
             },
             "funding": [
                 {
@@ -201,7 +201,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-20T19:17:40+00:00"
+            "time": "2023-08-07T20:00:50+00:00"
         },
         {
             "name": "badges/poser",
