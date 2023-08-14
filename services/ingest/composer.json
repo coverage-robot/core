@@ -13,7 +13,7 @@
         "ext-xmlreader": "*",
         "async-aws/async-aws-bundle": "^1.10",
         "async-aws/event-bridge": "^1.5",
-        "async-aws/s3": "^1.13",
+        "async-aws/s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "google/cloud-bigquery": "^1.24",
