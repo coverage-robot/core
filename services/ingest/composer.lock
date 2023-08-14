@@ -145,16 +145,16 @@
         },
         {
             "name": "async-aws/event-bridge",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/event-bridge.git",
-                "reference": "5d638e385de6964abe89ade72e2d73d8ba9f3f7a"
+                "reference": "f13aef3bd4da43689c9a894c93d7160597e174bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/5d638e385de6964abe89ade72e2d73d8ba9f3f7a",
-                "reference": "5d638e385de6964abe89ade72e2d73d8ba9f3f7a",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/f13aef3bd4da43689c9a894c93d7160597e174bb",
+                "reference": "f13aef3bd4da43689c9a894c93d7160597e174bb",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +165,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.5-dev"
+                    "dev-master": "1.6-dev"
                 }
             },
             "autoload": {
@@ -186,7 +186,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/event-bridge/tree/1.5.0"
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.1"
             },
             "funding": [
                 {
@@ -198,7 +198,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-20T19:17:40+00:00"
+            "time": "2023-08-07T20:00:50+00:00"
         },
         {
             "name": "async-aws/s3",
