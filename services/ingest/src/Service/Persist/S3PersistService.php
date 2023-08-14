@@ -35,6 +35,9 @@ class S3PersistService implements PersistServiceInterface
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         try {
+            /** @var array<string, string> $metadata */
+            $metadata = $upload->jsonSerialize();
+
             $response = $this->s3Client->putObject(
                 new PutObjectRequest(
                     [
@@ -43,7 +46,7 @@ class S3PersistService implements PersistServiceInterface
                         'ContentType' => 'application/json',
                         'Metadata' => [
                             'sourceFormat' => $coverage->getSourceFormat()->value,
-                            ...$upload->jsonSerialize(),
+                            ...$metadata,
                             'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
                         ],
                         'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
