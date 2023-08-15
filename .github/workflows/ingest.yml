@@ -162,7 +162,7 @@ jobs:
                     composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
                 shell: bash
 
-            -   uses: coverage-robot/action@v0.0.5
+            -   uses: coverage-robot/action@v1.0.0
                 with:
                     token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
