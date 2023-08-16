@@ -23,6 +23,9 @@ autolabeler:
     - label: 'feature'
       branch:
           - '/feature\/.+/'
+    - label: 'patch'
+      branch:
+          - '/.+/'
 version-resolver:
     major:
         labels:
