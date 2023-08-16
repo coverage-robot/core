@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
     check_labels:
-        name: Validate PR labels
+        name: Validate PR Labels
         runs-on: ubuntu-latest
 
         steps:
