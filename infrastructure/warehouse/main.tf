@@ -1,6 +1,7 @@
 resource "google_bigquery_dataset" "environment_dataset" {
   dataset_id    = var.environment
   friendly_name = var.environment
+  location      = "EU"
   description   = "Dataset for ${var.environment} environment"
 
   labels = {
