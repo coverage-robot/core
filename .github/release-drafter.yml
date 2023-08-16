@@ -8,7 +8,7 @@ categories:
     - title: '🐛 Bug Fixes'
       collapse-after: 5
       labels:
-          - 'bugfix'
+          - 'bug'
     - title: '🧰 Maintenance'
       collapse-after: 5
       label: 'chore'
@@ -19,7 +19,7 @@ autolabeler:
           - '/dependabot\/.+/'
     - label: 'bug'
       branch:
-          - '/fix\/.+/'
+          - '/bug\/.+/'
     - label: 'feature'
       branch:
           - '/feature\/.+/'
