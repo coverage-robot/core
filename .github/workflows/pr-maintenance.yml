@@ -15,13 +15,13 @@ jobs:
 
         steps:
             - name: Check for Semver labels
-              uses: danielchabr/pr-labels-checker@v3.1
+              uses: danielchabr/pr-labels-checker@v3.3
               with:
                   hasSome: major,minor,patch
                   githubToken: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Check for categorisation labels
-              uses: danielchabr/pr-labels-checker@v3.1
+              uses: danielchabr/pr-labels-checker@v3.3
               with:
                   hasSome: feature,bug,chore
                   githubToken: ${{ secrets.GITHUB_TOKEN }}
