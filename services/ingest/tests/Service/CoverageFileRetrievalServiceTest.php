@@ -45,6 +45,10 @@ class CoverageFileRetrievalServiceTest extends TestCase
 
     public function testIngestingUnknownObjectFromS3(): void
     {
+        $mockResponse = $this->createMock(ResponseInterface::class);
+        $mockResponse->method('getInfo')
+            ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
+
         $mockS3Client = $this->createMock(S3Client::class);
         $mockS3Client->expects($this->once())
             ->method('getObject')
@@ -56,7 +60,7 @@ class CoverageFileRetrievalServiceTest extends TestCase
             )
             ->willThrowException(
                 new NoSuchKeyException(
-                    $this->createMock(ResponseInterface::class),
+                    $mockResponse,
                     new AwsError(404, null, null, null)
                 )
             );

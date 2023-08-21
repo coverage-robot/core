@@ -3,12 +3,15 @@
 namespace App\Tests\Service\Persist;
 
 use App\Client\BigQueryClient;
+use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\Persist\BigQueryPersistService;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
 use Google\Cloud\BigQuery\Table;
 use Packages\Models\Enum\CoverageFormat;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
@@ -140,6 +143,12 @@ class BigQueryPersistServiceTest extends TestCase
         $bigQueryPersistService = new BigQueryPersistService(
             $mockBigQueryClient,
             new BigQueryMetadataBuilderService(new NullLogger()),
+            MockEnvironmentServiceFactory::getMock(
+                $this, Environment::TESTING,
+                [
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                ]
+            ),
             new NullLogger()
         );
 

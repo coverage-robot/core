@@ -3,7 +3,9 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
+use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
+use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
@@ -15,6 +17,7 @@ class BigQueryPersistService implements PersistServiceInterface
     public function __construct(
         private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
+        private readonly EnvironmentService $environmentService,
         private readonly LoggerInterface $bigQueryPersistServiceLogger
     ) {
     }
@@ -22,7 +25,7 @@ class BigQueryPersistService implements PersistServiceInterface
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         $table = $this->bigQueryClient->getEnvironmentDataset()
-            ->table($_ENV['BIGQUERY_LINE_COVERAGE_TABLE']);
+            ->table($this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE));
 
         $rows = $this->buildRows($upload, $coverage);
 

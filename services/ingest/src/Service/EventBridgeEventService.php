@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enum\EnvironmentVariable;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
@@ -13,8 +14,10 @@ use Packages\Models\Enum\EventBus\CoverageEvent;
 
 class EventBridgeEventService
 {
-    public function __construct(private readonly EventBridgeClient $eventBridgeClient)
-    {
+    public function __construct(
+        private readonly EventBridgeClient $eventBridgeClient,
+        private readonly EnvironmentService $environmentService
+    ) {
     }
 
     /**
@@ -27,7 +30,7 @@ class EventBridgeEventService
             new PutEventsRequest([
                 'Entries' => [
                     new PutEventsRequestEntry([
-                        'EventBusName' => $_ENV['EVENT_BUS'],
+                        'EventBusName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_BUS),
                         'Source' => CoverageEventSource::INGEST->value,
                         'DetailType' => $event->value,
                         'Detail' => json_encode($detail, JSON_THROW_ON_ERROR),
