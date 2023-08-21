@@ -11,7 +11,24 @@ permissions:
     contents: read
 
 jobs:
-    update_release_draft:
+    check_labels:
+        name: Validate Labels
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check for categorisation labels
+              uses: danielchabr/pr-labels-checker@v3.3
+              with:
+                  hasSome: feature,bug,chore
+                  githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Check for Semver labels
+              uses: danielchabr/pr-labels-checker@v3.3
+              with:
+                  hasSome: bump-major,bump-minor,bump-patch
+                  githubToken: ${{ secrets.GITHUB_TOKEN }}
+
+    update_release:
         name: Prepare Release
         permissions:
             # Allow access to create Releases
@@ -19,6 +36,8 @@ jobs:
             # Allow access to auto-labelling PRs (for categorisation)
             pull-requests: write
         runs-on: ubuntu-latest
+        needs: check_labels
+
         steps:
             - uses: release-drafter/release-drafter@v5
               env:

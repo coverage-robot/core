@@ -16,26 +16,22 @@ autolabeler:
     - label: 'chore'
       branch:
           - '/chore\/.+/'
-          - '/dependabot\/.+/'
     - label: 'bug'
       branch:
           - '/bug\/.+/'
     - label: 'feature'
       branch:
           - '/feature\/.+/'
-    - label: 'patch'
-      branch:
-          - '/.+/'
 version-resolver:
     major:
         labels:
-            - 'major'
+            - 'bump-major'
     minor:
         labels:
-            - 'minor'
+            - 'bump-minor'
     patch:
         labels:
-            - 'patch'
+            - 'bump-patch'
     default: patch
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&'
