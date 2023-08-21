@@ -22,7 +22,10 @@ class MockEnvironmentServiceFactory
         $mockEnvironmentService->method('getVariable')
             ->willReturnMap(
                 array_map(
-                    fn (string $variableName, string $value) => [EnvironmentVariable::from($variableName), $value],
+                    static fn (string $variableName, string $value) => [
+                        EnvironmentVariable::from($variableName),
+                        $value
+                    ],
                     array_keys($variables),
                     array_values($variables)
                 )

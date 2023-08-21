@@ -13,8 +13,7 @@ class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient
     public function __construct(
         private readonly EnvironmentService $environmentService,
         array $config = []
-    )
-    {
+    ) {
         if (file_exists(self::SERVICE_ACCOUNT_KEY)) {
             // We only want to pre-provide the service account key in environments where theres is one provided (e.g.
             // _not_ in CI, or test environments).

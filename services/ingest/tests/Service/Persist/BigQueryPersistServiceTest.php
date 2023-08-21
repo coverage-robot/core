@@ -144,7 +144,8 @@ class BigQueryPersistServiceTest extends TestCase
             $mockBigQueryClient,
             new BigQueryMetadataBuilderService(new NullLogger()),
             MockEnvironmentServiceFactory::getMock(
-                $this, Environment::TESTING,
+                $this,
+                Environment::TESTING,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
                 ]

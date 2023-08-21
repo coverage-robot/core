@@ -64,7 +64,8 @@ class EventBridgeEventServiceTest extends TestCase
         $eventBridgeEventService = new EventBridgeEventService(
             $mockEventBridgeClient,
             MockEnvironmentServiceFactory::getMock(
-                $this, Environment::TESTING,
+                $this,
+                Environment::TESTING,
                 [
                     EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
                 ]
