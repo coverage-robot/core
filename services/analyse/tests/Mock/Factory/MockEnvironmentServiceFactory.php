@@ -10,8 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class MockEnvironmentServiceFactory
 {
-    public static function getMock(TestCase $testCase, Environment $environment, array $variables = []): EnvironmentService&MockObject
-    {
+    public static function getMock(
+        TestCase $testCase,
+        Environment $environment,
+        array $variables = []
+    ): EnvironmentService&MockObject {
         $mockEnvironmentService = $testCase->getMockBuilder(EnvironmentService::class)
             ->disableOriginalConstructor()
             ->getMock();
