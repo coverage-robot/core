@@ -3,6 +3,7 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
+use App\Service\Event\AnalyseSuccessEventProcessor;
 use App\Service\Event\EventProcessorInterface;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -37,6 +38,16 @@ class EventHandlerTest extends TestCase
             ->with($event);
 
         $eventHandler->handleEventBridge($event, Context::fake());
+    }
+
+    public function testSubscribedServices(): void
+    {
+        $this->assertEquals(
+            [
+                AnalyseSuccessEventProcessor::class,
+            ],
+            EventHandler::getSubscribedServices()
+        );
     }
 
     public static function eventsDataProvider(): array

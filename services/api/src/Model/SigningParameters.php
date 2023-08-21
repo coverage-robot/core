@@ -7,6 +7,7 @@ use Exception;
 use JsonException;
 use JsonSerializable;
 use Packages\Models\Enum\Provider;
+use ValueError;
 
 class SigningParameters implements ParametersInterface, JsonSerializable
 {
@@ -106,7 +107,7 @@ class SigningParameters implements ParametersInterface, JsonSerializable
                 (string)$data['ref'],
                 isset($data['pullRequest']) ? (string)$data['pullRequest'] : null
             );
-        } catch (Exception $e) {
+        } catch (ValueError $e) {
             throw SigningException::invalidParameters($e);
         }
     }

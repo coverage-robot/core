@@ -28,6 +28,8 @@
         </include>
         <exclude>
             <directory suffix=".php">tests</directory>
+            <directory suffix=".php">src/Entity</directory>
+            <directory suffix=".php">src/Repository</directory>
         </exclude>
     </source>
 </phpunit>

@@ -28,7 +28,14 @@ class GraphControllerTest extends KernelTestCase
 
         $mockAuthTokenService->expects($this->once())
             ->method('validateParametersWithGraphToken')
-            ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
+            ->with(
+                self::callback(
+                    static fn(GraphParameters $parameters) => $parameters->getOwner() === 'owner' &&
+                        $parameters->getRepository() === 'repository' &&
+                        $parameters->getProvider() === Provider::GITHUB
+                ),
+                'mock-graph-token'
+            )
             ->willReturn(true);
 
         $mockProjectRepository->expects($this->once())

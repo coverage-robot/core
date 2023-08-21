@@ -51,9 +51,7 @@ class GraphParameters implements ParametersInterface
                 Provider::from((string)$data['provider'])
             );
         } catch (ValueError $e) {
-            throw GraphException::invalidParameters(
-                new InvalidArgumentException($e->getMessage())
-            );
+            throw GraphException::invalidParameters($e);
         }
     }
 }
