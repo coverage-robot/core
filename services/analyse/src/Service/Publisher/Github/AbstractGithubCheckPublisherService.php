@@ -4,7 +4,9 @@ namespace App\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
+use App\Service\EnvironmentService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Psr\Log\LoggerInterface;
 
@@ -12,6 +14,7 @@ abstract class AbstractGithubCheckPublisherService implements PublisherServiceIn
 {
     public function __construct(
         protected readonly GithubAppInstallationClient $client,
+        protected readonly EnvironmentService $environmentService,
         protected readonly LoggerInterface $checkPublisherLogger
     ) {
     }
@@ -25,9 +28,8 @@ abstract class AbstractGithubCheckPublisherService implements PublisherServiceIn
 
         $checkRuns = array_filter(
             $checkRuns,
-            static fn(array $checkRun) => isset($checkRun['id']) &&
-                isset($checkRun['app']['id']) &&
-                $checkRun['app']['id'] == GithubAppClient::APP_ID
+            fn(array $checkRun) => isset($checkRun['id'], $checkRun['app']['id']) &&
+                $checkRun['app']['id'] === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
         );
 
         if (!empty($checkRuns)) {

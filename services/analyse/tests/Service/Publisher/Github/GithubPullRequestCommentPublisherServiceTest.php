@@ -137,7 +137,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                 [
                     'id' => 2,
                     'user' => [
-                        'node_id' => GithubAppClient::BOT_ID
+                        'node_id' => 'mock-github-bot-id'
                     ]
                 ]
             ]);

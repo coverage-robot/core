@@ -2,12 +2,15 @@
 
 namespace App\Tests\Service;
 
+use App\Enum\EnvironmentVariable;
 use App\Service\EventBridgeEventService;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
@@ -47,7 +50,7 @@ class EventBridgeEventServiceTest extends TestCase
                 new PutEventsRequest([
                     'Entries' => [
                         new PutEventsRequestEntry([
-                            'EventBusName' => $_ENV['EVENT_BUS'],
+                            'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::INGEST->value,
                             'DetailType' => CoverageEvent::INGEST_SUCCESS->value,
                             'Detail' => json_encode($upload, JSON_THROW_ON_ERROR),
@@ -58,7 +61,16 @@ class EventBridgeEventServiceTest extends TestCase
             ->willReturn($mockResult);
 
 
-        $eventBridgeEventService = new EventBridgeEventService($mockEventBridgeClient);
+        $eventBridgeEventService = new EventBridgeEventService(
+            $mockEventBridgeClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
+                ]
+            )
+        );
 
         $success = $eventBridgeEventService->publishEvent(
             CoverageEvent::INGEST_SUCCESS,

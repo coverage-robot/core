@@ -4,10 +4,14 @@ namespace App\Tests\Client\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
+use App\Exception\ClientException;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Github\Api\Apps;
 use Github\AuthMethod;
 use Github\HttpClient\Builder;
 use Http\Client\Common\HttpMethodsClientInterface;
+use Packages\Models\Enum\Environment;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -47,6 +51,13 @@ class GithubAppInstallationClientTest extends TestCase
         $appClient = $this->getMockBuilder(GithubAppClient::class)
             ->setConstructorArgs(
                 [
+                    MockEnvironmentServiceFactory::getMock(
+                        $this,
+                        Environment::TESTING,
+                        [
+                            EnvironmentVariable::GITHUB_APP_ID->value => 'mock',
+                        ]
+                    ),
                     $this->createMock(Builder::class),
                     'mock',
                     'https://mock-client.com'
@@ -94,6 +105,13 @@ class GithubAppInstallationClientTest extends TestCase
         $mockGithubAppClient = $this->getMockBuilder(GithubAppClient::class)
             ->setConstructorArgs(
                 [
+                    MockEnvironmentServiceFactory::getMock(
+                        $this,
+                        Environment::TESTING,
+                        [
+                            EnvironmentVariable::GITHUB_APP_ID->value => 'mock',
+                        ]
+                    ),
                     $mockBuilder,
                     'mock',
                     'https://mock-client.com'

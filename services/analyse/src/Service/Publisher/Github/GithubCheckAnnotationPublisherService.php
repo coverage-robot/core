@@ -6,6 +6,7 @@ use App\Client\Github\GithubAppInstallationClient;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageQueryResult;
+use App\Service\EnvironmentService;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
@@ -17,10 +18,11 @@ class GithubCheckAnnotationPublisherService extends AbstractGithubCheckPublisher
 {
     public function __construct(
         GithubAppInstallationClient $client,
+        EnvironmentService $environmentService,
         LoggerInterface $checkPublisherLogger,
         private readonly CheckAnnotationFormatterService $formatter
     ) {
-        parent::__construct($client, $checkPublisherLogger);
+        parent::__construct($client, $environmentService, $checkPublisherLogger);
     }
 
     public function supports(Upload $upload, PublishableCoverageDataInterface $coverageData): bool

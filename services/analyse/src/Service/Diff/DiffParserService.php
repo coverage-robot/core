@@ -10,13 +10,13 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 class DiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @param array<array-key, DiffParserServiceInterface&ProviderAwareInterface> $parsers
+     * @param (DiffParserServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
         #[TaggedIterator(
             'app.diff_parser',
-            exclude: ['CachingDiffParserService', 'DiffParserService'],
-            defaultIndexMethod: 'getProvider'
+            defaultIndexMethod: 'getProvider',
+            exclude: ['CachingDiffParserService', 'DiffParserService']
         )]
         private readonly iterable $parsers
     ) {
@@ -27,17 +27,17 @@ class DiffParserService implements DiffParserServiceInterface
      */
     public function get(Upload $upload): array
     {
-        $reader = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;
+        $parser = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;
 
-        if (!$reader instanceof DiffParserServiceInterface) {
+        if (!$parser instanceof DiffParserServiceInterface) {
             throw new RuntimeException(
                 sprintf(
-                    'No diff reader found for %s',
+                    'No diff parser found for %s',
                     $upload->getProvider()->value
                 )
             );
         }
 
-        return $reader->get($upload);
+        return $parser->get($upload);
     }
 }

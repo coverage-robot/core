@@ -250,6 +250,8 @@ jobs:
                 uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
+                    envkey_GITHUB_BOT_ID: ${{ secrets.GH_BOT_ID }}
                     directory: ${{ env.working-directory }}
                     file_name: .env.local
                     fail_on_empty: false

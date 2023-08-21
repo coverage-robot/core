@@ -123,9 +123,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            static fn(array $comment) => isset($comment['id']) &&
-                isset($comment['user']['node_id']) &&
-                $comment['user']['node_id'] === GithubAppClient::BOT_ID
+            static fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
+                $comment['user']['node_id'] === 'mock-github-bot-id'
         );
 
         if (!empty($comments)) {
