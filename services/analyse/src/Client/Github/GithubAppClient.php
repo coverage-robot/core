@@ -15,6 +15,7 @@ use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\FileCouldNotBeRead;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Packages\Models\Enum\Environment;
 
 class GithubAppClient extends Client
 {
@@ -45,6 +46,10 @@ class GithubAppClient extends Client
             // Attempt to read the key file. If it fails, we can't authenticate. This
             // is usually the result of running tests, but can happen if configured
             // incorrectly.
+            if ($this->environmentService->getEnvironment() === Environment::TESTING) {
+                return;
+            }
+
             throw ClientException::authenticationException($e);
         }
 

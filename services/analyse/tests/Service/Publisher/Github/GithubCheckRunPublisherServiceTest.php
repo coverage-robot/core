@@ -49,7 +49,13 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckRunPublisherService(
             $mockGithubAppInstallationClient,
-            MockEnvironmentServiceFactory::getMock($this, Environment::TESTING),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
+                ]
+            ),
             new NullLogger()
         );
 

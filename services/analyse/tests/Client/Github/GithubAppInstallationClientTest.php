@@ -5,6 +5,7 @@ namespace App\Tests\Client\Github;
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
 use App\Enum\EnvironmentVariable;
+use App\Exception\ClientException;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Github\Api\Apps;
 use Github\AuthMethod;

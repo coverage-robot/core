@@ -34,6 +34,7 @@ class BigQueryClientTest extends TestCase
                 $this,
                 Environment::TESTING,
                 [
+                    EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset'
                 ]
             )
