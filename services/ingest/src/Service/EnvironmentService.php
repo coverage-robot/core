@@ -17,8 +17,8 @@ class EnvironmentService
         return Environment::from($this->kernel->getEnvironment());
     }
 
-    public function getVariable(EnvironmentVariable $variable): ?string
+    public function getVariable(EnvironmentVariable $variable): string
     {
-        return $_ENV[$variable->value];
+        return $_ENV[$variable->value] ?: '';
     }
 }

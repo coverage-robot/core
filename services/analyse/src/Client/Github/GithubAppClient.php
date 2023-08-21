@@ -10,6 +10,7 @@ use Exception;
 use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
+use InvalidArgumentException;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Key\FileCouldNotBeRead;
 use Lcobucci\JWT\Signer\Key\InMemory;
@@ -49,11 +50,27 @@ class GithubAppClient extends Client
 
         $now = new DateTimeImmutable('@' . time());
         $jwt = $config->builder()
-            ->issuedBy($this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID))
+            ->issuedBy($this->getAppId())
             ->issuedAt($now)
             ->expiresAt($now->modify('+5 minutes'))
             ->getToken($config->signer(), $config->signingKey());
 
         $this->authenticate($jwt->toString(), null, AuthMethod::JWT);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function getAppId(): string
+    {
+        $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
+
+        if (empty($appId)) {
+            throw ClientException::authenticationException(
+                new InvalidArgumentException('App Id for Github app not provided.')
+            );
+        }
+
+        return $appId;
     }
 }
