@@ -4,13 +4,16 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -31,6 +34,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $publisher = new GithubCheckRunPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
+            MockEnvironmentServiceFactory::getMock($this, Environment::TESTING),
             new NullLogger()
         );
 
@@ -45,6 +49,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckRunPublisherService(
             $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock($this, Environment::TESTING),
             new NullLogger()
         );
 
@@ -103,6 +108,13 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckRunPublisherService(
             $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
+                ]
+            ),
             new NullLogger()
         );
 
@@ -140,7 +152,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     [
                         'id' => 2,
                         'app' => [
-                            'id' => GithubAppClient::APP_ID
+                            'id' => 'mock-github-app-id'
                         ]
                     ]
                 ]

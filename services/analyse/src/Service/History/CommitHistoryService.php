@@ -2,6 +2,7 @@
 
 namespace App\Service\History;
 
+use App\Service\ProviderAwareInterface;
 use Packages\Models\Model\Upload;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -9,13 +10,13 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 class CommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
-     * @param array<array-key, CommitHistoryServiceInterface> $parsers
+     * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
         #[TaggedIterator(
             'app.commit_history',
-            exclude: ['CommitHistoryService'],
-            defaultIndexMethod: 'getProvider'
+            defaultIndexMethod: 'getProvider',
+            exclude: ['CommitHistoryService']
         )]
         private readonly iterable $parsers
     ) {

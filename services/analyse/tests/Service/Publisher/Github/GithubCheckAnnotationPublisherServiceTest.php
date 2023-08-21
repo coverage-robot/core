@@ -4,14 +4,17 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Publisher\Github\GithubCheckAnnotationPublisherService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use App\Tests\Mock\Factory\MockPublishableCoverageDataFactory;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
@@ -34,6 +37,13 @@ class GithubCheckAnnotationPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckAnnotationPublisherService(
             $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
+                ]
+            ),
             new NullLogger(),
             new CheckAnnotationFormatterService()
         );
@@ -91,7 +101,7 @@ class GithubCheckAnnotationPublisherServiceTest extends TestCase
                     [
                         'id' => 2,
                         'app' => [
-                            'id' => GithubAppClient::APP_ID
+                            'id' => 'mock-github-app-id'
                         ]
                     ]
                 ]
@@ -108,6 +118,13 @@ class GithubCheckAnnotationPublisherServiceTest extends TestCase
     {
         $publisher = new GithubCheckAnnotationPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
+                ]
+            ),
             new NullLogger(),
             new CheckAnnotationFormatterService()
         );

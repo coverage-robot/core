@@ -2,6 +2,9 @@
 
 namespace App\Client\Github;
 
+use App\Enum\EnvironmentVariable;
+use App\Exception\ClientException;
+use App\Service\EnvironmentService;
 use DateTimeImmutable;
 use Exception;
 use Github\AuthMethod;
@@ -14,16 +17,13 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 class GithubAppClient extends Client
 {
-    public const APP_ID = '327333';
-
-    public const BOT_ID = 'BOT_kgDOB-Qpag';
-
     private const PRIVATE_KEY = __DIR__ . '/../../../config/github.pem';
 
     /**
      * @throws Exception
      */
     public function __construct(
+        private readonly EnvironmentService $environmentService,
         ?Builder $httpClientBuilder = null,
         ?string $apiVersion = null,
         public readonly ?string $enterpriseUrl = null
@@ -33,29 +33,27 @@ class GithubAppClient extends Client
         $this->authenticateAsApp();
     }
 
-    private function authenticateAsApp(): bool
+    private function authenticateAsApp(): void
     {
         try {
             $config = Configuration::forSymmetricSigner(
                 new Sha256(),
                 InMemory::file(self::PRIVATE_KEY)
             );
-        } catch (FileCouldNotBeRead) {
+        } catch (FileCouldNotBeRead $e) {
             // Attempt to read the key file. If it fails, we can't authenticate. This
             // is usually the result of running tests, but can happen if configured
             // incorrectly.
-            return false;
+            throw ClientException::authenticationException($e);
         }
 
         $now = new DateTimeImmutable('@' . time());
         $jwt = $config->builder()
-            ->issuedBy(self::APP_ID)
+            ->issuedBy($this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID))
             ->issuedAt($now)
             ->expiresAt($now->modify('+5 minutes'))
             ->getToken($config->signer(), $config->signingKey());
 
         $this->authenticate($jwt->toString(), null, AuthMethod::JWT);
-
-        return true;
     }
 }
