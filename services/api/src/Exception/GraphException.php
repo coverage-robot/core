@@ -7,10 +7,6 @@ use Throwable;
 
 class GraphException extends Exception
 {
-    /**
-     * @param Exception|null $exception
-     * @return self
-     */
     public static function invalidParameters(?Throwable $exception = null): self
     {
         return new self(
