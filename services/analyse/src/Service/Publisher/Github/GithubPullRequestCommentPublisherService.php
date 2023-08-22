@@ -122,12 +122,13 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     private function getExistingCommentId(string $owner, string $repository, int $pullRequest): ?int
     {
         $api = $this->client->issue();
+        $botId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID);
 
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
             fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
-                $comment['user']['node_id'] === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID)
+                $comment['user']['node_id'] === $botId
         );
 
         if (!empty($comments)) {
