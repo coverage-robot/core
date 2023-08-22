@@ -4,6 +4,7 @@ namespace App\Tests\Handler;
 
 use App\Exception\DeletionException;
 use App\Exception\PersistException;
+use App\Exception\RetrievalException;
 use App\Handler\EventHandler;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
@@ -66,6 +67,35 @@ class EventHandlerTest extends TestCase
             ->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
             ->method('publishEvent')
             ->with(CoverageEvent::INGEST_FAILURE);
+
+        $handler = new EventHandler(
+            $mockCoverageFileRetrievalService,
+            $this->getRealCoverageFileParserService(),
+            $mockCoverageFilePersistService,
+            $mockEventBridgeEventService,
+            new NullLogger()
+        );
+
+        $handler->handleS3($event, Context::fake());
+    }
+
+    #[DataProvider('validS3EventDataProvider')]
+    public function testHandleS3FailsToRetrieve(S3Event $event): void
+    {
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService->method('ingestFromS3')
+            ->willThrowException(RetrievalException::from(new Exception('Failed to retrieve')));
+
+        $mockCoverageFileRetrievalService->expects($this->never())
+            ->method('deleteFromS3');
+
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService->expects($this->never())
+            ->method('persist');
+
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService->expects($this->never())
+            ->method('publishEvent');
 
         $handler = new EventHandler(
             $mockCoverageFileRetrievalService,
