@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:invoke_event', description: 'Create a new project with tokens')]
+#[AsCommand(name: 'app:invoke_event', description: 'Invoke an event which the API listens for when testing locally')]
 class InvokeEventCommand extends Command
 {
     public function __construct(
@@ -28,19 +28,21 @@ class InvokeEventCommand extends Command
             ->addArgument('body', InputArgument::REQUIRED, 'The body of the event (JSON)');
     }
 
-    /**
-     * @throws InvalidLambdaEvent
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->eventHandler->handleEventBridge(
-            new EventBridgeEvent([
-                'detail-type' => CoverageEvent::from($input->getArgument('event'))->value,
-                'detail' => $input->getArgument('body'),
-            ]),
-            Context::fake()
-        );
+        try {
+            $this->eventHandler->handleEventBridge(
+                new EventBridgeEvent([
+                    'detail-type' => CoverageEvent::from($input->getArgument('event'))->value,
+                    'detail' => $input->getArgument('body'),
+                ]),
+                Context::fake()
+            );
 
-        return Command::SUCCESS;
+            return Command::SUCCESS;
+        } catch (InvalidLambdaEvent $e) {
+            $output->writeln($e->getMessage());
+            return Command::FAILURE;
+        }
     }
 }

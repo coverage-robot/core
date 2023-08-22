@@ -10,6 +10,7 @@ use App\Service\Publisher\CoveragePublisherService;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
+use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
@@ -76,6 +77,41 @@ class EventHandlerTest extends TestCase
                     'detail' => $upload->jsonSerialize()
                 ]
             ),
+            Context::fake()
+        );
+    }
+
+    public function testHandleEventInvalidJson(): void
+    {
+        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+
+        $mockCoverageAnalyserService->expects($this->never())
+            ->method('analyse');
+
+        $mockCoveragePublisherService = $this->createMock(CoveragePublisherService::class);
+
+        $mockCoveragePublisherService->expects($this->never())
+            ->method('publish');
+
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService->expects($this->never())
+            ->method('publishEvent');
+
+        $handler = new EventHandler(
+            new NullLogger(),
+            $mockCoverageAnalyserService,
+            $mockCoveragePublisherService,
+            $mockEventBridgeEventService,
+            new NullLogger()
+        );
+
+        $mockEvent = $this->createMock(EventBridgeEvent::class);
+        $mockEvent->expects($this->once())
+            ->method('getDetail')
+            ->willThrowException(new JsonException('Invalid JSON'));
+
+        $handler->handleEventBridge(
+            $mockEvent,
             Context::fake()
         );
     }
