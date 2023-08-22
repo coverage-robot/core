@@ -20,6 +20,7 @@ use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
+use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -140,6 +141,94 @@ class QueryServiceTest extends TestCase
         $this->expectException(QueryException::class);
 
         $queryService->runQuery('invalid-query');
+    }
+
+    public function testRunQueryWithExternalException(): void
+    {
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
+
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+
+        $queryService = new QueryService(
+            $mockBigQueryService,
+            [
+                MockQueryFactory::createMock(
+                    $this,
+                    TotalCoverageQuery::class,
+                    '',
+                    $this->createMock(CoverageQueryResult::class)
+                )
+            ],
+            $mockQueryBuilderService,
+            new NullLogger()
+        );
+
+        $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
+
+        $mockQueryBuilderService->expects($this->once())
+            ->method('build')
+            ->willReturn('formatted-query');
+
+        $mockBigQueryService->expects($this->once())
+            ->method('query')
+            ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockBigQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with($mockQueryJobConfiguration)
+            ->willThrowException(new GoogleException());
+
+        $queryParameterBag = new QueryParameterBag();
+        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+
+        $this->expectException(GoogleException::class);
+
+        $queryService->runQuery(TotalCoverageQuery::class, $queryParameterBag);
+    }
+
+    public function testRunQueryWithQueryException(): void
+    {
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
+
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+
+        $queryService = new QueryService(
+            $mockBigQueryService,
+            [
+                MockQueryFactory::createMock(
+                    $this,
+                    TotalCoverageQuery::class,
+                    '',
+                    $this->createMock(CoverageQueryResult::class)
+                )
+            ],
+            $mockQueryBuilderService,
+            new NullLogger()
+        );
+
+        $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
+
+        $mockQueryBuilderService->expects($this->once())
+            ->method('build')
+            ->willReturn('formatted-query');
+
+        $mockBigQueryService->expects($this->once())
+            ->method('query')
+            ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockBigQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with($mockQueryJobConfiguration)
+            ->willThrowException(new QueryException());
+
+        $queryParameterBag = new QueryParameterBag();
+        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+
+        $this->expectException(QueryException::class);
+
+        $queryService->runQuery(TotalCoverageQuery::class, $queryParameterBag);
     }
 
     public static function queryDataProvider(): array
