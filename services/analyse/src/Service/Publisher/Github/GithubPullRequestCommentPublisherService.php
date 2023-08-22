@@ -4,8 +4,10 @@ namespace App\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
+use App\Service\EnvironmentService;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Models\Enum\Provider;
@@ -18,6 +20,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     public function __construct(
         private readonly GithubAppInstallationClient $client,
         private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
+        private readonly EnvironmentService $environmentService,
         private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
     }
@@ -123,8 +126,8 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            static fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
-                $comment['user']['node_id'] === 'mock-github-bot-id'
+            fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
+                $comment['user']['node_id'] === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID)
         );
 
         if (!empty($comments)) {

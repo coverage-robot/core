@@ -4,11 +4,14 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Client\Github\GithubAppClient;
 use App\Client\Github\GithubAppInstallationClient;
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Github\Api\Issue;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,6 +26,10 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
             new PullRequestCommentFormatterService(),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING
+            ),
             new NullLogger()
         );
 
@@ -38,6 +45,13 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
+                ]
+            ),
             new NullLogger()
         );
 
@@ -96,6 +110,13 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
+                ]
+            ),
             new NullLogger()
         );
 
