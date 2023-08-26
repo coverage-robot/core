@@ -16,7 +16,8 @@ class PullRequestCommentFormatterService
     {
         return <<<MARKDOWN
         ## Coverage Report
-        > Merging #{$upload->getPullRequest()}, with **{$data->getTotalUploads()}** uploaded coverage files on {$upload->getCommit()}
+        > Merging #{$upload->getPullRequest()}, with **{$data->getTotalUploads(
+        )}** uploaded coverage files on {$upload->getCommit()}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
@@ -34,7 +35,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($upload, $data)}
         </details>
 
-        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i e')}*
+        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i T')}*
         MARKDOWN;
     }
 
@@ -53,12 +54,15 @@ class PullRequestCommentFormatterService
             implode(
                 "\n",
                 array_map(
-                    static fn (TagCoverageQueryResult $tag) => sprintf(
+                    static fn(TagCoverageQueryResult $tag) => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
                         sprintf(
                             '%s%s',
                             $tag->getTag()->getName(),
-                            $tag->getTag()->getCommit() != $upload->getCommit() ? sprintf('<br><sub>(Carried forward from %s)</sub>', $tag->getTag()->getCommit()) : ''
+                            $tag->getTag()->getCommit() != $upload->getCommit() ? sprintf(
+                                '<br><sub>(Carried forward from %s)</sub>',
+                                $tag->getTag()->getCommit()
+                            ) : ''
                         ),
                         $tag->getLines(),
                         $tag->getCovered(),
@@ -91,7 +95,7 @@ class PullRequestCommentFormatterService
             implode(
                 "\n",
                 array_map(
-                    static fn (FileCoverageQueryResult $tag) => sprintf(
+                    static fn(FileCoverageQueryResult $tag) => sprintf(
                         '| %s | %s%% |',
                         $tag->getFileName(),
                         $tag->getCoveragePercentage(),
