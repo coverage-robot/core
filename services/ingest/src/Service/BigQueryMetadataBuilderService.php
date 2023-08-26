@@ -4,7 +4,10 @@ namespace App\Service;
 
 use App\Exception\PersistException;
 use JsonException;
+use Packages\Models\Model\Coverage;
+use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
+use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
 class BigQueryMetadataBuilderService
@@ -12,6 +15,32 @@ class BigQueryMetadataBuilderService
     public function __construct(
         private readonly LoggerInterface $metadataBuilderServiceLogger
     ) {
+    }
+
+    /**
+     * Build a row's worth of line coverage data, suitable for insertion into BigQuery.
+     */
+    public function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLine $line): array
+    {
+        return [
+            'uploadId' => $upload->getUploadId(),
+            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+            'provider' => $upload->getProvider()->value,
+            'owner' => $upload->getOwner(),
+            'repository' => $upload->getRepository(),
+            'commit' => $upload->getCommit(),
+            'parent' => $upload->getParent(),
+            'ref' => $upload->getRef(),
+            'tag' => $upload->getTag()->getName(),
+            'sourceFormat' => $coverage->getSourceFormat(),
+            'fileName' => $file->getFileName(),
+            'generatedAt' => $coverage->getGeneratedAt() ?
+                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                null,
+            'type' => $line->getType(),
+            'lineNumber' => $line->getLineNumber(),
+            'metadata' => $this->buildMetadata($line)
+        ];
     }
 
     /**
