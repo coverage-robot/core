@@ -55,7 +55,7 @@ class S3PersistService implements PersistServiceInterface
                         // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
                         // provided.
                         'ContentLength' => $this->getContentLength($coverage),
-                        'Body' => $this->getBody($coverage),
+                        'Body' => (fn() => $this->getBody($coverage))(),
                     ]
                 )
             );
@@ -146,8 +146,11 @@ class S3PersistService implements PersistServiceInterface
                          * @param array-key $key
                          * @throws JsonException
                          */
-                        static fn (string $key, string|array $value) =>
-                            sprintf('%s: %s', ucfirst((string)$key), json_encode($value, JSON_THROW_ON_ERROR)),
+                        static fn(string $key, string|array $value) => sprintf(
+                            '%s: %s',
+                            ucfirst((string)$key),
+                            json_encode($value, JSON_THROW_ON_ERROR)
+                        ),
                         array_keys($line),
                         array_values($line)
                     )

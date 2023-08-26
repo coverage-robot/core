@@ -2,18 +2,15 @@
 
 namespace App\Tests\Service\Persist;
 
-use App\Exception\PersistException;
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
-use Closure;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
@@ -55,13 +52,10 @@ class S3PersistServiceTest extends TestCase
             ->method('putObject')
             ->with(
                 self::callback(
-                    static function (PutObjectRequest $request) use ($upload, $metadata, $expectedWrittenLines): bool {
-                        $b = iterator_to_array($request->getBody());
-                        return $request->getKey() === $upload->getUploadId() . '.txt' &&
-                            $request->getBucket() === 'coverage-output-dev' &&
-                            $request->getMetadata() == $metadata &&
-                            $b == $expectedWrittenLines;
-                    }
+                    static fn(PutObjectRequest $request) => $request->getKey() === $upload->getUploadId() . '.txt' &&
+                        $request->getBucket() === 'coverage-output-dev' &&
+                        $request->getMetadata() == $metadata &&
+                        iterator_to_array($request->getBody()) == $expectedWrittenLines
                 )
             )
             ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 200));
@@ -127,8 +121,11 @@ class S3PersistServiceTest extends TestCase
                     $expectedWrittenLines[] = implode(
                         ', ',
                         array_map(
-                            static fn (string $key, string|array $value) =>
-                                sprintf('%s: %s', ucfirst($key), json_encode($value, JSON_THROW_ON_ERROR)),
+                            static fn(string $key, string|array $value) => sprintf(
+                                '%s: %s',
+                                ucfirst($key),
+                                json_encode($value, JSON_THROW_ON_ERROR)
+                            ),
                             array_keys($line->jsonSerialize()),
                             array_values($line->jsonSerialize())
                         )
