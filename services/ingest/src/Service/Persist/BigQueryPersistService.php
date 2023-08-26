@@ -7,12 +7,8 @@ use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
-
-use function PHPUnit\Framework\countOf;
 
 class BigQueryPersistService implements PersistServiceInterface
 {
