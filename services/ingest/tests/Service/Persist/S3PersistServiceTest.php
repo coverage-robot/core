@@ -9,51 +9,59 @@ use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
+use Closure;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\File;
+use Packages\Models\Model\Line\Branch;
+use Packages\Models\Model\Line\Method;
+use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Ramsey\Uuid\Uuid;
 
 class S3PersistServiceTest extends TestCase
 {
-    public function testPersist(): void
-    {
-        $coverage = new Coverage(
-            CoverageFormat::CLOVER,
-            'mock/project/root',
-            new DateTimeImmutable()
-        );
+    #[DataProvider('coverageDataProvider')]
+    public function testPersist(
+        Upload $upload,
+        Coverage $coverage,
+        array $expectedWrittenLines
+    ): void {
+        $metadata = [
+            'sourceFormat' => $coverage->getSourceFormat()->value,
+            'commit' => $upload->getCommit(),
+            'parent' => json_encode($upload->getParent()),
+            'ingestTime' => $upload->getIngestTime()->format(DateTimeImmutable::ATOM),
+            'uploadId' => $upload->getUploadId(),
+            'provider' => $upload->getProvider()->value,
+            'owner' => $upload->getOwner(),
+            'repository' => $upload->getRepository(),
+            'ref' => $upload->getRef(),
+            'pullRequest' => $upload->getPullRequest(),
+            'tag' => $upload->getTag()->getName()
+        ];
 
         $mockS3Client = $this->createMock(S3Client::class);
 
         $mockS3Client->expects($this->once())
             ->method('putObject')
             ->with(
-                new PutObjectRequest(
-                    [
-                        'Bucket' => 'coverage-output-dev',
-                        'Key' => 'mock-uuid.json',
-                        'ContentType' => 'application/json',
-                        'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->value,
-                            'commit' => '1',
-                            'parent' => json_encode(['2']),
-                            'ingestTime' => '2023-05-02T12:00:00+00:00',
-                            'uploadId' => 'mock-uuid',
-                            'provider' => 'github',
-                            'owner' => 'mock-owner',
-                            'repository' => 'mock-repo',
-                            'ref' => 'mock-branch-reference',
-                            'pullRequest' => 1234,
-                            'tag' => 'backend'
-                        ],
-                        'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
-                    ]
+                self::callback(
+                    static function (PutObjectRequest $request) use ($upload, $metadata, $expectedWrittenLines): bool {
+                        $b = iterator_to_array($request->getBody());
+                        return $request->getKey() === $upload->getUploadId() . '.txt' &&
+                            $request->getBucket() === 'coverage-output-dev' &&
+                            $request->getMetadata() == $metadata &&
+                            $b == $expectedWrittenLines;
+                    }
                 )
             )
             ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 200));
@@ -64,80 +72,77 @@ class S3PersistServiceTest extends TestCase
             new NullLogger()
         );
         $S3PersistService->persist(
-            new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repo',
-                '1',
-                ['2'],
-                'mock-branch-reference',
-                1234,
-                new Tag('backend', ''),
-                new DateTimeImmutable('2023-05-02 12:00:00')
-            ),
+            $upload,
             $coverage
         );
     }
 
-    public function testFailingToPersist(): void
+    public static function coverageDataProvider(): iterable
     {
-        $coverage = new Coverage(
-            CoverageFormat::CLOVER,
-            'mock/project/root',
-            new DateTimeImmutable()
+        $upload = new Upload(
+            Uuid::uuid4()->toString(),
+            Provider::GITHUB,
+            '',
+            '',
+            '',
+            [],
+            'mock-branch-reference',
+            1,
+            new Tag('mock-tag', '')
         );
 
-        $mockS3Client = $this->createMock(S3Client::class);
+        for ($numberOfLines = 1; $numberOfLines <= 10; $numberOfLines++) {
+            $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
+            $expectedWrittenLines = [];
 
-        $mockS3Client->expects($this->once())
-            ->method('putObject')
-            ->with(
-                new PutObjectRequest(
-                    [
-                        'Bucket' => 'coverage-output-dev',
-                        'Key' => 'mock-uuid.json',
-                        'ContentType' => 'application/json',
-                        'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->value,
-                            'commit' => '1',
-                            'parent' => json_encode(['2']),
-                            'ingestTime' => '2023-05-02T12:00:00+00:00',
-                            'uploadId' => 'mock-uuid',
-                            'provider' => 'github',
-                            'owner' => 'mock-owner',
-                            'repository' => 'mock-repo',
-                            'ref' => 'mock-branch-reference',
-                            'pullRequest' => 1234,
-                            'tag' => 'backend'
-                        ],
-                        'Body' => json_encode($coverage, JSON_THROW_ON_ERROR),
-                    ]
-                )
-            )
-            ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 403));
+            for ($numberOfFiles = 1; $numberOfFiles <= 3; $numberOfFiles++) {
+                // Clone the coverage object so that we can add an additional file per yield, while
+                // modifying the original object
+                $coverage = clone $coverage;
 
-        $this->expectException(PersistException::class);
+                $expectedWrittenLines[0] = sprintf(
+                    ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
+                    $coverage->getSourceFormat()->value,
+                    $coverage->getGeneratedAt()?->format(DateTimeImmutable::ATOM) ?? 'unknown',
+                    $coverage->getRoot(),
+                    $numberOfFiles
+                );
 
-        $S3PersistService = new S3PersistService(
-            $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, Environment::DEVELOPMENT),
-            new NullLogger()
-        );
-        $S3PersistService->persist(
-            new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repo',
-                '1',
-                ['2'],
-                'mock-branch-reference',
-                1234,
-                new Tag('backend', ''),
-                new DateTimeImmutable('2023-05-02 12:00:00')
-            ),
-            $coverage,
-        );
+                $file = new File('mock-file-' . $numberOfFiles);
+
+                $expectedWrittenLines[] = sprintf(
+                    "\n> FileName: %s, TotalLines: %s\n",
+                    $file->getFileName(),
+                    $numberOfLines
+                );
+
+                for ($i = 1; $i <= $numberOfLines; $i++) {
+                    $line = match ($i % 3) {
+                        0 => new Branch($i, $i % 2, [0 => 0, 1 => 2, 3 => 0]),
+                        1 => new Statement($i, $i % 2),
+                        2 => new Method($i, $i % 2, 'mock-method-' . $i)
+                    };
+                    $file->setLine($line);
+
+                    $expectedWrittenLines[] = implode(
+                        ', ',
+                        array_map(
+                            static fn (string $key, string|array $value) =>
+                                sprintf('%s: %s', ucfirst($key), json_encode($value, JSON_THROW_ON_ERROR)),
+                            array_keys($line->jsonSerialize()),
+                            array_values($line->jsonSerialize())
+                        )
+                    ) . "\n";
+                }
+
+                $coverage->addFile($file);
+
+                yield sprintf('%s files with %s line(s) each', $numberOfFiles, $numberOfLines) => [
+                    $upload,
+                    $coverage,
+                    $expectedWrittenLines
+                ];
+            }
+        }
     }
 }

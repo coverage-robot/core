@@ -7,8 +7,6 @@ use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
@@ -18,7 +16,8 @@ class BigQueryPersistService implements PersistServiceInterface
         private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentService $environmentService,
-        private readonly LoggerInterface $bigQueryPersistServiceLogger
+        private readonly LoggerInterface $bigQueryPersistServiceLogger,
+        private readonly int $chunkSize = 1000
     ) {
     }
 
@@ -27,76 +26,71 @@ class BigQueryPersistService implements PersistServiceInterface
         $table = $this->bigQueryClient->getEnvironmentDataset()
             ->table($this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE));
 
-        $rows = $this->buildRows($upload, $coverage);
+        $partialFailure = false;
 
-        $insertResponse = $table->insertRows($rows);
+        foreach ($this->getChunkedLines($upload, $coverage, $this->chunkSize) as $chunkNumber => $rows) {
+            $insertResponse = $table->insertRows($rows);
+            $failedRows = $insertResponse->failedRows();
 
-        if (!$insertResponse->isSuccessful()) {
-            $this->bigQueryPersistServiceLogger->critical(
+            $this->bigQueryPersistServiceLogger->info(
                 sprintf(
-                    '%s row error(s) while attempting to persist coverage file (%s) into BigQuery.',
+                    'Persistence of %s rows into BigQuery complete (chunk: %s for %s). Failed to insert %s rows.',
+                    count($rows),
+                    $chunkNumber,
                     (string)$upload,
-                    count($insertResponse->failedRows())
+                    count($failedRows)
                 ),
                 [
-                    'failedRows' => $insertResponse->failedRows()
+                    'failedRows' => $failedRows
                 ]
             );
 
-            return false;
+            $partialFailure = $partialFailure || !$insertResponse->isSuccessful();
         }
 
-        $this->bigQueryPersistServiceLogger->info(
-            sprintf(
-                'Persisting %s (%s rows) into BigQuery was successful',
-                (string)$upload,
-                count($rows)
-            )
-        );
-
-        return true;
+        return !$partialFailure;
     }
 
-    private function buildRows(Upload $upload, Coverage $coverage): array
+    /**
+     * Build a set of chunked rows to be inserted into BigQuery.
+     *
+     * This method has to be very memory efficient as it will be an accumulator for _every_ line in _every_ file of
+     * the coverage file - potentially resulting in hundreds of thousands of rows at a time.
+     *
+     * @return iterable<int, array>
+     */
+    private function getChunkedLines(Upload $upload, Coverage $coverage, int $chunkSize): iterable
     {
-        return array_reduce(
-            $coverage->getFiles(),
-            function (array $carry, File $file) use ($upload, $coverage): array {
-                return [
-                    ...$carry,
-                    ...array_map(
-                        fn(AbstractLine $line): array => [
-                            'data' => $this->buildRow($upload, $coverage, $file, $line)
-                        ],
-                        $file->getAllLines()
-                    )
+        $chunk = [];
+
+        $remainingFiles = count($coverage);
+
+        foreach ($coverage->getFiles() as $file) {
+            $remainingLines = count($file);
+
+            $remainingFiles--;
+
+            foreach ($file->getAllLines() as $line) {
+                $chunk[] = [
+                    'data' => $this->bigQueryMetadataBuilderService->buildRow($upload, $coverage, $file, $line)
                 ];
-            },
-            []
-        );
-    }
 
-    private function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLine $line): array
-    {
-        return [
-            'uploadId' => $upload->getUploadId(),
-            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-            'provider' => $upload->getProvider()->value,
-            'owner' => $upload->getOwner(),
-            'repository' => $upload->getRepository(),
-            'commit' => $upload->getCommit(),
-            'parent' => $upload->getParent(),
-            'ref' => $upload->getRef(),
-            'tag' => $upload->getTag()->getName(),
-            'sourceFormat' => $coverage->getSourceFormat(),
-            'fileName' => $file->getFileName(),
-            'generatedAt' => $coverage->getGeneratedAt() ?
-                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
-                null,
-            'type' => $line->getType(),
-            'lineNumber' => $line->getLineNumber(),
-            'metadata' => $this->bigQueryMetadataBuilderService->buildMetadata($line)
-        ];
+                $remainingLines--;
+
+                if (
+                    $remainingFiles == 0 &&
+                    $remainingLines == 0
+                ) {
+                    yield $chunk;
+                    return;
+                }
+
+                if (count($chunk) === $chunkSize) {
+                    yield $chunk;
+                    $chunk = [];
+                }
+            }
+        }
     }
 
     public static function getPriority(): int

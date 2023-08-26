@@ -2,13 +2,14 @@
 
 namespace Packages\Models\Model;
 
+use Countable;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use JsonSerializable;
 use Packages\Models\Enum\CoverageFormat;
 
-class Coverage implements JsonSerializable
+class Coverage implements JsonSerializable, Countable
 {
     private ?DateTimeImmutable $generatedAt = null;
 
@@ -16,6 +17,8 @@ class Coverage implements JsonSerializable
      * @var File[]
      */
     private array $files = [];
+
+    private int $fileCount = 0;
 
     /**
      * @throws Exception
@@ -87,11 +90,17 @@ class Coverage implements JsonSerializable
     public function addFile(File $file): void
     {
         $this->files[] = $file;
+        $this->fileCount++;
     }
 
     public function toString(): string
     {
         return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
+    }
+
+    public function count(): int
+    {
+        return $this->fileCount;
     }
 
     public function jsonSerialize(): array

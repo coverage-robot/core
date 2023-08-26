@@ -17,115 +17,39 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\Branch;
+use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
 use Packages\Models\Model\Upload;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 
 class BigQueryPersistServiceTest extends TestCase
 {
-    public function testPersist(): void
-    {
-        $fileCoverage = new File('mock-file');
-        $fileCoverage->setLine(new Statement(1, 1));
-        $fileCoverage->setLine(new Branch(2, 1, [0 => 0, 1 => 1]));
-
-        $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
-        $coverage->addFile($fileCoverage);
-
-        $upload = new Upload(
-            Uuid::uuid4()->toString(),
-            Provider::GITHUB,
-            '',
-            '',
-            '',
-            [],
-            'mock-branch-reference',
-            1,
-            new Tag('mock-tag', '')
-        );
-
+    #[DataProvider('coverageDataProvider')]
+    public function testPersistWithVaryingChunks(
+        Upload $upload,
+        Coverage $coverage,
+        int $chunkSize,
+        array $expectedInsertedChunks
+    ): void {
         $insertResponse = $this->createMock(InsertResponse::class);
-        $insertResponse->expects($this->once())
-            ->method('isSuccessful')
+        $insertResponse->method('isSuccessful')
             ->willReturn(true);
+        $insertResponse->method('failedRows')
+            ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $mockTable->expects($this->once())
+        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
-                [
-                    [
-                        'data' => [
-                            'uploadId' => $upload->getUploadId(),
-                            'commit' => '',
-                            'parent' => [],
-                            'provider' => 'github',
-                            'owner' => '',
-                            'repository' => '',
-                            'ref' => 'mock-branch-reference',
-                            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-                            'sourceFormat' => CoverageFormat::LCOV,
-                            'fileName' => 'mock-file',
-                            'generatedAt' => null,
-                            'type' => LineType::STATEMENT,
-                            'lineNumber' => 1,
-                            'metadata' => [
-                                [
-                                    'key' => 'type',
-                                    'value' => LineType::STATEMENT->value,
-                                ],
-                                [
-                                    'key' => 'lineNumber',
-                                    'value' => '1'
-                                ],
-                                [
-                                    'key' => 'lineHits',
-                                    'value' => '1'
-                                ]
-                            ],
-                            'tag' => 'mock-tag'
-                        ]
-                    ],
-                    [
-                        'data' => [
-                            'uploadId' => $upload->getUploadId(),
-                            'commit' => '',
-                            'parent' => [],
-                            'provider' => 'github',
-                            'owner' => '',
-                            'repository' => '',
-                            'ref' => 'mock-branch-reference',
-                            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-                            'sourceFormat' => CoverageFormat::LCOV,
-                            'fileName' => 'mock-file',
-                            'generatedAt' => null,
-                            'type' => LineType::BRANCH,
-                            'lineNumber' => 2,
-                            'metadata' => [
-                                [
-                                    'key' => 'type',
-                                    'value' => LineType::BRANCH->value,
-                                ],
-                                [
-                                    'key' => 'lineNumber',
-                                    'value' => '2'
-                                ],
-                                [
-                                    'key' => 'lineHits',
-                                    'value' => '1'
-                                ],
-                                [
-                                    'key' => 'branchHits',
-                                    'value' => '[0,1]'
-                                ]
-                            ],
-                            'tag' => 'mock-tag'
-                        ]
-                    ]
-                ]
+                self::callback(
+                    static fn (array $rows) =>
+                        $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations() - 1]
+                )
             )
             ->willReturn($insertResponse);
 
@@ -150,9 +74,175 @@ class BigQueryPersistServiceTest extends TestCase
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
                 ]
             ),
-            new NullLogger()
+            new NullLogger(),
+            $chunkSize
         );
 
-        $bigQueryPersistService->persist($upload, $coverage);
+        $this->assertTrue($bigQueryPersistService->persist($upload, $coverage));
+    }
+
+    #[DataProvider('coverageDataProvider')]
+    public function testPersistingAPartialFailure(
+        Upload $upload,
+        Coverage $coverage,
+        int $chunkSize,
+        array $expectedInsertedChunks
+    ): void {
+        $insertResponse = $this->createMock(InsertResponse::class);
+        $insertResponse->method('isSuccessful')
+            ->willReturn(false);
+        $insertResponse->method('failedRows')
+            ->willReturn([]);
+
+        $mockTable = $this->createMock(Table::class);
+        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $mockTable->expects($insertMatcher)
+            ->method('insertRows')
+            ->with(
+                self::callback(
+                    static fn (array $rows) =>
+                        $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations() - 1]
+                )
+            )
+            ->willReturn($insertResponse);
+
+        $mockBigQueryDataset = $this->createMock(Dataset::class);
+        $mockBigQueryDataset->expects($this->once())
+            ->method('table')
+            ->with('mock-table')
+            ->willReturn($mockTable);
+
+        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
+        $mockBigQueryClient->expects($this->once())
+            ->method('getEnvironmentDataset')
+            ->willReturn($mockBigQueryDataset);
+
+        $bigQueryPersistService = new BigQueryPersistService(
+            $mockBigQueryClient,
+            new BigQueryMetadataBuilderService(new NullLogger()),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                ]
+            ),
+            new NullLogger(),
+            $chunkSize
+        );
+
+        $this->assertFalse($bigQueryPersistService->persist($upload, $coverage));
+    }
+
+    public static function coverageDataProvider(): iterable
+    {
+        $chunkSize = 6;
+
+        $upload = new Upload(
+            Uuid::uuid4()->toString(),
+            Provider::GITHUB,
+            '',
+            '',
+            '',
+            [],
+            'mock-branch-reference',
+            1,
+            new Tag('mock-tag', '')
+        );
+
+        for ($numberOfLines = 1; $numberOfLines <= 10; $numberOfLines++) {
+            $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
+            $expectedInsertedRows = [];
+
+            for ($numberOfFiles = 1; $numberOfFiles <= 3; $numberOfFiles++) {
+                // Clone the coverage object so that we can add an additional file per yield, while
+                // modifying the original object
+                $coverage = clone $coverage;
+
+                $file = new File('mock-file-' . $numberOfFiles);
+
+                for ($i = 1; $i <= $numberOfLines; $i++) {
+                    $line = match ($i % 3) {
+                        0 => new Branch($i, $i % 2, [0 => 0, 1 => 2, 3 => 0]),
+                        1 => new Statement($i, $i % 2),
+                        2 => new Method($i, $i % 2, 'mock-method-' . $i)
+                    };
+                    $file->setLine($line);
+
+                    $commonColumns = [
+                        'uploadId' => $upload->getUploadId(),
+                        'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+                        'provider' => $upload->getProvider()->value,
+                        'owner' => $upload->getOwner(),
+                        'repository' => $upload->getRepository(),
+                        'commit' => $upload->getCommit(),
+                        'parent' => $upload->getParent(),
+                        'ref' => $upload->getRef(),
+                        'tag' => $upload->getTag()->getName(),
+                        'sourceFormat' => CoverageFormat::LCOV,
+                        'fileName' => $file->getFileName(),
+                        'generatedAt' => $coverage->getGeneratedAt(),
+                        'type' => $line->getType(),
+                        'lineNumber' => $line->getLineNumber(),
+                    ];
+
+                    $commonMetadata = [
+                        [
+                            'key' => 'type',
+                            'value' => $line->getType()->value,
+                        ],
+                        [
+                            'key' => 'lineNumber',
+                            'value' => $line->getLineNumber()
+                        ],
+                        [
+                            'key' => 'lineHits',
+                            'value' => $line->getLineHits()
+                        ]
+                    ];
+
+                    $expectedInsertedRows[] = [
+                        'data' => [
+                            ...match ($line->getType()) {
+                                LineType::STATEMENT => $commonColumns + [
+                                    'metadata' => $commonMetadata,
+                                ],
+                                LineType::BRANCH => $commonColumns + [
+                                    'metadata' => array_merge(
+                                        $commonMetadata,
+                                        [
+                                            [
+                                                'key' => 'branchHits',
+                                                'value' => '{"0":0,"1":2,"3":0}'
+                                            ]
+                                        ]
+                                    )
+                                ],
+                                LineType::METHOD => $commonColumns + [
+                                    'metadata' => array_merge(
+                                        $commonMetadata,
+                                        [
+                                            [
+                                                'key' => 'name',
+                                                'value' => $line->getName()
+                                            ]
+                                        ]
+                                    )
+                                ],
+                            }
+                        ]
+                    ];
+                }
+
+                $coverage->addFile($file);
+
+                yield sprintf('%s files with %s line(s) each', $numberOfFiles, $numberOfLines) => [
+                    $upload,
+                    $coverage,
+                    $chunkSize,
+                    array_chunk($expectedInsertedRows, $chunkSize)
+                ];
+            }
+        }
     }
 }
