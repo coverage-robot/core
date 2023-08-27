@@ -2,6 +2,7 @@
 
 namespace App\Service\Persist;
 
+use App\Exception\PersistException;
 use App\Service\EnvironmentService;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
@@ -34,15 +35,16 @@ class S3PersistService implements PersistServiceInterface
         /** @var array<string, string> $metadata */
         $metadata = $upload->jsonSerialize();
 
+        $body = $this->getBody($coverage);
+
         $this->s3Client->upload(
             sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
             sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
-            $this->getBody($coverage),
+            $body,
             [
                 // We can't directly encode and upload the file, as its entirely possible it'll be too big
-                // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
-                // provided.
-                'ContentLength' => $this->getContentLength($coverage),
+                // to fit in memory. Instead, we need to pass a resource to the request
+                'ContentLength' => $this->getContentLength($body),
                 'ContentType' => 'text/plain',
                 'Metadata' => [
                     'sourceFormat' => $coverage->getSourceFormat()->value,
@@ -92,65 +94,77 @@ class S3PersistService implements PersistServiceInterface
      * Type: METHOD, LineNumber: 52, LineHits: 0, Name: resolve
      * Type: STATEMENT, LineNumber: 55, LineHits: 0
      * ```
-     * @return iterable<mixed, string>
+     * @return resource
      * @throws JsonException
      */
-    public function getBody(Coverage $coverage): iterable
+    public function getBody(Coverage $coverage)
     {
-        yield sprintf(
-            ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
-            $coverage->getSourceFormat()->value,
-            $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
-            $coverage->getRoot(),
-            count($coverage),
+        $buffer = fopen('php://temp', 'rw+');
+
+        if (!$buffer) {
+            throw new PersistException('Unable to open buffer for writing S3 stream to.');
+        }
+
+        fwrite(
+            $buffer,
+            sprintf(
+                ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
+                $coverage->getSourceFormat()->value,
+                $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
+                $coverage->getRoot(),
+                count($coverage),
+            )
         );
 
         foreach ($coverage->getFiles() as $file) {
-            yield sprintf(
-                "\n> FileName: %s, TotalLines: %s\n",
-                $file->getFileName(),
-                count($file)
+            fwrite(
+                $buffer,
+                sprintf(
+                    "\n> FileName: %s, TotalLines: %s\n",
+                    $file->getFileName(),
+                    count($file)
+                )
             );
 
             foreach ($file->getAllLines() as $line) {
                 $line = $line->jsonSerialize();
 
-                yield implode(
-                    ', ',
-                    array_map(
+                fwrite(
+                    $buffer,
+                    implode(
+                        ', ',
+                        array_map(
                         /**
                          * @param array-key $key
                          * @throws JsonException
                          */
-                        static fn(string $key, string|array $value) => sprintf(
-                            '%s: %s',
-                            ucfirst((string)$key),
-                            json_encode($value, JSON_THROW_ON_ERROR)
-                        ),
-                        array_keys($line),
-                        array_values($line)
-                    )
-                ) . "\n";
+                            static fn(string $key, string|array $value) => sprintf(
+                                '%s: %s',
+                                ucfirst((string)$key),
+                                json_encode($value, JSON_THROW_ON_ERROR)
+                            ),
+                            array_keys($line),
+                            array_values($line)
+                        )
+                    ) . "\n"
+                );
             }
         }
+
+        return $buffer;
     }
 
     /**
      * We need to be able to tell S3 how big the file is going to be once all of the chunks have
      * been streamed.
      *
-     * This method acts as an accumulator (ensuring the entire coverage file is never stored directly
-     * in memory), and return the total length of the fully streamed file will be.
+     * This method returns the total length the fully streamed file.
+     *
+     * @param resource $buffer
      */
-    public function getContentLength(Coverage $coverage): int
+    public function getContentLength($buffer): int
     {
-        $contentLength = 0;
-
-        foreach ($this->getBody($coverage) as $line) {
-            $contentLength += mb_strlen($line);
-        }
-
-        return $contentLength;
+        return fstat($buffer)['size'] ?? 0;
     }
 
     public static function getPriority(): int
