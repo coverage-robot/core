@@ -92,7 +92,8 @@ resource "aws_lambda_function" "service" {
   runtime          = "provided.al2"
   handler          = "App\\Handler\\EventHandler"
   architectures    = ["arm64"]
-  timeout          = 28
+  # Allow two minutes for the file to successfully ingest. That should be plenty of time to import hundreds of MB work of coverage
+  timeout = 120
   layers = [
     format(
       "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
