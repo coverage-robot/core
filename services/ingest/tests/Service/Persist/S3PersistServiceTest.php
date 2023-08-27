@@ -55,7 +55,7 @@ class S3PersistServiceTest extends TestCase
                     static fn(PutObjectRequest $request) => $request->getKey() === $upload->getUploadId() . '.txt' &&
                         $request->getBucket() === 'coverage-output-dev' &&
                         $request->getMetadata() == $metadata &&
-                        iterator_to_array($request->getBody()) == $expectedWrittenLines
+                        implode("\n", iterator_to_array($request->getBody())) == implode("\n", $expectedWrittenLines)
                 )
             )
             ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 200));
@@ -95,7 +95,7 @@ class S3PersistServiceTest extends TestCase
                 $coverage = clone $coverage;
 
                 $expectedWrittenLines[0] = sprintf(
-                    ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
+                    '>> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s',
                     $coverage->getSourceFormat()->value,
                     $coverage->getGeneratedAt()?->format(DateTimeImmutable::ATOM) ?? 'unknown',
                     $coverage->getRoot(),
@@ -105,7 +105,7 @@ class S3PersistServiceTest extends TestCase
                 $file = new File('mock-file-' . $numberOfFiles);
 
                 $expectedWrittenLines[] = sprintf(
-                    "\n> FileName: %s, TotalLines: %s\n",
+                    "\n> FileName: %s, TotalLines: %s",
                     $file->getFileName(),
                     $numberOfLines
                 );
@@ -129,7 +129,7 @@ class S3PersistServiceTest extends TestCase
                             array_keys($line->jsonSerialize()),
                             array_values($line->jsonSerialize())
                         )
-                    ) . "\n";
+                    );
                 }
 
                 $coverage->addFile($file);
