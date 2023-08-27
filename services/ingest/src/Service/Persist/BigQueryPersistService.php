@@ -77,18 +77,19 @@ class BigQueryPersistService implements PersistServiceInterface
 
                 $remainingLines--;
 
-                if (
-                    $remainingFiles == 0 &&
-                    $remainingLines == 0
-                ) {
-                    yield $chunk;
-                    return;
-                }
-
                 if (count($chunk) === $chunkSize) {
                     yield $chunk;
                     $chunk = [];
                 }
+            }
+
+            if (
+                !empty($chunk) &&
+                $remainingFiles == 0 &&
+                $remainingLines == 0
+            ) {
+                yield $chunk;
+                return;
             }
         }
     }
