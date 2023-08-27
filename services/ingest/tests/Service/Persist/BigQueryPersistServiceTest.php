@@ -48,7 +48,7 @@ class BigQueryPersistServiceTest extends TestCase
             ->with(
                 self::callback(
                     static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                    ) - 1]
+                        ) - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -101,7 +101,7 @@ class BigQueryPersistServiceTest extends TestCase
             ->with(
                 self::callback(
                     static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                    ) - 1]
+                        ) - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -157,7 +157,7 @@ class BigQueryPersistServiceTest extends TestCase
             ->with(
                 self::callback(
                     static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                    ) - 1]
+                        ) - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -206,7 +206,7 @@ class BigQueryPersistServiceTest extends TestCase
             new Tag('mock-tag', '')
         );
 
-        for ($numberOfLines = 6; $numberOfLines <= 10; $numberOfLines++) {
+        for ($numberOfLines = 1; $numberOfLines <= 10; $numberOfLines++) {
             $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
             $expectedInsertedRows = [];
 
