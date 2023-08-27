@@ -33,7 +33,7 @@ class BigQueryPersistServiceTest extends TestCase
         Upload $upload,
         Coverage $coverage,
         int $chunkSize,
-        array $expectedInsertedChunks
+        array $expectedChunks
     ): void {
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->method('isSuccessful')
@@ -42,13 +42,12 @@ class BigQueryPersistServiceTest extends TestCase
             ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $insertMatcher = $this->exactly(count($expectedChunks));
         $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                        ) - 1]
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -86,7 +85,7 @@ class BigQueryPersistServiceTest extends TestCase
         Upload $upload,
         Coverage $coverage,
         int $chunkSize,
-        array $expectedInsertedChunks
+        array $expectedChunks
     ): void {
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->method('isSuccessful')
@@ -95,13 +94,12 @@ class BigQueryPersistServiceTest extends TestCase
             ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $insertMatcher = $this->exactly(count($expectedChunks));
         $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                        ) - 1]
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -139,7 +137,7 @@ class BigQueryPersistServiceTest extends TestCase
         Upload $upload,
         Coverage $coverage,
         int $chunkSize,
-        array $expectedInsertedChunks
+        array $expectedChunks
     ): void {
         // Add a file to the end, with no lines
         $coverage->addFile(new File('file-with-no-lines'));
@@ -151,13 +149,12 @@ class BigQueryPersistServiceTest extends TestCase
             ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $insertMatcher = $this->exactly(count($expectedChunks));
         $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn(array $rows) => $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations(
-                        ) - 1]
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
                 )
             )
             ->willReturn($insertResponse);
