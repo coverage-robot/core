@@ -76,6 +76,13 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tags = $this->queryService->runQuery(CommitTagsQuery::class, QueryParameterBag::fromUpload($upload));
 
+        if (empty($tags->getCommits())) {
+            // Generally we shouldn't get there, as its a pretty safe assumption that there
+            // should be _at least_ one commit, with one tag (the one we're analysing currently),
+            // however, on the off chance something goes wrong, we should just to double check.
+            return [];
+        }
+
         return $tags->getCommits()[0]->getTags();
     }
 
@@ -136,7 +143,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             /** @var Tag[] $commitTags */
             $commitTags = array_reduce(
                 $uploadedCommits->getCommits(),
-                static fn (array $tags, CommitQueryResult $result) => $result->getCommit() === $commit ?
+                static fn(array $tags, CommitQueryResult $result) => $result->getCommit() === $commit ?
                     [...$tags, ...$result->getTags()] :
                     $tags,
                 []
