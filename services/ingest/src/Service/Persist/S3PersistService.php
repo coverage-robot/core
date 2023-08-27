@@ -55,7 +55,9 @@ class S3PersistService implements PersistServiceInterface
                         // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
                         // provided.
                         'ContentLength' => $this->getContentLength($coverage),
-                        'Body' => (fn() => $this->getBody($coverage))(),
+                        'Body' => (function () use ($coverage): iterable {
+                            yield from $this->getBody($coverage);
+                        })(),
                     ]
                 )
             );
