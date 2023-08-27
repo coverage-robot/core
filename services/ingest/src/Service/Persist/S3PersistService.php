@@ -56,7 +56,42 @@ class S3PersistService implements PersistServiceInterface
                         // provided.
                         'ContentLength' => $this->getContentLength($coverage),
                         'Body' => (function () use ($coverage): iterable {
-                            yield from $this->getBody($coverage);
+                            yield sprintf(
+                                ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
+                                $coverage->getSourceFormat()->value,
+                                $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
+                                $coverage->getRoot(),
+                                count($coverage),
+                            );
+
+                            foreach ($coverage->getFiles() as $file) {
+                                yield sprintf(
+                                    "\n> FileName: %s, TotalLines: %s\n",
+                                    $file->getFileName(),
+                                    count($file)
+                                );
+
+                                foreach ($file->getAllLines() as $line) {
+                                    $line = $line->jsonSerialize();
+
+                                    yield implode(
+                                        ', ',
+                                        array_map(
+                                            /**
+                                             * @param array-key $key
+                                             * @throws JsonException
+                                             */
+                                            static fn(string $key, string|array $value) => sprintf(
+                                                '%s: %s',
+                                                ucfirst((string)$key),
+                                                json_encode($value, JSON_THROW_ON_ERROR)
+                                            ),
+                                            array_keys($line),
+                                            array_values($line)
+                                        )
+                                    ) . "\n";
+                                }
+                            }
                         })(),
                     ]
                 )
