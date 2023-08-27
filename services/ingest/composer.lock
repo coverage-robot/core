@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5cd49d853f7f363d873dee62b206a98d",
+    "content-hash": "93c515ec6aa2890c765e6f5d82da9988",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -202,16 +202,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "2.0.0",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "1486ae6592a8f870da60dfc29bfc98390c7b9092"
+                "reference": "27ce65242cde50ba09323d54708b45cf64a51aa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/1486ae6592a8f870da60dfc29bfc98390c7b9092",
-                "reference": "1486ae6592a8f870da60dfc29bfc98390c7b9092",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/27ce65242cde50ba09323d54708b45cf64a51aa5",
+                "reference": "27ce65242cde50ba09323d54708b45cf64a51aa5",
                 "shasum": ""
             },
             "require": {
@@ -225,7 +225,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.14-dev"
                 }
             },
             "autoload": {
@@ -246,7 +246,64 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.0.0"
+                "source": "https://github.com/async-aws/s3/tree/1.14.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-06-20T19:17:40+00:00"
+        },
+        {
+            "name": "async-aws/simple-s3",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/simple-s3.git",
+                "reference": "e4ca6b2ff302ecfe7106ecfff074715cae6c95f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/e4ca6b2ff302ecfe7106ecfff074715cae6c95f3",
+                "reference": "e4ca6b2ff302ecfe7106ecfff074715cae6c95f3",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/s3": "^1.2",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\SimpleS3\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A simple S3 client that are easy to work with. ",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "s3",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/simple-s3/tree/1.1.1"
             },
             "funding": [
                 {
@@ -463,7 +520,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
             },
             "type": "library",
             "autoload": {

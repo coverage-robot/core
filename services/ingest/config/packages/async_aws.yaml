@@ -4,10 +4,12 @@ when@dev: &aws_dev
       region: eu-west-2
 
     clients:
-      s3:
+      s3: &s3
         config:
           endpoint: 'http://localstack:4566'
           pathStyleEndpoint: true
+
+      simple_s3: *s3
 
       event-bridge:
         config:
