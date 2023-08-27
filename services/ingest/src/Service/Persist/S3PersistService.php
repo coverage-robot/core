@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class S3PersistService implements PersistServiceInterface
 {
+    private const CHUNK_SIZE = 90000;
+
     private const OUTPUT_BUCKET = 'coverage-output-%s';
 
     private const OUTPUT_KEY = '%s%s.txt';
@@ -55,44 +57,7 @@ class S3PersistService implements PersistServiceInterface
                         // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
                         // provided.
                         'ContentLength' => $this->getContentLength($coverage),
-                        'Body' => (function () use ($coverage): iterable {
-                            yield sprintf(
-                                ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
-                                $coverage->getSourceFormat()->value,
-                                $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
-                                $coverage->getRoot(),
-                                count($coverage),
-                            );
-
-                            foreach ($coverage->getFiles() as $file) {
-                                yield sprintf(
-                                    "\n> FileName: %s, TotalLines: %s\n",
-                                    $file->getFileName(),
-                                    count($file)
-                                );
-
-                                foreach ($file->getAllLines() as $line) {
-                                    $line = $line->jsonSerialize();
-
-                                    yield implode(
-                                        ', ',
-                                        array_map(
-                                            /**
-                                             * @param array-key $key
-                                             * @throws JsonException
-                                             */
-                                            static fn(string $key, string|array $value) => sprintf(
-                                                '%s: %s',
-                                                ucfirst((string)$key),
-                                                json_encode($value, JSON_THROW_ON_ERROR)
-                                            ),
-                                            array_keys($line),
-                                            array_values($line)
-                                        )
-                                    ) . "\n";
-                                }
-                            }
-                        })(),
+                        'Body' => $this->getBody($coverage)
                     ]
                 )
             );
@@ -158,7 +123,7 @@ class S3PersistService implements PersistServiceInterface
      */
     public function getBody(Coverage $coverage): iterable
     {
-        yield sprintf(
+        $stream = sprintf(
             ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
             $coverage->getSourceFormat()->value,
             $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
@@ -167,7 +132,7 @@ class S3PersistService implements PersistServiceInterface
         );
 
         foreach ($coverage->getFiles() as $file) {
-            yield sprintf(
+            $stream .= sprintf(
                 "\n> FileName: %s, TotalLines: %s\n",
                 $file->getFileName(),
                 count($file)
@@ -176,24 +141,31 @@ class S3PersistService implements PersistServiceInterface
             foreach ($file->getAllLines() as $line) {
                 $line = $line->jsonSerialize();
 
-                yield implode(
-                    ', ',
-                    array_map(
+                $stream .= implode(
+                        ', ',
+                        array_map(
                         /**
                          * @param array-key $key
                          * @throws JsonException
                          */
-                        static fn(string $key, string|array $value) => sprintf(
-                            '%s: %s',
-                            ucfirst((string)$key),
-                            json_encode($value, JSON_THROW_ON_ERROR)
-                        ),
-                        array_keys($line),
-                        array_values($line)
-                    )
-                ) . "\n";
+                            static fn(string $key, string|array $value) => sprintf(
+                                '%s: %s',
+                                ucfirst((string)$key),
+                                json_encode($value, JSON_THROW_ON_ERROR)
+                            ),
+                            array_keys($line),
+                            array_values($line)
+                        )
+                    ) . "\n";
+            }
+
+            if (mb_strlen($stream) >= self::CHUNK_SIZE) {
+                yield rtrim($stream);
+                $stream = '';
             }
         }
+
+        yield rtrim($stream);
     }
 
     /**
