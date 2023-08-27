@@ -95,7 +95,7 @@ class S3PersistService implements PersistServiceInterface
      * @return iterable<mixed, string>
      * @throws JsonException
      */
-    public function getBody(Coverage $coverage): \Generator
+    public function getBody(Coverage $coverage): iterable
     {
         yield sprintf(
             ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
