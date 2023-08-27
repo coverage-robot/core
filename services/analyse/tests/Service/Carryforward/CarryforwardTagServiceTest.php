@@ -65,15 +65,15 @@ class CarryforwardTagServiceTest extends TestCase
                     ],
                     [
                         'commit' => 'mock-commit-4',
-                        'tags' => [ 'tag-2']
+                        'tags' => ['tag-2']
                     ],
                     [
                         'commit' => 'mock-commit-5',
-                        'tags' => [ 'tag-4']
+                        'tags' => ['tag-4']
                     ],
                     [
                         'commit' => 'mock-commit-7',
-                        'tags' => [ 'tag-3']
+                        'tags' => ['tag-3']
                     ]
                 ])
             );
@@ -129,6 +129,81 @@ class CarryforwardTagServiceTest extends TestCase
 
         $this->assertEquals(
             [],
+            $tags
+        );
+    }
+
+    public function testCarryingForwardWithNoCurrentTags(): void
+    {
+        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
+        $mockQueryService = $this->createMock(QueryService::class);
+
+        $mockCommitHistoryService->expects($this->once())
+            ->method('getPrecedingCommits')
+            ->willReturn([
+                'mock-commit-2',
+                'mock-commit-3',
+                'mock-commit-4',
+                'mock-commit-5',
+                'mock-commit-6',
+                'mock-commit-7'
+            ]);
+
+        $carryforwardTagService = new CarryforwardTagService(
+            $mockCommitHistoryService,
+            $mockQueryService,
+            new NullLogger()
+        );
+
+        $upload = Upload::from(
+            [
+                'uploadId' => 'mock-uuid',
+                'provider' => Provider::GITHUB->value,
+                'commit' => 'mock-commit-1',
+                'parent' => ['mock-parent'],
+                'ref' => 'mock-ref',
+                'owner' => 'owner',
+                'repository' => 'repository',
+                'tag' => 'tag-4'
+            ]
+        );
+
+        // This shouldn't really happen (no current tags), as the upload we're analysing currently
+        // should _always_ be in BigQuery, but we should handle it gracefully if something goes wrong
+        // during BigQuery persistence.
+        $mockQueryService->expects($this->exactly(2))
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls(
+                CommitCollectionQueryResult::from([]),
+                CommitCollectionQueryResult::from([
+                    [
+                        'commit' => 'mock-commit-2',
+                        'tags' => ['tag-1', 'tag-2']
+                    ],
+                    [
+                        'commit' => 'mock-commit-4',
+                        'tags' => ['tag-2']
+                    ],
+                    [
+                        'commit' => 'mock-commit-5',
+                        'tags' => ['tag-4']
+                    ],
+                    [
+                        'commit' => 'mock-commit-7',
+                        'tags' => ['tag-3']
+                    ]
+                ])
+            );
+
+        $tags = $carryforwardTagService->getTagsToCarryforward($upload);
+
+        $this->assertEquals(
+            [
+                new Tag('tag-1', 'mock-commit-2'),
+                new Tag('tag-2', 'mock-commit-2'),
+                new Tag('tag-4', 'mock-commit-5'),
+                new Tag('tag-3', 'mock-commit-7')
+            ],
             $tags
         );
     }
