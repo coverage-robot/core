@@ -4,10 +4,7 @@ namespace App\Tests\Service\Persist;
 
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use AsyncAws\Core\Test\ResultMockFactory;
-use AsyncAws\S3\Input\PutObjectRequest;
-use AsyncAws\S3\Result\PutObjectOutput;
-use AsyncAws\S3\S3Client;
+use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
@@ -46,19 +43,30 @@ class S3PersistServiceTest extends TestCase
             'tag' => $upload->getTag()->getName()
         ];
 
-        $mockS3Client = $this->createMock(S3Client::class);
+        $mockS3Client = $this->createMock(SimpleS3Client::class);
 
         $mockS3Client->expects($this->once())
-            ->method('putObject')
+            ->method('upload')
             ->with(
+                'coverage-output-dev',
+                $upload->getUploadId() . '.txt',
                 self::callback(
-                    static fn(PutObjectRequest $request) => $request->getKey() === $upload->getUploadId() . '.txt' &&
-                        $request->getBucket() === 'coverage-output-dev' &&
-                        $request->getMetadata() == $metadata &&
-                        implode("\n", iterator_to_array($request->getBody())) == implode("\n", $expectedWrittenLines)
-                )
-            )
-            ->willReturn(ResultMockFactory::createFailing(PutObjectOutput::class, 200));
+                    static fn(iterable $body) => implode('', iterator_to_array($body)) == implode(
+                        '',
+                        $expectedWrittenLines
+                    )
+                ),
+                [
+                    'ContentLength' => mb_strlen(
+                        implode(
+                            '',
+                            $expectedWrittenLines
+                        )
+                    ),
+                    'ContentType' => 'text/plain',
+                    'Metadata' => $metadata
+                ]
+            );
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
@@ -95,7 +103,7 @@ class S3PersistServiceTest extends TestCase
                 $coverage = clone $coverage;
 
                 $expectedWrittenLines[0] = sprintf(
-                    '>> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s',
+                    ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
                     $coverage->getSourceFormat()->value,
                     $coverage->getGeneratedAt()?->format(DateTimeImmutable::ATOM) ?? 'unknown',
                     $coverage->getRoot(),
@@ -105,7 +113,7 @@ class S3PersistServiceTest extends TestCase
                 $file = new File('mock-file-' . $numberOfFiles);
 
                 $expectedWrittenLines[] = sprintf(
-                    "\n> FileName: %s, TotalLines: %s",
+                    "\n> FileName: %s, TotalLines: %s\n",
                     $file->getFileName(),
                     $numberOfLines
                 );
@@ -129,7 +137,7 @@ class S3PersistServiceTest extends TestCase
                             array_keys($line->jsonSerialize()),
                             array_values($line->jsonSerialize())
                         )
-                    );
+                    ) . "\n";
                 }
 
                 $coverage->addFile($file);

@@ -12,7 +12,7 @@ use AsyncAws\S3\Input\DeleteObjectRequest;
 use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\Result\DeleteObjectOutput;
 use AsyncAws\S3\Result\GetObjectOutput;
-use AsyncAws\S3\S3Client;
+use AsyncAws\SimpleS3\SimpleS3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class CoverageFileRetrievalServiceTest extends TestCase
 {
     public function testIngestFromS3(): void
     {
-        $mockS3Client = $this->createMock(S3Client::class);
+        $mockS3Client = $this->createMock(SimpleS3Client::class);
         $mockS3Client->expects($this->once())
             ->method('getObject')
             ->with(
@@ -49,7 +49,7 @@ class CoverageFileRetrievalServiceTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 
-        $mockS3Client = $this->createMock(S3Client::class);
+        $mockS3Client = $this->createMock(SimpleS3Client::class);
         $mockS3Client->expects($this->once())
             ->method('getObject')
             ->with(
@@ -81,7 +81,7 @@ class CoverageFileRetrievalServiceTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_NO_CONTENT);
 
-        $mockS3Client = $this->createMock(S3Client::class);
+        $mockS3Client = $this->createMock(SimpleS3Client::class);
         $mockS3Client->expects($this->once())
             ->method('deleteObject')
             ->with(
@@ -116,7 +116,7 @@ class CoverageFileRetrievalServiceTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_BAD_GATEWAY);
 
-        $mockS3Client = $this->createMock(S3Client::class);
+        $mockS3Client = $this->createMock(SimpleS3Client::class);
         $mockS3Client->expects($this->once())
             ->method('deleteObject')
             ->with(

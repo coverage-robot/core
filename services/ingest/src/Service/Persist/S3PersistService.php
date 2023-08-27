@@ -2,28 +2,22 @@
 
 namespace App\Service\Persist;
 
-use App\Exception\PersistException;
 use App\Service\EnvironmentService;
-use AsyncAws\Core\Exception\Http\HttpException;
-use AsyncAws\S3\Input\PutObjectRequest;
-use AsyncAws\S3\S3Client;
+use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class S3PersistService implements PersistServiceInterface
 {
-    private const CHUNK_SIZE = 90000;
-
     private const OUTPUT_BUCKET = 'coverage-output-%s';
 
     private const OUTPUT_KEY = '%s%s.txt';
 
     public function __construct(
-        private readonly S3Client $s3Client,
+        private readonly SimpleS3Client $s3Client,
         private readonly EnvironmentService $environmentService,
         private readonly LoggerInterface $s3PersistServiceLogger
     ) {
@@ -37,55 +31,35 @@ class S3PersistService implements PersistServiceInterface
      */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
-        try {
-            /** @var array<string, string> $metadata */
-            $metadata = $upload->jsonSerialize();
+        /** @var array<string, string> $metadata */
+        $metadata = $upload->jsonSerialize();
 
-            $response = $this->s3Client->putObject(
-                new PutObjectRequest(
-                    [
-                        'Bucket' => sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
-                        'Key' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
-                        'ContentType' => 'text/plain',
-                        'Metadata' => [
-                            'sourceFormat' => $coverage->getSourceFormat()->value,
-                            ...$metadata,
-                            'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
-                        ],
-
-                        // We can't directly encode and upload the file, as its entirely possible it'll be too big
-                        // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
-                        // provided.
-                        'ContentLength' => $this->getContentLength($coverage),
-                        'Body' => $this->getBody($coverage)
-                    ]
-                )
-            );
-
-            $response->resolve();
-
-            $this->s3PersistServiceLogger->info(
-                sprintf(
-                    'Persisting %s into BigQuery was %s',
-                    (string)$upload,
-                    $response->info()['status'] === Response::HTTP_OK ? 'successful' : 'failed'
-                )
-            );
-
-            return $response->info()['status'] === Response::HTTP_OK;
-        } catch (HttpException $exception) {
-            $this->s3PersistServiceLogger->info(
-                sprintf(
-                    'Exception while persisting %s into S3',
-                    (string)$upload
-                ),
-                [
-                    'exception' => $exception
+        $this->s3Client->upload(
+            sprintf(self::OUTPUT_BUCKET, $this->environmentService->getEnvironment()->value),
+            sprintf(self::OUTPUT_KEY, '', $upload->getUploadId()),
+            $this->getBody($coverage),
+            [
+                // We can't directly encode and upload the file, as its entirely possible it'll be too big
+                // to fit in memory. Instead, we need stream it in chunks, which requires a content length to be
+                // provided.
+                'ContentLength' => $this->getContentLength($coverage),
+                'ContentType' => 'text/plain',
+                'Metadata' => [
+                    'sourceFormat' => $coverage->getSourceFormat()->value,
+                    ...$metadata,
+                    'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
                 ]
-            );
+            ]
+        );
 
-            throw PersistException::from($exception);
-        }
+        $this->s3PersistServiceLogger->info(
+            sprintf(
+                'Persisting %s to S3 has finished',
+                (string)$upload
+            )
+        );
+
+        return true;
     }
 
     /**
@@ -123,7 +97,7 @@ class S3PersistService implements PersistServiceInterface
      */
     public function getBody(Coverage $coverage): iterable
     {
-        $stream = sprintf(
+        yield sprintf(
             ">> SourceFormat: %s, GeneratedAt: %s, ProjectRoot: %s, TotalFiles: %s\n",
             $coverage->getSourceFormat()->value,
             $coverage->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'unknown',
@@ -132,7 +106,7 @@ class S3PersistService implements PersistServiceInterface
         );
 
         foreach ($coverage->getFiles() as $file) {
-            $stream .= sprintf(
+            yield sprintf(
                 "\n> FileName: %s, TotalLines: %s\n",
                 $file->getFileName(),
                 count($file)
@@ -141,7 +115,7 @@ class S3PersistService implements PersistServiceInterface
             foreach ($file->getAllLines() as $line) {
                 $line = $line->jsonSerialize();
 
-                $stream .= implode(
+                yield implode(
                     ', ',
                     array_map(
                         /**
@@ -158,14 +132,7 @@ class S3PersistService implements PersistServiceInterface
                     )
                 ) . "\n";
             }
-
-            if (mb_strlen($stream) >= self::CHUNK_SIZE) {
-                yield rtrim($stream);
-                $stream = '';
-            }
         }
-
-        yield rtrim($stream);
     }
 
     /**

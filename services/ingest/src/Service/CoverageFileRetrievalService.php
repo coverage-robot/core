@@ -11,7 +11,7 @@ use AsyncAws\S3\Exception\NoSuchKeyException;
 use AsyncAws\S3\Input\DeleteObjectRequest;
 use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\Result\GetObjectOutput;
-use AsyncAws\S3\S3Client;
+use AsyncAws\SimpleS3\SimpleS3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
 use Psr\Log\LoggerInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CoverageFileRetrievalService
 {
     public function __construct(
-        private readonly S3Client $s3Client,
+        private readonly SimpleS3Client $s3Client,
         private readonly LoggerInterface $retrievalLogger
     ) {
     }
