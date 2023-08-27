@@ -56,7 +56,7 @@ class S3PersistService implements PersistServiceInterface
                         // provided.
                         'ContentLength' => $this->getContentLength($coverage),
                         'Body' => (function () use ($coverage): iterable {
-                            yield from $this->getBody($coverage);
+                            return yield from $this->getBody($coverage);
                         })(),
                     ]
                 )
@@ -142,21 +142,21 @@ class S3PersistService implements PersistServiceInterface
                 $line = $line->jsonSerialize();
 
                 yield implode(
-                    ', ',
-                    array_map(
+                        ', ',
+                        array_map(
                         /**
                          * @param array-key $key
                          * @throws JsonException
                          */
-                        static fn(string $key, string|array $value) => sprintf(
-                            '%s: %s',
-                            ucfirst((string)$key),
-                            json_encode($value, JSON_THROW_ON_ERROR)
-                        ),
-                        array_keys($line),
-                        array_values($line)
-                    )
-                ) . "\n";
+                            static fn(string $key, string|array $value) => sprintf(
+                                '%s: %s',
+                                ucfirst((string)$key),
+                                json_encode($value, JSON_THROW_ON_ERROR)
+                            ),
+                            array_keys($line),
+                            array_values($line)
+                        )
+                    ) . "\n";
             }
         }
     }
