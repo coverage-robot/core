@@ -51,10 +51,13 @@ class S3PersistServiceTest extends TestCase
                 'coverage-output-dev',
                 $upload->getUploadId() . '.txt',
                 self::callback(
-                    static fn(iterable $body) => implode('', iterator_to_array($body)) == implode(
-                        '',
-                        $expectedWrittenLines
-                    )
+                    static function ($body) use ($expectedWrittenLines) {
+                        rewind($body);
+                        return stream_get_contents($body) == implode(
+                            '',
+                            $expectedWrittenLines
+                        );
+                    }
                 ),
                 [
                     'ContentLength' => mb_strlen(
