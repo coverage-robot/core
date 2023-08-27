@@ -44,7 +44,7 @@ class CoverageFileRetrievalService
             );
 
             return $coverageFile;
-        } catch (NoSuchKeyException|InvalidObjectStateException $exception) {
+        } catch (NoSuchKeyException | InvalidObjectStateException $exception) {
             throw RetrievalException::from($exception);
         }
     }
@@ -80,11 +80,11 @@ class CoverageFileRetrievalService
                 );
             }
         } catch (
-        NoSuchKeyException|
-        InvalidObjectStateException|
-        ClientException|
-        HttpException|
-        DeletionException $exception
+            NoSuchKeyException |
+            InvalidObjectStateException |
+            ClientException |
+            HttpException |
+            DeletionException $exception
         ) {
             $this->retrievalLogger->error(
                 'Failed to delete ingested file.',
