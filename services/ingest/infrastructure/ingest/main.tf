@@ -92,8 +92,8 @@ resource "aws_lambda_function" "service" {
   runtime          = "provided.al2"
   handler          = "App\\Handler\\EventHandler"
   architectures    = ["arm64"]
-  # Allow two minutes for the file to successfully ingest. That should be plenty of time to import hundreds of MB work of coverage
-  timeout = 120
+  # Allow five minutes for the file to successfully ingest. That should be plenty of time to import hundreds of MB work of coverage
+  timeout = 300
   layers = [
     format(
       "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
@@ -110,6 +110,14 @@ resource "aws_lambda_function" "service" {
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
     }
   }
+}
+
+resource "aws_lambda_function_event_invoke_config" "service_invoke_config" {
+  function_name = aws_lambda_function.service.function_name
+
+  # Don't retry events in the case of a timeout - its very likely that the event will have partially processed and we don't
+  # want to duplicate the data
+  maximum_retry_attempts = 0
 }
 
 resource "aws_lambda_permission" "allow_bucket" {

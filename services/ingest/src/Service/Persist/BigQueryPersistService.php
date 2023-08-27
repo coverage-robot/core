@@ -17,7 +17,7 @@ class BigQueryPersistService implements PersistServiceInterface
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentService $environmentService,
         private readonly LoggerInterface $bigQueryPersistServiceLogger,
-        private readonly int $chunkSize = 1000
+        private readonly int $chunkSize = 10000
     ) {
     }
 
