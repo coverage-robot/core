@@ -33,7 +33,7 @@ class BigQueryPersistServiceTest extends TestCase
         Upload $upload,
         Coverage $coverage,
         int $chunkSize,
-        array $expectedInsertedChunks
+        array $expectedChunks
     ): void {
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->method('isSuccessful')
@@ -42,13 +42,12 @@ class BigQueryPersistServiceTest extends TestCase
             ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $insertMatcher = $this->exactly(count($expectedChunks));
         $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn (array $rows) =>
-                        $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations() - 1]
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -86,7 +85,7 @@ class BigQueryPersistServiceTest extends TestCase
         Upload $upload,
         Coverage $coverage,
         int $chunkSize,
-        array $expectedInsertedChunks
+        array $expectedChunks
     ): void {
         $insertResponse = $this->createMock(InsertResponse::class);
         $insertResponse->method('isSuccessful')
@@ -95,13 +94,12 @@ class BigQueryPersistServiceTest extends TestCase
             ->willReturn([]);
 
         $mockTable = $this->createMock(Table::class);
-        $insertMatcher = $this->exactly(count($expectedInsertedChunks));
+        $insertMatcher = $this->exactly(count($expectedChunks));
         $mockTable->expects($insertMatcher)
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn (array $rows) =>
-                        $rows == $expectedInsertedChunks[$insertMatcher->numberOfInvocations() - 1]
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
                 )
             )
             ->willReturn($insertResponse);
@@ -132,6 +130,61 @@ class BigQueryPersistServiceTest extends TestCase
         );
 
         $this->assertFalse($bigQueryPersistService->persist($upload, $coverage));
+    }
+
+    #[DataProvider('coverageDataProvider')]
+    public function testPersistingWithAnEmptyFileAtEnd(
+        Upload $upload,
+        Coverage $coverage,
+        int $chunkSize,
+        array $expectedChunks
+    ): void {
+        // Add a file to the end, with no lines
+        $coverage->addFile(new File('file-with-no-lines'));
+
+        $insertResponse = $this->createMock(InsertResponse::class);
+        $insertResponse->method('isSuccessful')
+            ->willReturn(true);
+        $insertResponse->method('failedRows')
+            ->willReturn([]);
+
+        $mockTable = $this->createMock(Table::class);
+        $insertMatcher = $this->exactly(count($expectedChunks));
+        $mockTable->expects($insertMatcher)
+            ->method('insertRows')
+            ->with(
+                self::callback(
+                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
+                )
+            )
+            ->willReturn($insertResponse);
+
+        $mockBigQueryDataset = $this->createMock(Dataset::class);
+        $mockBigQueryDataset->expects($this->once())
+            ->method('table')
+            ->with('mock-table')
+            ->willReturn($mockTable);
+
+        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
+        $mockBigQueryClient->expects($this->once())
+            ->method('getEnvironmentDataset')
+            ->willReturn($mockBigQueryDataset);
+
+        $bigQueryPersistService = new BigQueryPersistService(
+            $mockBigQueryClient,
+            new BigQueryMetadataBuilderService(new NullLogger()),
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                ]
+            ),
+            new NullLogger(),
+            $chunkSize
+        );
+
+        $this->assertTrue($bigQueryPersistService->persist($upload, $coverage));
     }
 
     public static function coverageDataProvider(): iterable
@@ -205,30 +258,30 @@ class BigQueryPersistServiceTest extends TestCase
                         'data' => [
                             ...match ($line->getType()) {
                                 LineType::STATEMENT => $commonColumns + [
-                                    'metadata' => $commonMetadata,
-                                ],
+                                        'metadata' => $commonMetadata,
+                                    ],
                                 LineType::BRANCH => $commonColumns + [
-                                    'metadata' => array_merge(
-                                        $commonMetadata,
-                                        [
+                                        'metadata' => array_merge(
+                                            $commonMetadata,
                                             [
-                                                'key' => 'branchHits',
-                                                'value' => '{"0":0,"1":2,"3":0}'
+                                                [
+                                                    'key' => 'branchHits',
+                                                    'value' => '{"0":0,"1":2,"3":0}'
+                                                ]
                                             ]
-                                        ]
-                                    )
-                                ],
+                                        )
+                                    ],
                                 LineType::METHOD => $commonColumns + [
-                                    'metadata' => array_merge(
-                                        $commonMetadata,
-                                        [
+                                        'metadata' => array_merge(
+                                            $commonMetadata,
                                             [
-                                                'key' => 'name',
-                                                'value' => $line->getName()
+                                                [
+                                                    'key' => 'name',
+                                                    'value' => $line->getName()
+                                                ]
                                             ]
-                                        ]
-                                    )
-                                ],
+                                        )
+                                    ],
                             }
                         ]
                     ];
