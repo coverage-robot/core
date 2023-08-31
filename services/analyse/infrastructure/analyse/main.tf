@@ -55,6 +55,15 @@ resource "aws_iam_policy" "analyse_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:SednMessage"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.publish_queue.arn
+        ]
       }
     ]
   })
@@ -71,7 +80,8 @@ resource "aws_lambda_function" "analyse" {
 
   function_name = format("coverage-analyse-%s", var.environment)
   role          = aws_iam_role.analyse_role.arn
-  timeout       = 28
+  timeout       = 60
+  memory_size   = 1024
   runtime       = "provided.al2"
   handler       = "App\\Handler\\EventHandler"
   architectures = ["arm64"]
