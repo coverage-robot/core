@@ -4,6 +4,7 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
+use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
@@ -26,6 +27,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
+            new CheckAnnotationFormatterService(),
             $this->createMock(GithubAppInstallationClient::class),
             MockEnvironmentServiceFactory::getMock($this, Environment::TESTING),
             new NullLogger()
@@ -34,6 +36,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $isSupported = $publisher->supports(
             new PublishableCheckRunMessage(
                 $upload,
+                [],
                 100,
                 new DateTimeImmutable()
             )
@@ -48,6 +51,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
+            new CheckAnnotationFormatterService(),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::getMock(
                 $this,
@@ -106,6 +110,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                [],
                 100,
                 new DateTimeImmutable()
             )
@@ -118,6 +123,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
+            new CheckAnnotationFormatterService(),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::getMock(
                 $this,
@@ -176,6 +182,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                [],
                 100,
                 new DateTimeImmutable()
             )

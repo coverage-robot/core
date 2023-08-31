@@ -10,16 +10,34 @@ use Packages\Models\Model\Upload;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
 {
+    /**
+     * @var PublishableCheckAnnotationMessage[]
+     */
+    private array $annotations;
+
+    /**
+     * @param PublishableCheckAnnotationMessage[] $annotations
+     */
     public function __construct(
         private readonly Upload $upload,
+        array $annotations,
         private readonly float $coveragePercentage,
         private readonly DateTimeImmutable $validUntil,
     ) {
+        $this->annotations = array_filter(
+            $annotations,
+            static fn(mixed $annotation) => $annotation instanceof PublishableCheckAnnotationMessage
+        );
     }
 
     public function getUpload(): Upload
     {
         return $this->upload;
+    }
+
+    public function getAnnotations(): array
+    {
+        return $this->annotations;
     }
 
     public function getType(): PublishableMessage
@@ -52,8 +70,20 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
             throw new InvalidArgumentException("Check run message is not valid.");
         }
 
+        $annotations = array_filter(
+            array_map(
+                static fn(array $message) => PublishableMessageCollection::tryFromMessageUsingType($message),
+                $data['annotations'] ?? []
+            )
+        );
+
+        if (count($annotations) !== count($data['annotations'])) {
+            throw new InvalidArgumentException('At least one invalid message has been provided.');
+        }
+
         return new self(
             Upload::from($data['upload']),
+            $annotations,
             (float)$data['coveragePercentage'],
             $validUntil
         );
@@ -65,7 +95,6 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
             implode('', [
                 $this->upload->getOwner(),
                 $this->upload->getRepository(),
-                $this->upload->getRef(),
                 $this->upload->getCommit()
             ])
         );
@@ -76,6 +105,10 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         return [
             'type' => $this->getType()->value,
             'upload' => $this->upload->jsonSerialize(),
+            'annotations' => array_map(
+                static fn(PublishableCheckAnnotationMessage $annotationMessage) => $annotationMessage->jsonSerialize(),
+                $this->annotations
+            ),
             'coveragePercentage' => $this->coveragePercentage,
             'validUntil' => $this->validUntil->format(DateTimeInterface::ATOM),
         ];

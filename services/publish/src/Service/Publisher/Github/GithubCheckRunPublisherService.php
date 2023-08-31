@@ -4,6 +4,7 @@ namespace App\Service\Publisher\Github;
 
 use App\Exception\PublishException;
 use App\Service\EnvironmentService;
+use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -19,6 +20,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
 {
     public function __construct(
         private readonly CheckRunFormatterService $checkRunFormatterService,
+        private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
         GithubAppInstallationClient $client,
         EnvironmentService $environmentService,
         LoggerInterface $checkPublisherLogger
@@ -47,12 +49,23 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         /** @var PublishableCheckRunMessage $publishableMessage */
         $upload = $publishableMessage->getUpload();
 
-        $this->upsertCheckRun(
+        $successful = $this->upsertCheckRun(
             $upload->getOwner(),
             $upload->getRepository(),
             $upload->getCommit(),
             $publishableMessage
         );
+
+        if (!$successful) {
+            $this->checkPublisherLogger->critical(
+                sprintf(
+                    'Failed to publish check run for %s',
+                    (string)$upload
+                )
+            );
+
+            return false;
+        }
 
         return true;
     }
@@ -68,37 +81,13 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         $api = $this->client->repo();
 
         try {
-            $existingCheckRun = $this->getCheckRun(
+            $checkRunId = $this->getCheckRun(
                 $owner,
                 $repository,
                 $commit
             );
-
-            $api->checkRuns()
-                ->update(
-                    $owner,
-                    $repository,
-                    $existingCheckRun,
-                    [
-                        'name' => sprintf('Coverage - %s%%', $publishableMessage->getCoveragePercentage()),
-                        'status' => 'completed',
-                        'conclusion' => 'success',
-                        'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                    ]
-                );
-
-            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-                $this->checkPublisherLogger->critical(
-                    sprintf(
-                        '%s status code returned while attempting to update existing check run with new results.',
-                        (string)$this->client->getLastResponse()?->getStatusCode()
-                    )
-                );
-
-                return false;
-            }
         } catch (RuntimeException) {
-            $api->checkRuns()
+            $checkRun = $api->checkRuns()
                 ->create(
                     $owner,
                     $repository,
@@ -125,8 +114,62 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
 
                 return false;
             }
+
+            $checkRunId = $checkRun['id'];
+        }
+
+        $chunkedAnnotations = $this->getFormattedAnnotations($publishableMessage);
+
+        foreach ($chunkedAnnotations as $chunk) {
+            $api->checkRuns()
+                ->update(
+                    $owner,
+                    $repository,
+                    $checkRunId,
+                    [
+                        'name' => sprintf('Coverage - %s%%', $publishableMessage->getCoveragePercentage()),
+                        'status' => 'completed',
+                        'conclusion' => 'success',
+                        'annotations' => $chunk,
+                        'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                    ]
+                );
+
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
+                $this->checkPublisherLogger->critical(
+                    sprintf(
+                        '%s status code returned while attempting to update existing check run with new results.',
+                        (string)$this->client->getLastResponse()?->getStatusCode()
+                    )
+                );
+
+                return false;
+            }
         }
 
         return true;
+    }
+
+    private function getFormattedAnnotations(PublishableCheckRunMessage $publishableMessage): iterable
+    {
+        $annotations = [];
+
+        foreach ($publishableMessage->getAnnotations() as $annotation) {
+            if (count($annotations) === 50) {
+                yield $annotations;
+                $annotations = 0;
+            }
+
+            $annotations[] = [
+                'path' => $annotation->getFileName(),
+                'annotation_level' => 'warning',
+                'title' => $this->checkAnnotationFormatterService->formatTitle($annotation),
+                'message' => $this->checkAnnotationFormatterService->format($annotation),
+                'start_line' => $annotation->getLineNumber(),
+                'end_line' => $annotation->getLineNumber()
+            ];
+        }
+
+        yield $annotations;
     }
 }

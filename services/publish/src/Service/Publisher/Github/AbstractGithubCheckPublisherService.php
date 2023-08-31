@@ -28,7 +28,9 @@ abstract class AbstractGithubCheckPublisherService implements PublisherServiceIn
         $checkRuns = array_filter(
             $checkRuns,
             fn(array $checkRun) => isset($checkRun['id'], $checkRun['app']['id']) &&
-                $checkRun['app']['id'] === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
+                (string)$checkRun['app']['id'] === $this->environmentService->getVariable(
+                    EnvironmentVariable::GITHUB_APP_ID
+                )
         );
 
         if (!empty($checkRuns)) {
