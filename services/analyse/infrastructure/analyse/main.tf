@@ -59,7 +59,7 @@ resource "aws_iam_policy" "analyse_policy" {
       {
         Effect = "Allow"
         Action = [
-          "sqs:SednMessage"
+          "sqs:SendMessage"
         ]
         Resource = [
           data.terraform_remote_state.core.outputs.publish_queue.arn
