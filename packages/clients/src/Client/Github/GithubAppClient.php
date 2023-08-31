@@ -61,9 +61,7 @@ class GithubAppClient extends Client
     private function getAppId(): string
     {
         if (empty($this->appId)) {
-            throw ClientException::authenticationException(
-                new InvalidArgumentException('App Id for Github app not provided.')
-            );
+            throw new InvalidArgumentException('App Id for Github app not provided.');
         }
 
         return $this->appId;
