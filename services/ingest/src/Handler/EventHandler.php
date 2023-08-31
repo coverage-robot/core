@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use App\Client\EventBridgeEventClient;
 use App\Exception\DeletionException;
 use App\Exception\ParseException;
 use App\Exception\PersistException;
@@ -9,7 +10,6 @@ use App\Exception\RetrievalException;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\EventBridgeEventService;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
@@ -29,7 +29,7 @@ class EventHandler extends S3Handler
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
-        private readonly EventBridgeEventService $eventBridgeEventService,
+        private readonly EventBridgeEventClient $eventBridgeEventService,
         private readonly LoggerInterface $handlerLogger
     ) {
     }
@@ -77,8 +77,8 @@ class EventHandler extends S3Handler
                     'Failed to retrieve coverage file.',
                     [
                         'exception' => $e,
-                        'bucket'    => $coverageFile->getBucket(),
-                        'key'       => $coverageFile->getObject()
+                        'bucket' => $coverageFile->getBucket(),
+                        'key' => $coverageFile->getObject()
                     ]
                 );
             } catch (ParseException | PersistException $e) {
@@ -86,7 +86,7 @@ class EventHandler extends S3Handler
                     'Failed to successfully ingest coverage.',
                     [
                         'exception' => $e,
-                        'upload'    => $upload ?? null
+                        'upload' => $upload ?? null
                     ]
                 );
 
@@ -96,7 +96,7 @@ class EventHandler extends S3Handler
                     'Failed to successfully delete ingested coverage file.',
                     [
                         'exception' => $e,
-                        'upload'    => $upload ?? null
+                        'upload' => $upload ?? null
                     ]
                 );
             }

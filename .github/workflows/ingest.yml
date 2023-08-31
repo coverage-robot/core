@@ -6,7 +6,7 @@ on:
             - master
         paths:
             - 'services/ingest/**'
-            - '.github/workflows/analyse.yml'
+            - '.github/workflows/ingest.yml'
             - 'packages/**'
 
     pull_request:
@@ -14,7 +14,7 @@ on:
             - master
         paths:
             - 'services/ingest/**'
-            - '.github/workflows/analyse.yml'
+            - '.github/workflows/ingest.yml'
             - 'packages/**'
 
     workflow_dispatch:
@@ -56,13 +56,13 @@ jobs:
                     file_name: .env.local
                     fail_on_empty: false
 
-            - name: Setup test environment variables
-              uses: SpicyPizza/create-envfile@v2.0
-              with:
-                  envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-                  directory: ${{ env.working-directory }}
-                  file_name: .env.test.local
-                  fail_on_empty: false
+            -   name: Setup test environment variables
+                uses: SpicyPizza/create-envfile@v2.0
+                with:
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.test.local
+                    fail_on_empty: false
 
             -   name: Install Composer dependencies
                 run: composer install --prefer-dist --no-progress
@@ -224,7 +224,7 @@ jobs:
     deployment:
         name: Deployment
         runs-on: ubuntu-latest
-        needs:  ingest-tests
+        needs: ingest-tests
         if: github.ref == 'refs/heads/master'
         environment: ingest-prod
         env:

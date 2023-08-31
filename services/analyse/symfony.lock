@@ -30,10 +30,7 @@
             "branch": "main",
             "version": "2.6",
             "ref": "a7d5781e4a8e84f1c238c43e4c9bb806f01d8a3f"
-        },
-        "files": [
-            "./config/packages/github_api.yaml"
-        ]
+        }
     },
     "nyholm/psr7": {
         "version": "1.7",
@@ -48,7 +45,7 @@
         ]
     },
     "php-http/discovery": {
-        "version": "1.18",
+        "version": "1.19",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",

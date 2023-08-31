@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service\Persist;
 
-use App\Service\EventBridgeEventService;
+use App\Client\EventBridgeEventClient;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\EventBridgePersistService;
 use DateTimeImmutable;
@@ -21,7 +21,7 @@ class EventBridgePersistServiceTest extends TestCase
     #[DataProvider('uploadDataProvider')]
     public function testPersist(Upload $upload, Coverage $coverage): void
     {
-        $eventService = $this->createMock(EventBridgeEventService::class);
+        $eventService = $this->createMock(EventBridgeEventClient::class);
         $eventService->expects($this->once())
             ->method('publishEvent')
             ->with(CoverageEvent::INGEST_SUCCESS, $upload)

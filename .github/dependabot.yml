@@ -1,5 +1,6 @@
 version: 2
 updates:
+    ## Ingest service dependencies
     -   package-ecosystem: "composer"
         directory: "services/ingest"
         schedule:
@@ -24,6 +25,7 @@ updates:
             - "chore"
             - "bump-patch"
 
+    ## Analyse service dependencies
     -   package-ecosystem: "composer"
         directory: "services/analyse"
         schedule:
@@ -48,6 +50,7 @@ updates:
             - "chore"
             - "bump-patch"
 
+    ## API service dependencies
     -   package-ecosystem: "composer"
         directory: "services/api"
         schedule:
@@ -72,6 +75,7 @@ updates:
             - "chore"
             - "bump-patch"
 
+    ## Global infrastructure dependencies
     -   package-ecosystem: "terraform"
         directory: "infrastructure"
         schedule:
@@ -93,5 +97,43 @@ updates:
         labels:
             - "dependencies"
             - "github_actions"
+            - "chore"
+            - "bump-patch"
+
+    ## Publish service dependencies
+    -   package-ecosystem: "composer"
+        directory: "services/publish"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
+
+    -   package-ecosystem: "terraform"
+        directory: "services/publish/infrastructure"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "terraform"
+            - "chore"
+            - "bump-patch"
+
+    ## Clients package dependencies
+    -   package-ecosystem: "composer"
+        directory: "packages/clients"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
             - "chore"
             - "bump-patch"

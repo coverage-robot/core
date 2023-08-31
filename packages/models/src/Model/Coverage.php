@@ -8,8 +8,9 @@ use DateTimeInterface;
 use Exception;
 use JsonSerializable;
 use Packages\Models\Enum\CoverageFormat;
+use Stringable;
 
-class Coverage implements JsonSerializable, Countable
+class Coverage implements JsonSerializable, Countable, Stringable
 {
     private ?DateTimeImmutable $generatedAt = null;
 
@@ -93,7 +94,7 @@ class Coverage implements JsonSerializable, Countable
         $this->fileCount++;
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
     }

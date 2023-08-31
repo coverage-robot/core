@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service;
 
+use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
-use App\Service\EventBridgeEventService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
@@ -61,7 +61,7 @@ class EventBridgeEventServiceTest extends TestCase
             ->willReturn($mockResult);
 
 
-        $eventBridgeEventService = new EventBridgeEventService(
+        $eventBridgeEventService = new EventBridgeEventClient(
             $mockEventBridgeClient,
             MockEnvironmentServiceFactory::getMock(
                 $this,

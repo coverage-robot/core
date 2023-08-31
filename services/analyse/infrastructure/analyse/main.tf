@@ -87,6 +87,7 @@ resource "aws_lambda_function" "analyse" {
   environment {
     variables = {
       "EVENT_BUS"                    = data.terraform_remote_state.core.outputs.coverage_event_bus.name,
+      "PUBLISH_QUEUE"                = data.terraform_remote_state.core.outputs.publish_queue.url,
       "BIGQUERY_PROJECT"             = data.terraform_remote_state.core.outputs.environment_dataset.project,
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,

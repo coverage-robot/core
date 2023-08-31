@@ -2,7 +2,7 @@
 
 namespace App\Service\Persist;
 
-use App\Service\EventBridgeEventService;
+use App\Client\EventBridgeEventClient;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 class EventBridgePersistService implements PersistServiceInterface
 {
     public function __construct(
-        private readonly EventBridgeEventService $eventBridgeEventService,
+        private readonly EventBridgeEventClient $eventBridgeEventService,
         private readonly LoggerInterface $sqsPersistServiceLogger
     ) {
     }
