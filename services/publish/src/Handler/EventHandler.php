@@ -27,6 +27,9 @@ class EventHandler extends SqsHandler
     {
         $messages = $this->getLatestPublishableMessages($event->getRecords());
 
+        /**
+         * @var PublishableMessageInterface[] $messages
+         */
         $messages = array_reduce(
             $messages,
             function (array $messages, PublishableMessageInterface $message) {
@@ -75,6 +78,10 @@ class EventHandler extends SqsHandler
 
             $currentNewestMessage = $messages[$attributes['MessageGroupId']] ?? null;
             $newMessage = PublishableMessageCollection::fromMessageUsingType($body);
+
+            if (!$newMessage) {
+                continue;
+            }
 
             if (!$currentNewestMessage) {
                 // This is the first set of messages to publish for this owner/repository

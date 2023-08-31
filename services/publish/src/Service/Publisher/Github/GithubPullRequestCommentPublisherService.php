@@ -34,7 +34,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             return false;
         }
 
-        return $publishableMessage->getUpload()?->getProvider() === Provider::GITHUB;
+        return $publishableMessage->getUpload()->getProvider() === Provider::GITHUB;
     }
 
     /**

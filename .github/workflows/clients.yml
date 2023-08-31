@@ -45,6 +45,9 @@ jobs:
             -   name: Validate Composer configuration
                 run: composer validate
 
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress
+
             -   name: Run PHPUnit
                 run: |
                     composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'

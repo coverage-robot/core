@@ -54,17 +54,19 @@ class PullRequestCommentFormatterService
                         '| %s | %s | %s | %s | %s | %s%% |',
                         sprintf(
                             '%s%s',
-                            $tag["tag"]["name"],
-                            $tag["tag"]["commit"] != $upload->getCommit() ? sprintf(
-                                '<br><sub>(Carried forward from %s)</sub>',
-                                $tag["tag"]["commit"]
-                            ) : ''
+                            is_array($tag["tag"]) ?
+                                (string)$tag["tag"]["name"] :
+                                "No name",
+                            is_array($tag["tag"]) &&
+                            $tag["tag"]["commit"] != $upload->getCommit() ?
+                                sprintf('<br><sub>(Carried forward from %s)</sub>', (string)$tag["tag"]["commit"]) :
+                                ''
                         ),
-                        $tag["lines"],
-                        $tag["covered"],
-                        $tag["partial"],
-                        $tag["uncovered"],
-                        $tag["coveragePercentage"]
+                        (int)$tag["lines"],
+                        (int)$tag["covered"],
+                        (int)$tag["partial"],
+                        (int)$tag["uncovered"],
+                        (float)$tag["coveragePercentage"]
                     ),
                     $message->getTagCoverage()
                 )
@@ -92,8 +94,8 @@ class PullRequestCommentFormatterService
                 array_map(
                     static fn(array $file) => sprintf(
                         '| %s | %s%% |',
-                        $file["fileName"],
-                        $file["coveragePercentage"],
+                        (string)$file["fileName"],
+                        (float)$file["coveragePercentage"],
                     ),
                     $files
                 )

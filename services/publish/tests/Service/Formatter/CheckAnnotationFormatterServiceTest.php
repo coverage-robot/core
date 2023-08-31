@@ -14,7 +14,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
     {
         $annotationMessage = new PublishableCheckAnnotationMessage(
             $this->createMock(Upload::class),
-            "/file.php",
+            '/file.php',
             1,
             LineState::COVERED,
             new \DateTimeImmutable()
@@ -29,7 +29,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
     {
         $annotationMessage = new PublishableCheckAnnotationMessage(
             $this->createMock(Upload::class),
-            "/file.php",
+            '/file.php',
             1,
             LineState::UNCOVERED,
             new \DateTimeImmutable()
@@ -44,7 +44,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
     {
         $annotationMessage = new PublishableCheckAnnotationMessage(
             $this->createMock(Upload::class),
-            "/file.php",
+            '/file.php',
             1,
             LineState::COVERED,
             new \DateTimeImmutable()
@@ -59,7 +59,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
     {
         $annotationMessage = new PublishableCheckAnnotationMessage(
             $this->createMock(Upload::class),
-            "/file.php",
+            '/file.php',
             1,
             LineState::UNCOVERED,
             new \DateTimeImmutable()

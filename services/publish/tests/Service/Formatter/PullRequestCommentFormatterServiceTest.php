@@ -106,8 +106,8 @@ class PullRequestCommentFormatterServiceTest extends TestCase
             $this->assertStringContainsString(
                 sprintf(
                     '| %s | %s%% |',
-                    $file["fileName"],
-                    $file["coveragePercentage"]
+                    $file['fileName'],
+                    $file['coveragePercentage']
                 ),
                 $markdown
             );
@@ -119,16 +119,16 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     '| %s | %s | %s | %s | %s | %s%% |',
                     sprintf(
                         '%s%s',
-                        $tag["tag"]["name"],
-                        $upload->getCommit() !== $tag["tag"]["commit"] ?
-                            '<br><sub>(Carried forward from ' . $tag["tag"]["commit"] . ')</sub>' :
+                        $tag['tag']['name'],
+                        $upload->getCommit() !== $tag['tag']['commit'] ?
+                            '<br><sub>(Carried forward from ' . $tag['tag']['commit'] . ')</sub>' :
                             ''
                     ),
-                    $tag["lines"],
-                    $tag["covered"],
-                    $tag["partial"],
-                    $tag["uncovered"],
-                    $tag["coveragePercentage"]
+                    $tag['lines'],
+                    $tag['covered'],
+                    $tag['partial'],
+                    $tag['uncovered'],
+                    $tag['coveragePercentage']
                 ),
                 $markdown
             );

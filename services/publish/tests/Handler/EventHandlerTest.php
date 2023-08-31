@@ -51,11 +51,11 @@ class EventHandlerTest extends TestCase
 
         $sqsEvent = new SqsEvent(
             [
-                "Records" => [
+                'Records' => [
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "1",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '1',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
@@ -83,14 +83,14 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "1234",
-                            "SequenceNumber" => "1",
-                            "MessageGroupId" => "1",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "1234"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '1234',
+                            'SequenceNumber' => '1',
+                            'MessageGroupId' => '1',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '1234'
                         ]
                     ]
                 ]
@@ -142,11 +142,11 @@ class EventHandlerTest extends TestCase
 
         $sqsEvent = new SqsEvent(
             [
-                "Records" => [
+                'Records' => [
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "1",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '1',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
@@ -177,20 +177,20 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "1234",
-                            "SequenceNumber" => "2",
-                            "MessageGroupId" => "1",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "1234"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '1234',
+                            'SequenceNumber' => '2',
+                            'MessageGroupId' => '1',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '1234'
                         ]
                     ],
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "1",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '1',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
@@ -232,14 +232,14 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "1234",
-                            "SequenceNumber" => "1",
-                            "MessageGroupId" => "1",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "1234"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '1234',
+                            'SequenceNumber' => '1',
+                            'MessageGroupId' => '1',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '1234'
                         ]
                     ]
                 ]
@@ -312,11 +312,11 @@ class EventHandlerTest extends TestCase
 
         $sqsEvent = new SqsEvent(
             [
-                "Records" => [
+                'Records' => [
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "1",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '1',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
@@ -347,20 +347,20 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "1234",
-                            "SequenceNumber" => "1",
-                            "MessageGroupId" => "1",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "1234"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '1234',
+                            'SequenceNumber' => '1',
+                            'MessageGroupId' => '1',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '1234'
                         ]
                     ],
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "2",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '2',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
@@ -402,26 +402,26 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "1234",
-                            "SequenceNumber" => "2",
-                            "MessageGroupId" => "1",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "1234"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '1234',
+                            'SequenceNumber' => '2',
+                            'MessageGroupId' => '1',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '1234'
                         ]
                     ],
                     [
-                        "eventSource" => "aws:sqs",
-                        "messageId" => "3",
-                        "body" => json_encode(
+                        'eventSource' => 'aws:sqs',
+                        'messageId' => '3',
+                        'body' => json_encode(
                             new PublishableMessageCollection(
                                 $upload,
                                 [
                                     new PublishableCheckAnnotationMessage(
                                         $upload,
-                                        "mock-file.php",
+                                        'mock-file.php',
                                         1,
                                         LineState::UNCOVERED,
                                         DateTimeImmutable::createFromFormat(
@@ -432,14 +432,14 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        "messageAttributes" => [
-                            "ApproximateReceiveCount" => "1",
-                            "SentTimestamp" => "0",
-                            "SequenceNumber" => "1",
-                            "MessageGroupId" => "2",
-                            "SenderId" => "987",
-                            "MessageDeduplicationId" => "1",
-                            "ApproximateFirstReceiveTimestamp" => "0"
+                        'messageAttributes' => [
+                            'ApproximateReceiveCount' => '1',
+                            'SentTimestamp' => '0',
+                            'SequenceNumber' => '1',
+                            'MessageGroupId' => '2',
+                            'SenderId' => '987',
+                            'MessageDeduplicationId' => '1',
+                            'ApproximateFirstReceiveTimestamp' => '0'
                         ]
                     ]
                 ]

@@ -6,6 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
+use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
@@ -58,6 +59,14 @@ class InvokeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
+            /**
+             * @var DateTimeImmutable $validUntil
+             */
+            $validUntil = DateTimeImmutable::createFromFormat(
+                DateTimeInterface::ATOM,
+                '2023-08-30T12:00:00+00:00'
+            );
+
             $upload = Upload::from([
                 'uploadId' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
@@ -72,11 +81,11 @@ class InvokeCommand extends Command
 
             $sqsEvent = new SqsEvent(
                 [
-                    "Records" => [
+                    'Records' => [
                         [
-                            "eventSource" => "aws:sqs",
-                            "messageId" => "1",
-                            "body" => json_encode(
+                            'eventSource' => 'aws:sqs',
+                            'messageId' => '1',
+                            'body' => json_encode(
                                 new PublishableMessageCollection(
                                     $upload,
                                     [
@@ -99,19 +108,19 @@ class InvokeCommand extends Command
                                                 ],
                                             ],
                                             [],
-                                            new DateTimeImmutable('2023-08-30T12:00:00+00:00')
+                                            $validUntil
                                         )
                                     ]
                                 )
                             ),
-                            "messageAttributes" => [
-                                "ApproximateReceiveCount" => "1",
-                                "SentTimestamp" => "1234",
-                                "SequenceNumber" => "1",
-                                "MessageGroupId" => "1",
-                                "SenderId" => "987",
-                                "MessageDeduplicationId" => "1",
-                                "ApproximateFirstReceiveTimestamp" => "1234"
+                            'messageAttributes' => [
+                                'ApproximateReceiveCount' => '1',
+                                'SentTimestamp' => '1234',
+                                'SequenceNumber' => '1',
+                                'MessageGroupId' => '1',
+                                'SenderId' => '987',
+                                'MessageDeduplicationId' => '1',
+                                'ApproximateFirstReceiveTimestamp' => '1234'
                             ]
                         ]
                     ]

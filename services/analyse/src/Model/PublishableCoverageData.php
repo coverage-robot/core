@@ -159,8 +159,9 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getLeastCoveredDiffFiles(int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT): FileCoverageCollectionQueryResult
-    {
+    public function getLeastCoveredDiffFiles(
+        int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
+    ): FileCoverageCollectionQueryResult {
         $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(
             QueryParameter::LINE_SCOPE,

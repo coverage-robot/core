@@ -92,7 +92,7 @@ class GithubCheckAnnotationPublisherServiceTest extends TestCase
                 [
                     (new PublishableCheckAnnotationMessage(
                         $upload,
-                        "mock-file",
+                        'mock-file',
                         1,
                         LineState::COVERED,
                         new DateTimeImmutable()
@@ -122,7 +122,7 @@ class GithubCheckAnnotationPublisherServiceTest extends TestCase
                 [
                     (new PublishableCheckAnnotationMessage(
                         $upload,
-                        "mock-file",
+                        'mock-file',
                         1,
                         LineState::COVERED,
                         new DateTimeImmutable()
