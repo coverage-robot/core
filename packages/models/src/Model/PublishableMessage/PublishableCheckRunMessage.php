@@ -35,6 +35,9 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         return $this->upload;
     }
 
+    /**
+     * @return PublishableCheckAnnotationMessage[]
+     */
     public function getAnnotations(): array
     {
         return $this->annotations;

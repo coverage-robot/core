@@ -20,7 +20,7 @@ abstract class AbstractGithubCheckPublisherService implements PublisherServiceIn
 
     protected function getCheckRun(string $owner, string $repository, string $commit): int
     {
-        /** @var array{ id: int, app: array{ id: string } }[] $checkRuns */
+        /** @var array{ id: int, app: array{ id: int } }[] $checkRuns */
         $checkRuns = $this->client->repo()
             ->checkRuns()
             ->allForReference($owner, $repository, $commit)['check_runs'];

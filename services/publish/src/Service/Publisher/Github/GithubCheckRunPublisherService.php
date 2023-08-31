@@ -8,6 +8,7 @@ use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
@@ -18,6 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
 {
+    private const MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
+
     public function __construct(
         private readonly CheckRunFormatterService $checkRunFormatterService,
         private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
@@ -87,6 +90,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $commit
             );
         } catch (RuntimeException) {
+            /** @var array{ id: string } $checkRun */
             $checkRun = $api->checkRuns()
                 ->create(
                     $owner,
@@ -115,7 +119,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 return false;
             }
 
-            $checkRunId = $checkRun['id'];
+            $checkRunId = (int)$checkRun['id'];
         }
 
         $chunkedAnnotations = $this->getFormattedAnnotations($publishableMessage);
@@ -150,14 +154,26 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         return true;
     }
 
+    /**
+     * @psalm-type Annotation = array{
+     *     annotation_level: 'warning',
+     *     end_line: int,
+     *     message: string,
+     *     path: string,
+     *     start_line: int,
+     *     title: string
+     * }
+     * @return Generator<int, Annotation[]>
+     */
     private function getFormattedAnnotations(PublishableCheckRunMessage $publishableMessage): iterable
     {
+        /** @var Annotation[] $annotations */
         $annotations = [];
 
         foreach ($publishableMessage->getAnnotations() as $annotation) {
-            if (count($annotations) === 50) {
+            if (count($annotations) === self::MAX_ANNOTATIONS_PER_CHECK_RUN) {
                 yield $annotations;
-                $annotations = 0;
+                $annotations = [];
             }
 
             $annotations[] = [
@@ -170,6 +186,8 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
             ];
         }
 
-        yield $annotations;
+        if (!empty($annotations)) {
+            yield $annotations;
+        }
     }
 }
