@@ -1,0 +1,15 @@
+monolog:
+    handlers:
+        nested:
+            type: stream
+            path: "php://stderr"
+            formatter: Monolog\Formatter\LineFormatter
+
+    channels: [ 'handler', 'pull_request_publisher', 'check_run_publisher', 'publisher_service' ]
+
+services:
+    Monolog\Formatter\LineFormatter:
+        arguments: [ "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n" ]
+
+    Monolog\Processor\PsrLogMessageProcessor:
+        tags: { name: monolog.processor, handler: nested }

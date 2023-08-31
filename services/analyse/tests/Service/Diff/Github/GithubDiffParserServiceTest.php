@@ -2,10 +2,10 @@
 
 namespace App\Tests\Service\Diff\Github;
 
-use App\Client\Github\GithubAppInstallationClient;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
+use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -177,7 +177,7 @@ class GithubDiffParserServiceTest extends TestCase
             [
                 'file-1.php' => [173],
                 'file-2.php' => [173],
-                'file-3.php' => [173,185,186,187],
+                'file-3.php' => [173, 185, 186, 187],
             ],
             $addedLines
         );

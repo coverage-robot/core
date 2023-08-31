@@ -2,9 +2,9 @@
 
 namespace App\Service\Diff\Github;
 
-use App\Client\Github\GithubAppInstallationClient;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
+use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
@@ -160,7 +160,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
 
         return array_reduce(
             $files,
-            fn (string $diff, array $file) => <<<DIFF
+            fn(string $diff, array $file) => <<<DIFF
                 $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}

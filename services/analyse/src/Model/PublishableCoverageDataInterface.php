@@ -42,7 +42,9 @@ interface PublishableCoverageDataInterface
      * Get the coverage percentage for each file in the PR diff, ordered by least covered
      * first.
      */
-    public function getLeastCoveredDiffFiles(int $limit): FileCoverageCollectionQueryResult;
+    public function getLeastCoveredDiffFiles(
+        int $limit = PublishableCoverageData::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
+    ): FileCoverageCollectionQueryResult;
 
     /**
      * Get the coverage per line of the PR diff.

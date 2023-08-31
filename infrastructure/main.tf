@@ -53,6 +53,11 @@ module "events" {
   environment = local.environment
 }
 
+module "queue" {
+  source      = "./queue"
+  environment = local.environment
+}
+
 module "bucket" {
   source      = "./bucket"
   environment = local.environment

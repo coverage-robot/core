@@ -2,6 +2,7 @@
 
 namespace App\Tests\Handler;
 
+use App\Client\EventBridgeEventClient;
 use App\Exception\DeletionException;
 use App\Exception\PersistException;
 use App\Exception\RetrievalException;
@@ -9,7 +10,6 @@ use App\Handler\EventHandler;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\EventBridgeEventService;
 use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
@@ -62,7 +62,7 @@ class EventHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService
             ->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
             ->method('publishEvent')
@@ -93,7 +93,7 @@ class EventHandlerTest extends TestCase
         $mockCoverageFilePersistService->expects($this->never())
             ->method('persist');
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->never())
             ->method('publishEvent');
 
@@ -131,7 +131,7 @@ class EventHandlerTest extends TestCase
                 PersistException::from(new Exception('Failed to persist'))
             );
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService
             ->expects($this->exactly(count($coverageFiles)))
             ->method('publishEvent')
@@ -177,7 +177,7 @@ class EventHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventService::class);
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
             ->method('publishEvent');
 

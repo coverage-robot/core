@@ -6,8 +6,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use JsonSerializable;
 use Packages\Models\Enum\Provider;
+use Stringable;
 
-class Upload implements JsonSerializable
+class Upload implements JsonSerializable, Stringable
 {
     private readonly DateTimeImmutable $ingestTime;
 

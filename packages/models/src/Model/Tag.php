@@ -2,7 +2,10 @@
 
 namespace Packages\Models\Model;
 
-class Tag
+use JsonSerializable;
+use Stringable;
+
+class Tag implements JsonSerializable, Stringable
 {
     public function __construct(
         private readonly string $name,
@@ -31,5 +34,13 @@ class Tag
     public function __toString(): string
     {
         return sprintf("Tag#%s-%s", $this->name, $this->commit);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'name' => $this->name,
+            'commit' => $this->commit,
+        ];
     }
 }

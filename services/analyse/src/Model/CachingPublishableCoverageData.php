@@ -29,11 +29,6 @@ class CachingPublishableCoverageData extends PublishableCoverageData
      */
     private array $leastCoveredDiffFiles = [];
 
-    /**
-     * @var string[]
-     */
-    private array $carriedforwardTags = [];
-
     public function getTotalUploads(): int
     {
         if (!$this->totalUploads) {
@@ -97,8 +92,9 @@ class CachingPublishableCoverageData extends PublishableCoverageData
         return $this->diffCoveragePercentage;
     }
 
-    public function getLeastCoveredDiffFiles(int $limit): FileCoverageCollectionQueryResult
-    {
+    public function getLeastCoveredDiffFiles(
+        int $limit = PublishableCoverageData::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
+    ): FileCoverageCollectionQueryResult {
         if (!array_key_exists($limit, $this->leastCoveredDiffFiles)) {
             $this->leastCoveredDiffFiles[$limit] = parent::getLeastCoveredDiffFiles($limit);
         }

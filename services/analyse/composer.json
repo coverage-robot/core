@@ -11,13 +11,13 @@
         "ext-iconv": "*",
         "async-aws/async-aws-bundle": "^1.10",
         "async-aws/event-bridge": "^1.5",
+        "async-aws/sqs": "^1.9",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
+        "coverage-robot/clients": "^1.0",
+        "coverage-robot/models": "^1.0",
         "doctrine/sql-formatter": "^1.1",
         "google/cloud-bigquery": "^1.24",
-        "knplabs/github-api": "^3.11",
-        "lcobucci/jwt": "^5.0",
-        "coverage-robot/models": "*",
         "sebastian/diff": "^5.0",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
@@ -87,6 +87,10 @@
         {
             "type": "path",
             "url": "../../packages/models"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/clients"
         }
     ],
     "extra": {

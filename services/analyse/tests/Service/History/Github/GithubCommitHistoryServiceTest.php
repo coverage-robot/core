@@ -2,9 +2,9 @@
 
 namespace App\Tests\Service\History\Github;
 
-use App\Client\Github\GithubAppInstallationClient;
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
+use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;

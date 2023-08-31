@@ -6,6 +6,10 @@ output "output_bucket" {
   value = module.bucket.output_bucket
 }
 
+output "publish_queue" {
+  value = module.queue.publish_queue
+}
+
 output "cloudfront_distribution" {
   value = length(module.warehouse) > 0 ? module.routing.cloudwatch_distribution : null
 }

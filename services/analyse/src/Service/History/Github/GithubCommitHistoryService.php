@@ -2,9 +2,9 @@
 
 namespace App\Service\History\Github;
 
-use App\Client\Github\GithubAppInstallationClient;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
+use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Upload;
 

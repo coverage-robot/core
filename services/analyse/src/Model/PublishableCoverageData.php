@@ -22,6 +22,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
 {
+    public const DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
+
     public function __construct(
         protected readonly QueryService $queryService,
         #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
@@ -157,7 +159,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getLeastCoveredDiffFiles(int $limit): FileCoverageCollectionQueryResult
+    public function getLeastCoveredDiffFiles(int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT): FileCoverageCollectionQueryResult
     {
         $params = QueryParameterBag::fromUpload($this->upload);
         $params->set(

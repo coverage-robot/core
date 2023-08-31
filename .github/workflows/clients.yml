@@ -1,0 +1,59 @@
+name: Clients Package
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'packages/clients/**'
+            - '.github/workflows/packages.yml'
+
+    pull_request:
+        branches:
+            - master
+        paths:
+            - 'packages/clients/**'
+            - '.github/workflows/packages.yml'
+
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        shell: bash
+        working-directory: './packages/clients/'
+
+env:
+    php-version: "8.2"
+    working-directory: './packages/clients/'
+
+jobs:
+    client-tests:
+        name: "Client Tests"
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v3
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+
+            -   name: Validate Composer configuration
+                run: composer validate
+
+            -   name: Run PHPUnit
+                run: |
+                    composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
+                shell: bash
+
+            -   uses: coverage-robot/action@v1.0.0
+                with:
+                    token: ${{ secrets.COVERAGE_TOKEN }}
+                    files: |
+                        ${{ env.working-directory }}/coverage.xml
+                    tag: clients-package
+                continue-on-error: true

@@ -6,8 +6,9 @@ use Countable;
 use JsonSerializable;
 use OutOfBoundsException;
 use Packages\Models\Model\Line\AbstractLine;
+use Stringable;
 
-class File implements JsonSerializable, Countable
+class File implements JsonSerializable, Countable, Stringable
 {
     private int $lineCount;
 
@@ -55,7 +56,7 @@ class File implements JsonSerializable, Countable
         $this->lines[$line->getUniqueLineIdentifier()] = $line;
     }
 
-    public function toString(): string
+    public function __toString(): string
     {
         return 'File#' . $this->getFileName();
     }
