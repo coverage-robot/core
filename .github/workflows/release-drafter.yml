@@ -5,7 +5,7 @@ on:
         branches:
             - master
     pull_request:
-        types: [opened, reopened, labeled, unlabeled, synchronize]
+        types: [ opened, reopened, labeled, unlabeled, synchronize ]
 
 permissions:
     contents: read
@@ -23,9 +23,9 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - uses: release-drafter/release-drafter@v5
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: release-drafter/release-drafter@v5
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     check_labels:
         name: Validate Labels
@@ -33,14 +33,24 @@ jobs:
         needs: update_release
 
         steps:
-            - name: Check for categorisation labels
-              uses: danielchabr/pr-labels-checker@v3.3
-              with:
-                  hasSome: feature,bug,chore
-                  githubToken: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: mheap/github-action-required-labels@v5
+                with:
+                    mode: exactly
+                    count: 1
+                    labels: "bump-patch, bump-minor, bump-major, skip-changelog"
+                    add_comment: true
+                    message: |
+                        This PR needs **{{ errorString }}** one label added to indicate whether it is a major, minor, or patch change.
 
-            - name: Check for Semver labels
-              uses: danielchabr/pr-labels-checker@v3.3
-              with:
-                  hasSome: bump-major,bump-minor,bump-patch
-                  githubToken: ${{ secrets.GITHUB_TOKEN }}
+                        The available labels are: `bump-patch`, `bump-minor`, `bump-major` and `skip-changelog`.
+
+            -   uses: mheap/github-action-required-labels@v5
+                with:
+                    mode: exactly
+                    count: 1
+                    labels: "feature, chore, bug"
+                    add_comment: true
+                    message: |
+                        This PR needs **{{ errorString }}** one label added to indicate whether it is a feature, bug, or chore.
+
+                        The available labels are: `feature`, `chore`, `bug`.
