@@ -8,7 +8,10 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
+use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
+use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Upload;
@@ -108,6 +111,20 @@ class InvokeCommand extends Command
                                                 ],
                                             ],
                                             [],
+                                            $validUntil
+                                        ),
+                                        new PublishableCheckRunMessage(
+                                            $upload,
+                                            [
+                                                new PublishableCheckAnnotationMessage(
+                                                    $upload,
+                                                    'mock-file',
+                                                    1,
+                                                    LineState::COVERED,
+                                                    $validUntil
+                                                )
+                                            ],
+                                            100,
                                             $validUntil
                                         )
                                     ]

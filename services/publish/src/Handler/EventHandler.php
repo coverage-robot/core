@@ -71,7 +71,7 @@ class EventHandler extends SqsHandler
 
         foreach ($records as $record) {
             /** @var array{MessageGroupId: string} $attributes */
-            $attributes = $record->getMessageAttributes();
+            $attributes = $record->toArray()['attributes'];
 
             /** @var array $body */
             $body = json_decode($record->getBody(), true, 512, JSON_THROW_ON_ERROR);

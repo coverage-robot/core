@@ -42,7 +42,6 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
             implode('', [
                 $this->upload->getOwner(),
                 $this->upload->getRepository(),
-                $this->upload->getRef(),
                 $this->upload->getPullRequest()
             ])
         );
