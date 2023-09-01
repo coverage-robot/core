@@ -117,7 +117,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
                 $this->upload->getOwner(),
                 $this->upload->getRepository(),
                 $this->upload->getRef(),
-                $this->upload->getCommit()
+                $this->upload->getPullRequest() ?: $this->upload->getCommit()
             ])
         );
     }

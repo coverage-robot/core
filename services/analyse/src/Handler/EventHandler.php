@@ -92,6 +92,23 @@ class EventHandler extends EventBridgeHandler
      */
     private function queueMessages(Upload $upload, PublishableCoverageDataInterface $publishableCoverageData): bool
     {
+        $annotations = array_map(
+            function (LineCoverageQueryResult $line) use ($upload) {
+                if ($line->getState() !== LineState::UNCOVERED) {
+                    return null;
+                }
+
+                return new PublishableCheckAnnotationMessage(
+                    $upload,
+                    $line->getFileName(),
+                    $line->getLineNumber(),
+                    $line->getState(),
+                    $upload->getIngestTime()
+                );
+            },
+            $publishableCoverageData->getDiffLineCoverage()->getLines()
+        );
+
         $messages = [
             new PublishablePullRequestMessage(
                 $upload,
@@ -101,7 +118,7 @@ class EventHandler extends EventBridgeHandler
                 array_map(
                     function (TagCoverageQueryResult $tag) {
                         return [
-                            'tag' => $tag->getTag()->getName(),
+                            'tag' => $tag->getTag()->jsonSerialize(),
                             'coveragePercentage' => $tag->getCoveragePercentage(),
                             'lines' => $tag->getLines(),
                             'covered' => $tag->getCovered(),
@@ -128,33 +145,20 @@ class EventHandler extends EventBridgeHandler
             ),
             new PublishableCheckRunMessage(
                 $upload,
+                array_filter($annotations),
                 $publishableCoverageData->getCoveragePercentage(),
                 $upload->getIngestTime()
             ),
         ];
-
-        $annotations = array_map(
-            function (LineCoverageQueryResult $line) use ($upload) {
-                if ($line->getState() !== LineState::UNCOVERED) {
-                    return null;
-                }
-
-                return new PublishableCheckAnnotationMessage(
-                    $upload,
-                    $line->getFileName(),
-                    $line->getLineNumber(),
-                    $line->getState(),
-                    $upload->getIngestTime()
-                );
-            },
-            $publishableCoverageData->getDiffLineCoverage()->getLines()
-        );
 
         $messages = array_merge(
             $messages,
             array_filter($annotations)
         );
 
+        // We _could_ publish the check run and PR comment individually, but we want
+        // to leverage toe collection in order to ensure that they are all published
+        // together, or not at all (e.g. they're not independent messages).
         return $this->sqsEventClient->queuePublishableMessage(
             new PublishableMessageCollection(
                 $upload,
