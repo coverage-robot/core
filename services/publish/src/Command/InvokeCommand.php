@@ -118,9 +118,9 @@ class InvokeCommand extends Command
                                             [
                                                 new PublishableCheckAnnotationMessage(
                                                     $upload,
-                                                    'mock-file',
-                                                    1,
-                                                    LineState::COVERED,
+                                                    '.github/workflows/upload.yml',
+                                                    6,
+                                                    LineState::UNCOVERED,
                                                     $validUntil
                                                 )
                                             ],
@@ -130,7 +130,7 @@ class InvokeCommand extends Command
                                     ]
                                 )
                             ),
-                            'messageAttributes' => [
+                            'attributes' => [
                                 'ApproximateReceiveCount' => '1',
                                 'SentTimestamp' => '1234',
                                 'SequenceNumber' => '1',

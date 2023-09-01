@@ -181,6 +181,17 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         float $coveragePercentage,
         array $annotations
     ): bool {
+        $a = [
+            'name' => sprintf('Coverage - %s%%', $coveragePercentage),
+            'status' => 'completed',
+            'conclusion' => 'success',
+            'output' => [
+                'title' => $this->checkRunFormatterService->formatTitle(),
+                'summary' => $this->checkRunFormatterService->formatSummary(),
+                'annotations' => $annotations,
+            ],
+            'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+        ];
         $this->client->repo()
             ->checkRuns()
             ->update(
@@ -191,7 +202,11 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                     'name' => sprintf('Coverage - %s%%', $coveragePercentage),
                     'status' => 'completed',
                     'conclusion' => 'success',
-                    'annotations' => $annotations,
+                    'output' => [
+                        'title' => $this->checkRunFormatterService->formatTitle(),
+                        'summary' => $this->checkRunFormatterService->formatSummary(),
+                        'annotations' => $annotations,
+                    ],
                     'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 ]
             );
