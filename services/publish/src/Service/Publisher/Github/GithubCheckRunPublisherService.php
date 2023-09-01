@@ -171,7 +171,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
             );
         }
 
-        return $checkRun['id'];
+        return (int)$checkRun['id'];
     }
 
     private function updateCheckRun(
