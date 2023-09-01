@@ -79,9 +79,8 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $commit,
         PublishableCheckRunMessage $publishableMessage
     ): bool {
+        $isNewCheckRun = false;
         $this->client->authenticateAsRepositoryOwner($owner);
-
-        $api = $this->client->repo();
 
         try {
             $checkRunId = $this->getCheckRun(
@@ -90,65 +89,122 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $commit
             );
         } catch (RuntimeException) {
-            /** @var array{ id: string } $checkRun */
-            $checkRun = $api->checkRuns()
-                ->create(
-                    $owner,
-                    $repository,
-                    [
-                        'name' => sprintf('Coverage - %s%%', $publishableMessage->getCoveragePercentage()),
-                        'head_sha' => $commit,
-                        'status' => 'completed',
-                        'conclusion' => 'success',
-                        'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                        'output' => [
-                            'title' => $this->checkRunFormatterService->formatTitle(),
-                            'summary' => $this->checkRunFormatterService->formatSummary()
-                        ]
-                    ]
-                );
-
-            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->checkPublisherLogger->critical(
-                    sprintf(
-                        '%s status code returned while attempting to create a new check run for results.',
-                        (string)$this->client->getLastResponse()?->getStatusCode()
-                    )
-                );
-
-                return false;
-            }
-
-            $checkRunId = (int)$checkRun['id'];
+            $checkRunId = $this->createCheckRun(
+                $owner,
+                $repository,
+                $commit,
+                $publishableMessage->getCoveragePercentage(),
+                []
+            );
+            $isNewCheckRun = true;
         }
 
         $chunkedAnnotations = $this->getFormattedAnnotations($publishableMessage);
 
+        if (!$isNewCheckRun && $publishableMessage->getAnnotations() === []) {
+            $this->updateCheckRun(
+                $owner,
+                $repository,
+                $checkRunId,
+                $publishableMessage->getCoveragePercentage(),
+                []
+            );
+            return true;
+        }
+
         foreach ($chunkedAnnotations as $chunk) {
-            $api->checkRuns()
-                ->update(
-                    $owner,
-                    $repository,
-                    $checkRunId,
-                    [
-                        'name' => sprintf('Coverage - %s%%', $publishableMessage->getCoveragePercentage()),
-                        'status' => 'completed',
-                        'conclusion' => 'success',
-                        'annotations' => $chunk,
-                        'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+            // Progressively update the check run with each new set of annotations. The API
+            // is additive (i.e. non-idempotent) meaning by streaming new sets of annotations
+            // they will be appended to the existing set.
+            $this->updateCheckRun(
+                $owner,
+                $repository,
+                $checkRunId,
+                $publishableMessage->getCoveragePercentage(),
+                $chunk
+            );
+        }
+
+        return true;
+    }
+
+    private function createCheckRun(
+        string $owner,
+        string $repository,
+        string $commit,
+        float $coveragePercentage,
+        array $annotations
+    ): int {
+        /** @var array{ id: string } $checkRun */
+        $checkRun = $this->client->repo()
+            ->checkRuns()
+            ->create(
+                $owner,
+                $repository,
+                [
+                    'name' => sprintf('Coverage - %s%%', $coveragePercentage),
+                    'head_sha' => $commit,
+                    'status' => 'completed',
+                    'conclusion' => 'success',
+                    'annotations' => $annotations,
+                    'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                    'output' => [
+                        'title' => $this->checkRunFormatterService->formatTitle(),
+                        'summary' => $this->checkRunFormatterService->formatSummary(),
                     ]
-                );
+                ]
+            );
 
-            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-                $this->checkPublisherLogger->critical(
-                    sprintf(
-                        '%s status code returned while attempting to update existing check run with new results.',
-                        (string)$this->client->getLastResponse()?->getStatusCode()
-                    )
-                );
+        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
+            $this->checkPublisherLogger->critical(
+                sprintf(
+                    '%s status code returned while attempting to create a new check run for results.',
+                    (string)$this->client->getLastResponse()?->getStatusCode()
+                )
+            );
 
-                return false;
-            }
+            throw new PublishException(
+                sprintf(
+                    'Failed to create check run. Status code was %s',
+                    (string)$this->client->getLastResponse()?->getStatusCode()
+                )
+            );
+        }
+
+        return $checkRun['id'];
+    }
+
+    private function updateCheckRun(
+        string $owner,
+        string $repository,
+        int $checkRunId,
+        float $coveragePercentage,
+        array $annotations
+    ): bool {
+        $this->client->repo()
+            ->checkRuns()
+            ->update(
+                $owner,
+                $repository,
+                $checkRunId,
+                [
+                    'name' => sprintf('Coverage - %s%%', $coveragePercentage),
+                    'status' => 'completed',
+                    'conclusion' => 'success',
+                    'annotations' => $annotations,
+                    'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                ]
+            );
+
+        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
+            $this->checkPublisherLogger->critical(
+                sprintf(
+                    '%s status code returned while attempting to update existing check run with new results.',
+                    (string)$this->client->getLastResponse()?->getStatusCode()
+                )
+            );
+
+            return false;
         }
 
         return true;

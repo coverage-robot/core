@@ -19,6 +19,7 @@ use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\Response;
 
 class GithubCheckRunPublisherServiceTest extends TestCase
 {
@@ -101,8 +102,15 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 ]
             ]);
 
+        $mockGithubAppInstallationClient
+            ->method('getLastResponse')
+            ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_CREATED));
+
         $mockCheckRunsApi->expects($this->once())
-            ->method('create');
+            ->method('create')
+            ->willReturn([
+                'id' => 3
+            ]);
 
         $mockCheckRunsApi->expects($this->never())
             ->method('update');

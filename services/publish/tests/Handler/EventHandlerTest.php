@@ -83,7 +83,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
                             'SequenceNumber' => '1',
@@ -177,7 +177,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
                             'SequenceNumber' => '2',
@@ -232,7 +232,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
                             'SequenceNumber' => '1',
@@ -347,7 +347,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
                             'SequenceNumber' => '1',
@@ -402,7 +402,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
                             'SequenceNumber' => '2',
@@ -432,7 +432,7 @@ class EventHandlerTest extends TestCase
                                 ]
                             )
                         ),
-                        'messageAttributes' => [
+                        'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '0',
                             'SequenceNumber' => '1',
