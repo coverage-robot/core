@@ -22,6 +22,7 @@ class GithubAppClient extends Client
      */
     public function __construct(
         private readonly string $appId,
+        private readonly string $privateKeyFile,
         private readonly JwtGenerator $jwtGenerator,
         ?Builder $httpClientBuilder = null,
         ?string $apiVersion = null,
@@ -44,7 +45,7 @@ class GithubAppClient extends Client
     {
         try {
             $this->authenticate(
-                $this->jwtGenerator->generate($this->appId)
+                $this->jwtGenerator->generate($this->appId, $this->privateKeyFile)
                     ->toString(),
                 null,
                 AuthMethod::JWT

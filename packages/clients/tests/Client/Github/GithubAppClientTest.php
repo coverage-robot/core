@@ -20,10 +20,12 @@ class GithubAppClientTest extends TestCase
 
         $jwtGenerator->expects($this->once())
             ->method('generate')
+            ->with('mock-app-id', 'some-path/file.pem')
             ->willReturn($token);
 
         new GithubAppClient(
             'mock-app-id',
+            'some-path/file.pem',
             $jwtGenerator
         );
     }
