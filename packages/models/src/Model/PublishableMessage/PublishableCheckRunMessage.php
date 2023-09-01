@@ -80,7 +80,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
             )
         );
 
-        if (count($annotations) !== count($data['annotations'])) {
+        if (count($annotations) !== count($data['annotations'] ?? [])) {
             throw new InvalidArgumentException('At least one invalid message has been provided.');
         }
 
