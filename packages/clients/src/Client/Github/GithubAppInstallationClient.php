@@ -2,33 +2,23 @@
 
 namespace Packages\Clients\Client\Github;
 
-use Github\Api\Apps;
 use Github\Api\GraphQL;
 use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\AuthMethod;
-use Github\Client;
 use OutOfBoundsException;
+use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
-class GithubAppInstallationClient extends Client
+class GithubAppInstallationClient
 {
     private ?string $owner = null;
 
     public function __construct(
-        private readonly GithubAppClient $githubAppClient,
-        ?string $owner = null
+        private readonly GithubAppClient $appClient,
+        private readonly GithubAppClient $installationClient
     ) {
-        parent::__construct(
-            $githubAppClient->getHttpClientBuilder(),
-            $githubAppClient->getApiVersion(),
-            $githubAppClient->enterpriseUrl
-        );
-
-        if ($owner !== null) {
-            $this->authenticateAsRepositoryOwner($owner);
-        }
     }
 
     public function authenticateAsRepositoryOwner(string $owner): void
@@ -37,32 +27,54 @@ class GithubAppInstallationClient extends Client
             return;
         }
 
-        $installation = $this->getInstallationForOwner($owner);
-
-        $this->authenticateAsInstallation($installation);
-
-        $this->owner = $owner;
-    }
-
-    private function authenticateAsInstallation(int $installationId): void
-    {
-        $accessToken = $this->apps()
-            ->createInstallationToken($installationId);
+        $accessToken = $this->appClient->apps()
+            ->createInstallationToken($this->getInstallationForOwner($owner));
 
         if (!isset($accessToken['token']) || !is_string($accessToken['token'])) {
             throw new UnexpectedValueException('Unable to generate access token for installation.');
         }
 
-        $this->authenticate($accessToken['token'], null, AuthMethod::ACCESS_TOKEN);
+        $this->installationClient->authenticate(
+            $accessToken['token'],
+            null,
+            AuthMethod::ACCESS_TOKEN
+        );
+
+        $this->owner = $owner;
+    }
+
+    public function getLastResponse(): ?ResponseInterface
+    {
+        return $this->installationClient->getLastResponse();
+    }
+
+    public function issue(): Issue
+    {
+        return new Issue($this->installationClient);
+    }
+
+    public function repo(): Repo
+    {
+        return new Repo($this->installationClient);
+    }
+
+    public function pullRequest(): PullRequest
+    {
+        return new PullRequest($this->installationClient);
+    }
+
+    public function graphql(): GraphQL
+    {
+        return new GraphQL($this->installationClient);
     }
 
     private function getInstallationForOwner(string $owner): int
     {
         /** @var array{ id: int, account: array{ login: string } }[] $installs */
         $installs = array_filter(
-            $this->apps()->findInstallations(),
-            static fn(array $install) => isset($install['id']) &&
-                isset($install['account']['login'])
+            $this->appClient->apps()
+                ->findInstallations(),
+            static fn(array $install) => isset($install['id'], $install['account']['login'])
                 && $install['account']['login'] === $owner
         );
 
@@ -71,30 +83,5 @@ class GithubAppInstallationClient extends Client
         }
 
         return end($installs)['id'];
-    }
-
-    public function issue(): Issue
-    {
-        return new Issue($this);
-    }
-
-    public function repo(): Repo
-    {
-        return new Repo($this);
-    }
-
-    public function apps(): Apps
-    {
-        return new Apps($this->githubAppClient);
-    }
-
-    public function pullRequest(): PullRequest
-    {
-        return new PullRequest($this);
-    }
-
-    public function graphql(): GraphQL
-    {
-        return new GraphQL($this);
     }
 }

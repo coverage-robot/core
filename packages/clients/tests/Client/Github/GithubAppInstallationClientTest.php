@@ -1,117 +1,118 @@
 <?php
 
-namespace App\Tests\Client\Github;
+namespace Packages\Clients\Tests\Client\Github;
 
 use Github\Api\Apps;
 use Github\AuthMethod;
-use Github\HttpClient\Builder;
-use Http\Client\Common\HttpMethodsClientInterface;
+use OutOfBoundsException;
 use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 
 class GithubAppInstallationClientTest extends TestCase
 {
-    public function testClientAuthenticatesOnCreationWithOwner(): void
+    public function testAuthenticatingAsInstallation(): void
     {
-        $mockAppsApi = $this->createMock(Apps::class);
-
-        $mockAppsApi->expects($this->once())
-            ->method('findInstallations')
-            ->willReturn(
-                [
-                    [
-                        'id' => 111,
-                        'account' => [
-                            'login' => 'mock-owner-2'
-                        ]
-                    ],
-                    [
-                        'id' => 222,
-                        'account' => [
-                            'login' => 'mock-owner'
-                        ]
-                    ]
-                ]
-            );
-
-        $mockAppsApi->expects($this->once())
+        $mockAppsWrapper = $this->createMock(Apps::class);
+        $mockAppsWrapper->expects($this->once())
             ->method('createInstallationToken')
-            ->with(222)
+            ->willReturn(['token' => 'test-token']);
+
+        $mockAppsWrapper->expects($this->once())
+            ->method('findInstallations')
             ->willReturn([
-                'token' => 'mock-token'
+                ['id' => 1, 'account' => ['login' => 'test-owner']],
+                ['id' => 2, 'account' => ['login' => 'second-owner']]
             ]);
 
-        $appClient = $this->getMockBuilder(GithubAppClient::class)
-            ->setConstructorArgs(
-                [
-                    'mock',
-                    null,
-                    $this->createMock(Builder::class),
-                    'mock',
-                    'https://mock-client.com'
-                ]
-            )
-            ->onlyMethods(['getHttpClientBuilder'])
-            ->getMock();
-
-        $installationClient = $this->getMockBuilder(GithubAppInstallationClient::class)
-            ->setConstructorArgs(
-                [
-                    $appClient
-                ]
-            )
-            ->onlyMethods(['apps', 'authenticate'])
-            ->getMock();
-
-        $installationClient->expects($this->exactly(2))
-            ->method('apps')
-            ->willReturn($mockAppsApi);
+        $appClient = $this->createMock(GithubAppClient::class);
+        $installationClient = $this->createMock(GithubAppClient::class);
 
         $installationClient->expects($this->once())
             ->method('authenticate')
-            ->with('mock-token', null, AuthMethod::ACCESS_TOKEN);
+            ->with(
+                'test-token',
+                null,
+                AuthMethod::ACCESS_TOKEN
+            );
 
-        $installationClient->authenticateAsRepositoryOwner('mock-owner');
+        $appClient->method('apps')
+            ->willReturn($mockAppsWrapper);
+
+        $installation = new GithubAppInstallationClient(
+            $appClient,
+            $installationClient
+        );
+
+        $installation->authenticateAsRepositoryOwner('test-owner');
     }
 
-    public function testConstructorDoesNotAuthenticateWithNoOwner(): void
+    public function testAuthenticatingRepeatedlyAsSameInstallation(): void
     {
-        $mockAppsApi = $this->createMock(Apps::class);
+        $mockAppsWrapper = $this->createMock(Apps::class);
+        $mockAppsWrapper->expects($this->once())
+            ->method('createInstallationToken')
+            ->willReturn(['token' => 'test-token']);
 
-        $mockResponse = $this->createMock(ResponseInterface::class);
-        $mockResponse->method('getBody')
-            ->willReturn($this->createMock(StreamInterface::class));
+        $mockAppsWrapper->expects($this->once())
+            ->method('findInstallations')
+            ->willReturn([
+                ['id' => 1, 'account' => ['login' => 'test-owner']]
+            ]);
 
-        $mockClient = $this->createMock(HttpMethodsClientInterface::class);
-        $mockClient->method('get')
-            ->willReturn($mockResponse);
+        $appClient = $this->createMock(GithubAppClient::class);
+        $installationClient = $this->createMock(GithubAppClient::class);
 
-        $mockBuilder = $this->createMock(Builder::class);
-        $mockBuilder->method('getHttpClient')
-            ->willReturn($mockClient);
+        $installationClient->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                'test-token',
+                null,
+                AuthMethod::ACCESS_TOKEN
+            );
 
-        $mockGithubAppClient = $this->getMockBuilder(GithubAppClient::class)
-            ->setConstructorArgs(
-                [
-                    'mock',
-                    null,
-                    $mockBuilder,
-                    'mock',
-                    'https://mock-client.com'
-                ]
-            )
-            ->onlyMethods(['authenticate'])
-            ->getMock();
+        $appClient->method('apps')
+            ->willReturn($mockAppsWrapper);
 
-        $mockAppsApi->expects($this->never())
-            ->method('findInstallations');
+        $installation = new GithubAppInstallationClient(
+            $appClient,
+            $installationClient
+        );
 
-        $mockAppsApi->expects($this->never())
+        $installation->authenticateAsRepositoryOwner('test-owner');
+
+        // This should not trigger a second authentication
+        $installation->authenticateAsRepositoryOwner('test-owner');
+    }
+
+    public function testAuthenticatingHandlesMissingInstallation(): void
+    {
+        $mockAppsWrapper = $this->createMock(Apps::class);
+        $mockAppsWrapper->expects($this->never())
             ->method('createInstallationToken');
 
-        new GithubAppInstallationClient($mockGithubAppClient);
+        $mockAppsWrapper->expects($this->once())
+            ->method('findInstallations')
+            ->willReturn([
+                ['id' => 2, 'account' => ['login' => 'second-owner']]
+            ]);
+
+        $appClient = $this->createMock(GithubAppClient::class);
+        $installationClient = $this->createMock(GithubAppClient::class);
+
+        $installationClient->expects($this->never())
+            ->method('authenticate');
+
+        $appClient->method('apps')
+            ->willReturn($mockAppsWrapper);
+
+        $this->expectException(OutOfBoundsException::class);
+
+        $installation = new GithubAppInstallationClient(
+            $appClient,
+            $installationClient
+        );
+
+        $installation->authenticateAsRepositoryOwner('test-owner');
     }
 }

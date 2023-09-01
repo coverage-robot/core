@@ -48,7 +48,7 @@ class PullRequestCommentFormatterService
             %s
             MARKDOWN,
             implode(
-                "\n",
+                PHP_EOL,
                 array_map(
                     static fn(array $tag) => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
@@ -87,10 +87,9 @@ class PullRequestCommentFormatterService
             | File | Diff Coverage |
             | --- | --- |
             %s
-            <td colspan=3>
             MARKDOWN,
             implode(
-                "\n",
+                PHP_EOL,
                 array_map(
                     static fn(array $file) => sprintf(
                         '| %s | %s%% |',
