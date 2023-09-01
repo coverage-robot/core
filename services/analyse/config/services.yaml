@@ -28,7 +28,9 @@ services:
     Packages\Clients\Client\Github\GithubAppClient:
         arguments:
             $appId: '%env(GITHUB_APP_ID)%'
-            $privateKey: './config/github.pem'
 
+    Packages\Clients\Generator\JwtGenerator:
+        arguments:
+            $privateKey: './config/github.pem'
 
     Packages\Clients\Client\Github\GithubAppInstallationClient: ~
