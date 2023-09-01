@@ -43,7 +43,7 @@ class GithubAppInstallationClient
         $this->owner = $owner;
     }
 
-    public function getLastResponse(): ResponseInterface
+    public function getLastResponse(): ?ResponseInterface
     {
         return $this->installationClient->getLastResponse();
     }
