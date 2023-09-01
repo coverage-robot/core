@@ -2,25 +2,27 @@
 
 namespace Packages\Clients\Client\Github;
 
-use DateTimeImmutable;
 use Exception;
+use Github\Api\Apps;
 use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
-use InvalidArgumentException;
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Signer\Key\FileCouldNotBeRead;
-use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Packages\Clients\Exception\ClientException;
+use Packages\Clients\Generator\JwtGenerator;
 
 class GithubAppClient extends Client
 {
     /**
-     * @throws Exception
+     * @param string $appId
+     * @param JwtGenerator $jwtGenerator
+     * @param Builder|null $httpClientBuilder
+     * @param string|null $apiVersion
+     * @param string|null $enterpriseUrl
+     * @throws ClientException
      */
     public function __construct(
         private readonly string $appId,
-        private readonly ?string $privateKey = null,
+        private readonly JwtGenerator $jwtGenerator,
         ?Builder $httpClientBuilder = null,
         ?string $apiVersion = null,
         public readonly ?string $enterpriseUrl = null
@@ -30,40 +32,25 @@ class GithubAppClient extends Client
         $this->authenticateAsApp();
     }
 
-    private function authenticateAsApp(): void
+    public function apps(): Apps
     {
-        if (!$this->privateKey) {
-            return;
-        }
-
-        try {
-            $config = Configuration::forSymmetricSigner(
-                new Sha256(),
-                InMemory::file($this->privateKey)
-            );
-        } catch (FileCouldNotBeRead $e) {
-            throw new Exception('Unable to authenticate using the client.', 0, $e);
-        }
-
-        $now = new DateTimeImmutable('@' . time());
-        $jwt = $config->builder()
-            ->issuedBy($this->getAppId())
-            ->issuedAt($now)
-            ->expiresAt($now->modify('+5 minutes'))
-            ->getToken($config->signer(), $config->signingKey());
-
-        $this->authenticate($jwt->toString(), null, AuthMethod::JWT);
+        return parent::apps();
     }
 
     /**
-     * @return non-empty-string
+     * @throws ClientException
      */
-    private function getAppId(): string
+    private function authenticateAsApp(): void
     {
-        if (empty($this->appId)) {
-            throw new InvalidArgumentException('App Id for Github app not provided.');
+        try {
+            $this->authenticate(
+                $this->jwtGenerator->generate($this->appId)
+                    ->toString(),
+                null,
+                AuthMethod::JWT
+            );
+        } catch (Exception $e) {
+            throw ClientException::authenticationException($e);
         }
-
-        return $this->appId;
     }
 }
