@@ -23,3 +23,5 @@ services:
             $privateKeyFile: './config/github.pem'
 
     Packages\Clients\Client\Github\GithubAppInstallationClient: ~
+
+    Packages\Clients\Generator\JwtGenerator: ~
