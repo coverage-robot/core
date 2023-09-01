@@ -8,6 +8,7 @@ use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\AuthMethod;
 use OutOfBoundsException;
+use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
 class GithubAppInstallationClient
@@ -40,6 +41,11 @@ class GithubAppInstallationClient
         );
 
         $this->owner = $owner;
+    }
+
+    public function getLastResponse(): ResponseInterface
+    {
+        return $this->installationClient->getLastResponse();
     }
 
     public function issue(): Issue
