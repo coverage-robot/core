@@ -7,19 +7,12 @@ on:
     pull_request:
         types: [ opened, reopened, labeled, unlabeled, synchronize ]
 
-permissions:
-    contents: read
 
 jobs:
     # Prepare the release _before_ validating the labels, as Release Drafter will
     # automatically tag the PR with the appropriate labels based on branch names.
     update_release:
         name: Prepare Release
-        permissions:
-            # Allow access to create Releases
-            contents: write
-            # Allow access to auto-labelling PRs (for categorisation)
-            pull-requests: write
         runs-on: ubuntu-latest
 
         steps:
