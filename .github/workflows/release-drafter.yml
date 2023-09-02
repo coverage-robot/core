@@ -7,12 +7,15 @@ on:
     pull_request:
         types: [ opened, reopened, labeled, unlabeled, synchronize ]
 
+permissions:
+    contents: read
 
 jobs:
-    # Prepare the release _before_ validating the labels, as Release Drafter will
-    # automatically tag the PR with the appropriate labels based on branch names.
     update_release:
         name: Prepare Release
+        permissions:
+            contents: write
+            pull-requests: write
         runs-on: ubuntu-latest
 
         steps:
@@ -24,6 +27,9 @@ jobs:
         name: Validate Labels
         runs-on: ubuntu-latest
         needs: update_release
+        permissions:
+            issues: write
+            pull-requests: write
 
         steps:
             -   uses: mheap/github-action-required-labels@v5
