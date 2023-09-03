@@ -47,6 +47,12 @@ resource "google_bigquery_table" "line_coverage" {
     "description": "The original format of the coverage file ingested."
   },
   {
+    "name": "totalLines",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "The total number of lines ingested from the coverage file."
+  },
+  {
     "name": "fileName",
     "type": "STRING",
     "mode": "REQUIRED",
