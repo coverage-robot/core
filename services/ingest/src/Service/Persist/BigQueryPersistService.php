@@ -37,16 +37,26 @@ class BigQueryPersistService implements PersistServiceInterface
 
             $this->bigQueryPersistServiceLogger->info(
                 sprintf(
-                    'Persistence of %s rows into BigQuery complete (chunk: %s for %s). Failed to insert %s rows.',
+                    'Persistence of %s rows into BigQuery complete (chunk: %s for %s).',
                     count($rows),
                     $chunkNumber,
                     (string)$upload,
-                    count($failedRows)
-                ),
-                [
-                    'failedRows' => $failedRows
-                ]
+                )
             );
+
+            if (count($failedRows) > 0) {
+                $this->bigQueryPersistServiceLogger->critical(
+                    sprintf(
+                        '%s rows failed to insert in chunk %s for %s.',
+                        count($failedRows),
+                        $chunkNumber,
+                        (string)$upload
+                    ),
+                    [
+                        'failedRows' => $failedRows
+                    ]
+                );
+            }
 
             $partialFailure = $partialFailure || !$insertResponse->isSuccessful();
         }
@@ -71,6 +81,13 @@ class BigQueryPersistService implements PersistServiceInterface
                 $chunk = [
                     ...($chunk ?? []),
                     [
+                        'uploadId' => md5(
+                            implode('-', [
+                                $upload->getUploadId(),
+                                $file->getFileName(),
+                                $line->getLineNumber()
+                            ])
+                        ),
                         'data' => $this->bigQueryMetadataBuilderService->buildRow(
                             $upload,
                             $totalLines,
