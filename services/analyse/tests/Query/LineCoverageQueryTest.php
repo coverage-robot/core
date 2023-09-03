@@ -319,7 +319,13 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                       (
                         uploadId IN (
                           SELECT
-                            DISTINCT uploadId
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) > totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
                           FROM
                             `mock-table`
                           WHERE
@@ -328,15 +334,19 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                             AND repository = "mock-repository"
                             AND owner = "mock-owner"
                             AND provider = "github"
-                            AND (
-                              COUNT(uploadId) >= totalLines
-                            )
                           GROUP BY
-                            uploadId
+                            uploadId,
+                            totalLines
                         )
                         OR uploadId IN (
                           SELECT
-                            DISTINCT uploadId
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) > totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
                           FROM
                             `mock-table`
                           WHERE
@@ -345,15 +355,19 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                             AND repository = "mock-repository"
                             AND owner = "mock-owner"
                             AND provider = "github"
-                            AND (
-                              COUNT(uploadId) >= totalLines
-                            )
                           GROUP BY
-                            uploadId
+                            uploadId,
+                            totalLines
                         )
                         OR uploadId IN (
                           SELECT
-                            DISTINCT uploadId
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) > totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
                           FROM
                             `mock-table`
                           WHERE
@@ -362,15 +376,19 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                             AND repository = "mock-repository"
                             AND owner = "mock-owner"
                             AND provider = "github"
-                            AND (
-                              COUNT(uploadId) >= totalLines
-                            )
                           GROUP BY
-                            uploadId
+                            uploadId,
+                            totalLines
                         )
                         OR uploadId IN (
                           SELECT
-                            DISTINCT uploadId
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) > totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
                           FROM
                             `mock-table`
                           WHERE
@@ -379,11 +397,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                             AND repository = "mock-repository"
                             AND owner = "mock-owner"
                             AND provider = "github"
-                            AND (
-                              COUNT(uploadId) >= totalLines
-                            )
                           GROUP BY
-                            uploadId
+                            uploadId,
+                            totalLines
                         )
                       )
                       AND repository = "mock-repository"

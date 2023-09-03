@@ -55,16 +55,22 @@ trait CarryforwardAwareTrait
                 static fn(Tag $tag) => <<<SQL
                 uploadId IN (
                     SELECT
-                        DISTINCT uploadId
+                        DISTINCT (
+                            IF (
+                                COUNT(uploadId) > totalLines,
+                                uploadId,
+                                NULL
+                            )
+                        )
                     FROM
                         `{$table}`
                     WHERE
                         commit = "{$tag->getCommit()}" AND
                         tag = "{$tag->getName()}" AND
-                        {$repositoryScope} AND
-                        (COUNT(uploadId) >= totalLines)
+                        {$repositoryScope}
                     GROUP BY
-                        uploadId
+                        uploadId,
+                        totalLines
                 )
                 SQL,
                 $carryforwardTags
