@@ -11,6 +11,7 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -37,15 +38,29 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getTotalUploads(): int
+    public function getSuccessfulUploads(): int
     {
-        /** @var IntegerQueryResult $totalUploads */
+        /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
             TotalUploadsQuery::class,
             QueryParameterBag::fromUpload($this->upload)
         );
 
-        return $totalUploads->getResult();
+        return $totalUploads->getSuccessfulUploads();
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function getPendingUploads(): int
+    {
+        /** @var TotalUploadsQueryResult $totalUploads */
+        $totalUploads = $this->queryService->runQuery(
+            TotalUploadsQuery::class,
+            QueryParameterBag::fromUpload($this->upload)
+        );
+
+        return $totalUploads->getPendingUploads();
     }
 
     /**

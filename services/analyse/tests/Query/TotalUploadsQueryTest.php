@@ -6,6 +6,7 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\IntegerQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalUploadsQuery;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
@@ -20,15 +21,30 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-              COUNT(DISTINCT uploadId) as totalUploads
+              SUM(
+                IF(
+                  totalLines >= COUNT(*),
+                  1,
+                  0
+                )
+              ) as successfulUploads,
+              SUM(
+                IF(
+                  totalLines < COUNT(*),
+                  1,
+                  0
+                )
+              ) as pendingUploads
             FROM
               `mock-table`
             WHERE
               commit = "mock-commit"
-              AND ingestTime <= "2021-01-01 00:00:00"
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
+            GROUP BY
+              uploadId,
+              totalLines
             SQL
         ];
     }
@@ -57,7 +73,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         $result = $this->getQueryClass()
             ->parseResults($mockBigQueryResult);
 
-        $this->assertInstanceOf(IntegerQueryResult::class, $result);
+        $this->assertInstanceOf(TotalUploadsQueryResult::class, $result);
     }
 
     #[DataProvider('parametersDataProvider')]
@@ -77,17 +93,32 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             [
                 [
-                    'totalUploads' => 1
+                    'successfulUploads' => 1,
+                    'pendingUploads' => 0
                 ]
             ],
             [
                 [
-                    'totalUploads' => 10
+                    'successfulUploads' => 2,
+                    'pendingUploads' => 1
                 ]
             ],
             [
                 [
-                    'totalUploads' => 100
+                    'successfulUploads' => 10,
+                    'pendingUploads' => 0
+                ],
+            ],
+            [
+                [
+                    'successfulUploads' => 100,
+                    'pendingUploads' => 0
+                ]
+            ],
+            [
+                [
+                    'successfulUploads' => 98,
+                    'pendingUploads' => 2
                 ]
             ]
         ];

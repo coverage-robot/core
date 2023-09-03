@@ -26,11 +26,16 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
-    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag = null): string
+    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $parent = parent::getUnnestQueryFiltering($parameterBag);
-        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '' ;
-        $lineScope = !empty($scope = self::getLineScope($parameterBag)) ? 'AND ' . $scope : '' ;
+        $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
+        $carryforwardScope = !empty(
+            $scope = self::getCarryforwardTagsScope(
+                $table,
+                $parameterBag
+            )
+        ) ? 'OR ' . $scope : '';
+        $lineScope = !empty($scope = self::getLineScope($parameterBag)) ? 'AND ' . $scope : '';
 
         return <<<SQL
         (

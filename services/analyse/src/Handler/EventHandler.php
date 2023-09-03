@@ -114,7 +114,8 @@ class EventHandler extends EventBridgeHandler
                 $upload,
                 $publishableCoverageData->getCoveragePercentage(),
                 $publishableCoverageData->getDiffCoveragePercentage(),
-                $publishableCoverageData->getTotalUploads(),
+                $publishableCoverageData->getSuccessfulUploads(),
+                $publishableCoverageData->getPendingUploads(),
                 array_map(
                     function (TagCoverageQueryResult $tag) {
                         return [

@@ -66,10 +66,22 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 WHERE
                   (
                     commit = "mock-commit"
-                    AND ingestTime <= "2021-01-01 00:00:00"
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
+                    AND totalLines >= (
+                      SELECT
+                        COUNT(uploadId)
+                      FROM
+                        `mock-table`
+                      WHERE
+                        uploadId = "mock-uploadId"
+                        AND repository = "mock-repository"
+                        AND owner = "mock-owner"
+                        AND provider = "github"
+                      GROUP BY
+                        uploadId
+                    )
                   )
               ),
               branchingLines AS (
@@ -204,27 +216,107 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 WHERE
                   (
                     commit = "mock-commit"
-                    AND ingestTime <= "2021-01-01 00:00:00"
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
+                    AND totalLines >= (
+                      SELECT
+                        COUNT(uploadId)
+                      FROM
+                        `mock-table`
+                      WHERE
+                        uploadId = "mock-uploadId"
+                        AND repository = "mock-repository"
+                        AND owner = "mock-owner"
+                        AND provider = "github"
+                      GROUP BY
+                        uploadId
+                    )
                     OR (
                       (
-                        (
-                          commit = "mock-commit"
-                          AND tag = "1"
+                        uploadId IN (
+                          SELECT
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) >= totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
+                          FROM
+                            `mock-table`
+                          WHERE
+                            commit = "mock-commit"
+                            AND tag = "1"
+                            AND repository = "mock-repository"
+                            AND owner = "mock-owner"
+                            AND provider = "github"
+                          GROUP BY
+                            uploadId,
+                            totalLines
                         )
-                        OR (
-                          commit = "mock-commit"
-                          AND tag = "2"
+                        OR uploadId IN (
+                          SELECT
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) >= totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
+                          FROM
+                            `mock-table`
+                          WHERE
+                            commit = "mock-commit"
+                            AND tag = "2"
+                            AND repository = "mock-repository"
+                            AND owner = "mock-owner"
+                            AND provider = "github"
+                          GROUP BY
+                            uploadId,
+                            totalLines
                         )
-                        OR (
-                          commit = "mock-commit-2"
-                          AND tag = "3"
+                        OR uploadId IN (
+                          SELECT
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) >= totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
+                          FROM
+                            `mock-table`
+                          WHERE
+                            commit = "mock-commit-2"
+                            AND tag = "3"
+                            AND repository = "mock-repository"
+                            AND owner = "mock-owner"
+                            AND provider = "github"
+                          GROUP BY
+                            uploadId,
+                            totalLines
                         )
-                        OR (
-                          commit = "mock-commit-2"
-                          AND tag = "4"
+                        OR uploadId IN (
+                          SELECT
+                            DISTINCT (
+                              IF (
+                                COUNT(uploadId) >= totalLines,
+                                uploadId,
+                                NULL
+                              )
+                            )
+                          FROM
+                            `mock-table`
+                          WHERE
+                            commit = "mock-commit-2"
+                            AND tag = "4"
+                            AND repository = "mock-repository"
+                            AND owner = "mock-owner"
+                            AND provider = "github"
+                          GROUP BY
+                            uploadId,
+                            totalLines
                         )
                       )
                       AND repository = "mock-repository"
@@ -324,7 +416,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload =  Upload::from([
+        $upload = Upload::from([
             'provider' => Provider::GITHUB->value,
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',

@@ -34,7 +34,19 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
               `mock-table`
             WHERE
               commit = "mock-commit"
-              AND ingestTime <= "2021-01-01 00:00:00"
+              AND totalLines >= (
+                SELECT
+                  COUNT(uploadId)
+                FROM
+                  `mock-table`
+                WHERE
+                  uploadId = "mock-uploadId"
+                  AND repository = "mock-repository"
+                  AND owner = "mock-owner"
+                  AND provider = "github"
+                GROUP BY
+                  uploadId
+              )
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
@@ -49,7 +61,19 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
               `mock-table`
             WHERE
               commit IN ("mock-commit", "mock-commit-2")
-              AND ingestTime <= "2021-01-01 00:00:00"
+              AND totalLines >= (
+                SELECT
+                  COUNT(uploadId)
+                FROM
+                  `mock-table`
+                WHERE
+                  uploadId = "mock-uploadId"
+                  AND repository = "mock-repository"
+                  AND owner = "mock-owner"
+                  AND provider = "github"
+                GROUP BY
+                  uploadId
+              )
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"

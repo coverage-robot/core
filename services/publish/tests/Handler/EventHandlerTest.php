@@ -64,6 +64,7 @@ class EventHandlerTest extends TestCase
                                         100,
                                         100,
                                         1,
+                                        0,
                                         [
                                             [
                                                 'tag' => [
@@ -155,6 +156,7 @@ class EventHandlerTest extends TestCase
                                         100,
                                         100,
                                         1,
+                                        0,
                                         [
                                             [
                                                 'tag' => [
@@ -199,6 +201,7 @@ class EventHandlerTest extends TestCase
                                         50,
                                         100,
                                         2,
+                                        0,
                                         [
                                             [
                                                 'tag' => [
@@ -325,6 +328,7 @@ class EventHandlerTest extends TestCase
                                         100,
                                         100,
                                         1,
+                                        0,
                                         [
                                             [
                                                 'tag' => [
@@ -369,6 +373,7 @@ class EventHandlerTest extends TestCase
                                         50,
                                         100,
                                         2,
+                                        0,
                                         [
                                             [
                                                 'tag' => [

@@ -1,5 +1,5 @@
 ## Coverage Report
-> Merging #12, with **2** uploaded coverage files on mock-commit
+> Merging #12 which has **2** successfully uploaded coverage files (and **1** still pending) on mock-commit
 
 | Total Coverage | Diff Coverage |
 | --- | --- |

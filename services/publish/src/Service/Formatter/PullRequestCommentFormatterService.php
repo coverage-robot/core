@@ -12,8 +12,9 @@ class PullRequestCommentFormatterService
     {
         return <<<MARKDOWN
         ## Coverage Report
-        > Merging #{$upload->getPullRequest()}, with **{$message->getTotalUploads(
-        )}** uploaded coverage files on {$upload->getCommit()}
+        > Merging #{$upload->getPullRequest()} which has **{$message->getSuccessfulUploads(
+        )}** successfully uploaded coverage files (and **{$message->getPendingUploads(
+        )}** still pending) on {$upload->getCommit()}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |

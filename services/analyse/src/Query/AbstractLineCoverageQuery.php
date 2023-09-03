@@ -3,10 +3,13 @@
 namespace App\Query;
 
 use App\Model\QueryParameterBag;
+use App\Query\Trait\ScopeAwareTrait;
 use Packages\Models\Enum\LineState;
 
 abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
+    use ScopeAwareTrait;
+
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getNamedQueries($table, $parameterBag);
@@ -24,16 +27,16 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
                 SUM(hits) as hits,
                 branchIndex,
                 SUM(branchHit) > 0 as isBranchedLineHit
-            FROM 
+            FROM
                 unnested,
                 UNNEST(
                     IF(
                         ARRAY_LENGTH(branchHits) = 0,
                         [hits],
-                        branchHits    
+                        branchHits
                     )
                 ) AS branchHit WITH OFFSET AS branchIndex
-            GROUP BY 
+            GROUP BY
                 fileName,
                 lineNumber,
                 branchIndex
@@ -57,6 +60,20 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
                 fileName,
                 lineNumber
         )
+        SQL;
+    }
+
+    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
+    {
+        $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
+        $successfulUploadsScope = self::getSuccessfulUploadsScope(
+            $table,
+            $parameterBag
+        );
+
+        return <<<SQL
+        {$parent}
+        AND {$successfulUploadsScope}
         SQL;
     }
 }

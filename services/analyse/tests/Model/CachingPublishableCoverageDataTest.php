@@ -9,8 +9,8 @@ use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -75,13 +75,15 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(CoverageQueryResult::from([
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.1
-            ]));
+            ->willReturn(
+                CoverageQueryResult::from([
+                    'lines' => 6,
+                    'covered' => 1,
+                    'partial' => 2,
+                    'uncovered' => 3,
+                    'coveragePercentage' => 97.1
+                ])
+            );
 
         $this->assertEquals(97.1, $this->cachedPublishableCoverageData->getCoveragePercentage());
 
@@ -96,13 +98,15 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(CoverageQueryResult::from([
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.0
-            ]));
+            ->willReturn(
+                CoverageQueryResult::from([
+                    'lines' => 6,
+                    'covered' => 1,
+                    'partial' => 2,
+                    'uncovered' => 3,
+                    'coveragePercentage' => 97.0
+                ])
+            );
 
         $this->assertEquals(3, $this->cachedPublishableCoverageData->getUncoveredLines());
 
@@ -117,13 +121,15 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(CoverageQueryResult::from([
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.0
-            ]));
+            ->willReturn(
+                CoverageQueryResult::from([
+                    'lines' => 6,
+                    'covered' => 1,
+                    'partial' => 2,
+                    'uncovered' => 3,
+                    'coveragePercentage' => 97.0
+                ])
+            );
 
         $this->assertEquals(6, $this->cachedPublishableCoverageData->getTotalLines());
 
@@ -138,14 +144,14 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalUploadsQuery::class)
-            ->willReturn(IntegerQueryResult::from(2));
+            ->willReturn(TotalUploadsQueryResult::from(2, 0));
 
-        $this->assertEquals(2, $this->cachedPublishableCoverageData->getTotalUploads());
+        $this->assertEquals(2, $this->cachedPublishableCoverageData->getSuccessfulUploads());
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertEquals(2, $this->cachedPublishableCoverageData->getTotalUploads());
+        $this->assertEquals(2, $this->cachedPublishableCoverageData->getSuccessfulUploads());
     }
 
     public function testGetTagCoverage(): void
@@ -180,13 +186,15 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalCoverageQuery::class)
-            ->willReturn(CoverageQueryResult::from([
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.0
-            ]));
+            ->willReturn(
+                CoverageQueryResult::from([
+                    'lines' => 6,
+                    'covered' => 1,
+                    'partial' => 2,
+                    'uncovered' => 3,
+                    'coveragePercentage' => 97.0
+                ])
+            );
 
         $this->assertEquals(97.0, $this->cachedPublishableCoverageData->getDiffCoveragePercentage());
 
