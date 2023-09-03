@@ -1,21 +1,21 @@
-# Ingest
+# Publish
 
-The Ingest service handles all of the ingestion portion of the pipeline, and is responsible for taking the files,
-divining the coverage format, and storing the results in the warehouse, S3, and event bus.
+The Publish service handles publishing information (known as messages) to third-party platforms, like GitHub, off the
+back of queue items published by other services - such as PR results from the Analyse service.
 
 ## Deployment
 
 Deployment is handled through Terraform, and is deployed as part of the CI/CD pipeline.
 
-For the deployment of Ingest service, see the [`infrastructure/`](./infrastructure) folder.
+For the deployment of the Publish service, see the [`infrastructure/`](./infrastructure) folder.
 
 ## Local Development
 
 All of the local containers are managed in the project root's [`docker-compose.yml`](../../docker-compose.yml), but to
-invoke ingestion you
-can use the provided Makefile commands, using a Docker container.
+invoke the publishing of messages, like PR comments, you can use the provided Makefile commands, using a Docker
+container.
 
-### Invoke Ingestion
+### Publishing Messages
 
 Perform a PUT request to push the file into S3 locally:
 

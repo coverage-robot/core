@@ -40,21 +40,21 @@ class InvokeCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('commit', InputArgument::REQUIRED, 'The commit to analyse')
+        $this->addArgument('commit', InputArgument::REQUIRED, 'The commit to publish messages to')
             ->addArgument('pullRequest', InputArgument::REQUIRED, 'The pull request the commit belongs to')
             ->addArgument('repository', InputArgument::REQUIRED, 'The repository the commit belongs to')
             ->addArgument('owner', InputArgument::REQUIRED, 'The owner of the repository')
             ->addArgument(
                 'tag',
                 InputArgument::OPTIONAL,
-                'The tag of the coverage file which is being analysed',
+                'The tag of the coverage file which is being published for',
                 'mock-tag'
             )
-            ->addArgument('ref', InputArgument::OPTIONAL, 'The ref of the commit to analyse', 'mock-ref')
+            ->addArgument('ref', InputArgument::OPTIONAL, 'The ref of the commit being published to', 'mock-ref')
             ->addArgument(
                 'parent',
                 InputArgument::OPTIONAL,
-                'The parent of the commit to analyse',
+                'The parent of the commit being published to',
                 '["mock-parent-commit"]'
             );
     }
