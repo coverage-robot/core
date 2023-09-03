@@ -14,7 +14,8 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly Upload $upload,
         private readonly float $coveragePercentage,
         private readonly float $diffCoveragePercentage,
-        private readonly int $totalUploads,
+        private readonly int $successfulUploads,
+        private readonly int $pendingUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
         private readonly DateTimeImmutable $validUntil,
@@ -57,9 +58,14 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         return $this->diffCoveragePercentage;
     }
 
-    public function getTotalUploads(): int
+    public function getSuccessfulUploads(): int
     {
-        return $this->totalUploads;
+        return $this->successfulUploads;
+    }
+
+    public function getPendingUploads(): int
+    {
+        return $this->pendingUploads;
     }
 
     public function getTagCoverage(): array
@@ -83,7 +89,8 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
             !isset($data['upload']) ||
             !isset($data['coveragePercentage']) ||
             !isset($data['diffCoveragePercentage']) ||
-            !isset($data['totalUploads']) ||
+            !isset($data['successfulUploads']) ||
+            !isset($data['pendingUploads']) ||
             !isset($data['tagCoverage']) ||
             !isset($data['leastCoveredDiffFiles']) ||
             !$validUntil
@@ -95,7 +102,8 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
             Upload::from($data['upload']),
             (float)$data['coveragePercentage'],
             (float)$data['diffCoveragePercentage'],
-            (int)$data['totalUploads'],
+            (int)$data['successfulUploads'],
+            (int)$data['pendingUploads'],
             (array)$data['tagCoverage'],
             (array)$data['leastCoveredDiffFiles'],
             $validUntil
@@ -109,7 +117,8 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
             'upload' => $this->upload->jsonSerialize(),
             'coveragePercentage' => $this->coveragePercentage,
             'diffCoveragePercentage' => $this->diffCoveragePercentage,
-            'totalUploads' => $this->totalUploads,
+            'successfulUploads' => $this->successfulUploads,
+            'pendingUploads' => $this->pendingUploads,
             'tagCoverage' => $this->tagCoverage,
             'leastCoveredDiffFiles' => $this->leastCoveredDiffFiles,
             'validUntil' => $this->validUntil->format(DateTimeInterface::ATOM),

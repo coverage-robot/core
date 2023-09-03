@@ -12,24 +12,13 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
     use ScopeAwareTrait;
 
-    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
+    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
         $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? $scope : '';
         $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
 
-        // To avoid any race conditions, the only uploads which should be included are those _before_ the current
-        // upload we're analysing. This is because we cannot guarantee the completeness of any coverage data which
-        // is after what we're currently uploading.
-        $ingestTimeScope = sprintf(
-            'AND ingestTime <= "%s"',
-            $parameterBag?->get(QueryParameter::UPLOAD)
-                ->getIngestTime()
-                ->format('Y-m-d H:i:s')
-        );
-
         return <<<SQL
         {$commitScope}
-        {$ingestTimeScope}
         {$repositoryScope}
         SQL;
     }
@@ -68,7 +57,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                                     WHERE
                                         KEY = "branchHits"
                                 )
-                            ) 
+                            )
                         ) AS branchHits WITH OFFSET AS branchIndex
                     GROUP BY
                         branchIndex,
@@ -77,7 +66,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             FROM
                 `$table`
             WHERE
-                {$this->getUnnestQueryFiltering($parameterBag)}
+                {$this->getUnnestQueryFiltering($table, $parameterBag)}
         )
         SQL;
     }

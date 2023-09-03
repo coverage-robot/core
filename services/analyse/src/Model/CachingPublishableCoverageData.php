@@ -8,7 +8,9 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 
 class CachingPublishableCoverageData extends PublishableCoverageData
 {
-    private ?int $totalUploads = null;
+    private ?int $successfulUploads = null;
+
+    private ?int $pendingUploads = null;
 
     private ?int $totalLines = null;
 
@@ -29,13 +31,22 @@ class CachingPublishableCoverageData extends PublishableCoverageData
      */
     private array $leastCoveredDiffFiles = [];
 
-    public function getTotalUploads(): int
+    public function getSuccessfulUploads(): int
     {
-        if (!$this->totalUploads) {
-            $this->totalUploads = parent::getTotalUploads();
+        if (!$this->successfulUploads) {
+            $this->successfulUploads = parent::getSuccessfulUploads();
         }
 
-        return $this->totalUploads;
+        return $this->successfulUploads;
+    }
+
+    public function getPendingUploads(): int
+    {
+        if (!$this->pendingUploads) {
+            $this->pendingUploads = parent::getPendingUploads();
+        }
+
+        return $this->pendingUploads;
     }
 
     public function getTotalLines(): int

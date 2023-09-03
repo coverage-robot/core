@@ -65,16 +65,16 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 SUM(hits) as hits,
                 branchIndex,
                 SUM(branchHit) > 0 as isBranchedLineHit
-            FROM 
+            FROM
                 unnested,
                 UNNEST(
                     IF(
                         ARRAY_LENGTH(branchHits) = 0,
                         [hits],
-                        branchHits    
+                        branchHits
                     )
                 ) AS branchHit WITH OFFSET AS branchIndex
-            GROUP BY 
+            GROUP BY
                 fileName,
                 lineNumber,
                 tag,
@@ -107,14 +107,24 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         SQL;
     }
 
-    public function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
+    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
-        $parent = parent::getUnnestQueryFiltering($parameterBag);
-        $carryforwardScope = !empty($scope = self::getCarryforwardTagsScope($parameterBag)) ? 'OR ' . $scope : '' ;
+        $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
+        $successfulUploadsScope = self::getSuccessfulUploadsScope(
+            $table,
+            $parameterBag
+        );
+        $carryforwardScope = !empty(
+            $scope = self::getCarryforwardTagsScope(
+                $table,
+                $parameterBag
+            )
+        ) ? 'OR ' . $scope : '';
 
         return <<<SQL
         (
             {$parent}
+            AND {$successfulUploadsScope}
         )
         {$carryforwardScope}
         SQL;

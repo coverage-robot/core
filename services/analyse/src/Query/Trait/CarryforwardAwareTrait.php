@@ -39,8 +39,10 @@ trait CarryforwardAwareTrait
      * )
      * ```
      */
-    private static function getCarryforwardTagsScope(?QueryParameterBag $parameterBag): string
+    private static function getCarryforwardTagsScope(string $table, ?QueryParameterBag $parameterBag): string
     {
+        $successfulUploadsScope = self::getSuccessfulUploadsScope($table, $parameterBag);
+
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
             /** @var Tag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
@@ -53,7 +55,8 @@ trait CarryforwardAwareTrait
                 static fn(Tag $tag) => <<<SQL
                 (
                     commit = "{$tag->getCommit()}" AND
-                    tag = "{$tag->getName()}"
+                    tag = "{$tag->getName()}" AND
+                    {$successfulUploadsScope}
                 )
                 SQL,
                 $carryforwardTags

@@ -5,7 +5,7 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\IntegerQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -20,25 +20,22 @@ class TotalUploadsQuery implements QueryInterface
         $commitScope = self::getCommitScope($parameterBag);
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
-        // To avoid any race conditions, the only uploads which should be included are those _before_ the current
-        // upload we're analysing. This is because we cannot guarantee the completeness of any coverage data which
-        // is after what we're currently uploading.
-        $ingestTimeScope = sprintf(
-            'ingestTime <= "%s"',
-            $parameterBag?->get(QueryParameter::UPLOAD)
-                ->getIngestTime()
-                ->format('Y-m-d H:i:s')
-        );
-
         return <<<SQL
         SELECT
-            COUNT(DISTINCT uploadId) as totalUploads
+            SUM(
+                IF(totalLines >= COUNT(*), 1, 0)
+            ) as successfulUploads,
+            SUM(
+                IF(totalLines < COUNT(*), 1, 0)
+            ) as pendingUploads
         FROM
             `$table`
         WHERE
             {$commitScope} AND
-            {$ingestTimeScope} AND
             {$repositoryScope}
+        GROUP BY
+            uploadId,
+            totalLines
         SQL;
     }
 
@@ -51,7 +48,7 @@ class TotalUploadsQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
-    public function parseResults(QueryResults $results): IntegerQueryResult
+    public function parseResults(QueryResults $results): TotalUploadsQueryResult
     {
         if (!$results->isComplete()) {
             throw new QueryException('Query was not complete when attempting to parse results.');
@@ -61,11 +58,15 @@ class TotalUploadsQuery implements QueryInterface
         $row = $results->rows()
             ->current();
 
-        if (is_int($row['totalUploads'])) {
-            return IntegerQueryResult::from($row['totalUploads']);
+        if (!is_int($row['successfulUploads'])) {
+            throw QueryException::typeMismatch(gettype($row['successfulUploads']), 'int');
         }
 
-        throw QueryException::typeMismatch(gettype($row['totalUploads']), 'int');
+        if (!is_int($row['pendingUploads'])) {
+            throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'int');
+        }
+
+        return TotalUploadsQueryResult::from($row['successfulUploads'], $row['pendingUploads']);
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void

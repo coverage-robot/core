@@ -107,4 +107,20 @@ trait ScopeAwareTrait
 
         return '';
     }
+
+    private static function getSuccessfulUploadsScope(string $table, ?QueryParameterBag $parameterBag): string
+    {
+        return <<<SQL
+            totalLines >= (
+                SELECT
+                    COUNT(uploadId)
+                FROM
+                    `$table`
+                WHERE
+                    uploadId = "{$parameterBag->get(QueryParameter::UPLOAD)->getUploadId()}"
+                GROUP BY
+                    uploadId
+            )
+        SQL;
+    }
 }

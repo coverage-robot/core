@@ -19,16 +19,7 @@ class CommitTagsQuery implements QueryInterface
     {
         $commitScope = self::getCommitScope($parameterBag);
         $repositoryScope = self::getRepositoryScope($parameterBag);
-
-        // To avoid any race conditions, the only uploads which should be included are those _before_ the current
-        // upload we're analysing. This is because we cannot guarantee the completeness of any coverage data which
-        // is after what we're currently uploading.
-        $ingestTimeScope = sprintf(
-            'ingestTime <= "%s"',
-            $parameterBag?->get(QueryParameter::UPLOAD)
-                ->getIngestTime()
-                ->format('Y-m-d H:i:s')
-        );
+        $successfulUploadsScope = self::getSuccessfulUploadsScope($table, $parameterBag);
 
         return <<<SQL
         SELECT
@@ -38,7 +29,7 @@ class CommitTagsQuery implements QueryInterface
             `{$table}`
         WHERE
             {$commitScope} AND
-            {$ingestTimeScope} AND
+            {$successfulUploadsScope} AND
             {$repositoryScope}
         GROUP BY
             commit

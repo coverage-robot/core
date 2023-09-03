@@ -8,10 +8,10 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
-use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
@@ -51,7 +51,7 @@ class QueryServiceTest extends TestCase
                     TotalUploadsQuery::class,
                     '',
                     TotalUploadsQuery::class === $query ? $queryResult :
-                        $this->createMock(IntegerQueryResult::class)
+                        $this->createMock(TotalUploadsQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
@@ -116,7 +116,7 @@ class QueryServiceTest extends TestCase
                     $this,
                     TotalUploadsQuery::class,
                     null,
-                    $this->createMock(IntegerQueryResult::class)
+                    $this->createMock(TotalUploadsQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
@@ -246,7 +246,7 @@ class QueryServiceTest extends TestCase
             ],
             'Total commit uploads query' => [
                 TotalUploadsQuery::class,
-                IntegerQueryResult::from(99)
+                TotalUploadsQueryResult::from(99, 1)
             ],
             'Diff coverage query' => [
                 LineCoverageQuery::class,
