@@ -20,7 +20,7 @@ class BigQueryMetadataBuilderService
     /**
      * Build a row's worth of line coverage data, suitable for insertion into BigQuery.
      */
-    public function buildRow(Upload $upload, Coverage $coverage, File $file, AbstractLine $line): array
+    public function buildRow(Upload $upload, int $totalLines, Coverage $coverage, File $file, AbstractLine $line): array
     {
         return [
             'uploadId' => $upload->getUploadId(),
@@ -39,6 +39,7 @@ class BigQueryMetadataBuilderService
                 null,
             'type' => $line->getType(),
             'lineNumber' => $line->getLineNumber(),
+            'totalLines' => $totalLines,
             'metadata' => $this->buildMetadata($line)
         ];
     }
@@ -56,13 +57,13 @@ class BigQueryMetadataBuilderService
             array_values($line->jsonSerialize())
         );
 
-        return array_filter($metadata, static fn(?array $record) => $record !== null);
+        return array_filter($metadata);
     }
 
     private function mapMetadataRecord(mixed $key, mixed $value): ?array
     {
         try {
-            return  [
+            return [
                 'key' => $this->stringifyDataType($key),
                 'value' => $this->stringifyDataType($value)
             ];
