@@ -112,7 +112,7 @@ trait ScopeAwareTrait
     private static function getSuccessfulUploadsScope(string $table, ?QueryParameterBag $parameterBag): string
     {
         /** @var Upload|null $upload */
-        $upload = $parameterBag->get(QueryParameter::UPLOAD);
+        $upload = $parameterBag?->get(QueryParameter::UPLOAD);
 
         if (!$upload) {
             return '';
