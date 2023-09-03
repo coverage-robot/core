@@ -57,7 +57,7 @@ trait CarryforwardAwareTrait
                     SELECT
                         DISTINCT (
                             IF (
-                                COUNT(uploadId) > totalLines,
+                                COUNT(uploadId) >= totalLines,
                                 uploadId,
                                 NULL
                             )

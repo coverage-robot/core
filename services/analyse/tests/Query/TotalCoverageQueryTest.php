@@ -76,6 +76,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                         `mock-table`
                       WHERE
                         uploadId = "mock-uploadId"
+                        AND repository = "mock-repository"
+                        AND owner = "mock-owner"
+                        AND provider = "github"
                       GROUP BY
                         uploadId
                     )
@@ -223,6 +226,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                         `mock-table`
                       WHERE
                         uploadId = "mock-uploadId"
+                        AND repository = "mock-repository"
+                        AND owner = "mock-owner"
+                        AND provider = "github"
                       GROUP BY
                         uploadId
                     )
@@ -232,7 +238,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                           SELECT
                             DISTINCT (
                               IF (
-                                COUNT(uploadId) > totalLines,
+                                COUNT(uploadId) >= totalLines,
                                 uploadId,
                                 NULL
                               )
@@ -253,7 +259,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                           SELECT
                             DISTINCT (
                               IF (
-                                COUNT(uploadId) > totalLines,
+                                COUNT(uploadId) >= totalLines,
                                 uploadId,
                                 NULL
                               )
@@ -274,7 +280,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                           SELECT
                             DISTINCT (
                               IF (
-                                COUNT(uploadId) > totalLines,
+                                COUNT(uploadId) >= totalLines,
                                 uploadId,
                                 NULL
                               )
@@ -295,7 +301,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                           SELECT
                             DISTINCT (
                               IF (
-                                COUNT(uploadId) > totalLines,
+                                COUNT(uploadId) >= totalLines,
                                 uploadId,
                                 NULL
                               )

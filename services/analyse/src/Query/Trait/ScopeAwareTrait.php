@@ -118,6 +118,8 @@ trait ScopeAwareTrait
             return '';
         }
 
+        $repositoryScope = self::getRepositoryScope($parameterBag);
+
         return <<<SQL
             totalLines >= (
                 SELECT
@@ -126,6 +128,7 @@ trait ScopeAwareTrait
                     `$table`
                 WHERE
                     uploadId = "{$upload->getUploadId()}"
+                    AND {$repositoryScope}
                 GROUP BY
                     uploadId
             )

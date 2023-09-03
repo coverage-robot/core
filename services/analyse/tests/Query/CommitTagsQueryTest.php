@@ -41,6 +41,9 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   `mock-table`
                 WHERE
                   uploadId = "mock-uploadId"
+                  AND repository = "mock-repository"
+                  AND owner = "mock-owner"
+                  AND provider = "github"
                 GROUP BY
                   uploadId
               )
@@ -65,6 +68,9 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   `mock-table`
                 WHERE
                   uploadId = "mock-uploadId"
+                  AND repository = "mock-repository"
+                  AND owner = "mock-owner"
+                  AND provider = "github"
                 GROUP BY
                   uploadId
               )
