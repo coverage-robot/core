@@ -40,6 +40,7 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                 new Tag('mock-tag', 'mock-commit'),
                 $ingestTime
             ),
+            1,
             new Coverage(CoverageFormat::CLOVER, 'path/from/root', $ingestTime),
             new File('mock-file.ts', []),
             new Statement(1, 10)
@@ -57,6 +58,7 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                 'ref' => 'main',
                 'tag' => 'mock-tag',
                 'sourceFormat' => CoverageFormat::CLOVER,
+                'totalLines' => 1,
                 'fileName' => 'mock-file.ts',
                 'generatedAt' => $ingestTime->format('Y-m-d H:i:s'),
                 'type' => LineType::STATEMENT,

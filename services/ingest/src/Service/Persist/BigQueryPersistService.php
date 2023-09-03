@@ -7,6 +7,7 @@ use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\File;
 use Packages\Models\Model\Upload;
 use Psr\Log\LoggerInterface;
 
@@ -28,7 +29,9 @@ class BigQueryPersistService implements PersistServiceInterface
 
         $partialFailure = false;
 
-        foreach ($this->getChunkedLines($upload, $coverage, $this->chunkSize) as $chunkNumber => $rows) {
+        $totalLines = $this->totalLines($coverage);
+
+        foreach ($this->getChunkedLines($upload, $totalLines, $coverage, $this->chunkSize) as $chunkNumber => $rows) {
             $insertResponse = $table->insertRows($rows);
             $failedRows = $insertResponse->failedRows();
 
@@ -59,20 +62,23 @@ class BigQueryPersistService implements PersistServiceInterface
      *
      * @return iterable<int, array>
      */
-    private function getChunkedLines(Upload $upload, Coverage $coverage, int $chunkSize): iterable
+    private function getChunkedLines(Upload $upload, int $totalLines, Coverage $coverage, int $chunkSize): iterable
     {
-        $chunk = [];
-
-        $remainingFiles = count($coverage);
+        $remainingLines = $totalLines;
 
         foreach ($coverage->getFiles() as $file) {
-            $remainingLines = count($file);
-
-            $remainingFiles--;
-
             foreach ($file->getAllLines() as $line) {
-                $chunk[] = [
-                    'data' => $this->bigQueryMetadataBuilderService->buildRow($upload, $coverage, $file, $line)
+                $chunk = [
+                    ...($chunk ?? []),
+                    [
+                        'data' => $this->bigQueryMetadataBuilderService->buildRow(
+                            $upload,
+                            $totalLines,
+                            $coverage,
+                            $file,
+                            $line
+                        )
+                    ]
                 ];
 
                 $remainingLines--;
@@ -85,13 +91,21 @@ class BigQueryPersistService implements PersistServiceInterface
 
             if (
                 !empty($chunk) &&
-                $remainingFiles == 0 &&
                 $remainingLines == 0
             ) {
                 yield $chunk;
                 return;
             }
         }
+    }
+
+    public function totalLines(Coverage $coverage): int
+    {
+        return array_reduce(
+            $coverage->getFiles(),
+            static fn(int $totalLines, File $file) => $totalLines + count($file),
+            0
+        );
     }
 
     public static function getPriority(): int

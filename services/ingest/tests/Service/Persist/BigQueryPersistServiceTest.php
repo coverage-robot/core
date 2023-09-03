@@ -47,7 +47,9 @@ class BigQueryPersistServiceTest extends TestCase
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static fn(array $rows) => $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1]
+                    static function (array $rows) use ($insertMatcher, $expectedChunks): bool {
+                        return $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1];
+                    }
                 )
             )
             ->willReturn($insertResponse);
@@ -293,7 +295,18 @@ class BigQueryPersistServiceTest extends TestCase
                     $upload,
                     $coverage,
                     $chunkSize,
-                    array_chunk($expectedInsertedRows, $chunkSize)
+                    array_chunk(
+                        array_map(
+                            static fn(array $row) => [
+                                'data' => array_merge(
+                                    $row['data'],
+                                    ['totalLines' => count($expectedInsertedRows)]
+                                )
+                            ],
+                            $expectedInsertedRows
+                        ),
+                        $chunkSize
+                    )
                 ];
             }
         }
