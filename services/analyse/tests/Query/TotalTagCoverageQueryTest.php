@@ -232,61 +232,73 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   )
                   OR (
                     (
-                      (
-                        commit = "mock-commit"
-                        AND tag = "1"
-                        AND totalLines >= (
-                          SELECT
-                            COUNT(uploadId)
-                          FROM
-                            `mock-table`
-                          WHERE
-                            uploadId = "mock-uploadId"
-                          GROUP BY
-                            uploadId
-                        )
+                      uploadId IN (
+                        SELECT
+                          DISTINCT uploadId
+                        FROM
+                          `mock-table`
+                        WHERE
+                          commit = "mock-commit"
+                          AND tag = "1"
+                          AND repository = "mock-repository"
+                          AND owner = "mock-owner"
+                          AND provider = "github"
+                          AND (
+                            COUNT(uploadId) >= totalLines
+                          )
+                        GROUP BY
+                          uploadId
                       )
-                      OR (
-                        commit = "mock-commit"
-                        AND tag = "2"
-                        AND totalLines >= (
-                          SELECT
-                            COUNT(uploadId)
-                          FROM
-                            `mock-table`
-                          WHERE
-                            uploadId = "mock-uploadId"
-                          GROUP BY
-                            uploadId
-                        )
+                      OR uploadId IN (
+                        SELECT
+                          DISTINCT uploadId
+                        FROM
+                          `mock-table`
+                        WHERE
+                          commit = "mock-commit"
+                          AND tag = "2"
+                          AND repository = "mock-repository"
+                          AND owner = "mock-owner"
+                          AND provider = "github"
+                          AND (
+                            COUNT(uploadId) >= totalLines
+                          )
+                        GROUP BY
+                          uploadId
                       )
-                      OR (
-                        commit = "mock-commit-2"
-                        AND tag = "3"
-                        AND totalLines >= (
-                          SELECT
-                            COUNT(uploadId)
-                          FROM
-                            `mock-table`
-                          WHERE
-                            uploadId = "mock-uploadId"
-                          GROUP BY
-                            uploadId
-                        )
+                      OR uploadId IN (
+                        SELECT
+                          DISTINCT uploadId
+                        FROM
+                          `mock-table`
+                        WHERE
+                          commit = "mock-commit-2"
+                          AND tag = "3"
+                          AND repository = "mock-repository"
+                          AND owner = "mock-owner"
+                          AND provider = "github"
+                          AND (
+                            COUNT(uploadId) >= totalLines
+                          )
+                        GROUP BY
+                          uploadId
                       )
-                      OR (
-                        commit = "mock-commit-2"
-                        AND tag = "4"
-                        AND totalLines >= (
-                          SELECT
-                            COUNT(uploadId)
-                          FROM
-                            `mock-table`
-                          WHERE
-                            uploadId = "mock-uploadId"
-                          GROUP BY
-                            uploadId
-                        )
+                      OR uploadId IN (
+                        SELECT
+                          DISTINCT uploadId
+                        FROM
+                          `mock-table`
+                        WHERE
+                          commit = "mock-commit-2"
+                          AND tag = "4"
+                          AND repository = "mock-repository"
+                          AND owner = "mock-owner"
+                          AND provider = "github"
+                          AND (
+                            COUNT(uploadId) >= totalLines
+                          )
+                        GROUP BY
+                          uploadId
                       )
                     )
                     AND repository = "mock-repository"
