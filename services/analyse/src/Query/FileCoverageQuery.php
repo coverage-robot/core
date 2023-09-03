@@ -58,7 +58,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
-    public function getUnnestQueryFiltering($table, ?QueryParameterBag $parameterBag = null): string
+    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
         $carryforwardScope = !empty(

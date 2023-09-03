@@ -5,6 +5,7 @@ namespace App\Query\Trait;
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Upload;
 
 trait ScopeAwareTrait
 {
@@ -110,6 +111,13 @@ trait ScopeAwareTrait
 
     private static function getSuccessfulUploadsScope(string $table, ?QueryParameterBag $parameterBag): string
     {
+        /** @var Upload|null $upload */
+        $upload = $parameterBag->get(QueryParameter::UPLOAD);
+
+        if (!$upload) {
+            return '';
+        }
+
         return <<<SQL
             totalLines >= (
                 SELECT
@@ -117,7 +125,7 @@ trait ScopeAwareTrait
                 FROM
                     `$table`
                 WHERE
-                    uploadId = "{$parameterBag->get(QueryParameter::UPLOAD)->getUploadId()}"
+                    uploadId = "{$upload->getUploadId()}"
                 GROUP BY
                     uploadId
             )
