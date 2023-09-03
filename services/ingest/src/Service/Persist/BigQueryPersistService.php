@@ -81,7 +81,7 @@ class BigQueryPersistService implements PersistServiceInterface
                 $chunk = [
                     ...($chunk ?? []),
                     [
-                        'uploadId' => md5(
+                        'insertId' => md5(
                             implode('-', [
                                 $upload->getUploadId(),
                                 $file->getFileName(),
