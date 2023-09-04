@@ -64,7 +64,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                         branchHits
                 ) as branchHits
             FROM
-                `$table`
+                `$table` as lines
             WHERE
                 {$this->getUnnestQueryFiltering($table, $parameterBag)}
         )

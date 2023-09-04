@@ -62,7 +62,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table`
+                  `mock-table` as lines
                 WHERE
                   (
                     (
@@ -76,7 +76,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         FROM
                           `mock-table`
                         WHERE
-                          uploadId = "mock-uploadId"
+                          uploadId = lines.uploadId
                           AND repository = "mock-repository"
                           AND owner = "mock-owner"
                           AND provider = "github"
@@ -187,7 +187,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table`
+                  `mock-table` as lines
                 WHERE
                   (
                     (
@@ -201,7 +201,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         FROM
                           `mock-table`
                         WHERE
-                          uploadId = "mock-uploadId"
+                          uploadId = lines.uploadId
                           AND repository = "mock-repository"
                           AND owner = "mock-owner"
                           AND provider = "github"
@@ -302,7 +302,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table`
+                  `mock-table` as lines
                 WHERE
                   (
                     (
@@ -316,7 +316,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         FROM
                           `mock-table`
                         WHERE
-                          uploadId = "mock-uploadId"
+                          uploadId = lines.uploadId
                           AND repository = "mock-repository"
                           AND owner = "mock-owner"
                           AND provider = "github"
