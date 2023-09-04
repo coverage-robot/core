@@ -61,7 +61,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table`
+                  `mock-table` as lines
                 WHERE
                   (
                     commit = "mock-commit"
@@ -74,7 +74,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                       FROM
                         `mock-table`
                       WHERE
-                        uploadId = "mock-uploadId"
+                        uploadId = lines.uploadId
                         AND repository = "mock-repository"
                         AND owner = "mock-owner"
                         AND provider = "github"
@@ -215,7 +215,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table`
+                  `mock-table` as lines
                 WHERE
                   (
                     commit = "mock-commit"
@@ -228,7 +228,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                       FROM
                         `mock-table`
                       WHERE
-                        uploadId = "mock-uploadId"
+                        uploadId = lines.uploadId
                         AND repository = "mock-repository"
                         AND owner = "mock-owner"
                         AND provider = "github"
