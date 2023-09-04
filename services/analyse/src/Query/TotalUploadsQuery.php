@@ -22,12 +22,8 @@ class TotalUploadsQuery implements QueryInterface
 
         return <<<SQL
         SELECT
-            SUM(
-                IF(totalLines >= COUNT(*), 1, 0)
-            ) as successfulUploads,
-            SUM(
-                IF(totalLines < COUNT(*), 1, 0)
-            ) as pendingUploads
+            IF(totalLines >= COUNT(*), 1, 0) as successfulUploads,
+            IF(totalLines < COUNT(*), 1, 0) as pendingUploads
         FROM
             `$table`
         WHERE
