@@ -12,9 +12,7 @@ class PullRequestCommentFormatterService
     {
         return <<<MARKDOWN
         ## Coverage Report
-        > Merging #{$upload->getPullRequest()} which has **{$message->getSuccessfulUploads(
-        )}** successfully uploaded coverage files (and **{$message->getPendingUploads(
-        )}** still pending) on {$upload->getCommit()}
+        {$this->getSummary($upload, $message)}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
@@ -34,6 +32,17 @@ class PullRequestCommentFormatterService
 
         *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i T')}*
         MARKDOWN;
+    }
+
+    private function getSummary(Upload $upload, PublishablePullRequestMessage $message): string
+    {
+        $pendingUploads = $message->getPendingUploads() > 0 ? sprintf(
+            ' (and **%s** still pending)',
+            $message->getPendingUploads()
+        ) : '';
+
+        return "> Merging #{$upload->getPullRequest()} which has **{$message->getSuccessfulUploads(
+        )}** successfully uploaded coverage file(s){$pendingUploads} on {$upload->getCommit()}";
     }
 
     private function getTagCoverageTable(Upload $upload, PublishablePullRequestMessage $message): string
