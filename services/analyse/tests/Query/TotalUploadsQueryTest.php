@@ -101,26 +101,26 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             [
                 [
-                    'successfulUploads' => ["1"],
+                    'successfulUploads' => ['1'],
                     'pendingUploads' => []
                 ]
             ],
             [
                 [
-                    'successfulUploads' => ["1", "2"],
-                    'pendingUploads' => ["3"]
+                    'successfulUploads' => ['1', '2'],
+                    'pendingUploads' => ['3']
                 ]
             ],
             [
                 [
-                    'successfulUploads' => ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                    'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
                     'pendingUploads' => []
                 ],
             ],
             [
                 [
-                    'successfulUploads' => ["1", "2", "3", "4", "5", "6", "7", "8"],
-                    'pendingUploads' => ["9", "10"]
+                    'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
+                    'pendingUploads' => ['9', '10']
                 ]
             ]
         ];
