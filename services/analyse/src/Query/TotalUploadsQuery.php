@@ -22,7 +22,7 @@ class TotalUploadsQuery implements QueryInterface
         {$parent}
         SELECT
             ARRAY_AGG(IF(successful = 1, uploadId, NULL) IGNORE NULLS) as successfulUploads,
-            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads,
+            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads
         FROM
             uploads
         SQL;

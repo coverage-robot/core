@@ -50,7 +50,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               ) as successfulUploads,
               ARRAY_AGG(
                 IF(pending = 1, uploadId, NULL) IGNORE NULLS
-              ) as pendingUploads,
+              ) as pendingUploads
             FROM
               uploads
             SQL
