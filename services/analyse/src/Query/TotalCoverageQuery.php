@@ -66,7 +66,9 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
 
         return <<<SQL
         (
-            {$parent}
+            (
+                {$parent}
+            )
             {$carryforwardScope}
         )
         {$lineScope}
