@@ -21,19 +21,15 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-              SUM(
-                IF(
-                  totalLines >= COUNT(*),
-                  1,
-                  0
-                )
+              IF(
+                totalLines >= COUNT(*),
+                1,
+                0
               ) as successfulUploads,
-              SUM(
-                IF(
-                  totalLines < COUNT(*),
-                  1,
-                  0
-                )
+              IF(
+                totalLines < COUNT(*),
+                1,
+                0
               ) as pendingUploads
             FROM
               `mock-table`
