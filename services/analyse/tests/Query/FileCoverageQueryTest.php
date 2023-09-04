@@ -586,89 +586,21 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     )
                     OR (
                       (
-                        uploadId IN (
-                          SELECT
-                            DISTINCT (
-                              IF (
-                                COUNT(uploadId) >= totalLines,
-                                uploadId,
-                                NULL
-                              )
-                            )
-                          FROM
-                            `mock-table`
-                          WHERE
-                            commit = "mock-commit"
-                            AND tag = "1"
-                            AND repository = "mock-repository"
-                            AND owner = "mock-owner"
-                            AND provider = "github"
-                          GROUP BY
-                            uploadId,
-                            totalLines
+                        (
+                          commit = "mock-commit"
+                          AND tag = "1"
                         )
-                        OR uploadId IN (
-                          SELECT
-                            DISTINCT (
-                              IF (
-                                COUNT(uploadId) >= totalLines,
-                                uploadId,
-                                NULL
-                              )
-                            )
-                          FROM
-                            `mock-table`
-                          WHERE
-                            commit = "mock-commit"
-                            AND tag = "2"
-                            AND repository = "mock-repository"
-                            AND owner = "mock-owner"
-                            AND provider = "github"
-                          GROUP BY
-                            uploadId,
-                            totalLines
+                        OR (
+                          commit = "mock-commit"
+                          AND tag = "2"
                         )
-                        OR uploadId IN (
-                          SELECT
-                            DISTINCT (
-                              IF (
-                                COUNT(uploadId) >= totalLines,
-                                uploadId,
-                                NULL
-                              )
-                            )
-                          FROM
-                            `mock-table`
-                          WHERE
-                            commit = "mock-commit-2"
-                            AND tag = "3"
-                            AND repository = "mock-repository"
-                            AND owner = "mock-owner"
-                            AND provider = "github"
-                          GROUP BY
-                            uploadId,
-                            totalLines
+                        OR (
+                          commit = "mock-commit-2"
+                          AND tag = "3"
                         )
-                        OR uploadId IN (
-                          SELECT
-                            DISTINCT (
-                              IF (
-                                COUNT(uploadId) >= totalLines,
-                                uploadId,
-                                NULL
-                              )
-                            )
-                          FROM
-                            `mock-table`
-                          WHERE
-                            commit = "mock-commit-2"
-                            AND tag = "4"
-                            AND repository = "mock-repository"
-                            AND owner = "mock-owner"
-                            AND provider = "github"
-                          GROUP BY
-                            uploadId,
-                            totalLines
+                        OR (
+                          commit = "mock-commit-2"
+                          AND tag = "4"
                         )
                       )
                       AND repository = "mock-repository"

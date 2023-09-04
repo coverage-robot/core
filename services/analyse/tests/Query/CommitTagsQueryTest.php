@@ -49,17 +49,23 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   uploadId,
                   tag,
                   totalLines
+              ),
+              tags AS (
+                SELECT
+                  commit,
+                  ARRAY_AGG(tag) as tags,
+                  MIN(isSuccessfulUpload) as allUploadsSuccessful
+                FROM
+                  uploads
+                GROUP BY
+                  commit
               )
             SELECT
-              commit,
-              ARRAY_AGG(tag) as tags
+              *
             FROM
-              uploads
+              tags
             WHERE
-              isSuccessfulUpload = 1
-            GROUP BY
-              commit,
-              isSuccessfulUpload
+              allUploadsSuccessful = 1
             SQL,
             <<<SQL
             WITH
@@ -84,17 +90,23 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   uploadId,
                   tag,
                   totalLines
+              ),
+              tags AS (
+                SELECT
+                  commit,
+                  ARRAY_AGG(tag) as tags,
+                  MIN(isSuccessfulUpload) as allUploadsSuccessful
+                FROM
+                  uploads
+                GROUP BY
+                  commit
               )
             SELECT
-              commit,
-              ARRAY_AGG(tag) as tags
+              *
             FROM
-              uploads
+              tags
             WHERE
-              isSuccessfulUpload = 1
-            GROUP BY
-              commit,
-              isSuccessfulUpload
+              allUploadsSuccessful = 1
             SQL,
         ];
     }

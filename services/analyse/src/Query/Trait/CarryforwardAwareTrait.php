@@ -53,24 +53,9 @@ trait CarryforwardAwareTrait
 
             $filtering = array_map(
                 static fn(Tag $tag) => <<<SQL
-                uploadId IN (
-                    SELECT
-                        DISTINCT (
-                            IF (
-                                COUNT(uploadId) >= totalLines,
-                                uploadId,
-                                NULL
-                            )
-                        )
-                    FROM
-                        `{$table}`
-                    WHERE
-                        commit = "{$tag->getCommit()}" AND
-                        tag = "{$tag->getName()}" AND
-                        {$repositoryScope}
-                    GROUP BY
-                        uploadId,
-                        totalLines
+                (
+                    commit = "{$tag->getCommit()}"
+                    AND tag = "{$tag->getName()}"
                 )
                 SQL,
                 $carryforwardTags
