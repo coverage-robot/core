@@ -257,6 +257,13 @@ class BigQueryPersistServiceTest extends TestCase
                     ];
 
                     $expectedInsertedRows[] = [
+                        'insertId' => md5(
+                            implode('-', [
+                                $upload->getUploadId(),
+                                $file->getFileName(),
+                                $line->getLineNumber()
+                            ])
+                        ),
                         'data' => [
                             ...match ($line->getType()) {
                                 LineType::STATEMENT => $commonColumns + [
@@ -298,6 +305,7 @@ class BigQueryPersistServiceTest extends TestCase
                     array_chunk(
                         array_map(
                             static fn(array $row) => [
+                                'insertId' => $row['insertId'],
                                 'data' => array_merge(
                                     $row['data'],
                                     ['totalLines' => count($expectedInsertedRows)]
