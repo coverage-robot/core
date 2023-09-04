@@ -27,58 +27,74 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
     {
         return [
             <<<SQL
-            SELECT
-              commit,
-              ARRAY_AGG(DISTINCT tag) as tags
-            FROM
-              `mock-table`
-            WHERE
-              commit = "mock-commit"
-              AND totalLines >= (
+            WITH
+              uploads AS (
                 SELECT
-                  COUNT(uploadId)
+                  commit,
+                  tag,
+                  IF (
+                    totalLines >= COUNT(uploadId),
+                    1,
+                    0
+                  ) as isSuccessfulUpload
                 FROM
                   `mock-table`
                 WHERE
-                  uploadId = "mock-uploadId"
+                  commit = "mock-commit"
                   AND repository = "mock-repository"
                   AND owner = "mock-owner"
                   AND provider = "github"
                 GROUP BY
-                  uploadId
+                  commit,
+                  uploadId,
+                  tag,
+                  totalLines
               )
-              AND repository = "mock-repository"
-              AND owner = "mock-owner"
-              AND provider = "github"
+            SELECT
+              commit,
+              ARRAY_AGG(tag) as tags
+            FROM
+              uploads
+            WHERE
+              isSuccessfulUpload = 1
             GROUP BY
-              commit
+              commit,
+              isSuccessfulUpload
             SQL,
             <<<SQL
-            SELECT
-              commit,
-              ARRAY_AGG(DISTINCT tag) as tags
-            FROM
-              `mock-table`
-            WHERE
-              commit IN ("mock-commit", "mock-commit-2")
-              AND totalLines >= (
+            WITH
+              uploads AS (
                 SELECT
-                  COUNT(uploadId)
+                  commit,
+                  tag,
+                  IF (
+                    totalLines >= COUNT(uploadId),
+                    1,
+                    0
+                  ) as isSuccessfulUpload
                 FROM
                   `mock-table`
                 WHERE
-                  uploadId = "mock-uploadId"
+                  commit IN ("mock-commit", "mock-commit-2")
                   AND repository = "mock-repository"
                   AND owner = "mock-owner"
                   AND provider = "github"
                 GROUP BY
-                  uploadId
+                  commit,
+                  uploadId,
+                  tag,
+                  totalLines
               )
-              AND repository = "mock-repository"
-              AND owner = "mock-owner"
-              AND provider = "github"
+            SELECT
+              commit,
+              ARRAY_AGG(tag) as tags
+            FROM
+              uploads
+            WHERE
+              isSuccessfulUpload = 1
             GROUP BY
-              commit
+              commit,
+              isSuccessfulUpload
             SQL,
         ];
     }
