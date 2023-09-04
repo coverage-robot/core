@@ -17,28 +17,44 @@ class CommitTagsQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $commitScope = self::getCommitScope($parameterBag);
-        $repositoryScope = self::getRepositoryScope($parameterBag);
-        $successfulUploadsScope = self::getSuccessfulUploadsScope($table, $parameterBag);
-
         return <<<SQL
+        {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             commit,
-            ARRAY_AGG(DISTINCT tag) as tags
+            ARRAY_AGG(tag) as tags
         FROM
-            `{$table}`
+            uploads
         WHERE
-            {$commitScope} AND
-            {$successfulUploadsScope} AND
-            {$repositoryScope}
+            isSuccessfulUpload = 1
         GROUP BY
-            commit
+            commit,
+            isSuccessfulUpload
         SQL;
     }
 
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        return '';
+        $commitScope = self::getCommitScope($parameterBag);
+        $repositoryScope = self::getRepositoryScope($parameterBag);
+
+        return <<<SQL
+        WITH uploads AS (
+            SELECT
+                commit,
+                tag,
+                IF (totalLines >= COUNT(uploadId), 1, 0) as isSuccessfulUpload
+            FROM
+                `{$table}`
+            WHERE
+                {$commitScope} AND
+                {$repositoryScope}
+            GROUP BY
+                commit,
+                uploadId,
+                tag,
+                totalLines
+        )
+        SQL;
     }
 
     /**
