@@ -21,8 +21,8 @@ class TotalUploadsQuery implements QueryInterface
         return <<<SQL
         {$parent}
         SELECT
-            SUM(successful) as successfulUploads,
-            SUM(pending) as pendingUploads
+            ARRAY_AGG(IF(successful = 1, uploadId, NULL) IGNORE NULLS) as successfulUploads,
+            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads,
         FROM
             uploads
         SQL;
@@ -65,12 +65,12 @@ class TotalUploadsQuery implements QueryInterface
         $row = $results->rows()
             ->current();
 
-        if (!is_int($row['successfulUploads'])) {
-            throw QueryException::typeMismatch(gettype($row['successfulUploads']), 'int');
+        if (!is_array($row['successfulUploads'])) {
+            throw QueryException::typeMismatch(gettype($row['successfulUploads']), 'array');
         }
 
-        if (!is_int($row['pendingUploads'])) {
-            throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'int');
+        if (!is_array($row['pendingUploads'])) {
+            throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'array');
         }
 
         return TotalUploadsQueryResult::from($row['successfulUploads'], $row['pendingUploads']);

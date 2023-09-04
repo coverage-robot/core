@@ -68,19 +68,6 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
-                    AND totalLines >= (
-                      SELECT
-                        COUNT(uploadId)
-                      FROM
-                        `mock-table`
-                      WHERE
-                        uploadId = lines.uploadId
-                        AND repository = "mock-repository"
-                        AND owner = "mock-owner"
-                        AND provider = "github"
-                      GROUP BY
-                        uploadId
-                    )
                   )
               ),
               branchingLines AS (
@@ -222,19 +209,6 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     AND repository = "mock-repository"
                     AND owner = "mock-owner"
                     AND provider = "github"
-                    AND totalLines >= (
-                      SELECT
-                        COUNT(uploadId)
-                      FROM
-                        `mock-table`
-                      WHERE
-                        uploadId = lines.uploadId
-                        AND repository = "mock-repository"
-                        AND owner = "mock-owner"
-                        AND provider = "github"
-                      GROUP BY
-                        uploadId
-                    )
                   )
                   OR (
                     (

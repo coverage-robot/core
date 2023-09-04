@@ -16,10 +16,12 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     {
         $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? $scope : '';
         $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
+        $uploadScope = !empty($scope = self::getUploadsScope($parameterBag)) ? 'AND ' . $scope : '';
 
         return <<<SQL
         {$commitScope}
         {$repositoryScope}
+        {$uploadScope}
         SQL;
     }
 

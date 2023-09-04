@@ -17,6 +17,19 @@ enum QueryParameter
     case LINE_SCOPE;
 
     /**
+     * The uploads to scope the queries to.
+     *
+     * ```php
+     * [
+     *      "mock-uuid-1",
+     *      "mock-uuid-2",
+     *      "mock-uuid-3",
+     * ]
+     * ```
+     */
+    case UPLOADS_SCOPE;
+
+    /**
      * The tags to carry forward from previous commits (parents to the current upload)
      * ```
      * [

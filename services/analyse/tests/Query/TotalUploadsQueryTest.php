@@ -5,7 +5,6 @@ namespace App\Tests\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
-use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalUploadsQuery;
 use Google\Cloud\BigQuery\QueryResults;
@@ -46,8 +45,12 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                   totalLines
               )
             SELECT
-              SUM(successful) as successfulUploads,
-              SUM(pending) as pendingUploads
+              ARRAY_AGG(
+                IF(successful = 1, uploadId, NULL) IGNORE NULLS
+              ) as successfulUploads,
+              ARRAY_AGG(
+                IF(pending = 1, uploadId, NULL) IGNORE NULLS
+              ) as pendingUploads,
             FROM
               uploads
             SQL
@@ -98,32 +101,26 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             [
                 [
-                    'successfulUploads' => 1,
-                    'pendingUploads' => 0
+                    'successfulUploads' => ["1"],
+                    'pendingUploads' => []
                 ]
             ],
             [
                 [
-                    'successfulUploads' => 2,
-                    'pendingUploads' => 1
+                    'successfulUploads' => ["1", "2"],
+                    'pendingUploads' => ["3"]
                 ]
             ],
             [
                 [
-                    'successfulUploads' => 10,
-                    'pendingUploads' => 0
+                    'successfulUploads' => ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+                    'pendingUploads' => []
                 ],
             ],
             [
                 [
-                    'successfulUploads' => 100,
-                    'pendingUploads' => 0
-                ]
-            ],
-            [
-                [
-                    'successfulUploads' => 98,
-                    'pendingUploads' => 2
+                    'successfulUploads' => ["1", "2", "3", "4", "5", "6", "7", "8"],
+                    'pendingUploads' => ["9", "10"]
                 ]
             ]
         ];

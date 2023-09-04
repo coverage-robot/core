@@ -38,7 +38,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getSuccessfulUploads(): int
+    public function getSuccessfulUploads(): array
     {
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
@@ -52,7 +52,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     /**
      * @throws QueryException
      */
-    public function getPendingUploads(): int
+    public function getPendingUploads(): array
     {
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
@@ -73,6 +73,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
         );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -89,6 +93,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
         );
 
         /** @var CoverageQueryResult $totalCoverage */
@@ -107,6 +115,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
         );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -124,6 +136,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
         );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
+        );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -140,6 +156,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
         );
 
         /** @var TagCoverageCollectionQueryResult $tags */
@@ -161,6 +181,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
         );
 
         /**
@@ -190,6 +214,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
         );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
+        );
 
         /**
          * @var FileCoverageCollectionQueryResult $files
@@ -212,6 +240,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+        );
+        $params->set(
+            QueryParameter::UPLOADS_SCOPE,
+            $this->getSuccessfulUploads()
         );
 
         /**

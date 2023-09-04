@@ -62,25 +62,4 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
         )
         SQL;
     }
-
-    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
-    {
-        $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
-        $repositoryScope = self::getRepositoryScope($parameterBag);
-
-        return <<<SQL
-        {$parent}
-        AND totalLines >= (
-            SELECT
-                COUNT(uploadId)
-            FROM
-                `$table`
-            WHERE
-                uploadId = lines.uploadId
-                AND {$repositoryScope}
-            GROUP BY
-                uploadId
-        )
-        SQL;
-    }
 }

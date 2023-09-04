@@ -4,23 +4,32 @@ namespace App\Query\Result;
 
 class TotalUploadsQueryResult implements QueryResultInterface
 {
+    /**
+     * @param string[] $successfulUploads
+     * @param string[] $pendingUploads
+     */
     private function __construct(
-        private readonly int $successfulUploads,
-        private readonly int $pendingUploads
+        private readonly array $successfulUploads,
+        private readonly array $pendingUploads
     ) {
     }
 
-    public static function from(int $successfulUploads, int $pendingUploads): self
+    /**
+     * @param string[] $successfulUploads
+     * @param string[] $pendingUploads
+     * @return self
+     */
+    public static function from(array $successfulUploads, array $pendingUploads): self
     {
         return new self($successfulUploads, $pendingUploads);
     }
 
-    public function getSuccessfulUploads(): int
+    public function getSuccessfulUploads(): array
     {
         return $this->successfulUploads;
     }
 
-    public function getPendingUploads(): int
+    public function getPendingUploads(): array
     {
         return $this->pendingUploads;
     }
