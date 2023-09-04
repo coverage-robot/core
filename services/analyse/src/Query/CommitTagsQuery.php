@@ -59,7 +59,7 @@ class CommitTagsQuery implements QueryInterface
 
     /**
      * @param QueryResults $results
-     * @param QueryParameterBag|null $parameterBag
+     * @return CommitCollectionQueryResult
      * @throws GoogleException
      * @throws QueryException
      */

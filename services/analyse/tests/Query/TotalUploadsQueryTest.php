@@ -20,27 +20,36 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
     {
         return [
             <<<SQL
+            WITH
+              uploads AS (
+                SELECT
+                  uploadId,
+                  IF(
+                    totalLines >= COUNT(*),
+                    1,
+                    0
+                  ) as successful,
+                  IF(
+                    totalLines < COUNT(*),
+                    1,
+                    0
+                  ) as pending
+                FROM
+                  `mock-table`
+                WHERE
+                  commit = "mock-commit"
+                  AND repository = "mock-repository"
+                  AND owner = "mock-owner"
+                  AND provider = "github"
+                GROUP BY
+                  uploadId,
+                  totalLines
+              )
             SELECT
-              IF(
-                totalLines >= COUNT(*),
-                1,
-                0
-              ) as successfulUploads,
-              IF(
-                totalLines < COUNT(*),
-                1,
-                0
-              ) as pendingUploads
+              SUM(successful) as successfulUploads,
+              SUM(pending) as pendingUploads
             FROM
-              `mock-table`
-            WHERE
-              commit = "mock-commit"
-              AND repository = "mock-repository"
-              AND owner = "mock-owner"
-              AND provider = "github"
-            GROUP BY
-              uploadId,
-              totalLines
+              uploads
             SQL
         ];
     }

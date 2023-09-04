@@ -17,27 +17,38 @@ class TotalUploadsQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $commitScope = self::getCommitScope($parameterBag);
-        $repositoryScope = self::getRepositoryScope($parameterBag);
-
+        $parent = self::getNamedQueries($table, $parameterBag);
         return <<<SQL
+        {$parent}
         SELECT
-            IF(totalLines >= COUNT(*), 1, 0) as successfulUploads,
-            IF(totalLines < COUNT(*), 1, 0) as pendingUploads
+            SUM(successful) as successfulUploads,
+            SUM(pending) as pendingUploads
         FROM
-            `$table`
-        WHERE
-            {$commitScope} AND
-            {$repositoryScope}
-        GROUP BY
-            uploadId,
-            totalLines
+            uploads
         SQL;
     }
 
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        return '';
+        $commitScope = self::getCommitScope($parameterBag);
+        $repositoryScope = self::getRepositoryScope($parameterBag);
+
+        return <<<SQL
+        WITH uploads AS (
+            SELECT
+                uploadId,
+                IF(totalLines >= COUNT(*), 1, 0) as successful,
+                IF(totalLines < COUNT(*), 1, 0) as pending
+            FROM
+                `$table`
+            WHERE
+                {$commitScope} AND
+                {$repositoryScope}
+            GROUP BY
+                uploadId,
+                totalLines
+        )
+        SQL;
     }
 
     /**
