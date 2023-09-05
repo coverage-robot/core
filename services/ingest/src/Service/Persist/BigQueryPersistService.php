@@ -85,7 +85,7 @@ class BigQueryPersistService implements PersistServiceInterface
                             implode('-', [
                                 $upload->getUploadId(),
                                 $file->getFileName(),
-                                $line->getLineNumber()
+                                $line->getUniqueLineIdentifier()
                             ])
                         ),
                         'data' => $this->bigQueryMetadataBuilderService->buildRow(
