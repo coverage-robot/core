@@ -30,7 +30,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($upload, $message)}
         </details>
 
-        *Last update to `{$upload->getTag()->getName()}` at {$upload->getIngestTime()->format('H:i T')}*
+        *Last update to `{$upload->getTag()->getName()}` at {$this->getLastUpdateTime($upload)}*
         MARKDOWN;
     }
 
@@ -43,6 +43,13 @@ class PullRequestCommentFormatterService
 
         return "> Merging #{$upload->getPullRequest()} which has **{$message->getSuccessfulUploads(
         )}** successfully uploaded coverage file(s){$pendingUploads} on {$upload->getCommit()}";
+    }
+
+    private function getLastUpdateTime(Upload $upload): string
+    {
+        return $upload->getIngestTime()
+            ->setTimezone(new \DateTimeZone('UTC'))
+            ->format('H:ia e');
     }
 
     private function getTagCoverageTable(Upload $upload, PublishablePullRequestMessage $message): string
