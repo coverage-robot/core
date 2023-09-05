@@ -23,4 +23,4 @@
 | mock-file-2 | 100% |
 </details>
 
-*Last update to `mock-tag` at 10:12 GMT+0000*
+*Last update to `mock-tag` at 10:12am UTC*
