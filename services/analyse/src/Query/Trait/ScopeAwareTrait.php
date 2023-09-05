@@ -92,6 +92,46 @@ trait ScopeAwareTrait
     }
 
     /**
+     * Build a BQ query filter to scope particular queries to only specific uploads(s).
+     *
+     * This can be either a single upload, or an array of uploads.
+     *
+     * For example, convert this:
+     * ```php
+     * [
+     *     'upload-uuid-1',
+     *     'upload-uuid-2',
+     *     'upload-uuid-3',
+     * ]
+     * ```
+     * into:
+     * ```sql
+     * uploadId IN ('upload-uuid-1', 'upload-uuid-2', 'upload-uuid-3')
+     * ```
+     */
+    private static function getUploadsScope(?QueryParameterBag $parameterBag): string
+    {
+        if ($parameterBag && $parameterBag->has(QueryParameter::UPLOADS_SCOPE)) {
+            /** @var string|string[] $uploads */
+            $uploads = $parameterBag->get(QueryParameter::UPLOADS_SCOPE);
+
+            if (is_string($uploads)) {
+                return <<<SQL
+                uploadId = "{$uploads}"
+                SQL;
+            }
+
+            $uploads = implode('","', $uploads);
+
+            return <<<SQL
+            uploadId IN ("{$uploads}")
+            SQL;
+        }
+
+        return '';
+    }
+
+    /**
      * Build a simple BigQuery limit clause.
      *
      * For example:

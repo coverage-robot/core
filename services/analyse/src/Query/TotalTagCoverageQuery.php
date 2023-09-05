@@ -110,7 +110,6 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
-        $repositoryScope = self::getRepositoryScope($parameterBag);
         $carryforwardScope = !empty(
             $scope = self::getCarryforwardTagsScope(
                 $table,
@@ -121,17 +120,6 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         return <<<SQL
         (
             {$parent}
-            AND totalLines >= (
-                SELECT
-                    COUNT(uploadId)
-                FROM
-                    `$table`
-                WHERE
-                    uploadId = lines.uploadId
-                    AND {$repositoryScope}
-                GROUP BY
-                    uploadId
-            )
         )
         {$carryforwardScope}
         SQL;

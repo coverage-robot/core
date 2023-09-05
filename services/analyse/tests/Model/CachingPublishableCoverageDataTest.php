@@ -3,16 +3,11 @@
 namespace App\Tests\Model;
 
 use App\Model\CachingPublishableCoverageData;
-use App\Query\FileCoverageQuery;
-use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
-use App\Query\TotalCoverageQuery;
-use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
@@ -49,10 +44,10 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetAtLeastPartiallyCoveredLines(): void
     {
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalCoverageQuery::class)
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -72,10 +67,10 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetCoveragePercentage(): void
     {
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalCoverageQuery::class)
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -95,10 +90,10 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetUncoveredLines(): void
     {
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalCoverageQuery::class)
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -118,10 +113,10 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetTotalLines(): void
     {
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalCoverageQuery::class)
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -139,19 +134,56 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->assertEquals(6, $this->cachedPublishableCoverageData->getTotalLines());
     }
 
-    public function testGetTotalUploads(): void
+    public function testGetSuccessfulUploads(): void
     {
         $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalUploadsQuery::class)
-            ->willReturn(TotalUploadsQueryResult::from(2, 0));
+            ->willReturn(
+                TotalUploadsQueryResult::from(
+                    ['mock-upload-1', 'mock-upload-2'],
+                    []
+                )
+            );
 
-        $this->assertEquals(2, $this->cachedPublishableCoverageData->getSuccessfulUploads());
+        $this->assertEquals(
+            ['mock-upload-1', 'mock-upload-2'],
+            $this->cachedPublishableCoverageData->getSuccessfulUploads()
+        );
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertEquals(2, $this->cachedPublishableCoverageData->getSuccessfulUploads());
+        $this->assertEquals(
+            ['mock-upload-1', 'mock-upload-2'],
+            $this->cachedPublishableCoverageData->getSuccessfulUploads()
+        );
+    }
+
+    public function testGetPendingUploads(): void
+    {
+        $this->mockQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with(TotalUploadsQuery::class)
+            ->willReturn(
+                TotalUploadsQueryResult::from(
+                    [],
+                    ['mock-upload-1', 'mock-upload-2']
+                )
+            );
+
+        $this->assertEquals(
+            ['mock-upload-1', 'mock-upload-2'],
+            $this->cachedPublishableCoverageData->getPendingUploads()
+        );
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            ['mock-upload-1', 'mock-upload-2'],
+            $this->cachedPublishableCoverageData->getPendingUploads()
+        );
     }
 
     public function testGetTagCoverage(): void
@@ -168,10 +200,12 @@ class CachingPublishableCoverageDataTest extends TestCase
             ]
         ]);
 
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalTagCoverageQuery::class)
-            ->willReturn($files);
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
+                $files
+            );
 
         $this->assertEquals($files, $this->cachedPublishableCoverageData->getTagCoverage());
 
@@ -183,10 +217,10 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetDiffCoveragePercentage(): void
     {
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(TotalCoverageQuery::class)
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -217,10 +251,12 @@ class CachingPublishableCoverageDataTest extends TestCase
             ]
         ]);
 
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(FileCoverageQuery::class)
-            ->willReturn($files);
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
+                $files
+            );
 
         $this->assertEquals($files, $this->cachedPublishableCoverageData->getLeastCoveredDiffFiles(1));
 
@@ -240,10 +276,12 @@ class CachingPublishableCoverageDataTest extends TestCase
             ]
         ]);
 
-        $this->mockQueryService->expects($this->once())
+        $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(LineCoverageQuery::class)
-            ->willReturn($lines);
+            ->willReturnOnConsecutiveCalls(
+                TotalUploadsQueryResult::from(['mock-upload'], []),
+                $lines
+            );
 
         $this->assertEquals($lines, $this->cachedPublishableCoverageData->getDiffLineCoverage());
 

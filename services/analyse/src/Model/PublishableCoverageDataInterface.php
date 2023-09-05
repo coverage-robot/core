@@ -9,14 +9,14 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 interface PublishableCoverageDataInterface
 {
     /**
-     * Get the total number of successful uploads for a particular commit.
+     * Get the list of successful uploads for a particular commit.
      */
-    public function getSuccessfulUploads(): int;
+    public function getSuccessfulUploads(): array;
 
     /**
-     * Get the total number of uploads which are still pending for a particular commit.
+     * Get the list of uploads which are still pending for a particular commit.
      */
-    public function getPendingUploads(): int;
+    public function getPendingUploads(): array;
 
     /**
      * Get the total number of lines which are coverable across the whole repository.
