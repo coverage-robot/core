@@ -3,6 +3,7 @@
 
 namespace App\Service\Formatter;
 
+use DateTimeZone;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Upload;
 
@@ -48,7 +49,7 @@ class PullRequestCommentFormatterService
     private function getLastUpdateTime(Upload $upload): string
     {
         return $upload->getIngestTime()
-            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTimezone(new DateTimeZone('UTC'))
             ->format('H:ia e');
     }
 
