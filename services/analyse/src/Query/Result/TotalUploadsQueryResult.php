@@ -14,14 +14,12 @@ class TotalUploadsQueryResult implements QueryResultInterface
     ) {
     }
 
-    /**
-     * @param string[] $successfulUploads
-     * @param string[] $pendingUploads
-     * @return self
-     */
     public static function from(array $successfulUploads, array $pendingUploads): self
     {
-        return new self($successfulUploads, $pendingUploads);
+        return new self(
+            array_filter($successfulUploads, static fn(mixed $uploadId) => is_string($uploadId)),
+            array_filter($pendingUploads, static fn(mixed $uploadId) => is_string($uploadId))
+        );
     }
 
     public function getSuccessfulUploads(): array
