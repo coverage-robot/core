@@ -373,16 +373,16 @@
         },
         {
             "name": "bref/extra-php-extensions",
-            "version": "1.2.5",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/extra-php-extensions.git",
-                "reference": "0a915e16d33d33133094fa2f84d43508508f3f94"
+                "reference": "3bd67859b2bcd096aab4d636a9bb02d7eb951cb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/extra-php-extensions/zipball/0a915e16d33d33133094fa2f84d43508508f3f94",
-                "reference": "0a915e16d33d33133094fa2f84d43508508f3f94",
+                "url": "https://api.github.com/repos/brefphp/extra-php-extensions/zipball/3bd67859b2bcd096aab4d636a9bb02d7eb951cb7",
+                "reference": "3bd67859b2bcd096aab4d636a9bb02d7eb951cb7",
                 "shasum": ""
             },
             "conflict": {
@@ -413,7 +413,7 @@
             "description": "Extra PHP extensions for your lambda application.",
             "support": {
                 "issues": "https://github.com/brefphp/extra-php-extensions/issues",
-                "source": "https://github.com/brefphp/extra-php-extensions/tree/1.2.5"
+                "source": "https://github.com/brefphp/extra-php-extensions/tree/1.2.6"
             },
             "funding": [
                 {
@@ -429,7 +429,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-23T16:33:34+00:00"
+            "time": "2023-09-05T06:36:06+00:00"
         },
         {
             "name": "bref/symfony-bridge",
