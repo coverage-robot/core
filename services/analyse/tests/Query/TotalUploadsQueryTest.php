@@ -24,12 +24,12 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                 SELECT
                   uploadId,
                   IF(
-                    totalLines >= COUNT(*),
+                    COUNT(uploadId) >= totalLines,
                     1,
                     0
                   ) as successful,
                   IF(
-                    totalLines < COUNT(*),
+                    COUNT(uploadId) < totalLines,
                     1,
                     0
                   ) as pending

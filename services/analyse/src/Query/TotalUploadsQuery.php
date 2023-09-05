@@ -37,8 +37,8 @@ class TotalUploadsQuery implements QueryInterface
         WITH uploads AS (
             SELECT
                 uploadId,
-                IF(totalLines >= COUNT(*), 1, 0) as successful,
-                IF(totalLines < COUNT(*), 1, 0) as pending
+                IF(COUNT(uploadId) >= totalLines, 1, 0) as successful,
+                IF(COUNT(uploadId) < totalLines, 1, 0) as pending
             FROM
                 `$table`
             WHERE
