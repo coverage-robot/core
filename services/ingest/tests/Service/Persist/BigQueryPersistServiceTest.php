@@ -261,7 +261,7 @@ class BigQueryPersistServiceTest extends TestCase
                             implode('-', [
                                 $upload->getUploadId(),
                                 $file->getFileName(),
-                                $line->getLineNumber()
+                                $line->getUniqueLineIdentifier()
                             ])
                         ),
                         'data' => [
