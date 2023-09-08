@@ -93,7 +93,7 @@ class EventHandler extends EventBridgeHandler
     private function queueMessages(Upload $upload, PublishableCoverageDataInterface $publishableCoverageData): bool
     {
         $annotations = array_map(
-            function (LineCoverageQueryResult $line) use ($upload) {
+            function (LineCoverageQueryResult $line) use ($upload, $publishableCoverageData) {
                 if ($line->getState() !== LineState::UNCOVERED) {
                     return null;
                 }
@@ -103,7 +103,7 @@ class EventHandler extends EventBridgeHandler
                     $line->getFileName(),
                     $line->getLineNumber(),
                     $line->getState(),
-                    $upload->getIngestTime()
+                    $publishableCoverageData->getLatestSuccessfulUpload()
                 );
             },
             $publishableCoverageData->getDiffLineCoverage()->getLines()
@@ -142,13 +142,13 @@ class EventHandler extends EventBridgeHandler
                     },
                     $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                 ),
-                $upload->getIngestTime()
+                $publishableCoverageData->getLatestSuccessfulUpload()
             ),
             new PublishableCheckRunMessage(
                 $upload,
                 array_filter($annotations),
                 $publishableCoverageData->getCoveragePercentage(),
-                $upload->getIngestTime()
+                $publishableCoverageData->getLatestSuccessfulUpload()
             ),
         ];
 

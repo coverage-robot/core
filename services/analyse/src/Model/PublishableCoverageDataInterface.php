@@ -5,9 +5,19 @@ namespace App\Model;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
+use DateTimeImmutable;
 
 interface PublishableCoverageDataInterface
 {
+    /**
+     * Get the raw list of uploads, regardless of if they were successful,
+     * and the last successful upload ingest date.
+     *
+     * @return array
+     */
+    public function getUploads(): TotalUploadsQueryResult;
+
     /**
      * Get the list of successful uploads for a particular commit.
      */
@@ -17,6 +27,11 @@ interface PublishableCoverageDataInterface
      * Get the list of uploads which are still pending for a particular commit.
      */
     public function getPendingUploads(): array;
+
+    /**
+     * Get the date of the latest **successful** upload for a particular commit.
+     */
+    public function getLatestSuccessfulUpload(): DateTimeImmutable|null;
 
     /**
      * Get the total number of lines which are coverable across the whole repository.
