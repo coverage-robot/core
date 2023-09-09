@@ -39,6 +39,9 @@ class EventHandlerTest extends TestCase
         $mockPublishableCoverageData->expects($this->exactly(3))
             ->method('getCoveragePercentage')
             ->willReturn(100.0);
+        $mockPublishableCoverageData->expects($this->atLeastOnce())
+            ->method('getLatestSuccessfulUpload')
+            ->willReturn(new DateTimeImmutable());
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
 
@@ -134,6 +137,9 @@ class EventHandlerTest extends TestCase
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->exactly(2))
             ->method('getCoveragePercentage');
+        $mockPublishableCoverageData->expects($this->atLeastOnce())
+            ->method('getLatestSuccessfulUpload')
+            ->willReturn(new DateTimeImmutable());
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
 

@@ -77,9 +77,6 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
     {
         return match (PublishableMessage::from($message['type'])) {
             PublishableMessage::PullRequest => PublishablePullRequestMessage::from($message),
-            PublishableMessage::CheckAnnotationCollection => PublishableCheckAnnotationMessageCollection::from(
-                $message
-            ),
             PublishableMessage::CheckAnnotation => PublishableCheckAnnotationMessage::from(
                 $message
             ),
@@ -124,7 +121,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
 
     public function __toString(): string
     {
-        return "PublishableMessageCollection#{$this->getValidUntil()->format('Y-m-d H:i:s')}";
+        return "PublishableMessageCollection#{$this->getValidUntil()->format(DateTimeInterface::ATOM)}";
     }
 
     public function count(): int

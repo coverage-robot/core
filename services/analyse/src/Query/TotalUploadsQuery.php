@@ -22,7 +22,8 @@ class TotalUploadsQuery implements QueryInterface
         {$parent}
         SELECT
             ARRAY_AGG(IF(successful = 1, uploadId, NULL) IGNORE NULLS) as successfulUploads,
-            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads
+            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads,
+            MAX(IF(successful = 1, ingestTime, NULL)) as latestSuccessfulUpload
         FROM
             uploads
         SQL;
@@ -38,7 +39,8 @@ class TotalUploadsQuery implements QueryInterface
             SELECT
                 uploadId,
                 IF(COUNT(uploadId) >= totalLines, 1, 0) as successful,
-                IF(COUNT(uploadId) < totalLines, 1, 0) as pending
+                IF(COUNT(uploadId) < totalLines, 1, 0) as pending,
+                ingestTime
             FROM
                 `$table`
             WHERE
@@ -46,7 +48,8 @@ class TotalUploadsQuery implements QueryInterface
                 {$repositoryScope}
             GROUP BY
                 uploadId,
-                totalLines
+                totalLines,
+                ingestTime
         )
         SQL;
     }
@@ -73,7 +76,18 @@ class TotalUploadsQuery implements QueryInterface
             throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'array');
         }
 
-        return TotalUploadsQueryResult::from($row['successfulUploads'], $row['pendingUploads']);
+        if (
+            !is_null($row['latestSuccessfulUpload']) &&
+            !is_string($row['latestSuccessfulUpload'])
+        ) {
+            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'string or null');
+        }
+
+        return TotalUploadsQueryResult::from(
+            $row['successfulUploads'],
+            $row['pendingUploads'],
+            $row['latestSuccessfulUpload']
+        );
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
