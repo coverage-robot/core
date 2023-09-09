@@ -76,8 +76,11 @@ class TotalUploadsQuery implements QueryInterface
             throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'array');
         }
 
-        if ($row['latestSuccessfulUpload'] && !is_string($row['latestSuccessfulUpload'])) {
-            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'string');
+        if (
+            !is_null($row['latestSuccessfulUpload']) &&
+            !is_string($row['latestSuccessfulUpload'])
+        ) {
+            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'string or null');
         }
 
         return TotalUploadsQueryResult::from(

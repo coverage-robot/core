@@ -13,8 +13,6 @@ interface PublishableCoverageDataInterface
     /**
      * Get the raw list of uploads, regardless of if they were successful,
      * and the last successful upload ingest date.
-     *
-     * @return array
      */
     public function getUploads(): TotalUploadsQueryResult;
 

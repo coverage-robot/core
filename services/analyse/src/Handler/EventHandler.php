@@ -103,7 +103,7 @@ class EventHandler extends EventBridgeHandler
                     $line->getFileName(),
                     $line->getLineNumber(),
                     $line->getState(),
-                    $publishableCoverageData->getLatestSuccessfulUpload()
+                    $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
                 );
             },
             $publishableCoverageData->getDiffLineCoverage()->getLines()
@@ -142,13 +142,13 @@ class EventHandler extends EventBridgeHandler
                     },
                     $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                 ),
-                $publishableCoverageData->getLatestSuccessfulUpload()
+                $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
             ),
             new PublishableCheckRunMessage(
                 $upload,
                 array_filter($annotations),
                 $publishableCoverageData->getCoveragePercentage(),
-                $publishableCoverageData->getLatestSuccessfulUpload()
+                $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
             ),
         ];
 

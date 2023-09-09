@@ -26,10 +26,10 @@ class TotalUploadsQueryResult implements QueryResultInterface
         return new self(
             array_filter($successfulUploads, static fn(mixed $uploadId) => is_string($uploadId)),
             array_filter($pendingUploads, static fn(mixed $uploadId) => is_string($uploadId)),
-            $latestSuccessfulUpload ? DateTimeImmutable::createFromFormat(
+            $latestSuccessfulUpload ? (DateTimeImmutable::createFromFormat(
                 DateTimeInterface::ATOM,
                 $latestSuccessfulUpload
-            ) : null
+            ) ?: null) : null
         );
     }
 
