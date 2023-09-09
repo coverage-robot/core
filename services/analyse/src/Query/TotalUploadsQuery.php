@@ -7,6 +7,8 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
+use DateTime;
+use DateTimeInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Upload;
@@ -78,15 +80,15 @@ class TotalUploadsQuery implements QueryInterface
 
         if (
             !is_null($row['latestSuccessfulUpload']) &&
-            !is_string($row['latestSuccessfulUpload'])
+            !$row['latestSuccessfulUpload'] instanceof DateTime
         ) {
-            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'string or null');
+            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'DateTime or null');
         }
 
         return TotalUploadsQueryResult::from(
             $row['successfulUploads'],
             $row['pendingUploads'],
-            $row['latestSuccessfulUpload']
+            $row['latestSuccessfulUpload']?->format(DateTimeInterface::ATOM)
         );
     }
 

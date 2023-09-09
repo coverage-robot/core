@@ -11,7 +11,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\Provider;
 
-class CommitTagsQuery implements QueryInterface
+class CommitSuccessfulTagsQuery implements QueryInterface
 {
     use ScopeAwareTrait;
 
@@ -20,11 +20,12 @@ class CommitTagsQuery implements QueryInterface
         return <<<SQL
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
-            *
-        FROM
-            tags
-        WHERE
-            allUploadsSuccessful = 1
+                commit,
+                ARRAY_AGG(DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS) as tags,
+            FROM
+                uploads
+            GROUP BY
+                commit
         SQL;
     }
 
@@ -49,16 +50,6 @@ class CommitTagsQuery implements QueryInterface
                 uploadId,
                 tag,
                 totalLines
-        ),
-        tags AS (
-            SELECT
-                commit,
-                ARRAY_AGG(tag) as tags,
-                MIN(isSuccessfulUpload) as allUploadsSuccessful
-            FROM
-                uploads
-            GROUP BY
-                commit
         )
         SQL;
     }
