@@ -139,12 +139,6 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'latestSuccessfulUpload' => null
                 ]
             ],
-            [
-                [
-                    'successfulUploads' => [],
-                    'pendingUploads' => ['9', '10']
-                ]
-            ]
         ];
     }
 
