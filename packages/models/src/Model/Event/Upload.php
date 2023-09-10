@@ -1,14 +1,13 @@
 <?php
 
-namespace Packages\Models\Model;
+namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use JsonSerializable;
 use Packages\Models\Enum\Provider;
-use Stringable;
+use Packages\Models\Model\Tag;
 
-class Upload implements JsonSerializable, Stringable
+class Upload implements EventInterface
 {
     private readonly DateTimeImmutable $ingestTime;
 

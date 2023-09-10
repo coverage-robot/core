@@ -5,7 +5,7 @@ namespace App\Tests\Service\Diff;
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -14,8 +14,8 @@ class DiffParserServiceTest extends TestCase
     public function testGetUsingValidProvider(): void
     {
         $diff = [
-            'file-1' => [1,2,3],
-            'file-2' => [4,5,6],
+            'file-1' => [1, 2, 3],
+            'file-2' => [4, 5, 6],
         ];
 
         $mockParser = $this->createMock(GithubDiffParserService::class);

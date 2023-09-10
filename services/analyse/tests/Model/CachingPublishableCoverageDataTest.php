@@ -14,7 +14,7 @@ use App\Service\QueryService;
 use DateTimeImmutable;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

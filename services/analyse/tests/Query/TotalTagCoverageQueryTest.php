@@ -10,8 +10,8 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class TotalTagCoverageQueryTest extends AbstractQueryTestCase

@@ -7,8 +7,8 @@ use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

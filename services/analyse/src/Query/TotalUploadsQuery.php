@@ -11,7 +11,7 @@ use DateTime;
 use DateTimeInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {

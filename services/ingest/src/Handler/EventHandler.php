@@ -19,7 +19,7 @@ use Bref\Event\S3\S3Record;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 

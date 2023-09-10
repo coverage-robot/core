@@ -3,7 +3,7 @@
 namespace App\Service\Diff;
 
 use App\Service\ProviderAwareInterface;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 

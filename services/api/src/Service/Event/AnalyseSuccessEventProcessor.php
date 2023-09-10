@@ -5,7 +5,7 @@ namespace App\Service\Event;
 use App\Repository\ProjectRepository;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class AnalyseSuccessEventProcessor implements EventProcessorInterface

@@ -11,7 +11,7 @@ use App\Tests\Mock\Factory\MockQueryFactory;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 
 class QueryBuilderServiceTest extends TestCase

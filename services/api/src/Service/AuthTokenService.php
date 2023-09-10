@@ -116,6 +116,41 @@ class AuthTokenService
         return $graphToken;
     }
 
+    public function getPayloadSignatureFromRequest(Request $request): ?string
+    {
+        $payloadSignature = $request->headers->get('x-hub-signature-256');
+
+        if (!is_string($payloadSignature)) {
+            $this->authTokenLogger->info(
+                'Payload signature not provided in request.',
+                [
+                    'parameters' => $request->headers->all()
+                ]
+            );
+
+            return null;
+        }
+
+
+        $this->authTokenLogger->info(
+            'Payload signature decoded successfully.',
+            [
+                'signature' => $payloadSignature,
+                'parameters' => $request->headers->all()
+            ]
+        );
+
+        return $payloadSignature;
+    }
+
+    public function validatePayloadSignature(string $signature, string $payload, string $secret): bool
+    {
+        return hash_equals(
+            hash_hmac('sha256', $payload, $secret),
+            $signature
+        );
+    }
+
     /**
      * Validate a potential upload using a user-provided upload token.
      */

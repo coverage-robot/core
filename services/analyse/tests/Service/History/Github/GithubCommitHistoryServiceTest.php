@@ -6,7 +6,7 @@ use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

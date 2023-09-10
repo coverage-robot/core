@@ -5,7 +5,7 @@ namespace App\Tests\Service\History;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\Github\GithubCommitHistoryService;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 

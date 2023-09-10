@@ -15,7 +15,7 @@ use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 
 class EventHandlerTest extends TestCase

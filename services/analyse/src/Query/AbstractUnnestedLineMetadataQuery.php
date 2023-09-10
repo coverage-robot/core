@@ -6,7 +6,7 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {

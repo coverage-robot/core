@@ -6,7 +6,7 @@ use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 
 /**
  * @psalm-type Result = array{

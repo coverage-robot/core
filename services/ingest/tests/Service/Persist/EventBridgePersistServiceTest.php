@@ -11,7 +11,7 @@ use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

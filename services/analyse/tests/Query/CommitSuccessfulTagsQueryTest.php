@@ -10,7 +10,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\CommitCollectionQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase

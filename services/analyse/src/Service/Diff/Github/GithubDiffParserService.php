@@ -6,7 +6,7 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SebastianBergmann\Diff\Line;
