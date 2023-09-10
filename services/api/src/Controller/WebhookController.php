@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Requirement\EnumRequirement;
 
 class WebhookController extends AbstractController
 {
@@ -29,7 +30,16 @@ class WebhookController extends AbstractController
     /**
      * @throws AuthenticationException
      */
-    #[Route('/event/{provider}', name: 'webhook_event', methods: ['POST'])]
+    #[Route(
+        '/event/{provider}',
+        name: 'webhook_event',
+        requirements: [
+            'provider' => new EnumRequirement(
+                Provider::class
+            )
+        ],
+        methods: ['POST']
+    )]
     public function handleWebhookEvent(string $provider, Request $request): Response
     {
         try {
