@@ -8,10 +8,10 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
-use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
+use DateTimeImmutable;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
@@ -39,6 +39,110 @@ class CachingPublishableCoverageDataTest extends TestCase
             $this->createMock(DiffParserService::class),
             $this->createMock(CarryforwardTagService::class),
             $upload
+        );
+    }
+
+    public function testGetUploads(): void
+    {
+        $result = TotalUploadsQueryResult::from(
+            ['a'],
+            ['b'],
+            '2023-09-09T01:22:00+0000'
+        );
+
+        $this->mockQueryService->expects($this->once())
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls($result);
+
+        $this->assertEquals(
+            $result,
+            $this->cachedPublishableCoverageData->getUploads()
+        );
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            $result,
+            $this->cachedPublishableCoverageData->getUploads()
+        );
+    }
+
+    public function testGetSuccessfulUploads(): void
+    {
+        $result = TotalUploadsQueryResult::from(
+            ['a'],
+            ['b'],
+            '2023-09-09T01:22:00+0000'
+        );
+
+        $this->mockQueryService->expects($this->once(2))
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls($result);
+
+        $this->assertEquals(
+            ['a'],
+            $this->cachedPublishableCoverageData->getSuccessfulUploads()
+        );
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            ['a'],
+            $this->cachedPublishableCoverageData->getSuccessfulUploads()
+        );
+    }
+
+    public function testGetPendingUploads(): void
+    {
+        $result = TotalUploadsQueryResult::from(
+            ['a'],
+            ['b'],
+            '2023-09-09T01:22:00+0000'
+        );
+
+        $this->mockQueryService->expects($this->once(2))
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls($result);
+
+        $this->assertEquals(
+            ['b'],
+            $this->cachedPublishableCoverageData->getPendingUploads()
+        );
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            ['b'],
+            $this->cachedPublishableCoverageData->getPendingUploads()
+        );
+    }
+
+    public function testGetLatestSuccessfulUpload(): void
+    {
+        $result = TotalUploadsQueryResult::from(
+            ['a'],
+            ['b'],
+            '2023-09-09T01:22:00+0000'
+        );
+
+        $this->mockQueryService->expects($this->once(2))
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls($result);
+
+        $this->assertEquals(
+            DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
+            $this->cachedPublishableCoverageData->getLatestSuccessfulUpload()
+        );
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
+            $this->cachedPublishableCoverageData->getLatestSuccessfulUpload()
         );
     }
 
@@ -132,58 +236,6 @@ class CachingPublishableCoverageDataTest extends TestCase
             ->method('runQuery');
 
         $this->assertEquals(6, $this->cachedPublishableCoverageData->getTotalLines());
-    }
-
-    public function testGetSuccessfulUploads(): void
-    {
-        $this->mockQueryService->expects($this->once())
-            ->method('runQuery')
-            ->with(TotalUploadsQuery::class)
-            ->willReturn(
-                TotalUploadsQueryResult::from(
-                    ['mock-upload-1', 'mock-upload-2'],
-                    []
-                )
-            );
-
-        $this->assertEquals(
-            ['mock-upload-1', 'mock-upload-2'],
-            $this->cachedPublishableCoverageData->getSuccessfulUploads()
-        );
-
-        $this->mockQueryService->expects($this->never())
-            ->method('runQuery');
-
-        $this->assertEquals(
-            ['mock-upload-1', 'mock-upload-2'],
-            $this->cachedPublishableCoverageData->getSuccessfulUploads()
-        );
-    }
-
-    public function testGetPendingUploads(): void
-    {
-        $this->mockQueryService->expects($this->once())
-            ->method('runQuery')
-            ->with(TotalUploadsQuery::class)
-            ->willReturn(
-                TotalUploadsQueryResult::from(
-                    [],
-                    ['mock-upload-1', 'mock-upload-2']
-                )
-            );
-
-        $this->assertEquals(
-            ['mock-upload-1', 'mock-upload-2'],
-            $this->cachedPublishableCoverageData->getPendingUploads()
-        );
-
-        $this->mockQueryService->expects($this->never())
-            ->method('runQuery');
-
-        $this->assertEquals(
-            ['mock-upload-1', 'mock-upload-2'],
-            $this->cachedPublishableCoverageData->getPendingUploads()
-        );
     }
 
     public function testGetTagCoverage(): void

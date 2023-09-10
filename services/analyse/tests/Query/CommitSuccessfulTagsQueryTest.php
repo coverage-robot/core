@@ -5,7 +5,7 @@ namespace App\Tests\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\CommitTagsQuery;
+use App\Query\CommitSuccessfulTagsQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\CommitCollectionQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
@@ -13,11 +13,11 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class CommitTagsQueryTest extends AbstractQueryTestCase
+class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
 {
     public function getQueryClass(): QueryInterface
     {
-        return new CommitTagsQuery();
+        return new CommitSuccessfulTagsQuery();
     }
 
     /**
@@ -49,23 +49,16 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   uploadId,
                   tag,
                   totalLines
-              ),
-              tags AS (
-                SELECT
-                  commit,
-                  ARRAY_AGG(tag) as tags,
-                  MIN(isSuccessfulUpload) as allUploadsSuccessful
-                FROM
-                  uploads
-                GROUP BY
-                  commit
               )
             SELECT
-              *
+              commit,
+              ARRAY_AGG(
+                DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS
+              ) as tags,
             FROM
-              tags
-            WHERE
-              allUploadsSuccessful = 1
+              uploads
+            GROUP BY
+              commit
             SQL,
             <<<SQL
             WITH
@@ -90,23 +83,16 @@ class CommitTagsQueryTest extends AbstractQueryTestCase
                   uploadId,
                   tag,
                   totalLines
-              ),
-              tags AS (
-                SELECT
-                  commit,
-                  ARRAY_AGG(tag) as tags,
-                  MIN(isSuccessfulUpload) as allUploadsSuccessful
-                FROM
-                  uploads
-                GROUP BY
-                  commit
               )
             SELECT
-              *
+              commit,
+              ARRAY_AGG(
+                DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS
+              ) as tags,
             FROM
-              tags
-            WHERE
-              allUploadsSuccessful = 1
+              uploads
+            GROUP BY
+              commit
             SQL,
         ];
     }

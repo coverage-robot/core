@@ -8,7 +8,6 @@ use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\IntegerQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -18,6 +17,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryService;
+use DateTimeImmutable;
 use Packages\Models\Model\Event\Upload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -35,10 +35,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     ) {
     }
 
-    /**
-     * @throws QueryException
-     */
-    public function getSuccessfulUploads(): array
+    public function getUploads(): TotalUploadsQueryResult
     {
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
@@ -46,7 +43,16 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             QueryParameterBag::fromUpload($this->upload)
         );
 
-        return $totalUploads->getSuccessfulUploads();
+        return $totalUploads;
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function getSuccessfulUploads(): array
+    {
+        return $this->getUploads()
+            ->getSuccessfulUploads();
     }
 
     /**
@@ -54,13 +60,14 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getPendingUploads(): array
     {
-        /** @var TotalUploadsQueryResult $totalUploads */
-        $totalUploads = $this->queryService->runQuery(
-            TotalUploadsQuery::class,
-            QueryParameterBag::fromUpload($this->upload)
-        );
+        return $this->getUploads()
+            ->getPendingUploads();
+    }
 
-        return $totalUploads->getPendingUploads();
+    public function getLatestSuccessfulUpload(): DateTimeImmutable|null
+    {
+        return $this->getUploads()
+            ->getLatestSuccessfulUpload();
     }
 
     /**

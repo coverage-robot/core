@@ -7,6 +7,7 @@ use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalUploadsQuery;
+use DateTime;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Provider;
@@ -32,7 +33,8 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     COUNT(uploadId) < totalLines,
                     1,
                     0
-                  ) as pending
+                  ) as pending,
+                  ingestTime
                 FROM
                   `mock-table`
                 WHERE
@@ -42,7 +44,8 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                   AND provider = "github"
                 GROUP BY
                   uploadId,
-                  totalLines
+                  totalLines,
+                  ingestTime
               )
             SELECT
               ARRAY_AGG(
@@ -50,7 +53,10 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               ) as successfulUploads,
               ARRAY_AGG(
                 IF(pending = 1, uploadId, NULL) IGNORE NULLS
-              ) as pendingUploads
+              ) as pendingUploads,
+              MAX(
+                IF(successful = 1, ingestTime, NULL)
+              ) as latestSuccessfulUpload
             FROM
               uploads
             SQL
@@ -102,27 +108,38 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
             [
                 [
                     'successfulUploads' => ['1'],
-                    'pendingUploads' => []
+                    'pendingUploads' => [],
+                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
             ],
             [
                 [
                     'successfulUploads' => ['1', '2'],
-                    'pendingUploads' => ['3']
+                    'pendingUploads' => ['3'],
+                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
             ],
             [
                 [
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                    'pendingUploads' => []
+                    'pendingUploads' => [],
+                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ],
             ],
             [
                 [
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
-                    'pendingUploads' => ['9', '10']
+                    'pendingUploads' => ['9', '10'],
+                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
-            ]
+            ],
+            [
+                [
+                    'successfulUploads' => [],
+                    'pendingUploads' => ['9', '10'],
+                    'latestSuccessfulUpload' => null
+                ]
+            ],
         ];
     }
 

@@ -7,6 +7,8 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
+use DateTime;
+use DateTimeInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Event\Upload;
@@ -22,7 +24,8 @@ class TotalUploadsQuery implements QueryInterface
         {$parent}
         SELECT
             ARRAY_AGG(IF(successful = 1, uploadId, NULL) IGNORE NULLS) as successfulUploads,
-            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads
+            ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads,
+            MAX(IF(successful = 1, ingestTime, NULL)) as latestSuccessfulUpload
         FROM
             uploads
         SQL;
@@ -38,7 +41,8 @@ class TotalUploadsQuery implements QueryInterface
             SELECT
                 uploadId,
                 IF(COUNT(uploadId) >= totalLines, 1, 0) as successful,
-                IF(COUNT(uploadId) < totalLines, 1, 0) as pending
+                IF(COUNT(uploadId) < totalLines, 1, 0) as pending,
+                ingestTime
             FROM
                 `$table`
             WHERE
@@ -46,7 +50,8 @@ class TotalUploadsQuery implements QueryInterface
                 {$repositoryScope}
             GROUP BY
                 uploadId,
-                totalLines
+                totalLines,
+                ingestTime
         )
         SQL;
     }
@@ -73,7 +78,18 @@ class TotalUploadsQuery implements QueryInterface
             throw QueryException::typeMismatch(gettype($row['pendingUploads']), 'array');
         }
 
-        return TotalUploadsQueryResult::from($row['successfulUploads'], $row['pendingUploads']);
+        if (
+            !is_null($row['latestSuccessfulUpload']) &&
+            !$row['latestSuccessfulUpload'] instanceof DateTime
+        ) {
+            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'DateTime or null');
+        }
+
+        return TotalUploadsQueryResult::from(
+            $row['successfulUploads'],
+            $row['pendingUploads'],
+            $row['latestSuccessfulUpload']?->format(DateTimeInterface::ATOM)
+        );
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void

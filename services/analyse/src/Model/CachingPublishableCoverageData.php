@@ -5,12 +5,11 @@ namespace App\Model;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 
 class CachingPublishableCoverageData extends PublishableCoverageData
 {
-    private ?array $successfulUploads = null;
-
-    private ?array $pendingUploads = null;
+    private ?TotalUploadsQueryResult $uploads = null;
 
     private ?int $totalLines = null;
 
@@ -31,22 +30,13 @@ class CachingPublishableCoverageData extends PublishableCoverageData
      */
     private array $leastCoveredDiffFiles = [];
 
-    public function getSuccessfulUploads(): array
+    public function getUploads(): TotalUploadsQueryResult
     {
-        if (!$this->successfulUploads) {
-            $this->successfulUploads = parent::getSuccessfulUploads();
+        if (!$this->uploads) {
+            $this->uploads = parent::getUploads();
         }
 
-        return $this->successfulUploads;
-    }
-
-    public function getPendingUploads(): array
-    {
-        if (!$this->pendingUploads) {
-            $this->pendingUploads = parent::getPendingUploads();
-        }
-
-        return $this->pendingUploads;
+        return $this->uploads;
     }
 
     public function getTotalLines(): int

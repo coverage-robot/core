@@ -5,7 +5,7 @@ namespace App\Service\Carryforward;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\CommitTagsQuery;
+use App\Query\CommitSuccessfulTagsQuery;
 use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Result\CommitQueryResult;
 use App\Service\History\CommitHistoryService;
@@ -74,7 +74,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         /**
          * @var CommitCollectionQueryResult $tags
          */
-        $tags = $this->queryService->runQuery(CommitTagsQuery::class, QueryParameterBag::fromUpload($upload));
+        $tags = $this->queryService->runQuery(CommitSuccessfulTagsQuery::class, QueryParameterBag::fromUpload($upload));
 
         if (empty($tags->getCommits())) {
             // Generally we shouldn't get there, as its a pretty safe assumption that there
@@ -108,7 +108,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         );
 
         $results = $this->queryService->runQuery(
-            CommitTagsQuery::class,
+            CommitSuccessfulTagsQuery::class,
             $precedingUploadedTags
         );
 
