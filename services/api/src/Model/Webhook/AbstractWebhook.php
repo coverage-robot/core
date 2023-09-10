@@ -4,11 +4,13 @@ namespace App\Model\Webhook;
 
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookState;
-use App\Model\Webhook\Github\GithubWebhook;
+use App\Model\Webhook\Github\AbstractGithubWebhook;
 use InvalidArgumentException;
+use JsonSerializable;
 use Packages\Models\Enum\Provider;
+use Stringable;
 
-abstract class AbstractWebhook
+abstract class AbstractWebhook implements JsonSerializable, Stringable
 {
     public function __construct(
         private readonly Provider $provider,
@@ -44,7 +46,7 @@ abstract class AbstractWebhook
     public static function fromBody(Provider $provider, array $body): AbstractWebhook
     {
         return match ($provider) {
-            Provider::GITHUB => GithubWebhook::fromBody($provider, $body)
+            Provider::GITHUB => AbstractGithubWebhook::fromBody($provider, $body)
         };
     }
 

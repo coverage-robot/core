@@ -4,9 +4,10 @@ namespace App\Model\Webhook\Github;
 
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookState;
+use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
 
-class GithubCheckRunWebhook extends GithubWebhook
+class GithubCheckRunWebhook extends AbstractGithubWebhook
 {
     public function __construct(
         Provider $provider,
@@ -24,21 +25,33 @@ class GithubCheckRunWebhook extends GithubWebhook
         return $this->commit;
     }
 
-    public function getPullRequest(): string
+    public function getPullRequest(): ?string
     {
         return $this->pullRequest;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public static function fromBody(Provider $provider, array $body): self
     {
+        if (
+            !isset($body['action']) ||
+            !isset($body['repository']['owner']) ||
+            !isset($body['repository']['name']) ||
+            !isset($body['check_run']['head_sha'])
+        ) {
+            throw new InvalidArgumentException('Provided body is not a valid Github check run webhook');
+        }
+
         return new self(
             $provider,
             WebhookState::from(strtolower((string)$body['action'])),
-            (string)$body['repository']['owner']['login'],
+            (string)((array)$body['repository']['owner'])['login'],
             (string)$body['repository']['name'],
             (string)$body['check_run']['head_sha'],
-            isset($body['check_run']['pull_requests'][0]) ?
-                $body['check_run']['pull_requests'][0]['number'] :
+            isset($body['check_run']['pull_requests'][0]['number']) ?
+                (string)$body['check_run']['pull_requests'][0]['number'] :
                 null
         );
     }
@@ -65,7 +78,7 @@ class GithubCheckRunWebhook extends GithubWebhook
             $this->getOwner(),
             $this->getRepository(),
             $this->getCommit(),
-            $this->getPullRequest()
+            $this->getPullRequest() ?? ''
         );
     }
 

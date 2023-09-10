@@ -8,6 +8,9 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class WebhookProcessor
 {
+    /**
+     * @param WebhookProcessorInterface[] $webhookProcessors
+     */
     public function __construct(
         #[TaggedIterator('app.webook_processors', defaultPriorityMethod: 'getProcessorEvent')]
         private readonly iterable $webhookProcessors
