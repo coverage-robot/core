@@ -8,7 +8,7 @@ use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class S3PersistService implements PersistServiceInterface

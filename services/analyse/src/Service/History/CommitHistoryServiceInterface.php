@@ -2,7 +2,7 @@
 
 namespace App\Service\History;
 
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.commit_history')]

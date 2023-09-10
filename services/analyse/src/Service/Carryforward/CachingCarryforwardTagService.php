@@ -3,8 +3,8 @@
 namespace App\Service\Carryforward;
 
 use App\Exception\QueryException;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
 use WeakMap;
 
 class CachingCarryforwardTagService implements CarryforwardTagServiceInterface

@@ -2,8 +2,8 @@
 
 namespace App\Service\Carryforward;
 
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
 
 interface CarryforwardTagServiceInterface
 {

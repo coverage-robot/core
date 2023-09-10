@@ -2,7 +2,7 @@
 
 namespace App\Service\Diff;
 
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use WeakMap;
 
 class CachingDiffParserService implements DiffParserServiceInterface

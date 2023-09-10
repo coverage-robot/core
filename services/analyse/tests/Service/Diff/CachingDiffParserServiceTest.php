@@ -4,7 +4,7 @@ namespace App\Tests\Service\Diff;
 
 use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserService;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 
 class CachingDiffParserServiceTest extends TestCase

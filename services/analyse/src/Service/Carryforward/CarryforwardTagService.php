@@ -12,7 +12,7 @@ use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class CarryforwardTagService implements CarryforwardTagServiceInterface

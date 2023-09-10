@@ -10,7 +10,7 @@ use App\Query\TotalUploadsQuery;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class TotalUploadsQueryTest extends AbstractQueryTestCase

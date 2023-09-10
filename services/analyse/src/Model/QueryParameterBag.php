@@ -4,7 +4,7 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use WeakMap;
 
 /**

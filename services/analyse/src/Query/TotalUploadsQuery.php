@@ -9,7 +9,7 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 
 class TotalUploadsQuery implements QueryInterface
 {

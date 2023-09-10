@@ -6,7 +6,7 @@ use App\Client\EventBridgeEventClient;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class EventBridgePersistService implements PersistServiceInterface

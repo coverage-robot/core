@@ -5,7 +5,7 @@ namespace Packages\Models\Model\PublishableMessage;
 use DateTimeInterface;
 use JsonSerializable;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Stringable;
 
 interface PublishableMessageInterface extends JsonSerializable, Stringable

@@ -8,7 +8,7 @@ use App\Service\BigQueryMetadataBuilderService;
 use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class BigQueryPersistService implements PersistServiceInterface

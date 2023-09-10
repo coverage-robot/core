@@ -10,8 +10,8 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileCoverageQueryTest extends AbstractQueryTestCase

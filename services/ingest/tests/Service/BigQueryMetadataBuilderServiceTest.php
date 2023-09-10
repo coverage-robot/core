@@ -14,7 +14,7 @@ use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

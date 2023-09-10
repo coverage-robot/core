@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
 {

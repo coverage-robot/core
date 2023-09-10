@@ -13,7 +13,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Models\Model\Upload;
+use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
