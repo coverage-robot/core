@@ -252,6 +252,7 @@ jobs:
               envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
               envkey_DATABASE_USERNAME: ${{ secrets.API_SERVICE_DB_USERNAME }}
               envkey_DATABASE_PASSWORD: ${{ secrets.API_SERVICE_DB_PASSWORD }}
+              envkey_WEBHOOK_SECRET: ${{ secrets.API_SERVICE_WEBHOOK_SECRET }}
               directory: ${{ env.working-directory }}
               file_name: .env.local
               fail_on_empty: false
