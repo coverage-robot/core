@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Model\Webhook\Github\AbstractGithubWebhook;
 use App\Service\WebhookSignatureService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +14,7 @@ class WebhookSignatureServiceTest extends TestCase
     public function testGetPayloadSignatureFromRequest(): void
     {
         $request = new Request();
-        $request->headers->set('x-hub-signature-256', 'sha256=mock-signature');
+        $request->headers->set(AbstractGithubWebhook::SIGNATURE_HEADER, 'sha256=mock-signature');
 
         $webhookSignatureService = new WebhookSignatureService(new NullLogger());
 
@@ -62,7 +63,7 @@ class WebhookSignatureServiceTest extends TestCase
                 file_get_contents($file),
                 'mock-secret',
                 hash_hmac(
-                    'sha256',
+                    AbstractGithubWebhook::SIGNATURE_ALGORITHM,
                     file_get_contents($file),
                     'mock-secret'
                 )
