@@ -655,16 +655,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.29.1",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "f199ed635b945e5adfd3c1a203543d8d86aff239"
+                "reference": "6028b072aa444d7edecbed603431322026704627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/f199ed635b945e5adfd3c1a203543d8d86aff239",
-                "reference": "f199ed635b945e5adfd3c1a203543d8d86aff239",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/6028b072aa444d7edecbed603431322026704627",
+                "reference": "6028b072aa444d7edecbed603431322026704627",
                 "shasum": ""
             },
             "require": {
@@ -707,22 +707,22 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.29.1"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.30.0"
             },
-            "time": "2023-08-23T08:49:35+00:00"
+            "time": "2023-09-07T19:13:44+00:00"
         },
         {
             "name": "google/cloud-bigquery",
-            "version": "v1.26.1",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-bigquery.git",
-                "reference": "2bb2c8a02318adb7122d6b48968e7beacf88353b"
+                "reference": "f4ab27b611824168bc5f7c2acb1cba5d62e0e95d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/2bb2c8a02318adb7122d6b48968e7beacf88353b",
-                "reference": "2bb2c8a02318adb7122d6b48968e7beacf88353b",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/f4ab27b611824168bc5f7c2acb1cba5d62e0e95d",
+                "reference": "f4ab27b611824168bc5f7c2acb1cba5d62e0e95d",
                 "shasum": ""
             },
             "require": {
@@ -762,9 +762,9 @@
             ],
             "description": "BigQuery Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.26.1"
+                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.27.0"
             },
-            "time": "2023-08-25T20:04:15+00:00"
+            "time": "2023-09-09T05:18:10+00:00"
         },
         {
             "name": "google/cloud-core",
