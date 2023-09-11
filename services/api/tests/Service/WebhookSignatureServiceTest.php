@@ -14,13 +14,43 @@ class WebhookSignatureServiceTest extends TestCase
     public function testGetPayloadSignatureFromRequest(): void
     {
         $request = new Request();
-        $request->headers->set(AbstractGithubWebhook::SIGNATURE_HEADER, 'sha256=mock-signature');
+        $request->headers->set(
+            AbstractGithubWebhook::SIGNATURE_HEADER,
+            sprintf(
+                '%s=mock-signature',
+                AbstractGithubWebhook::SIGNATURE_ALGORITHM
+            )
+        );
 
         $webhookSignatureService = new WebhookSignatureService(new NullLogger());
 
         $signature = $webhookSignatureService->getPayloadSignatureFromRequest($request);
 
         $this->assertEquals('mock-signature', $signature);
+    }
+
+    public function testGetMissingPayloadSignatureFromRequest(): void
+    {
+        $request = new Request();
+
+        $webhookSignatureService = new WebhookSignatureService(new NullLogger());
+
+        $signature = $webhookSignatureService->getPayloadSignatureFromRequest($request);
+
+        $this->assertNull($signature);
+    }
+
+    #[DataProvider('invalidPayloadSignatureHeaderDataProvider')]
+    public function testGetInvalidPayloadSignatureFromRequest(string $header): void
+    {
+        $request = new Request();
+        $request->headers->set(AbstractGithubWebhook::SIGNATURE_HEADER, $header);
+
+        $webhookSignatureService = new WebhookSignatureService(new NullLogger());
+
+        $signature = $webhookSignatureService->getPayloadSignatureFromRequest($request);
+
+        $this->assertNull($signature);
     }
 
     #[DataProvider('payloadAndSignatureDataProvider')]
@@ -69,5 +99,20 @@ class WebhookSignatureServiceTest extends TestCase
                 )
             ];
         }
+    }
+
+    public static function invalidPayloadSignatureHeaderDataProvider(): array
+    {
+        return [
+            [
+                sprintf('%s=', AbstractGithubWebhook::SIGNATURE_ALGORITHM),
+            ],
+            [
+                'mock-signature',
+            ],
+            [
+                '',
+            ],
+        ];
     }
 }
