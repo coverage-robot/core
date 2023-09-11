@@ -112,7 +112,7 @@ class WebhookControllerTest extends KernelTestCase
             ->method('validatePayloadSignature')
             ->with(
                 'mock-signature',
-                json_decode($payload, true),
+                $payload,
                 'mock-webhook-secret'
             )
             ->willReturn(false);
@@ -171,7 +171,7 @@ class WebhookControllerTest extends KernelTestCase
             ->method('validatePayloadSignature')
             ->with(
                 'mock-signature',
-                json_decode($payload, true),
+                $payload,
                 'mock-webhook-secret'
             )
             ->willReturn(true);
