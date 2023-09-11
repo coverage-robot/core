@@ -67,7 +67,7 @@ class WebhookController extends AbstractController
             !$signature ||
             !$this->authTokenService->validatePayloadSignature(
                 $signature,
-                $request->getContent(),
+                $request->toArray(),
                 $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET),
             )
         ) {
