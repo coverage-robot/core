@@ -10,5 +10,5 @@ interface WebhookProcessorInterface
 {
     public function process(AbstractWebhook $webhook): void;
 
-    public function getProcessorEvent(): string;
+    public static function getProcessorEvent(): string;
 }

@@ -24,7 +24,7 @@ class PipelineStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    public function getProcessorEvent(): string
+    public static function getProcessorEvent(): string
     {
         return WebhookProcessorEvent::PIPELINE_STATE_CHANGE->value;
     }
