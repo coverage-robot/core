@@ -36,7 +36,7 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook
      */
     public static function fromRequest(Provider $provider, Request $request): self
     {
-        $body = $request->toArray() ?? [];
+        $body = $request->toArray();
 
         if (
             !isset($body['action']) ||
