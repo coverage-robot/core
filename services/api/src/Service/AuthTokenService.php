@@ -131,7 +131,7 @@ class AuthTokenService
             return null;
         }
 
-        [$algorithm, $hash] = explode($payloadSignature, "=", 1);
+        [$algorithm, $hash] = explode($payloadSignature, '=', 1);
 
         $this->authTokenLogger->info(
             'Payload signature decoded successfully.',
