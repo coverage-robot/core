@@ -6,9 +6,9 @@ use App\Enum\EnvironmentVariable;
 use App\Exception\AuthenticationException;
 use App\Model\Webhook\AbstractWebhook;
 use App\Repository\ProjectRepository;
-use App\Service\AuthTokenService;
 use App\Service\EnvironmentService;
 use App\Service\Webhook\WebhookProcessor;
+use App\Service\WebhookSignatureService;
 use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
 use Psr\Log\LoggerInterface;
@@ -22,7 +22,7 @@ class WebhookController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $webhookLogger,
-        private readonly AuthTokenService $authTokenService,
+        private readonly WebhookSignatureService $webhookSignatureService,
         private readonly ProjectRepository $projectRepository,
         private readonly WebhookProcessor $webhookProcessor,
         private readonly EnvironmentService $environmentService,
@@ -80,11 +80,11 @@ class WebhookController extends AbstractController
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
-        $signature = $this->authTokenService->getPayloadSignatureFromRequest($request);
+        $signature = $this->webhookSignatureService->getPayloadSignatureFromRequest($request);
 
         if (
             !$signature ||
-            !$this->authTokenService->validatePayloadSignature(
+            !$this->webhookSignatureService->validatePayloadSignature(
                 $signature,
                 $request->getContent(),
                 $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET),
@@ -94,7 +94,7 @@ class WebhookController extends AbstractController
                 'Signature validation failed for webhook payload.',
                 [
                     'provided' => $signature,
-                    'computed' => $this->authTokenService->computePayloadSignature(
+                    'computed' => $this->webhookSignatureService->computePayloadSignature(
                         $request->getContent(),
                         $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET),
                     ),
