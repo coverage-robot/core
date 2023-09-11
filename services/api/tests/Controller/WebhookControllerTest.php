@@ -9,6 +9,7 @@ use App\Model\Webhook\Github\AbstractGithubWebhook;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\Webhook\WebhookProcessor;
+use App\Service\WebhookSignatureService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
@@ -25,8 +26,8 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->never())
             ->method('process');
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-        $mockAuthTokenService->expects($this->never())
+        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
+        $mockWebhookSignatureService->expects($this->never())
             ->method('getPayloadSignatureFromRequest');
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->never())
@@ -34,7 +35,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockAuthTokenService,
+            $mockWebhookSignatureService,
             $mockProjectRepository,
             $mockWebhookProcessor,
             MockEnvironmentServiceFactory::getMock(
@@ -61,8 +62,8 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->never())
             ->method('process');
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-        $mockAuthTokenService->expects($this->never())
+        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
+        $mockWebhookSignatureService->expects($this->never())
             ->method('getPayloadSignatureFromRequest');
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->once())
@@ -77,7 +78,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockAuthTokenService,
+            $mockWebhookSignatureService,
             $mockProjectRepository,
             $mockWebhookProcessor,
             MockEnvironmentServiceFactory::getMock(
@@ -107,11 +108,11 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->never())
             ->method('process');
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-        $mockAuthTokenService->expects($this->once())
+        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
+        $mockWebhookSignatureService->expects($this->once())
             ->method('getPayloadSignatureFromRequest')
             ->willReturn('mock-signature');
-        $mockAuthTokenService->expects($this->once())
+        $mockWebhookSignatureService->expects($this->once())
             ->method('validatePayloadSignature')
             ->with(
                 'mock-signature',
@@ -137,7 +138,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockAuthTokenService,
+            $mockWebhookSignatureService,
             $mockProjectRepository,
             $mockWebhookProcessor,
             MockEnvironmentServiceFactory::getMock(
@@ -167,11 +168,11 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->once())
             ->method('process');
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-        $mockAuthTokenService->expects($this->once())
+        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
+        $mockWebhookSignatureService->expects($this->once())
             ->method('getPayloadSignatureFromRequest')
             ->willReturn('mock-signature');
-        $mockAuthTokenService->expects($this->once())
+        $mockWebhookSignatureService->expects($this->once())
             ->method('validatePayloadSignature')
             ->with(
                 'mock-signature',
@@ -197,7 +198,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockAuthTokenService,
+            $mockWebhookSignatureService,
             $mockProjectRepository,
             $mockWebhookProcessor,
             MockEnvironmentServiceFactory::getMock(
