@@ -118,9 +118,9 @@ class AuthTokenService
 
     public function getPayloadSignatureFromRequest(Request $request): ?string
     {
-        $payloadSignature = $request->headers->get('x-hub-signature-256');
+        $signature = $request->headers->get('x-hub-signature-256');
 
-        if (!is_string($payloadSignature)) {
+        if (!$signature) {
             $this->authTokenLogger->info(
                 'Payload signature not provided in request.',
                 [
@@ -131,18 +131,33 @@ class AuthTokenService
             return null;
         }
 
-        [$algorithm, $hash] = explode($payloadSignature, '=', 1);
+        preg_match(
+            '/^(?<algorithm>(sha[0-9]+))\=(?<signature>(.*))$/i',
+            $signature,
+            $payloadSignature
+        );
+
+        if (!$payloadSignature['signature']) {
+            $this->authTokenLogger->info(
+                'Payload signature provided in an unsupported format.',
+                [
+                    'signature' => $payloadSignature,
+                    'parameters' => $request->headers->all()
+                ]
+            );
+
+            return null;
+        }
 
         $this->authTokenLogger->info(
             'Payload signature decoded successfully.',
             [
-                'algorithm' => $algorithm,
-                'hash' => $hash,
+                'signature' => $payloadSignature,
                 'parameters' => $request->headers->all()
             ]
         );
 
-        return $hash;
+        return $payloadSignature['signature'];
     }
 
     public function validatePayloadSignature(string $signature, string $payload, string $secret): bool
