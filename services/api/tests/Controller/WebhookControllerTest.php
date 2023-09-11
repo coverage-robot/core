@@ -13,6 +13,7 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,7 @@ class WebhookControllerTest extends KernelTestCase
             ->method('findOneBy');
 
         $webhookController = new WebhookController(
+            new NullLogger(),
             $mockAuthTokenService,
             $mockProjectRepository,
             $mockWebhookProcessor,
@@ -74,6 +76,7 @@ class WebhookControllerTest extends KernelTestCase
 
 
         $webhookController = new WebhookController(
+            new NullLogger(),
             $mockAuthTokenService,
             $mockProjectRepository,
             $mockWebhookProcessor,
@@ -133,6 +136,7 @@ class WebhookControllerTest extends KernelTestCase
             ->willReturn($mockProject);
 
         $webhookController = new WebhookController(
+            new NullLogger(),
             $mockAuthTokenService,
             $mockProjectRepository,
             $mockWebhookProcessor,
@@ -192,6 +196,7 @@ class WebhookControllerTest extends KernelTestCase
             ->willReturn($mockProject);
 
         $webhookController = new WebhookController(
+            new NullLogger(),
             $mockAuthTokenService,
             $mockProjectRepository,
             $mockWebhookProcessor,

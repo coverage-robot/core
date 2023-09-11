@@ -146,12 +146,17 @@ class AuthTokenService
     public function validatePayloadSignature(string $signature, string $payload, string $secret): bool
     {
         return hash_equals(
-            hash_hmac(
-                'sha256',
-                $payload,
-                $secret
-            ),
+            $this->computePayloadSignature($payload, $secret),
             $signature
+        );
+    }
+
+    public function computePayloadSignature(string $payload, string $secret): string
+    {
+        return hash_hmac(
+            'sha256',
+            $payload,
+            $secret
         );
     }
 

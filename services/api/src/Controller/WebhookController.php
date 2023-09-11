@@ -11,6 +11,7 @@ use App\Service\EnvironmentService;
 use App\Service\Webhook\WebhookProcessor;
 use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +21,7 @@ use Symfony\Component\Routing\Requirement\EnumRequirement;
 class WebhookController extends AbstractController
 {
     public function __construct(
+        private readonly LoggerInterface $webhookLogger,
         private readonly AuthTokenService $authTokenService,
         private readonly ProjectRepository $projectRepository,
         private readonly WebhookProcessor $webhookProcessor,
@@ -47,6 +49,13 @@ class WebhookController extends AbstractController
         } catch (InvalidArgumentException $e) {
             // We're likely to receive this a lot from providers which send excess events
             // which we don't wish to process (i.e. pings from Github)
+            $this->webhookLogger->info(
+                'Invalid webhook payload received.',
+                [
+                    'exception' => $e,
+                    'request' => $request->toArray()
+                ]
+            );
             return new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -58,6 +67,16 @@ class WebhookController extends AbstractController
             ]);
 
         if (!$project || !$project->isEnabled()) {
+            $this->webhookLogger->warning(
+                'Webhook received from disabled (or non-existent) project.',
+                [
+                    'provider' => $provider,
+                    'repository' => $webhook->getRepository(),
+                    'owner' => $webhook->getOwner(),
+                    'project' => $project?->getId(),
+                    'enabled' => $project?->isEnabled()
+                ]
+            );
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
@@ -71,6 +90,17 @@ class WebhookController extends AbstractController
                 $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET),
             )
         ) {
+            $this->webhookLogger->warning(
+                'Signature validation failed for webhook payload.',
+                [
+                    'provided' => $signature,
+                    'computed' => $this->authTokenService->computePayloadSignature(
+                        $request->getContent(),
+                        $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET),
+                    ),
+                    'payload' => $request->getContent()
+                ]
+            );
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
