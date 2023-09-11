@@ -13,7 +13,7 @@
         "ext-xmlreader": "*",
         "async-aws/async-aws-bundle": "^1.10",
         "async-aws/event-bridge": "^1.5",
-        "async-aws/simple-s3": "^1.1",
+        "async-aws/simple-s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/models": "*",
