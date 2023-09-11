@@ -131,16 +131,18 @@ class AuthTokenService
             return null;
         }
 
+        [$algorithm, $hash] = explode($payloadSignature, "=", 1);
 
         $this->authTokenLogger->info(
             'Payload signature decoded successfully.',
             [
-                'signature' => $payloadSignature,
+                'algorithm' => $algorithm,
+                'hash' => $hash,
                 'parameters' => $request->headers->all()
             ]
         );
 
-        return ltrim($payloadSignature, 'sha256=');
+        return $hash;
     }
 
     public function validatePayloadSignature(string $signature, string $payload, string $secret): bool
