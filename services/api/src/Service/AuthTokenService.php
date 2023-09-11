@@ -143,15 +143,12 @@ class AuthTokenService
         return ltrim($payloadSignature, 'sha256=');
     }
 
-    public function validatePayloadSignature(string $signature, array $payload, string $secret): bool
+    public function validatePayloadSignature(string $signature, string $payload, string $secret): bool
     {
         return hash_equals(
             hash_hmac(
                 'sha256',
-                json_encode(
-                    $payload,
-                    JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS | JSON_UNESCAPED_UNICODE
-                ),
+                $payload,
                 $secret
             ),
             $signature
