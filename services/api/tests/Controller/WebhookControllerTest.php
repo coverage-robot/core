@@ -5,6 +5,7 @@ namespace App\Tests\Controller;
 use App\Controller\WebhookController;
 use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
+use App\Model\Webhook\Github\AbstractGithubWebhook;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\Webhook\WebhookProcessor;
@@ -53,7 +54,7 @@ class WebhookControllerTest extends KernelTestCase
     }
 
     #[DataProvider('webhookPayloadDataProvider')]
-    public function testHandleInvalidRepository(Provider $provider, string $payload): void
+    public function testHandleInvalidRepository(Provider $provider, string $event, string $payload): void
     {
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->never())
@@ -87,7 +88,10 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController->setContainer($this->getContainer());
 
-        $request = new Request(content: $payload);
+        $request = new Request(
+            server: ['HTTP_' . AbstractGithubWebhook::GITHUB_EVENT_HEADER => $event],
+            content: $payload
+        );
 
         $response = $webhookController->handleWebhookEvent($provider->value, $request);
 
@@ -209,7 +213,7 @@ class WebhookControllerTest extends KernelTestCase
     public static function webhookPayloadDataProvider(): iterable
     {
         foreach (glob(__DIR__ . '/../Fixture/Webhook/*.json') as $payload) {
-            yield basename($payload) => [Provider::GITHUB, file_get_contents($payload)];
+            yield basename($payload) => [Provider::GITHUB, 'check_run', file_get_contents($payload)];
         }
     }
 }

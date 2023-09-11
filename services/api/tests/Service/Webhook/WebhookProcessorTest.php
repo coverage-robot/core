@@ -26,7 +26,7 @@ class WebhookProcessorTest extends TestCase
         );
 
         $webhookProcessor->process(
-            AbstractWebhook::fromBody($provider, json_decode($payload, true))
+            AbstractWebhook::fromRequest($provider, json_decode($payload, true))
         );
     }
 

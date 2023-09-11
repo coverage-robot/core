@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use JsonSerializable;
 use Packages\Models\Enum\Provider;
 use Stringable;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractWebhook implements JsonSerializable, Stringable
 {
@@ -43,10 +44,10 @@ abstract class AbstractWebhook implements JsonSerializable, Stringable
     /**
      * @throws InvalidArgumentException
      */
-    public static function fromBody(Provider $provider, array $body): AbstractWebhook
+    public static function fromRequest(Provider $provider, Request $request): AbstractWebhook
     {
         return match ($provider) {
-            Provider::GITHUB => AbstractGithubWebhook::fromBody($provider, $body)
+            Provider::GITHUB => AbstractGithubWebhook::fromRequest($provider, $request)
         };
     }
 

@@ -43,7 +43,7 @@ class WebhookController extends AbstractController
     public function handleWebhookEvent(string $provider, Request $request): Response
     {
         try {
-            $webhook = AbstractWebhook::fromBody(Provider::from($provider), $request->toArray());
+            $webhook = AbstractWebhook::fromRequest(Provider::from($provider), $request);
         } catch (InvalidArgumentException $e) {
             // We're likely to receive this a lot from providers which send excess events
             // which we don't wish to process (i.e. pings from Github)

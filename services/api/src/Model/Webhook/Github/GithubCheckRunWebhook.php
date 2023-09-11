@@ -6,6 +6,7 @@ use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookState;
 use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\HttpFoundation\Request;
 
 class GithubCheckRunWebhook extends AbstractGithubWebhook
 {
@@ -33,15 +34,17 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook
     /**
      * @throws InvalidArgumentException
      */
-    public static function fromBody(Provider $provider, array $body): self
+    public static function fromRequest(Provider $provider, Request $request): self
     {
+        $body = $request->toArray() ?? [];
+
         if (
             !isset($body['action']) ||
             !isset($body['repository']['owner']) ||
             !isset($body['repository']['name']) ||
             !isset($body['check_run']['head_sha'])
         ) {
-            throw new InvalidArgumentException('Provided body is not a valid Github check run webhook');
+            throw new InvalidArgumentException('Provided request  is not a valid Github check run webhook');
         }
 
         return new self(
