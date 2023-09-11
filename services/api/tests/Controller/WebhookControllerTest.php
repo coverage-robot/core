@@ -99,7 +99,7 @@ class WebhookControllerTest extends KernelTestCase
     }
 
     #[DataProvider('webhookPayloadDataProvider')]
-    public function testHandleInvalidSignature(Provider $provider, string $payload): void
+    public function testHandleInvalidSignature(Provider $provider, string $event, string $payload): void
     {
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->never())
@@ -147,7 +147,10 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController->setContainer($this->getContainer());
 
-        $request = new Request(content: $payload);
+        $request = new Request(
+            server: ['HTTP_' . AbstractGithubWebhook::GITHUB_EVENT_HEADER => $event],
+            content: $payload
+        );
 
         $response = $webhookController->handleWebhookEvent($provider->value, $request);
 
@@ -155,7 +158,7 @@ class WebhookControllerTest extends KernelTestCase
     }
 
     #[DataProvider('webhookPayloadDataProvider')]
-    public function testSuccessfullySendsWebhookToProcess(Provider $provider, string $payload): void
+    public function testSuccessfullySendsWebhookToProcess(Provider $provider, string $event, string $payload): void
     {
         $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
         $mockWebhookProcessor->expects($this->once())
@@ -203,7 +206,10 @@ class WebhookControllerTest extends KernelTestCase
 
         $webhookController->setContainer($this->getContainer());
 
-        $request = new Request(content: $payload);
+        $request = new Request(
+            server: ['HTTP_' . AbstractGithubWebhook::GITHUB_EVENT_HEADER => $event],
+            content: $payload
+        );
 
         $response = $webhookController->handleWebhookEvent($provider->value, $request);
 
