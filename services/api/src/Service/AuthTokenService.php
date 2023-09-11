@@ -140,7 +140,7 @@ class AuthTokenService
             ]
         );
 
-        return ltrim($payloadSignature, "sha256=");
+        return ltrim($payloadSignature, 'sha256=');
     }
 
     public function validatePayloadSignature(string $signature, array $payload, string $secret): bool
