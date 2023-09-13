@@ -53,6 +53,9 @@ class Project implements Stringable
     #[ORM\Column(options: ['default' => null], nullable: true)]
     private ?float $coveragePercentage = null;
 
+    /**
+     * @var Collection<int, Job>
+     */
     #[ORM\OneToMany(mappedBy: 'project', targetEntity: Job::class, orphanRemoval: true)]
     private Collection $jobs;
 
@@ -180,9 +183,20 @@ class Project implements Stringable
 
     public function __toString(): string
     {
+        $projectId = $this->getId();
+
+        if (!$projectId) {
+            return sprintf(
+                'Project#%s-%s-%s',
+                (string)$this->getProvider()?->value,
+                (string)$this->getOwner(),
+                (string)$this->getRepository()
+            );
+        }
+
         return sprintf(
             'Project#%s',
-            $this->getId()
+            $projectId
         );
     }
 }

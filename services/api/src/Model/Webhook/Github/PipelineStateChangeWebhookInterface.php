@@ -22,4 +22,9 @@ interface PipelineStateChangeWebhookInterface
      * The current state of the job.
      */
     public function getJobState(): JobState;
+
+    /**
+     * The pull request the job is running on (if applicable)
+     */
+    public function getPullRequest(): ?string;
 }

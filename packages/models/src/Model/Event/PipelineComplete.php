@@ -30,6 +30,16 @@ class PipelineComplete implements EventInterface
         return $this->repository;
     }
 
+    public function getCommit(): string
+    {
+        return $this->commit;
+    }
+
+    public function getPullRequest(): ?string
+    {
+        return $this->pullRequest;
+    }
+
     public static function from(array $data): EventInterface
     {
         return new self(

@@ -95,7 +95,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 )
             );
 
-            $this->publishPipelineCompleteEvent($project, $webhook);
+            $this->publishPipelineCompleteEvent($webhook);
         }
     }
 
@@ -110,8 +110,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    private function findOrCreateJob(Project $project, AbstractWebhook $webhook): Job
-    {
+    private function findOrCreateJob(
+        Project $project,
+        AbstractWebhook&PipelineStateChangeWebhookInterface $webhook
+    ): Job {
         $job = $this->jobRepository->findOneBy(
             [
                 'project' => $project,
@@ -124,15 +126,19 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             $job->setProject($project);
             $job->setCommit($webhook->getCommit());
             $job->setExternalId($webhook->getExternalId());
-            $job->setCreatedAt(new DateTimeImmutable());
-            $job->setUpdatedAt($job->getCreatedAt());
+
+            $now = new DateTimeImmutable();
+            $job->setCreatedAt($now);
+            $job->setUpdatedAt($now);
         }
 
         return $job;
     }
 
-    private function isAllCommitJobsComplete(Project $project, PipelineStateChangeWebhookInterface $webhook): bool
-    {
+    private function isAllCommitJobsComplete(
+        Project $project,
+        AbstractWebhook&PipelineStateChangeWebhookInterface $webhook
+    ): bool {
         return !$this->jobRepository->findOneBy(
             [
                 'project' => $project,
@@ -145,15 +151,15 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    public function publishPipelineCompleteEvent(Project $project, PipelineStateChangeWebhookInterface $webhook): bool
+    public function publishPipelineCompleteEvent(AbstractWebhook&PipelineStateChangeWebhookInterface $webhook): bool
     {
         try {
             return $this->eventBridgeEventClient->publishEvent(
                 CoverageEvent::PIPELINE_COMPLETE,
                 new PipelineComplete(
-                    $project->getProvider(),
-                    $project->getOwner(),
-                    $project->getRepository(),
+                    $webhook->getProvider(),
+                    $webhook->getOwner(),
+                    $webhook->getRepository(),
                     $webhook->getCommit(),
                     $webhook->getPullRequest()
                 )
