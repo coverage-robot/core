@@ -5,7 +5,7 @@ namespace App\Tests\Service\Webhook;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\Github\AbstractGithubWebhook;
-use App\Service\Webhook\PipelineStateChangeWebhookProcessor;
+use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Service\Webhook\WebhookProcessor;
 use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -17,7 +17,7 @@ class WebhookProcessorTest extends TestCase
     #[DataProvider('webhookPayloadDataProvider')]
     public function testProcessUsingValidEvent(Provider $provider, string $event, string $payload): void
     {
-        $mockProcessor = $this->createMock(PipelineStateChangeWebhookProcessor::class);
+        $mockProcessor = $this->createMock(JobStateChangeWebhookProcessor::class);
         $mockProcessor->expects($this->once())
             ->method('process');
 
