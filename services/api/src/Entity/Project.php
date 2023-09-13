@@ -3,14 +3,17 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Packages\Models\Enum\Provider;
+use Stringable;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 #[ORM\UniqueConstraint(
     columns: ['provider', 'owner', 'repository']
 )]
-class Project
+class Project implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -49,6 +52,14 @@ class Project
 
     #[ORM\Column(options: ['default' => null], nullable: true)]
     private ?float $coveragePercentage = null;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Job::class, orphanRemoval: true)]
+    private Collection $jobs;
+
+    public function __construct()
+    {
+        $this->jobs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +100,7 @@ class Project
 
         return $this;
     }
+
     public function getRepository(): ?string
     {
         return $this->repository;
@@ -134,5 +146,43 @@ class Project
     {
         $this->coveragePercentage = $coveragePercentage;
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Job>
+     */
+    public function getJobs(): Collection
+    {
+        return $this->jobs;
+    }
+
+    public function addJob(Job $job): static
+    {
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+            $job->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJob(Job $job): static
+    {
+        if ($this->jobs->removeElement($job)) {
+            // set the owning side to null (unless already changed)
+            if ($job->getProject() === $this) {
+                $job->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'Project#%s',
+            $this->getId()
+        );
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Model\Webhook;
 
 use App\Enum\WebhookProcessorEvent;
-use App\Enum\WebhookState;
 use App\Model\Webhook\Github\AbstractGithubWebhook;
 use InvalidArgumentException;
 use JsonSerializable;
@@ -15,7 +14,6 @@ abstract class AbstractWebhook implements JsonSerializable, Stringable
 {
     public function __construct(
         private readonly Provider $provider,
-        private readonly WebhookState $type,
         private readonly string $owner,
         private readonly string $repository
     ) {
@@ -34,11 +32,6 @@ abstract class AbstractWebhook implements JsonSerializable, Stringable
     public function getRepository(): string
     {
         return $this->repository;
-    }
-
-    public function getState(): WebhookState
-    {
-        return $this->type;
     }
 
     /**
