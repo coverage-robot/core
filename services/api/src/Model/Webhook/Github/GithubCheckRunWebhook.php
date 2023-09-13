@@ -73,19 +73,6 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
         );
     }
 
-    public static function from(array $data): self
-    {
-        return new self(
-            Provider::from((string)$data['provider']),
-            (string)$data['owner'],
-            (string)$data['repository'],
-            (string)$data['checkRunId'],
-            JobState::from((string)$data['jobState']),
-            (string)$data['commit'],
-            (string)$data['pullRequest']
-        );
-    }
-
     public function __toString(): string
     {
         return sprintf(
@@ -97,18 +84,6 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             $this->getExternalId(),
             $this->getCommit()
         );
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'provider' => $this->getProvider()->value,
-            'owner' => $this->getOwner(),
-            'repository' => $this->getRepository(),
-            'jobState' => $this->getJobState()->value,
-            'commit' => $this->getCommit(),
-            'pullRequest' => $this->getPullRequest()
-        ];
     }
 
     public function getEvent(): WebhookProcessorEvent

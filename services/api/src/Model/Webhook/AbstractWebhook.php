@@ -5,12 +5,11 @@ namespace App\Model\Webhook;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\Github\AbstractGithubWebhook;
 use InvalidArgumentException;
-use JsonSerializable;
 use Packages\Models\Enum\Provider;
 use Stringable;
 use Symfony\Component\HttpFoundation\Request;
 
-abstract class AbstractWebhook implements JsonSerializable, Stringable
+abstract class AbstractWebhook implements Stringable
 {
     public function __construct(
         private readonly Provider $provider,
