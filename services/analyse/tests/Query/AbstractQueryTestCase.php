@@ -31,7 +31,7 @@ abstract class AbstractQueryTestCase extends TestCase
     public static function getQueryParameters(): array
     {
         return [
-            QueryParameterBag::fromUpload(
+            QueryParameterBag::fromEvent(
                 Upload::from([
                     'provider' => Provider::GITHUB->value,
                     'owner' => 'mock-owner',

@@ -381,7 +381,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             'ingestTime' => '2021-01-01T00:00:00+00:00'
         ]);
 
-        $scopedParameters = QueryParameterBag::fromUpload($upload);
+        $scopedParameters = QueryParameterBag::fromEvent($upload);
         $scopedParameters->set(
             QueryParameter::LINE_SCOPE,
             [
@@ -390,7 +390,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             ]
         );
 
-        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters = QueryParameterBag::fromEvent($upload);
         $carryforwardParameters->set(
             QueryParameter::CARRYFORWARD_TAGS,
             [
@@ -479,7 +479,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromUpload(
+                QueryParameterBag::fromEvent(
                     Upload::from([
                         'provider' => Provider::GITHUB->value,
                         'owner' => 'mock-owner',

@@ -4,6 +4,7 @@ namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
 use App\Service\Event\AnalyseSuccessEventProcessor;
+use App\Service\Event\AnalysisOnNewUploadSuccessEventProcessor;
 use App\Service\Event\EventProcessorInterface;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -44,7 +45,7 @@ class EventHandlerTest extends TestCase
     {
         $this->assertEquals(
             [
-                AnalyseSuccessEventProcessor::class,
+                AnalysisOnNewUploadSuccessEventProcessor::class,
             ],
             EventHandler::getSubscribedServices()
         );
@@ -53,7 +54,10 @@ class EventHandlerTest extends TestCase
     public static function eventsDataProvider(): array
     {
         return array_map(
-            static fn (CoverageEvent $event) => [$event->value, $event === CoverageEvent::ANALYSE_SUCCESS],
+            static fn(CoverageEvent $event) => [
+                $event->value,
+                $event === CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS
+            ],
             CoverageEvent::cases()
         );
     }

@@ -49,7 +49,7 @@ class EventBridgeEventServiceTest extends TestCase
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::ANALYSE->value,
-                            'DetailType' => CoverageEvent::ANALYSE_SUCCESS->value,
+                            'DetailType' => CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS->value,
                             'Detail' => json_encode([
                                 'upload' => $upload,
                                 'coveragePercentage' => '99'
@@ -73,7 +73,7 @@ class EventBridgeEventServiceTest extends TestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::ANALYSE_SUCCESS,
+            CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS,
             [
                 'upload' => $upload->jsonSerialize(),
                 'coveragePercentage' => '99'

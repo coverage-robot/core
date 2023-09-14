@@ -7,12 +7,13 @@ use DateTimeInterface;
 use InvalidArgumentException;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
+use Packages\Models\Model\Event\GenericEvent;
 
 class PublishableCheckAnnotationMessage implements PublishableMessageInterface
 {
     public function __construct(
-        private readonly Upload $upload,
+        private readonly EventInterface $event,
         private readonly string $fileName,
         private readonly int $lineNumber,
         private readonly LineState $lineState,
@@ -20,9 +21,9 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
     ) {
     }
 
-    public function getUpload(): Upload
+    public function getEvent(): EventInterface
     {
-        return $this->upload;
+        return $this->event;
     }
 
     public function getFileName(): string
@@ -58,7 +59,7 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
         );
 
         if (
-            !isset($data['upload']) ||
+            !isset($data['event']) ||
             !isset($data['fileName']) ||
             !isset($data['lineNumber']) ||
             !isset($data['lineState']) ||
@@ -68,7 +69,7 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
         }
 
         return new self(
-            Upload::from($data['upload']),
+            GenericEvent::from($data['event']),
             (string)$data['fileName'],
             (int)$data['lineNumber'],
             LineState::from($data['lineState']),
@@ -80,7 +81,7 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
     {
         return [
             'type' => $this->getType()->value,
-            'upload' => $this->upload->jsonSerialize(),
+            'event' => $this->event->jsonSerialize(),
             'fileName' => $this->fileName,
             'lineNumber' => $this->lineNumber,
             'lineState' => $this->lineState->value,
@@ -92,17 +93,21 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
     {
         return md5(
             implode('', [
-                $this->upload->getOwner(),
-                $this->upload->getRepository(),
-                $this->upload->getRef(),
-                $this->upload->getPullRequest(),
-                $this->upload->getCommit()
+                $this->event->getProvider()->value,
+                $this->event->getOwner(),
+                $this->event->getRepository(),
+                $this->event->getCommit()
             ])
         );
     }
 
     public function __toString(): string
     {
-        return "PublishableCheckAnnotationMessage#{$this->upload->getUploadId()}";
+        return sprintf(
+            "PublishableCheckAnnotationMessage#%s-%s-%s",
+            $this->event->getOwner(),
+            $this->event->getRepository(),
+            $this->event->getCommit()
+        );
     }
 }

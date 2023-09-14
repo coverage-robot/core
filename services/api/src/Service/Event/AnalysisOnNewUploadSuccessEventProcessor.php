@@ -8,7 +8,7 @@ use JsonException;
 use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
-class AnalyseSuccessEventProcessor implements EventProcessorInterface
+class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterface
 {
     private const REFS = [
         'master',

@@ -80,10 +80,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     {
         if (
             !$parameterBag ||
-            !$parameterBag->has(QueryParameter::UPLOAD) ||
-            !($parameterBag->get(QueryParameter::UPLOAD) instanceof Upload)
+            !$parameterBag->has(QueryParameter::EVENT) ||
+            !($parameterBag->get(QueryParameter::EVENT) instanceof Upload)
         ) {
-            throw QueryException::invalidParameters(QueryParameter::UPLOAD);
+            throw QueryException::invalidParameters(QueryParameter::EVENT);
         }
     }
 }

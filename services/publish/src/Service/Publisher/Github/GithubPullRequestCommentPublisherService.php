@@ -30,11 +30,11 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
             return false;
         }
 
-        if (!$publishableMessage->getUpload()->getPullRequest()) {
+        if (!$publishableMessage->getEvent()->getPullRequest()) {
             return false;
         }
 
-        return $publishableMessage->getUpload()->getProvider() === Provider::GITHUB;
+        return $publishableMessage->getEvent()->getProvider() === Provider::GITHUB;
     }
 
     /**
@@ -47,9 +47,9 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         }
 
         /** @var PublishablePullRequestMessage $publishableMessage */
-        $pullRequest = (int)$publishableMessage->getUpload()->getPullRequest();
+        $pullRequest = (int)$publishableMessage->getEvent()->getPullRequest();
 
-        $upload = $publishableMessage->getUpload();
+        $upload = $publishableMessage->getEvent();
 
         return $this->upsertComment(
             $upload->getOwner(),

@@ -670,14 +670,14 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             'mock-file-2' => [10, 11, 12]
         ];
 
-        $lineScopedParameters = QueryParameterBag::fromUpload($upload);
+        $lineScopedParameters = QueryParameterBag::fromEvent($upload);
         $lineScopedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
 
-        $limitedParameters = QueryParameterBag::fromUpload($upload);
+        $limitedParameters = QueryParameterBag::fromEvent($upload);
         $limitedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
         $limitedParameters->set(QueryParameter::LIMIT, 50);
 
-        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters = QueryParameterBag::fromEvent($upload);
         $carryforwardParameters->set(
             QueryParameter::CARRYFORWARD_TAGS,
             [
@@ -771,7 +771,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromUpload(
+                QueryParameterBag::fromEvent(
                     Upload::from([
                         'provider' => Provider::GITHUB->value,
                         'owner' => 'mock-owner',

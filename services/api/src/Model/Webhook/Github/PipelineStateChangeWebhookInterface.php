@@ -7,6 +7,11 @@ use App\Enum\JobState;
 interface PipelineStateChangeWebhookInterface
 {
     /**
+     * The ref the job is running on.
+     */
+    public function getRef(): string;
+
+    /**
      * The commit the job is running on.
      */
     public function getCommit(): string;

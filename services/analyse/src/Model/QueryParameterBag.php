@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Event\Upload;
 use WeakMap;
 
@@ -25,7 +26,7 @@ class QueryParameterBag
      * @return (
      *  $key is QueryParameter::COMMIT ?
      *      string :
-     *      ($key is QueryParameter::UPLOAD ?
+     *      ($key is QueryParameter::EVENT ?
      *          Upload :
      *          ($key is QueryParameter::LINE_SCOPE ?
      *              array :
@@ -52,18 +53,18 @@ class QueryParameterBag
         $this->parameters[$key] = $value;
     }
 
-    public static function fromUpload(Upload $upload): self
+    public static function fromEvent(EventInterface $event): self
     {
         $parameters = new self();
 
-        // Store the main upload model in the parameter bag
-        $parameters->set(QueryParameter::UPLOAD, $upload);
+        // Store the main event model in the parameter bag
+        $parameters->set(QueryParameter::EVENT, $event);
 
         // Extract core parameters from upload model for ease of use
-        $parameters->set(QueryParameter::COMMIT, $upload->getCommit());
-        $parameters->set(QueryParameter::OWNER, $upload->getOwner());
-        $parameters->set(QueryParameter::REPOSITORY, $upload->getRepository());
-        $parameters->set(QueryParameter::PROVIDER, $upload->getProvider());
+        $parameters->set(QueryParameter::COMMIT, $event->getCommit());
+        $parameters->set(QueryParameter::OWNER, $event->getOwner());
+        $parameters->set(QueryParameter::REPOSITORY, $event->getRepository());
+        $parameters->set(QueryParameter::PROVIDER, $event->getProvider());
 
         return $parameters;
     }

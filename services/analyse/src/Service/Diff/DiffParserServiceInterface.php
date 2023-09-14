@@ -2,7 +2,7 @@
 
 namespace App\Service\Diff;
 
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.diff_parser')]
@@ -15,8 +15,8 @@ interface DiffParserServiceInterface
      * will either be from the commit, or the PR, depending
      * on the context of the upload.
      *
-     * @param Upload $upload
+     * @param EventInterface $event
      * @return array<array-key, int[]>
      */
-    public function get(Upload $upload): array;
+    public function get(EventInterface $event): array;
 }

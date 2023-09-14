@@ -14,5 +14,11 @@ interface EventInterface extends JsonSerializable, Stringable
 
     public function getRepository(): string;
 
+    public function getCommit(): string;
+
+    public function getPullRequest(): int|string|null;
+
+    public function getRef(): string;
+
     public static function from(array $data): self;
 }

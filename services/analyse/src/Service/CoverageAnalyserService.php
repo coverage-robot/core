@@ -6,7 +6,7 @@ use App\Model\CachingPublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService
@@ -20,13 +20,13 @@ class CoverageAnalyserService
     ) {
     }
 
-    public function analyse(Upload $upload): PublishableCoverageDataInterface
+    public function analyse(EventInterface $event): PublishableCoverageDataInterface
     {
         return new CachingPublishableCoverageData(
             $this->queryService,
             $this->diffParser,
             $this->carryforwardTagService,
-            $upload
+            $event
         );
     }
 }

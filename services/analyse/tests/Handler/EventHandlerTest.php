@@ -59,7 +59,7 @@ class EventHandlerTest extends TestCase
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())
             ->method('publishEvent')
-            ->with(CoverageEvent::ANALYSE_SUCCESS, [
+            ->with(CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS, [
                 'upload' => $upload->jsonSerialize(),
                 'coveragePercentage' => 100.0,
             ]);

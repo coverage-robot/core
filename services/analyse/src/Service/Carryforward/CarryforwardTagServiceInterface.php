@@ -2,7 +2,7 @@
 
 namespace App\Service\Carryforward;
 
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Tag;
 
 interface CarryforwardTagServiceInterface
@@ -13,5 +13,5 @@ interface CarryforwardTagServiceInterface
      *
      * @return Tag[]
      */
-    public function getTagsToCarryforward(Upload $upload): array;
+    public function getTagsToCarryforward(EventInterface $event): array;
 }

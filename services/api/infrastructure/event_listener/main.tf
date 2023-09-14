@@ -17,13 +17,13 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "api_policy" {
-  name = "api-event-listener-policy"
+  name               = "api-event-listener-policy"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -33,10 +33,10 @@ resource "aws_iam_role" "api_policy" {
 }
 
 resource "aws_iam_policy" "api_service_policy" {
-  name = "api-event-listener-policy"
-  path = "/"
+  name   = "api-event-listener-policy"
+  path   = "/"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Effect = "Allow"
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "events" {
   handler          = "App\\Handler\\EventHandler"
   architectures    = ["arm64"]
   timeout          = 28
-  layers = [
+  layers           = [
     format(
       "arn:aws:lambda:%s:534081306603:layer:arm-%s:%s",
       var.region,
@@ -88,7 +88,7 @@ resource "aws_cloudwatch_event_rule" "event_listener" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "ANALYSE_SUCCESS"
+      "ANALYSIS_ON_NEW_UPLOAD_SUCCESS"
     ]
   }
   EOF

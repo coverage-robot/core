@@ -160,8 +160,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                     $webhook->getProvider(),
                     $webhook->getOwner(),
                     $webhook->getRepository(),
+                    $webhook->getRef(),
                     $webhook->getCommit(),
-                    $webhook->getPullRequest()
+                    $webhook->getPullRequest(),
+                    new DateTimeImmutable()
                 )
             );
         } catch (HttpException | JsonException $e) {

@@ -17,13 +17,13 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "analyse_role" {
-  name = "analyse-role"
+  name               = "analyse-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -33,10 +33,10 @@ resource "aws_iam_role" "analyse_role" {
 }
 
 resource "aws_iam_policy" "analyse_policy" {
-  name = "analyse-policy"
-  path = "/"
+  name   = "analyse-policy"
+  path   = "/"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Effect = "Allow"
@@ -113,7 +113,8 @@ resource "aws_cloudwatch_event_rule" "service" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "INGEST_SUCCESS"
+      "INGEST_SUCCESS",
+      "PIPELINE_COMPLETE"
     ]
   }
   EOF

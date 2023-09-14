@@ -10,6 +10,7 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
+use DateTimeImmutable;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
@@ -27,8 +28,10 @@ class EventBridgeEventClientTest extends TestCase
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
+            'mock-ref',
             'mock-commit',
-            null
+            null,
+            new DateTimeImmutable()
         );
 
         $mockResult = ResultMockFactory::create(
