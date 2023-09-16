@@ -11,8 +11,9 @@ use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class EventHandler extends EventBridgeHandler
+class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterface
 {
     public function __construct(
         private readonly LoggerInterface $handlerLogger,
