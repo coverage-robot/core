@@ -2,7 +2,7 @@
 
 namespace App\Service\History;
 
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.commit_history')]
@@ -11,5 +11,5 @@ interface CommitHistoryServiceInterface
     /**
      * @return string[]
      */
-    public function getPrecedingCommits(Upload $upload): array;
+    public function getPrecedingCommits(EventInterface $event): array;
 }

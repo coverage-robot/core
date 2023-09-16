@@ -3,7 +3,7 @@
 namespace App\Service\History;
 
 use App\Service\ProviderAwareInterface;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -28,19 +28,19 @@ class CommitHistoryService implements CommitHistoryServiceInterface
      *
      * @throws RuntimeException
      */
-    public function getPrecedingCommits(Upload $upload): array
+    public function getPrecedingCommits(EventInterface $event): array
     {
-        $service = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;
+        $service = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
 
         if (!$service instanceof CommitHistoryServiceInterface) {
             throw new RuntimeException(
                 sprintf(
                     'No commit history service for %s',
-                    $upload->getProvider()->value
+                    $event->getProvider()->value
                 )
             );
         }
 
-        return $service->getPrecedingCommits($upload);
+        return $service->getPrecedingCommits($event);
     }
 }

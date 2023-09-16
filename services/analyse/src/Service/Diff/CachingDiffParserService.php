@@ -2,13 +2,13 @@
 
 namespace App\Service\Diff;
 
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use WeakMap;
 
 class CachingDiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @var WeakMap<Upload, int[][]>
+     * @var WeakMap<EventInterface, int[][]>
      */
     private WeakMap $cache;
 
@@ -16,19 +16,19 @@ class CachingDiffParserService implements DiffParserServiceInterface
         private readonly DiffParserService $diffParserService
     ) {
         /**
-         * @var WeakMap<Upload, int[][]>
+         * @var WeakMap<EventInterface, int[][]>
          */
         $this->cache = new WeakMap();
     }
 
-    public function get(Upload $upload): array
+    public function get(EventInterface $event): array
     {
-        if (isset($this->cache[$upload])) {
-            return $this->cache[$upload];
+        if (isset($this->cache[$event])) {
+            return $this->cache[$event];
         }
 
-        $this->cache[$upload] = $this->diffParserService->get($upload);
+        $this->cache[$event] = $this->diffParserService->get($event);
 
-        return $this->cache[$upload];
+        return $this->cache[$event];
     }
 }

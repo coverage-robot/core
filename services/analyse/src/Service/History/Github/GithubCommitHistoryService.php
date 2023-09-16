@@ -6,7 +6,7 @@ use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 
 /**
  * @psalm-type Result = array{
@@ -38,13 +38,13 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     /**
      * @inheritDoc
      */
-    public function getPrecedingCommits(Upload $upload): array
+    public function getPrecedingCommits(EventInterface $event): array
     {
         // The first commit returned from the API will be the one associated with the
         // upload, so it needs to be offset by 1 to match the maximum number of commits
         $maxCommits = self::MAX_COMMITS + 1;
 
-        $this->githubClient->authenticateAsRepositoryOwner($upload->getOwner());
+        $this->githubClient->authenticateAsRepositoryOwner($event->getOwner());
 
         /**
          * @var Result $result
@@ -53,12 +53,12 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
             ->execute(
                 <<<GQL
                 {
-                  repository(owner: "{$upload->getOwner()}", name: "{$upload->getRepository()}") {
-                    ref(qualifiedName: "{$upload->getRef()}") {
+                  repository(owner: "{$event->getOwner()}", name: "{$event->getRepository()}") {
+                    ref(qualifiedName: "{$event->getRef()}") {
                       name
                       target {
                         ... on Commit {
-                          history(before: "{$upload->getCommit()}", first: {$maxCommits}) {
+                          history(before: "{$event->getCommit()}", first: {$maxCommits}) {
                             edges {
                               node {
                                 oid
@@ -81,10 +81,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $result = $result['data']['repository']['ref']['target']['history']['edges'] ?? [];
 
         $commits = array_map(
-            static function (array $commit) use ($upload): ?string {
+            static function (array $commit) use ($event): ?string {
                 if (
                     isset($commit['node']['oid']) &&
-                    $commit['node']['oid'] !== $upload->getCommit()
+                    $commit['node']['oid'] !== $event->getCommit()
                 ) {
                     /**
                      * The Github API will return the current commit (the one associated with

@@ -7,7 +7,7 @@ use DateTimeInterface;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 
-class Upload implements EventInterface
+class Upload extends GenericEvent
 {
     private readonly DateTimeImmutable $ingestTime;
 
@@ -65,6 +65,11 @@ class Upload implements EventInterface
         return $this->ingestTime;
     }
 
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->ingestTime;
+    }
+
     public function getCommit(): string
     {
         return $this->commit;
@@ -115,6 +120,7 @@ class Upload implements EventInterface
     public function jsonSerialize(): array
     {
         $fields = [
+            ...parent::jsonSerialize(),
             'uploadId' => $this->uploadId,
             'provider' => $this->provider->value,
             'owner' => $this->owner,

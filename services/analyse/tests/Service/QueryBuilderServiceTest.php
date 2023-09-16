@@ -18,7 +18,7 @@ class QueryBuilderServiceTest extends TestCase
 {
     public function testBuildFormatsQuery(): void
     {
-        $queryParameters = QueryParameterBag::fromUpload(
+        $queryParameters = QueryParameterBag::fromEvent(
             Upload::from(
                 [
                     'provider' => Provider::GITHUB->value,

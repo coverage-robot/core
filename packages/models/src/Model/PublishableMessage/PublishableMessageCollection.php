@@ -6,7 +6,8 @@ use Countable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
+use Packages\Models\Model\Event\GenericEvent;
 
 class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {
@@ -16,7 +17,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
      * @param PublishableMessageInterface[] $messages
      */
     public function __construct(
-        private readonly Upload $upload,
+        private readonly EventInterface $event,
         array $messages,
     ) {
         $this->messages = array_filter(
@@ -30,9 +31,9 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
         return $this->messages;
     }
 
-    public function getUpload(): Upload
+    public function getEvent(): EventInterface
     {
-        return $this->upload;
+        return $this->event;
     }
 
     public function getValidUntil(): DateTimeInterface
@@ -52,7 +53,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
 
     public static function from(array $data): self
     {
-        if (!isset($data['upload'], $data['messages'])) {
+        if (!isset($data['event'], $data['messages'])) {
             throw new InvalidArgumentException('Invalid message provided.');
         }
 
@@ -68,7 +69,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
         }
 
         return new self(
-            Upload::from($data['upload']),
+            GenericEvent::from($data['event']),
             $messages
         );
     }
@@ -99,7 +100,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
     {
         return [
             'type' => $this->getType()->value,
-            'upload' => $this->upload->jsonSerialize(),
+            'event' => $this->event->jsonSerialize(),
             'messages' => array_map(
                 static fn(PublishableMessageInterface $message) => (array)$message->jsonSerialize(),
                 $this->messages
@@ -111,10 +112,10 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
     {
         return md5(
             implode('', [
-                $this->upload->getOwner(),
-                $this->upload->getRepository(),
-                $this->upload->getRef(),
-                $this->upload->getPullRequest() ?: $this->upload->getCommit()
+                $this->event->getProvider()->value,
+                $this->event->getOwner(),
+                $this->event->getRepository(),
+                $this->event->getPullRequest() ?: $this->event->getCommit()
             ])
         );
     }

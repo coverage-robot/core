@@ -11,8 +11,8 @@ use App\Query\Result\CommitQueryResult;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class CarryforwardTagService implements CarryforwardTagServiceInterface
@@ -27,10 +27,10 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     /**
      * @throws QueryException|GoogleException
      */
-    public function getTagsToCarryforward(Upload $upload): array
+    public function getTagsToCarryforward(EventInterface $event): array
     {
-        $uploadedTags = $this->getCurrentTags($upload);
-        $carryableCommitTags = $this->getParentCommitTags($upload);
+        $uploadedTags = $this->getCurrentTags($event);
+        $carryableCommitTags = $this->getParentCommitTags($event);
 
         $carryforwardTags = [];
 
@@ -53,10 +53,10 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             sprintf(
                 '%s tags being carried forward for %s',
                 count($carryforwardTags),
-                (string)$upload
+                (string)$event
             ),
             [
-                'upload' => $upload,
+                'event' => $event,
                 'tags' => $carryforwardTags
             ]
         );
@@ -69,12 +69,12 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      *
      * @throws QueryException|GoogleException
      */
-    private function getCurrentTags(Upload $upload): array
+    private function getCurrentTags(EventInterface $event): array
     {
         /**
          * @var CommitCollectionQueryResult $tags
          */
-        $tags = $this->queryService->runQuery(CommitSuccessfulTagsQuery::class, QueryParameterBag::fromUpload($upload));
+        $tags = $this->queryService->runQuery(CommitSuccessfulTagsQuery::class, QueryParameterBag::fromEvent($event));
 
         if (empty($tags->getCommits())) {
             // Generally we shouldn't get there, as its a pretty safe assumption that there
@@ -92,16 +92,16 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @return Tag[][]
      * @throws QueryException|GoogleException
      */
-    private function getParentCommitTags(Upload $upload): array
+    private function getParentCommitTags(EventInterface $event): array
     {
-        $commitHistory = $this->commitHistoryService->getPrecedingCommits($upload);
+        $commitHistory = $this->commitHistoryService->getPrecedingCommits($event);
 
         if ($commitHistory === []) {
             // No proceeding commits in the tree, so there will no tags to carry forward.
             return [];
         }
 
-        $precedingUploadedTags = QueryParameterBag::fromUpload($upload);
+        $precedingUploadedTags = QueryParameterBag::fromEvent($event);
         $precedingUploadedTags->set(
             QueryParameter::COMMIT,
             $commitHistory

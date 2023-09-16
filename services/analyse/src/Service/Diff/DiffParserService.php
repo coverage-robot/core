@@ -3,7 +3,7 @@
 namespace App\Service\Diff;
 
 use App\Service\ProviderAwareInterface;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -25,19 +25,19 @@ class DiffParserService implements DiffParserServiceInterface
     /**
      * @inheritDoc
      */
-    public function get(Upload $upload): array
+    public function get(EventInterface $event): array
     {
-        $parser = (iterator_to_array($this->parsers)[$upload->getProvider()->value]) ?? null;
+        $parser = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
 
         if (!$parser instanceof DiffParserServiceInterface) {
             throw new RuntimeException(
                 sprintf(
                     'No diff parser found for %s',
-                    $upload->getProvider()->value
+                    $event->getProvider()->value
                 )
             );
         }
 
-        return $parser->get($upload);
+        return $parser->get($event);
     }
 }

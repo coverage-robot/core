@@ -38,6 +38,7 @@ class WebhookSignatureService
         );
 
         if (
+            !isset($payloadSignature['signature'], $payloadSignature['algorithm']) ||
             !$payloadSignature['signature'] ||
             !$payloadSignature['algorithm'] == AbstractGithubWebhook::SIGNATURE_ALGORITHM
         ) {

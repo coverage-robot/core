@@ -40,7 +40,8 @@ class S3PersistServiceTest extends TestCase
             'repository' => $upload->getRepository(),
             'ref' => $upload->getRef(),
             'pullRequest' => $upload->getPullRequest(),
-            'tag' => $upload->getTag()->getName()
+            'tag' => $upload->getTag()->getName(),
+            'eventType' => $upload::class
         ];
 
         $mockS3Client = $this->createMock(SimpleS3Client::class);

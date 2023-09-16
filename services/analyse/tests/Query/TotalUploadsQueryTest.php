@@ -151,7 +151,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromUpload(
+                QueryParameterBag::fromEvent(
                     Upload::from([
                         'provider' => Provider::GITHUB->value,
                         'owner' => 'mock-owner',

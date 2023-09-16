@@ -2,169 +2,54 @@
 
 namespace App\Handler;
 
-use App\Client\EventBridgeEventClient;
-use App\Client\SqsMessageClient;
-use App\Model\PublishableCoverageDataInterface;
-use App\Query\Result\FileCoverageQueryResult;
-use App\Query\Result\LineCoverageQueryResult;
-use App\Query\Result\TagCoverageQueryResult;
-use App\Service\CoverageAnalyserService;
+use App\Service\Event\EventProcessorInterface;
+use App\Service\Event\IngestSuccessEventProcessor;
+use App\Service\Event\PipelineCompleteEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
-use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\LineState;
-use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
-use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Models\Model\Event\Upload;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 class EventHandler extends EventBridgeHandler
 {
     public function __construct(
         private readonly LoggerInterface $handlerLogger,
-        private readonly CoverageAnalyserService $coverageAnalyserService,
-        private readonly SqsMessageClient $sqsEventClient,
-        private readonly EventBridgeEventClient $eventBridgeEventService
+        private readonly ContainerInterface $container
     ) {
     }
 
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
-        try {
-            /** @var array $detail */
-            $detail = $event->getDetail();
+        $handlerClass = match ($event->getDetailType()) {
+            CoverageEvent::INGEST_SUCCESS->value => IngestSuccessEventProcessor::class,
+            CoverageEvent::PIPELINE_COMPLETE->value => PipelineCompleteEventProcessor::class,
+            default => null,
+        };
 
-            $upload = Upload::from($detail);
-
-            $this->handlerLogger->info(sprintf('Starting analysis on %s.', (string)$upload));
-
-            $coverageData = $this->coverageAnalyserService->analyse($upload);
-
-            $successful = $this->queueMessages($upload, $coverageData);
-
-            if (!$successful) {
-                $this->handlerLogger->critical(
-                    sprintf(
-                        'Attempt to publish coverage for %s was unsuccessful.',
-                        (string)$upload
-                    )
-                );
-
-                $this->eventBridgeEventService->publishEvent(
-                    CoverageEvent::ANALYSE_FAILURE,
-                    $upload
-                );
-
-                return;
-            }
-
-            $this->eventBridgeEventService->publishEvent(
-                CoverageEvent::ANALYSE_SUCCESS,
+        if ($handlerClass === null) {
+            $this->handlerLogger->warning(
+                'Event skipped as it was not a known event.',
                 [
-                    'upload' => $upload->jsonSerialize(),
-                    'coveragePercentage' => $coverageData->getCoveragePercentage()
+                    'detailType' => $event->getDetailType(),
+                    'detail' => $event->getDetail(),
                 ]
             );
-        } catch (JsonException $e) {
-            $this->handlerLogger->critical(
-                'Exception while parsing event details.',
-                [
-                    'exception' => $e,
-                    'event' => $event->toArray(),
-                ]
-            );
+            return;
         }
+
+        /** @var EventProcessorInterface $handler */
+        $handler = $this->container->get($handlerClass);
+
+        $handler->process($event);
     }
 
-    /**
-     * Write all of the publishable coverage data messages onto the queue,
-     * ready to be picked up and published to the version control provider.
-     *
-     * Right now, this is:
-     * 1. A pull request comment
-     * 2. A check run
-     * 3. A collection of check run annotations, linked to each uncovered line of
-     *    the diff
-     */
-    private function queueMessages(Upload $upload, PublishableCoverageDataInterface $publishableCoverageData): bool
+    public static function getSubscribedServices(): array
     {
-        $annotations = array_map(
-            function (LineCoverageQueryResult $line) use ($upload, $publishableCoverageData) {
-                if ($line->getState() !== LineState::UNCOVERED) {
-                    return null;
-                }
-
-                return new PublishableCheckAnnotationMessage(
-                    $upload,
-                    $line->getFileName(),
-                    $line->getLineNumber(),
-                    $line->getState(),
-                    $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
-                );
-            },
-            $publishableCoverageData->getDiffLineCoverage()->getLines()
-        );
-
-        $messages = [
-            new PublishablePullRequestMessage(
-                $upload,
-                $publishableCoverageData->getCoveragePercentage(),
-                $publishableCoverageData->getDiffCoveragePercentage(),
-                count($publishableCoverageData->getSuccessfulUploads()),
-                count($publishableCoverageData->getPendingUploads()),
-                array_map(
-                    function (TagCoverageQueryResult $tag) {
-                        return [
-                            'tag' => $tag->getTag()->jsonSerialize(),
-                            'coveragePercentage' => $tag->getCoveragePercentage(),
-                            'lines' => $tag->getLines(),
-                            'covered' => $tag->getCovered(),
-                            'partial' => $tag->getPartial(),
-                            'uncovered' => $tag->getUncovered(),
-                        ];
-                    },
-                    $publishableCoverageData->getTagCoverage()->getTags()
-                ),
-                array_map(
-                    function (FileCoverageQueryResult $file) {
-                        return [
-                            'fileName' => $file->getFileName(),
-                            'coveragePercentage' => $file->getCoveragePercentage(),
-                            'lines' => $file->getLines(),
-                            'covered' => $file->getCovered(),
-                            'partial' => $file->getPartial(),
-                            'uncovered' => $file->getUncovered(),
-                        ];
-                    },
-                    $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
-                ),
-                $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
-            ),
-            new PublishableCheckRunMessage(
-                $upload,
-                array_filter($annotations),
-                $publishableCoverageData->getCoveragePercentage(),
-                $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
-            ),
+        return [
+            IngestSuccessEventProcessor::class,
+            PipelineCompleteEventProcessor::class
         ];
-
-        $messages = array_merge(
-            $messages,
-            array_filter($annotations)
-        );
-
-        // We _could_ publish the check run and PR comment individually, but we want
-        // to leverage toe collection in order to ensure that they are all published
-        // together, or not at all (e.g. they're not independent messages).
-        return $this->sqsEventClient->queuePublishableMessage(
-            new PublishableMessageCollection(
-                $upload,
-                $messages
-            )
-        );
     }
 }

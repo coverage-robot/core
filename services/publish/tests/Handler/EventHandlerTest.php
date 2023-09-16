@@ -10,12 +10,12 @@ use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
 
 class EventHandlerTest extends TestCase

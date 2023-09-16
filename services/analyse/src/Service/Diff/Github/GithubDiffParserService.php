@@ -6,7 +6,7 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SebastianBergmann\Diff\Line;
@@ -24,30 +24,30 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     /**
      * @inheritDoc
      */
-    public function get(Upload $upload): array
+    public function get(EventInterface $event): array
     {
-        $this->client->authenticateAsRepositoryOwner($upload->getOwner());
+        $this->client->authenticateAsRepositoryOwner($event->getOwner());
 
         $this->diffParserLogger->info(
-            sprintf('Fetching diff from GitHub for %s.', (string)$upload),
+            sprintf('Fetching diff from GitHub for %s.', (string)$event),
             [
-                'owner' => $upload->getOwner(),
-                'repository' => $upload->getRepository(),
-                'commit' => $upload->getCommit(),
-                'pull_request' => $upload->getPullRequest()
+                'owner' => $event->getOwner(),
+                'repository' => $event->getRepository(),
+                'commit' => $event->getCommit(),
+                'pull_request' => $event->getPullRequest()
             ]
         );
 
-        $diff = $upload->getPullRequest() ?
+        $diff = $event->getPullRequest() ?
             $this->getPullRequestDiff(
-                $upload->getOwner(),
-                $upload->getRepository(),
-                (int)$upload->getPullRequest()
+                $event->getOwner(),
+                $event->getRepository(),
+                (int)$event->getPullRequest()
             ) :
             $this->getCommitDiff(
-                $upload->getOwner(),
-                $upload->getRepository(),
-                $upload->getCommit()
+                $event->getOwner(),
+                $event->getRepository(),
+                $event->getCommit()
             );
 
         $files = $this->parser->parse($diff);
@@ -76,12 +76,12 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         }
 
         $this->diffParserLogger->info(
-            sprintf('Diff for %s has %s files with added lines.', (string)$upload, count($addedLines)),
+            sprintf('Diff for %s has %s files with added lines.', (string)$event, count($addedLines)),
             [
-                'owner' => $upload->getOwner(),
-                'repository' => $upload->getRepository(),
-                'commit' => $upload->getCommit(),
-                'pullRequest' => $upload->getPullRequest(),
+                'owner' => $event->getOwner(),
+                'repository' => $event->getRepository(),
+                'commit' => $event->getCommit(),
+                'pullRequest' => $event->getPullRequest(),
                 $addedLines
             ]
         );

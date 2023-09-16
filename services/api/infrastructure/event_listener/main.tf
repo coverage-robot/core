@@ -88,7 +88,7 @@ resource "aws_cloudwatch_event_rule" "event_listener" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "ANALYSE_SUCCESS"
+      "ANALYSIS_ON_NEW_UPLOAD_SUCCESS"
     ]
   }
   EOF

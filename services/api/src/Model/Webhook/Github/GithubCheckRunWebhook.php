@@ -16,6 +16,7 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
         string $repository,
         private readonly string $checkRunId,
         private readonly JobState $jobState,
+        private readonly string $ref,
         private readonly string $commit,
         private readonly ?string $pullRequest,
     ) {
@@ -30,6 +31,11 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
     public function getJobState(): JobState
     {
         return $this->jobState;
+    }
+
+    public function getRef(): string
+    {
+        return $this->ref;
     }
 
     public function getCommit(): string
@@ -54,8 +60,8 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             !isset($body['repository']['owner']) ||
             !isset($body['repository']['name']) ||
             !isset($body['check_run']['id']) ||
-            !isset($body['check_run']['head_sha']) ||
-            !isset($body['check_run']['conclusion'])
+            !isset($body['check_run']['check_suite']['head_branch']) ||
+            !isset($body['check_run']['check_suite']['head_sha'])
         ) {
             throw new InvalidArgumentException('Provided request is not a valid Github check run webhook');
         }
@@ -65,8 +71,13 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             (string)((array)$body['repository']['owner'])['login'],
             (string)$body['repository']['name'],
             (string)$body['check_run']['id'],
-            JobState::from((string)$body['check_run']['conclusion']),
-            (string)$body['check_run']['head_sha'],
+            // The job state will be null if the check run is still queued. We'll just
+            // represent this internally as a waiting job.
+            isset($body['check_run']['conclusion']) ?
+                JobState::from((string)$body['check_run']['conclusion']) :
+                JobState::WAITING,
+            (string)((array)$body['check_run']['check_suite'])['head_branch'],
+            (string)((array)$body['check_run']['check_suite'])['head_sha'],
             isset($body['check_run']['pull_requests'][0]['number']) ?
                 (string)$body['check_run']['pull_requests'][0]['number'] :
                 null,

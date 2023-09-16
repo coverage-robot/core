@@ -5,20 +5,21 @@ namespace Packages\Models\Model\PublishableMessage;
 use DateTimeInterface;
 use JsonSerializable;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Stringable;
 
 interface PublishableMessageInterface extends JsonSerializable, Stringable
 {
     /**
-     * Get the upload the message is was generated for.
+     * Get the event the message is was generated for (this may be an upload, or some
+     * other event, like a pipeline finishing).
      *
      * Its not always the case that a message is associated to a specific upload - for example, a collection of messages ({@see PublishableMessageCollection})
      * might be for different ones.
      *
-     * @return Upload|null
+     * @return EventInterface|null
      */
-    public function getUpload(): Upload|null;
+    public function getEvent(): EventInterface|null;
 
     /**
      * The message _must_ provide a hash which can uniquely group messages of the same context together.

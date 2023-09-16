@@ -6,12 +6,13 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
+use Packages\Models\Model\Event\GenericEvent;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
 {
     public function __construct(
-        private readonly Upload $upload,
+        private readonly EventInterface $event,
         private readonly float $coveragePercentage,
         private readonly float $diffCoveragePercentage,
         private readonly int $successfulUploads,
@@ -22,9 +23,9 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     ) {
     }
 
-    public function getUpload(): Upload
+    public function getEvent(): EventInterface
     {
-        return $this->upload;
+        return $this->event;
     }
 
     public function getType(): PublishableMessage
@@ -41,9 +42,10 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     {
         return md5(
             implode('', [
-                $this->upload->getOwner(),
-                $this->upload->getRepository(),
-                $this->upload->getPullRequest()
+                $this->event->getProvider()->value,
+                $this->event->getOwner(),
+                $this->event->getRepository(),
+                $this->event->getPullRequest()
             ])
         );
     }
@@ -86,7 +88,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         );
 
         if (
-            !isset($data['upload']) ||
+            !isset($data['event']) ||
             !isset($data['coveragePercentage']) ||
             !isset($data['diffCoveragePercentage']) ||
             !isset($data['successfulUploads']) ||
@@ -99,7 +101,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         }
 
         return new self(
-            Upload::from($data['upload']),
+            GenericEvent::from($data['event']),
             (float)$data['coveragePercentage'],
             (float)$data['diffCoveragePercentage'],
             (int)$data['successfulUploads'],
@@ -114,7 +116,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     {
         return [
             'type' => $this->getType()->value,
-            'upload' => $this->upload->jsonSerialize(),
+            'event' => $this->event->jsonSerialize(),
             'coveragePercentage' => $this->coveragePercentage,
             'diffCoveragePercentage' => $this->diffCoveragePercentage,
             'successfulUploads' => $this->successfulUploads,
@@ -127,6 +129,11 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
 
     public function __toString(): string
     {
-        return "PublishablePullRequestMessage#{$this->upload->getUploadId()}";
+        return sprintf(
+            "PublishablePullRequestMessage#%s-%s-%s",
+            $this->event->getOwner(),
+            $this->event->getRepository(),
+            $this->event->getCommit()
+        );
     }
 }

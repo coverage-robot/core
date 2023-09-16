@@ -90,7 +90,7 @@ class QueryServiceTest extends TestCase
             ->willReturn($this->createMock(QueryResults::class));
 
         $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
 
         $result = $queryService->runQuery($query, $queryParameterBag);
 
@@ -180,7 +180,7 @@ class QueryServiceTest extends TestCase
             ->willThrowException(new GoogleException());
 
         $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
 
         $this->expectException(GoogleException::class);
 
@@ -224,7 +224,7 @@ class QueryServiceTest extends TestCase
             ->willThrowException(new QueryException());
 
         $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::UPLOAD, $this->createMock(Upload::class));
+        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
 
         $this->expectException(QueryException::class);
 

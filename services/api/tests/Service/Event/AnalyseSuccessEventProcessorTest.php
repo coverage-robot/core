@@ -4,7 +4,7 @@ namespace App\Tests\Service\Event;
 
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use App\Service\Event\AnalyseSuccessEventProcessor;
+use App\Service\Event\AnalysisOnNewUploadSuccessEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
@@ -21,7 +21,7 @@ class AnalyseSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new AnalyseSuccessEventProcessor(
+        $eventProcessor = new AnalysisOnNewUploadSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -56,7 +56,7 @@ class AnalyseSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new AnalyseSuccessEventProcessor(
+        $eventProcessor = new AnalysisOnNewUploadSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -93,7 +93,7 @@ class AnalyseSuccessEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $eventProcessor = new AnalyseSuccessEventProcessor(
+        $eventProcessor = new AnalysisOnNewUploadSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );
@@ -136,7 +136,7 @@ class AnalyseSuccessEventProcessorTest extends TestCase
             ->method('setCoveragePercentage')
             ->with(99);
 
-        $eventProcessor = new AnalyseSuccessEventProcessor(
+        $eventProcessor = new AnalysisOnNewUploadSuccessEventProcessor(
             new NullLogger(),
             $mockProjectRepository
         );

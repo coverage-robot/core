@@ -49,7 +49,7 @@ enum QueryParameter
     /**
      * A full upload model.
      */
-    case UPLOAD;
+    case EVENT;
 
     /**
      * A commit hash, or hashes.

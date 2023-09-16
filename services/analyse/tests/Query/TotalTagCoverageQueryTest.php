@@ -346,7 +346,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             'ingestTime' => '2021-01-01T00:00:00+00:00'
         ]);
 
-        $carryforwardParameters = QueryParameterBag::fromUpload($upload);
+        $carryforwardParameters = QueryParameterBag::fromEvent($upload);
         $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
             new Tag('1', 'mock-commit'),
             new Tag('2', 'mock-commit'),
@@ -446,7 +446,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromUpload(
+                QueryParameterBag::fromEvent(
                     Upload::from([
                         'provider' => Provider::GITHUB->value,
                         'owner' => 'mock-owner',

@@ -18,6 +18,7 @@ use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryService;
 use DateTimeImmutable;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Event\Upload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -31,7 +32,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         protected readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
         protected readonly CarryforwardTagServiceInterface $carryforwardTagService,
-        protected readonly Upload $upload
+        protected readonly EventInterface $event
     ) {
     }
 
@@ -40,7 +41,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
             TotalUploadsQuery::class,
-            QueryParameterBag::fromUpload($this->upload)
+            QueryParameterBag::fromEvent($this->event)
         );
 
         return $totalUploads;
@@ -75,10 +76,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getTotalLines(): int
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -96,10 +97,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getAtLeastPartiallyCoveredLines(): int
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -117,10 +118,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getUncoveredLines(): int
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -138,10 +139,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getCoveragePercentage(): float
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -159,10 +160,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getTagCoverage(): TagCoverageCollectionQueryResult
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -180,14 +181,14 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffCoveragePercentage(): float
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->upload)
+            $this->diffParser->get($this->event)
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -208,10 +209,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getLeastCoveredDiffFiles(
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->upload)
+            $this->diffParser->get($this->event)
         );
         $params->set(
             QueryParameter::LIMIT,
@@ -219,7 +220,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -239,14 +240,14 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
-        $params = QueryParameterBag::fromUpload($this->upload);
+        $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->upload)
+            $this->diffParser->get($this->event)
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->upload)
+            $this->carryforwardTagService->getTagsToCarryforward($this->event)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,

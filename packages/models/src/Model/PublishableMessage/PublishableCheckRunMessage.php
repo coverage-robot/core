@@ -6,7 +6,8 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
+use Packages\Models\Model\Event\GenericEvent;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
 {
@@ -19,7 +20,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
      * @param PublishableCheckAnnotationMessage[] $annotations
      */
     public function __construct(
-        private readonly Upload $upload,
+        private readonly EventInterface $event,
         array $annotations,
         private readonly float $coveragePercentage,
         private readonly DateTimeImmutable $validUntil,
@@ -30,9 +31,9 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         );
     }
 
-    public function getUpload(): Upload
+    public function getEvent(): EventInterface
     {
-        return $this->upload;
+        return $this->event;
     }
 
     /**
@@ -66,7 +67,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         );
 
         if (
-            !isset($data['upload']) ||
+            !isset($data['event']) ||
             !isset($data['coveragePercentage']) ||
             !$validUntil
         ) {
@@ -85,7 +86,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         }
 
         return new self(
-            Upload::from($data['upload']),
+            GenericEvent::from($data['event']),
             $annotations,
             (float)$data['coveragePercentage'],
             $validUntil
@@ -96,9 +97,10 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     {
         return md5(
             implode('', [
-                $this->upload->getOwner(),
-                $this->upload->getRepository(),
-                $this->upload->getCommit()
+                $this->event->getProvider()->value,
+                $this->event->getOwner(),
+                $this->event->getRepository(),
+                $this->event->getCommit()
             ])
         );
     }
@@ -107,7 +109,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     {
         return [
             'type' => $this->getType()->value,
-            'upload' => $this->upload->jsonSerialize(),
+            'event' => $this->event->jsonSerialize(),
             'annotations' => array_map(
                 static fn(PublishableCheckAnnotationMessage $annotationMessage) => $annotationMessage->jsonSerialize(),
                 $this->annotations
@@ -119,6 +121,11 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
 
     public function __toString(): string
     {
-        return "PublishableCheckRunMessage#{$this->upload->getUploadId()}";
+        return sprintf(
+            "PublishableCheckRunMessage#%s-%s-%s",
+            $this->event->getOwner(),
+            $this->event->getRepository(),
+            $this->event->getCommit()
+        );
     }
 }

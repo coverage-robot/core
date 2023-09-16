@@ -37,7 +37,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
             return false;
         }
 
-        return $publishableMessage->getUpload()->getProvider() === Provider::GITHUB;
+        return $publishableMessage->getEvent()->getProvider() === Provider::GITHUB;
     }
 
     /**
@@ -50,12 +50,12 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         }
 
         /** @var PublishableCheckRunMessage $publishableMessage */
-        $upload = $publishableMessage->getUpload();
+        $event = $publishableMessage->getEvent();
 
         $successful = $this->upsertCheckRun(
-            $upload->getOwner(),
-            $upload->getRepository(),
-            $upload->getCommit(),
+            $event->getOwner(),
+            $event->getRepository(),
+            $event->getCommit(),
             $publishableMessage
         );
 
@@ -63,7 +63,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
             $this->checkPublisherLogger->critical(
                 sprintf(
                     'Failed to publish check run for %s',
-                    (string)$upload
+                    (string)$event
                 )
             );
 

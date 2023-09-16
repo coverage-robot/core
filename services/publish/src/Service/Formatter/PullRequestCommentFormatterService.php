@@ -48,7 +48,7 @@ class PullRequestCommentFormatterService
 
     private function getLastUpdateTime(Upload $upload): string
     {
-        return $upload->getIngestTime()
+        return $upload->getEventTime()
             ->setTimezone(new DateTimeZone('UTC'))
             ->format('H:ia e');
     }

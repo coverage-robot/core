@@ -111,7 +111,7 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
             'ingestTime' => '2021-01-01T00:00:00+00:00'
         ]);
 
-        $multipleCommitParameters = QueryParameterBag::fromUpload($upload);
+        $multipleCommitParameters = QueryParameterBag::fromEvent($upload);
         $multipleCommitParameters->set(
             QueryParameter::COMMIT,
             ['mock-commit', 'mock-commit-2']
@@ -186,7 +186,7 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromUpload(
+                QueryParameterBag::fromEvent(
                     Upload::from([
                         'provider' => Provider::GITHUB->value,
                         'owner' => 'mock-owner',

@@ -11,7 +11,7 @@ use DateTime;
 use DateTimeInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 
 class TotalUploadsQuery implements QueryInterface
 {
@@ -96,10 +96,10 @@ class TotalUploadsQuery implements QueryInterface
     {
         if (
             !$parameterBag ||
-            !$parameterBag->has(QueryParameter::UPLOAD) ||
-            !($parameterBag->get(QueryParameter::UPLOAD) instanceof Upload)
+            !$parameterBag->has(QueryParameter::EVENT) ||
+            !($parameterBag->get(QueryParameter::EVENT) instanceof EventInterface)
         ) {
-            throw QueryException::invalidParameters(QueryParameter::UPLOAD);
+            throw QueryException::invalidParameters(QueryParameter::EVENT);
         }
     }
 }
