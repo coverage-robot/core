@@ -34,7 +34,12 @@ class PipelineCompleteEventProcessor implements EventProcessorInterface
 
             $pipelineComplete = PipelineComplete::from($detail);
 
-            $this->eventProcessorLogger->info(sprintf('Starting analysis on %s.', (string)$pipelineComplete));
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Starting analysis on %s.',
+                    (string)$pipelineComplete
+                )
+            );
 
             $coverageData = $this->coverageAnalyserService->analyse($pipelineComplete);
 

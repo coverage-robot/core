@@ -158,7 +158,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    public function publishPipelineCompleteEvent(AbstractWebhook&PipelineStateChangeWebhookInterface $webhook): bool
+    private function publishPipelineCompleteEvent(AbstractWebhook&PipelineStateChangeWebhookInterface $webhook): bool
     {
         try {
             return $this->eventBridgeEventClient->publishEvent(

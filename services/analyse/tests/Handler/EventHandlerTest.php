@@ -4,11 +4,13 @@ namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
 use App\Service\Event\IngestSuccessEventProcessor;
+use App\Service\Event\PipelineCompleteEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
@@ -72,18 +74,18 @@ class EventHandlerTest extends TestCase
             'completedAt' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
         ];
 
-        $upload = PipelineComplete::from($body);
+        $pipelineCompleteEvent = PipelineComplete::from($body);
 
         $mockContainer = $this->createMock(ContainerInterface::class);
 
-        $mockProcessor = $this->createMock(IngestSuccessEventProcessor::class);
+        $mockProcessor = $this->createMock(PipelineCompleteEventProcessor::class);
 
         $mockProcessor->expects($this->once())
             ->method('process');
 
         $mockContainer->expects($this->once())
             ->method('get')
-            ->with(IngestSuccessEventProcessor::class)
+            ->with(PipelineCompleteEventProcessor::class)
             ->willReturn($mockProcessor);
 
         $handler = new EventHandler(
@@ -94,11 +96,45 @@ class EventHandlerTest extends TestCase
         $handler->handleEventBridge(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => $upload->jsonSerialize()
+                    'detail-type' => CoverageEvent::PIPELINE_COMPLETE->value,
+                    'detail' => $pipelineCompleteEvent->jsonSerialize()
                 ]
             ),
             Context::fake()
+        );
+    }
+
+    public function testHandleInvalidEvent(): void
+    {
+        $mockContainer = $this->createMock(ContainerInterface::class);
+
+        $mockContainer->expects($this->never())
+            ->method('get');
+
+        $handler = new EventHandler(
+            new NullLogger(),
+            $mockContainer
+        );
+
+        $handler->handleEventBridge(
+            new EventBridgeEvent(
+                [
+                    'detail-type' => 'some-other-event-type',
+                    'detail' => $this->createMock(EventInterface::class)
+                ]
+            ),
+            Context::fake()
+        );
+    }
+
+    public function testSubscribedServices(): void
+    {
+        $this->assertEquals(
+            [
+                IngestSuccessEventProcessor::class,
+                PipelineCompleteEventProcessor::class
+            ],
+            EventHandler::getSubscribedServices()
         );
     }
 }

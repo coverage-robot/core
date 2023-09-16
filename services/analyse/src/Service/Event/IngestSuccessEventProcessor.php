@@ -35,7 +35,12 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
 
             $upload = Upload::from($detail);
 
-            $this->eventProcessorLogger->info(sprintf('Starting analysis on %s.', (string)$upload));
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Starting analysis on %s.',
+                    (string)$upload
+                )
+            );
 
             $coverageData = $this->coverageAnalyserService->analyse($upload);
 
