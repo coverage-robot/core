@@ -24,6 +24,11 @@ interface PipelineStateChangeWebhookInterface
     public function getExternalId(): string;
 
     /**
+     * The current state of the suite of jobs the job is in.
+     */
+    public function getSuiteState(): JobState;
+
+    /**
      * The current state of the job.
      */
     public function getJobState(): JobState;
