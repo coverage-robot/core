@@ -81,7 +81,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             throw QueryException::invalidParameters(QueryParameter::COMMIT);
         }
 
-        if (!$parameterBag?->has(QueryParameter::REPOSITORY)) {
+        if (!$parameterBag->has(QueryParameter::REPOSITORY)) {
             throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
         }
     }
