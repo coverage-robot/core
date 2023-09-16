@@ -15,6 +15,7 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
         string $owner,
         string $repository,
         private readonly string $checkRunId,
+        private readonly JobState $suiteState,
         private readonly JobState $jobState,
         private readonly string $ref,
         private readonly string $commit,
@@ -26,6 +27,11 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
     public function getExternalId(): string
     {
         return $this->checkRunId;
+    }
+
+    public function getSuiteState(): JobState
+    {
+        return $this->suiteState;
     }
 
     public function getJobState(): JobState
@@ -60,6 +66,7 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             !isset($body['repository']['owner']) ||
             !isset($body['repository']['name']) ||
             !isset($body['check_run']['id']) ||
+            !isset($body['check_run']['status']) ||
             !isset($body['check_run']['check_suite']['head_branch']) ||
             !isset($body['check_run']['check_suite']['head_sha'])
         ) {
@@ -71,11 +78,8 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             (string)((array)$body['repository']['owner'])['login'],
             (string)$body['repository']['name'],
             (string)$body['check_run']['id'],
-            // The job state will be null if the check run is still queued. We'll just
-            // represent this internally as a waiting job.
-            isset($body['check_run']['conclusion']) ?
-                JobState::from((string)$body['check_run']['conclusion']) :
-                JobState::WAITING,
+            JobState::from((string)$body['check_run']['check_suite']['status']),
+            JobState::from((string)$body['check_run']['status']),
             (string)((array)$body['check_run']['check_suite'])['head_branch'],
             (string)((array)$body['check_run']['check_suite'])['head_sha'],
             isset($body['check_run']['pull_requests'][0]['number']) ?

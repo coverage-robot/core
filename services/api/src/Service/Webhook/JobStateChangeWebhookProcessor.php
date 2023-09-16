@@ -139,13 +139,20 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         Project $project,
         AbstractWebhook&PipelineStateChangeWebhookInterface $webhook
     ): bool {
+        if ($webhook->getSuiteState() !== JobState::COMPLETED) {
+            // If the suite of jobs is not yet complete, it means we can expect
+            // there to be at least one more job to be done
+            return false;
+        }
+
         return !$this->jobRepository->findOneBy(
             [
                 'project' => $project,
                 'commit' => $webhook->getCommit(),
                 'state' => [
-                    JobState::WAITING,
+                    JobState::IN_PROGRESS,
                     JobState::PENDING,
+                    JobState::QUEUED,
                 ]
             ]
         );
