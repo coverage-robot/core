@@ -3,13 +3,12 @@
 namespace App\Service\Diff;
 
 use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\Upload;
 use WeakMap;
 
 class CachingDiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @var WeakMap<Upload, int[][]>
+     * @var WeakMap<EventInterface, int[][]>
      */
     private WeakMap $cache;
 
@@ -17,7 +16,7 @@ class CachingDiffParserService implements DiffParserServiceInterface
         private readonly DiffParserService $diffParserService
     ) {
         /**
-         * @var WeakMap<Upload, int[][]>
+         * @var WeakMap<EventInterface, int[][]>
          */
         $this->cache = new WeakMap();
     }

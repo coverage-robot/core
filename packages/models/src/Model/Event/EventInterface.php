@@ -2,6 +2,7 @@
 
 namespace Packages\Models\Model\Event;
 
+use DateTimeInterface;
 use JsonSerializable;
 use Packages\Models\Enum\Provider;
 use Stringable;
@@ -19,6 +20,8 @@ interface EventInterface extends JsonSerializable, Stringable
     public function getPullRequest(): int|string|null;
 
     public function getRef(): string;
+
+    public function getEventTime(): DateTimeInterface;
 
     public static function from(array $data): self;
 }

@@ -65,6 +65,11 @@ class Upload extends GenericEvent
         return $this->ingestTime;
     }
 
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->ingestTime;
+    }
+
     public function getCommit(): string
     {
         return $this->commit;

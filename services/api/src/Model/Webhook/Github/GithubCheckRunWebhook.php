@@ -76,8 +76,8 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             isset($body['check_run']['conclusion']) ?
                 JobState::from((string)$body['check_run']['conclusion']) :
                 JobState::WAITING,
-            (string)$body['check_run']['check_suite']['head_branch'],
-            (string)$body['check_run']['check_suite']['head_sha'],
+            (string)((array)$body['check_run']['check_suite'])['head_branch'],
+            (string)((array)$body['check_run']['check_suite'])['head_sha'],
             isset($body['check_run']['pull_requests'][0]['number']) ?
                 (string)$body['check_run']['pull_requests'][0]['number'] :
                 null,

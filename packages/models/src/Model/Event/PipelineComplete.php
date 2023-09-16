@@ -54,6 +54,11 @@ class PipelineComplete extends GenericEvent
         return $this->completedAt;
     }
 
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
     public static function from(array $data): PipelineComplete
     {
         return new self(

@@ -5,7 +5,6 @@ namespace App\Model;
 use App\Enum\QueryParameter;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\Upload;
 use WeakMap;
 
 /**
@@ -27,7 +26,7 @@ class QueryParameterBag
      *  $key is QueryParameter::COMMIT ?
      *      string :
      *      ($key is QueryParameter::EVENT ?
-     *          Upload :
+     *          EventInterface :
      *          ($key is QueryParameter::LINE_SCOPE ?
      *              array :
      *              ($key is QueryParameter::PROVIDER ?
@@ -48,7 +47,7 @@ class QueryParameterBag
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, array|int|string|Upload|Provider $value): void
+    public function set(QueryParameter $key, array|int|string|EventInterface|Provider $value): void
     {
         $this->parameters[$key] = $value;
     }
