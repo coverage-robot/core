@@ -68,7 +68,8 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             !isset($body['check_run']['id']) ||
             !isset($body['check_run']['status']) ||
             !isset($body['check_run']['check_suite']['head_branch']) ||
-            !isset($body['check_run']['check_suite']['head_sha'])
+            !isset($body['check_run']['check_suite']['head_sha']) ||
+            !isset($body['check_run']['check_suite']['status'])
         ) {
             throw new InvalidArgumentException('Provided request is not a valid Github check run webhook');
         }
@@ -78,7 +79,7 @@ class GithubCheckRunWebhook extends AbstractGithubWebhook implements PipelineSta
             (string)((array)$body['repository']['owner'])['login'],
             (string)$body['repository']['name'],
             (string)$body['check_run']['id'],
-            JobState::from((string)$body['check_run']['check_suite']['status']),
+            JobState::from((string)((array)$body['check_run']['check_suite'])['status']),
             JobState::from((string)$body['check_run']['status']),
             (string)((array)$body['check_run']['check_suite'])['head_branch'],
             (string)((array)$body['check_run']['check_suite'])['head_sha'],
