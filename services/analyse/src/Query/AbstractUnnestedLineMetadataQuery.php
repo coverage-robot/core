@@ -6,7 +6,6 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
-use Packages\Models\Model\Event\Upload;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
@@ -78,12 +77,12 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
      */
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
-        if (
-            !$parameterBag ||
-            !$parameterBag->has(QueryParameter::EVENT) ||
-            !($parameterBag->get(QueryParameter::EVENT) instanceof Upload)
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::EVENT);
+        if (!$parameterBag?->has(QueryParameter::COMMIT)) {
+            throw QueryException::invalidParameters(QueryParameter::COMMIT);
+        }
+
+        if (!$parameterBag->has(QueryParameter::REPOSITORY)) {
+            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
         }
     }
 }
