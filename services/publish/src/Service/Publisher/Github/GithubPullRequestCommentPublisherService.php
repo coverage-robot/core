@@ -9,6 +9,7 @@ use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,10 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$publishableMessage instanceof PublishablePullRequestMessage) {
+            return false;
+        }
+
+        if (!$publishableMessage->getEvent() instanceof Upload) {
             return false;
         }
 
@@ -49,6 +54,9 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var PublishablePullRequestMessage $publishableMessage */
         $pullRequest = (int)$publishableMessage->getEvent()->getPullRequest();
 
+        /**
+         * @var Upload $upload
+         */
         $upload = $publishableMessage->getEvent();
 
         return $this->upsertComment(
