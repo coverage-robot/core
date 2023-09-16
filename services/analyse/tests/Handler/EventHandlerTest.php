@@ -2,24 +2,22 @@
 
 namespace App\Tests\Handler;
 
-use App\Client\EventBridgeEventClient;
-use App\Client\SqsMessageClient;
 use App\Handler\EventHandler;
-use App\Model\PublishableCoverageDataInterface;
-use App\Service\CoverageAnalyserService;
+use App\Service\Event\IngestSuccessEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
-use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
 
 class EventHandlerTest extends TestCase
 {
-    public function testHandleEvent(): void
+    public function testHandleUploadEvent(): void
     {
         $body = [
             'uploadId' => 'mock-uuid',
@@ -35,41 +33,21 @@ class EventHandlerTest extends TestCase
 
         $upload = Upload::from($body);
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
-        $mockPublishableCoverageData->expects($this->exactly(3))
-            ->method('getCoveragePercentage')
-            ->willReturn(100.0);
-        $mockPublishableCoverageData->expects($this->atLeastOnce())
-            ->method('getLatestSuccessfulUpload')
-            ->willReturn(new DateTimeImmutable());
+        $mockContainer = $this->createMock(ContainerInterface::class);
 
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $mockProcessor = $this->createMock(IngestSuccessEventProcessor::class);
 
-        $mockCoverageAnalyserService->expects($this->once())
-            ->method('analyse')
-            ->with($upload)
-            ->willReturn($mockPublishableCoverageData);
+        $mockProcessor->expects($this->once())
+            ->method('process');
 
-        $mockSqsEventClient = $this->createMock(SqsMessageClient::class);
-
-        $mockSqsEventClient->expects($this->once())
-            ->method('queuePublishableMessage')
-            ->willReturn(true);
-
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with(CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS, [
-                'upload' => $upload->jsonSerialize(),
-                'coveragePercentage' => 100.0,
-            ]);
+        $mockContainer->expects($this->once())
+            ->method('get')
+            ->with(IngestSuccessEventProcessor::class)
+            ->willReturn($mockProcessor);
 
         $handler = new EventHandler(
             new NullLogger(),
-            $mockCoverageAnalyserService,
-            $mockSqsEventClient,
-            $mockEventBridgeEventService,
-            new NullLogger()
+            $mockContainer
         );
 
         $handler->handleEventBridge(
@@ -83,88 +61,34 @@ class EventHandlerTest extends TestCase
         );
     }
 
-    public function testHandleEventInvalidJson(): void
-    {
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
-
-        $mockCoverageAnalyserService->expects($this->never())
-            ->method('analyse');
-
-        $mockSqsEventClient = $this->createMock(SqsMessageClient::class);
-
-        $mockSqsEventClient->expects($this->never())
-            ->method('queuePublishableMessage');
-
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->never())
-            ->method('publishEvent');
-
-        $handler = new EventHandler(
-            new NullLogger(),
-            $mockCoverageAnalyserService,
-            $mockSqsEventClient,
-            $mockEventBridgeEventService,
-            new NullLogger()
-        );
-
-        $mockEvent = $this->createMock(EventBridgeEvent::class);
-        $mockEvent->expects($this->once())
-            ->method('getDetail')
-            ->willThrowException(new JsonException('Invalid JSON'));
-
-        $handler->handleEventBridge(
-            $mockEvent,
-            Context::fake()
-        );
-    }
-
-    public function testHandleFailedPublishEvent(): void
+    public function testHandlePipelineCompleteEvent(): void
     {
         $body = [
-            'uploadId' => 'mock-uuid',
             'provider' => Provider::GITHUB->value,
             'commit' => 'mock-commit',
-            'parent' => '["mock-parent-commit"]',
             'owner' => 'mock-owner',
-            'tag' => 'mock-tag',
             'ref' => 'mock-ref',
             'repository' => 'mock-repository',
-            'ingestTime' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
+            'completedAt' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
         ];
 
-        $upload = Upload::from($body);
+        $upload = PipelineComplete::from($body);
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
-        $mockPublishableCoverageData->expects($this->exactly(2))
-            ->method('getCoveragePercentage');
-        $mockPublishableCoverageData->expects($this->atLeastOnce())
-            ->method('getLatestSuccessfulUpload')
-            ->willReturn(new DateTimeImmutable());
+        $mockContainer = $this->createMock(ContainerInterface::class);
 
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $mockProcessor = $this->createMock(IngestSuccessEventProcessor::class);
 
-        $mockCoverageAnalyserService->expects($this->once())
-            ->method('analyse')
-            ->with($upload)
-            ->willReturn($mockPublishableCoverageData);
+        $mockProcessor->expects($this->once())
+            ->method('process');
 
-        $mockSqsEventClient = $this->createMock(SqsMessageClient::class);
-
-        $mockSqsEventClient->expects($this->once())
-            ->method('queuePublishableMessage')
-            ->willReturn(false);
-
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with(CoverageEvent::ANALYSE_FAILURE, $upload);
+        $mockContainer->expects($this->once())
+            ->method('get')
+            ->with(IngestSuccessEventProcessor::class)
+            ->willReturn($mockProcessor);
 
         $handler = new EventHandler(
             new NullLogger(),
-            $mockCoverageAnalyserService,
-            $mockSqsEventClient,
-            $mockEventBridgeEventService,
-            new NullLogger()
+            $mockContainer
         );
 
         $handler->handleEventBridge(

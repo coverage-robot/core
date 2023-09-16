@@ -67,7 +67,7 @@ class PipelineComplete extends GenericEvent
             (string)$data['repository'],
             (string)$data['ref'],
             (string)$data['commit'],
-            (string)$data['pullRequest'],
+            isset($data['pullRequest']) ? (int)$data['pullRequest'] : null,
             DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['completedAt'])
         );
     }
