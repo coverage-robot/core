@@ -139,12 +139,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         Project $project,
         AbstractWebhook&PipelineStateChangeWebhookInterface $webhook
     ): bool {
-        if ($webhook->getSuiteState() !== JobState::COMPLETED) {
-            // If the suite of jobs is not yet complete, it means we can expect
-            // there to be at least one more job to be done
-            return false;
-        }
-
         return !$this->jobRepository->findOneBy(
             [
                 'project' => $project,
@@ -158,7 +152,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    public function publishPipelineCompleteEvent(AbstractWebhook&PipelineStateChangeWebhookInterface $webhook): bool
+    private function publishPipelineCompleteEvent(AbstractWebhook&PipelineStateChangeWebhookInterface $webhook): bool
     {
         try {
             return $this->eventBridgeEventClient->publishEvent(
