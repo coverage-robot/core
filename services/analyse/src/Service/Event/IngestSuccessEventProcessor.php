@@ -16,10 +16,15 @@ use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class IngestSuccessEventProcessor implements EventProcessorInterface
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface $serializer,
@@ -32,10 +37,9 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
     public function process(EventBridgeEvent $event): void
     {
         try {
-            $upload = $this->serializer->deserialize(
+            $upload = $this->serializer->denormalize(
                 $event->getDetail(),
-                Upload::class,
-                'json'
+                Upload::class
             );
 
             $this->eventProcessorLogger->info(

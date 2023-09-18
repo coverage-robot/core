@@ -15,10 +15,15 @@ use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PipelineCompleteEventProcessor implements EventProcessorInterface
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface $serializer,
@@ -31,10 +36,9 @@ class PipelineCompleteEventProcessor implements EventProcessorInterface
     public function process(EventBridgeEvent $event): void
     {
         try {
-            $pipelineComplete = $this->serializer->deserialize(
+            $pipelineComplete = $this->serializer->denormalize(
                 $event->getDetail(),
-                PipelineComplete::class,
-                'json'
+                PipelineComplete::class
             );
 
             $this->eventProcessorLogger->info(
@@ -67,7 +71,7 @@ class PipelineCompleteEventProcessor implements EventProcessorInterface
             $this->eventBridgeEventService->publishEvent(
                 CoverageEvent::ANALYSIS_ON_PIPELINE_COMPLETE_SUCCESS,
                 [
-                    'pipelineComplete' => $this->serializer->serialize($pipelineComplete, 'json'),
+                    'pipelineComplete' => $pipelineComplete,
                     'coveragePercentage' => $coverageData->getCoveragePercentage()
                 ]
             );

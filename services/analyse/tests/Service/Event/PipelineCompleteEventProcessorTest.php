@@ -8,23 +8,24 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\PipelineCompleteEventProcessor;
-use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class PipelineCompleteEventProcessorTest extends TestCase
+class PipelineCompleteEventProcessorTest extends KernelTestCase
 {
     public function testProcess(): void
     {
-        $validUntil = new DateTimeImmutable();
+        $validUntil = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
 
         $event = new PipelineComplete(
             Provider::GITHUB,
@@ -40,6 +41,9 @@ class PipelineCompleteEventProcessorTest extends TestCase
         $mockPublishableCoverageData->expects($this->atLeastOnce())
             ->method('getCoveragePercentage')
             ->willReturn(100.0);
+        $mockPublishableCoverageData->expects($this->atLeastOnce())
+            ->method('getLatestSuccessfulUpload')
+            ->willReturn($validUntil);
         $mockPublishableCoverageData->expects($this->once())
             ->method('getDiffLineCoverage')
             ->willReturn(
@@ -96,26 +100,7 @@ class PipelineCompleteEventProcessorTest extends TestCase
 
         $pipelineCompleteEventProcessor = new PipelineCompleteEventProcessor(
             new NullLogger(),
-            MockSerializerFactory::getMock(
-                $this,
-                serializeMap: [
-                    [
-                        $event,
-                        'json',
-                        [],
-                        'mock-pipeline-complete'
-                    ]
-                ],
-                deserializeMap: [
-                    [
-                        'mock-pipeline-complete',
-                        PipelineComplete::class,
-                        'json',
-                        [],
-                        $event
-                    ]
-                ]
-            ),
+            $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalysisService,
             $mockSqsMessageClient,
             $mockEventBridgeEventClient
@@ -124,7 +109,16 @@ class PipelineCompleteEventProcessorTest extends TestCase
         $pipelineCompleteEventProcessor->process(
             new EventBridgeEvent([
                 'detail-type' => CoverageEvent::PIPELINE_COMPLETE->value,
-                'detail' => 'mock-pipeline-complete'
+                'detail' => [
+                    'provider' => Provider::GITHUB->value,
+                    'owner' => 'mock-owner',
+                    'repository' => 'mock-repository',
+                    'ref' => 'mock-ref',
+                    'commit' => 'mock-commit',
+                    'pullRequest' => null,
+                    'completedAt' => $validUntil->format(DateTimeInterface::ATOM),
+                    'validUntil' => $validUntil->format(DateTimeInterface::ATOM)
+                ]
             ])
         );
     }
