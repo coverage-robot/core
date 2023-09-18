@@ -8,6 +8,7 @@ use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
@@ -45,7 +46,8 @@ class S3PersistServiceTest extends KernelTestCase
             'pullRequest' => $upload->getPullRequest(),
             'tag' => $upload->getTag()->getName(),
             'eventTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
-            'projectRoot' => $upload->getProjectRoot()
+            'projectRoot' => $upload->getProjectRoot(),
+            'type' => EventType::UPLOAD->value
         ];
 
         $mockS3Client = $this->createMock(SimpleS3Client::class);
