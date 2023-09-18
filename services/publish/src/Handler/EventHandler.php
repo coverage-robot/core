@@ -9,7 +9,6 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
-use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -36,8 +35,7 @@ class EventHandler extends SqsHandler
         $messages = array_reduce(
             $messages,
             function (array $messages, PublishableMessageInterface $message) {
-                if ($message->getType() === PublishableMessage::Collection) {
-                    /** @var PublishableMessageCollection $message */
+                if ($message instanceof PublishableMessageCollection) {
                     return array_merge($messages, $message->getMessages());
                 }
 
