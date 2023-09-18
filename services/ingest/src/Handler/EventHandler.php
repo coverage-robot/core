@@ -16,15 +16,12 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
-use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends S3Handler
@@ -54,9 +51,12 @@ class EventHandler extends S3Handler
                 $metadata = array_merge(
                     $source->getMetadata(),
                     [
-                        'uploadId' => $source->getMetadata()['uploadid'],
-                        'projectRoot' => $source->getMetadata()['projectroot'],
-                        'pullRequest' => $source->getMetadata()['pullrequest'],
+                        'uploadId' => $source->getMetadata()['uploadid'] ?:
+                            ($source->getMetadata()['uploadId'] ?? null),
+                        'projectRoot' => $source->getMetadata()['projectroot'] ?:
+                            ($source->getMetadata()['projectRoot'] ?? null),
+                        'pullRequest' => $source->getMetadata()['pullrequest'] ?:
+                            ($source->getMetadata()['pullRequest'] ?? null),
                         'tag' => [
                             'name' => $source->getMetadata()['tag'],
                             'commit' => $source->getMetadata()['commit']
