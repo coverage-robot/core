@@ -51,12 +51,12 @@ class EventHandler extends S3Handler
                 $metadata = array_merge(
                     $source->getMetadata(),
                     [
-                        'uploadId' => $source->getMetadata()['uploadid'] ?:
-                            ($source->getMetadata()['uploadId'] ?? null),
-                        'projectRoot' => $source->getMetadata()['projectroot'] ?:
-                            ($source->getMetadata()['projectRoot'] ?? null),
-                        'pullRequest' => $source->getMetadata()['pullrequest'] ?:
-                            ($source->getMetadata()['pullRequest'] ?? null),
+                        'uploadId' => $source->getMetadata()['uploadid'] ??
+                                $source->getMetadata()['uploadId'] ?? null,
+                        'projectRoot' => $source->getMetadata()['projectroot'] ??
+                                $source->getMetadata()['projectRoot'] ?? null,
+                        'pullRequest' => $source->getMetadata()['pullrequest'] ??
+                                $source->getMetadata()['pullRequest'] ?? null,
                         'tag' => [
                             'name' => $source->getMetadata()['tag'],
                             'commit' => $source->getMetadata()['commit']

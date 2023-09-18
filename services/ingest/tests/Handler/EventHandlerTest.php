@@ -53,7 +53,7 @@ class EventHandlerTest extends KernelTestCase
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getuploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
                         $upload->getParent() === ['2']
                 ),
@@ -171,7 +171,7 @@ class EventHandlerTest extends KernelTestCase
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getuploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
                         $upload->getParent() === ['2']
                 ),
@@ -203,14 +203,17 @@ class EventHandlerTest extends KernelTestCase
         $mockResponse = $this->createMock(GetObjectOutput::class);
         $mockResponse->method('getBody')
             ->willReturn($mockStream);
+
+        // Notice the lowercase keys, this is how S3 will return the metadata fields
+        // to us
         $mockResponse->method('getMetadata')
             ->willReturn([
-                'uploadId' => 'mock-uuid',
+                'uploadid' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
-                'projectRoot' => 'mock/project/root/',
+                'projectroot' => 'mock/project/root/',
                 'commit' => '1',
                 'parent' => '["2"]',
-                'pullRequest' => 1234,
+                'pullrequest' => 1234,
                 'tag' => 'frontend',
                 'owner' => 'ryanmab',
                 'repository' => 'portfolio',
