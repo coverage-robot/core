@@ -47,9 +47,4 @@ interface PublishableMessageInterface extends Stringable
      * is created).
      */
     public function getValidUntil(): DateTimeInterface;
-
-    /**
-     * Determine the type of message when its serialised.
-     */
-    public function getType(): PublishableMessage;
 }

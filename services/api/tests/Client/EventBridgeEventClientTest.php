@@ -28,6 +28,7 @@ class EventBridgeEventClientTest extends KernelTestCase
     {
         $completedAt = new DateTimeImmutable();
         $event = [
+            'type' => 'PIPELINE_COMPLETE',
             'provider' => Provider::GITHUB,
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',

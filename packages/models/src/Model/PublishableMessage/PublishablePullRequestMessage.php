@@ -4,7 +4,6 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
@@ -24,11 +23,6 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getEvent(): EventInterface
     {
         return $this->event;
-    }
-
-    public function getType(): PublishableMessage
-    {
-        return PublishableMessage::PullRequest;
     }
 
     public function getValidUntil(): DateTimeInterface

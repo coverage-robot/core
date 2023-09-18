@@ -30,6 +30,4 @@ interface EventInterface extends Stringable
     public function getRef(): string;
 
     public function getEventTime(): DateTimeImmutable;
-
-    public function getEventType(): EventType;
 }

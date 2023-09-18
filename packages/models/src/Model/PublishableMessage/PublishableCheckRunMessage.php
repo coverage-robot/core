@@ -4,7 +4,6 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
@@ -40,11 +39,6 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function getAnnotations(): array
     {
         return $this->annotations;
-    }
-
-    public function getType(): PublishableMessage
-    {
-        return PublishableMessage::CheckRun;
     }
 
     public function getValidUntil(): DateTimeInterface

@@ -5,7 +5,6 @@ namespace Packages\Models\Model\PublishableMessage;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
 
 class PublishableCheckAnnotationMessage implements PublishableMessageInterface
@@ -37,11 +36,6 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
     public function getLineState(): LineState
     {
         return $this->lineState;
-    }
-
-    public function getType(): PublishableMessage
-    {
-        return PublishableMessage::CheckAnnotation;
     }
 
     public function getValidUntil(): DateTimeInterface

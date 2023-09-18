@@ -4,7 +4,6 @@ namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use Symfony\Component\Serializer\Annotation\Context;
@@ -96,11 +95,6 @@ class Upload implements EventInterface
     public function getTag(): Tag
     {
         return $this->tag;
-    }
-
-    public function getEventType(): EventType
-    {
-        return EventType::UPLOAD;
     }
 
     public function __toString(): string

@@ -4,7 +4,6 @@ namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -64,11 +63,6 @@ class PipelineComplete implements EventInterface
     public function getEventTime(): DateTimeImmutable
     {
         return $this->completedAt;
-    }
-
-    public function getEventType(): EventType
-    {
-        return EventType::PIPELINE_COMPLETE;
     }
 
     public function __toString(): string

@@ -4,7 +4,6 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use Countable;
 use DateTimeInterface;
-use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
 
 class PublishableMessageCollection implements PublishableMessageInterface, Countable
@@ -45,11 +44,6 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
                 $this->messages
             )
         );
-    }
-
-    public function getType(): PublishableMessage
-    {
-        return PublishableMessage::Collection;
     }
 
     public function getMessageGroup(): string
