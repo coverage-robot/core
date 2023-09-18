@@ -8,9 +8,11 @@ use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use JsonException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadService
 {
@@ -18,10 +20,14 @@ class UploadService
 
     private const EXPIRY_MINUTES = 5;
 
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly UploadSignerService $uploadSignerService,
         private readonly EnvironmentService $environmentService,
         private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
+        private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $uploadLogger
     ) {
     }
@@ -57,7 +63,10 @@ class UploadService
         );
 
         try {
-            return SigningParameters::from($parameters);
+            return $this->serializer->denormalize(
+                $parameters,
+                SigningParameters::class
+            );
         } catch (SigningException $exception) {
             $this->uploadLogger->error(
                 $exception->getMessage(),
@@ -98,26 +107,28 @@ class UploadService
         return $this->uploadSignerService->sign($uploadId, $input, $expiry);
     }
 
-    /**
-     * @throws JsonException
-     */
     private function getSignedPutRequest(
         string $bucket,
         string $key,
         string $uploadId,
         SigningParameters $signingParameters
     ): PutObjectRequest {
-        /** @var array<string, string> $params */
-        $params = $signingParameters->jsonSerialize();
+        /** @var array<string, string> $metadata */
+        $metadata = array_merge(
+            (array)$this->serializer->normalize($signingParameters),
+            [
+                'uploadId' => $uploadId,
+                'parent' => $this->serializer->serialize(
+                    $signingParameters->getParent(),
+                    'json'
+                )
+            ]
+        );
 
         return new PutObjectRequest([
             'Bucket' => $bucket,
             'Key' => $key,
-            'Metadata' => [
-                ...$params,
-                'uploadId' => $uploadId,
-                'provider' => $signingParameters->getProvider()->value
-            ]
+            'Metadata' => $metadata
         ]);
     }
 }

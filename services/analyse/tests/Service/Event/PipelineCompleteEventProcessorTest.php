@@ -8,9 +8,9 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\PipelineCompleteEventProcessor;
+use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
@@ -24,15 +24,17 @@ class PipelineCompleteEventProcessorTest extends TestCase
 {
     public function testProcess(): void
     {
-        $event = PipelineComplete::from([
-            'provider' => Provider::GITHUB->value,
-            'commit' => 'mock-commit',
-            'repository' => 'mock-repository',
-            'owner' => 'mock-owner',
-            'ref' => 'mock-ref',
-            'pullRequest' => 'mock-pull-request',
-            'completedAt' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM)
-        ]);
+        $validUntil = new DateTimeImmutable();
+
+        $event = new PipelineComplete(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            null,
+            $validUntil
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->atLeastOnce())
@@ -67,17 +69,15 @@ class PipelineCompleteEventProcessorTest extends TestCase
             ->method('queuePublishableMessage')
             ->with(
                 self::callback(
-                    function (PublishableCheckRunMessage $message) use ($event) {
+                    function (PublishableCheckRunMessage $message) use ($event, $validUntil) {
                         $this->assertEquals(
                             [
-                                1 => PublishableCheckAnnotationMessage::from(
-                                    [
-                                        'event' => $event->jsonSerialize(),
-                                        'fileName' => 'mock-path/mock-file-2.php',
-                                        'lineNumber' => 2,
-                                        'lineState' => LineState::UNCOVERED->value,
-                                        'validUntil' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                                    ]
+                                1 => new PublishableCheckAnnotationMessage(
+                                    $event,
+                                    'mock-path/mock-file-2.php',
+                                    2,
+                                    LineState::UNCOVERED,
+                                    $validUntil
                                 )
                             ],
                             $message->getAnnotations()
@@ -96,6 +96,26 @@ class PipelineCompleteEventProcessorTest extends TestCase
 
         $pipelineCompleteEventProcessor = new PipelineCompleteEventProcessor(
             new NullLogger(),
+            MockSerializerFactory::getMock(
+                $this,
+                serializeMap: [
+                    [
+                        $event,
+                        'json',
+                        [],
+                        'mock-pipeline-complete'
+                    ]
+                ],
+                deserializeMap: [
+                    [
+                        'mock-pipeline-complete',
+                        PipelineComplete::class,
+                        'json',
+                        [],
+                        $event
+                    ]
+                ]
+            ),
             $mockCoverageAnalysisService,
             $mockSqsMessageClient,
             $mockEventBridgeEventClient
@@ -104,7 +124,7 @@ class PipelineCompleteEventProcessorTest extends TestCase
         $pipelineCompleteEventProcessor->process(
             new EventBridgeEvent([
                 'detail-type' => CoverageEvent::PIPELINE_COMPLETE->value,
-                'detail' => $event->jsonSerialize()
+                'detail' => 'mock-pipeline-complete'
             ])
         );
     }

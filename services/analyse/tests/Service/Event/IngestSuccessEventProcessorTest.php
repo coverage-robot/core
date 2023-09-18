@@ -7,11 +7,9 @@ use App\Client\SqsMessageClient;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\IngestSuccessEventProcessor;
+use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use PHPUnit\Framework\TestCase;
@@ -21,19 +19,7 @@ class IngestSuccessEventProcessorTest extends TestCase
 {
     public function testProcess(): void
     {
-        $event = Upload::from(
-            [
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => 'mock-commit',
-                'parent' => '["mock-parent-commit"]',
-                'owner' => 'mock-owner',
-                'tag' => 'mock-tag',
-                'ref' => 'mock-ref',
-                'repository' => 'mock-repository',
-                'ingestTime' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-            ]
-        );
+        $mockUpload = $this->createMock(Upload::class);
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->atLeastOnce())
@@ -50,7 +36,7 @@ class IngestSuccessEventProcessorTest extends TestCase
             ->method('queuePublishableMessage')
             ->with(
                 self::callback(
-                    function (PublishableMessageCollection $message) use ($event) {
+                    function (PublishableMessageCollection $message) {
                         $this->assertCount(
                             2,
                             $message->getMessages()
@@ -65,15 +51,35 @@ class IngestSuccessEventProcessorTest extends TestCase
 
         $ingestSuccessEventProcessor = new IngestSuccessEventProcessor(
             new NullLogger(),
+            MockSerializerFactory::getMock(
+                $this,
+                serializeMap: [
+                    [
+                        $mockUpload,
+                        'json',
+                        [],
+                        'mock-upload'
+                    ]
+                ],
+                deserializeMap: [
+                    [
+                        'mock-upload',
+                        Upload::class,
+                        'json',
+                        [],
+                        $mockUpload
+                    ]
+                ]
+            ),
             $mockCoverageAnalysisService,
             $mockSqsMessageClient,
-            $mockEventBridgeEventClient
+            $mockEventBridgeEventClient,
         );
 
         $ingestSuccessEventProcessor->process(
             new EventBridgeEvent([
                 'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                'detail' => $event->jsonSerialize()
+                'detail' => 'mock-upload'
             ])
         );
     }

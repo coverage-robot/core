@@ -2,14 +2,9 @@
 
 namespace App\Model;
 
-use App\Exception\SigningException;
-use Exception;
-use JsonException;
-use JsonSerializable;
 use Packages\Models\Enum\Provider;
-use ValueError;
 
-class SigningParameters implements ParametersInterface, JsonSerializable
+class SigningParameters implements ParametersInterface
 {
     public function __construct(
         private readonly string $owner,
@@ -73,66 +68,5 @@ class SigningParameters implements ParametersInterface, JsonSerializable
     public function getPullRequest(): ?string
     {
         return $this->pullRequest;
-    }
-
-    /**
-     * @throws SigningException
-     */
-    public static function from(array $data): self
-    {
-        if (
-            !isset($data['owner']) ||
-            !isset($data['repository']) ||
-            !isset($data['provider']) ||
-            !isset($data['fileName']) ||
-            !isset($data['projectRoot']) ||
-            !isset($data['tag']) ||
-            !isset($data['commit']) ||
-            !isset($data['parent']) ||
-            !isset($data['ref'])
-        ) {
-            throw SigningException::invalidParameters();
-        }
-
-        try {
-            return new SigningParameters(
-                (string)$data['owner'],
-                (string)$data['repository'],
-                Provider::from((string)$data['provider']),
-                (string)$data['fileName'],
-                (string)$data['projectRoot'],
-                (string)$data['tag'],
-                (string)$data['commit'],
-                is_array($data['parent']) ? $data['parent'] : (array)$data['parent'],
-                (string)$data['ref'],
-                isset($data['pullRequest']) ? (string)$data['pullRequest'] : null
-            );
-        } catch (ValueError $e) {
-            throw SigningException::invalidParameters($e);
-        }
-    }
-
-    /**
-     * @throws JsonException
-     */
-    public function jsonSerialize(): array
-    {
-        $parameters = [
-            'owner' => $this->owner,
-            'repository' => $this->repository,
-            'commit' => $this->commit,
-            'parent' => json_encode($this->parent, JSON_THROW_ON_ERROR),
-            'ref' => $this->ref,
-            'tag' => $this->tag,
-            'provider' => $this->provider,
-            'fileName' => $this->fileName,
-            'projectRoot' => $this->projectRoot,
-        ];
-
-        if ($this->pullRequest) {
-            $parameters['pullRequest'] = $this->pullRequest;
-        }
-
-        return $parameters;
     }
 }

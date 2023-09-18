@@ -6,6 +6,7 @@ use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -32,16 +33,18 @@ class DiffParserServiceTest extends TestCase
         $this->assertEquals(
             $diff,
             $diffParser->get(
-                Upload::from([
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'owner',
-                    'repository' => 'repository',
-                    'commit' => 'commit',
-                    'uploadId' => 'uploadId',
-                    'ref' => 'ref',
-                    'parent' => [],
-                    'tag' => 'tag',
-                ])
+                new Upload(
+                    'uploadId',
+                    Provider::GITHUB,
+                    'owner',
+                    'repository',
+                    'commit',
+                    [],
+                    'ref',
+                    'project-root',
+                    12,
+                    new Tag('tag', 'commit'),
+                )
             )
         );
     }
@@ -61,16 +64,18 @@ class DiffParserServiceTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $diffParser->get(
-            Upload::from([
-                'provider' => Provider::GITHUB->value,
-                'owner' => 'owner',
-                'repository' => 'repository',
-                'commit' => 'commit',
-                'uploadId' => 'uploadId',
-                'ref' => 'ref',
-                'parent' => [],
-                'tag' => 'tag',
-            ])
+            new Upload(
+                'uploadId',
+                Provider::GITHUB,
+                'owner',
+                'repository',
+                'commit',
+                [],
+                'ref',
+                'project-root',
+                12,
+                new Tag('tag', 'commit'),
+            )
         );
     }
 }

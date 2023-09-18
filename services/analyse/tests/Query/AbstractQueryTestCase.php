@@ -9,6 +9,7 @@ use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -32,17 +33,18 @@ abstract class AbstractQueryTestCase extends TestCase
     {
         return [
             QueryParameterBag::fromEvent(
-                Upload::from([
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repository',
-                    'commit' => 'mock-commit',
-                    'uploadId' => 'mock-uploadId',
-                    'ref' => 'mock-ref',
-                    'parent' => [],
-                    'tag' => 'mock-tag',
-                    'ingestTime' => '2021-01-01T00:00:00+00:00'
-                ])
+                new Upload(
+                    'mock-upload-id',
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'mock-commit',
+                    [],
+                    'mock-ref',
+                    'mock-project-root',
+                    12,
+                    new Tag('mock-tag', 'mock-commit')
+                )
             )
         ];
     }

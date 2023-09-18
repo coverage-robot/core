@@ -3,9 +3,8 @@
 namespace App\Model;
 
 use DateTimeInterface;
-use JsonSerializable;
 
-class SignedUrl implements JsonSerializable
+class SignedUrl
 {
     public function __construct(
         private readonly string $uploadId,
@@ -27,14 +26,5 @@ class SignedUrl implements JsonSerializable
     public function getExpiration(): DateTimeInterface
     {
         return $this->expiration;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'uploadId' => $this->getUploadId(),
-            'signedUrl' => $this->getSignedUrl(),
-            'expiration' => $this->getExpiration()->format(DateTimeInterface::ATOM)
-        ];
     }
 }

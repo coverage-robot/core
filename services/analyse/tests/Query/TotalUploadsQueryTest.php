@@ -12,6 +12,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class TotalUploadsQueryTest extends AbstractQueryTestCase
@@ -152,16 +153,18 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromEvent(
-                    Upload::from([
-                        'provider' => Provider::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'uploadId' => 'mock-uploadId',
-                        'ref' => 'mock-ref',
-                        'parent' => [],
-                        'tag' => 'mock-tag',
-                    ])
+                    new Upload(
+                        'mock-uuid',
+                        Provider::GITHUB,
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-commit',
+                        ['mock-parent-commit'],
+                        'mock-ref',
+                        'mock-project-root',
+                        null,
+                        new Tag('mock-tag', 'mock-commit-1')
+                    )
                 ),
                 true
             ],

@@ -3,7 +3,6 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\Event\AnalyseSuccessEventProcessor;
 use App\Service\Event\AnalysisOnNewUploadSuccessEventProcessor;
 use App\Service\Event\EventProcessorInterface;
 use Bref\Context\Context;

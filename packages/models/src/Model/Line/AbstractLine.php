@@ -2,10 +2,19 @@
 
 namespace Packages\Models\Model\Line;
 
-use JsonSerializable;
 use Packages\Models\Enum\LineType;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
-abstract class AbstractLine implements JsonSerializable
+#[DiscriminatorMap(
+    'type',
+    [
+        LineType::STATEMENT->value => Statement::class,
+        LineType::BRANCH->value => Branch::class,
+        LineType::METHOD->value => Method::class,
+    ]
+)]
+abstract class AbstractLine
 {
     public function __construct(
         private readonly int $lineNumber,
@@ -29,6 +38,7 @@ abstract class AbstractLine implements JsonSerializable
      *
      * @see Method::getUniqueLineIdentifier()
      */
+    #[Ignore]
     public function getUniqueLineIdentifier(): string
     {
         return (string)$this->getLineNumber();
@@ -51,14 +61,5 @@ abstract class AbstractLine implements JsonSerializable
             ucfirst(strtolower($this->getType()->value)),
             $this->getUniqueLineIdentifier()
         );
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'type' => $this->getType()->value,
-            'lineNumber' => $this->getLineNumber(),
-            'lineHits' => $this->getLineHits()
-        ];
     }
 }

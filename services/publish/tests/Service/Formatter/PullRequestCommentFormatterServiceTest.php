@@ -5,9 +5,9 @@ namespace App\Tests\Service\Formatter;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +33,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
             'mock-commit',
             [],
             'master',
+            'project-root',
             12,
             new Tag('mock-tag', 'mock-commit'),
             new DateTimeImmutable('2023-09-02T10:12:00+00:00'),

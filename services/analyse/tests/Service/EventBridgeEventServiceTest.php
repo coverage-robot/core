@@ -5,11 +5,14 @@ namespace App\Tests\Service;
 use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
+use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
+use DateTimeImmutable;
+use Monolog\Test\TestCase;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
@@ -17,24 +20,28 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 
 class EventBridgeEventServiceTest extends TestCase
 {
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
-        $upload = new Upload(
-            'mock-upload-id',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            ['mock-parent'],
-            'mock-ref',
-            null,
-            new Tag('mock-tag', 'mock-commit')
-        );
+        $detail = [
+            'upload' => new Upload(
+                'mock-uuid',
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-commit',
+                ['mock-parent-commit'],
+                'mock-ref',
+                'mock-project-root',
+                null,
+                new Tag('mock-tag', 'mock-commit'),
+                new DateTimeImmutable()
+            ),
+            'coveragePercentage' => '99'
+        ];
 
         $mockResult = ResultMockFactory::create(PutEventsResponse::class, [
             'FailedEntryCount' => $failedEntryCount,
@@ -50,10 +57,7 @@ class EventBridgeEventServiceTest extends TestCase
                             'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::ANALYSE->value,
                             'DetailType' => CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS->value,
-                            'Detail' => json_encode([
-                                'upload' => $upload,
-                                'coveragePercentage' => '99'
-                            ], JSON_THROW_ON_ERROR)
+                            'Detail' => 'mock-serialized-json'
                         ])
                     ],
                 ])
@@ -69,15 +73,23 @@ class EventBridgeEventServiceTest extends TestCase
                 [
                     EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
                 ]
+            ),
+            MockSerializerFactory::getMock(
+                $this,
+                [
+                    [
+                        $detail,
+                        'json',
+                        [],
+                        'mock-serialized-json'
+                    ]
+                ]
             )
         );
 
         $success = $eventBridgeEventService->publishEvent(
             CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS,
-            [
-                'upload' => $upload->jsonSerialize(),
-                'coveragePercentage' => '99'
-            ]
+            $detail
         );
 
         $this->assertEquals($expectSuccess, $success);

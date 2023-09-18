@@ -9,11 +9,13 @@ use Bref\Event\InvalidLambdaEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * This command is a helper for manually invoking the analysis handler locally.
@@ -27,8 +29,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the analysis handler')]
 class InvokeCommand extends Command
 {
-    public function __construct(private readonly EventHandler $handler)
-    {
+    public function __construct(
+        private readonly EventHandler $handler,
+        private readonly SerializerInterface $serializer
+    ) {
         parent::__construct();
     }
 
@@ -49,29 +53,32 @@ class InvokeCommand extends Command
                 'parent',
                 InputArgument::OPTIONAL,
                 'The parent of the commit to analyse',
-                '["mock-parent-commit"]'
+                'mock-parent-commit'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $upload = Upload::from([
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => $input->getArgument('commit'),
-                'parent' => $input->getArgument('parent'),
-                'ref' => $input->getArgument('ref'),
-                'owner' => $input->getArgument('owner'),
-                'repository' => $input->getArgument('repository'),
-                'tag' => $input->getArgument('tag'),
-                'pullRequest' => $input->getArgument('pullRequest')
-            ]);
+            $upload = new Upload(
+                'mock-uuid',
+                Provider::GITHUB,
+                $input->getArgument('owner'),
+                $input->getArgument('repository'),
+                $input->getArgument('commit'),
+                [
+                    $input->getArgument('parent')
+                ],
+                $input->getArgument('ref'),
+                'mock-root',
+                $input->getArgument('pullRequest'),
+                new Tag($input->getArgument('tag'), $input->getArgument('commit')),
+            );
 
             $this->handler->handleEventBridge(
                 new EventBridgeEvent([
                     'detail-type' => CoverageEvent::INGEST_SUCCESS,
-                    'detail' => $upload->jsonSerialize()
+                    'detail' => $this->serializer->serialize($upload, 'json')
                 ]),
                 Context::fake()
             );

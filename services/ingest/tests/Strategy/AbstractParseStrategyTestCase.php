@@ -5,9 +5,10 @@ namespace App\Tests\Strategy;
 use App\Exception\ParseException;
 use App\Strategy\ParseStrategyInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-abstract class AbstractParseStrategyTestCase extends TestCase
+abstract class AbstractParseStrategyTestCase extends KernelTestCase
 {
     #[DataProvider('coverageFilesDataProvider')]
     public function testSupports(string $projectRoot, string $contents, bool $expectedSupport): void
@@ -21,7 +22,7 @@ abstract class AbstractParseStrategyTestCase extends TestCase
         string $projectRoot,
         string $contents,
         bool $expectedSupport,
-        array $expectedCoverage
+        string $expectedCoverage
     ): void {
         $parser = $this->getParserStrategy();
         if (!$expectedSupport) {
@@ -31,37 +32,28 @@ abstract class AbstractParseStrategyTestCase extends TestCase
         $projectCoverage = $parser->parse($projectRoot, $contents);
 
         if ($expectedSupport) {
-            $this->assertSame(
+            $this->assertJsonStringEqualsJsonString(
                 $expectedCoverage,
-                json_decode(json_encode($projectCoverage), true)
+                $this->getContainer()
+                    ->get(SerializerInterface::class)
+                    ->serialize($projectCoverage, 'json')
             );
         }
     }
 
-    abstract public static function coverageFilesDataProvider(): array;
+    abstract public static function coverageFilesDataProvider(): iterable;
 
     abstract protected function getParserStrategy(): ParseStrategyInterface;
 
-    protected static function parseCoverageFixtures(string $path, string $fileExtension): array
+    protected static function parseCoverageFixtures(string $path, string $fileExtension): iterable
     {
-        return array_reduce(
-            glob(sprintf('%s/*.%s', $path, $fileExtension)),
-            static fn (array $fixtures, string $path) =>
-                [
-                    ...$fixtures,
-                    sprintf('Can handle %s', basename($path)) => [
-                        'mock/project/root',
-                        file_get_contents($path),
-                        true,
-                        json_decode(
-                            file_get_contents(
-                                substr($path, 0, strlen($path) - strlen($fileExtension)) . 'json'
-                            ),
-                            true
-                        ),
-                    ]
-                ],
-            []
-        );
+        foreach (glob(sprintf('%s/*.%s', $path, $fileExtension)) as $file) {
+            yield sprintf('Can handle %s', basename($file)) => [
+                'mock/project/root',
+                file_get_contents($file),
+                true,
+                file_get_contents(substr($file, 0, strlen($file) - strlen($fileExtension)) . 'json')
+            ];
+        }
     }
 }

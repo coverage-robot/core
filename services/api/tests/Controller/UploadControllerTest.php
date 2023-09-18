@@ -9,6 +9,7 @@ use App\Model\SigningParameters;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use DateTimeImmutable;
+use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -154,31 +155,32 @@ class UploadControllerTest extends KernelTestCase
     {
         return [
             'With pull request' => [
-                 SigningParameters::from([
-                     'owner' => 'mock-owner-id',
-                     'repository' => 'mock-repository-name',
-                     'commit' => 1234,
-                     'pullRequest' => 12,
-                     'parent' => 'mock-parent-hash',
-                     'ref' => 'mock-branch-reference',
-                     'tag' => 'mock-tag',
-                     'provider' => 'github',
-                     'fileName' => 'some/root/test.xml',
-                     'projectRoot' => 'some/root/'
-                 ])
+                new SigningParameters(
+                    'mock-owner-id',
+                    'mock-repository-name',
+                    Provider::GITHUB,
+                    'some/root/test.xml',
+                    'some/root/',
+                    'mock-tag',
+                    'mock-commit',
+                    ['mock-parent-hash'],
+                    'mock-branch-reference',
+                    '12'
+                )
             ],
             'Without to pull request' => [
-                SigningParameters::from([
-                        'owner' => 'mock-owner-id',
-                        'repository' => 'mock-repository-name',
-                        'commit' => 2345,
-                        'parent' => 'mock-parent-hash',
-                        'ref' => 'mock-branch-reference',
-                        'tag' => 'mock-tag',
-                        'provider' => 'github',
-                        'fileName' => 'some/root/test.xml',
-                        'projectRoot' => 'some/root/'
-                ])
+                new SigningParameters(
+                    'mock-owner-id',
+                    'mock-repository-name',
+                    Provider::GITHUB,
+                    'some/root/test.xml',
+                    'some/root/',
+                    'mock-tag',
+                    'mock-commit',
+                    [],
+                    'mock-branch-reference',
+                    null
+                )
             ]
         ];
     }

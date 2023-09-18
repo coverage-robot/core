@@ -5,15 +5,22 @@ namespace App\Service;
 use App\Exception\PersistException;
 use JsonException;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
-use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BigQueryMetadataBuilderService
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
-        private readonly LoggerInterface $metadataBuilderServiceLogger
+        private readonly LoggerInterface $metadataBuilderServiceLogger,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
@@ -25,7 +32,7 @@ class BigQueryMetadataBuilderService
         return [
             'uploadId' => $upload->getUploadId(),
             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-            'provider' => $upload->getProvider()->value,
+            'provider' => $upload->getProvider(),
             'owner' => $upload->getOwner(),
             'repository' => $upload->getRepository(),
             'commit' => $upload->getCommit(),
@@ -49,12 +56,15 @@ class BigQueryMetadataBuilderService
      */
     public function buildMetadata(AbstractLine $line): array
     {
+        /** @var array<array-key, mixed> $line */
+        $line = $this->serializer->normalize($line);
+
         $metadata = array_map(
             function (mixed $key, mixed $value): ?array {
                 return $this->mapMetadataRecord($key, $value);
             },
-            array_keys($line->jsonSerialize()),
-            array_values($line->jsonSerialize())
+            array_keys($line),
+            array_values($line)
         );
 
         return array_filter($metadata);

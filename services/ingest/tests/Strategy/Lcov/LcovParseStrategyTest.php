@@ -2,29 +2,26 @@
 
 namespace App\Tests\Strategy\Lcov;
 
-use App\Service\PathFixingService;
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
-use Psr\Log\NullLogger;
 
 class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 {
-    public static function coverageFilesDataProvider(): array
+    public static function coverageFilesDataProvider(): iterable
     {
-        return [
-            ...parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Lcov', 'info'),
-            'Does not handle invalid file' => [
-                'mock/project/root',
-                'invalid-file-content',
-                false,
-                []
-            ]
+        yield from parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Lcov', 'info');
+
+        yield 'Does not handle invalid file' => [
+            'mock/project/root',
+            'invalid-file-content',
+            false,
+            ''
         ];
     }
 
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        return new LcovParseStrategy(new NullLogger(), new PathFixingService());
+        return $this->getContainer()->get(LcovParseStrategy::class);
     }
 }

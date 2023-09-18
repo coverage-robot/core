@@ -16,11 +16,13 @@ use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class IngestSuccessEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
+        private readonly SerializerInterface $serializer,
         private readonly CoverageAnalyserService $coverageAnalyserService,
         private readonly SqsMessageClient $sqsEventClient,
         private readonly EventBridgeEventClient $eventBridgeEventService
@@ -30,10 +32,11 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
     public function process(EventBridgeEvent $event): void
     {
         try {
-            /** @var array $detail */
-            $detail = $event->getDetail();
-
-            $upload = Upload::from($detail);
+            $upload = $this->serializer->deserialize(
+                $event->getDetail(),
+                Upload::class,
+                'json'
+            );
 
             $this->eventProcessorLogger->info(
                 sprintf(
@@ -65,7 +68,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
             $this->eventBridgeEventService->publishEvent(
                 CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS,
                 [
-                    'upload' => $upload->jsonSerialize(),
+                    'upload' => $this->serializer->serialize($upload, 'json'),
                     'coveragePercentage' => $coverageData->getCoveragePercentage()
                 ]
             );
@@ -96,7 +99,10 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
                 array_map(
                     function (TagCoverageQueryResult $tag) {
                         return [
-                            'tag' => $tag->getTag()->jsonSerialize(),
+                            'tag' => [
+                                'name' => $tag->getTag()->getName(),
+                                'commit' => $tag->getTag()->getCommit(),
+                            ],
                             'coveragePercentage' => $tag->getCoveragePercentage(),
                             'lines' => $tag->getLines(),
                             'covered' => $tag->getCovered(),

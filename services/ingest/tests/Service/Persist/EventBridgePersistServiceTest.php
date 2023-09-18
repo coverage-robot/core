@@ -10,8 +10,8 @@ use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Tag;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -53,6 +53,7 @@ class EventBridgePersistServiceTest extends TestCase
                     '1',
                     ['2'],
                     'mock-branch-reference',
+                    'mock-project-root',
                     1234,
                     new Tag('mock-tag', ''),
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),
@@ -68,6 +69,7 @@ class EventBridgePersistServiceTest extends TestCase
                     '3',
                     ['4'],
                     'mock-branch-reference',
+                    'mock-project-root',
                     1234,
                     new Tag('mock-tag', ''),
                     new DateTimeImmutable('2023-05-02T12:00:00+00:00'),

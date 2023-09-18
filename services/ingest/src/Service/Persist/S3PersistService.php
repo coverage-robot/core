@@ -10,6 +10,9 @@ use JsonException;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class S3PersistService implements PersistServiceInterface
 {
@@ -17,9 +20,13 @@ class S3PersistService implements PersistServiceInterface
 
     private const OUTPUT_KEY = '%s%s.txt';
 
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly SimpleS3Client $s3Client,
         private readonly EnvironmentService $environmentService,
+        private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $s3PersistServiceLogger
     ) {
     }
@@ -33,7 +40,7 @@ class S3PersistService implements PersistServiceInterface
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         /** @var array<string, string> $metadata */
-        $metadata = $upload->jsonSerialize();
+        $metadata = $this->serializer->normalize($upload);
 
         $body = $this->getBody($coverage);
 
@@ -46,11 +53,14 @@ class S3PersistService implements PersistServiceInterface
                 // to fit in memory. Instead, we need to pass a resource to the request
                 'ContentLength' => $this->getContentLength($body),
                 'ContentType' => 'text/plain',
-                'Metadata' => [
-                    'sourceFormat' => $coverage->getSourceFormat()->value,
-                    ...$metadata,
-                    'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR)
-                ]
+                'Metadata' => array_merge(
+                    $metadata,
+                    [
+                        'sourceFormat' => $coverage->getSourceFormat()->value,
+                        'parent' => $this->serializer->serialize($upload->getParent(), 'json'),
+                        'tag' => $upload->getTag()->getName()
+                    ]
+                )
             ]
         );
 
@@ -126,8 +136,9 @@ class S3PersistService implements PersistServiceInterface
                 )
             );
 
-            foreach ($file->getAllLines() as $line) {
-                $line = $line->jsonSerialize();
+            foreach ($file->getLines() as $line) {
+                /** @var array<array-key, mixed> $line */
+                $line = $this->serializer->normalize($line);
 
                 fwrite(
                     $buffer,

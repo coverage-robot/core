@@ -3,11 +3,19 @@
 namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
-use JsonSerializable;
+use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\Provider;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
-interface EventInterface extends JsonSerializable, Stringable
+#[DiscriminatorMap(
+    'type',
+    [
+        EventType::UPLOAD->value => Upload::class,
+        EventType::PIPELINE_COMPLETE->value => PipelineComplete::class
+    ]
+)]
+interface EventInterface extends Stringable
 {
     public function getProvider(): Provider;
 
@@ -22,6 +30,4 @@ interface EventInterface extends JsonSerializable, Stringable
     public function getRef(): string;
 
     public function getEventTime(): DateTimeImmutable;
-
-    public static function from(array $data): self;
 }
