@@ -13,6 +13,7 @@ use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Psr\Log\LoggerInterface;
+use ValueError;
 use XMLReader;
 
 class CloverParseStrategy implements ParseStrategyInterface
@@ -38,9 +39,14 @@ class CloverParseStrategy implements ParseStrategyInterface
     {
         libxml_use_internal_errors(true);
 
-        $reader = $this->buildXmlReader($content);
-        if (!$reader->read()) {
-            $this->parseStrategyLogger->error('Unable to read first line of Clover file.');
+        try {
+            $reader = $this->buildXmlReader($content);
+
+            if (!$reader->read()) {
+                throw new ValueError('Unable to read XML.');
+            }
+        } catch (ValueError $exception) {
+            $this->parseStrategyLogger->error('Unable to build XML reader.');
             return false;
         }
 

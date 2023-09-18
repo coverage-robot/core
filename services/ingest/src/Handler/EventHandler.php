@@ -22,10 +22,18 @@ use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\UnwrappingDenormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends S3Handler
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
+        private readonly SerializerInterface $serializer,
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
@@ -37,14 +45,31 @@ class EventHandler extends S3Handler
     /**
      * @throws DeletionException
      * @throws InvalidLambdaEvent
-     * @throws JsonException
      */
     public function handleS3(S3Event $event, Context $context): void
     {
         foreach ($event->getRecords() as $coverageFile) {
             try {
                 $source = $this->retrieveFile($coverageFile);
-                $upload = Upload::from($source->getMetadata());
+                $metadata = array_merge(
+                    $source->getMetadata(),
+                    [
+                        'tag' => [
+                            'name' => $source->getMetadata()['tag'],
+                            'commit' => $source->getMetadata()['commit']
+                        ],
+                        'parent' => $this->serializer->deserialize(
+                            $source->getMetadata()['parent'],
+                            'string[]',
+                            'json'
+                        )
+                    ]
+                );
+
+                $upload = $this->serializer->denormalize(
+                    $metadata,
+                    Upload::class
+                );
 
                 $this->handlerLogger->info(
                     sprintf(
@@ -54,10 +79,8 @@ class EventHandler extends S3Handler
                     )
                 );
 
-                $projectRoot = $this->getProjectRoot($source);
-
                 $coverage = $this->parseFile(
-                    $projectRoot,
+                    $upload->getProjectRoot(),
                     $source->getBody()->getContentAsString()
                 );
 
@@ -114,27 +137,6 @@ class EventHandler extends S3Handler
             $coverageFile->getBucket(),
             $coverageFile->getObject()
         );
-    }
-
-    /**
-     * Get the project root from the coverage file metadata.
-     *
-     * The key must be in all lowercase, as the metadata pulled back from S3 will
-     * have already lost its case.
-     *
-     * @throws RetrievalException
-     */
-    private function getProjectRoot(GetObjectOutput $object): string
-    {
-        $metadata = $object->getMetadata();
-
-        if (!isset($metadata['projectroot'])) {
-            throw RetrievalException::from(
-                new RuntimeException('Missing project root from metadata')
-            );
-        }
-
-        return $metadata['projectroot'];
     }
 
     /**

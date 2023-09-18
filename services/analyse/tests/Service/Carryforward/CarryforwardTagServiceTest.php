@@ -36,17 +36,17 @@ class CarryforwardTagServiceTest extends TestCase
             new NullLogger()
         );
 
-        $upload = Upload::from(
-            [
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => 'mock-commit-1',
-                'parent' => ['mock-parent'],
-                'ref' => 'mock-ref',
-                'owner' => 'owner',
-                'repository' => 'repository',
-                'tag' => 'tag-4'
-            ]
+        $upload = new Upload(
+            'mock-uuid',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit-1',
+            ['mock-parent-commit'],
+            'mock-ref',
+            'mock-project-root',
+            null,
+            new Tag('mock-tag', 'mock-commit-1')
         );
 
         $mockQueryService->expects($this->exactly(2))
@@ -101,17 +101,17 @@ class CarryforwardTagServiceTest extends TestCase
             new NullLogger()
         );
 
-        $upload = Upload::from(
-            [
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => 'mock-commit',
-                'parent' => ['mock-parent'],
-                'ref' => 'mock-ref',
-                'owner' => 'owner',
-                'repository' => 'repository',
-                'tag' => 'tag-4'
-            ]
+        $upload = new Upload(
+            'mock-uuid',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit-1',
+            ['mock-parent-commit'],
+            'mock-ref',
+            'mock-project-root',
+            null,
+            new Tag('mock-tag', 'mock-commit-1')
         );
 
         $mockQueryService->expects($this->once())
@@ -155,17 +155,17 @@ class CarryforwardTagServiceTest extends TestCase
             new NullLogger()
         );
 
-        $upload = Upload::from(
-            [
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => 'mock-commit-1',
-                'parent' => ['mock-parent'],
-                'ref' => 'mock-ref',
-                'owner' => 'owner',
-                'repository' => 'repository',
-                'tag' => 'tag-4'
-            ]
+        $upload = new Upload(
+            'mock-uuid',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit-1',
+            ['mock-parent-commit'],
+            'mock-ref',
+            'mock-project-root',
+            null,
+            new Tag('mock-tag', 'mock-commit-1')
         );
 
         // This shouldn't really happen (no current tags), as the upload we're analysing currently

@@ -8,10 +8,12 @@ use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Service\QueryBuilderService;
 use App\Tests\Mock\Factory\MockQueryFactory;
+use DateTimeImmutable;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 
 class QueryBuilderServiceTest extends TestCase
@@ -19,17 +21,18 @@ class QueryBuilderServiceTest extends TestCase
     public function testBuildFormatsQuery(): void
     {
         $queryParameters = QueryParameterBag::fromEvent(
-            Upload::from(
-                [
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repository',
-                    'commit' => 'mock-commit',
-                    'uploadId' => 'mock-uploadId',
-                    'ref' => 'mock-ref',
-                    'parent' => [],
-                    'tag' => 'mock-tag',
-                ]
+            new Upload(
+                'mock-uploadId',
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-commit',
+                [],
+                'master',
+                'project-root',
+                12,
+                new Tag('mock-tag', 'mock-commit'),
+                new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
             )
         );
 

@@ -13,12 +13,17 @@
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/clients": "*",
         "coverage-robot/models": "*",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.23",
         "symfony/console": "6.3.*",
         "symfony/dotenv": "6.3.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
         "symfony/monolog-bundle": "^3.8",
+        "symfony/property-access": "6.3.*",
+        "symfony/property-info": "6.3.*",
         "symfony/runtime": "6.3.*",
+        "symfony/serializer": "6.3.*",
         "symfony/yaml": "6.3.*"
     },
     "require-dev": {
@@ -89,7 +94,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "6.2.*"
+            "require": "6.3.*"
         }
     }
 }

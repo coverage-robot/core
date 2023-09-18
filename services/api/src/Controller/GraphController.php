@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Exception\AuthenticationException;
-use App\Exception\GraphException;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\BadgeService;
+use Packages\Models\Enum\Provider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,11 +32,11 @@ class GraphController extends AbstractController
     public function badge(string $provider, string $owner, string $repository, Request $request): Response
     {
         try {
-            $parameters = GraphParameters::from([
-                'provider' => $provider,
-                'owner' => $owner,
-                'repository' => $repository,
-            ]);
+            $parameters = new GraphParameters(
+                $owner,
+                $repository,
+                Provider::from($provider)
+            );
 
             $token = $this->authTokenService->getGraphTokenFromRequest($request);
 
@@ -64,13 +64,6 @@ class GraphController extends AbstractController
                     'error' => $e->getMessage()
                 ],
                 Response::HTTP_UNAUTHORIZED
-            );
-        } catch (GraphException $e) {
-            return $this->json(
-                [
-                    'error' => $e->getMessage()
-                ],
-                Response::HTTP_BAD_REQUEST
             );
         }
     }

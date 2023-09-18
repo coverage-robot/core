@@ -13,6 +13,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
@@ -21,19 +22,19 @@ class EventHandlerTest extends TestCase
 {
     public function testHandleUploadEvent(): void
     {
-        $body = [
-            'uploadId' => 'mock-uuid',
-            'provider' => Provider::GITHUB->value,
-            'commit' => 'mock-commit',
-            'parent' => '["mock-parent-commit"]',
-            'owner' => 'mock-owner',
-            'tag' => 'mock-tag',
-            'ref' => 'mock-ref',
-            'repository' => 'mock-repository',
-            'ingestTime' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
-        ];
-
-        $upload = Upload::from($body);
+        $upload = new Upload(
+            'mock-uuid',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit',
+            ['mock-parent-commit'],
+            'mock-ref',
+            'mock-project-root',
+            null,
+            new Tag('mock-tag', 'mock-commit'),
+            new DateTimeImmutable()
+        );
 
         $mockContainer = $this->createMock(ContainerInterface::class);
 
@@ -56,7 +57,22 @@ class EventHandlerTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => $upload->jsonSerialize()
+                    'detail' => [
+                        'uploadId' => $upload->getUploadId(),
+                        'provider' => $upload->getProvider()->value,
+                        'owner' => $upload->getOwner(),
+                        'repository' => $upload->getRepository(),
+                        'commit' => $upload->getCommit(),
+                        'parent' => $upload->getParent(),
+                        'ref' => $upload->getRef(),
+                        'projectRoot' => $upload->getProjectRoot(),
+                        'pullRequest' => $upload->getPullRequest(),
+                        'tag' => [
+                            'name' => $upload->getTag()->getName(),
+                            'commit' => $upload->getTag()->getCommit()
+                        ],
+                        'ingestTime' => $upload->getIngestTime()->format(DateTimeImmutable::ATOM)
+                    ]
                 ]
             ),
             Context::fake()
@@ -65,16 +81,15 @@ class EventHandlerTest extends TestCase
 
     public function testHandlePipelineCompleteEvent(): void
     {
-        $body = [
-            'provider' => Provider::GITHUB->value,
-            'commit' => 'mock-commit',
-            'owner' => 'mock-owner',
-            'ref' => 'mock-ref',
-            'repository' => 'mock-repository',
-            'completedAt' => (new DateTimeImmutable())->format(DateTimeImmutable::ATOM),
-        ];
-
-        $pipelineCompleteEvent = PipelineComplete::from($body);
+        $pipelineCompleteEvent = new PipelineComplete(
+            Provider::GITHUB,
+            'mock-commit',
+            'mock-owner',
+            'mock-ref',
+            'mock-repository',
+            null,
+            new DateTimeImmutable()
+        );
 
         $mockContainer = $this->createMock(ContainerInterface::class);
 
@@ -97,7 +112,14 @@ class EventHandlerTest extends TestCase
             new EventBridgeEvent(
                 [
                     'detail-type' => CoverageEvent::PIPELINE_COMPLETE->value,
-                    'detail' => $pipelineCompleteEvent->jsonSerialize()
+                    'detail' => [
+                        'provider' => $pipelineCompleteEvent->getProvider()->value,
+                        'commit' => $pipelineCompleteEvent->getCommit(),
+                        'owner' => $pipelineCompleteEvent->getOwner(),
+                        'ref' => $pipelineCompleteEvent->getRef(),
+                        'repository' => $pipelineCompleteEvent->getRepository(),
+                        'completedAt' => $pipelineCompleteEvent->getCompletedAt()->format(DateTimeImmutable::ATOM),
+                    ]
                 ]
             ),
             Context::fake()

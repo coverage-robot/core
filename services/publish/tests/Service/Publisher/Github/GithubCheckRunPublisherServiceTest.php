@@ -15,9 +15,10 @@ use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -410,30 +411,33 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     {
         return [
             [
-                Upload::from([
-                    'uploadId' => 'mock-uuid',
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repository',
-                    'commit' => 'mock-commit',
-                    'parent' => '["mock-parent"]',
-                    'tag' => 'mock-tag',
-                    'ref' => 'mock-ref',
-                ]),
+                new Upload(
+                    'mock-uuid',
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'mock-commit',
+                    ['mock-parent'],
+                    'mock-ref',
+                    'mock-project-root',
+                    null,
+                    new Tag('mock-tag', 'mock-commit'),
+                ),
                 true
             ],
             [
-                Upload::from([
-                    'uploadId' => 'mock-uuid',
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repository',
-                    'commit' => 'mock-commit',
-                    'parent' => '["mock-parent"]',
-                    'tag' => 'mock-tag',
-                    'ref' => 'mock-ref',
-                    'pullRequest' => 123
-                ]),
+                new Upload(
+                    'mock-uuid',
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'mock-commit',
+                    ['mock-parent'],
+                    'mock-ref',
+                    'mock-project-root',
+                    '1234',
+                    new Tag('mock-tag', 'mock-commit'),
+                ),
                 true
             ]
         ];

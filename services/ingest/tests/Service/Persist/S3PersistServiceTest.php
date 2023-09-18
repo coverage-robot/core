@@ -8,20 +8,23 @@ use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\File;
+use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class S3PersistServiceTest extends TestCase
+class S3PersistServiceTest extends KernelTestCase
 {
     #[DataProvider('coverageDataProvider')]
     public function testPersist(
@@ -41,7 +44,8 @@ class S3PersistServiceTest extends TestCase
             'ref' => $upload->getRef(),
             'pullRequest' => $upload->getPullRequest(),
             'tag' => $upload->getTag()->getName(),
-            'eventType' => $upload::class
+            'eventTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
+            'projectRoot' => $upload->getProjectRoot()
         ];
 
         $mockS3Client = $this->createMock(SimpleS3Client::class);
@@ -52,12 +56,17 @@ class S3PersistServiceTest extends TestCase
                 'coverage-output-dev',
                 $upload->getUploadId() . '.txt',
                 self::callback(
-                    static function ($body) use ($expectedWrittenLines) {
+                    function ($body) use ($expectedWrittenLines) {
                         rewind($body);
-                        return stream_get_contents($body) == implode(
-                            '',
-                            $expectedWrittenLines
+                        $this->assertEquals(
+                            implode(
+                                '',
+                                $expectedWrittenLines
+                            ),
+                            stream_get_contents($body)
                         );
+
+                        return true;
                     }
                 ),
                 [
@@ -75,6 +84,7 @@ class S3PersistServiceTest extends TestCase
         $S3PersistService = new S3PersistService(
             $mockS3Client,
             MockEnvironmentServiceFactory::getMock($this, Environment::DEVELOPMENT),
+            $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
         $S3PersistService->persist(
@@ -93,6 +103,7 @@ class S3PersistServiceTest extends TestCase
             '',
             [],
             'mock-branch-reference',
+            'project/root',
             1,
             new Tag('mock-tag', '')
         );
@@ -130,18 +141,7 @@ class S3PersistServiceTest extends TestCase
                     };
                     $file->setLine($line);
 
-                    $expectedWrittenLines[] = implode(
-                        ', ',
-                        array_map(
-                            static fn(string $key, string|array $value) => sprintf(
-                                '%s: %s',
-                                ucfirst($key),
-                                json_encode($value, JSON_THROW_ON_ERROR)
-                            ),
-                            array_keys($line->jsonSerialize()),
-                            array_values($line->jsonSerialize())
-                        )
-                    ) . "\n";
+                    $expectedWrittenLines[] = self::getExpectedWrittenLine($line);
                 }
 
                 $coverage->addFile($file);
@@ -153,5 +153,31 @@ class S3PersistServiceTest extends TestCase
                 ];
             }
         }
+    }
+
+    private static function getExpectedWrittenLine(AbstractLine $line): string
+    {
+        return match ($line->getType()) {
+            LineType::STATEMENT => sprintf(
+                "Type: \"%s\", LineNumber: \"%s\", LineHits: \"%s\"\n",
+                $line->getType()->value,
+                $line->getLineNumber(),
+                $line->getLineHits()
+            ),
+            LineType::BRANCH => sprintf(
+                "BranchHits: %s, Type: \"%s\", LineNumber: \"%s\", LineHits: \"%s\"\n",
+                json_encode($line->getBranchHits()),
+                $line->getType()->value,
+                $line->getLineNumber(),
+                $line->getLineHits()
+            ),
+            LineType::METHOD => sprintf(
+                "Name: \"%s\", Type: \"%s\", LineNumber: \"%s\", LineHits: \"%s\"\n",
+                $line->getName(),
+                $line->getType()->value,
+                $line->getLineNumber(),
+                $line->getLineHits()
+            ),
+        };
     }
 }

@@ -13,12 +13,15 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadServiceTest extends TestCase
+class UploadServiceTest extends KernelTestCase
 {
     public function testGetMissingSigningParametersFromRequest(): void
     {
@@ -26,7 +29,8 @@ class UploadServiceTest extends TestCase
             $this->createMock(UploadSignerService::class),
             $this->createMock(EnvironmentService::class),
             $this->createMock(UniqueIdGeneratorService::class),
-            new NullLogger()
+            $this->createMock(SerializerInterface::class),
+            new NullLogger(),
         );
 
         $request = new Request([], [], [], [], [], [], json_encode([]));
@@ -43,11 +47,12 @@ class UploadServiceTest extends TestCase
             $this->createMock(UploadSignerService::class),
             $this->createMock(EnvironmentService::class),
             $this->createMock(UniqueIdGeneratorService::class),
+            $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
 
         if (!$expectedParameters) {
-            $this->expectException(SigningException::class);
+            $this->expectException(MissingConstructorArgumentsException::class);
         }
 
         $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
@@ -64,21 +69,22 @@ class UploadServiceTest extends TestCase
             $this->createMock(UploadSignerService::class),
             $this->createMock(EnvironmentService::class),
             $this->createMock(UniqueIdGeneratorService::class),
+            $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
 
         $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
 
         if (!$expectedParameters) {
-            $this->expectException(SigningException::class);
+            $this->expectException(MissingConstructorArgumentsException::class);
         }
 
         $signingParameters = $uploadService->getSigningParametersFromRequest($request);
 
-        $parent = $signingParameters->jsonSerialize()['parent'];
+        $parent = $signingParameters->getParent();
 
-        $this->assertJson($parent);
-        $this->assertEquals(json_encode((array)$parameters['parent']), $parent);
+        $this->assertIsArray($parent);
+        $this->assertEquals($parameters['parent'], $parent);
     }
 
     public function testBuildSignedUploadUrl(): void
@@ -119,22 +125,23 @@ class UploadServiceTest extends TestCase
             $mockUploadSignerService,
             MockEnvironmentServiceFactory::getMock($this, Environment::PRODUCTION),
             $mockUniqueIdGeneratorService,
+            $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
 
         $uploadService->buildSignedUploadUrl(
-            SigningParameters::from([
-                'owner' => '1',
-                'repository' => 'a',
-                'commit' => 2,
-                'pullRequest' => 12,
-                'parent' => 'mock-parent-hash',
-                'ref' => 'mock-branch-reference',
-                'provider' => 'github',
-                'fileName' => 'some/root/test.xml',
-                'tag' => 'frontend',
-                'projectRoot' => 'some/root/'
-            ])
+            new SigningParameters(
+                '1',
+                'a',
+                Provider::GITHUB,
+                'some/root/test.xml',
+                'some/root/',
+                'frontend',
+                '2',
+                ['mock-parent-hash'],
+                'mock-branch-reference',
+                '12'
+            )
         );
     }
 
@@ -146,57 +153,58 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'pullRequest' => 12,
-                    'parent' => 'mock-parent-hash',
+                    'commit' => '2',
+                    'pullRequest' => '12',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
                 ],
-                SigningParameters::from([
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'pullRequest' => 12,
-                    'parent' => 'mock-parent-hash',
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ])
+                new SigningParameters(
+                    'mock-owner-id',
+                    'mock-repository-name',
+                    Provider::GITHUB,
+                    'test.xml',
+                    'some/root/',
+                    'frontend',
+                    '2',
+                    ['mock-parent-hash'],
+                    'mock-branch-reference',
+                    '12'
+                )
             ],
             'Without to pull request' => [
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'parent' => 'mock-parent-hash',
+                    'commit' => '2',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'backend'
                 ],
-                SigningParameters::from([
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'parent' => 'mock-parent-hash',
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'backend'
-                ])
+                new SigningParameters(
+                    'mock-owner-id',
+                    'mock-repository-name',
+                    Provider::GITHUB,
+                    'test.xml',
+                    'some/root/',
+                    'backend',
+                    '2',
+                    ['mock-parent-hash'],
+                    'mock-branch-reference',
+                    null
+                )
             ],
             'Without commit' => [
                 [
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'parent' => 'mock-parent-hash',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
@@ -209,8 +217,8 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'parent' => 'mock-parent-hash',
+                    'commit' => '2',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'tag' => 'backend'
@@ -219,9 +227,9 @@ class UploadServiceTest extends TestCase
             ],
             'Without owner or repository' => [
                 [
-                    'commit' => 2,
+                    'commit' => '2',
                     'projectRoot' => 'some/root/',
-                    'parent' => 'mock-parent-hash',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
@@ -234,9 +242,9 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'pullRequest' => 12,
-                    'parent' => 'mock-parent-hash',
+                    'commit' => '2',
+                    'pullRequest' => '12',
+                    'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml'
@@ -248,26 +256,26 @@ class UploadServiceTest extends TestCase
                     'owner' => 'mock-owner-id',
                     'repository' => 'mock-repository-name',
                     'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'pullRequest' => 12,
+                    'commit' => '2',
+                    'pullRequest' => '12',
                     'parent' => ['mock-parent-hash', 'e'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
                     'fileName' => 'test.xml',
                     'tag' => 'frontend'
                 ],
-                SigningParameters::from([
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => 2,
-                    'pullRequest' => 12,
-                    'parent' => ['mock-parent-hash', 'e'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ])
+                new SigningParameters(
+                    'mock-owner-id',
+                    'mock-repository-name',
+                    Provider::GITHUB,
+                    'test.xml',
+                    'some/root/',
+                    'frontend',
+                    '2',
+                    ['mock-parent-hash', 'e'],
+                    'mock-branch-reference',
+                    '12'
+                )
             ],
         ];
     }

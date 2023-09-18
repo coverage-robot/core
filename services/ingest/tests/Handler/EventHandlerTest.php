@@ -10,9 +10,6 @@ use App\Handler\EventHandler;
 use App\Service\CoverageFileParserService;
 use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFileRetrievalService;
-use App\Service\PathFixingService;
-use App\Strategy\Clover\CloverParseStrategy;
-use App\Strategy\Lcov\LcovParseStrategy;
 use AsyncAws\Core\Stream\ResultStream;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
@@ -24,10 +21,11 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandlerTest extends TestCase
+class EventHandlerTest extends KernelTestCase
 {
     /**
      * @throws Exception
@@ -55,9 +53,9 @@ class EventHandlerTest extends TestCase
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload) => $upload->getuploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
-                        $upload->getParent() === [2]
+                        $upload->getParent() === ['2']
                 ),
             )
             ->willReturn(true);
@@ -69,8 +67,9 @@ class EventHandlerTest extends TestCase
             ->with(CoverageEvent::INGEST_FAILURE);
 
         $handler = new EventHandler(
+            $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getRealCoverageFileParserService(),
+            $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger()
@@ -98,8 +97,9 @@ class EventHandlerTest extends TestCase
             ->method('publishEvent');
 
         $handler = new EventHandler(
+            $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getRealCoverageFileParserService(),
+            $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger()
@@ -138,8 +138,9 @@ class EventHandlerTest extends TestCase
             ->with(CoverageEvent::INGEST_FAILURE);
 
         $handler = new EventHandler(
+            $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getRealCoverageFileParserService(),
+            $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger()
@@ -170,9 +171,9 @@ class EventHandlerTest extends TestCase
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload) => $upload->getuploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
-                        $upload->getParent() === [2]
+                        $upload->getParent() === ['2']
                 ),
             )
             ->willReturn(true);
@@ -182,25 +183,15 @@ class EventHandlerTest extends TestCase
             ->method('publishEvent');
 
         $handler = new EventHandler(
+            $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getRealCoverageFileParserService(),
+            $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger()
         );
 
         $handler->handleS3($event, Context::fake());
-    }
-
-    private function getRealCoverageFileParserService(): CoverageFileParserService
-    {
-        return new CoverageFileParserService(
-            [
-                new LcovParseStrategy(new NullLogger(), new PathFixingService()),
-                new CloverParseStrategy(new NullLogger(), new PathFixingService())
-            ],
-            new NullLogger()
-        );
     }
 
     private function getMockS3ObjectResponse(string $body): GetObjectOutput|MockObject
@@ -214,12 +205,12 @@ class EventHandlerTest extends TestCase
             ->willReturn($mockStream);
         $mockResponse->method('getMetadata')
             ->willReturn([
-                'uploadid' => 'mock-uuid',
+                'uploadId' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
-                'projectroot' => 'mock/project/root/',
+                'projectRoot' => 'mock/project/root/',
                 'commit' => '1',
-                'parent' => json_encode([2]),
-                'pullrequest' => 1234,
+                'parent' => '["2"]',
+                'pullRequest' => 1234,
                 'tag' => 'frontend',
                 'owner' => 'ryanmab',
                 'repository' => 'portfolio',

@@ -11,6 +11,7 @@ use App\Query\Result\CommitCollectionQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
@@ -99,17 +100,18 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload = Upload::from([
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'commit' => 'mock-commit',
-            'uploadId' => 'mock-uploadId',
-            'ref' => 'mock-ref',
-            'parent' => [],
-            'tag' => 'mock-tag',
-            'ingestTime' => '2021-01-01T00:00:00+00:00'
-        ]);
+        $upload = new Upload(
+            'mock-uuid',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit',
+            ['mock-parent-commit'],
+            'mock-ref',
+            'mock-project-root',
+            null,
+            new Tag('mock-tag', 'mock-commit-1')
+        );
 
         $multipleCommitParameters = QueryParameterBag::fromEvent($upload);
         $multipleCommitParameters->set(
@@ -187,16 +189,18 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromEvent(
-                    Upload::from([
-                        'provider' => Provider::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'uploadId' => 'mock-uploadId',
-                        'ref' => 'mock-ref',
-                        'parent' => [],
-                        'tag' => 'mock-tag',
-                    ])
+                    new Upload(
+                        'mock-uuid',
+                        Provider::GITHUB,
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-commit',
+                        ['mock-parent-commit'],
+                        'mock-ref',
+                        'mock-project-root',
+                        null,
+                        new Tag('mock-tag', 'mock-commit-1')
+                    )
                 ),
                 true
             ],

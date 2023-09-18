@@ -8,17 +8,13 @@ use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
-use Packages\Models\Enum\LineState;
-use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Models\Model\Tag;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandlerTest extends TestCase
+class EventHandlerTest extends KernelTestCase
 {
     public function testReceivingSingleMessageInSingleGroup(): void
     {
@@ -36,54 +32,81 @@ class EventHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            [],
-            'master',
-            1,
-            new Tag('mock-tag', 'mock-commit'),
-        );
-
         $sqsEvent = new SqsEvent(
             [
                 'Records' => [
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '1',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishablePullRequestMessage(
-                                        $upload,
-                                        100,
-                                        100,
-                                        1,
-                                        0,
-                                        [
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 1,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 0,
-                                                'coverage' => 100,
-                                            ],
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'PULL_REQUEST',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:15:37+00:00',
+                                        'eventTime' => '2023-09-18T01:15:37+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
                                         ],
-                                        [],
-                                        new DateTimeImmutable('2023-08-30T12:00:00+00:00')
-                                    )
-                                ]
-                            )
-                        ),
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                    ],
+                                    'validUntil' => '2023-09-18T01:15:39+00:00',
+                                    'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                                    'coveragePercentage' => 100.0,
+                                    'diffCoveragePercentage' => 100.0,
+                                    'successfulUploads' => 1,
+                                    'pendingUploads' => 0,
+                                    'tagCoverage' => [
+                                        0 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 1,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 0,
+                                            'coverage' => 100,
+                                        ],
+                                    ],
+                                    'leastCoveredDiffFiles' => [
+                                    ],
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:15:37+00:00',
+                                'eventTime' => '2023-09-18T01:15:37+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                            ],
+                            'validUntil' => '2023-09-18T01:15:39+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
@@ -98,7 +121,10 @@ class EventHandlerTest extends TestCase
             ]
         );
 
-        $eventHandler = new EventHandler($mockCoveragePublisherService);
+        $eventHandler = new EventHandler(
+            $mockCoveragePublisherService,
+            $this->getContainer()->get(SerializerInterface::class)
+        );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());
     }
@@ -129,56 +155,83 @@ class EventHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            [],
-            'master',
-            1,
-            new Tag('mock-tag', 'mock-commit'),
-        );
-
         $sqsEvent = new SqsEvent(
             [
                 'Records' => [
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '1',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishablePullRequestMessage(
-                                        $upload,
-                                        100,
-                                        100,
-                                        1,
-                                        0,
-                                        [
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 1,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 0,
-                                                'coverage' => 100,
-                                            ],
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'PULL_REQUEST',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:28:36+00:00',
+                                        'eventTime' => '2023-09-18T01:28:36+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
                                         ],
-                                        [],
-                                        DateTimeImmutable::createFromFormat(
-                                            DateTimeInterface::ATOM,
-                                            '2023-08-30T12:00:00+00:00'
-                                        )
-                                    )
-                                ]
-                            )
-                        ),
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                        'eventType' => 'UPLOAD',
+                                    ],
+                                    'validUntil' => '2023-08-30T12:00:00+00:00',
+                                    'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                                    'coveragePercentage' => 100.0,
+                                    'diffCoveragePercentage' => 100.0,
+                                    'successfulUploads' => 1,
+                                    'pendingUploads' => 0,
+                                    'tagCoverage' => [
+                                        0 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 1,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 0,
+                                            'coverage' => 100,
+                                        ],
+                                    ],
+                                    'leastCoveredDiffFiles' => [
+                                    ],
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:28:36+00:00',
+                                'eventTime' => '2023-09-18T01:28:36+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                                'eventType' => 'UPLOAD',
+                            ],
+                            'validUntil' => '2023-08-30T12:00:00+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
@@ -192,49 +245,88 @@ class EventHandlerTest extends TestCase
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '1',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishablePullRequestMessage(
-                                        $upload,
-                                        50,
-                                        100,
-                                        2,
-                                        0,
-                                        [
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 1,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 0,
-                                                'coverage' => 100,
-                                            ],
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag-2',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 2,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 1,
-                                                'coverage' => 50,
-                                            ],
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'PULL_REQUEST',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:34:28+00:00',
+                                        'eventTime' => '2023-09-18T01:34:28+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
                                         ],
-                                        [],
-                                        DateTimeImmutable::createFromFormat(
-                                            DateTimeInterface::ATOM,
-                                            '2023-08-30T12:00:78+00:00'
-                                        )
-                                    )
-                                ]
-                            )
-                        ),
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                        'eventType' => 'UPLOAD',
+                                    ],
+                                    'validUntil' => '2023-08-30T12:01:18+00:00',
+                                    'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                                    'coveragePercentage' => 50.0,
+                                    'diffCoveragePercentage' => 100.0,
+                                    'successfulUploads' => 2,
+                                    'pendingUploads' => 0,
+                                    'tagCoverage' => [
+                                        0 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 1,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 0,
+                                            'coverage' => 100,
+                                        ],
+                                        1 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag-2',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 2,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 1,
+                                            'coverage' => 50,
+                                        ],
+                                    ],
+                                    'leastCoveredDiffFiles' => [
+                                    ],
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:34:28+00:00',
+                                'eventTime' => '2023-09-18T01:34:28+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                                'eventType' => 'UPLOAD',
+                            ],
+                            'validUntil' => '2023-08-30T12:01:18+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
@@ -249,7 +341,10 @@ class EventHandlerTest extends TestCase
             ]
         );
 
-        $eventHandler = new EventHandler($mockCoveragePublisherService);
+        $eventHandler = new EventHandler(
+            $mockCoveragePublisherService,
+            $this->getContainer()->get(SerializerInterface::class)
+        );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());
     }
@@ -301,56 +396,83 @@ class EventHandlerTest extends TestCase
             )
             ->willReturn(true);
 
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            [],
-            'master',
-            1,
-            new Tag('mock-tag', 'mock-commit'),
-        );
-
         $sqsEvent = new SqsEvent(
             [
                 'Records' => [
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '1',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishablePullRequestMessage(
-                                        $upload,
-                                        100,
-                                        100,
-                                        1,
-                                        0,
-                                        [
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 1,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 0,
-                                                'coverage' => 100,
-                                            ],
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'PULL_REQUEST',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:29:37+00:00',
+                                        'eventTime' => '2023-09-18T01:29:37+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
                                         ],
-                                        [],
-                                        DateTimeImmutable::createFromFormat(
-                                            DateTimeInterface::ATOM,
-                                            '2023-08-30T12:00:00+00:00'
-                                        )
-                                    )
-                                ]
-                            )
-                        ),
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                        'eventType' => 'UPLOAD',
+                                    ],
+                                    'validUntil' => '2023-08-30T12:00:00+00:00',
+                                    'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                                    'coveragePercentage' => 100.0,
+                                    'diffCoveragePercentage' => 100.0,
+                                    'successfulUploads' => 1,
+                                    'pendingUploads' => 0,
+                                    'tagCoverage' => [
+                                        0 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 1,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 0,
+                                            'coverage' => 100,
+                                        ],
+                                    ],
+                                    'leastCoveredDiffFiles' => [
+                                    ],
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:29:37+00:00',
+                                'eventTime' => '2023-09-18T01:29:37+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                                'eventType' => 'UPLOAD',
+                            ],
+                            'validUntil' => '2023-08-30T12:00:00+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
@@ -364,49 +486,88 @@ class EventHandlerTest extends TestCase
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '2',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishablePullRequestMessage(
-                                        $upload,
-                                        50,
-                                        100,
-                                        2,
-                                        0,
-                                        [
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 1,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 0,
-                                                'coverage' => 100,
-                                            ],
-                                            [
-                                                'tag' => [
-                                                    'name' => 'mock-tag-2',
-                                                    'commit' => 'mock-commit',
-                                                ],
-                                                'lines' => 2,
-                                                'covered' => 1,
-                                                'partial' => 0,
-                                                'uncovered' => 1,
-                                                'coverage' => 50,
-                                            ],
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'PULL_REQUEST',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:30:39+00:00',
+                                        'eventTime' => '2023-09-18T01:30:39+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
                                         ],
-                                        [],
-                                        DateTimeImmutable::createFromFormat(
-                                            DateTimeInterface::ATOM,
-                                            '2023-08-30T12:00:78+00:00'
-                                        )
-                                    )
-                                ]
-                            )
-                        ),
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                        'eventType' => 'UPLOAD',
+                                    ],
+                                    'validUntil' => '2023-08-30T12:01:18+00:00',
+                                    'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                                    'coveragePercentage' => 50.0,
+                                    'diffCoveragePercentage' => 100.0,
+                                    'successfulUploads' => 2,
+                                    'pendingUploads' => 0,
+                                    'tagCoverage' => [
+                                        0 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 1,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 0,
+                                            'coverage' => 100,
+                                        ],
+                                        1 => [
+                                            'tag' => [
+                                                'name' => 'mock-tag-2',
+                                                'commit' => 'mock-commit',
+                                            ],
+                                            'lines' => 2,
+                                            'covered' => 1,
+                                            'partial' => 0,
+                                            'uncovered' => 1,
+                                            'coverage' => 50,
+                                        ],
+                                    ],
+                                    'leastCoveredDiffFiles' => [
+                                    ],
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:30:39+00:00',
+                                'eventTime' => '2023-09-18T01:30:39+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                                'eventType' => 'UPLOAD',
+                            ],
+                            'validUntil' => '2023-08-30T12:01:18+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '1234',
@@ -420,23 +581,61 @@ class EventHandlerTest extends TestCase
                     [
                         'eventSource' => 'aws:sqs',
                         'messageId' => '3',
-                        'body' => json_encode(
-                            new PublishableMessageCollection(
-                                $upload,
-                                [
-                                    new PublishableCheckAnnotationMessage(
-                                        $upload,
-                                        'mock-file.php',
-                                        1,
-                                        LineState::UNCOVERED,
-                                        DateTimeImmutable::createFromFormat(
-                                            DateTimeInterface::ATOM,
-                                            '2023-08-30T12:01:00+00:00'
-                                        )
-                                    )
-                                ]
-                            )
-                        ),
+                        'body' => json_encode([
+                            'type' => 'COLLECTION',
+                            'messages' => [
+                                0 => [
+                                    'type' => 'CHECK_ANNOTATION',
+                                    'event' => [
+                                        'type' => 'UPLOAD',
+                                        'uploadId' => 'mock-uuid',
+                                        'provider' => 'github',
+                                        'owner' => 'mock-owner',
+                                        'repository' => 'mock-repository',
+                                        'ref' => 'master',
+                                        'projectRoot' => 'mock-root',
+                                        'pullRequest' => 1,
+                                        'ingestTime' => '2023-09-18T01:31:35+00:00',
+                                        'eventTime' => '2023-09-18T01:31:35+00:00',
+                                        'commit' => 'mock-commit',
+                                        'parent' => [
+                                        ],
+                                        'tag' => [
+                                            'name' => 'mock-tag',
+                                            'commit' => 'mock-commit',
+                                        ],
+                                        'eventType' => 'UPLOAD',
+                                    ],
+                                    'fileName' => 'mock-file.php',
+                                    'lineNumber' => 1,
+                                    'lineState' => 'uncovered',
+                                    'validUntil' => '2023-08-30T12:01:00+00:00',
+                                    'messageGroup' => '6bfe4fbaf34561246b97f9e8a8c66082',
+                                ],
+                            ],
+                            'event' => [
+                                'type' => 'UPLOAD',
+                                'uploadId' => 'mock-uuid',
+                                'provider' => 'github',
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repository',
+                                'ref' => 'master',
+                                'projectRoot' => 'mock-root',
+                                'pullRequest' => 1,
+                                'ingestTime' => '2023-09-18T01:31:35+00:00',
+                                'eventTime' => '2023-09-18T01:31:35+00:00',
+                                'commit' => 'mock-commit',
+                                'parent' => [
+                                ],
+                                'tag' => [
+                                    'name' => 'mock-tag',
+                                    'commit' => 'mock-commit',
+                                ],
+                                'eventType' => 'UPLOAD',
+                            ],
+                            'validUntil' => '2023-08-30T12:01:00+00:00',
+                            'messageGroup' => 'd047439957bad1d7f75c954f2fbe434c',
+                        ]),
                         'attributes' => [
                             'ApproximateReceiveCount' => '1',
                             'SentTimestamp' => '0',
@@ -451,7 +650,10 @@ class EventHandlerTest extends TestCase
             ]
         );
 
-        $eventHandler = new EventHandler($mockCoveragePublisherService);
+        $eventHandler = new EventHandler(
+            $mockCoveragePublisherService,
+            $this->getContainer()->get(SerializerInterface::class)
+        );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());
     }

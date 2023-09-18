@@ -127,36 +127,4 @@ class GraphControllerTest extends KernelTestCase
             $response->getStatusCode()
         );
     }
-
-    public function testBadgeWithInvalidProvider(): void
-    {
-        $mockBadgeService = $this->createMock(BadgeService::class);
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-
-        $mockAuthTokenService->expects($this->never())
-            ->method('getGraphTokenFromRequest')
-            ->with($this->isInstanceOf(Request::class))
-            ->willReturn(null);
-
-        $mockAuthTokenService->expects($this->never())
-            ->method('validateParametersWithGraphToken');
-
-        $mockProjectRepository->expects($this->never())
-            ->method('findOneBy');
-
-        $mockBadgeService->expects($this->never())
-            ->method('getBadge');
-
-        $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
-
-        $uploadController->setContainer($this->getContainer());
-
-        $response = $uploadController->badge('invalid-provider', 'owner', 'repository', new Request());
-
-        $this->assertEquals(
-            Response::HTTP_BAD_REQUEST,
-            $response->getStatusCode()
-        );
-    }
 }

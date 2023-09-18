@@ -7,8 +7,8 @@ use App\Enum\EnvironmentVariable;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\EnvironmentService;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\File;
 use Psr\Log\LoggerInterface;
 
 class BigQueryPersistService implements PersistServiceInterface
@@ -77,7 +77,7 @@ class BigQueryPersistService implements PersistServiceInterface
         $remainingLines = $totalLines;
 
         foreach ($coverage->getFiles() as $file) {
-            foreach ($file->getAllLines() as $line) {
+            foreach ($file->getLines() as $line) {
                 $chunk = [
                     ...($chunk ?? []),
                     [

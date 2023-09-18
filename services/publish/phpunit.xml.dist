@@ -15,11 +15,6 @@
         <server name="APP_ENV" value="test" force="true"/>
         <server name="SHELL_VERBOSITY" value="-1"/>
         <server name="KERNEL_CLASS" value="App\Kernel"/>
-
-        <!-- ###+ symfony/framework-bundle ### -->
-        <env name="APP_ENV" value="dev"/>
-        <env name="APP_SECRET" value="ecdb8b7e637b21ef4ed1c3d1452b8b54"/>
-        <!-- ###- symfony/framework-bundle ### -->
     </php>
     <testsuites>
         <testsuite name="Project Test Suite">

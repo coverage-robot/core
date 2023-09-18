@@ -4,9 +4,12 @@ namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-class PipelineComplete extends GenericEvent
+class PipelineComplete implements EventInterface
 {
     public function __construct(
         private readonly Provider $provider,
@@ -15,6 +18,10 @@ class PipelineComplete extends GenericEvent
         private readonly string $ref,
         private readonly string $commit,
         private readonly ?string $pullRequest,
+        #[Context(
+            normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+            denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+        )]
         private readonly DateTimeImmutable $completedAt
     ) {
     }
@@ -59,17 +66,9 @@ class PipelineComplete extends GenericEvent
         return $this->completedAt;
     }
 
-    public static function from(array $data): PipelineComplete
+    public function getEventType(): EventType
     {
-        return new self(
-            Provider::from((string)$data['provider']),
-            (string)$data['owner'],
-            (string)$data['repository'],
-            (string)$data['ref'],
-            (string)$data['commit'],
-            isset($data['pullRequest']) ? (int)$data['pullRequest'] : null,
-            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['completedAt'])
-        );
+        return EventType::PIPELINE_COMPLETE;
     }
 
     public function __toString(): string
@@ -83,19 +82,5 @@ class PipelineComplete extends GenericEvent
             $this->commit,
             $this->pullRequest
         );
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            ...parent::jsonSerialize(),
-            'provider' => $this->provider->value,
-            'owner' => $this->owner,
-            'repository' => $this->repository,
-            'ref' => $this->ref,
-            'commit' => $this->commit,
-            'pullRequest' => $this->pullRequest,
-            'completedAt' => $this->completedAt->format(DateTimeInterface::ATOM),
-        ];
     }
 }

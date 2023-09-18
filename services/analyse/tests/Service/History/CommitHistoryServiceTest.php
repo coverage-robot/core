@@ -6,6 +6,7 @@ use App\Service\History\CommitHistoryService;
 use App\Service\History\Github\GithubCommitHistoryService;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -27,16 +28,18 @@ class CommitHistoryServiceTest extends TestCase
         $this->assertEquals(
             [],
             $historyService->getPrecedingCommits(
-                Upload::from([
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'owner',
-                    'repository' => 'repository',
-                    'commit' => 'commit',
-                    'uploadId' => 'uploadId',
-                    'ref' => 'ref',
-                    'parent' => [],
-                    'tag' => 'tag',
-                ])
+                new Upload(
+                    'uploadId',
+                    Provider::GITHUB,
+                    'owner',
+                    'repository',
+                    'commit',
+                    [],
+                    'ref',
+                    'project-root',
+                    12,
+                    new Tag('tag', 'commit'),
+                )
             )
         );
     }
@@ -56,16 +59,18 @@ class CommitHistoryServiceTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $historyService->getPrecedingCommits(
-            Upload::from([
-                'provider' => Provider::GITHUB->value,
-                'owner' => 'owner',
-                'repository' => 'repository',
-                'commit' => 'commit',
-                'uploadId' => 'uploadId',
-                'ref' => 'ref',
-                'parent' => [],
-                'tag' => 'tag',
-            ])
+            new Upload(
+                'uploadId',
+                Provider::GITHUB,
+                'owner',
+                'repository',
+                'commit',
+                [],
+                'ref',
+                'project-root',
+                12,
+                new Tag('tag', 'commit'),
+            )
         );
     }
 }

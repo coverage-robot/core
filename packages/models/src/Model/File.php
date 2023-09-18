@@ -3,12 +3,11 @@
 namespace Packages\Models\Model;
 
 use Countable;
-use JsonSerializable;
 use OutOfBoundsException;
 use Packages\Models\Model\Line\AbstractLine;
 use Stringable;
 
-class File implements JsonSerializable, Countable, Stringable
+class File implements Countable, Stringable
 {
     private int $lineCount;
 
@@ -31,7 +30,7 @@ class File implements JsonSerializable, Countable, Stringable
     /**
      * @return AbstractLine[]
      */
-    public function getAllLines(): array
+    public function getLines(): array
     {
         return array_values($this->lines);
     }
@@ -64,13 +63,5 @@ class File implements JsonSerializable, Countable, Stringable
     public function count(): int
     {
         return $this->lineCount;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'fileName' => $this->getFileName(),
-            'lines' => $this->getAllLines()
-        ];
     }
 }

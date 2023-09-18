@@ -9,13 +9,16 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
+use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends SqsHandler
 {
     public function __construct(
-        private readonly MessagePublisherService $messagePublisherService
+        private readonly MessagePublisherService $messagePublisherService,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
@@ -33,7 +36,8 @@ class EventHandler extends SqsHandler
         $messages = array_reduce(
             $messages,
             function (array $messages, PublishableMessageInterface $message) {
-                if ($message instanceof PublishableMessageCollection) {
+                if ($message->getType() === PublishableMessage::Collection) {
+                    /** @var PublishableMessageCollection $message */
                     return array_merge($messages, $message->getMessages());
                 }
 
@@ -73,15 +77,12 @@ class EventHandler extends SqsHandler
             /** @var array{MessageGroupId: string} $attributes */
             $attributes = $record->toArray()['attributes'];
 
-            /** @var array $body */
-            $body = json_decode($record->getBody(), true, 512, JSON_THROW_ON_ERROR);
-
+            $newMessage = $this->serializer->deserialize(
+                $record->getBody(),
+                PublishableMessageInterface::class,
+                'json'
+            );
             $currentNewestMessage = $messages[$attributes['MessageGroupId']] ?? null;
-            $newMessage = PublishableMessageCollection::fromMessageUsingType($body);
-
-            if (!$newMessage) {
-                continue;
-            }
 
             if (!$currentNewestMessage) {
                 // This is the first set of messages to publish for this owner/repository

@@ -3,12 +3,21 @@
 namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeInterface;
-use JsonSerializable;
 use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
-interface PublishableMessageInterface extends JsonSerializable, Stringable
+#[DiscriminatorMap(
+    'type',
+    [
+        PublishableMessage::PullRequest->value => PublishablePullRequestMessage::class,
+        PublishableMessage::CheckAnnotation->value => PublishableCheckAnnotationMessage::class,
+        PublishableMessage::CheckRun->value => PublishableCheckRunMessage::class,
+        PublishableMessage::Collection->value => PublishableMessageCollection::class,
+    ]
+)]
+interface PublishableMessageInterface extends Stringable
 {
     /**
      * Get the event the message is was generated for (this may be an upload, or some
@@ -43,9 +52,4 @@ interface PublishableMessageInterface extends JsonSerializable, Stringable
      * Determine the type of message when its serialised.
      */
     public function getType(): PublishableMessage;
-
-    /**
-     * Create a message from an array of data - generally a serialised array of data from a queue.
-     */
-    public static function from(array $data): self;
 }

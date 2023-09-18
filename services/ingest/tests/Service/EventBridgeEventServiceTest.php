@@ -5,6 +5,7 @@ namespace App\Tests\Service;
 use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
+use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
@@ -14,8 +15,8 @@ use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Tag;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +33,7 @@ class EventBridgeEventServiceTest extends TestCase
             'mock-commit',
             ['mock-parent'],
             'mock-ref',
+            'mock-project-root',
             null,
             new Tag('mock-tag', 'mock-commit')
         );
@@ -68,6 +70,17 @@ class EventBridgeEventServiceTest extends TestCase
                 Environment::TESTING,
                 [
                     EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
+                ]
+            ),
+            MockSerializerFactory::getMock(
+                $this,
+                serializeMap: [
+                    [
+                        $upload,
+                        'json',
+                        [],
+                        json_encode($upload, JSON_THROW_ON_ERROR)
+                    ]
                 ]
             )
         );

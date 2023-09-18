@@ -3,27 +3,32 @@
 namespace App\Tests\Service;
 
 use App\Service\BigQueryMetadataBuilderService;
+use App\Tests\Mock\Factory\MockNormalizerFactory;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
+use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
-use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class BigQueryMetadataBuilderServiceTest extends TestCase
+class BigQueryMetadataBuilderServiceTest extends KernelTestCase
 {
     public function testBuildRow(): void
     {
-        $bigQueryMetadataBuilderService = new BigQueryMetadataBuilderService(new NullLogger());
+        $bigQueryMetadataBuilderService = new BigQueryMetadataBuilderService(
+            new NullLogger(),
+            $this->getContainer()->get(SerializerInterface::class)
+        );
 
         $ingestTime = new DateTimeImmutable();
 
@@ -36,6 +41,7 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                 'mock-commit',
                 [],
                 'main',
+                'project/root',
                 1234,
                 new Tag('mock-tag', 'mock-commit'),
                 $ingestTime
@@ -50,7 +56,7 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
             [
                 'uploadId' => 'mock-uuid',
                 'ingestTime' => $ingestTime->format('Y-m-d H:i:s'),
-                'provider' => 'github',
+                'provider' => Provider::GITHUB,
                 'owner' => 'mock-repository',
                 'repository' => 'mock-branch',
                 'commit' => 'mock-commit',
@@ -85,7 +91,10 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
     #[DataProvider('lineDataProvider')]
     public function testBuildMetadata(AbstractLine $line, array $expectedMetadata): void
     {
-        $bigQueryMetadataBuilderService = new BigQueryMetadataBuilderService(new NullLogger());
+        $bigQueryMetadataBuilderService = new BigQueryMetadataBuilderService(
+            new NullLogger(),
+            $this->getContainer()->get(SerializerInterface::class)
+        );
 
         $metadata = $bigQueryMetadataBuilderService->buildMetadata($line);
 
@@ -99,6 +108,10 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                 new Branch(1, 1, [0 => 0, 1 => 1]),
                 [
                     [
+                        'key' => 'branchHits',
+                        'value' => '[0,1]'
+                    ],
+                    [
                         'key' => 'type',
                         'value' => LineType::BRANCH->value
                     ],
@@ -110,10 +123,6 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                         'key' => 'lineHits',
                         'value' => 1
                     ],
-                    [
-                        'key' => 'branchHits',
-                        'value' => '[0,1]'
-                    ]
                 ]
             ],
             LineType::STATEMENT->value => [
@@ -137,6 +146,10 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                 new Method(1, 10, 'some-method'),
                 [
                     [
+                        'key' => 'name',
+                        'value' => 'some-method'
+                    ],
+                    [
                         'key' => 'type',
                         'value' => LineType::METHOD->value
                     ],
@@ -148,10 +161,6 @@ class BigQueryMetadataBuilderServiceTest extends TestCase
                         'key' => 'lineHits',
                         'value' => 10
                     ],
-                    [
-                        'key' => 'name',
-                        'value' => 'some-method'
-                    ]
                 ]
             ],
         ];

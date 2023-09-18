@@ -6,12 +6,17 @@ use Countable;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use JsonSerializable;
 use Packages\Models\Enum\CoverageFormat;
 use Stringable;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-class Coverage implements JsonSerializable, Countable, Stringable
+class Coverage implements Countable, Stringable
 {
+    #[Context(
+        normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+        denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+    )]
     private ?DateTimeImmutable $generatedAt = null;
 
     /**
@@ -102,15 +107,5 @@ class Coverage implements JsonSerializable, Countable, Stringable
     public function count(): int
     {
         return $this->fileCount;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'sourceFormat' => $this->sourceFormat,
-            'root' => $this->root,
-            'generatedAt' => $this->getGeneratedAt()?->format(DateTimeInterface::ATOM),
-            'files' => $this->getFiles()
-        ];
     }
 }

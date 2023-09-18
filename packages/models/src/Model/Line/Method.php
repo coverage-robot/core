@@ -28,14 +28,4 @@ class Method extends AbstractLine
     {
         return LineType::METHOD;
     }
-
-    public function jsonSerialize(): array
-    {
-        return array_merge(
-            parent::jsonSerialize(),
-            [
-                'name' => $this->getName(),
-            ]
-        );
-    }
 }

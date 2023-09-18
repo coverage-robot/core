@@ -4,11 +4,18 @@ namespace Packages\Models\Model\Event;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-class Upload extends GenericEvent
+class Upload implements EventInterface
 {
+    #[Context(
+        normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+        denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+    )]
     private readonly DateTimeImmutable $ingestTime;
 
     public function __construct(
@@ -19,6 +26,7 @@ class Upload extends GenericEvent
         private readonly string $commit,
         private readonly array $parent,
         private readonly string $ref,
+        private readonly string $projectRoot,
         private readonly string|int|null $pullRequest,
         private readonly Tag $tag,
         ?DateTimeInterface $ingestTime = null
@@ -55,6 +63,11 @@ class Upload extends GenericEvent
         return $this->ref;
     }
 
+    public function getProjectRoot(): string
+    {
+        return $this->projectRoot;
+    }
+
     public function getPullRequest(): int|string|null
     {
         return $this->pullRequest;
@@ -85,57 +98,13 @@ class Upload extends GenericEvent
         return $this->tag;
     }
 
+    public function getEventType(): EventType
+    {
+        return EventType::UPLOAD;
+    }
+
     public function __toString(): string
     {
         return 'Upload#' . $this->uploadId;
-    }
-
-    public static function from(array $data): self
-    {
-        // Convert all keys to lower case to unify key lookups and account for
-        // S3 metadata which will have already done this
-        $data = array_change_key_case($data);
-
-        return new self(
-            (string)$data['uploadid'],
-            Provider::from((string)$data['provider']),
-            (string)$data['owner'],
-            (string)$data['repository'],
-            (string)$data['commit'],
-            is_array($data['parent']) ?
-                $data['parent'] :
-                json_decode($data['parent'], true, 512, JSON_THROW_ON_ERROR),
-            (string)$data['ref'],
-            isset($data['pullrequest']) ? (int)$data['pullrequest'] : null,
-            new Tag(
-                (string)$data['tag'],
-                (string)$data['commit']
-            ),
-            isset($data['ingesttime']) ?
-                DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $data['ingesttime']) :
-                new DateTimeImmutable()
-        );
-    }
-
-    public function jsonSerialize(): array
-    {
-        $fields = [
-            ...parent::jsonSerialize(),
-            'uploadId' => $this->uploadId,
-            'provider' => $this->provider->value,
-            'owner' => $this->owner,
-            'repository' => $this->repository,
-            'ingestTime' => $this->ingestTime->format(DateTimeInterface::ATOM),
-            'commit' => $this->commit,
-            'parent' => $this->parent,
-            'ref' => $this->ref,
-            'tag' => $this->tag->getName()
-        ];
-
-        if ($this->pullRequest) {
-            $fields['pullRequest'] = $this->pullRequest;
-        }
-
-        return $fields;
     }
 }

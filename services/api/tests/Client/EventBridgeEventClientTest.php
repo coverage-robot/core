@@ -11,19 +11,33 @@ use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\PipelineComplete;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class EventBridgeEventClientTest extends TestCase
+class EventBridgeEventClientTest extends KernelTestCase
 {
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
+        $completedAt = new DateTimeImmutable();
+        $event = [
+            'provider' => Provider::GITHUB,
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository',
+            'ref' => 'mock-ref',
+            'commit' => 'mock-commit',
+            'pullRequest' => null,
+            'completedAt' => $completedAt->format(DateTimeInterface::ATOM),
+            'eventTime' => $completedAt->format(DateTimeInterface::ATOM)
+        ];
+
         $pipelineComplete = new PipelineComplete(
             Provider::GITHUB,
             'mock-owner',
@@ -31,7 +45,7 @@ class EventBridgeEventClientTest extends TestCase
             'mock-ref',
             'mock-commit',
             null,
-            new DateTimeImmutable()
+            $completedAt
         );
 
         $mockResult = ResultMockFactory::create(
@@ -51,7 +65,7 @@ class EventBridgeEventClientTest extends TestCase
                             'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::API->value,
                             'DetailType' => CoverageEvent::PIPELINE_COMPLETE->value,
-                            'Detail' => json_encode($pipelineComplete, JSON_THROW_ON_ERROR),
+                            'Detail' => json_encode($event),
                         ])
                     ],
                 ])
@@ -67,7 +81,8 @@ class EventBridgeEventClientTest extends TestCase
                 [
                     EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
                 ]
-            )
+            ),
+            $this->getContainer()->get(SerializerInterface::class)
         );
 
         $success = $eventBridgeEventService->publishEvent(

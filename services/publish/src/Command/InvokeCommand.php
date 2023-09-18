@@ -15,6 +15,7 @@ use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Models\Model\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -70,17 +71,18 @@ class InvokeCommand extends Command
                 '2023-08-30T12:00:00+00:00'
             );
 
-            $upload = Upload::from([
-                'uploadId' => 'mock-uuid',
-                'provider' => Provider::GITHUB->value,
-                'commit' => $input->getArgument('commit'),
-                'parent' => $input->getArgument('parent'),
-                'ref' => $input->getArgument('ref'),
-                'owner' => $input->getArgument('owner'),
-                'repository' => $input->getArgument('repository'),
-                'tag' => $input->getArgument('tag'),
-                'pullRequest' => $input->getArgument('pullRequest')
-            ]);
+            $upload = new Upload(
+                'mock-uuid',
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-commit',
+                ['mock-parent'],
+                'mock-ref',
+                'mock-project-root',
+                null,
+                new Tag('mock-tag', 'mock-commit'),
+            );
 
             $sqsEvent = new SqsEvent(
                 [

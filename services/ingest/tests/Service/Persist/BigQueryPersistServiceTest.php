@@ -22,11 +22,12 @@ use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class BigQueryPersistServiceTest extends TestCase
+class BigQueryPersistServiceTest extends KernelTestCase
 {
     #[DataProvider('coverageDataProvider')]
     public function testPersistWithVaryingChunks(
@@ -47,8 +48,10 @@ class BigQueryPersistServiceTest extends TestCase
             ->method('insertRows')
             ->with(
                 self::callback(
-                    static function (array $rows) use ($insertMatcher, $expectedChunks): bool {
-                        return $rows == $expectedChunks[$insertMatcher->numberOfInvocations() - 1];
+                    function (array $rows) use ($insertMatcher, $expectedChunks): bool {
+                        $this->assertEquals($rows, $expectedChunks[$insertMatcher->numberOfInvocations() - 1]);
+
+                        return true;
                     }
                 )
             )
@@ -67,7 +70,10 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService(
             $mockBigQueryClient,
-            new BigQueryMetadataBuilderService(new NullLogger()),
+            new BigQueryMetadataBuilderService(
+                new NullLogger(),
+                $this->getContainer()->get(SerializerInterface::class)
+            ),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::TESTING,
@@ -119,7 +125,10 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService(
             $mockBigQueryClient,
-            new BigQueryMetadataBuilderService(new NullLogger()),
+            new BigQueryMetadataBuilderService(
+                new NullLogger(),
+                $this->getContainer()->get(SerializerInterface::class)
+            ),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::TESTING,
@@ -174,7 +183,10 @@ class BigQueryPersistServiceTest extends TestCase
 
         $bigQueryPersistService = new BigQueryPersistService(
             $mockBigQueryClient,
-            new BigQueryMetadataBuilderService(new NullLogger()),
+            new BigQueryMetadataBuilderService(
+                new NullLogger(),
+                $this->getContainer()->get(SerializerInterface::class)
+            ),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::TESTING,
@@ -201,6 +213,7 @@ class BigQueryPersistServiceTest extends TestCase
             '',
             [],
             'mock-branch-reference',
+            'project/root/',
             1,
             new Tag('mock-tag', '')
         );
@@ -227,7 +240,7 @@ class BigQueryPersistServiceTest extends TestCase
                     $commonColumns = [
                         'uploadId' => $upload->getUploadId(),
                         'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
-                        'provider' => $upload->getProvider()->value,
+                        'provider' => $upload->getProvider(),
                         'owner' => $upload->getOwner(),
                         'repository' => $upload->getRepository(),
                         'commit' => $upload->getCommit(),
@@ -267,28 +280,28 @@ class BigQueryPersistServiceTest extends TestCase
                         'data' => [
                             ...match ($line->getType()) {
                                 LineType::STATEMENT => $commonColumns + [
-                                        'metadata' => $commonMetadata,
+                                        'metadata' => $commonMetadata
                                     ],
                                 LineType::BRANCH => $commonColumns + [
                                         'metadata' => array_merge(
-                                            $commonMetadata,
                                             [
                                                 [
                                                     'key' => 'branchHits',
                                                     'value' => '{"0":0,"1":2,"3":0}'
                                                 ]
-                                            ]
+                                            ],
+                                            $commonMetadata,
                                         )
                                     ],
                                 LineType::METHOD => $commonColumns + [
                                         'metadata' => array_merge(
-                                            $commonMetadata,
                                             [
                                                 [
                                                     'key' => 'name',
                                                     'value' => $line->getName()
                                                 ]
-                                            ]
+                                            ],
+                                            $commonMetadata
                                         )
                                     ],
                             }

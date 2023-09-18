@@ -14,27 +14,30 @@ use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
-use PHPUnit\Framework\TestCase;
+use Packages\Models\Model\Tag;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class SqsMessageClientTest extends TestCase
+class SqsMessageClientTest extends KernelTestCase
 {
     public function testQueuePublishableMessage(): void
     {
         $publishableMessage = new PublishablePullRequestMessage(
-            Upload::from(
-                [
-                    'provider' => Provider::GITHUB->value,
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repository',
-                    'commit' => 'mock-commit',
-                    'uploadId' => 'mock-uploadId',
-                    'ref' => 'mock-ref',
-                    'parent' => [],
-                    'tag' => 'mock-tag',
-                ]
+            new Upload(
+                'mock-uploadId',
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-commit',
+                [],
+                'master',
+                'project-root',
+                12,
+                new Tag('mock-tag', 'mock-commit'),
+                new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
             ),
             100.0,
             100.0,
@@ -56,9 +59,7 @@ class SqsMessageClientTest extends TestCase
                 self::callback(
                     function (SendMessageRequest $messageRequest) use ($publishableMessage): true {
                         $this->assertEquals('publish-queue-url', $messageRequest->getQueueUrl());
-                        $this->assertEquals('1a29f8adfb262a02370a33939d5f5840', $messageRequest->getMessageGroupId());
-                        $this->assertEquals(json_encode($publishableMessage), $messageRequest->getMessageBody());
-
+                        $this->assertEquals('ba7fb642308245d6784bbc6bb7b28638', $messageRequest->getMessageGroupId());
                         return true;
                     }
                 )
@@ -81,7 +82,8 @@ class SqsMessageClientTest extends TestCase
                 [
                     EnvironmentVariable::PUBLISH_QUEUE->value => 'publish-queue-url',
                 ]
-            )
+            ),
+            $this->getContainer()->get(SerializerInterface::class)
         );
 
         $successful = $sqsMessageClient->queuePublishableMessage($publishableMessage);

@@ -653,17 +653,18 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload = Upload::from([
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'commit' => 'mock-commit',
-            'uploadId' => 'mock-uploadId',
-            'ref' => 'mock-ref',
-            'parent' => [],
-            'tag' => 'mock-tag',
-            'ingestTime' => '2021-01-01T00:00:00+00:00'
-        ]);
+        $upload = new Upload(
+            'uploadId',
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit',
+            [],
+            'ref',
+            'project-root',
+            12,
+            new Tag('tag', 'commit'),
+        );
 
         $lineScope = [
             'mock-file' => [1, 2, 3],
@@ -772,16 +773,18 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromEvent(
-                    Upload::from([
-                        'provider' => Provider::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repository',
-                        'commit' => 'mock-commit',
-                        'uploadId' => 'mock-uploadId',
-                        'ref' => 'mock-ref',
-                        'parent' => [],
-                        'tag' => 'mock-tag',
-                    ])
+                    new Upload(
+                        'uploadId',
+                        Provider::GITHUB,
+                        'owner',
+                        'repository',
+                        'commit',
+                        [],
+                        'ref',
+                        'project-root',
+                        12,
+                        new Tag('tag', 'commit'),
+                    )
                 ),
                 true
             ],

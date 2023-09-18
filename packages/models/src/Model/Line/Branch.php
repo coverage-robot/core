@@ -44,14 +44,4 @@ class Branch extends AbstractLine
     {
         return LineType::BRANCH;
     }
-
-    public function jsonSerialize(): array
-    {
-        return array_merge(
-            parent::jsonSerialize(),
-            [
-                'branchHits' => $this->getBranchHits()
-            ]
-        );
-    }
 }

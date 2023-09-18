@@ -4,10 +4,8 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use InvalidArgumentException;
 use Packages\Models\Enum\PublishableMessage;
 use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\GenericEvent;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
 {
@@ -78,53 +76,6 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getLeastCoveredDiffFiles(): array
     {
         return $this->leastCoveredDiffFiles;
-    }
-
-    public static function from(array $data): self
-    {
-        $validUntil = DateTimeImmutable::createFromFormat(
-            DateTimeInterface::ATOM,
-            $data['validUntil'] ?? ''
-        );
-
-        if (
-            !isset($data['event']) ||
-            !isset($data['coveragePercentage']) ||
-            !isset($data['diffCoveragePercentage']) ||
-            !isset($data['successfulUploads']) ||
-            !isset($data['pendingUploads']) ||
-            !isset($data['tagCoverage']) ||
-            !isset($data['leastCoveredDiffFiles']) ||
-            !$validUntil
-        ) {
-            throw new InvalidArgumentException("Pull request message is not valid.");
-        }
-
-        return new self(
-            GenericEvent::from($data['event']),
-            (float)$data['coveragePercentage'],
-            (float)$data['diffCoveragePercentage'],
-            (int)$data['successfulUploads'],
-            (int)$data['pendingUploads'],
-            (array)$data['tagCoverage'],
-            (array)$data['leastCoveredDiffFiles'],
-            $validUntil
-        );
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'type' => $this->getType()->value,
-            'event' => $this->event->jsonSerialize(),
-            'coveragePercentage' => $this->coveragePercentage,
-            'diffCoveragePercentage' => $this->diffCoveragePercentage,
-            'successfulUploads' => $this->successfulUploads,
-            'pendingUploads' => $this->pendingUploads,
-            'tagCoverage' => $this->tagCoverage,
-            'leastCoveredDiffFiles' => $this->leastCoveredDiffFiles,
-            'validUntil' => $this->validUntil->format(DateTimeInterface::ATOM),
-        ];
     }
 
     public function __toString(): string

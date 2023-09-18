@@ -7,6 +7,7 @@ use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
 use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterface
 {
@@ -17,7 +18,8 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
 
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
-        private readonly ProjectRepository $projectRepository
+        private readonly ProjectRepository $projectRepository,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
@@ -45,7 +47,12 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
             return;
         }
 
-        $upload = Upload::from((array)$detail['upload']);
+        $upload = $this->serializer->deserialize(
+            $detail['upload'],
+            Upload::class,
+            'json'
+        );
+
         $coveragePercentage = (float)$detail['coveragePercentage'];
 
         if (!in_array($upload->getRef(), self::REFS, true)) {
