@@ -32,10 +32,9 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
     public function process(EventBridgeEvent $event): void
     {
         try {
-            $upload = $this->serializer->deserialize(
+            $upload = $this->serializer->denormalize(
                 $event->getDetail(),
-                Upload::class,
-                'json'
+                Upload::class
             );
 
             $this->eventProcessorLogger->info(
