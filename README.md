@@ -1,6 +1,9 @@
-<img src="resources/logo.png" style="margin: 5px auto 15px; display: block; height: 200px; width: auto;" />
-
-<img src="https://api.coveragerobot.com/v1/graph/github/coverage-robot/core/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc" style="display: block; margin: 0 auto;" />
+<p align="center">
+    <img src="resources/logo.png" style="height: 200px; width: auto;" />
+</p>
+<p align="center">
+    <img src="https://api.coveragerobot.com/v1/graph/github/coverage-robot/core/badge.svg?token=88f90351b6ac5ff3b37dec111714c05195803089cdba6892cc" style="display: block;" />
+</p>
 
 The core platform for ingesting, analysing, and publishing coverage data to Version Control platforms.
 
