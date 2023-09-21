@@ -10,6 +10,10 @@ output "publish_queue" {
   value = module.queue.publish_queue
 }
 
+output "webhooks_queue" {
+  value = module.queue.webhooks_queue
+}
+
 output "cloudfront_distribution" {
   value = length(module.warehouse) > 0 ? module.routing.cloudwatch_distribution : null
 }
