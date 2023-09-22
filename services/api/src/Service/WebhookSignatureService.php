@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Model\Webhook\Github\AbstractGithubWebhook;
+use App\Model\Webhook\SignedWebhookInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,7 +18,7 @@ class WebhookSignatureService
      */
     public function getPayloadSignatureFromRequest(Request $request): ?string
     {
-        $signature = $request->headers->get(AbstractGithubWebhook::SIGNATURE_HEADER);
+        $signature = $request->headers->get(SignedWebhookInterface::SIGNATURE_HEADER);
 
         if (!$signature) {
             $this->webhookSignatureLogger->info(
@@ -40,7 +40,7 @@ class WebhookSignatureService
         if (
             !isset($payloadSignature['signature'], $payloadSignature['algorithm']) ||
             !$payloadSignature['signature'] ||
-            !$payloadSignature['algorithm'] == AbstractGithubWebhook::SIGNATURE_ALGORITHM
+            !$payloadSignature['algorithm'] == SignedWebhookInterface::SIGNATURE_ALGORITHM
         ) {
             $this->webhookSignatureLogger->info(
                 'Payload signature provided in an unsupported format.',
@@ -70,7 +70,7 @@ class WebhookSignatureService
     public function computePayloadSignature(string $payload, string $secret): string
     {
         return hash_hmac(
-            AbstractGithubWebhook::SIGNATURE_ALGORITHM,
+            'sha256',
             $payload,
             $secret
         );

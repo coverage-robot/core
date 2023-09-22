@@ -2,7 +2,8 @@
 
 namespace App\Service\Webhook;
 
-use App\Model\Webhook\AbstractWebhook;
+use App\Entity\Project;
+use App\Model\Webhook\WebhookInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -17,7 +18,7 @@ class WebhookProcessor
     ) {
     }
 
-    public function process(AbstractWebhook $webhook): void
+    public function process(Project $project, WebhookInterface $webhook): void
     {
         $processor = (iterator_to_array($this->webhookProcessors)[$webhook->getEvent()->value]) ?? null;
 
@@ -30,6 +31,6 @@ class WebhookProcessor
             );
         }
 
-        $processor->process($webhook);
+        $processor->process($project, $webhook);
     }
 }

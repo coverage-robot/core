@@ -47,7 +47,7 @@ data "archive_file" "deployment" {
     "composer.lock",
     "README.md",
     "tests",
-    "infrastructure"
+    "infrastructure",
   ]
 }
 
@@ -63,6 +63,16 @@ module "api" {
 
 module "event_listener" {
   source = "./event_listener"
+
+  php_version     = var.php_version
+  deployment_hash = data.archive_file.deployment.output_base64sha256
+
+  environment = local.environment
+  region      = var.region
+}
+
+module "webhook_handler" {
+  source = "./webhook_handler"
 
   php_version     = var.php_version
   deployment_hash = data.archive_file.deployment.output_base64sha256

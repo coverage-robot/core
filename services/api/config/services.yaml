@@ -19,6 +19,11 @@ services:
         # runtime
         public: true
 
+    App\Handler\WebhookHandler:
+        # The handler must be public so that Bref is able to run it through the Symfony
+        # runtime
+        public: true
+
     PUGX\Poser\Render\:
         resource: '../vendor/badges/poser/src/Render'
 
