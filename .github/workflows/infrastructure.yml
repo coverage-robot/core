@@ -128,3 +128,6 @@ jobs:
                     variables: |
                         planetscale_service_token_id = "${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}"
                         planetscale_service_token = "${{ secrets.PLANETSCALE_SERVICE_TOKEN }}"
+
+                    # The plan will already have been generated on the PR, so approving here should be fine
+                    auto_approve: true
