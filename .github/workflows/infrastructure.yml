@@ -120,7 +120,7 @@ jobs:
                     service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
 
             -   name: Run Apply
-                uses: dflook/terraform-plan@v1
+                uses: dflook/terraform-apply@v1
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
