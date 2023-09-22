@@ -2,46 +2,29 @@
 
 namespace App\Model\Webhook;
 
-use App\Enum\WebhookProcessorEvent;
-use App\Model\Webhook\Github\AbstractGithubWebhook;
-use InvalidArgumentException;
-use Packages\Models\Enum\Provider;
-use Stringable;
-use Symfony\Component\HttpFoundation\Request;
-
-abstract class AbstractWebhook implements Stringable
+abstract class AbstractWebhook implements WebhookInterface
 {
-    public function __construct(
-        private readonly Provider $provider,
-        private readonly string $owner,
-        private readonly string $repository
-    ) {
-    }
-
-    public function getProvider(): Provider
+    public function __toString(): string
     {
-        return $this->provider;
+        return sprintf(
+            'Webhook#%s-%s-%s',
+            $this->getProvider()->value,
+            $this->getOwner(),
+            $this->getRepository()
+        );
     }
 
-    public function getOwner(): string
+    public function getMessageGroup(): string
     {
-        return $this->owner;
+        return md5(
+            implode(
+                '',
+                [
+                    $this->getProvider()->value,
+                    $this->getOwner(),
+                    $this->getRepository()
+                ]
+            )
+        );
     }
-
-    public function getRepository(): string
-    {
-        return $this->repository;
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public static function fromRequest(Provider $provider, Request $request): AbstractWebhook
-    {
-        return match ($provider) {
-            Provider::GITHUB => AbstractGithubWebhook::fromRequest($provider, $request)
-        };
-    }
-
-    abstract public function getEvent(): WebhookProcessorEvent;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Webhook\Github;
+namespace App\Model\Webhook;
 
 use App\Enum\JobState;
 
@@ -21,7 +21,7 @@ interface PipelineStateChangeWebhookInterface
      *
      * For example, the check run id for GitHub.
      */
-    public function getExternalId(): string;
+    public function getExternalId(): string|int;
 
     /**
      * The current state of the suite of jobs the job is in.

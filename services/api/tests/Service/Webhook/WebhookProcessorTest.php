@@ -2,20 +2,20 @@
 
 namespace App\Tests\Service\Webhook;
 
+use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
-use App\Model\Webhook\AbstractWebhook;
-use App\Model\Webhook\Github\AbstractGithubWebhook;
+use App\Enum\WebhookType;
+use App\Model\Webhook\WebhookInterface;
 use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Service\Webhook\WebhookProcessor;
-use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookProcessorTest extends TestCase
+class WebhookProcessorTest extends KernelTestCase
 {
     #[DataProvider('webhookPayloadDataProvider')]
-    public function testProcessUsingValidEvent(Provider $provider, string $event, string $payload): void
+    public function testProcessUsingValidEvent(WebhookType $type, array $payload): void
     {
         $mockProcessor = $this->createMock(JobStateChangeWebhookProcessor::class);
         $mockProcessor->expects($this->once())
@@ -28,20 +28,30 @@ class WebhookProcessorTest extends TestCase
         );
 
         $webhookProcessor->process(
-            AbstractWebhook::fromRequest(
-                $provider,
-                new Request(
-                    server: ['HTTP_' . AbstractGithubWebhook::GITHUB_EVENT_HEADER => $event],
-                    content: $payload
+            $this->createMock(Project::class),
+            $this->getContainer()->get(SerializerInterface::class)
+                ->denormalize(
+                    array_merge(
+                        [
+                            'type' => $type->value,
+                        ],
+                        $payload
+                    ),
+                    WebhookInterface::class
                 )
-            )
         );
     }
 
     public static function webhookPayloadDataProvider(): iterable
     {
         foreach (glob(__DIR__ . '/../../Fixture/Webhook/*.json') as $payload) {
-            yield basename($payload) => [Provider::GITHUB, 'check_run', file_get_contents($payload)];
+            yield basename($payload) => [
+                WebhookType::GITHUB_CHECK_RUN,
+                json_decode(
+                    file_get_contents($payload),
+                    true
+                )
+            ];
         }
     }
 }

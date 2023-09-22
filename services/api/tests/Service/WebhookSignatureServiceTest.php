@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service;
 
-use App\Model\Webhook\Github\AbstractGithubWebhook;
+use App\Model\Webhook\SignedWebhookInterface;
 use App\Service\WebhookSignatureService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -15,10 +15,10 @@ class WebhookSignatureServiceTest extends TestCase
     {
         $request = new Request();
         $request->headers->set(
-            AbstractGithubWebhook::SIGNATURE_HEADER,
+            SignedWebhookInterface::SIGNATURE_HEADER,
             sprintf(
                 '%s=mock-signature',
-                AbstractGithubWebhook::SIGNATURE_ALGORITHM
+                SignedWebhookInterface::SIGNATURE_ALGORITHM
             )
         );
 
@@ -44,7 +44,7 @@ class WebhookSignatureServiceTest extends TestCase
     public function testGetInvalidPayloadSignatureFromRequest(string $header): void
     {
         $request = new Request();
-        $request->headers->set(AbstractGithubWebhook::SIGNATURE_HEADER, $header);
+        $request->headers->set(SignedWebhookInterface::SIGNATURE_HEADER, $header);
 
         $webhookSignatureService = new WebhookSignatureService(new NullLogger());
 
@@ -93,7 +93,7 @@ class WebhookSignatureServiceTest extends TestCase
                 file_get_contents($file),
                 'mock-secret',
                 hash_hmac(
-                    AbstractGithubWebhook::SIGNATURE_ALGORITHM,
+                    SignedWebhookInterface::SIGNATURE_ALGORITHM,
                     file_get_contents($file),
                     'mock-secret'
                 )
@@ -105,7 +105,7 @@ class WebhookSignatureServiceTest extends TestCase
     {
         return [
             [
-                sprintf('%s=', AbstractGithubWebhook::SIGNATURE_ALGORITHM),
+                sprintf('%s=', SignedWebhookInterface::SIGNATURE_ALGORITHM),
             ],
             [
                 'mock-signature',
