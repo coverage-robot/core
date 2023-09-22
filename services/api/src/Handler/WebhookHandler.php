@@ -30,10 +30,10 @@ class WebhookHandler extends SqsHandler
     public function handleSqs(SqsEvent $event, Context $context): void
     {
         foreach ($event->getRecords() as $record) {
-            /** @var WebhookInterface $webhook */
-            $webhook = $this->serializer->normalize(
-                $record->toArray(),
-                WebhookInterface::class
+            $webhook = $this->serializer->deserialize(
+                $record->getBody(),
+                WebhookInterface::class,
+                'json'
             );
 
             $this->processWebhookEvent($webhook);
