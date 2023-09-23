@@ -47,12 +47,12 @@ class WebhookController extends AbstractController
     )]
     public function handleWebhookEvent(string $provider, Request $request): Response
     {
-        /**
-         * Attach the provider and webhook event so that the serializer can
-         * discriminate against the payload body uniformly and decode the
-         * webhook event correctly.
-         */
         try {
+            /**
+             * Attach the provider and webhook type so that the serializer can
+             * discriminate against the payload body uniformly and decode the
+             * webhook event correctly.
+             */
             $webhook = $this->serializer->denormalize(
                 array_merge(
                     $request->toArray(),
@@ -60,7 +60,7 @@ class WebhookController extends AbstractController
                         'type' => WebhookType::tryFrom(
                             sprintf(
                                 '%s_%s',
-                                $provider,
+                                Provider::tryFrom($provider)?->value ?? '',
                                 $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
                             )
                         )?->value,
@@ -69,9 +69,16 @@ class WebhookController extends AbstractController
                 ),
                 WebhookInterface::class
             );
-        } catch (Exception) {
+        } catch (Exception $e) {
             // Occurs whenever the denormalized fails to denormalize the payload. This
             // common as providers frequently send payloads which aren't ones want to act on
+            $this->webhookLogger->info(
+                'Failed to denormalize webhook payload.',
+                [
+                    'exception' => $e,
+                ]
+            );
+
             return new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
@@ -85,6 +92,13 @@ class WebhookController extends AbstractController
         }
 
         $this->sqsMessageClient->queueIncomingWebhook($webhook);
+        
+        $this->webhookLogger->info(
+            sprintf(
+                '%s queued for handling successfully.',
+                (string)$webhook
+            ),
+        );
 
         return new Response(null, Response::HTTP_OK);
     }
