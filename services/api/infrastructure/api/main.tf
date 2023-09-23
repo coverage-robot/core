@@ -18,13 +18,13 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "api_role" {
-  name = "api-policy"
+  name               = "api-policy"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -34,10 +34,10 @@ resource "aws_iam_role" "api_role" {
 }
 
 resource "aws_iam_policy" "api_policy" {
-  name = "api-service-policy"
-  path = "/"
+  name   = "api-service-policy"
+  path   = "/"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Effect = "Allow"
@@ -67,6 +67,15 @@ resource "aws_iam_policy" "api_policy" {
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:SendMessage"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.webhooks_queue.arn
+        ]
+      }
     ]
   })
 }
@@ -86,7 +95,7 @@ resource "aws_lambda_function" "api" {
   architectures    = ["x86_64"]
   timeout          = 28
   memory_size      = 1024
-  layers = [
+  layers           = [
     format(
       "arn:aws:lambda:%s:534081306603:layer:${var.php_version}-fpm:%s",
       var.region,
