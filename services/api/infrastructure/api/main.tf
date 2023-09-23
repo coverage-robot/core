@@ -104,6 +104,7 @@ resource "aws_lambda_function" "api" {
     variables = {
       "BREF_PING_DISABLE" = "1",
       "EVENT_BUS"         = data.terraform_remote_state.core.outputs.coverage_event_bus.name,
+      "WEBHOOK_QUEUE"     = data.terraform_remote_state.core.outputs.webhooks_queue.url,
     }
   }
 }
