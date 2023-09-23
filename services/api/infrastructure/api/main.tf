@@ -67,6 +67,15 @@ resource "aws_iam_policy" "api_policy" {
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:SendMessage"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.webhooks_queue.arn
+        ]
+      }
     ]
   })
 }
