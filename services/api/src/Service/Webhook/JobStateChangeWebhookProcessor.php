@@ -142,7 +142,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                     $webhook->getRepository(),
                     $webhook->getRef(),
                     $webhook->getCommit(),
-                    $webhook->getPullRequest(),
+                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
                     new DateTimeImmutable()
                 )
             );

@@ -22,7 +22,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string|int $externalId,
         protected readonly string $ref,
         protected readonly string $commit,
-        protected readonly ?string $pullRequest,
+        protected readonly string|int|null $pullRequest,
         protected readonly JobState $jobState,
         protected readonly JobState $suiteState,
     ) {
@@ -86,7 +86,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     }
 
     #[SerializedPath('[check_run][pull_requests][0][number]')]
-    public function getPullRequest(): ?string
+    public function getPullRequest(): string|int|null
     {
         return $this->pullRequest;
     }
