@@ -58,6 +58,15 @@ resource "aws_iam_policy" "api_service_policy" {
           data.terraform_remote_state.core.outputs.webhooks_queue.arn
         ]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "events:PutEvents"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.coverage_event_bus.arn
+        ]
+      }
     ]
   })
 }
@@ -88,6 +97,7 @@ resource "aws_lambda_function" "webhooks" {
   environment {
     variables = {
       "BREF_PING_DISABLE" = "1"
+      "EVENT_BUS"         = data.terraform_remote_state.core.outputs.coverage_event_bus.name,
     }
   }
 }
