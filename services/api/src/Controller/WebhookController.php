@@ -92,7 +92,7 @@ class WebhookController extends AbstractController
         }
 
         $this->sqsMessageClient->queueIncomingWebhook($webhook);
-        
+
         $this->webhookLogger->info(
             sprintf(
                 '%s queued for handling successfully.',
