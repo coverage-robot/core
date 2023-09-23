@@ -36,5 +36,5 @@ interface PipelineStateChangeWebhookInterface
     /**
      * The pull request the job is running on (if applicable)
      */
-    public function getPullRequest(): ?string;
+    public function getPullRequest(): string|int|null;
 }
