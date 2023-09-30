@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Psr\Log\LoggerInterface;
@@ -93,6 +94,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $owner,
                 $repository,
                 $commit,
+                $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
                 []
             );
@@ -106,6 +108,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $owner,
                 $repository,
                 $checkRunId,
+                $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
                 []
             );
@@ -120,6 +123,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $owner,
                 $repository,
                 $checkRunId,
+                $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
                 $chunk
             );
@@ -132,27 +136,43 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $owner,
         string $repository,
         string $commit,
+        PublishableCheckRunStatus $status,
         float $coveragePercentage,
         array $annotations
     ): int {
+        $body = match ($status) {
+            PublishableCheckRunStatus::IN_PROGRESS => [
+                'name' => 'Coverage Robot',
+                'head_sha' => $commit,
+                'status' => $status->value,
+                'annotations' => $annotations,
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                ]
+            ],
+            default => [
+                'name' => 'Coverage Robot',
+                'head_sha' => $commit,
+                'status' => 'completed',
+                'conclusion' => $status->value,
+                'annotations' => $annotations,
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                ]
+            ]
+        };
+
         /** @var array{ id: string } $checkRun */
         $checkRun = $this->client->repo()
             ->checkRuns()
             ->create(
                 $owner,
                 $repository,
-                [
-                    'name' => sprintf('Coverage - %s%%', $coveragePercentage),
-                    'head_sha' => $commit,
-                    'status' => 'completed',
-                    'conclusion' => 'success',
-                    'annotations' => $annotations,
-                    'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                    'output' => [
-                        'title' => $this->checkRunFormatterService->formatTitle(),
-                        'summary' => $this->checkRunFormatterService->formatSummary(),
-                    ]
-                ]
+                $body
             );
 
         if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_CREATED) {
@@ -178,26 +198,41 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $owner,
         string $repository,
         int $checkRunId,
+        PublishableCheckRunStatus $status,
         float $coveragePercentage,
         array $annotations
     ): bool {
+        $body = match ($status) {
+            PublishableCheckRunStatus::IN_PROGRESS => [
+                'name' => 'Coverage Robot',
+                'status' => $status->value,
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'annotations' => $annotations,
+                ],
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+            ],
+            default => [
+                'name' => 'Coverage Robot',
+                'status' => 'completed',
+                'conclusion' => $status->value,
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'annotations' => $annotations,
+                ],
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+            ]
+        };
+
         $this->client->repo()
             ->checkRuns()
             ->update(
                 $owner,
                 $repository,
                 $checkRunId,
-                [
-                    'name' => sprintf('Coverage - %s%%', $coveragePercentage),
-                    'status' => 'completed',
-                    'conclusion' => 'success',
-                    'output' => [
-                        'title' => $this->checkRunFormatterService->formatTitle(),
-                        'summary' => $this->checkRunFormatterService->formatSummary(),
-                        'annotations' => $annotations,
-                    ],
-                    'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
-                ]
+                $body
             );
 
         if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {

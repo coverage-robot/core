@@ -15,6 +15,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
@@ -42,6 +43,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
             $publisher->supports(
                 new PublishableCheckRunMessage(
                     $upload,
+                    PublishableCheckRunStatus::SUCCESS,
                     [],
                     100,
                     new DateTimeImmutable()
@@ -122,6 +124,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                PublishableCheckRunStatus::SUCCESS,
                 [],
                 100,
                 new DateTimeImmutable()
@@ -203,12 +206,12 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 3,
                 self::callback(
                     function (array $checkRun) {
-                        $this->assertEquals('Coverage - 100%', $checkRun['name']);
+                        $this->assertEquals('Coverage Robot', $checkRun['name']);
                         $this->assertEquals('completed', $checkRun['status']);
                         $this->assertEquals('success', $checkRun['conclusion']);
                         $this->assertEquals(
                             [
-                                'title' => 'Coverage Robot',
+                                'title' => 'Total Coverage: 100%',
                                 'summary' => '',
                                 'annotations' => [
                                     [
@@ -231,6 +234,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                PublishableCheckRunStatus::SUCCESS,
                 [
                     new PublishableCheckAnnotationMessage(
                         $upload,
@@ -318,6 +322,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                PublishableCheckRunStatus::IN_PROGRESS,
                 array_fill(
                     0,
                     52,
@@ -400,6 +405,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher->publish(
             new PublishableCheckRunMessage(
                 $upload,
+                PublishableCheckRunStatus::IN_PROGRESS,
                 [],
                 100,
                 new DateTimeImmutable()

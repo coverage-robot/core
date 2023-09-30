@@ -11,7 +11,7 @@ class CheckRunFormatterServiceTest extends TestCase
     {
         $formatter = new CheckRunFormatterService();
 
-        $this->assertEquals('Coverage Robot', $formatter->formatTitle());
+        $this->assertEquals('Total Coverage: 99.98%', $formatter->formatTitle(99.98));
     }
 
     public function testFormatSummary(): void

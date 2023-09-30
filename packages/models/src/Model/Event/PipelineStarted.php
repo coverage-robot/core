@@ -8,7 +8,7 @@ use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-class PipelineComplete extends AbstractPipelineEvent
+class PipelineStarted extends AbstractPipelineEvent
 {
     public function __construct(
         Provider $provider,
@@ -21,18 +21,18 @@ class PipelineComplete extends AbstractPipelineEvent
             normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
             denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
         )]
-        private readonly DateTimeImmutable $completedAt
+        private readonly DateTimeImmutable $startedAt
     ) {
         parent::__construct($provider, $owner, $repository, $ref, $commit, $pullRequest);
     }
 
-    public function getCompletedAt(): DateTimeImmutable
+    public function getStartedAt(): DateTimeImmutable
     {
-        return $this->completedAt;
+        return $this->startedAt;
     }
 
     public function getEventTime(): DateTimeImmutable
     {
-        return $this->completedAt;
+        return $this->startedAt;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Handler;
 use App\Service\Event\EventProcessorInterface;
 use App\Service\Event\IngestSuccessEventProcessor;
 use App\Service\Event\PipelineCompleteEventProcessor;
+use App\Service\Event\PipelineStartedEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
@@ -25,6 +26,7 @@ class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterf
     {
         $handlerClass = match ($event->getDetailType()) {
             CoverageEvent::INGEST_SUCCESS->value => IngestSuccessEventProcessor::class,
+            CoverageEvent::PIPELINE_STARTED->value => PipelineStartedEventProcessor::class,
             CoverageEvent::PIPELINE_COMPLETE->value => PipelineCompleteEventProcessor::class,
             default => null,
         };

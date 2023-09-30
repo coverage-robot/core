@@ -4,9 +4,12 @@ namespace App\Service\Formatter;
 
 class CheckRunFormatterService
 {
-    public function formatTitle(): string
+    public function formatTitle(float $coveragePercentage): string
     {
-        return 'Coverage Robot';
+        return sprintf(
+            'Total Coverage: %s%%',
+            $coveragePercentage
+        );
     }
 
     public function formatSummary(): string

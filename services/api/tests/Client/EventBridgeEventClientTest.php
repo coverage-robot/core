@@ -28,15 +28,15 @@ class EventBridgeEventClientTest extends KernelTestCase
     {
         $completedAt = new DateTimeImmutable();
         $event = [
-            'type' => 'PIPELINE_COMPLETE',
+            'type' => CoverageEvent::PIPELINE_COMPLETE->value,
+            'completedAt' => $completedAt->format(DateTimeInterface::ATOM),
+            'eventTime' => $completedAt->format(DateTimeInterface::ATOM),
             'provider' => Provider::GITHUB,
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
             'ref' => 'mock-ref',
             'commit' => 'mock-commit',
             'pullRequest' => null,
-            'completedAt' => $completedAt->format(DateTimeInterface::ATOM),
-            'eventTime' => $completedAt->format(DateTimeInterface::ATOM)
         ];
 
         $pipelineComplete = new PipelineComplete(

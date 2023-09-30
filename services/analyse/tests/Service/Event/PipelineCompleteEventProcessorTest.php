@@ -14,6 +14,7 @@ use DateTimeInterface;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
@@ -85,6 +86,10 @@ class PipelineCompleteEventProcessorTest extends KernelTestCase
                                 )
                             ],
                             $message->getAnnotations()
+                        );
+                        $this->assertEquals(
+                            PublishableCheckRunStatus::SUCCESS,
+                            $message->getStatus()
                         );
                         $this->assertEquals(
                             100,
