@@ -19,7 +19,6 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryService;
 use DateTimeImmutable;
 use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\Upload;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
@@ -79,7 +78,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -100,7 +102,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -121,7 +126,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -142,7 +150,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -163,7 +174,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -188,7 +202,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -220,7 +237,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -247,7 +267,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         );
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward($this->event)
+            $this->carryforwardTagService->getTagsToCarryforward(
+                $this->event,
+                $this->getUploads()->getSuccessfulTags()
+            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
