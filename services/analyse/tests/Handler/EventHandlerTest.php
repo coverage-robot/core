@@ -5,6 +5,7 @@ namespace App\Tests\Handler;
 use App\Handler\EventHandler;
 use App\Service\Event\IngestSuccessEventProcessor;
 use App\Service\Event\PipelineCompleteEventProcessor;
+use App\Service\Event\PipelineStartedEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
@@ -154,7 +155,8 @@ class EventHandlerTest extends TestCase
         $this->assertEquals(
             [
                 IngestSuccessEventProcessor::class,
-                PipelineCompleteEventProcessor::class
+                PipelineCompleteEventProcessor::class,
+                PipelineStartedEventProcessor::class
             ],
             EventHandler::getSubscribedServices()
         );

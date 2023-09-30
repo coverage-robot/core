@@ -52,7 +52,8 @@ class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterf
     {
         return [
             IngestSuccessEventProcessor::class,
-            PipelineCompleteEventProcessor::class
+            PipelineCompleteEventProcessor::class,
+            PipelineStartedEventProcessor::class,
         ];
     }
 }
