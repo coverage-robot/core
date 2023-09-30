@@ -27,9 +27,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     /**
      * @throws QueryException|GoogleException
      */
-    public function getTagsToCarryforward(EventInterface $event): array
+    public function getTagsToCarryforward(EventInterface $event, array $existingTags): array
     {
-        $uploadedTags = $this->getCurrentTags($event);
         $carryableCommitTags = $this->getParentCommitTags($event);
 
         $carryforwardTags = [];
@@ -37,7 +36,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         foreach ($carryableCommitTags as $tags) {
             $tagsNotSeen = array_udiff(
                 $tags,
-                [...$uploadedTags, ...$carryforwardTags],
+                [...$existingTags, ...$carryforwardTags],
                 static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
             );
 
@@ -62,28 +61,6 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         );
 
         return $carryforwardTags;
-    }
-
-    /**
-     * Get all of the tags uploaded for a particular upload.
-     *
-     * @throws QueryException|GoogleException
-     */
-    private function getCurrentTags(EventInterface $event): array
-    {
-        /**
-         * @var CommitCollectionQueryResult $tags
-         */
-        $tags = $this->queryService->runQuery(CommitSuccessfulTagsQuery::class, QueryParameterBag::fromEvent($event));
-
-        if (empty($tags->getCommits())) {
-            // Generally we shouldn't get there, as its a pretty safe assumption that there
-            // should be _at least_ one commit, with one tag (the one we're analysing currently),
-            // however, on the off chance something goes wrong, we should just to double check.
-            return [];
-        }
-
-        return $tags->getCommits()[0]->getTags();
     }
 
     /**

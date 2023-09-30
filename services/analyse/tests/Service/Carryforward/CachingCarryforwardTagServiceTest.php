@@ -12,25 +12,35 @@ class CachingCarryforwardTagServiceTest extends TestCase
 {
     public function testCachesRepeatedRequests(): void
     {
-        $tags = [new Tag('tag', 'commit')];
+        $carryforwardTags = [new Tag('tag', 'commit')];
 
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
         $mockCarryforwardTagService->expects($this->once())
             ->method('getTagsToCarryforward')
-            ->willReturn($tags);
+            ->willReturn($carryforwardTags);
 
         $cachingCarryforwardTagService = new CachingCarryforwardTagService($mockCarryforwardTagService);
 
         $mockUpload = $this->createMock(Upload::class);
 
         $this->assertEquals(
-            $tags,
-            $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload)
+            $carryforwardTags,
+            $cachingCarryforwardTagService->getTagsToCarryforward(
+                $mockUpload,
+                [
+                    new Tag('tag', 'commit')
+                ]
+            )
         );
         $this->assertEquals(
-            $tags,
-            $cachingCarryforwardTagService->getTagsToCarryforward($mockUpload)
+            $carryforwardTags,
+            $cachingCarryforwardTagService->getTagsToCarryforward(
+                $mockUpload,
+                [
+                    new Tag('tag', 'commit')
+                ]
+            )
         );
     }
 
@@ -49,13 +59,15 @@ class CachingCarryforwardTagServiceTest extends TestCase
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(Upload::class)
+                $this->createMock(Upload::class),
+                [new Tag('tag', 'commit')]
             )
         );
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(Upload::class)
+                $this->createMock(Upload::class),
+                [new Tag('tag', 'commit')]
             )
         );
     }
