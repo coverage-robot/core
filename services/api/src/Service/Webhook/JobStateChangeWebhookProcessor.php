@@ -144,8 +144,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         return $job;
     }
 
-    private function isFirstCommitJobStarted(Project $project, WebhookInterface $webhook): bool
-    {
+    private function isFirstCommitJobStarted(
+        Project $project,
+        WebhookInterface&PipelineStateChangeWebhookInterface $webhook
+    ): bool {
         return !$this->jobRepository->findOneBy(
             [
                 'project' => $project,
