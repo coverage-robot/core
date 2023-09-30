@@ -146,7 +146,6 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 'head_sha' => $commit,
                 'status' => $status->value,
                 'annotations' => $annotations,
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
                     'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
@@ -210,8 +209,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                     'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
-                ],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                ]
             ],
             default => [
                 'name' => 'Coverage Robot',
