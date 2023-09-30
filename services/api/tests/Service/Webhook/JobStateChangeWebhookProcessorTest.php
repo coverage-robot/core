@@ -19,7 +19,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
         $mockProject = $this->createMock(Project::class);
 
         $mockJobRepository = $this->createMock(JobRepository::class);
-        $jobRepositoryMatcher = $this->exactly(2);
+        $jobRepositoryMatcher = $this->exactly(3);
         $mockJobRepository->expects($jobRepositoryMatcher)
             ->method('findOneBy')
             ->with(
@@ -29,9 +29,14 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                             match ($jobRepositoryMatcher->numberOfInvocations()) {
                                 1 => [
                                     'project' => $mockProject,
-                                    'externalId' => '1'
+                                    'externalId' => '1',
+                                    'commit' => 'mock-commit'
                                 ],
                                 2 => [
+                                    'project' => $mockProject,
+                                    'commit' => 'mock-commit'
+                                ],
+                                3 => [
                                     'project' => $mockProject,
                                     'commit' => 'mock-commit',
                                     'state' => [
@@ -53,7 +58,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
             ->method('save');
 
         $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->once())
+        $mockEventBridgeEventClient->expects($this->exactly(2))
             ->method('publishEvent');
 
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
@@ -83,7 +88,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
         $mockProject = $this->createMock(Project::class);
 
         $mockJobRepository = $this->createMock(JobRepository::class);
-        $jobRepositoryMatcher = $this->exactly(2);
+        $jobRepositoryMatcher = $this->exactly(3);
         $mockJobRepository->expects($jobRepositoryMatcher)
             ->method('findOneBy')
             ->with(
@@ -93,9 +98,14 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                             match ($jobRepositoryMatcher->numberOfInvocations()) {
                                 1 => [
                                     'project' => $mockProject,
-                                    'externalId' => '1'
+                                    'externalId' => '1',
+                                    'commit' => 'mock-commit'
                                 ],
                                 2 => [
+                                    'project' => $mockProject,
+                                    'commit' => 'mock-commit'
+                                ],
+                                3 => [
                                     'project' => $mockProject,
                                     'commit' => 'mock-commit',
                                     'state' => [

@@ -114,6 +114,7 @@ resource "aws_cloudwatch_event_rule" "service" {
   {
     "detail-type": [
       "INGEST_SUCCESS",
+      "PIPELINE_STARTED",
       "PIPELINE_COMPLETE"
     ]
   }

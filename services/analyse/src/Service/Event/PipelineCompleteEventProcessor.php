@@ -11,6 +11,7 @@ use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\LineState;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\PipelineComplete;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
@@ -67,14 +68,6 @@ class PipelineCompleteEventProcessor implements EventProcessorInterface
 
                 return;
             }
-
-            $this->eventBridgeEventService->publishEvent(
-                CoverageEvent::ANALYSIS_ON_PIPELINE_COMPLETE_SUCCESS,
-                [
-                    'pipelineComplete' => $pipelineComplete,
-                    'coveragePercentage' => $coverageData->getCoveragePercentage()
-                ]
-            );
         } catch (JsonException $e) {
             $this->eventProcessorLogger->critical(
                 'Exception while parsing event details.',
@@ -119,6 +112,7 @@ class PipelineCompleteEventProcessor implements EventProcessorInterface
         return $this->sqsEventClient->queuePublishableMessage(
             new PublishableCheckRunMessage(
                 $pipelineComplete,
+                PublishableCheckRunStatus::SUCCESS,
                 array_filter($annotations),
                 $publishableCoverageData->getCoveragePercentage(),
                 $publishableCoverageData->getLatestSuccessfulUpload() ?? $pipelineComplete->getCompletedAt()

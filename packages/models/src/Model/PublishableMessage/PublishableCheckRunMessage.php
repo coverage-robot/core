@@ -4,6 +4,7 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\EventInterface;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
@@ -18,6 +19,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
      */
     public function __construct(
         private readonly EventInterface $event,
+        private readonly PublishableCheckRunStatus $status,
         array $annotations,
         private readonly float $coveragePercentage,
         private readonly DateTimeImmutable $validUntil,
@@ -31,6 +33,11 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function getEvent(): EventInterface
     {
         return $this->event;
+    }
+
+    public function getStatus(): PublishableCheckRunStatus
+    {
+        return $this->status;
     }
 
     /**

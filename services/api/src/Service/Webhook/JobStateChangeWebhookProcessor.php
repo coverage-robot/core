@@ -14,7 +14,9 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Models\Model\Event\AbstractPipelineEvent;
 use Packages\Models\Model\Event\PipelineComplete;
+use Packages\Models\Model\Event\PipelineStarted;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -59,8 +61,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         $job->setState($webhook->getJobState());
         $job->setUpdatedAt(new DateTimeImmutable());
 
-        $this->jobRepository->save($job, true);
-
         $this->webhookProcessorLogger->info(
             sprintf(
                 'Job updated successfully based on webhook changes: %s.',
@@ -71,6 +71,28 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             ]
         );
 
+        if ($this->isFirstCommitJobStarted($project, $webhook)) {
+            $this->webhookProcessorLogger->info(
+                sprintf(
+                    'First job for %s been recorded. Dispatching event.',
+                    (string)$project
+                )
+            );
+
+            $this->publishPipelineEvent(
+                CoverageEvent::PIPELINE_STARTED,
+                new PipelineStarted(
+                    $webhook->getProvider(),
+                    $webhook->getOwner(),
+                    $webhook->getRepository(),
+                    $webhook->getRef(),
+                    $webhook->getCommit(),
+                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
+                    new DateTimeImmutable()
+                )
+            );
+        }
+
         if ($this->isAllCommitJobsComplete($project, $webhook)) {
             $this->webhookProcessorLogger->info(
                 sprintf(
@@ -79,8 +101,21 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 )
             );
 
-            $this->publishPipelineCompleteEvent($webhook);
+            $this->publishPipelineEvent(
+                CoverageEvent::PIPELINE_COMPLETE,
+                new PipelineComplete(
+                    $webhook->getProvider(),
+                    $webhook->getOwner(),
+                    $webhook->getRepository(),
+                    $webhook->getRef(),
+                    $webhook->getCommit(),
+                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
+                    new DateTimeImmutable()
+                )
+            );
         }
+
+        $this->jobRepository->save($job, true);
     }
 
     private function findOrCreateJob(
@@ -90,6 +125,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         $job = $this->jobRepository->findOneBy(
             [
                 'project' => $project,
+                'commit' => $webhook->getCommit(),
                 'externalId' => $webhook->getExternalId()
             ]
         );
@@ -106,6 +142,16 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         }
 
         return $job;
+    }
+
+    private function isFirstCommitJobStarted(Project $project, WebhookInterface $webhook): bool
+    {
+        return !$this->jobRepository->findOneBy(
+            [
+                'project' => $project,
+                'commit' => $webhook->getCommit(),
+            ]
+        );
     }
 
     private function isAllCommitJobsComplete(
@@ -131,26 +177,18 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    private function publishPipelineCompleteEvent(WebhookInterface&PipelineStateChangeWebhookInterface $webhook): bool
+    private function publishPipelineEvent(CoverageEvent $event, AbstractPipelineEvent $pipelineEvent): bool
     {
         try {
             return $this->eventBridgeEventClient->publishEvent(
-                CoverageEvent::PIPELINE_COMPLETE,
-                new PipelineComplete(
-                    $webhook->getProvider(),
-                    $webhook->getOwner(),
-                    $webhook->getRepository(),
-                    $webhook->getRef(),
-                    $webhook->getCommit(),
-                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
-                    new DateTimeImmutable()
-                )
+                $event,
+                $pipelineEvent
             );
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(
-                    'Failed to publish pipeline complete event for %s',
-                    (string)$webhook
+                    'Failed to publish pipeline event: %s',
+                    (string)$pipelineEvent
                 ),
                 [
                     'exception' => $e
