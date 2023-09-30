@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
     'type',
     [
         EventType::UPLOAD->value => Upload::class,
+        EventType::PIPELINE_STARTED->value => PipelineStarted::class,
         EventType::PIPELINE_COMPLETE->value => PipelineComplete::class
     ]
 )]
