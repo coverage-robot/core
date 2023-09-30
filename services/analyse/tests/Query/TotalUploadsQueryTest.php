@@ -25,6 +25,8 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               uploads AS (
                 SELECT
                   uploadId,
+                  tag,
+                  commit,
                   IF(
                     COUNT(uploadId) >= totalLines,
                     1,
@@ -45,13 +47,19 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                   AND provider = "github"
                 GROUP BY
                   uploadId,
+                  tag,
+                  commit,
                   totalLines,
                   ingestTime
               )
             SELECT
+              ANY_VALUE(commit) as commit,
               ARRAY_AGG(
                 IF(successful = 1, uploadId, NULL) IGNORE NULLS
               ) as successfulUploads,
+              ARRAY_AGG(
+                IF(successful = 1, tag, NULL) IGNORE NULLS
+              ) as successfulTags,
               ARRAY_AGG(
                 IF(pending = 1, uploadId, NULL) IGNORE NULLS
               ) as pendingUploads,
@@ -108,35 +116,45 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             [
                 [
+                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1'],
+                    'successfulTags' => ['tag-1'],
                     'pendingUploads' => [],
                     'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
             ],
             [
                 [
+                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2'],
+                    'successfulTags' => ['tag-1', 'tag-2'],
                     'pendingUploads' => ['3'],
                     'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
             ],
             [
                 [
+                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                    'successfulTags' => ['tag-1'],
                     'pendingUploads' => [],
                     'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ],
             ],
             [
                 [
+                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
+                    'successfulTags' => ['tag-1'],
                     'pendingUploads' => ['9', '10'],
                     'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
                 ]
             ],
             [
                 [
+                    'commit' => 'mock-commit',
                     'successfulUploads' => [],
+                    'successfulTags' => [],
                     'pendingUploads' => ['9', '10'],
                     'latestSuccessfulUpload' => null
                 ]

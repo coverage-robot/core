@@ -246,7 +246,7 @@ class QueryServiceTest extends TestCase
             ],
             'Total commit uploads query' => [
                 TotalUploadsQuery::class,
-                TotalUploadsQueryResult::from(['1', '2'], ['3'])
+                TotalUploadsQueryResult::from('mock-commit', ['1', '2'], ['tag-1'], ['3'])
             ],
             'Diff coverage query' => [
                 LineCoverageQuery::class,
