@@ -7,6 +7,7 @@ use App\Exception\PublishException;
 use App\Service\EnvironmentService;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
+use App\Service\Publisher\PublisherServiceInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Generator;
@@ -19,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubCheckRunPublisherService
+class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     private const MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
