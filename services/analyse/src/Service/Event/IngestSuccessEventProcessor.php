@@ -11,7 +11,10 @@ use App\Service\CoverageAnalyserService;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -49,7 +52,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
 
             $coverageData = $this->coverageAnalyserService->analyse($upload);
 
-            $successful = $this->queuePullRequestMessage($upload, $coverageData);
+            $successful = $this->queueMessages($upload, $coverageData);
 
             if (!$successful) {
                 $this->eventProcessorLogger->critical(
@@ -86,13 +89,12 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
     }
 
     /**
-     * Queue up a pull request comment to be published to the version control provider.
+     * Immediately queue publishing of the PR comment with the most up to date coverage data onto
+     * the queue, ready for the publisher to pick up and publish.
      */
-    private function queuePullRequestMessage(
-        Upload $upload,
-        PublishableCoverageDataInterface $publishableCoverageData
-    ): bool {
-        return $this->sqsEventClient->queuePublishableMessage(
+    private function queueMessages(Upload $upload, PublishableCoverageDataInterface $publishableCoverageData): bool
+    {
+        $messages = [
             new PublishablePullRequestMessage(
                 $upload,
                 $publishableCoverageData->getCoveragePercentage(),
@@ -129,6 +131,23 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
                     $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                 ),
                 $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
+            ),
+            new PublishableCheckRunMessage(
+                $upload,
+                PublishableCheckRunStatus::IN_PROGRESS,
+                [],
+                $publishableCoverageData->getCoveragePercentage(),
+                $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
+            ),
+        ];
+
+        // We _could_ publish the check run and PR comment individually, but we want
+        // to leverage toe collection in order to ensure that they are all published
+        // together, or not at all (e.g. they're not independent messages).
+        return $this->sqsEventClient->queuePublishableMessage(
+            new PublishableMessageCollection(
+                $upload,
+                $messages
             )
         );
     }
