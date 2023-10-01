@@ -2,14 +2,16 @@
 
 namespace App\Service\Formatter;
 
+use Packages\Models\Enum\PublishableCheckRunStatus;
+
 class CheckRunFormatterService
 {
-    public function formatTitle(float $coveragePercentage): string
+    public function formatTitle(PublishableCheckRunStatus $status, float $coveragePercentage): string
     {
-        return sprintf(
-            'Total Coverage: %s%%',
-            $coveragePercentage
-        );
+        return match ($status) {
+            default => sprintf('Total Coverage: %s%%', $coveragePercentage),
+            PublishableCheckRunStatus::IN_PROGRESS => 'Waiting for any additional coverage uploads...',
+        };
     }
 
     public function formatSummary(): string
