@@ -147,7 +147,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 'status' => $status->value,
                 'annotations' => $annotations,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ],
@@ -159,7 +159,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 'annotations' => $annotations,
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ]
@@ -206,7 +206,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 'name' => 'Coverage Robot',
                 'status' => $status->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ]
@@ -216,7 +216,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 'status' => 'completed',
                 'conclusion' => $status->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ],

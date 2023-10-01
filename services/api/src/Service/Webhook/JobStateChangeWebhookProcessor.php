@@ -108,6 +108,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             );
         }
 
+        // Persist and flush any changes _before_ checking if all jobs are complete, but after
+        // we've confirmed if this will be the first job of the commit
+        $this->jobRepository->save($job, true);
+
         if ($this->isAllCommitJobsComplete($project, $webhook)) {
             $this->webhookProcessorLogger->info(
                 sprintf(
@@ -129,8 +133,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 )
             );
         }
-
-        $this->jobRepository->save($job, true);
     }
 
     private function findOrCreateJob(
