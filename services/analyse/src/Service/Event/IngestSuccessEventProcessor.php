@@ -134,7 +134,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
             ),
             new PublishableCheckRunMessage(
                 $upload,
-                PublishableCheckRunStatus::IN_PROGRESS,
+                null, // Keep the status which is already set on the check run
                 [],
                 $publishableCoverageData->getCoveragePercentage(),
                 $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
