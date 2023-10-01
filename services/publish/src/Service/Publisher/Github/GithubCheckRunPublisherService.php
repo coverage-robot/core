@@ -327,10 +327,12 @@ class GithubCheckRunPublisherService
         );
 
         if (!empty($checkRuns)) {
+            $conclusion = reset($checkRuns)['conclusion'];
+
             return [
                 reset($checkRuns)['id'],
-                reset($checkRuns)['conclusion'] ?
-                    PublishableCheckRunStatus::from(reset($checkRuns)['conclusion']) :
+                $conclusion ?
+                    PublishableCheckRunStatus::from($conclusion) :
                     PublishableCheckRunStatus::IN_PROGRESS
             ];
         }
