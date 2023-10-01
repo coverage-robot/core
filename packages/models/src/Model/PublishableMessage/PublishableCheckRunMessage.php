@@ -19,7 +19,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
      */
     public function __construct(
         private readonly EventInterface $event,
-        private readonly PublishableCheckRunStatus $status,
+        private readonly ?PublishableCheckRunStatus $status,
         array $annotations,
         private readonly float $coveragePercentage,
         private readonly DateTimeImmutable $validUntil,
@@ -35,7 +35,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         return $this->event;
     }
 
-    public function getStatus(): PublishableCheckRunStatus
+    public function getStatus(): ?PublishableCheckRunStatus
     {
         return $this->status;
     }
