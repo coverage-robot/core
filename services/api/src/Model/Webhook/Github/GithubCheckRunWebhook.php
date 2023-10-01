@@ -20,6 +20,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string $owner,
         protected readonly string $repository,
         protected readonly string|int $externalId,
+        protected readonly string|int $appId,
         protected readonly string $ref,
         protected readonly string $commit,
         protected readonly string|int|null $pullRequest,
@@ -59,6 +60,12 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     public function getExternalId(): string|int
     {
         return $this->externalId;
+    }
+
+    #[SerializedPath('[check_run][app][id]')]
+    public function getAppId(): int|string
+    {
+        return $this->appId;
     }
 
     #[SerializedPath('[check_run][check_suite][status]')]

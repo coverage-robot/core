@@ -24,6 +24,14 @@ interface PipelineStateChangeWebhookInterface
     public function getExternalId(): string|int;
 
     /**
+     * The ID of the application which triggered the state change.
+     *
+     * Mainly relevant for identifying if the state change is from
+     * _us_ (and thus can be ignored).
+     */
+    public function getAppId(): int|string;
+
+    /**
      * The current state of the suite of jobs the job is in.
      */
     public function getSuiteState(): JobState;

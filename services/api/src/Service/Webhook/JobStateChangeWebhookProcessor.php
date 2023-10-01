@@ -5,11 +5,13 @@ namespace App\Service\Webhook;
 use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
+use App\Enum\EnvironmentVariable;
 use App\Enum\JobState;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
+use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
@@ -25,7 +27,8 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
-        private readonly EventBridgeEventClient $eventBridgeEventClient
+        private readonly EventBridgeEventClient $eventBridgeEventClient,
+        private readonly EnvironmentService $environmentService
     ) {
     }
 
@@ -46,6 +49,18 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                     PipelineStateChangeWebhookInterface::class
                 )
             );
+        }
+
+        if ($webhook->getAppId() === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)) {
+            $this->webhookProcessorLogger->info(
+                sprintf(
+                    'Ignoring as webhook is a state change caused by us: %s. Current state of the job is: %s',
+                    (string)$webhook,
+                    $webhook->getJobState()->value
+                )
+            );
+
+            return;
         }
 
         $this->webhookProcessorLogger->info(
