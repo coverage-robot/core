@@ -53,7 +53,10 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                   ingestTime
               )
             SELECT
-              ANY_VALUE(commit) as commit,
+              COALESCE(
+                ANY_VALUE(commit),
+                ''
+              ) as commit,
               ARRAY_AGG(
                 IF(successful = 1, uploadId, NULL) IGNORE NULLS
               ) as successfulUploads,

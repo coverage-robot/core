@@ -23,7 +23,7 @@ class TotalUploadsQuery implements QueryInterface
         return <<<SQL
         {$parent}
         SELECT
-            ANY_VALUE(commit) as commit,
+            COALESCE(ANY_VALUE(commit), '') as commit,
             ARRAY_AGG(IF(successful = 1, uploadId, NULL) IGNORE NULLS) as successfulUploads,
             ARRAY_AGG(IF(successful = 1, tag, NULL) IGNORE NULLS) as successfulTags,
             ARRAY_AGG(IF(pending = 1, uploadId, NULL) IGNORE NULLS) as pendingUploads,
