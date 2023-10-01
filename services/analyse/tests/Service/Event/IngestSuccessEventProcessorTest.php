@@ -10,7 +10,7 @@ use App\Service\Event\IngestSuccessEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -52,10 +52,10 @@ class IngestSuccessEventProcessorTest extends KernelTestCase
             ->method('queuePublishableMessage')
             ->with(
                 self::callback(
-                    function (PublishablePullRequestMessage $message) {
-                        $this->assertEquals(
-                            100,
-                            $message->getCoveragePercentage()
+                    function (PublishableMessageCollection $message) {
+                        $this->assertCount(
+                            2,
+                            $message->getMessages()
                         );
                         return true;
                     }

@@ -2,6 +2,7 @@
 
 namespace App\Service\Publisher\Github;
 
+use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Service\EnvironmentService;
 use App\Service\Formatter\CheckAnnotationFormatterService;
@@ -18,18 +19,17 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
+class GithubCheckRunPublisherService
 {
     private const MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
     public function __construct(
         private readonly CheckRunFormatterService $checkRunFormatterService,
         private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
-        GithubAppInstallationClient $client,
-        EnvironmentService $environmentService,
-        LoggerInterface $checkPublisherLogger
+        private readonly GithubAppInstallationClient $client,
+        private readonly EnvironmentService $environmentService,
+        private readonly LoggerInterface $checkPublisherLogger
     ) {
-        parent::__construct($client, $environmentService, $checkPublisherLogger);
     }
 
     public function supports(PublishableMessageInterface $publishableMessage): bool
@@ -67,11 +67,9 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                     (string)$event
                 )
             );
-
-            return false;
         }
 
-        return true;
+        return $successful;
     }
 
     private function upsertCheckRun(
@@ -80,15 +78,28 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $commit,
         PublishableCheckRunMessage $publishableMessage
     ): bool {
-        $isNewCheckRun = false;
         $this->client->authenticateAsRepositoryOwner($owner);
 
         try {
-            $checkRunId = $this->getCheckRun(
+            [$checkRunId, $currentStatus] = $this->getCheckRun(
                 $owner,
                 $repository,
                 $commit
             );
+
+            if ($publishableMessage->getAnnotations() === []) {
+                $this->updateCheckRun(
+                    $owner,
+                    $repository,
+                    $checkRunId,
+                    $currentStatus,
+                    $publishableMessage->getStatus(),
+                    $publishableMessage->getCoveragePercentage(),
+                    []
+                );
+
+                return true;
+            }
         } catch (RuntimeException) {
             $checkRunId = $this->createCheckRun(
                 $owner,
@@ -98,22 +109,10 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $publishableMessage->getCoveragePercentage(),
                 []
             );
-            $isNewCheckRun = true;
+            $currentStatus = $publishableMessage->getStatus();
         }
 
         $chunkedAnnotations = $this->getFormattedAnnotations($publishableMessage);
-
-        if (!$isNewCheckRun && $publishableMessage->getAnnotations() === []) {
-            $this->updateCheckRun(
-                $owner,
-                $repository,
-                $checkRunId,
-                $publishableMessage->getStatus(),
-                $publishableMessage->getCoveragePercentage(),
-                []
-            );
-            return true;
-        }
 
         foreach ($chunkedAnnotations as $chunk) {
             // Progressively update the check run with each new set of annotations. The API
@@ -123,6 +122,7 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
                 $owner,
                 $repository,
                 $checkRunId,
+                $currentStatus,
                 $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
                 $chunk
@@ -136,11 +136,23 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $owner,
         string $repository,
         string $commit,
-        PublishableCheckRunStatus $status,
+        ?PublishableCheckRunStatus $status,
         float $coveragePercentage,
         array $annotations
     ): int {
         $body = match ($status) {
+            null => [
+                'name' => 'Coverage Robot',
+                'head_sha' => $commit,
+                'annotations' => $annotations,
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        PublishableCheckRunStatus::IN_PROGRESS,
+                        $coveragePercentage
+                    ),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                ]
+            ],
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
@@ -197,11 +209,23 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         string $owner,
         string $repository,
         int $checkRunId,
-        PublishableCheckRunStatus $status,
+        ?PublishableCheckRunStatus $currentStatus,
+        ?PublishableCheckRunStatus $status,
         float $coveragePercentage,
         array $annotations
     ): bool {
         $body = match ($status) {
+            null => [
+                'name' => 'Coverage Robot',
+                'output' => [
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        $currentStatus ?? PublishableCheckRunStatus::IN_PROGRESS,
+                        $coveragePercentage
+                    ),
+                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'annotations' => $annotations,
+                ]
+            ],
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'status' => $status->value,
@@ -282,5 +306,37 @@ class GithubCheckRunPublisherService extends AbstractGithubCheckPublisherService
         if (!empty($annotations)) {
             yield $annotations;
         }
+    }
+
+    /**
+     * @return array{0: int, 1: PublishableCheckRunStatus}
+     */
+    protected function getCheckRun(string $owner, string $repository, string $commit): array
+    {
+        /** @var array{ id: int, conclusion: string|null, app: array{ id: int } }[] $checkRuns */
+        $checkRuns = $this->client->repo()
+            ->checkRuns()
+            ->allForReference($owner, $repository, $commit)['check_runs'];
+
+        $checkRuns = array_filter(
+            $checkRuns,
+            fn(array $checkRun) => isset($checkRun['id'], $checkRun['app']['id']) &&
+                (string)$checkRun['app']['id'] === $this->environmentService->getVariable(
+                    EnvironmentVariable::GITHUB_APP_ID
+                )
+        );
+
+        if (!empty($checkRuns)) {
+            $conclusion = reset($checkRuns)['conclusion'];
+
+            return [
+                reset($checkRuns)['id'],
+                $conclusion ?
+                    PublishableCheckRunStatus::from($conclusion) :
+                    PublishableCheckRunStatus::IN_PROGRESS
+            ];
+        }
+
+        throw PublishException::notFoundException('check run');
     }
 }
