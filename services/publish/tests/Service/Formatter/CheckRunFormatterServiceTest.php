@@ -3,15 +3,24 @@
 namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckRunFormatterService;
+use Packages\Models\Enum\PublishableCheckRunStatus;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CheckRunFormatterServiceTest extends TestCase
 {
-    public function testFormatTitle(): void
-    {
+    #[DataProvider('statusDataProvider')]
+    public function testFormatTitle(
+        PublishableCheckRunStatus $status,
+        float $coveragePercentage,
+        string $expectedTitle
+    ): void {
         $formatter = new CheckRunFormatterService();
 
-        $this->assertEquals('Total Coverage: 99.98%', $formatter->formatTitle(99.98));
+        $this->assertEquals(
+            $expectedTitle,
+            $formatter->formatTitle($status, $coveragePercentage)
+        );
     }
 
     public function testFormatSummary(): void
@@ -19,5 +28,13 @@ class CheckRunFormatterServiceTest extends TestCase
         $formatter = new CheckRunFormatterService();
 
         $this->assertEquals('', $formatter->formatSummary());
+    }
+
+    public static function statusDataProvider(): array
+    {
+        return [
+            [PublishableCheckRunStatus::SUCCESS, 99.98, 'Total Coverage: 99.98%'],
+            [PublishableCheckRunStatus::IN_PROGRESS, 0, 'Waiting for any additional coverage uploads...'],
+        ];
     }
 }
