@@ -40,7 +40,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
      * the associated job in the database. If theres no job associated with the ID from the webhook
      * one will be created.
      */
-    public function process(Project $project, WebhookInterface $webhook): void
+    public function process(Project $project, WebhookInterface $webhook, bool $isLastWebhook): void
     {
         if (!$webhook instanceof PipelineStateChangeWebhookInterface) {
             throw new RuntimeException(
@@ -112,7 +112,9 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         // we've confirmed if this will be the first job of the commit
         $this->jobRepository->save($job, true);
 
-        if ($this->isAllCommitJobsComplete($project, $webhook)) {
+        // The processor will be unique per commit, so we can only be sure the jobs are finished
+        // when we're on the last job to process
+        if ($isLastWebhook && $this->isAllCommitJobsComplete($project, $webhook)) {
             $this->webhookProcessorLogger->info(
                 sprintf(
                     'All jobs for %s are complete. Dispatching event.',

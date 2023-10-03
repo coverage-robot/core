@@ -98,6 +98,26 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         return $this->pullRequest;
     }
 
+    /**
+     * A per-commit message group for check runs means that the Webhook processor
+     * is able to confidently run through the queue messages knowing the messages
+     * are only relevant to the specific commit
+     */
+    public function getMessageGroup(): string
+    {
+        return md5(
+            implode(
+                '',
+                [
+                    $this->getProvider()->value,
+                    $this->getOwner(),
+                    $this->getRepository(),
+                    $this->getCommit()
+                ]
+            )
+        );
+    }
+
     public function __toString(): string
     {
         return sprintf(
