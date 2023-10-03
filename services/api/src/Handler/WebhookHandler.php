@@ -29,14 +29,20 @@ class WebhookHandler extends SqsHandler
 
     public function handleSqs(SqsEvent $event, Context $context): void
     {
-        foreach ($event->getRecords() as $record) {
+        $records = $event->getRecords();
+
+        foreach ($records as $recordNumber => $record) {
+            // Check if this is the last webhook in the batch of records that
+            // were picked up from the queue.
+            $isLastRecord = $recordNumber === count($records) - 1;
+
             $webhook = $this->serializer->deserialize(
                 $record->getBody(),
                 WebhookInterface::class,
                 'json'
             );
 
-            $this->processWebhookEvent($webhook);
+            $this->processWebhookEvent($webhook, $isLastRecord);
         }
     }
 
@@ -44,7 +50,7 @@ class WebhookHandler extends SqsHandler
     /**
      * Process the incoming webhook event payload.
      */
-    private function processWebhookEvent(WebhookInterface $webhook): void
+    private function processWebhookEvent(WebhookInterface $webhook, bool $isLastWebhook): void
     {
         $project = $this->getProject($webhook);
 
@@ -52,7 +58,7 @@ class WebhookHandler extends SqsHandler
             return;
         }
 
-        $this->webhookProcessor->process($project, $webhook);
+        $this->webhookProcessor->process($project, $webhook, $isLastWebhook);
     }
 
     /**

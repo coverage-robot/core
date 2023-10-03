@@ -13,7 +13,7 @@ interface WebhookProcessorInterface
      * Process the incoming webhook event payload using the dedicated webhook
      * event processor.
      */
-    public function process(Project $project, WebhookInterface $webhook): void;
+    public function process(Project $project, WebhookInterface $webhook, bool $isLastWebhook): void;
 
     /**
      * The webhook event that this processor is responsible for handling.
