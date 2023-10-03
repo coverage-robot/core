@@ -38,7 +38,8 @@ class WebhookProcessorTest extends KernelTestCase
                         $payload
                     ),
                     WebhookInterface::class
-                )
+                ),
+            true
         );
     }
 
