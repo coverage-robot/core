@@ -2,17 +2,33 @@
 
 namespace Packages\Models\Model\Event;
 
+use DateTimeImmutable;
+use DateTimeInterface;
+use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\Serializer\Annotation\Context;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
-abstract class AbstractPipelineEvent implements EventInterface
+class JobStateChange implements EventInterface
 {
+    /**
+     * @param array-key|int $index
+     */
     public function __construct(
         private readonly Provider $provider,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
-        private readonly ?string $pullRequest,
+        private readonly string|int|null $pullRequest,
+        private readonly int $index,
+        private readonly JobState $state,
+        private readonly bool $isInitialState,
+        #[Context(
+            normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+            denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
+        )]
+        private readonly DateTimeImmutable $eventTime
     ) {
     }
 
@@ -44,6 +60,26 @@ abstract class AbstractPipelineEvent implements EventInterface
     public function getPullRequest(): ?string
     {
         return $this->pullRequest;
+    }
+
+    public function getIndex(): int
+    {
+        return $this->index;
+    }
+
+    public function getState(): JobState
+    {
+        return $this->state;
+    }
+
+    public function isInitialState(): bool
+    {
+        return $this->isInitialState;
+    }
+
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->eventTime;
     }
 
     public function __toString(): string

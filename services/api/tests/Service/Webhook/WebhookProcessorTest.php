@@ -23,7 +23,7 @@ class WebhookProcessorTest extends KernelTestCase
 
         $webhookProcessor = new WebhookProcessor(
             [
-                WebhookProcessorEvent::PIPELINE_STATE_CHANGE->value => $mockProcessor,
+                WebhookProcessorEvent::JOB_STATE_CHANGE->value => $mockProcessor,
             ]
         );
 

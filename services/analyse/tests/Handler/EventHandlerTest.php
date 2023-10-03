@@ -4,20 +4,20 @@ namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
 use App\Service\Event\IngestSuccessEventProcessor;
-use App\Service\Event\PipelineCompleteEventProcessor;
-use App\Service\Event\PipelineStartedEventProcessor;
+use App\Service\Event\JobStateChangeEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
 use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\PipelineComplete;
+use Packages\Models\Model\Event\JobStateChange;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
+use ValueError;
 
 class EventHandlerTest extends TestCase
 {
@@ -37,21 +37,16 @@ class EventHandlerTest extends TestCase
             new DateTimeImmutable()
         );
 
-        $mockContainer = $this->createMock(ContainerInterface::class);
-
         $mockProcessor = $this->createMock(IngestSuccessEventProcessor::class);
-
         $mockProcessor->expects($this->once())
             ->method('process');
 
-        $mockContainer->expects($this->once())
-            ->method('get')
-            ->with(IngestSuccessEventProcessor::class)
-            ->willReturn($mockProcessor);
-
         $handler = new EventHandler(
             new NullLogger(),
-            $mockContainer
+            [
+                CoverageEvent::INGEST_SUCCESS->value => $mockProcessor,
+                CoverageEvent::JOB_STATE_CHANGE->value => $this->createMock(JobStateChangeEventProcessor::class),
+            ]
         );
 
         $handler->handleEventBridge(
@@ -80,46 +75,47 @@ class EventHandlerTest extends TestCase
         );
     }
 
-    public function testHandlePipelineCompleteEvent(): void
+    public function testHandleJobStateChangeEvent(): void
     {
-        $pipelineCompleteEvent = new PipelineComplete(
+        $jobStateChange = new JobStateChange(
             Provider::GITHUB,
-            'mock-commit',
             'mock-owner',
-            'mock-ref',
             'mock-repository',
+            'mock-ref',
+            'mock-commit',
             null,
+            0,
+            JobState::COMPLETED,
+            true,
             new DateTimeImmutable()
         );
 
-        $mockContainer = $this->createMock(ContainerInterface::class);
-
-        $mockProcessor = $this->createMock(PipelineCompleteEventProcessor::class);
-
+        $mockProcessor = $this->createMock(JobStateChangeEventProcessor::class);
         $mockProcessor->expects($this->once())
             ->method('process');
 
-        $mockContainer->expects($this->once())
-            ->method('get')
-            ->with(PipelineCompleteEventProcessor::class)
-            ->willReturn($mockProcessor);
-
         $handler = new EventHandler(
             new NullLogger(),
-            $mockContainer
+            [
+                CoverageEvent::INGEST_SUCCESS->value => $this->createMock(IngestSuccessEventProcessor::class),
+                CoverageEvent::JOB_STATE_CHANGE->value => $mockProcessor,
+            ]
         );
 
         $handler->handleEventBridge(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::PIPELINE_COMPLETE->value,
+                    'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
                     'detail' => [
-                        'provider' => $pipelineCompleteEvent->getProvider()->value,
-                        'commit' => $pipelineCompleteEvent->getCommit(),
-                        'owner' => $pipelineCompleteEvent->getOwner(),
-                        'ref' => $pipelineCompleteEvent->getRef(),
-                        'repository' => $pipelineCompleteEvent->getRepository(),
-                        'completedAt' => $pipelineCompleteEvent->getCompletedAt()->format(DateTimeImmutable::ATOM),
+                        'provider' => $jobStateChange->getProvider()->value,
+                        'commit' => $jobStateChange->getCommit(),
+                        'owner' => $jobStateChange->getOwner(),
+                        'ref' => $jobStateChange->getRef(),
+                        'repository' => $jobStateChange->getRepository(),
+                        'index' => $jobStateChange->getIndex(),
+                        'state' => $jobStateChange->getState()->value,
+                        'isInitialState' => $jobStateChange->isInitialState(),
+                        'eventTime' => $jobStateChange->getEventTime()->format(DateTimeImmutable::ATOM),
                     ]
                 ]
             ),
@@ -129,15 +125,18 @@ class EventHandlerTest extends TestCase
 
     public function testHandleInvalidEvent(): void
     {
-        $mockContainer = $this->createMock(ContainerInterface::class);
-
-        $mockContainer->expects($this->never())
-            ->method('get');
+        $mockProcessor = $this->createMock(JobStateChangeEventProcessor::class);
+        $mockProcessor->expects($this->never())
+            ->method('process');
 
         $handler = new EventHandler(
             new NullLogger(),
-            $mockContainer
+            [
+                CoverageEvent::JOB_STATE_CHANGE->value => $mockProcessor,
+            ]
         );
+
+        $this->expectException(ValueError::class);
 
         $handler->handleEventBridge(
             new EventBridgeEvent(
@@ -147,18 +146,6 @@ class EventHandlerTest extends TestCase
                 ]
             ),
             Context::fake()
-        );
-    }
-
-    public function testSubscribedServices(): void
-    {
-        $this->assertEquals(
-            [
-                IngestSuccessEventProcessor::class,
-                PipelineCompleteEventProcessor::class,
-                PipelineStartedEventProcessor::class
-            ],
-            EventHandler::getSubscribedServices()
         );
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Enum\JobState;
 use App\Repository\JobRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Packages\Models\Enum\JobState;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 #[ORM\UniqueConstraint(
@@ -112,5 +112,16 @@ class Job
         $this->externalId = $externalId;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'Job#%s-%s-%s-%s',
+            (int)$this->project?->getId(),
+            (string)$this->commit,
+            (string)$this->state?->value,
+            (string)$this->externalId
+        );
     }
 }

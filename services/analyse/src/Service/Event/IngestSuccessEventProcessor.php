@@ -11,7 +11,6 @@ use App\Service\CoverageAnalyserService;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
@@ -86,6 +85,11 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
                 ]
             );
         }
+    }
+
+    public static function getProcessorEvent(): string
+    {
+        return CoverageEvent::INGEST_SUCCESS->value;
     }
 
     /**

@@ -6,12 +6,12 @@ use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
-use App\Enum\JobState;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Packages\Models\Enum\Environment;
+use Packages\Models\Enum\JobState;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

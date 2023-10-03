@@ -2,12 +2,12 @@
 
 namespace App\Model\Webhook\Github;
 
-use App\Enum\JobState;
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\SignedWebhookInterface;
+use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
@@ -132,6 +132,6 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
 
     public function getEvent(): WebhookProcessorEvent
     {
-        return WebhookProcessorEvent::PIPELINE_STATE_CHANGE;
+        return WebhookProcessorEvent::JOB_STATE_CHANGE;
     }
 }
