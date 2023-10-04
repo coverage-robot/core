@@ -20,48 +20,38 @@ class JobStateChangeWebhookProcessorTest extends TestCase
     public function testProcessingWebhookCreatingNewJobForProject(): void
     {
         $mockProject = $this->createMock(Project::class);
+        $newJob = $this->createMock(Job::class);
 
         $mockJobRepository = $this->createMock(JobRepository::class);
-        $jobRepositoryMatcher = $this->exactly(3);
-        $mockJobRepository->expects($jobRepositoryMatcher)
+        $mockJobRepository->expects($this->exactly(1))
             ->method('findOneBy')
             ->with(
-                self::callback(
-                    function (array $argument) use ($mockProject, $jobRepositoryMatcher) {
-                        $this->assertEquals(
-                            match ($jobRepositoryMatcher->numberOfInvocations()) {
-                                1 => [
-                                    'project' => $mockProject,
-                                    'externalId' => '1',
-                                    'commit' => 'mock-commit'
-                                ],
-                                2 => [
-                                    'project' => $mockProject,
-                                    'commit' => 'mock-commit'
-                                ],
-                                3 => [
-                                    'project' => $mockProject,
-                                    'commit' => 'mock-commit',
-                                    'state' => [
-                                        JobState::IN_PROGRESS,
-                                        JobState::PENDING,
-                                        JobState::QUEUED,
-                                    ]
-                                ],
-                            },
-                            $argument
-                        );
-
-                        return true;
-                    }
-                )
+                [
+                    'project' => $mockProject,
+                    'externalId' => '1',
+                    'commit' => 'mock-commit'
+                ]
             )
             ->willReturn(null);
+        $mockJobRepository->expects($this->once())
+            ->method('findBy')
+            ->with(
+                [
+                    'project' => $mockProject,
+                    'commit' => 'mock-commit'
+                ]
+            )
+            ->willReturn([
+                $newJob
+            ]);
+        $mockJobRepository->expects($this->once())
+            ->method('create')
+            ->willReturn($newJob);
         $mockJobRepository->expects($this->once())
             ->method('save');
 
         $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->exactly(2))
+        $mockEventBridgeEventClient->expects($this->once())
             ->method('publishEvent');
 
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
@@ -90,56 +80,42 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 JobState::COMPLETED,
                 JobState::COMPLETED
-            ),
-            true
+            )
         );
     }
 
     public function testProcessingWebhookUpdatingExistingJobForProject(): void
     {
         $mockProject = $this->createMock(Project::class);
+        $job = $this->createMock(Job::class);
 
         $mockJobRepository = $this->createMock(JobRepository::class);
-        $jobRepositoryMatcher = $this->exactly(3);
-        $mockJobRepository->expects($jobRepositoryMatcher)
+        $mockJobRepository->expects($this->once())
             ->method('findOneBy')
             ->with(
-                self::callback(
-                    function (array $argument) use ($mockProject, $jobRepositoryMatcher) {
-                        $this->assertEquals(
-                            match ($jobRepositoryMatcher->numberOfInvocations()) {
-                                1 => [
-                                    'project' => $mockProject,
-                                    'externalId' => '1',
-                                    'commit' => 'mock-commit'
-                                ],
-                                2 => [
-                                    'project' => $mockProject,
-                                    'commit' => 'mock-commit'
-                                ],
-                                3 => [
-                                    'project' => $mockProject,
-                                    'commit' => 'mock-commit',
-                                    'state' => [
-                                        JobState::IN_PROGRESS,
-                                        JobState::PENDING,
-                                        JobState::QUEUED,
-                                    ]
-                                ],
-                            },
-                            $argument
-                        );
-
-                        return true;
-                    }
-                )
+                [
+                    'project' => $mockProject,
+                    'externalId' => '1',
+                    'commit' => 'mock-commit'
+                ]
             )
-            ->willReturn($this->createMock(Job::class));
+            ->willReturn($job);
+        $mockJobRepository->expects($this->once())
+            ->method('findBy')
+            ->with(
+                [
+                    'project' => $mockProject,
+                    'commit' => 'mock-commit'
+                ]
+            )
+            ->willReturn([$job]);
+        $mockJobRepository->expects($this->never())
+            ->method('create');
         $mockJobRepository->expects($this->once())
             ->method('save');
 
         $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->never())
+        $mockEventBridgeEventClient->expects($this->once())
             ->method('publishEvent');
 
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(

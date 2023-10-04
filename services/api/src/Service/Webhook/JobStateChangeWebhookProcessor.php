@@ -93,7 +93,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             true
         );
 
-        if (!$index) {
+        if ($index === false) {
             throw new RuntimeException(
                 sprintf(
                     'Failed to find job index for %s',
@@ -117,56 +117,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 new DateTimeImmutable()
             )
         );
-
-//        if ($this->isFirstCommitJobStarted($project, $webhook)) {
-//            $this->webhookProcessorLogger->info(
-//                sprintf(
-//                    'First job for %s been recorded. Dispatching event.',
-//                    (string)$project
-//                )
-//            );
-//
-//            $this->publishPipelineEvent(
-//                CoverageEvent::PIPELINE_STARTED,
-//                new PipelineStarted(
-//                    $webhook->getProvider(),
-//                    $webhook->getOwner(),
-//                    $webhook->getRepository(),
-//                    $webhook->getRef(),
-//                    $webhook->getCommit(),
-//                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
-//                    new DateTimeImmutable()
-//                )
-//            );
-//        }
-
-        // Persist and flush any changes _before_ checking if all jobs are complete, but after
-        // we've confirmed if this will be the first job of the commit
-//        $this->jobRepository->save($job, true);
-
-        // The processor will be unique per commit, so we can only be sure the jobs are finished
-        // when we're on the last job to process
-//        if ($isLastWebhook && $this->isAllCommitJobsComplete($project, $webhook)) {
-//            $this->webhookProcessorLogger->info(
-//                sprintf(
-//                    'All jobs for %s are complete. Dispatching event.',
-//                    (string)$project
-//                )
-//            );
-//
-//            $this->publishPipelineEvent(
-//                CoverageEvent::PIPELINE_COMPLETE,
-//                new PipelineComplete(
-//                    $webhook->getProvider(),
-//                    $webhook->getOwner(),
-//                    $webhook->getRepository(),
-//                    $webhook->getRef(),
-//                    $webhook->getCommit(),
-//                    $webhook->getPullRequest() ? (string)$webhook->getPullRequest() : null,
-//                    new DateTimeImmutable()
-//                )
-//            );
-//        }
     }
 
     private function findOrCreateJob(
@@ -182,14 +132,11 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
 
         if (!$job) {
-            $job = new Job();
-            $job->setProject($project);
-            $job->setCommit($webhook->getCommit());
-            $job->setExternalId((string)$webhook->getExternalId());
-
-            $now = new DateTimeImmutable();
-            $job->setCreatedAt($now);
-            $job->setUpdatedAt($now);
+            return $this->jobRepository->create(
+                $project,
+                $webhook->getCommit(),
+                (string)$webhook->getExternalId()
+            );
         }
 
         return $job;
