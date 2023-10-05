@@ -6,6 +6,8 @@ use Github\Api\GraphQL;
 use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
+use Github\Api\Repository\Checks\CheckRuns;
+use Github\Api\Repository\Checks\CheckSuites;
 use Github\AuthMethod;
 use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
@@ -61,6 +63,11 @@ class GithubAppInstallationClient
     public function pullRequest(): PullRequest
     {
         return new PullRequest($this->installationClient);
+    }
+
+    public function checkRuns(): CheckRuns
+    {
+        return new CheckRuns($this->installationClient);
     }
 
     public function graphql(): GraphQL

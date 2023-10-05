@@ -18,7 +18,7 @@ class WebhookProcessor
     ) {
     }
 
-    public function process(Project $project, WebhookInterface $webhook, bool $isLastWebhook): void
+    public function process(Project $project, WebhookInterface $webhook): void
     {
         $processor = (iterator_to_array($this->webhookProcessors)[$webhook->getEvent()->value]) ?? null;
 
@@ -31,6 +31,6 @@ class WebhookProcessor
             );
         }
 
-        $processor->process($project, $webhook, $isLastWebhook);
+        $processor->process($project, $webhook);
     }
 }

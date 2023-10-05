@@ -15,8 +15,9 @@ use DateTimeInterface;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\EventBus\CoverageEventSource;
+use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\PipelineComplete;
+use Packages\Models\Model\Event\JobStateChange;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -26,27 +27,32 @@ class EventBridgeEventClientTest extends KernelTestCase
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
-        $completedAt = new DateTimeImmutable();
+        $eventTime = new DateTimeImmutable();
         $event = [
-            'type' => CoverageEvent::PIPELINE_COMPLETE->value,
-            'completedAt' => $completedAt->format(DateTimeInterface::ATOM),
-            'eventTime' => $completedAt->format(DateTimeInterface::ATOM),
-            'provider' => Provider::GITHUB,
+            'type' => CoverageEvent::JOB_STATE_CHANGE->value,
+            'provider' => Provider::GITHUB->value,
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
             'ref' => 'mock-ref',
             'commit' => 'mock-commit',
             'pullRequest' => null,
+            'index' => 0,
+            'state' => JobState::COMPLETED->value,
+            'initialState' => false,
+            'eventTime' => $eventTime->format(DateTimeInterface::ATOM),
         ];
 
-        $pipelineComplete = new PipelineComplete(
+        $pipelineComplete = new JobStateChange(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
             'mock-ref',
             'mock-commit',
             null,
-            $completedAt
+            0,
+            JobState::COMPLETED,
+            false,
+            $eventTime
         );
 
         $mockResult = ResultMockFactory::create(
@@ -65,7 +71,7 @@ class EventBridgeEventClientTest extends KernelTestCase
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::API->value,
-                            'DetailType' => CoverageEvent::PIPELINE_COMPLETE->value,
+                            'DetailType' => CoverageEvent::JOB_STATE_CHANGE->value,
                             'Detail' => json_encode($event),
                         ])
                     ],
@@ -87,7 +93,7 @@ class EventBridgeEventClientTest extends KernelTestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::PIPELINE_COMPLETE,
+            CoverageEvent::JOB_STATE_CHANGE,
             $pipelineComplete
         );
 

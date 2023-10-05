@@ -10,5 +10,5 @@ enum WebhookProcessorEvent: string
      *
      * I.e. a new job has started, or a job has completed.
      */
-    case PIPELINE_STATE_CHANGE = 'PIPELINE_STATE_CHANGE';
+    case JOB_STATE_CHANGE = 'JOB_STATE_CHANGE';
 }

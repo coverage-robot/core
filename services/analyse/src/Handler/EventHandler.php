@@ -3,57 +3,49 @@
 namespace App\Handler;
 
 use App\Service\Event\EventProcessorInterface;
-use App\Service\Event\IngestSuccessEventProcessor;
-use App\Service\Event\PipelineCompleteEventProcessor;
-use App\Service\Event\PipelineStartedEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Models\Enum\EventBus\CoverageEvent;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class EventHandler extends EventBridgeHandler implements ServiceSubscriberInterface
+class EventHandler extends EventBridgeHandler
 {
+    /**
+     * @param EventProcessorInterface[] $eventProcessors
+     */
     public function __construct(
         private readonly LoggerInterface $handlerLogger,
-        private readonly ContainerInterface $container
+        #[TaggedIterator('app.event_processor', defaultIndexMethod: 'getProcessorEvent')]
+        private readonly iterable $eventProcessors
     ) {
     }
 
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
-        $handlerClass = match ($event->getDetailType()) {
-            CoverageEvent::INGEST_SUCCESS->value => IngestSuccessEventProcessor::class,
-            CoverageEvent::PIPELINE_STARTED->value => PipelineStartedEventProcessor::class,
-            CoverageEvent::PIPELINE_COMPLETE->value => PipelineCompleteEventProcessor::class,
-            default => null,
-        };
+        $eventType = CoverageEvent::from($event->getDetailType());
 
-        if ($handlerClass === null) {
-            $this->handlerLogger->warning(
-                'Event skipped as it was not a known event.',
-                [
-                    'detailType' => $event->getDetailType(),
-                    'detail' => $event->getDetail(),
-                ]
+        $processor = (iterator_to_array($this->eventProcessors)[$eventType->value]) ?? null;
+
+        if (!$processor instanceof EventProcessorInterface) {
+            throw new RuntimeException(
+                sprintf(
+                    'No event processor for %s',
+                    $eventType->value
+                )
             );
-            return;
         }
 
-        /** @var EventProcessorInterface $handler */
-        $handler = $this->container->get($handlerClass);
+        $this->handlerLogger->info(
+            sprintf(
+                'Processing %s using %s.',
+                $eventType->value,
+                get_class($processor)
+            )
+        );
 
-        $handler->process($event);
-    }
-
-    public static function getSubscribedServices(): array
-    {
-        return [
-            IngestSuccessEventProcessor::class,
-            PipelineCompleteEventProcessor::class,
-            PipelineStartedEventProcessor::class,
-        ];
+        $processor->process($event);
     }
 }
