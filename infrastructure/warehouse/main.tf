@@ -136,7 +136,6 @@ resource "google_storage_bucket" "loadable_data_bucket" {
   # in the EU.
   location = "us-east1"
 
-
   # Files can be deleted very quickly. Really they should be deleted
   # immediately, but a lifecycle for now should do.
   lifecycle_rule {
