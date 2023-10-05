@@ -5,6 +5,7 @@ namespace App\Tests\Service\Persist;
 use App\Client\EventBridgeEventClient;
 use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\EventBridgePersistService;
+use App\Service\Persist\GcsPersistService;
 use DateTimeImmutable;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\EventBus\CoverageEvent;
@@ -37,8 +38,8 @@ class EventBridgePersistServiceTest extends TestCase
     public function testGetPriority(): void
     {
         // The SQS message should **always** be persisted after the BigQuery data
-        // as been persisted.
-        $this->assertTrue(EventBridgePersistService::getPriority() < BigQueryPersistService::getPriority());
+        // as been loaded into the table.
+        $this->assertTrue(EventBridgePersistService::getPriority() < GcsPersistService::getPriority());
     }
 
     public static function uploadDataProvider(): array
