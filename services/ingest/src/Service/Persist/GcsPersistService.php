@@ -63,8 +63,6 @@ class GcsPersistService implements PersistServiceInterface
             )
         );
 
-        fclose($body);
-
         $this->gcsPersistServiceLogger->info(
             sprintf(
                 'Persisting %s to Google Cloud Storage (and loading to BigQuery) has finished',
