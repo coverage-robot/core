@@ -113,7 +113,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
     ): bool {
         $this->githubAppInstallationClient->authenticateAsRepositoryOwner($owner);
 
-        /** @var array{ check_suites: array{ status: string } }[] $checkRuns */
+        /** @var array{ check_runs: array{ status: string } }[] $checkRuns */
         $checkRuns = $this->githubAppInstallationClient->checkRuns()
             ->allForReference(
                 $owner,
@@ -122,7 +122,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
             );
 
         foreach ($checkRuns as $checkRun) {
-            if ($checkRun['check_suites']['status'] !== 'completed') {
+            if ($checkRun['check_runs']['status'] !== 'completed') {
                 return false;
             }
         }
