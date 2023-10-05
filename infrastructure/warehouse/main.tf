@@ -134,5 +134,16 @@ resource "google_storage_bucket" "loadable_data_bucket" {
   # GCP has a always-free tier which only applies to a handful of US
   # regions. Meaning we can't use the free tier for our bucket if its
   # in the EU.
-  location = "us-east-1"
+  location = "us-east1"
+
+  # Files can be deleted very quickly. Really they should be deleted
+  # immediately, but a lifecycle for now should do.
+  lifecycle_rule {
+    condition {
+      age = 1
+    }
+    action {
+      type = "Delete"
+    }
+  }
 }
