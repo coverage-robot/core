@@ -40,8 +40,8 @@ class EventBridgePersistService implements PersistServiceInterface
 
     public static function getPriority(): int
     {
-        // The message should only be persisted to the queue after BigQuery has been
-        // populated.
-        return BigQueryPersistService::getPriority() - 1;
+        // The message should only be persisted to the queue after the data has been loaded
+        // into BigQuery.
+        return GcsPersistService::getPriority() - 1;
     }
 }
