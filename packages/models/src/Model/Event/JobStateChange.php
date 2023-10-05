@@ -23,7 +23,7 @@ class JobStateChange implements EventInterface
         private readonly string|int|null $pullRequest,
         private readonly int $index,
         private readonly JobState $state,
-        private readonly bool $isInitialState,
+        private readonly bool $initialState,
         #[Context(
             normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
             denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
@@ -74,7 +74,7 @@ class JobStateChange implements EventInterface
 
     public function isInitialState(): bool
     {
-        return $this->isInitialState;
+        return $this->initialState;
     }
 
     public function getEventTime(): DateTimeImmutable
