@@ -127,3 +127,12 @@ resource "google_bigquery_table" "line_coverage" {
 ]
 EOF
 }
+
+resource "google_storage_bucket" "loadable_data_bucket" {
+  name = format("coverage-loadable-data-%s", var.environment)
+
+  # GCP has a always-free tier which only applies to a handful of US
+  # regions. Meaning we can't use the free tier for our bucket if its
+  # in the EU.
+  location = "us-east-1"
+}

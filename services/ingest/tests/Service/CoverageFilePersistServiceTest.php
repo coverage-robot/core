@@ -4,7 +4,7 @@ namespace App\Tests\Service;
 
 use App\Exception\PersistException;
 use App\Service\CoverageFilePersistService;
-use App\Service\Persist\BigQueryPersistService;
+use App\Service\Persist\GcsPersistService;
 use App\Service\Persist\S3PersistService;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
@@ -20,7 +20,7 @@ class CoverageFilePersistServiceTest extends TestCase
             ->method('persist')
             ->willReturn(true);
 
-        $mockBigQueryPersistService = $this->createMock(BigQueryPersistService::class);
+        $mockBigQueryPersistService = $this->createMock(GcsPersistService::class);
         $mockBigQueryPersistService->expects($this->once())
             ->method('persist')
             ->willReturn(true);
@@ -48,7 +48,7 @@ class CoverageFilePersistServiceTest extends TestCase
             ->method('persist')
             ->willThrowException(new PersistException());
 
-        $mockBigQueryPersistService = $this->createMock(BigQueryPersistService::class);
+        $mockBigQueryPersistService = $this->createMock(GcsPersistService::class);
         $mockBigQueryPersistService->expects($this->once())
             ->method('persist')
             ->willReturn(true);
