@@ -31,7 +31,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             'pullRequest' => 'mock-pull-request',
             'index' => 0,
             'state' => JobState::COMPLETED->value,
-            'isInitialState' => true,
+            'initialState' => true,
             'eventTime' => '2021-01-01T00:00:00+00:00',
         ];
 
