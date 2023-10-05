@@ -64,7 +64,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $this->isAllCheckRunsFinished(
                     $jobStateChange->getOwner(),
                     $jobStateChange->getRepository(),
-                    $jobStateChange->getRef()
+                    $jobStateChange->getCommit()
                 )
             ) {
                 $successful = $this->queueFinalCheckRun(
