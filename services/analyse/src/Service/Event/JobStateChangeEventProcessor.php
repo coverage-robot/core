@@ -4,9 +4,11 @@ namespace App\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
+use App\Enum\EnvironmentVariable;
 use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
+use App\Service\EnvironmentService;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -32,6 +34,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
         private readonly SerializerInterface $serializer,
         private readonly CoverageAnalyserService $coverageAnalyserService,
         private readonly GithubAppInstallationClient $githubAppInstallationClient,
+        private readonly EnvironmentService $environmentService,
         private readonly SqsMessageClient $sqsEventClient,
         private readonly EventBridgeEventClient $eventBridgeEventService
     ) {
@@ -113,7 +116,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
     ): bool {
         $this->githubAppInstallationClient->authenticateAsRepositoryOwner($owner);
 
-        /** @var array{ check_runs: array{ status: string } }[] $checkRuns */
+        /** @var array{ check_runs: array{ status: string, app: array{ id: int } } }[] $checkRuns */
         $checkRuns = $this->githubAppInstallationClient->checkRuns()
             ->allForReference(
                 $owner,
@@ -122,7 +125,12 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
             );
 
         foreach ($checkRuns['check_runs'] as $checkRun) {
-            if ($checkRun['status'] !== 'completed') {
+            if (
+                $checkRun['status'] !== 'completed' &&
+                (string)$checkRun['app']['id'] !== $this->environmentService->getVariable(
+                    EnvironmentVariable::GITHUB_APP_ID
+                )
+            ) {
                 return false;
             }
         }

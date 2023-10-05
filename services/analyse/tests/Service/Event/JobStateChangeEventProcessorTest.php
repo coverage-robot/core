@@ -4,11 +4,14 @@ namespace App\Tests\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
+use App\Enum\EnvironmentVariable;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\JobStateChangeEventProcessor;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
@@ -75,6 +78,13 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalysisService,
             $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id',
+                ]
+            ),
             $mockSqsMessageClient,
             $mockEventBridgeEventClient,
         );
