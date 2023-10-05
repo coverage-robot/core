@@ -64,8 +64,6 @@ class S3PersistService implements PersistServiceInterface
             ]
         );
 
-        fclose($body);
-
         $this->s3PersistServiceLogger->info(
             sprintf(
                 'Persisting %s to S3 has finished',
