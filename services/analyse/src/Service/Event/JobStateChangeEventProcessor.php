@@ -121,8 +121,8 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $ref
             );
 
-        foreach ($checkRuns as $checkRun) {
-            if ($checkRun['check_runs']['status'] !== 'completed') {
+        foreach ($checkRuns['check_runs'] as $checkRun) {
+            if ($checkRun['status'] !== 'completed') {
                 return false;
             }
         }
