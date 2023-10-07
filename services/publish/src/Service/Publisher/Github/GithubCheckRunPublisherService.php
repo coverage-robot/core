@@ -363,7 +363,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
          * @var array{
          *     id: int,
          *     conclusion: string|null,
-         *     annotation_count: non-negative-int,
+         *     output: array{ annotations_count: non-negative-int },
          *     app: array{ id: int }
          * }[] $checkRuns
          */
@@ -383,7 +383,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             $checkRun = reset($checkRuns);
 
             $checkRunId = $checkRun['id'];
-            $totalAnnotations = $checkRun['annotation_count'];
+            $totalAnnotations = $checkRun['output']['annotations_count'];
             $conclusion = $checkRun['conclusion'];
 
             $annotations = [];
