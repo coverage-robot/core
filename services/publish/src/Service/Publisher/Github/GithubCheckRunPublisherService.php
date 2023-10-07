@@ -14,12 +14,27 @@ use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Enum\PublishableCheckRunStatus;
+use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @psalm-type Annotation = array{
+ *      path: string,
+ *      start_line: int,
+ *      end_line: int,
+ *      start_column: int,
+ *      end_column: int,
+ *      annotation_level: string,
+ *      title: string,
+ *      message: string,
+ *      raw_details: string,
+ *      blob_href: string
+ *  }
+ */
 class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     private const MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
@@ -73,6 +88,9 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         return $successful;
     }
 
+    /**
+     * Update an existing check run for the given commit, or create it if it doesnt exist.
+     */
     private function upsertCheckRun(
         string $owner,
         string $repository,
@@ -82,14 +100,14 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         $this->client->authenticateAsRepositoryOwner($owner);
 
         try {
-            [$checkRunId, $currentStatus] = $this->getCheckRun(
+            [$checkRunId, $currentAnnotations, $currentStatus] = $this->getCheckRun(
                 $owner,
                 $repository,
                 $commit
             );
 
             if ($publishableMessage->getAnnotations() === []) {
-                $this->updateCheckRun(
+                return $this->updateCheckRun(
                     $owner,
                     $repository,
                     $checkRunId,
@@ -98,8 +116,6 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     $publishableMessage->getCoveragePercentage(),
                     []
                 );
-
-                return true;
             }
         } catch (RuntimeException) {
             $checkRunId = $this->createCheckRun(
@@ -113,13 +129,18 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             $currentStatus = $publishableMessage->getStatus();
         }
 
-        $chunkedAnnotations = $this->getFormattedAnnotations($publishableMessage);
+        $chunkedAnnotations = $this->getFormattedAnnotations(
+            $publishableMessage,
+            $currentAnnotations ?? []
+        );
+
+        $successful = true;
 
         foreach ($chunkedAnnotations as $chunk) {
             // Progressively update the check run with each new set of annotations. The API
             // is additive (i.e. non-idempotent) meaning by streaming new sets of annotations
             // they will be appended to the existing set.
-            $this->updateCheckRun(
+            $successful = $this->updateCheckRun(
                 $owner,
                 $repository,
                 $checkRunId,
@@ -127,12 +148,15 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
                 $chunk
-            );
+            ) && $successful;
         }
 
-        return true;
+        return $successful;
     }
 
+    /**
+     * Create a new check run for the given commit, including publishing any annotations.
+     */
     private function createCheckRun(
         string $owner,
         string $repository,
@@ -206,6 +230,10 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         return (int)$checkRun['id'];
     }
 
+    /**
+     * Update an existing check run for the given commit, including publishing
+     * any annotations which _are not_ already on the existing check run.
+     */
     private function updateCheckRun(
         string $owner,
         string $repository,
@@ -273,22 +301,17 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     }
 
     /**
-     * @psalm-type Annotation = array{
-     *     annotation_level: 'warning',
-     *     end_line: int,
-     *     message: string,
-     *     path: string,
-     *     start_line: int,
-     *     title: string
-     * }
+     * @param Annotation[] $currentAnnotations
      * @return Generator<int, Annotation[]>
      */
-    private function getFormattedAnnotations(PublishableCheckRunMessage $publishableMessage): iterable
-    {
+    private function getFormattedAnnotations(
+        PublishableCheckRunMessage $publishableMessage,
+        array $currentAnnotations
+    ): iterable {
         /** @var Annotation[] $annotations */
         $annotations = [];
 
-        foreach ($publishableMessage->getAnnotations() as $annotation) {
+        foreach ($this->filterAnnotations($publishableMessage, $currentAnnotations) as $annotation) {
             if (count($annotations) === self::MAX_ANNOTATIONS_PER_CHECK_RUN) {
                 yield $annotations;
                 $annotations = [];
@@ -309,10 +332,31 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         }
     }
 
+    private function filterAnnotations(
+        PublishableCheckRunMessage $publishableMessage,
+        array $currentAnnotations
+    ): array {
+        return array_filter(
+            $publishableMessage->getAnnotations(),
+            function (PublishableCheckAnnotationMessage $annotation) use ($currentAnnotations) {
+                foreach ($currentAnnotations as $currentAnnotation) {
+                    if (
+                        $annotation->getFileName() === $currentAnnotation['path'] &&
+                        $annotation->getLineNumber() === $currentAnnotation['start_line']
+                    ) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        );
+    }
+
     /**
-     * @return array{0: int, 1: PublishableCheckRunStatus}
+     * @return array{0: int, 1: Annotation[], 2: PublishableCheckRunStatus}
      */
-    protected function getCheckRun(string $owner, string $repository, string $commit): array
+    private function getCheckRun(string $owner, string $repository, string $commit): array
     {
         /** @var array{ id: int, conclusion: string|null, app: array{ id: int } }[] $checkRuns */
         $checkRuns = $this->client->repo()
@@ -328,10 +372,26 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         );
 
         if (!empty($checkRuns)) {
-            $conclusion = reset($checkRuns)['conclusion'];
+            $checkRun = reset($checkRuns);
+
+            $checkRunId = $checkRun['id'];
+            $totalAnnotations = $checkRun['annotation_count'];
+            $conclusion = $checkRun['conclusion'];
+
+            $annotations = [];
+            if ($totalAnnotations > 0) {
+                // The check run already has published annotations, so we need
+                // to de-duplicate them before we can publish the new ones.
+                $annotations = $this->getCheckRunAnnotations(
+                    $owner,
+                    $repository,
+                    $checkRunId
+                );
+            }
 
             return [
-                reset($checkRuns)['id'],
+                $checkRunId,
+                $annotations,
                 $conclusion ?
                     PublishableCheckRunStatus::from($conclusion) :
                     PublishableCheckRunStatus::IN_PROGRESS
@@ -339,5 +399,15 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         }
 
         throw PublishException::notFoundException('check run');
+    }
+
+    /**
+     * @return Annotation[]
+     */
+    private function getCheckRunAnnotations(string $owner, string $repository, string $checkRunId): array
+    {
+        return $this->client->repo()
+            ->checkRuns()
+            ->annotations($owner, $repository, $checkRunId);
     }
 }

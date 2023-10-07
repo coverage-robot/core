@@ -383,12 +383,16 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 'check_runs' => [
                     [
                         'id' => 1,
+                        'annotation_count' => 0,
+                        'conclusion' => 'success',
                         'app' => [
                             'id' => 'app-1'
                         ]
                     ],
                     [
                         'id' => 2,
+                        'annotation_count' => 0,
+                        'conclusion' => 'success',
                         'app' => [
                             'id' => 'mock-github-app-id'
                         ]
