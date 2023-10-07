@@ -18,6 +18,7 @@ use Bref\Event\S3\S3Event;
 use Exception;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -49,7 +50,7 @@ class EventHandlerTest extends KernelTestCase
             ->willReturn(true);
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
-        $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
+        $mockCoverageFilePersistService->expects($this->atMost(count($expectedOutputKeys)))
             ->method('persist')
             ->with(
                 self::callback(
@@ -108,17 +109,20 @@ class EventHandlerTest extends KernelTestCase
         $handler->handleS3($event, Context::fake());
     }
 
-    #[DataProvider('validS3EventDataProvider')]
-    public function testHandleS3FailsToPersist(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
+    public function testHandleS3FailsToPersist(): void
     {
+        $mockCoverage = $this->createMock(Coverage::class);
+        $mockCoverage->expects($this->once())
+            ->method('count')
+            ->willReturn(1);
+
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->method('ingestFromS3')
-            ->willReturnOnConsecutiveCalls(
-                ...array_map(
-                    [$this, 'getMockS3ObjectResponse'],
-                    $coverageFiles
-                )
-            );
+            ->willReturn($this->getMockS3ObjectResponse(''));
+
+        $mockCoverageFileParserService = $this->createMock(CoverageFileParserService::class);
+        $mockCoverageFileParserService->method('parse')
+            ->willReturn($mockCoverage);
 
         // The handler never attempts to delete the ingested file unless _everything_ succeeds
         // (including persisting the upload to all destinations)
@@ -127,26 +131,42 @@ class EventHandlerTest extends KernelTestCase
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
         $mockCoverageFilePersistService->method('persist')
-            ->willThrowException(
-                PersistException::from(new Exception('Failed to persist'))
-            );
+            ->willThrowException(PersistException::from(new Exception('Failed to persist')));
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService
-            ->expects($this->exactly(count($coverageFiles)))
+        $mockEventBridgeEventService->expects($this->once())
             ->method('publishEvent')
             ->with(CoverageEvent::INGEST_FAILURE);
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getContainer()->get(CoverageFileParserService::class),
+            $mockCoverageFileParserService,
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger()
         );
 
-        $handler->handleS3($event, Context::fake());
+        $handler->handleS3(
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'some-path/lcov/empty.info'
+                            ]
+                        ]
+                    ]
+                ]
+            ]),
+            Context::fake()
+        );
     }
 
     #[DataProvider('validS3EventDataProvider')]
@@ -167,7 +187,7 @@ class EventHandlerTest extends KernelTestCase
             ->willThrowException(DeletionException::from(new Exception('Failed to delete')));
 
         $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
-        $mockCoverageFilePersistService->expects($this->exactly(count($expectedOutputKeys)))
+        $mockCoverageFilePersistService->expects($this->atMost(count($expectedOutputKeys)))
             ->method('persist')
             ->with(
                 self::callback(

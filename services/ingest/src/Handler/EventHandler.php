@@ -87,7 +87,12 @@ class EventHandler extends S3Handler
                     $source->getBody()->getContentAsString()
                 );
 
-                $this->persistCoverage($upload, $coverage);
+                if (count($coverage) > 0) {
+                    // Only try persisting the parsed coverage if the report contains coverage
+                    // content. This will prevent us from publishing events when the report was
+                    // empty coverage
+                    $this->persistCoverage($upload, $coverage);
+                }
 
                 $this->deleteFile($coverageFile);
 
