@@ -10,6 +10,7 @@ use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Annotations\Annotation;
 use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
@@ -23,16 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @psalm-type Annotation = array{
+ *      annotation_level: 'warning',
+ *      end_line: int,
+ *      message: string,
  *      path: string,
  *      start_line: int,
- *      end_line: int,
- *      start_column: int,
- *      end_column: int,
- *      annotation_level: string,
- *      title: string,
- *      message: string,
- *      raw_details: string,
- *      blob_href: string
+ *      title: string
  *  }
  */
 class GithubCheckRunPublisherService implements PublisherServiceInterface
@@ -332,6 +329,10 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         }
     }
 
+    /**
+     * @param Annotation[] $currentAnnotations
+     * @return PublishableCheckAnnotationMessage[]
+     */
     private function filterAnnotations(
         PublishableCheckRunMessage $publishableMessage,
         array $currentAnnotations
@@ -358,7 +359,14 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
      */
     private function getCheckRun(string $owner, string $repository, string $commit): array
     {
-        /** @var array{ id: int, conclusion: string|null, app: array{ id: int } }[] $checkRuns */
+        /**
+         * @var array{
+         *     id: int,
+         *     conclusion: string|null,
+         *     annotation_count: non-negative-int,
+         *     app: array{ id: int }
+         * }[] $checkRuns
+         */
         $checkRuns = $this->client->repo()
             ->checkRuns()
             ->allForReference($owner, $repository, $commit)['check_runs'];
@@ -404,10 +412,13 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     /**
      * @return Annotation[]
      */
-    private function getCheckRunAnnotations(string $owner, string $repository, string $checkRunId): array
+    private function getCheckRunAnnotations(string $owner, string $repository, int $checkRunId): array
     {
-        return $this->client->repo()
+        $annotations = $this->client->repo()
             ->checkRuns()
             ->annotations($owner, $repository, $checkRunId);
+
+        /** @var Annotation[] $annotations */
+        return $annotations;
     }
 }
