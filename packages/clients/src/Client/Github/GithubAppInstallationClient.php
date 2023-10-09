@@ -7,8 +7,8 @@ use Github\Api\Issue;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
-use Github\Api\Repository\Checks\CheckSuites;
 use Github\AuthMethod;
+use Github\ResultPager;
 use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
@@ -73,6 +73,11 @@ class GithubAppInstallationClient
     public function graphql(): GraphQL
     {
         return new GraphQL($this->installationClient);
+    }
+
+    public function pagination(int $maxItems = 30): ResultPager
+    {
+        return new ResultPager($this->installationClient, $maxItems);
     }
 
     private function getInstallationForOwner(string $owner): int
