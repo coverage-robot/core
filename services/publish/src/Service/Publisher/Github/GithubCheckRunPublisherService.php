@@ -412,13 +412,23 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     /**
      * @return Annotation[]
      */
-    private function getCheckRunAnnotations(string $owner, string $repository, int $checkRunId): array
-    {
-        $annotations = $this->client->repo()
-            ->checkRuns()
-            ->annotations($owner, $repository, $checkRunId);
+    private function getCheckRunAnnotations(
+        string $owner,
+        string $repository,
+        int $checkRunId
+    ): array {
+        $checkRuns = $this->client->repo()
+            ->checkRuns();
+
+        $paginator = $this->client->pagination(100);
 
         /** @var Annotation[] $annotations */
+        $annotations = $paginator->fetchAll(
+            $checkRuns,
+            'annotations',
+            [$owner, $repository, $checkRunId]
+        );
+
         return $annotations;
     }
 }
