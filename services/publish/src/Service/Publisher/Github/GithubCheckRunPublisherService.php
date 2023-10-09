@@ -423,10 +423,12 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         $paginator = $this->client->pagination(100);
 
         /** @var Annotation[] $annotations */
-        return $paginator->fetchAll(
+        $annotations = $paginator->fetchAll(
             $checkRuns,
             'annotations',
             [$owner, $repository, $checkRunId]
         );
+
+        return $annotations;
     }
 }
