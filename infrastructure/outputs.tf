@@ -38,6 +38,10 @@ output "line_coverage_table" {
   value = length(module.warehouse) > 0 ? module.warehouse.line_coverage_table : null
 }
 
+output "upload_table" {
+  value = length(module.warehouse) > 0 ? module.warehouse.upload_table : null
+}
+
 output "coverage_api_db" {
   value = length(module.database) > 0 ? module.database.coverage_api_db : null
 }
