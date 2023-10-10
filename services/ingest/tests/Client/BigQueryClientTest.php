@@ -24,7 +24,7 @@ class BigQueryClientTest extends TestCase
             )
         );
 
-        $this->assertEquals('mock-project.mock-dataset.mock-table', $client->getTable());
+        $this->assertEquals('mock-project.mock-dataset.mock-line-coverage-table', $client->getTable());
     }
 
     public function testDatasetIsCorrectlyConstructed(): void
