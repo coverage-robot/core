@@ -18,6 +18,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     use DiffAwareTrait;
     use CarryforwardAwareTrait;
 
+    private const LINES_TABLE_ALIAS = 'lines';
     private const UPLOAD_TABLE_ALIAS = 'upload';
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
@@ -72,7 +73,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $lineScope = !empty(
             $scope = self::getLineScope(
                 $parameterBag,
-                self::UPLOAD_TABLE_ALIAS
+                self::LINES_TABLE_ALIAS
             )
         ) ? 'AND ' . $scope : '';
 

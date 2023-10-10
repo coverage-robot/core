@@ -42,7 +42,10 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -80,24 +83,25 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
                   AND (
                     (
-                      fileName = "mock-file"
-                      AND lineNumber IN (1, 2, 3)
+                      lines.fileName = "mock-file"
+                      AND lines.lineNumber IN (1, 2, 3)
                     )
                     OR(
-                      fileName = "mock-file-2"
-                      AND lineNumber IN (10, 11, 12)
+                      lines.fileName = "mock-file-2"
+                      AND lines.lineNumber IN (10, 11, 12)
                     )
                   )
               ),
@@ -196,7 +200,10 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -234,24 +241,25 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
                   AND (
                     (
-                      fileName = "mock-file"
-                      AND lineNumber IN (1, 2, 3)
+                      lines.fileName = "mock-file"
+                      AND lines.lineNumber IN (1, 2, 3)
                     )
                     OR(
-                      fileName = "mock-file-2"
-                      AND lineNumber IN (10, 11, 12)
+                      lines.fileName = "mock-file-2"
+                      AND lines.lineNumber IN (10, 11, 12)
                     )
                   )
               ),
@@ -352,7 +360,10 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -390,14 +401,15 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
               ),
@@ -496,7 +508,10 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -534,37 +549,38 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                     OR (
                       (
                         (
-                          commit = "mock-commit"
-                          AND tag = "1"
+                          upload.commit = "mock-commit"
+                          AND upload.tag = "1"
                         )
                         OR (
-                          commit = "mock-commit"
-                          AND tag = "2"
+                          upload.commit = "mock-commit"
+                          AND upload.tag = "2"
                         )
                         OR (
-                          commit = "mock-commit-2"
-                          AND tag = "3"
+                          upload.commit = "mock-commit-2"
+                          AND upload.tag = "3"
                         )
                         OR (
-                          commit = "mock-commit-2"
-                          AND tag = "4"
+                          upload.commit = "mock-commit-2"
+                          AND upload.tag = "4"
                         )
                       )
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
               ),

@@ -27,7 +27,10 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -65,14 +68,15 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
               ),
@@ -166,7 +170,10 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             WITH
               unnested AS (
                 SELECT
-                  *,
+                  upload.tag,
+                  upload.commit,
+                  fileName,
+                  lineNumber,
                   (
                     SELECT
                       IF (
@@ -204,37 +211,38 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                       branchHits
                   ) as branchHits
                 FROM
-                  `mock-table` as lines
+                  `mock-table` as upload
+                  INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
                 WHERE
                   (
                     (
-                      commit = "mock-commit"
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      upload.commit = "mock-commit"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                     OR (
                       (
                         (
-                          commit = "mock-commit"
-                          AND tag = "1"
+                          upload.commit = "mock-commit"
+                          AND upload.tag = "1"
                         )
                         OR (
-                          commit = "mock-commit"
-                          AND tag = "2"
+                          upload.commit = "mock-commit"
+                          AND upload.tag = "2"
                         )
                         OR (
-                          commit = "mock-commit-2"
-                          AND tag = "3"
+                          upload.commit = "mock-commit-2"
+                          AND upload.tag = "3"
                         )
                         OR (
-                          commit = "mock-commit-2"
-                          AND tag = "4"
+                          upload.commit = "mock-commit-2"
+                          AND upload.tag = "4"
                         )
                       )
-                      AND repository = "mock-repository"
-                      AND owner = "mock-owner"
-                      AND provider = "github"
+                      AND upload.repository = "mock-repository"
+                      AND upload.owner = "mock-owner"
+                      AND upload.provider = "github"
                     )
                   )
               ),
