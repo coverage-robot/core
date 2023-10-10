@@ -22,11 +22,6 @@ interface PublishableCoverageDataInterface
     public function getSuccessfulUploads(): array;
 
     /**
-     * Get the list of uploads which are still pending for a particular commit.
-     */
-    public function getPendingUploads(): array;
-
-    /**
      * Get the date of the latest **successful** upload for a particular commit.
      */
     public function getLatestSuccessfulUpload(): DateTimeImmutable|null;

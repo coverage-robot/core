@@ -58,7 +58,7 @@ class QueryService
     ): QueryResultInterface {
         $sql = $this->queryBuilderService->build(
             $query,
-            $this->bigQueryClient->getTable(),
+            $this->bigQueryClient->getTable($query->getTable()),
             $parameterBag
         );
 

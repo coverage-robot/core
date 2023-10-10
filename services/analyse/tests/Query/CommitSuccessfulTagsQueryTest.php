@@ -2,13 +2,16 @@
 
 namespace App\Tests\Query;
 
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\CommitSuccessfulTagsQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\CommitCollectionQueryResult;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
@@ -18,7 +21,15 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
 {
     public function getQueryClass(): QueryInterface
     {
-        return new CommitSuccessfulTagsQuery();
+        return new CommitSuccessfulTagsQuery(
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::PRODUCTION,
+                [
+                    EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-table'
+                ]
+            )
+        );
     }
 
     /**
@@ -28,70 +39,30 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
     {
         return [
             <<<SQL
-            WITH
-              uploads AS (
-                SELECT
-                  commit,
-                  tag,
-                  IF (
-                    totalLines >= COUNT(uploadId),
-                    1,
-                    0
-                  ) as isSuccessfulUpload
-                FROM
-                  `mock-table`
-                WHERE
-                  commit = "mock-commit"
-                  AND repository = "mock-repository"
-                  AND owner = "mock-owner"
-                  AND provider = "github"
-                GROUP BY
-                  commit,
-                  uploadId,
-                  tag,
-                  totalLines
-              )
             SELECT
               commit,
-              ARRAY_AGG(
-                DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS
-              ) as tags,
+              ARRAY_AGG(tag) as tags,
             FROM
-              uploads
+              `mock-table`
+            WHERE
+              commit = "mock-commit"
+              AND repository = "mock-repository"
+              AND owner = "mock-owner"
+              AND provider = "github"
             GROUP BY
               commit
             SQL,
             <<<SQL
-            WITH
-              uploads AS (
-                SELECT
-                  commit,
-                  tag,
-                  IF (
-                    totalLines >= COUNT(uploadId),
-                    1,
-                    0
-                  ) as isSuccessfulUpload
-                FROM
-                  `mock-table`
-                WHERE
-                  commit IN ("mock-commit", "mock-commit-2")
-                  AND repository = "mock-repository"
-                  AND owner = "mock-owner"
-                  AND provider = "github"
-                GROUP BY
-                  commit,
-                  uploadId,
-                  tag,
-                  totalLines
-              )
             SELECT
               commit,
-              ARRAY_AGG(
-                DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS
-              ) as tags,
+              ARRAY_AGG(tag) as tags,
             FROM
-              uploads
+              `mock-table`
+            WHERE
+              commit IN ("mock-commit", "mock-commit-2")
+              AND repository = "mock-repository"
+              AND owner = "mock-owner"
+              AND provider = "github"
             GROUP BY
               commit
             SQL,

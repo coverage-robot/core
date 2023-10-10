@@ -104,7 +104,7 @@ class IngestSuccessEventProcessor implements EventProcessorInterface
                 $publishableCoverageData->getCoveragePercentage(),
                 $publishableCoverageData->getDiffCoveragePercentage(),
                 count($publishableCoverageData->getSuccessfulUploads()),
-                count($publishableCoverageData->getPendingUploads()),
+                0,
                 array_map(
                     function (TagCoverageQueryResult $tag) {
                         return [

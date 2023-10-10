@@ -30,6 +30,11 @@ interface QueryInterface
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
     /**
+     * The name of the table to run the query against.
+     */
+    public function getTable(): string;
+
+    /**
      * Parse the results of the query.
      *
      * @throws QueryException

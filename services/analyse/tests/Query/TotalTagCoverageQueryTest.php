@@ -2,13 +2,16 @@
 
 namespace App\Tests\Query;
 
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
@@ -329,7 +332,15 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 
     public function getQueryClass(): QueryInterface
     {
-        return new TotalTagCoverageQuery();
+        return new TotalTagCoverageQuery(
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::PRODUCTION,
+                [
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                ]
+            )
+        );
     }
 
     public static function getQueryParameters(): array

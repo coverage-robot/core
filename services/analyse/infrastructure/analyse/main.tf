@@ -17,13 +17,13 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "analyse_role" {
-  name = "analyse-role"
+  name               = "analyse-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -33,10 +33,10 @@ resource "aws_iam_role" "analyse_role" {
 }
 
 resource "aws_iam_policy" "analyse_policy" {
-  name = "analyse-policy"
-  path = "/"
+  name   = "analyse-policy"
+  path   = "/"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Effect = "Allow"
@@ -101,6 +101,7 @@ resource "aws_lambda_function" "analyse" {
       "BIGQUERY_PROJECT"             = data.terraform_remote_state.core.outputs.environment_dataset.project,
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
+      "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload.table_id,
     }
   }
 }

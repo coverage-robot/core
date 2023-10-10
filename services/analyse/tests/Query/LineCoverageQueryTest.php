@@ -2,13 +2,16 @@
 
 namespace App\Tests\Query;
 
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
@@ -364,7 +367,15 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
 
     public function getQueryClass(): QueryInterface
     {
-        return new LineCoverageQuery();
+        return new LineCoverageQuery(
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::PRODUCTION,
+                [
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                ]
+            )
+        );
     }
 
     public static function getQueryParameters(): array

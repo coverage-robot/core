@@ -2,8 +2,10 @@
 
 namespace App\Tests\Mock\Factory;
 
+use App\Enum\EnvironmentVariable;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Packages\Models\Enum\Environment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,7 +25,18 @@ class MockQueryFactory
         QueryResultInterface $parsedResults
     ): QueryInterface|MockObject {
         $mockQuery = $testCase->getMockBuilder($queryClass)
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(
+                [
+                    MockEnvironmentServiceFactory::getMock(
+                        $testCase,
+                        Environment::TESTING,
+                        [
+                            EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
+                            EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-upload-table',
+                        ]
+                    )
+                ]
+            )
             ->onlyMethods(['getQuery', 'parseResults'])
             ->getMock();
 
