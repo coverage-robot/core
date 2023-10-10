@@ -7,22 +7,25 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
-use App\Service\EnvironmentService;
+use App\Query\Trait\UploadTableAwareTrait;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
     use ScopeAwareTrait;
+    use UploadTableAwareTrait;
 
-    public function __construct(
-        private readonly EnvironmentService $environmentService
-    ) {
-    }
+    private const UPLOAD_TABLE_ALIAS = 'upload';
 
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
-        $commitScope = !empty($scope = self::getCommitScope($parameterBag)) ? $scope : '';
-        $repositoryScope = !empty($scope = self::getRepositoryScope($parameterBag)) ? 'AND ' . $scope : '';
-        $uploadScope = !empty($scope = self::getUploadsScope($parameterBag)) ? 'AND ' . $scope : '';
+        $commitScope = !empty($scope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) ? $scope : '';
+        $repositoryScope = !empty(
+            $scope = self::getRepositoryScope(
+                $parameterBag,
+                self::UPLOAD_TABLE_ALIAS
+            )
+        ) ? 'AND ' . $scope : '';
+        $uploadScope = !empty($scope = self::getUploadsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) ? $scope : '';
 
         return <<<SQL
         {$commitScope}
@@ -33,17 +36,26 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
-    public function getTable(): string
-    {
-        return $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE);
-    }
-
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
+        // TODO(RM): We should do this better. We need to get line coverage table in the same
+        //  dataset as the upload table.
+        $uploadTableAlias = self::UPLOAD_TABLE_ALIAS;
+        $lineCoverageTable = implode(
+            '.',
+            [
+                ...explode('.', $table, -1),
+                $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
+            ]
+        );
+
         return <<<SQL
         WITH unnested AS (
             SELECT
-                *,
+                {$uploadTableAlias}.tag,
+                {$uploadTableAlias}.commit,
+                fileName,
+                lineNumber,
                 (
                     SELECT
                     IF (
@@ -77,7 +89,8 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                         branchHits
                 ) as branchHits
             FROM
-                `$table` as lines
+                `$table` as upload
+            INNER JOIN `$lineCoverageTable` as lines ON lines.uploadId = upload.uploadId
             WHERE
                 {$this->getUnnestQueryFiltering($table, $parameterBag)}
         )

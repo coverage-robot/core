@@ -18,6 +18,9 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     use DiffAwareTrait;
     use CarryforwardAwareTrait;
 
+    private const LINES_TABLE_ALIAS = 'lines';
+    private const UPLOAD_TABLE_ALIAS = 'upload';
+
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -63,11 +66,16 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
         $carryforwardScope = !empty(
             $scope = self::getCarryforwardTagsScope(
-                $table,
-                $parameterBag
+                $parameterBag,
+                self::UPLOAD_TABLE_ALIAS
             )
         ) ? 'OR ' . $scope : '';
-        $lineScope = !empty($scope = self::getLineScope($parameterBag)) ? 'AND ' . $scope : '';
+        $lineScope = !empty(
+            $scope = self::getLineScope(
+                $parameterBag,
+                self::LINES_TABLE_ALIAS
+            )
+        ) ? 'AND ' . $scope : '';
 
         return <<<SQL
         (

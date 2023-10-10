@@ -14,10 +14,7 @@ resource "google_bigquery_table" "line_coverage" {
   table_id            = "line_coverage"
   deletion_protection = false
   clustering = [
-    "provider",
-    "owner",
-    "repository",
-    "commit",
+    "uploadId"
   ]
 
   schema = <<EOF
