@@ -55,15 +55,6 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             ->getSuccessfulUploads();
     }
 
-    /**
-     * @throws QueryException
-     */
-    public function getPendingUploads(): array
-    {
-        return $this->getUploads()
-            ->getPendingUploads();
-    }
-
     public function getLatestSuccessfulUpload(): DateTimeImmutable|null
     {
         return $this->getUploads()

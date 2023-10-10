@@ -16,7 +16,6 @@ class TotalUploadsQueryResult implements QueryResultInterface
     private function __construct(
         private readonly array $successfulUploads,
         private readonly array $successfulTags,
-        private readonly array $pendingUploads,
         private readonly ?DateTimeImmutable $latestSuccessfulUpload
     ) {
     }
@@ -25,7 +24,6 @@ class TotalUploadsQueryResult implements QueryResultInterface
         string $commit,
         array $successfulUploads,
         array $successfulTags,
-        array $pendingUploads,
         ?string $latestSuccessfulUpload = null
     ): self {
         return new self(
@@ -36,10 +34,6 @@ class TotalUploadsQueryResult implements QueryResultInterface
             array_map(
                 static fn(string $tag) => new Tag($tag, $commit),
                 array_filter($successfulTags, static fn(mixed $tag) => is_string($tag))
-            ),
-            array_filter(
-                $pendingUploads,
-                static fn(mixed $uploadId) => is_string($uploadId)
             ),
             $latestSuccessfulUpload ? (DateTimeImmutable::createFromFormat(
                 DateTimeInterface::ATOM,
@@ -59,11 +53,6 @@ class TotalUploadsQueryResult implements QueryResultInterface
     public function getSuccessfulTags(): array
     {
         return $this->successfulTags;
-    }
-
-    public function getPendingUploads(): array
-    {
-        return $this->pendingUploads;
     }
 
     public function getLatestSuccessfulUpload(): DateTimeImmutable|null

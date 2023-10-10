@@ -7,6 +7,7 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
+use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\Provider;
@@ -14,44 +15,31 @@ use Packages\Models\Enum\Provider;
 class CommitSuccessfulTagsQuery implements QueryInterface
 {
     use ScopeAwareTrait;
+    use UploadTableAwareTrait;
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
-    {
-        return <<<SQL
-        {$this->getNamedQueries($table, $parameterBag)}
-        SELECT
-                commit,
-                ARRAY_AGG(DISTINCT IF(isSuccessfulUpload = 1, tag, NULL) IGNORE NULLS) as tags,
-            FROM
-                uploads
-            GROUP BY
-                commit
-        SQL;
-    }
-
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $commitScope = self::getCommitScope($parameterBag);
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
-        WITH uploads AS (
-            SELECT
-                commit,
-                tag,
-                IF (totalLines >= COUNT(uploadId), 1, 0) as isSuccessfulUpload
-            FROM
-                `{$table}`
-            WHERE
-                {$commitScope} AND
-                {$repositoryScope}
-            GROUP BY
-                commit,
-                uploadId,
-                tag,
-                totalLines
-        )
+        {$this->getNamedQueries($table, $parameterBag)}
+        SELECT
+            commit,
+            ARRAY_AGG(tag) as tags,
+        FROM
+            `{$table}`
+        WHERE
+            {$commitScope} AND
+            {$repositoryScope}
+        GROUP BY
+            commit
         SQL;
+    }
+
+    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    {
+        return '';
     }
 
     /**

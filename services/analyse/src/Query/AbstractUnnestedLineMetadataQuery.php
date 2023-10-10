@@ -2,14 +2,21 @@
 
 namespace App\Query;
 
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
+use App\Service\EnvironmentService;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
     use ScopeAwareTrait;
+
+    public function __construct(
+        private readonly EnvironmentService $environmentService
+    ) {
+    }
 
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
@@ -25,6 +32,11 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     }
 
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
+
+    public function getTable(): string
+    {
+        return $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE);
+    }
 
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {

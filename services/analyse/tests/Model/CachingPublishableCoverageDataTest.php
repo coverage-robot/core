@@ -48,7 +48,6 @@ class CachingPublishableCoverageDataTest extends TestCase
             'mock-commit',
             ['a'],
             ['c'],
-            ['b'],
             '2023-09-09T01:22:00+0000'
         );
 
@@ -76,7 +75,6 @@ class CachingPublishableCoverageDataTest extends TestCase
             'mock-commit',
             ['a'],
             ['c'],
-            ['b'],
             '2023-09-09T01:22:00+0000'
         );
 
@@ -95,34 +93,6 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->assertEquals(
             ['a'],
             $this->cachedPublishableCoverageData->getSuccessfulUploads()
-        );
-    }
-
-    public function testGetPendingUploads(): void
-    {
-        $result = TotalUploadsQueryResult::from(
-            'mock-commit',
-            ['a'],
-            ['c'],
-            ['b'],
-            '2023-09-09T01:22:00+0000'
-        );
-
-        $this->mockQueryService->expects($this->once(2))
-            ->method('runQuery')
-            ->willReturnOnConsecutiveCalls($result);
-
-        $this->assertEquals(
-            ['b'],
-            $this->cachedPublishableCoverageData->getPendingUploads()
-        );
-
-        $this->mockQueryService->expects($this->never())
-            ->method('runQuery');
-
-        $this->assertEquals(
-            ['b'],
-            $this->cachedPublishableCoverageData->getPendingUploads()
         );
     }
 
@@ -132,7 +102,6 @@ class CachingPublishableCoverageDataTest extends TestCase
             'mock-commit',
             ['a'],
             ['c'],
-            ['b'],
             '2023-09-09T01:22:00+0000'
         );
 
@@ -159,7 +128,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -182,7 +151,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -205,7 +174,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -228,7 +197,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -263,7 +232,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 $files
             );
 
@@ -280,7 +249,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 CoverageQueryResult::from([
                     'lines' => 6,
                     'covered' => 1,
@@ -314,7 +283,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 $files
             );
 
@@ -339,7 +308,7 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1'], []),
+                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
                 $lines
             );
 
