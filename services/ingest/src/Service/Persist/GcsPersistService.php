@@ -62,6 +62,7 @@ class GcsPersistService implements PersistServiceInterface
             )
         );
 
+        $hasAddedUpload = false;
         if ($isCoverageLoaded) {
             $hasAddedUpload = $this->streamUploadRow($upload);
 
