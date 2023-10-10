@@ -134,6 +134,71 @@ resource "google_bigquery_table" "line_coverage" {
 EOF
 }
 
+resource "google_bigquery_table" "upload" {
+  dataset_id          = google_bigquery_dataset.environment_dataset.dataset_id
+  table_id            = "upload"
+  deletion_protection = false
+
+  schema = <<EOF
+[
+  {
+    "name": "uploadId",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The unique upload id for the uploaded file."
+  },
+  {
+    "name": "commit",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The commit hash which the upload occured on."
+  },
+  {
+    "name": "parent",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "The parent commit hash(es) of the commit upload occured on."
+  },
+  {
+    "name": "ref",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The ref (e.g. branch) in the VCS provider."
+  },
+  {
+    "name": "tag",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The user provided tag of the upload."
+  },
+  {
+    "name": "owner",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The repository owner for the VCS provider."
+  },
+  {
+    "name": "repository",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The repository name for the VCS provider."
+  },
+  {
+    "name": "provider",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "The VCS provider."
+  },
+  {
+    "name": "ingestTime",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "The time the upload occurred."
+  }
+]
+EOF
+}
+
 resource "google_storage_bucket" "loadable_data_bucket" {
   name = format("coverage-loadable-data-%s", var.environment)
 
