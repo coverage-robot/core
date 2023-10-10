@@ -27,8 +27,13 @@ class BigQueryMetadataBuilderService
     /**
      * Build a row's worth of line coverage data, suitable for insertion into BigQuery.
      */
-    public function buildRow(Upload $upload, int $totalLines, Coverage $coverage, File $file, AbstractLine $line): array
-    {
+    public function buildLineCoverageRow(
+        Upload $upload,
+        int $totalLines,
+        Coverage $coverage,
+        File $file,
+        AbstractLine $line
+    ): array {
         return [
             'uploadId' => $upload->getUploadId(),
             'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
@@ -48,6 +53,21 @@ class BigQueryMetadataBuilderService
             'lineNumber' => $line->getLineNumber(),
             'totalLines' => $totalLines,
             'metadata' => $this->buildMetadata($line)
+        ];
+    }
+
+    public function buildUploadRow(Upload $upload): array
+    {
+        return [
+            'uploadId' => $upload->getUploadId(),
+            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+            'provider' => $upload->getProvider(),
+            'owner' => $upload->getOwner(),
+            'repository' => $upload->getRepository(),
+            'commit' => $upload->getCommit(),
+            'parent' => $upload->getParent(),
+            'ref' => $upload->getRef(),
+            'tag' => $upload->getTag()->getName()
         ];
     }
 
