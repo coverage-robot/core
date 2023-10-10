@@ -17,16 +17,17 @@ trait ScopeAwareTrait
      * provider = "provider"
      * ```
      */
-    private static function getRepositoryScope(?QueryParameterBag $parameterBag): string
+    private static function getRepositoryScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
         $filters = [];
+        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::REPOSITORY)) {
             /** @var string $repository */
             $repository = $parameterBag->get(QueryParameter::REPOSITORY);
 
             $filters[] = <<<SQL
-            repository = "{$repository}"
+            {$tableAlias}repository = "{$repository}"
             SQL;
         }
 
@@ -35,7 +36,7 @@ trait ScopeAwareTrait
             $owner = $parameterBag->get(QueryParameter::OWNER);
 
             $filters[] = <<<SQL
-            owner = "{$owner}"
+            {$tableAlias}owner = "{$owner}"
             SQL;
         }
 
@@ -44,7 +45,7 @@ trait ScopeAwareTrait
             $provider = $parameterBag->get(QueryParameter::PROVIDER);
 
             $filters[] = <<<SQL
-            provider = "{$provider?->value}"
+            {$tableAlias}provider = "{$provider?->value}"
             SQL;
         }
 
@@ -69,22 +70,24 @@ trait ScopeAwareTrait
      * commit IN ('commit-sha-1', 'commit-sha-2', 'commit-sha-3')
      * ```
      */
-    private static function getCommitScope(?QueryParameterBag $parameterBag): string
+    private static function getCommitScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
+        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+
         if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
             /** @var string|string[] $commits */
             $commits = $parameterBag->get(QueryParameter::COMMIT);
 
             if (is_string($commits)) {
                 return <<<SQL
-                commit = "{$commits}"
+                {$tableAlias}commit = "{$commits}"
                 SQL;
             }
 
             $commits = implode('","', $commits);
 
             return <<<SQL
-            commit IN ("{$commits}")
+            {$tableAlias}commit IN ("{$commits}")
             SQL;
         }
 
@@ -109,22 +112,24 @@ trait ScopeAwareTrait
      * uploadId IN ('upload-uuid-1', 'upload-uuid-2', 'upload-uuid-3')
      * ```
      */
-    private static function getUploadsScope(?QueryParameterBag $parameterBag): string
+    private static function getUploadsScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
+        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+
         if ($parameterBag && $parameterBag->has(QueryParameter::UPLOADS_SCOPE)) {
             /** @var string|string[] $uploads */
             $uploads = $parameterBag->get(QueryParameter::UPLOADS_SCOPE);
 
             if (is_string($uploads)) {
                 return <<<SQL
-                uploadId = "{$uploads}"
+                {$tableAlias}uploadId = "{$uploads}"
                 SQL;
             }
 
             $uploads = implode('","', $uploads);
 
             return <<<SQL
-            uploadId IN ("{$uploads}")
+            {$tableAlias}uploadId IN ("{$uploads}")
             SQL;
         }
 

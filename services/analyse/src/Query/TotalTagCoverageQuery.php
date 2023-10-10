@@ -14,6 +14,8 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     use CarryforwardAwareTrait;
 
+    private const UPLOAD_TABLE_ALIAS = 'upload';
+
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -112,8 +114,8 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
         $carryforwardScope = !empty(
             $scope = self::getCarryforwardTagsScope(
-                $table,
-                $parameterBag
+                $parameterBag,
+                self::UPLOAD_TABLE_ALIAS
             )
         ) ? 'OR ' . $scope : '';
 

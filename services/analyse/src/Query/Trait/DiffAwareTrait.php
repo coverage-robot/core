@@ -34,8 +34,9 @@ trait DiffAwareTrait
      * )
      * ```
      */
-    private static function getLineScope(?QueryParameterBag $parameterBag): string
+    private static function getLineScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
+        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::LINE_SCOPE)) {
             /** @var array<array-key, list{int}> $fileLineNumbers */
@@ -47,8 +48,8 @@ trait DiffAwareTrait
 
                 $filtering .= <<<SQL
                 (
-                    fileName = "{$fileName}" AND
-                    lineNumber IN ({$lineNumbers})
+                    {$tableAlias}fileName = "{$fileName}" AND
+                    {$tableAlias}lineNumber IN ({$lineNumbers})
                 ) OR
                 SQL;
             }

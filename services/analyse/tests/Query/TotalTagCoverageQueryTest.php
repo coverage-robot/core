@@ -337,7 +337,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 $this,
                 Environment::PRODUCTION,
                 [
-                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table'
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
                 ]
             )
         );

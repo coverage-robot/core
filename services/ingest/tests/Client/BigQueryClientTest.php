@@ -19,7 +19,7 @@ class BigQueryClientTest extends TestCase
                 [
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset',
-                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-table',
+                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
                 ]
             )
         );
