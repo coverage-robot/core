@@ -36,8 +36,7 @@ class TotalUploadsQuery implements QueryInterface
             {$commitScope} AND
             {$repositoryScope}
         GROUP BY
-            tag,
-            ingestTime
+            tag
         SQL;
     }
 

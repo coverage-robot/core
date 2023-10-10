@@ -40,8 +40,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               AND owner = "mock-owner"
               AND provider = "github"
             GROUP BY
-              tag,
-              ingestTime
+              tag
             SQL
         ];
     }
