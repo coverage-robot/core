@@ -11,14 +11,10 @@ use App\Service\EnvironmentService;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
-use JsonException;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\File;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class GcsPersistService implements PersistServiceInterface
 {
@@ -27,7 +23,11 @@ class GcsPersistService implements PersistServiceInterface
     private const OUTPUT_KEY = '%s%s.json';
 
     /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     * @param GoogleCloudStorageClient $googleCloudStorageClient
+     * @param BigQueryClient $bigQueryClient
+     * @param BigQueryMetadataBuilderService $bigQueryMetadataBuilderService
+     * @param EnvironmentService $environmentService
+     * @param LoggerInterface $gcsPersistServiceLogger
      */
     public function __construct(
         private readonly GoogleCloudStorageClient $googleCloudStorageClient,
@@ -42,11 +42,10 @@ class GcsPersistService implements PersistServiceInterface
      * @param Upload $upload
      * @param Coverage $coverage
      * @return bool
-     * @throws JsonException
      */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
-        $body = $this->getBody($upload, $coverage);
+        $body = $this->getLineCoverageFileBody($upload, $coverage);
 
         $bucket = $this->googleCloudStorageClient->bucket(
             sprintf(
@@ -55,7 +54,7 @@ class GcsPersistService implements PersistServiceInterface
             )
         );
 
-        $isLoaded = $this->triggerLoadJob(
+        $isCoverageLoaded = $this->triggerLoadJob(
             $upload,
             $bucket->upload(
                 $body,
@@ -63,17 +62,31 @@ class GcsPersistService implements PersistServiceInterface
             )
         );
 
+        if ($isCoverageLoaded) {
+            $hasAddedUpload = $this->streamUploadRow($upload);
+
+            if (!$hasAddedUpload) {
+                $this->gcsPersistServiceLogger->error(
+                    sprintf(
+                        'Unable to add upload to BigQuery for %s',
+                        (string)$upload
+                    )
+                );
+            }
+        }
+
         $this->gcsPersistServiceLogger->info(
             sprintf(
                 'Persisting %s to Google Cloud Storage (and loading to BigQuery) has finished',
                 (string)$upload
             ),
             [
-                'success' => $isLoaded,
+                'coverage' => $isCoverageLoaded,
+                'upload' => $hasAddedUpload
             ]
         );
 
-        return $isLoaded;
+        return $isCoverageLoaded && $hasAddedUpload;
     }
 
     private function triggerLoadJob(Upload $upload, StorageObject $object): bool
@@ -136,9 +149,12 @@ class GcsPersistService implements PersistServiceInterface
     }
 
     /**
+     * Build a temporary file handle containing a new line delimited JSON file
+     * consisting of the line coverage data - one row per line of the file handle.
+     *
      * @return resource
      */
-    public function getBody(Upload $upload, Coverage $coverage)
+    public function getLineCoverageFileBody(Upload $upload, Coverage $coverage)
     {
         $buffer = fopen('php://temp', 'rw+');
         $totalLines = $this->totalLines($coverage);
@@ -152,7 +168,7 @@ class GcsPersistService implements PersistServiceInterface
                 fwrite(
                     $buffer,
                     json_encode(
-                        $this->bigQueryMetadataBuilderService->buildRow(
+                        $this->bigQueryMetadataBuilderService->buildLineCoverageRow(
                             $upload,
                             $totalLines,
                             $coverage,
@@ -167,7 +183,18 @@ class GcsPersistService implements PersistServiceInterface
         return $buffer;
     }
 
-    public function totalLines(Coverage $coverage): int
+    private function streamUploadRow(Upload $upload): bool
+    {
+        $response = $this->bigQueryClient->getEnvironmentDataset()
+            ->table(
+                $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
+            )
+            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload));
+
+        return $response->failedRows() == 0;
+    }
+
+    private function totalLines(Coverage $coverage): int
     {
         return array_reduce(
             $coverage->getFiles(),

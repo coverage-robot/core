@@ -32,7 +32,7 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
 
         $ingestTime = new DateTimeImmutable();
 
-        $row = $bigQueryMetadataBuilderService->buildRow(
+        $row = $bigQueryMetadataBuilderService->buildLineCoverageRow(
             new Upload(
                 'mock-uuid',
                 Provider::GITHUB,
