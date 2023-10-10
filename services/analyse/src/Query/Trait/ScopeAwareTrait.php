@@ -20,7 +20,7 @@ trait ScopeAwareTrait
     private static function getRepositoryScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
         $filters = [];
-        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::REPOSITORY)) {
             /** @var string $repository */
@@ -72,7 +72,7 @@ trait ScopeAwareTrait
      */
     private static function getCommitScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
-        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::COMMIT)) {
             /** @var string|string[] $commits */
@@ -114,7 +114,7 @@ trait ScopeAwareTrait
      */
     private static function getUploadsScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
-        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::UPLOADS_SCOPE)) {
             /** @var string|string[] $uploads */

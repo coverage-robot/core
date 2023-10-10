@@ -45,7 +45,7 @@ trait CarryforwardAwareTrait
     ): string {
         $repositoryScope = self::getRepositoryScope($parameterBag, $tableAlias);
 
-        $tableAlias = $tableAlias ? "{$tableAlias}." : '';
+        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
             /** @var Tag[] $carryforwardTags */
