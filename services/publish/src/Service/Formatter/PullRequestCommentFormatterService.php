@@ -31,7 +31,7 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($event, $message)}
         </details>
 
-        *Last update to `{$event->getTag()->getName()}` at {$this->getLastUpdateTime($event)}*
+        *Last update at {$this->getLastUpdateTime($event)}*
         MARKDOWN;
     }
 
