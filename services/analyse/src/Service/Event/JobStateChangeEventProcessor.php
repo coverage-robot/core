@@ -231,7 +231,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                             },
                             $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                         ),
-                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
+                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
                     ),
                     new PublishableCheckRunMessage(
                         $jobStateChange,
