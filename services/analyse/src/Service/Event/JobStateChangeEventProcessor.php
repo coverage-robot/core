@@ -6,7 +6,9 @@ use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Enum\EnvironmentVariable;
 use App\Model\PublishableCoverageDataInterface;
+use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\EnvironmentService;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -19,6 +21,8 @@ use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\Event\JobStateChange;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
+use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -189,13 +193,55 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
         );
 
         return $this->sqsEventClient->queuePublishableMessage(
-            new PublishableCheckRunMessage(
+            new PublishableMessageCollection(
                 $jobStateChange,
-                PublishableCheckRunStatus::SUCCESS,
-                array_filter($annotations),
-                $publishableCoverageData->getCoveragePercentage(),
-                $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
-            )
+                [
+                    new PublishablePullRequestMessage(
+                        $jobStateChange,
+                        $publishableCoverageData->getCoveragePercentage(),
+                        $publishableCoverageData->getDiffCoveragePercentage(),
+                        count($publishableCoverageData->getSuccessfulUploads()),
+                        0,
+                        array_map(
+                            function (TagCoverageQueryResult $tag) {
+                                return [
+                                    'tag' => [
+                                        'name' => $tag->getTag()->getName(),
+                                        'commit' => $tag->getTag()->getCommit(),
+                                    ],
+                                    'coveragePercentage' => $tag->getCoveragePercentage(),
+                                    'lines' => $tag->getLines(),
+                                    'covered' => $tag->getCovered(),
+                                    'partial' => $tag->getPartial(),
+                                    'uncovered' => $tag->getUncovered(),
+                                ];
+                            },
+                            $publishableCoverageData->getTagCoverage()->getTags()
+                        ),
+                        array_map(
+                            function (FileCoverageQueryResult $file) {
+                                return [
+                                    'fileName' => $file->getFileName(),
+                                    'coveragePercentage' => $file->getCoveragePercentage(),
+                                    'lines' => $file->getLines(),
+                                    'covered' => $file->getCovered(),
+                                    'partial' => $file->getPartial(),
+                                    'uncovered' => $file->getUncovered(),
+                                ];
+                            },
+                            $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
+                        ),
+                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $upload->getIngestTime()
+                    ),
+                    new PublishableCheckRunMessage(
+                        $jobStateChange,
+                        PublishableCheckRunStatus::SUCCESS,
+                        array_filter($annotations),
+                        $publishableCoverageData->getCoveragePercentage(),
+                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
+                    )
+                ]
+            ),
         );
     }
 }
