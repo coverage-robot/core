@@ -25,10 +25,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-              COALESCE(
-                ANY_VALUE(commit),
-                ''
-              ) as commit,
+              commit,
               ARRAY_AGG(uploadId) as successfulUploads,
               ARRAY_AGG(tag) as successfulTags,
               MAX(ingestTime) as latestSuccessfulUpload
@@ -40,7 +37,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               AND owner = "mock-owner"
               AND provider = "github"
             GROUP BY
-              tag
+              commit
             SQL
         ];
     }
