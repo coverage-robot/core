@@ -4,16 +4,16 @@
 namespace App\Service\Formatter;
 
 use DateTimeZone;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 
 class PullRequestCommentFormatterService
 {
-    public function format(Upload $upload, PublishablePullRequestMessage $message): string
+    public function format(EventInterface $event, PublishablePullRequestMessage $message): string
     {
         return <<<MARKDOWN
         ## Coverage Report
-        {$this->getSummary($upload, $message)}
+        {$this->getSummary($event, $message)}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
@@ -22,41 +22,41 @@ class PullRequestCommentFormatterService
         <details>
           <summary>Tags</summary>
 
-          {$this->getTagCoverageTable($upload, $message)}
+          {$this->getTagCoverageTable($event, $message)}
         </details>
 
         <details>
           <summary>Impacted Files</summary>
 
-          {$this->getFileImpactTable($upload, $message)}
+          {$this->getFileImpactTable($event, $message)}
         </details>
 
-        *Last update to `{$upload->getTag()->getName()}` at {$this->getLastUpdateTime($upload)}*
+        *Last update to `{$event->getTag()->getName()}` at {$this->getLastUpdateTime($event)}*
         MARKDOWN;
     }
 
-    private function getSummary(Upload $upload, PublishablePullRequestMessage $message): string
+    private function getSummary(EventInterface $event, PublishablePullRequestMessage $message): string
     {
         $pendingUploads = $message->getPendingUploads() > 0 ? sprintf(
             ' (and **%s** still pending)',
             $message->getPendingUploads()
         ) : '';
 
-        return "> Merging #{$upload->getPullRequest()} which has **{$message->getSuccessfulUploads(
-        )}** successfully uploaded coverage file(s){$pendingUploads} on {$upload->getCommit()}";
+        return "> Merging #{$event->getPullRequest()} which has **{$message->getSuccessfulUploads(
+        )}** successfully uploaded coverage file(s){$pendingUploads} on {$event->getCommit()}";
     }
 
-    private function getLastUpdateTime(Upload $upload): string
+    private function getLastUpdateTime(EventInterface $event): string
     {
-        return $upload->getEventTime()
+        return $event->getEventTime()
             ->setTimezone(new DateTimeZone('UTC'))
             ->format('H:ia e');
     }
 
-    private function getTagCoverageTable(Upload $upload, PublishablePullRequestMessage $message): string
+    private function getTagCoverageTable(EventInterface $event, PublishablePullRequestMessage $message): string
     {
         if (count($message->getTagCoverage()) == 0) {
-            return "> No uploaded tags in #{$upload->getPullRequest()}";
+            return "> No uploaded tags in #{$event->getPullRequest()}";
         }
 
         return sprintf(
@@ -76,7 +76,7 @@ class PullRequestCommentFormatterService
                                 (string)$tag["tag"]["name"] :
                                 "No name",
                             is_array($tag["tag"]) &&
-                            $tag["tag"]["commit"] != $upload->getCommit() ?
+                            $tag["tag"]["commit"] != $event->getCommit() ?
                                 sprintf('<br><sub>(Carried forward from %s)</sub>', (string)$tag["tag"]["commit"]) :
                                 ''
                         ),
@@ -92,12 +92,12 @@ class PullRequestCommentFormatterService
         );
     }
 
-    private function getFileImpactTable(Upload $upload, PublishablePullRequestMessage $message): string
+    private function getFileImpactTable(EventInterface $event, PublishablePullRequestMessage $message): string
     {
         $files = $message->getLeastCoveredDiffFiles();
 
         if (count($files) == 0) {
-            return "> No impacted files in #{$upload->getPullRequest()}";
+            return "> No impacted files in #{$event->getPullRequest()}";
         }
 
         return sprintf(
