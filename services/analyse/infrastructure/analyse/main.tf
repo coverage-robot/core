@@ -134,3 +134,9 @@ resource "aws_lambda_permission" "lambda_permissions" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.service.arn
 }
+
+resource "aws_lambda_function_event_invoke_config" "service_invoke_config" {
+  function_name = aws_lambda_function.analyse.function_name
+
+  maximum_retry_attempts = 0
+}
