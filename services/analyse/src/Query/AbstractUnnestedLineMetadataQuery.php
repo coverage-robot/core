@@ -25,7 +25,12 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                 self::UPLOAD_TABLE_ALIAS
             )
         ) ? 'AND ' . $scope : '';
-        $uploadScope = !empty($scope = self::getUploadsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) ? $scope : '';
+        $uploadScope = !empty(
+            $scope = self::getUploadsScope(
+                $parameterBag,
+                self::UPLOAD_TABLE_ALIAS
+            )
+        ) ? 'AND ' . $scope : '';
 
         return <<<SQL
         {$commitScope}
