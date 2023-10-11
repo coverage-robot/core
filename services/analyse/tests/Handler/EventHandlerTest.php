@@ -13,68 +13,12 @@ use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Event\JobStateChange;
-use Packages\Models\Model\Event\Upload;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use ValueError;
 
 class EventHandlerTest extends TestCase
 {
-    public function testHandleUploadEvent(): void
-    {
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            ['mock-parent-commit'],
-            'mock-ref',
-            'mock-project-root',
-            null,
-            new Tag('mock-tag', 'mock-commit'),
-            new DateTimeImmutable()
-        );
-
-        $mockProcessor = $this->createMock(IngestSuccessEventProcessor::class);
-        $mockProcessor->expects($this->once())
-            ->method('process');
-
-        $handler = new EventHandler(
-            new NullLogger(),
-            [
-                CoverageEvent::INGEST_SUCCESS->value => $mockProcessor,
-                CoverageEvent::JOB_STATE_CHANGE->value => $this->createMock(JobStateChangeEventProcessor::class),
-            ]
-        );
-
-        $handler->handleEventBridge(
-            new EventBridgeEvent(
-                [
-                    'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
-                    'detail' => [
-                        'uploadId' => $upload->getUploadId(),
-                        'provider' => $upload->getProvider()->value,
-                        'owner' => $upload->getOwner(),
-                        'repository' => $upload->getRepository(),
-                        'commit' => $upload->getCommit(),
-                        'parent' => $upload->getParent(),
-                        'ref' => $upload->getRef(),
-                        'projectRoot' => $upload->getProjectRoot(),
-                        'pullRequest' => $upload->getPullRequest(),
-                        'tag' => [
-                            'name' => $upload->getTag()->getName(),
-                            'commit' => $upload->getTag()->getCommit()
-                        ],
-                        'ingestTime' => $upload->getIngestTime()->format(DateTimeImmutable::ATOM)
-                    ]
-                ]
-            ),
-            Context::fake()
-        );
-    }
-
     public function testHandleJobStateChangeEvent(): void
     {
         $jobStateChange = new JobStateChange(
@@ -97,7 +41,6 @@ class EventHandlerTest extends TestCase
         $handler = new EventHandler(
             new NullLogger(),
             [
-                CoverageEvent::INGEST_SUCCESS->value => $this->createMock(IngestSuccessEventProcessor::class),
                 CoverageEvent::JOB_STATE_CHANGE->value => $mockProcessor,
             ]
         );

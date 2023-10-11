@@ -114,7 +114,6 @@ resource "aws_cloudwatch_event_rule" "service" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "INGEST_SUCCESS",
       "JOB_STATE_CHANGE"
     ]
   }
