@@ -17,13 +17,13 @@ data "terraform_remote_state" "core" {
 }
 
 resource "aws_iam_role" "analyse_role" {
-  name = "analyse-role"
+  name               = "analyse-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -33,10 +33,10 @@ resource "aws_iam_role" "analyse_role" {
 }
 
 resource "aws_iam_policy" "analyse_policy" {
-  name = "analyse-policy"
-  path = "/"
+  name   = "analyse-policy"
+  path   = "/"
   policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
         Effect = "Allow"
@@ -134,4 +134,10 @@ resource "aws_lambda_permission" "lambda_permissions" {
   function_name = aws_lambda_function.analyse.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.service.arn
+}
+
+resource "aws_lambda_function_event_invoke_config" "service_invoke_config" {
+  function_name = aws_lambda_function.analyse.function_name
+
+  maximum_retry_attempts = 0
 }
