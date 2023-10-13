@@ -13,7 +13,7 @@ The core platform for ingesting, analysing, and publishing coverage data to Vers
 
 ## Folder Structure
 
-- [`infastructure/`](infrastructure/)
+- [`infrastructure/`](infrastructure/)
 
 The _global_ IaC modules to construct the static parts of the infrastructure (e.g. S3 buckets, event buses, caches,
 etc).
