@@ -26,7 +26,7 @@ class TotalUploadsQuery implements QueryInterface
 
         return <<<SQL
         SELECT
-            "{$parameterBag->get(QueryParameter::COMMIT)}" as commit,
+            "{$parameterBag?->get(QueryParameter::COMMIT)}" as commit,
             COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
             COALESCE(ARRAY_AGG(tag), []) as successfulTags,
             COALESCE(MAX(ingestTime), NULL) as latestSuccessfulUpload
