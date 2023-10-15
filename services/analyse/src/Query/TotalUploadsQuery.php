@@ -26,17 +26,15 @@ class TotalUploadsQuery implements QueryInterface
 
         return <<<SQL
         SELECT
-            commit,
-            ARRAY_AGG(uploadId) as successfulUploads,
-            ARRAY_AGG(tag) as successfulTags,
-            MAX(ingestTime) as latestSuccessfulUpload
+            "{$parameterBag->get(QueryParameter::COMMIT)}" as commit,
+            COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
+            COALESCE(ARRAY_AGG(tag), []) as successfulTags,
+            COALESCE(MAX(ingestTime), NULL) as latestSuccessfulUpload
         FROM
             `$table`
         WHERE
             {$commitScope} AND
             {$repositoryScope}
-        GROUP BY
-            commit
         SQL;
     }
 

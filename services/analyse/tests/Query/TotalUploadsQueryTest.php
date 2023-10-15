@@ -25,10 +25,19 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-              commit,
-              ARRAY_AGG(uploadId) as successfulUploads,
-              ARRAY_AGG(tag) as successfulTags,
-              MAX(ingestTime) as latestSuccessfulUpload
+              "mock-commit" as commit,
+              COALESCE(
+                ARRAY_AGG(uploadId),
+                []
+              ) as successfulUploads,
+              COALESCE(
+                ARRAY_AGG(tag),
+                []
+              ) as successfulTags,
+              COALESCE(
+                MAX(ingestTime),
+                NULL
+              ) as latestSuccessfulUpload
             FROM
               `mock-table`
             WHERE
@@ -36,8 +45,6 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
               AND repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
-            GROUP BY
-              commit
             SQL
         ];
     }
