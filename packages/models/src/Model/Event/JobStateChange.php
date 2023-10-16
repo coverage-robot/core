@@ -21,7 +21,7 @@ class JobStateChange implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly string|int|null $pullRequest,
-        private readonly string $externalId,
+        private readonly string|int $externalId,
         private readonly int $index,
         private readonly JobState $state,
         private readonly bool $initialState,
