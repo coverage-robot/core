@@ -63,7 +63,7 @@ class JobStateChange implements EventInterface
         return $this->pullRequest;
     }
 
-    public function getExternalId(): string
+    public function getExternalId(): string|int
     {
         return $this->externalId;
     }
