@@ -68,11 +68,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $successful = $this->queueStartCheckRun($jobStateChange);
             } elseif (
                 $jobStateChange->getState() === JobState::COMPLETED &&
-                $this->isAllCheckRunsFinished(
-                    $jobStateChange->getOwner(),
-                    $jobStateChange->getRepository(),
-                    $jobStateChange->getCommit()
-                )
+                $this->isAllCheckRunsFinished($jobStateChange)
             ) {
                 $successful = $this->queueFinalCheckRun(
                     $jobStateChange,
@@ -113,30 +109,54 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
         return CoverageEvent::JOB_STATE_CHANGE->value;
     }
 
-    private function isAllCheckRunsFinished(
-        string $owner,
-        string $repository,
-        string $ref
-    ): bool {
-        $this->githubAppInstallationClient->authenticateAsRepositoryOwner($owner);
+    /**
+     * Check if all of the check runs for the given job state change are finished,
+     * so that results can be published in one batch.
+     *
+     * This factors in Check runs in GitHub (and their state) and then uses the job
+     * index to work out whether its the last job state change coming through.
+     */
+    private function isAllCheckRunsFinished(JobStateChange $jobStateChange): bool
+    {
+        $this->githubAppInstallationClient->authenticateAsRepositoryOwner($jobStateChange->getOwner());
 
         /** @var array{ check_runs: array{ status: string, app: array{ id: int } } }[] $checkRuns */
         $checkRuns = $this->githubAppInstallationClient->checkRuns()
             ->allForReference(
-                $owner,
-                $repository,
-                $ref
+                $jobStateChange->getOwner(),
+                $jobStateChange->getRepository(),
+                $jobStateChange->getRef()
             );
+
+        $totalCheckRuns = 0;
 
         foreach ($checkRuns['check_runs'] as $checkRun) {
             if (
-                $checkRun['status'] !== 'completed' &&
-                (string)$checkRun['app']['id'] !== $this->environmentService->getVariable(
-                    EnvironmentVariable::GITHUB_APP_ID
-                )
+                (string)$checkRun['app']['id'] !==
+                $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
             ) {
+                // Ignore the check run if its ours!
+                continue;
+            }
+
+            if ($checkRun['status'] !== 'completed') {
                 return false;
             }
+
+            $totalCheckRuns++;
+        }
+
+        if ($totalCheckRuns - 1 <= $jobStateChange->getIndex()) {
+            // The job we're handling isn't the last one, even though
+            // all of the check runs are complete.
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'All check runs are complete for %s, but the job is not the last one.',
+                    (string)$jobStateChange
+                )
+            );
+
+            return false;
         }
 
         return true;
