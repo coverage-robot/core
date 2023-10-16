@@ -3,7 +3,6 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\Event\IngestSuccessEventProcessor;
 use App\Service\Event\JobStateChangeEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -28,6 +27,7 @@ class EventHandlerTest extends TestCase
             'mock-ref',
             'mock-commit',
             null,
+            'mock-id',
             0,
             JobState::COMPLETED,
             true,

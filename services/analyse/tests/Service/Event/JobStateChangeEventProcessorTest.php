@@ -32,6 +32,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             'ref' => 'mock-ref',
             'commit' => 'mock-commit',
             'pullRequest' => 'mock-pull-request',
+            'externalId' => 'mock-id',
             'index' => 0,
             'state' => JobState::COMPLETED->value,
             'initialState' => true,
