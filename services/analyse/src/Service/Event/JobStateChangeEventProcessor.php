@@ -132,7 +132,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
         foreach ($checkRuns['check_runs'] as $checkRun) {
             if (
-                (string)$checkRun['app']['id'] !== $this->environmentService->getVariable(
+                (string)$checkRun['app']['id'] === $this->environmentService->getVariable(
                     EnvironmentVariable::GITHUB_APP_ID
                 )
             ) {
@@ -141,6 +141,8 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
             }
 
             if ($checkRun['status'] !== 'completed') {
+                // Not all the checks are complete yet. We're expecting more to
+                // come through shortly.
                 return false;
             }
 
