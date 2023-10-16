@@ -125,7 +125,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
             ->allForReference(
                 $jobStateChange->getOwner(),
                 $jobStateChange->getRepository(),
-                $jobStateChange->getRef()
+                $jobStateChange->getCommit()
             );
 
         $totalCheckRuns = 0;
