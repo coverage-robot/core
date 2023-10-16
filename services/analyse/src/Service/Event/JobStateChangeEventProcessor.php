@@ -132,8 +132,9 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
         foreach ($checkRuns['check_runs'] as $checkRun) {
             if (
-                (string)$checkRun['app']['id'] !==
-                $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
+                (string)$checkRun['app']['id'] !== $this->environmentService->getVariable(
+                    EnvironmentVariable::GITHUB_APP_ID
+                )
             ) {
                 // Ignore the check run if its ours!
                 continue;
@@ -146,7 +147,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
             $totalCheckRuns++;
         }
 
-        if ($totalCheckRuns - 1 <= $jobStateChange->getIndex()) {
+        if ($totalCheckRuns - 1 > $jobStateChange->getIndex()) {
             // The job we're handling isn't the last one, even though
             // all of the check runs are complete.
             $this->eventProcessorLogger->info(
