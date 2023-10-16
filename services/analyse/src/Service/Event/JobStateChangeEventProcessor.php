@@ -156,7 +156,11 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 sprintf(
                     'All check runs are complete for %s, but the job is not the last one.',
                     (string)$jobStateChange
-                )
+                ),
+                [
+                    'total' => $totalCheckRuns,
+                    'index' => $jobStateChange->getIndex()
+                ]
             );
 
             return false;
