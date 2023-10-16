@@ -12,6 +12,8 @@ use App\Query\Result\TagCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\EnvironmentService;
 use Bref\Event\EventBridge\EventBridgeEvent;
+use DateTime;
+use Exception;
 use JsonException;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\EventBus\CoverageEvent;
@@ -113,14 +115,24 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
      * Check if all of the check runs for the given job state change are finished,
      * so that results can be published in one batch.
      *
-     * This factors in Check runs in GitHub (and their state) and then uses the job
-     * index to work out whether its the last job state change coming through.
+     * This factors in Check runs in GitHub (and their state) and then uses the job's
+     * external Id to work out whether its the last job state change coming through.
+     *
+     * @throws Exception
      */
     private function isAllCheckRunsFinished(JobStateChange $jobStateChange): bool
     {
         $this->githubAppInstallationClient->authenticateAsRepositoryOwner($jobStateChange->getOwner());
 
-        /** @var array{ check_runs: array{ status: string, app: array{ id: int } } }[] $checkRuns */
+        /** @var array{
+         *     check_runs: array{
+         *          id: string,
+         *          completed_at: string,
+         *          status: string,
+         *          app: array{ id: int }
+         *     }
+         * }[] $checkRuns
+         */
         $checkRuns = $this->githubAppInstallationClient->checkRuns()
             ->allForReference(
                 $jobStateChange->getOwner(),
@@ -128,7 +140,8 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $jobStateChange->getCommit()
             );
 
-        $totalCheckRuns = 0;
+        $latestCompleteCheckRun = null;
+        $isLatestCheckRun = false;
 
         foreach ($checkRuns['check_runs'] as $checkRun) {
             if (
@@ -146,20 +159,28 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 return false;
             }
 
-            $totalCheckRuns++;
+            $completedAt = new DateTime($checkRun['completed_at']);
+
+            if (
+                !$latestCompleteCheckRun ||
+                (!$isLatestCheckRun && $completedAt > $latestCompleteCheckRun)
+            ) {
+                $latestCompleteCheckRun = $completedAt;
+                $isLatestCheckRun = $checkRun['id'] === $jobStateChange->getExternalId();
+            }
         }
 
-        if ($totalCheckRuns - 1 > $jobStateChange->getIndex()) {
-            // The job we're handling isn't the last one, even though
-            // all of the check runs are complete.
+        if (!$isLatestCheckRun) {
+            // Theres no other in progress check runs, but the job change we're handing _isnt_
+            // the last one to complete. As such, we're confident theres another job state change
+            // being handled, so can wait for that to occur.
             $this->eventProcessorLogger->info(
                 sprintf(
-                    'All check runs are complete for %s, but the job is not the last one.',
+                    'All check runs are complete for %s, but the job is not the last one to have changed.',
                     (string)$jobStateChange
                 ),
                 [
-                    'total' => $totalCheckRuns,
-                    'index' => $jobStateChange->getIndex()
+                    'latest' => $latestCompleteCheckRun
                 ]
             );
 
