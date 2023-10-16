@@ -163,7 +163,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
             if (
                 !$latestCompleteCheckRun ||
-                (!$isLatestCheckRun && $completedAt > $latestCompleteCheckRun)
+                $completedAt > $latestCompleteCheckRun
             ) {
                 $latestCompleteCheckRun = $completedAt;
                 $isLatestCheckRun = $checkRun['id'] === $jobStateChange->getExternalId();
