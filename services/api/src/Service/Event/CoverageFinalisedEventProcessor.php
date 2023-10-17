@@ -4,10 +4,11 @@ namespace App\Service\Event;
 
 use App\Repository\ProjectRepository;
 use Bref\Event\EventBridge\EventBridgeEvent;
-use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Event\CoverageFinalised;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CoverageFinalisedEventProcessor implements EventProcessorInterface
@@ -17,6 +18,9 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
         'main',
     ];
 
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
         private readonly ProjectRepository $projectRepository,
@@ -24,9 +28,6 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
     ) {
     }
 
-    /**
-     * @throws JsonException
-     */
     public function process(EventBridgeEvent $event): void
     {
         $coverageFinalised = $this->serializer->denormalize(
