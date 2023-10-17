@@ -71,6 +71,24 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         $job = $this->findOrCreateJob($project, $webhook);
         $isNewJob = $job->getId() === null;
 
+        if (
+            !$isNewJob &&
+            $job->getState() === $webhook->getJobState()
+        ) {
+            // The state of the job hasn't actually changed, so theres no benefit
+            // in updating the job or publishing an event.
+            $this->webhookProcessorLogger->info(
+                sprintf(
+                    'Ignoring as job state has not changed: %s',
+                    (string)$webhook
+                ),
+                [
+                    'jobId' => $job->getId()
+                ]
+            );
+            return;
+        }
+
         $job->setState($webhook->getJobState());
         $job->setUpdatedAt(new DateTimeImmutable());
 
@@ -87,21 +105,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             ]
         );
 
-        $index = array_search(
-            $job,
-            $this->getJobs($project, $webhook->getCommit()),
-            true
-        );
-
-        if ($index === false) {
-            throw new RuntimeException(
-                sprintf(
-                    'Failed to find job index for %s',
-                    (string)$job
-                )
-            );
-        }
-
         $this->publishEvent(
             CoverageEvent::JOB_STATE_CHANGE,
             new JobStateChange(
@@ -112,7 +115,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 $webhook->getCommit(),
                 $webhook->getPullRequest(),
                 $webhook->getExternalId(),
-                $index,
+                $this->getJobIndex($job, $project, $webhook),
                 $webhook->getJobState(),
                 $isNewJob,
                 new DateTimeImmutable()
@@ -143,7 +146,27 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         return $job;
     }
 
-    public function getJobs(Project $project, string $commit): array
+    private function getJobIndex(Job $job, Project $project, WebhookInterface $webhook): int
+    {
+        $index = array_search(
+            $job,
+            $this->getJobs($project, $webhook->getCommit()),
+            true
+        );
+
+        if ($index === false) {
+            throw new RuntimeException(
+                sprintf(
+                    'Failed to find job index for %s',
+                    (string)$job
+                )
+            );
+        }
+
+        return $index;
+    }
+
+    private function getJobs(Project $project, string $commit): array
     {
         return $this->jobRepository->findBy(
             [
