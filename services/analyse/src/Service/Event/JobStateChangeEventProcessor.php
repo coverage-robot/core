@@ -81,17 +81,15 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
                 $this->eventBridgeEventService->publishEvent(
                     CoverageEvent::NEW_COVERAGE_FINALISED,
-                    $this->serializer->normalize(
-                        new CoverageFinalised(
-                            $jobStateChange->getProvider(),
-                            $jobStateChange->getOwner(),
-                            $jobStateChange->getRepository(),
-                            $jobStateChange->getRef(),
-                            $jobStateChange->getCommit(),
-                            $jobStateChange->getPullRequest(),
-                            $coverageData->getCoveragePercentage(),
-                            new DateTimeImmutable()
-                        )
+                    new CoverageFinalised(
+                        $jobStateChange->getProvider(),
+                        $jobStateChange->getOwner(),
+                        $jobStateChange->getRepository(),
+                        $jobStateChange->getRef(),
+                        $jobStateChange->getCommit(),
+                        $jobStateChange->getPullRequest(),
+                        $coverageData->getCoveragePercentage(),
+                        new DateTimeImmutable()
                     )
                 );
             } else {
