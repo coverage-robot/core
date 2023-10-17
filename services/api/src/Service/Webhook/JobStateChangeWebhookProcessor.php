@@ -146,8 +146,9 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         return $job;
     }
 
-    private function getJobIndex(Job $job, Project $project, WebhookInterface $webhook): int
+    private function getJobIndex(Job $job, Project $project, PipelineStateChangeWebhookInterface $webhook): int
     {
+        /** @var int|false $index */
         $index = array_search(
             $job,
             $this->getJobs($project, $webhook->getCommit()),
@@ -166,9 +167,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         return $index;
     }
 
-    /**
-     * @return array<int, Job>
-     */
     private function getJobs(Project $project, string $commit): array
     {
         return $this->jobRepository->findBy(
