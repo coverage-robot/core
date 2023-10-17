@@ -166,6 +166,9 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         return $index;
     }
 
+    /**
+     * @return array<int, Job>
+     */
     private function getJobs(Project $project, string $commit): array
     {
         return $this->jobRepository->findBy(
