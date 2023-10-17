@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service\Event;
 
+use App\Service\Event\CoverageFinalisedEventProcessor;
 use App\Service\Event\EventProcessor;
-use App\Service\Event\NewCoverageFinalisedEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -20,7 +20,7 @@ class EventProcessorTest extends TestCase
             'detail' => ''
         ]);
 
-        $mockProcessor = $this->createMock(NewCoverageFinalisedEventProcessor::class);
+        $mockProcessor = $this->createMock(CoverageFinalisedEventProcessor::class);
 
         if (!$shouldHandle) {
             $this->expectException(RuntimeException::class);
@@ -32,7 +32,7 @@ class EventProcessorTest extends TestCase
 
         $eventProcessor = new EventProcessor(
             [
-                CoverageEvent::NEW_COVERAGE_FINALISED->value => $mockProcessor
+                CoverageEvent::COVERAGE_FINALISED->value => $mockProcessor
             ]
         );
 
@@ -44,7 +44,7 @@ class EventProcessorTest extends TestCase
         return array_map(
             static fn(CoverageEvent $event) => [
                 $event->value,
-                $event === CoverageEvent::NEW_COVERAGE_FINALISED
+                $event === CoverageEvent::COVERAGE_FINALISED
             ],
             CoverageEvent::cases()
         );

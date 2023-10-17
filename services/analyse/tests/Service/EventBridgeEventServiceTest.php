@@ -56,7 +56,7 @@ class EventBridgeEventServiceTest extends TestCase
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
                             'Source' => CoverageEventSource::ANALYSE->value,
-                            'DetailType' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
+                            'DetailType' => CoverageEvent::COVERAGE_FINALISED->value,
                             'Detail' => 'mock-serialized-json'
                         ])
                     ],
@@ -88,7 +88,7 @@ class EventBridgeEventServiceTest extends TestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::NEW_COVERAGE_FINALISED,
+            CoverageEvent::COVERAGE_FINALISED,
             $detail
         );
 

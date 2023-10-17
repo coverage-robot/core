@@ -4,19 +4,23 @@ namespace App\Service\Event;
 
 use App\Repository\ProjectRepository;
 use Bref\Event\EventBridge\EventBridgeEvent;
-use JsonException;
 use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Model\Event\CoverageFinalised;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
+class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
     private const REFS = [
         'master',
         'main',
     ];
 
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
         private readonly ProjectRepository $projectRepository,
@@ -24,15 +28,11 @@ class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
     ) {
     }
 
-    /**
-     * @throws JsonException
-     */
     public function process(EventBridgeEvent $event): void
     {
-        $coverageFinalised = $this->serializer->deserialize(
+        $coverageFinalised = $this->serializer->denormalize(
             $event->getDetail(),
-            CoverageFinalised::class,
-            'json'
+            CoverageFinalised::class
         );
 
         $coveragePercentage = $coverageFinalised->getCoveragePercentage();
@@ -85,6 +85,6 @@ class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
 
     public static function getProcessorEvent(): string
     {
-        return CoverageEvent::NEW_COVERAGE_FINALISED->value;
+        return CoverageEvent::COVERAGE_FINALISED->value;
     }
 }

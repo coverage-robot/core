@@ -80,7 +80,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 );
 
                 $this->eventBridgeEventService->publishEvent(
-                    CoverageEvent::NEW_COVERAGE_FINALISED,
+                    CoverageEvent::COVERAGE_FINALISED,
                     new CoverageFinalised(
                         $jobStateChange->getProvider(),
                         $jobStateChange->getOwner(),
