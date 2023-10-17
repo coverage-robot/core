@@ -29,10 +29,9 @@ class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
      */
     public function process(EventBridgeEvent $event): void
     {
-        $coverageFinalised = $this->serializer->deserialize(
+        $coverageFinalised = $this->serializer->denormalize(
             $event->getDetail(),
-            CoverageFinalised::class,
-            'json'
+            CoverageFinalised::class
         );
 
         $coveragePercentage = $coverageFinalised->getCoveragePercentage();

@@ -12,7 +12,8 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
     'type',
     [
         EventType::UPLOAD->value => Upload::class,
-        EventType::JOB_STATE_CHANGE->value => JobStateChange::class
+        EventType::JOB_STATE_CHANGE->value => JobStateChange::class,
+        EventType::COVERAGE_FINALISED->value => CoverageFinalised::class
     ]
 )]
 interface EventInterface extends Stringable

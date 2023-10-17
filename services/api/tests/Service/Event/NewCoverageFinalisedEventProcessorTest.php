@@ -5,7 +5,6 @@ namespace App\Tests\Service\Event;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\Event\NewCoverageFinalisedEventProcessor;
-use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
 use Packages\Models\Enum\EventBus\CoverageEvent;
@@ -13,6 +12,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\CoverageFinalised;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\Serializer\Serializer;
 
 class NewCoverageFinalisedEventProcessorTest extends TestCase
 {
@@ -37,18 +37,14 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $mockSerializer = MockSerializerFactory::getMock(
-            $this,
-            deserializeMap: [
-                [
-                    $coverageFinalised,
-                    CoverageFinalised::class,
-                    'json',
-                    [],
-                    $this->createMock(CoverageFinalised::class)
-                ]
-            ]
-        );
+        $mockSerializer = $this->createMock(Serializer::class);
+        $mockSerializer->expects($this->once())
+            ->method('denormalize')
+            ->with(
+                $coverageFinalised,
+                CoverageFinalised::class
+            )
+            ->willReturn($this->createMock(CoverageFinalised::class));
 
         $eventProcessor = new NewCoverageFinalisedEventProcessor(
             new NullLogger(),
@@ -76,28 +72,26 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->never())
             ->method('save');
 
-        $mockSerializer = MockSerializerFactory::getMock(
-            $this,
-            [],
-            [
-                [
-                    [],
-                    CoverageFinalised::class,
-                    'json',
-                    [],
-                    new CoverageFinalised(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'main',
-                        'mock-commit',
-                        '',
-                        99.0,
-                        new DateTimeImmutable()
-                    )
-                ]
-            ]
-        );
+
+        $mockSerializer = $this->createMock(Serializer::class);
+        $mockSerializer->expects($this->once())
+            ->method('denormalize')
+            ->with(
+                [],
+                CoverageFinalised::class
+            )
+            ->willReturn(
+                new CoverageFinalised(
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'main',
+                    'mock-commit',
+                    '',
+                    99.0,
+                    new DateTimeImmutable()
+                )
+            );
 
         $eventProcessor = new NewCoverageFinalisedEventProcessor(
             new NullLogger(),
@@ -131,28 +125,25 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
             ->method('setCoveragePercentage')
             ->with(99);
 
-        $mockSerializer = MockSerializerFactory::getMock(
-            $this,
-            [],
-            [
-                [
-                    [],
-                    CoverageFinalised::class,
-                    'json',
-                    [],
-                    new CoverageFinalised(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'main',
-                        'mock-commit',
-                        '',
-                        99.0,
-                        new DateTimeImmutable()
-                    )
-                ]
-            ]
-        );
+        $mockSerializer = $this->createMock(Serializer::class);
+        $mockSerializer->expects($this->once())
+            ->method('denormalize')
+            ->with(
+                [],
+                CoverageFinalised::class
+            )
+            ->willReturn(
+                new CoverageFinalised(
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'main',
+                    'mock-commit',
+                    '',
+                    99.0,
+                    new DateTimeImmutable()
+                )
+            );
 
         $eventProcessor = new NewCoverageFinalisedEventProcessor(
             new NullLogger(),
