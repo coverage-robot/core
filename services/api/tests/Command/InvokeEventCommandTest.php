@@ -27,7 +27,7 @@ class InvokeEventCommandTest extends KernelTestCase
         $command = $application->find('app:invoke_event');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'event' => CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS->value,
+            'event' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
             'body' => '["mock-event-detail"]'
         ]);
 
@@ -50,7 +50,7 @@ class InvokeEventCommandTest extends KernelTestCase
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'event' => CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS->value,
+            'event' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
             'body' => '["mock-event-detail"]'
         ]);
 
