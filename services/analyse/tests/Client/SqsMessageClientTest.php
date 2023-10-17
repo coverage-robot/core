@@ -33,7 +33,7 @@ class SqsMessageClientTest extends KernelTestCase
                 'mock-repository',
                 'mock-commit',
                 [],
-                'master',
+                'main',
                 'project-root',
                 12,
                 new Tag('mock-tag', 'mock-commit'),

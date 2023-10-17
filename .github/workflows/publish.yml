@@ -1,302 +1,302 @@
 name: Publish
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'services/publish/**'
-      - '.github/workflows/publish.yml'
-      - 'packages/**'
+    push:
+        branches:
+            - main
+        paths:
+            - 'services/publish/**'
+            - '.github/workflows/publish.yml'
+            - 'packages/**'
 
-  pull_request:
-    branches:
-      - master
-    paths:
-      - 'services/publish/**'
-      - '.github/workflows/publish.yml'
-      - 'packages/**'
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'services/publish/**'
+            - '.github/workflows/publish.yml'
+            - 'packages/**'
 
-  workflow_dispatch:
+    workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 defaults:
-  run:
-    shell: bash
-    working-directory: './services/publish'
+    run:
+        shell: bash
+        working-directory: './services/publish'
 
 env:
-  php-version: "8.2"
-  working-directory: './services/publish'
-  workspace: 'prod'
+    php-version: "8.2"
+    working-directory: './services/publish'
+    workspace: 'prod'
 
 jobs:
-  build:
-    name: "Build"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    build:
+        name: "Build"
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v4
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{env.php-version}}
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{env.php-version}}
 
-      - name: Validate Composer configuration
-        run: composer validate
+            -   name: Validate Composer configuration
+                run: composer validate
 
-      - name: Setup environment variables
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_APP_ENV: "dev"
-          envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-          directory: ${{ env.working-directory }}
-          file_name: .env.local
-          fail_on_empty: false
+            -   name: Setup environment variables
+                uses: SpicyPizza/create-envfile@v2.0
+                with:
+                    envkey_APP_ENV: "dev"
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.local
+                    fail_on_empty: false
 
-      - name: Setup test environment variables
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-          directory: ${{ env.working-directory }}
-          file_name: .env.test.local
-          fail_on_empty: false
+            -   name: Setup test environment variables
+                uses: SpicyPizza/create-envfile@v2.0
+                with:
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.test.local
+                    fail_on_empty: false
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress
 
-        # For Psalm's symfony plugin, which requires the test containers
-      - name: Warm testing environment cache
-        run: php bin/console cache:warmup --env=test
+                # For Psalm's symfony plugin, which requires the test containers
+            -   name: Warm testing environment cache
+                run: php bin/console cache:warmup --env=test
 
-      - name: Archive build package
-        run: |
-          cp -r ${{ github.workspace }}/.git ./
-          zip -q -r build.zip ./
+            -   name: Archive build package
+                run: |
+                    cp -r ${{ github.workspace }}/.git ./
+                    zip -q -r build.zip ./
 
-      - name: Upload build package to artifact storage
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          if-no-files-found: error
-          path: ${{ env.working-directory }}/build.zip
-          retention-days: 1
+            -   name: Upload build package to artifact storage
+                uses: actions/upload-artifact@v3
+                with:
+                    name: build
+                    if-no-files-found: error
+                    path: ${{ env.working-directory }}/build.zip
+                    retention-days: 1
 
-  lint:
-    name: "Lint"
-    runs-on: ubuntu-latest
-    needs: build
+    lint:
+        name: "Lint"
+        runs-on: ubuntu-latest
+        needs: build
 
-    steps:
-      - name: Make services folder structure
-        working-directory: "./"
-        run: mkdir -p ${{ env.working-directory }}
+        steps:
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
 
-      - name: Download build from artifact storage
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: ${{ env.working-directory }}
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
 
-      - name: Extract build package
-        run: |
-          umask 644
-          unzip -q build.zip -d ./
-          mv ./.git ${{ github.workspace }}/.git
+            -   name: Extract build package
+                run: |
+                    umask 644
+                    unzip -q build.zip -d ./
+                    mv ./.git ${{ github.workspace }}/.git
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.php-version }}
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
 
-      - name: Run PHP_CodeSniffer
-        run: composer lint:style
+            -   name: Run PHP_CodeSniffer
+                run: composer lint:style
 
-      - name: Run Psalm
-        run: composer lint:static-analysis
+            -   name: Run Psalm
+                run: composer lint:static-analysis
 
-      - name: Run Psalm Security Analysis
-        run: composer lint:security
+            -   name: Run Psalm Security Analysis
+                run: composer lint:security
 
-      - name: Run Terraform Format
-        uses: dflook/terraform-fmt-check@v1
-        with:
-          workspace: ${{ env.workspace }}
-          path: ${{ env.working-directory }}/infrastructure
+            -   name: Run Terraform Format
+                uses: dflook/terraform-fmt-check@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
 
-      - name: Run Terraform Validate
-        uses: dflook/terraform-validate@v1
-        with:
-          workspace: ${{ env.workspace }}
-          path: ${{ env.working-directory }}/infrastructure
+            -   name: Run Terraform Validate
+                uses: dflook/terraform-validate@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
 
-  publish-tests:
-    name: "Publish Tests"
-    runs-on: ubuntu-latest
-    needs: lint
+    publish-tests:
+        name: "Publish Tests"
+        runs-on: ubuntu-latest
+        needs: lint
 
-    steps:
-      - name: Make services folder structure
-        working-directory: "./"
-        run: mkdir -p ${{ env.working-directory }}
+        steps:
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
 
-      - name: Download build from artifact storage
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: ${{ env.working-directory }}
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
 
-      - name: Extract build package
-        run: |
-          umask 644
-          unzip -q build.zip -d ./
-          mv ./.git ${{ github.workspace }}/.git
+            -   name: Extract build package
+                run: |
+                    umask 644
+                    unzip -q build.zip -d ./
+                    mv ./.git ${{ github.workspace }}/.git
 
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.php-version }}
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
 
-      - name: Run PHPUnit
-        run: |
-          composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
-        shell: bash
+            -   name: Run PHPUnit
+                run: |
+                    composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
+                shell: bash
 
-      - uses: coverage-robot/action@v1.0.1
-        with:
-          token: ${{ secrets.COVERAGE_TOKEN }}
-          files: |
-            ${{ env.working-directory }}/coverage.xml
-          tag: publish-service
-        continue-on-error: true
+            -   uses: coverage-robot/action@v1.0.1
+                with:
+                    token: ${{ secrets.COVERAGE_TOKEN }}
+                    files: |
+                        ${{ env.working-directory }}/coverage.xml
+                    tag: publish-service
+                continue-on-error: true
 
-      - name: Upload coverage to artifact storage
-        if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage
-          if-no-files-found: error
-          path: ${{ env.working-directory }}/coverage.xml
-          retention-days: 1
+            -   name: Upload coverage to artifact storage
+                if: ${{ github.actor != 'dependabot[bot]' }}
+                uses: actions/upload-artifact@v3
+                with:
+                    name: coverage
+                    if-no-files-found: error
+                    path: ${{ env.working-directory }}/coverage.xml
+                    retention-days: 1
 
-  plan:
-    name: Plan
-    runs-on: ubuntu-latest
-    needs: publish-tests
-    if: github.ref != 'refs/heads/master'
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Make services folder structure
-        working-directory: "./"
-        run: mkdir -p ${{ env.working-directory }}
-
-      - name: Download build from artifact storage
-        uses: actions/download-artifact@v3
-        with:
-          name: build
-          path: ${{ env.working-directory }}
-
-      - name: Extract build package
-        run: |
-          umask 644
-          unzip -q build.zip -d ./
-          mv ./.git ${{ github.workspace }}/.git
-
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: eu-west-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Run Plan
-        uses: dflook/terraform-plan@v1
-        with:
-          workspace: ${{ env.workspace }}
-          add_github_comment: true
-          path: ${{ env.working-directory }}/infrastructure
-          var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
-
-  deployment:
-    name: Deployment
-    runs-on: ubuntu-latest
-    needs: publish-tests
-    if: github.ref == 'refs/heads/master'
-    environment: publish-prod
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.php-version }}
-
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: eu-west-2
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Setup environment variables
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-          envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
-          envkey_GITHUB_BOT_ID: ${{ secrets.GH_BOT_ID }}
-          directory: ${{ env.working-directory }}
-          file_name: .env.local
-          fail_on_empty: false
-
-        # Install Composer dependencies, with symlinks mirrored (e.g. dependencies from the packages folder
-        # are copied directly into the vendor folder, rather than symlinked - as Terraform doesn't like that during archiving)
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --optimize-autoloader --no-dev --no-scripts
+    plan:
+        name: Plan
+        runs-on: ubuntu-latest
+        needs: publish-tests
+        if: github.ref != 'refs/heads/main'
         env:
-          COMPOSER_MIRROR_PATH_REPOS: 1
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        steps:
+            -   name: Make services folder structure
+                working-directory: "./"
+                run: mkdir -p ${{ env.working-directory }}
 
-      - name: Clear platform cache
-        run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
+            -   name: Download build from artifact storage
+                uses: actions/download-artifact@v3
+                with:
+                    name: build
+                    path: ${{ env.working-directory }}
 
-      - name: Compile environment variables
-        run: composer dump-env ${{ env.workspace }}
+            -   name: Extract build package
+                run: |
+                    umask 644
+                    unzip -q build.zip -d ./
+                    mv ./.git ${{ github.workspace }}/.git
 
-      - name: Warm platform cache
-        run: php bin/console cache:warmup --env=${{ env.workspace }}
+            -   uses: aws-actions/configure-aws-credentials@v4
+                with:
+                    aws-region: eu-west-2
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Add Github Private Key
-        uses: DamianReeves/write-file-action@v1.2
-        with:
-          path: ${{ env.working-directory }}/config/github.pem
-          write-mode: overwrite
-          contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
+            -   name: Run Plan
+                uses: dflook/terraform-plan@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    add_github_comment: true
+                    path: ${{ env.working-directory }}/infrastructure
+                    var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
-      - name: Run Apply
-        uses: dflook/terraform-apply@v1
-        with:
-          workspace: ${{ env.workspace }}
-          path: ${{ env.working-directory }}/infrastructure
-          var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+    deployment:
+        name: Deployment
+        runs-on: ubuntu-latest
+        needs: publish-tests
+        if: github.ref == 'refs/heads/main'
+        environment: publish-prod
+        env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        permissions:
+            id-token: write
+            contents: read
+            pull-requests: write
+        steps:
+            -   uses: actions/checkout@v4
 
-          # The plan will already have been generated on the PR, so approving here should be fine
-          auto_approve: true
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
 
-  cleanup:
-    name: "Cleanup"
-    runs-on: ubuntu-latest
-    if: always() && needs.build.result == 'success'
-    needs: [ build, plan ]
+            -   uses: aws-actions/configure-aws-credentials@v4
+                with:
+                    aws-region: eu-west-2
+                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    steps:
-      - uses: geekyeggo/delete-artifact@v2
-        with:
-          name: |
-            build
+            -   name: Setup environment variables
+                uses: SpicyPizza/create-envfile@v2.0
+                with:
+                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
+                    envkey_GITHUB_BOT_ID: ${{ secrets.GH_BOT_ID }}
+                    directory: ${{ env.working-directory }}
+                    file_name: .env.local
+                    fail_on_empty: false
+
+                # Install Composer dependencies, with symlinks mirrored (e.g. dependencies from the packages folder
+                # are copied directly into the vendor folder, rather than symlinked - as Terraform doesn't like that during archiving)
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --optimize-autoloader --no-dev --no-scripts
+                env:
+                    COMPOSER_MIRROR_PATH_REPOS: 1
+
+            -   name: Clear platform cache
+                run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
+
+            -   name: Compile environment variables
+                run: composer dump-env ${{ env.workspace }}
+
+            -   name: Warm platform cache
+                run: php bin/console cache:warmup --env=${{ env.workspace }}
+
+            -   name: Add Github Private Key
+                uses: DamianReeves/write-file-action@v1.2
+                with:
+                    path: ${{ env.working-directory }}/config/github.pem
+                    write-mode: overwrite
+                    contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
+
+            -   name: Run Apply
+                uses: dflook/terraform-apply@v1
+                with:
+                    workspace: ${{ env.workspace }}
+                    path: ${{ env.working-directory }}/infrastructure
+                    var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+
+                    # The plan will already have been generated on the PR, so approving here should be fine
+                    auto_approve: true
+
+    cleanup:
+        name: "Cleanup"
+        runs-on: ubuntu-latest
+        if: always() && needs.build.result == 'success'
+        needs: [ build, plan ]
+
+        steps:
+            -   uses: geekyeggo/delete-artifact@v2
+                with:
+                    name: |
+                        build

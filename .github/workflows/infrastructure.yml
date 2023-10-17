@@ -3,14 +3,14 @@ name: Infrastructure
 on:
     push:
         branches:
-            - master
+            - main
         paths:
             - 'infrastructure/**'
             - '.github/workflows/infrastructure.yml'
 
     pull_request:
         branches:
-            - master
+            - main
         paths:
             - 'infrastructure/**'
             - '.github/workflows/infrastructure.yml'
@@ -62,7 +62,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: lint
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -97,7 +97,7 @@ jobs:
         name: Deployment
         runs-on: ubuntu-latest
         needs: lint
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         environment: infrastructure-prod
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
