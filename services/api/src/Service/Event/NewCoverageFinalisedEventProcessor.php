@@ -5,11 +5,12 @@ namespace App\Service\Event;
 use App\Repository\ProjectRepository;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use JsonException;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Models\Model\Event\CoverageFinalised;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterface
+class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
 {
     private const REFS = [
         'master',
@@ -28,34 +29,15 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
      */
     public function process(EventBridgeEvent $event): void
     {
-        $detail = $event->getDetail();
-
-        if (
-            !is_array($detail) ||
-            !isset($detail['upload']) ||
-            !isset($detail['coveragePercentage']) ||
-            !is_numeric($detail['coveragePercentage'])
-        ) {
-            $this->eventHandlerLogger->warning(
-                'Event skipped as it was malformed.',
-                [
-                    'detailType' => $event->getDetailType(),
-                    'detail' => $event->getDetail(),
-                ]
-            );
-
-            return;
-        }
-
-        $upload = $this->serializer->deserialize(
-            $detail['upload'],
-            Upload::class,
+        $coverageFinalised = $this->serializer->deserialize(
+            $event->getDetail(),
+            CoverageFinalised::class,
             'json'
         );
 
-        $coveragePercentage = (float)$detail['coveragePercentage'];
+        $coveragePercentage = $coverageFinalised->getCoveragePercentage();
 
-        if (!in_array($upload->getRef(), self::REFS, true)) {
+        if (!in_array($coverageFinalised->getRef(), self::REFS, true)) {
             $this->eventHandlerLogger->info(
                 'Event skipped as it was not for a main ref.',
                 [
@@ -67,9 +49,9 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
         }
 
         $project = $this->projectRepository->findOneBy([
-            'provider' => $upload->getProvider(),
-            'owner' => $upload->getOwner(),
-            'repository' => $upload->getRepository(),
+            'provider' => $coverageFinalised->getProvider(),
+            'owner' => $coverageFinalised->getOwner(),
+            'repository' => $coverageFinalised->getRepository(),
             'enabled' => true,
         ]);
 
@@ -90,7 +72,7 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
             sprintf(
                 'Coverage percentage (%s%%) persisted against Project#%s',
                 $coveragePercentage,
-                $project->getId() ?? 'null'
+                (string)$project
             ),
             [
                 'detailType' => $event->getDetailType(),
@@ -99,5 +81,10 @@ class AnalysisOnNewUploadSuccessEventProcessor implements EventProcessorInterfac
         );
 
         $this->projectRepository->save($project, true);
+    }
+
+    public static function getProcessorEvent(): string
+    {
+        return CoverageEvent::NEW_COVERAGE_FINALISED->value;
     }
 }

@@ -13,6 +13,7 @@ use App\Service\CoverageAnalyserService;
 use App\Service\EnvironmentService;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTime;
+use DateTimeImmutable;
 use Exception;
 use JsonException;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -20,6 +21,7 @@ use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\PublishableCheckRunStatus;
+use Packages\Models\Model\Event\CoverageFinalised;
 use Packages\Models\Model\Event\JobStateChange;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
@@ -75,6 +77,22 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $successful = $this->queueFinalCheckRun(
                     $jobStateChange,
                     $coverageData
+                );
+
+                $this->eventBridgeEventService->publishEvent(
+                    CoverageEvent::NEW_COVERAGE_FINALISED,
+                    $this->serializer->normalize(
+                        new CoverageFinalised(
+                            $jobStateChange->getProvider(),
+                            $jobStateChange->getOwner(),
+                            $jobStateChange->getRepository(),
+                            $jobStateChange->getRef(),
+                            $jobStateChange->getCommit(),
+                            $jobStateChange->getPullRequest(),
+                            $coverageData->getCoveragePercentage(),
+                            new DateTimeImmutable()
+                        )
+                    )
                 );
             } else {
                 return;

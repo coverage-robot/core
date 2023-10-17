@@ -3,61 +3,32 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\Event\AnalysisOnNewUploadSuccessEventProcessor;
-use App\Service\Event\EventProcessorInterface;
+use App\Service\Event\EventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Packages\Models\Enum\EventBus\CoverageEvent;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
 use Psr\Log\NullLogger;
 
 class EventHandlerTest extends TestCase
 {
-    #[DataProvider('eventsDataProvider')]
-    public function testHandleEventBridge(string $event, bool $shouldHandle): void
+    public function testHandleEventBridge(): void
     {
         $event = new EventBridgeEvent([
-            'detail-type' => $event,
+            'detail-type' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
             'detail' => ''
         ]);
 
-        $container = $this->createMock(ContainerInterface::class);
-
-        $mockProcessor = $this->createMock(EventProcessorInterface::class);
-
-        $eventHandler = new EventHandler(new NullLogger(), $container);
-
-        $container->expects($this->exactly($shouldHandle ? 1 : 0))
-            ->method('get')
-            ->willReturn($mockProcessor);
-
-        $mockProcessor->expects($this->exactly($shouldHandle ? 1 : 0))
+        $mockProcessor = $this->createMock(EventProcessor::class);
+        $mockProcessor->expects($this->once())
             ->method('process')
             ->with($event);
 
+        $eventHandler = new EventHandler(
+            new NullLogger(),
+            $mockProcessor
+        );
+
         $eventHandler->handleEventBridge($event, Context::fake());
-    }
-
-    public function testSubscribedServices(): void
-    {
-        $this->assertEquals(
-            [
-                AnalysisOnNewUploadSuccessEventProcessor::class,
-            ],
-            EventHandler::getSubscribedServices()
-        );
-    }
-
-    public static function eventsDataProvider(): array
-    {
-        return array_map(
-            static fn(CoverageEvent $event) => [
-                $event->value,
-                $event === CoverageEvent::ANALYSIS_ON_NEW_UPLOAD_SUCCESS
-            ],
-            CoverageEvent::cases()
-        );
     }
 }
