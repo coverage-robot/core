@@ -10,7 +10,7 @@ use Packages\Models\Model\Event\CoverageFinalised;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
+class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
     private const REFS = [
         'master',
@@ -84,6 +84,6 @@ class NewCoverageFinalisedEventProcessor implements EventProcessorInterface
 
     public static function getProcessorEvent(): string
     {
-        return CoverageEvent::NEW_COVERAGE_FINALISED->value;
+        return CoverageEvent::COVERAGE_FINALISED->value;
     }
 }

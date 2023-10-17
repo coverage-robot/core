@@ -18,7 +18,7 @@ enum CoverageEvent: string
      * All jobs have completed for a given commit, and the results of the uploaded
      * (and carried forward) coverage have been calculated.
      */
-    case NEW_COVERAGE_FINALISED = 'NEW_COVERAGE_FINALISED';
+    case COVERAGE_FINALISED = 'COVERAGE_FINALISED';
 
     /**
      * Analysis of results has failed.

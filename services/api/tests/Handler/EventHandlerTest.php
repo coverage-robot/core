@@ -15,7 +15,7 @@ class EventHandlerTest extends TestCase
     public function testHandleEventBridge(): void
     {
         $event = new EventBridgeEvent([
-            'detail-type' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
+            'detail-type' => CoverageEvent::COVERAGE_FINALISED->value,
             'detail' => ''
         ]);
 

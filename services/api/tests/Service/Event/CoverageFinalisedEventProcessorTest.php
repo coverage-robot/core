@@ -4,7 +4,7 @@ namespace App\Tests\Service\Event;
 
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
-use App\Service\Event\NewCoverageFinalisedEventProcessor;
+use App\Service\Event\CoverageFinalisedEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
 use Packages\Models\Enum\EventBus\CoverageEvent;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Serializer\Serializer;
 
-class NewCoverageFinalisedEventProcessorTest extends TestCase
+class CoverageFinalisedEventProcessorTest extends TestCase
 {
     public function testNonMainRefEventProcess(): void
     {
@@ -46,7 +46,7 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
             )
             ->willReturn($this->createMock(CoverageFinalised::class));
 
-        $eventProcessor = new NewCoverageFinalisedEventProcessor(
+        $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
             $mockProjectRepository,
             $mockSerializer
@@ -93,7 +93,7 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
                 )
             );
 
-        $eventProcessor = new NewCoverageFinalisedEventProcessor(
+        $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
             $mockProjectRepository,
             $mockSerializer
@@ -102,7 +102,7 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
         $eventProcessor->process(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::NEW_COVERAGE_FINALISED->value,
+                    'detail-type' => CoverageEvent::COVERAGE_FINALISED->value,
                     'detail' => []
                 ]
             )
@@ -145,7 +145,7 @@ class NewCoverageFinalisedEventProcessorTest extends TestCase
                 )
             );
 
-        $eventProcessor = new NewCoverageFinalisedEventProcessor(
+        $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
             $mockProjectRepository,
             $mockSerializer

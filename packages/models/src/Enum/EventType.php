@@ -8,5 +8,5 @@ enum EventType: string
 
     case UPLOAD = 'UPLOAD';
 
-    case COVERAGE_FINALISED = 'NEW_COVERAGE_FINALISED';
+    case COVERAGE_FINALISED = 'COVERAGE_FINALISED';
 }
