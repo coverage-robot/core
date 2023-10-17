@@ -3,14 +3,14 @@ name: Clients Package
 on:
     push:
         branches:
-            - master
+            - main
         paths:
             - 'packages/clients/**'
             - '.github/workflows/packages.yml'
 
     pull_request:
         branches:
-            - master
+            - main
         paths:
             - 'packages/clients/**'
             - '.github/workflows/packages.yml'

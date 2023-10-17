@@ -3,7 +3,7 @@ name: API
 on:
     push:
         branches:
-            - master
+            - main
         paths:
             - 'services/api/**'
             - '.github/workflows/api.yml'
@@ -11,7 +11,7 @@ on:
 
     pull_request:
         branches:
-            - master
+            - main
         paths:
             - 'services/api/**'
             - '.github/workflows/api.yml'
@@ -183,7 +183,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: api-tests
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -225,7 +225,7 @@ jobs:
         name: Deployment
         runs-on: ubuntu-latest
         needs: api-tests
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         environment: api-prod
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

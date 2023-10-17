@@ -3,7 +3,7 @@ name: Ingest
 on:
     push:
         branches:
-            - master
+            - main
         paths:
             - 'services/ingest/**'
             - '.github/workflows/ingest.yml'
@@ -11,7 +11,7 @@ on:
 
     pull_request:
         branches:
-            - master
+            - main
         paths:
             - 'services/ingest/**'
             - '.github/workflows/ingest.yml'
@@ -183,7 +183,7 @@ jobs:
         name: Plan
         runs-on: ubuntu-latest
         needs: ingest-tests
-        if: github.ref != 'refs/heads/master'
+        if: github.ref != 'refs/heads/main'
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
@@ -225,7 +225,7 @@ jobs:
         name: Deployment
         runs-on: ubuntu-latest
         needs: ingest-tests
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         environment: ingest-prod
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

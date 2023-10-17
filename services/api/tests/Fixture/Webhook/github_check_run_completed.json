@@ -23,7 +23,7 @@
         "check_suite": {
             "id": 16016203700,
             "node_id": "CS_kwDOJX_nN88AAAADuqPftA",
-            "head_branch": "master",
+            "head_branch": "main",
             "head_sha": "2776f27fdf7554a6e557b65338d2f7c26446480b",
             "status": "completed",
             "conclusion": "success",
@@ -223,7 +223,7 @@
         "forks": 0,
         "open_issues": 7,
         "watchers": 2,
-        "default_branch": "master"
+        "default_branch": "main"
     },
     "organization": {
         "login": "mock-owner",
