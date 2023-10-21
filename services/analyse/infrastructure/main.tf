@@ -62,7 +62,9 @@ module "analyse" {
   php_version     = var.php_version
   deployment_hash = data.archive_file.deployment.output_base64sha256
 
-  environment       = local.environment
-  region            = var.region
-  query_cache_table = module.query_cache.cache_table.name
+  environment = local.environment
+  region      = var.region
+
+  query_cache_name = module.query_cache.cache_table.name
+  query_cache_arn  = module.query_cache.cache_table.arn
 }

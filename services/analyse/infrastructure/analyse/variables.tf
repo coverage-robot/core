@@ -17,6 +17,10 @@ variable "deployment_hash" {
   type = string
 }
 
-variable "query_cache_table" {
+variable "query_cache_name" {
+  type = string
+}
+
+variable "query_cache_arn" {
   type = string
 }

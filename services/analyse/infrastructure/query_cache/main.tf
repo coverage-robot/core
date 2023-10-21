@@ -10,11 +10,6 @@ resource "aws_dynamodb_table" "cache_table" {
     type = "S"
   }
 
-  attribute {
-    name = "result"
-    type = "S"
-  }
-
   ttl {
     attribute_name = "expiry"
     enabled        = true
