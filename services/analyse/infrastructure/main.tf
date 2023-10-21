@@ -51,6 +51,11 @@ data "archive_file" "deployment" {
   ]
 }
 
+module "query_cache" {
+  source      = "./query_cache"
+  environment = local.environment
+}
+
 module "analyse" {
   source = "./analyse"
 
@@ -59,4 +64,7 @@ module "analyse" {
 
   environment = local.environment
   region      = var.region
+
+  query_cache_name = module.query_cache.cache_table.name
+  query_cache_arn  = module.query_cache.cache_table.arn
 }
