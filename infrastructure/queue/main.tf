@@ -5,6 +5,10 @@ resource "aws_sqs_queue" "publish_queue" {
   visibility_timeout_seconds  = 120
   deduplication_scope         = "messageGroup"
   fifo_throughput_limit       = "perMessageGroupId"
+
+  # The queue is going to spend a fair amount of time providing empty receives, so switching
+  # to long polling will reduce the number of requests made to SQS.
+  receive_wait_time_seconds = 20
 }
 
 resource "aws_sqs_queue" "webhooks_queue" {
@@ -14,6 +18,10 @@ resource "aws_sqs_queue" "webhooks_queue" {
   visibility_timeout_seconds  = 120
   deduplication_scope         = "messageGroup"
   fifo_throughput_limit       = "perMessageGroupId"
+
+  # The queue is going to spend a fair amount of time providing empty receives, so switching
+  # to long polling will reduce the number of requests made to SQS.
+  receive_wait_time_seconds = 20
 
   # Add a small (5 second) delay between webhooks received from providers and analysis on
   # coverage starting. This gives a short period of time for providers to start more jobs
