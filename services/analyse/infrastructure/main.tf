@@ -43,7 +43,7 @@ data "archive_file" "deployment" {
   type        = "zip"
   source_dir  = "${path.module}/../"
   output_path = "${path.module}/deployment.zip"
-  excludes    = [
+  excludes = [
     "composer.lock",
     "README.md",
     "tests",
