@@ -51,12 +51,18 @@ data "archive_file" "deployment" {
   ]
 }
 
+module "query_cache" {
+  source      = "./query_cache"
+  environment = local.environment
+}
+
 module "analyse" {
   source = "./analyse"
 
   php_version     = var.php_version
   deployment_hash = data.archive_file.deployment.output_base64sha256
 
-  environment = local.environment
-  region      = var.region
+  environment       = local.environment
+  region            = var.region
+  query_cache_table = module.query_cache.cache_table
 }
