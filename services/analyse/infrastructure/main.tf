@@ -43,7 +43,7 @@ data "archive_file" "deployment" {
   type        = "zip"
   source_dir  = "${path.module}/../"
   output_path = "${path.module}/deployment.zip"
-  excludes = [
+  excludes    = [
     "composer.lock",
     "README.md",
     "tests",
@@ -64,5 +64,5 @@ module "analyse" {
 
   environment       = local.environment
   region            = var.region
-  query_cache_table = module.query_cache.cache_table
+  query_cache_table = module.query_cache.cache_table.name
 }

@@ -102,6 +102,7 @@ resource "aws_lambda_function" "analyse" {
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
       "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload_table.table_id,
+      "QUERY_CACHE_TABLE_NAME"       = var.query_cache_table
     }
   }
 }
