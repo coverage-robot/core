@@ -10,7 +10,7 @@ class TagCoverageCollectionQueryResult implements QueryResultInterface
     /**
      * @param TagCoverageQueryResult[] $tags
      */
-    private function __construct(
+    public function __construct(
         private readonly array $tags,
     ) {
     }

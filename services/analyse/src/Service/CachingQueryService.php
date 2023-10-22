@@ -42,6 +42,7 @@ class CachingQueryService implements QueryServiceInterface
             $this->queryServiceLogger->info(
                 'Cache miss. Running query and caching result.',
                 [
+                    'cacheKey' => $cacheKey,
                     'queryClass' => $queryClass,
                     'parameterBag' => $parameterBag
                 ]
@@ -57,6 +58,8 @@ class CachingQueryService implements QueryServiceInterface
         $this->queryServiceLogger->info(
             'Cache hit. Returning cached result.',
             [
+                'cacheKey' => $cacheKey,
+                'result' => $result,
                 'queryClass' => $queryClass,
                 'parameterBag' => $parameterBag
             ]

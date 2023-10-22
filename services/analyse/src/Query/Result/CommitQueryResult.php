@@ -11,7 +11,7 @@ class CommitQueryResult implements QueryResultInterface
      * @param string $commit
      * @param Tag[] $tags
      */
-    private function __construct(
+    public function __construct(
         private readonly string $commit,
         private readonly array $tags
     ) {
@@ -29,7 +29,7 @@ class CommitQueryResult implements QueryResultInterface
             return new self(
                 (string)$result['commit'],
                 array_map(
-                    fn (string $name) => new Tag($name, (string)$result['commit']),
+                    fn(string $name) => new Tag($name, (string)$result['commit']),
                     (array)$result['tags']
                 )
             );

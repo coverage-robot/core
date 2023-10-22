@@ -6,7 +6,7 @@ use App\Exception\QueryException;
 
 class CoverageQueryResult implements QueryResultInterface
 {
-    protected function __construct(
+    public function __construct(
         private readonly float $coveragePercentage,
         private readonly int $lines,
         private readonly int $covered,

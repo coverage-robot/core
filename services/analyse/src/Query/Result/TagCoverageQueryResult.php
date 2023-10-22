@@ -7,7 +7,7 @@ use Packages\Models\Model\Tag;
 
 class TagCoverageQueryResult extends CoverageQueryResult
 {
-    private function __construct(
+    public function __construct(
         private readonly Tag $tag,
         readonly float $coveragePercentage,
         readonly int $lines,

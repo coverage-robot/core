@@ -6,7 +6,7 @@ use App\Exception\QueryException;
 
 class FileCoverageQueryResult extends CoverageQueryResult
 {
-    private function __construct(
+    public function __construct(
         private readonly string $fileName,
         readonly float $coveragePercentage,
         readonly int $lines,
