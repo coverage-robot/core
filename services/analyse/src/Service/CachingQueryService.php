@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Client\DynamoDbClient;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -82,6 +84,14 @@ class CachingQueryService implements QueryServiceInterface
         return $result;
     }
 
+    /**
+     * Run a query against the data warehouse, without any caching.
+     *
+     * @param class-string<QueryInterface> $queryClass
+     *
+     * @throws QueryException
+     * @throws GoogleException
+     */
     private function runUncachedQuery(
         string $queryClass,
         ?QueryParameterBag $parameterBag
