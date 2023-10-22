@@ -10,9 +10,9 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\CachingQueryService;
+use App\Service\QueryBuilderService;
 use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use App\Tests\Mock\Factory\MockSerializerFactory;
 use Monolog\Test\TestCase;
 use Packages\Models\Enum\Environment;
 use Psr\Log\NullLogger;
@@ -39,6 +39,10 @@ class CachingQueryServiceTest extends TestCase
                 )
             );
 
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService->expects($this->never())
+            ->method('hash');
+
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(TotalUploadsQuery::class, $parameters)
@@ -53,19 +57,7 @@ class CachingQueryServiceTest extends TestCase
         $cachingQueryService = new CachingQueryService(
             new NullLogger(),
             $mockQueryService,
-            MockSerializerFactory::getMock(
-                $this,
-                serializeMap: [
-                    [
-                        [
-                            QueryParameter::COMMIT->name => 'mock-commit'
-                        ],
-                        'json',
-                        [],
-                        'mock-serialized-parameters'
-                    ]
-                ]
-            ),
+            $mockQueryBuilderService,
             $mockDynamoDbClient
         );
 
@@ -106,6 +98,12 @@ class CachingQueryServiceTest extends TestCase
             ->with(TotalCoverageQuery::class, $parameters)
             ->willReturn($queryResult);
 
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService->expects($this->once())
+            ->method('hash')
+            ->with(TotalCoverageQuery::class, $parameters)
+            ->willReturn('mock-cache-key');
+
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('tryFromQueryCache')
@@ -117,19 +115,7 @@ class CachingQueryServiceTest extends TestCase
         $cachingQueryService = new CachingQueryService(
             new NullLogger(),
             $mockQueryService,
-            MockSerializerFactory::getMock(
-                $this,
-                serializeMap: [
-                    [
-                        [
-                            QueryParameter::COMMIT->name => 'mock-commit'
-                        ],
-                        'json',
-                        [],
-                        'mock-serialized-parameters'
-                    ]
-                ]
-            ),
+            $mockQueryBuilderService,
             $mockDynamoDbClient
         );
 
@@ -159,6 +145,12 @@ class CachingQueryServiceTest extends TestCase
         $mockQueryService->expects($this->never())
             ->method('runQuery');
 
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService->expects($this->once())
+            ->method('hash')
+            ->with(TotalCoverageQuery::class, $parameters)
+            ->willReturn('mock-cache-key');
+
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('tryFromQueryCache')
@@ -169,19 +161,7 @@ class CachingQueryServiceTest extends TestCase
         $cachingQueryService = new CachingQueryService(
             new NullLogger(),
             $mockQueryService,
-            MockSerializerFactory::getMock(
-                $this,
-                serializeMap: [
-                    [
-                        [
-                            QueryParameter::COMMIT->name => 'mock-commit'
-                        ],
-                        'json',
-                        [],
-                        'mock-serialized-parameters'
-                    ]
-                ]
-            ),
+            $mockQueryBuilderService,
             $mockDynamoDbClient
         );
 

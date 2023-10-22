@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum QueryParameter
+enum QueryParameter: string
 {
     /**
      * The added lines from multiple file's diffs.
@@ -14,7 +14,7 @@ enum QueryParameter
      * ]
      * ```
      */
-    case LINE_SCOPE;
+    case LINE_SCOPE = 'LINE_SCOPE';
 
     /**
      * The uploads to scope the queries to.
@@ -27,7 +27,7 @@ enum QueryParameter
      * ]
      * ```
      */
-    case UPLOADS_SCOPE;
+    case UPLOADS_SCOPE = 'UPLOADS_SCOPE';
 
     /**
      * The tags to carry forward from previous commits (parents to the current upload)
@@ -39,12 +39,12 @@ enum QueryParameter
      * ]
      * ```
      */
-    case CARRYFORWARD_TAGS;
+    case CARRYFORWARD_TAGS = 'CARRYFORWARD_TAGS';
 
     /**
      * The limit to apply on query results.
      */
-    case LIMIT;
+    case LIMIT = 'LIMIT';
 
     /**
      * A commit hash, or hashes.
@@ -53,17 +53,17 @@ enum QueryParameter
      * ['commit-1', 'commit-2', 'commit-3']
      * ```
      */
-    case COMMIT;
+    case COMMIT = 'COMMIT';
 
     /**
      * A repository name.
      */
-    case REPOSITORY;
+    case REPOSITORY = 'REPOSITORY';
 
     /**
      * A repository owner.
      */
-    case OWNER;
+    case OWNER = 'OWNER';
 
     /**
      * A repository provider.
@@ -74,5 +74,5 @@ enum QueryParameter
      *
      * @see \Packages\Models\Enum\Provider
      */
-    case PROVIDER;
+    case PROVIDER = 'PROVIDER';
 }
