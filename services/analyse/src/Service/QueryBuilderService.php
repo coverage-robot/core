@@ -58,7 +58,7 @@ class QueryBuilderService
                 $parameters[$key->value] = $value;
             }
 
-            $parameters = $this->normaliseParameterOrder($this->serializer->normalize($parameters));
+            $parameters = $this->normaliseParameterOrder((array)$this->serializer->normalize($parameters));
         }
 
         return md5(
@@ -88,11 +88,9 @@ class QueryBuilderService
             $value = $this->normaliseParameterOrder($value);
         }
 
-        if (is_array($array)) {
-            // Sort the array by value, in a case-insensitive manner so that the casing
-            // doesnt impact the hash
-            sort($array, SORT_FLAG_CASE);
-        }
+        // Sort the array by value, in a case-insensitive manner so that the casing
+        // doesnt impact the hash
+        sort($array, SORT_FLAG_CASE);
 
         return $array;
     }
