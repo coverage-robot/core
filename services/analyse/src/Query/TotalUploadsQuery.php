@@ -124,4 +124,14 @@ class TotalUploadsQuery implements QueryInterface
             throw QueryException::invalidParameters(QueryParameter::PROVIDER);
         }
     }
+
+    /**
+     * This can't be cached for extended periods of time, as its common (and very likely) the
+     * uploads on a particular commit will change over time, and we need to be able to respond
+     * to that.
+     */
+    public function isCachable(): bool
+    {
+        return false;
+    }
 }
