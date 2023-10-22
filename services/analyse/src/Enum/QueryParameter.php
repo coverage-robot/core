@@ -47,11 +47,6 @@ enum QueryParameter
     case LIMIT;
 
     /**
-     * A full upload model.
-     */
-    case EVENT;
-
-    /**
      * A commit hash, or hashes.
      *
      * ```php

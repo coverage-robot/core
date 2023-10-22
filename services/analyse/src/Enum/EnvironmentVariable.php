@@ -14,4 +14,6 @@ enum EnvironmentVariable: string
     case EVENT_BUS = 'EVENT_BUS';
 
     case PUBLISH_QUEUE = 'PUBLISH_QUEUE';
+
+    case QUERY_CACHE_TABLE_NAME = 'QUERY_CACHE_TABLE_NAME';
 }

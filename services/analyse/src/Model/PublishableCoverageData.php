@@ -16,7 +16,7 @@ use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
-use App\Service\QueryService;
+use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
 use Packages\Models\Model\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -26,7 +26,8 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public const DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
 
     public function __construct(
-        protected readonly QueryService $queryService,
+        #[Autowire(service: 'App\Service\CachingQueryService')]
+        protected readonly QueryServiceInterface $queryService,
         #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
         protected readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
