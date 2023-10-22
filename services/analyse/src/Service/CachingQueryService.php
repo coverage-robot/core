@@ -3,8 +3,8 @@
 namespace App\Service;
 
 use App\Client\DynamoDbClient;
-use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -29,6 +29,8 @@ class CachingQueryService implements QueryServiceInterface
      *
      * In the event of a cache miss, the query is passed through to the data warehouse, and the result is
      * cached for any subsequent queries.
+     *
+     * @param class-string<QueryInterface> $queryClass
      */
     public function runQuery(string $queryClass, ?QueryParameterBag $parameterBag = null): QueryResultInterface
     {
@@ -71,7 +73,9 @@ class CachingQueryService implements QueryServiceInterface
         $parameters = [];
 
         if ($parameterBag) {
-            /** @var QueryParameter $key */
+            /**
+             * @psalm-suppress all
+             */
             foreach ($parameterBag->getAll() as $key => $value) {
                 $parameters[$key->name] = $value;
             }

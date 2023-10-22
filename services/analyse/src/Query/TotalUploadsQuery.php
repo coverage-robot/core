@@ -86,6 +86,12 @@ class TotalUploadsQuery implements QueryInterface
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
+        if (!$parameterBag) {
+            throw new QueryException(
+                sprintf('Query %s requires parameters to be provided.', self::class)
+            );
+        }
+
         if (
             !$parameterBag->has(QueryParameter::COMMIT) ||
             !(

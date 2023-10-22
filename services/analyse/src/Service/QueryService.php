@@ -27,8 +27,6 @@ class QueryService implements QueryServiceInterface
     }
 
     /**
-     * @param class-string $queryClass
-     *
      * @throws GoogleException
      * @throws QueryException
      */
