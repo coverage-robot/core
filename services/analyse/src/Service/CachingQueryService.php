@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Client\DynamoDbClient;
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -34,6 +36,20 @@ class CachingQueryService implements QueryServiceInterface
      */
     public function runQuery(string $queryClass, ?QueryParameterBag $parameterBag = null): QueryResultInterface
     {
+        if (!$this->queryService->getQueryClass($queryClass)->isCachable()) {
+            // The query isn't cacheable, so just act as a direct pass-through,
+            // and run the query against the data warehouse.
+            $this->queryServiceLogger->info(
+                'Query is not cachable. Running query and not caching result.',
+                [
+                    'queryClass' => $queryClass,
+                    'parameterBag' => $parameterBag
+                ]
+            );
+
+            return $this->runUncachedQuery($queryClass, $parameterBag);
+        }
+
         $cacheKey = $this->generateQueryCacheKey($queryClass, $parameterBag);
 
         $result = $this->dynamoDbClient->tryFromQueryCache($cacheKey);
@@ -48,7 +64,7 @@ class CachingQueryService implements QueryServiceInterface
                 ]
             );
 
-            $result = $this->queryService->runQuery($queryClass, $parameterBag);
+            $result = $this->runUncachedQuery($queryClass, $parameterBag);
 
             $this->dynamoDbClient->putQueryResultInCache($cacheKey, $result);
 
@@ -66,6 +82,21 @@ class CachingQueryService implements QueryServiceInterface
         );
 
         return $result;
+    }
+
+    /**
+     * Run a query against the data warehouse, without any caching.
+     *
+     * @param class-string<QueryInterface> $queryClass
+     *
+     * @throws QueryException
+     * @throws GoogleException
+     */
+    private function runUncachedQuery(
+        string $queryClass,
+        ?QueryParameterBag $parameterBag
+    ): QueryResultInterface {
+        return $this->queryService->runQuery($queryClass, $parameterBag);
     }
 
     /**

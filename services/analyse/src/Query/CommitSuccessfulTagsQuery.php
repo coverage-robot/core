@@ -100,4 +100,19 @@ class CommitSuccessfulTagsQuery implements QueryInterface
             throw QueryException::invalidParameters(QueryParameter::PROVIDER);
         }
     }
+
+    /**
+     * The successful tags on a commit _could_ be cached (in theory). This is because,
+     * generally speaking, this query will only be performed using older commits in the
+     * commit tree, and any time a new commit is made, the query parameters will end up
+     * changing.
+     *
+     * However, there is a use case where newer commits in the tree could still be receiving
+     * uploads while we're doing processing, so therefore a hard cache would get in the
+     * way of that.
+     */
+    public function isCachable(): bool
+    {
+        return false;
+    }
 }

@@ -115,4 +115,17 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
         }
     }
+
+    /**
+     * Anything which inherits this abstract class is generally a coverage analysis query
+     * (i.e. analysing line coverage using a set of tags/uploads), so therefore we should
+     * be fine to cache these for extended periods of time.
+     *
+     * These are also **by far** the most expensive queries we run, simply by way of the
+     * amount of data they're querying over (potentially multiple GBs).
+     */
+    public function isCachable(): bool
+    {
+        return true;
+    }
 }

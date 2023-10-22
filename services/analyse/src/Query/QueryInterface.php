@@ -35,6 +35,11 @@ interface QueryInterface
     public function getTable(): string;
 
     /**
+     * Whether or not the query can be cached.
+     */
+    public function isCachable(): bool;
+
+    /**
      * Parse the results of the query.
      *
      * @throws QueryException
