@@ -13,7 +13,7 @@ class TotalUploadsQueryResult implements QueryResultInterface
      * @param Tag[] $successfulTags
      * @param string[] $pendingUploads
      */
-    private function __construct(
+    public function __construct(
         private readonly array $successfulUploads,
         private readonly array $successfulTags,
         private readonly ?DateTimeImmutable $latestSuccessfulUpload
