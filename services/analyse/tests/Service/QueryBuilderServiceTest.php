@@ -131,7 +131,7 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::LIMIT->value => 'some-value-4'
                 ],
-                'a56cb60da1052c5e33a256cebe6d172b'
+                'c8ad0013c06e2553ae33233c1e5a2179'
             ],
             [
                 'some-class',
@@ -141,7 +141,7 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::REPOSITORY->value => 'some-value-2'
                 ],
-                'a56cb60da1052c5e33a256cebe6d172b'
+                'c8ad0013c06e2553ae33233c1e5a2179'
             ],
             [
                 'some-class',
@@ -151,7 +151,7 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::COMMIT->value => ['commit-1', 'commit-2', 'commit-3']
                 ],
-                '3748fe079457569316accc996d97001a'
+                'bfaa256befa76c5cffa4e6f6273fa4df'
             ],
             [
                 'some-class',
@@ -161,7 +161,7 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::COMMIT->value => ['commit-1', 'commit-3', 'commit-2']
                 ],
-                '3748fe079457569316accc996d97001a'
+                'bfaa256befa76c5cffa4e6f6273fa4df'
             ],
             [
                 'some-class-2',
@@ -171,7 +171,7 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::COMMIT->value => ['commit-1', 'commit-3', 'commit-2']
                 ],
-                'e09b365192ef2fd9b95ee526979c4fa6'
+                'be703085c2b224acf1fecc205c134239'
             ]
         ];
     }

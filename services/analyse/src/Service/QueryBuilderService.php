@@ -90,7 +90,15 @@ class QueryBuilderService
 
         // Sort the array by value, in a case-insensitive manner so that the casing
         // doesnt impact the hash
-        sort($array, SORT_FLAG_CASE);
+        if (array_is_list($array)) {
+            // Don't preserve the keys of the array if its a list of values (i.e. a list
+            // of commits)
+            sort($array, SORT_FLAG_CASE);
+        } else {
+            // Preserve the array keys if they're not a list of values (i.e. an associative
+            // array, like a map)
+            asort($array, SORT_FLAG_CASE);
+        }
 
         return $array;
     }
