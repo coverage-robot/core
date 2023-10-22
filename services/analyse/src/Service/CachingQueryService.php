@@ -9,14 +9,13 @@ use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CachingQueryService implements QueryServiceInterface
 {
     public function __construct(
         public readonly LoggerInterface $queryServiceLogger,
         public readonly QueryService $queryService,
-        public readonly SerializerInterface $serializer,
+        public readonly QueryBuilderService $queryBuilderService,
         public readonly DynamoDbClient $dynamoDbClient,
     ) {
     }
@@ -50,7 +49,7 @@ class CachingQueryService implements QueryServiceInterface
             return $this->runUncachedQuery($queryClass, $parameterBag);
         }
 
-        $cacheKey = $this->generateQueryCacheKey($queryClass, $parameterBag);
+        $cacheKey = $this->queryBuilderService->hash($queryClass, $parameterBag);
 
         $result = $this->dynamoDbClient->tryFromQueryCache($cacheKey);
 
@@ -97,32 +96,5 @@ class CachingQueryService implements QueryServiceInterface
         ?QueryParameterBag $parameterBag
     ): QueryResultInterface {
         return $this->queryService->runQuery($queryClass, $parameterBag);
-    }
-
-    /**
-     * Generate a cache key for the query cache, using the parameter bag, and the query class.
-     */
-    private function generateQueryCacheKey(string $queryClass, ?QueryParameterBag $parameterBag): string
-    {
-        $parameters = [];
-
-        if ($parameterBag) {
-            /**
-             * @psalm-suppress all
-             */
-            foreach ($parameterBag->getAll() as $key => $value) {
-                $parameters[$key->name] = $value;
-            }
-        }
-
-        return md5(
-            implode(
-                '',
-                [
-                    $queryClass,
-                    $this->serializer->serialize($parameters, 'json')
-                ]
-            )
-        );
     }
 }

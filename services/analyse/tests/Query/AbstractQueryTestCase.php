@@ -12,6 +12,7 @@ use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Serializer;
 
 abstract class AbstractQueryTestCase extends TestCase
 {
@@ -53,7 +54,8 @@ abstract class AbstractQueryTestCase extends TestCase
     public function testGetQuery(string $expectedSql, QueryParameterBag $parameters): void
     {
         $queryBuilder = new QueryBuilderService(
-            new SqlFormatter(new NullHighlighter())
+            new SqlFormatter(new NullHighlighter()),
+            $this->createMock(Serializer::class)
         );
 
         $query = $this->getQueryClass();
