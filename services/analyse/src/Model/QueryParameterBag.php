@@ -25,14 +25,11 @@ class QueryParameterBag
      * @return (
      *  $key is QueryParameter::COMMIT ?
      *      string :
-     *      ($key is QueryParameter::EVENT ?
-     *          EventInterface :
-     *          ($key is QueryParameter::LINE_SCOPE ?
-     *              array :
-     *              ($key is QueryParameter::PROVIDER ?
-     *                  Provider :
-     *                  int
-     *              )
+     *      ($key is QueryParameter::LINE_SCOPE ?
+     *          array :
+     *          ($key is QueryParameter::PROVIDER ?
+     *              Provider :
+     *              int
      *          )
      *      )
      * )|null
@@ -40,6 +37,11 @@ class QueryParameterBag
     public function get(QueryParameter $key): mixed
     {
         return $this->parameters[$key] ?? null;
+    }
+
+    public function getAll(): WeakMap
+    {
+        return clone $this->parameters;
     }
 
     public function has(QueryParameter $key): bool
@@ -55,9 +57,6 @@ class QueryParameterBag
     public static function fromEvent(EventInterface $event): self
     {
         $parameters = new self();
-
-        // Store the main event model in the parameter bag
-        $parameters->set(QueryParameter::EVENT, $event);
 
         // Extract core parameters from upload model for ease of use
         $parameters->set(QueryParameter::COMMIT, $event->getCommit());

@@ -11,7 +11,7 @@ use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class QueryService
+class QueryService implements QueryServiceInterface
 {
     /**
      * @param BigQueryClient $bigQueryClient

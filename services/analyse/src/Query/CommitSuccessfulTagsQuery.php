@@ -68,10 +68,6 @@ class CommitSuccessfulTagsQuery implements QueryInterface
             );
         }
 
-        if (!$parameterBag->has(QueryParameter::EVENT)) {
-            throw QueryException::invalidParameters(QueryParameter::EVENT);
-        }
-
         if (
             !$parameterBag->has(QueryParameter::COMMIT) ||
             !(
