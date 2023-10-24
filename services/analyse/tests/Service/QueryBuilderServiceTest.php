@@ -172,7 +172,69 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::COMMIT->value => ['commit-1', 'commit-3', 'commit-2']
                 ],
                 'be703085c2b224acf1fecc205c134239'
-            ]
+            ],
+            [
+                'some-class-3',
+                [
+                    QueryParameter::OWNER->value => 'some-value-1',
+                    QueryParameter::PROVIDER->value => 'some-value-3',
+                    QueryParameter::CARRYFORWARD_TAGS->value => [
+                        new Tag('tag-1', 'commit-1'),
+                        new Tag('tag-2', 'commit-1'),
+                        new Tag('tag-3', 'commit-3'),
+                    ]
+                ],
+                'e1d213850cef9ac67bccd8ab1b674a98'
+            ],
+            [
+                'some-class-3',
+                [
+                    QueryParameter::OWNER->value => 'some-value-1',
+                    QueryParameter::PROVIDER->value => 'some-value-3',
+                    QueryParameter::CARRYFORWARD_TAGS->value => [
+                        new Tag('tag-1', 'commit-1'),
+                        new Tag('tag-3', 'commit-3'),
+                        new Tag('tag-2', 'commit-1'),
+                    ]
+                ],
+                'e1d213850cef9ac67bccd8ab1b674a98'
+            ],
+            [
+                'some-class-4',
+                [
+                    QueryParameter::OWNER->value => 'some-value-1',
+                    QueryParameter::PROVIDER->value => 'some-value-3',
+                    QueryParameter::LINE_SCOPE->value => [
+                        'file-1' => [1, 2, 3],
+                        'file-2' => [4, 5, 6]
+                    ]
+                ],
+                'e2392863844d4213424f6e2f7ab9db10'
+            ],
+            [
+                'some-class-4',
+                [
+                    QueryParameter::OWNER->value => 'some-value-1',
+                    QueryParameter::PROVIDER->value => 'some-value-3',
+                    QueryParameter::LINE_SCOPE->value => [
+                        'file-1' => [2, 1, 3],
+                        'file-2' => [4, 6, 5]
+                    ]
+                ],
+                'e2392863844d4213424f6e2f7ab9db10'
+            ],
+            [
+                'some-class-4',
+                [
+                    QueryParameter::OWNER->value => 'some-value-1',
+                    QueryParameter::PROVIDER->value => 'some-value-3',
+                    QueryParameter::LINE_SCOPE->value => [
+                        'file-2' => [4, 6, 5],
+                        'file-1' => [2, 1, 3],
+                    ]
+                ],
+                'e2392863844d4213424f6e2f7ab9db10'
+            ],
         ];
     }
 }
