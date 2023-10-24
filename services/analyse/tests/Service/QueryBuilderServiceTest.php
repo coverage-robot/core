@@ -205,8 +205,8 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::OWNER->value => 'some-value-1',
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::LINE_SCOPE->value => [
-                        "file-1" => [1, 2, 3],
-                        "file-2" => [4, 5, 6]
+                        'file-1' => [1, 2, 3],
+                        'file-2' => [4, 5, 6]
                     ]
                 ],
                 'e2392863844d4213424f6e2f7ab9db10'
@@ -217,8 +217,8 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::OWNER->value => 'some-value-1',
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::LINE_SCOPE->value => [
-                        "file-1" => [2, 1, 3],
-                        "file-2" => [4, 6, 5]
+                        'file-1' => [2, 1, 3],
+                        'file-2' => [4, 6, 5]
                     ]
                 ],
                 'e2392863844d4213424f6e2f7ab9db10'
@@ -229,8 +229,8 @@ class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::OWNER->value => 'some-value-1',
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::LINE_SCOPE->value => [
-                        "file-2" => [4, 6, 5],
-                        "file-1" => [2, 1, 3],
+                        'file-2' => [4, 6, 5],
+                        'file-1' => [2, 1, 3],
                     ]
                 ],
                 'e2392863844d4213424f6e2f7ab9db10'
