@@ -17,6 +17,9 @@ resource "aws_dynamodb_table" "cache_table" {
   }
 
   lifecycle {
-    ignore_changes = ["write_capacity", "read_capacity"]
+    ignore_changes = [
+      write_capacity,
+      read_capacity
+    ]
   }
 }
