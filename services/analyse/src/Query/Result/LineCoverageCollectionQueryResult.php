@@ -10,7 +10,7 @@ class LineCoverageCollectionQueryResult implements QueryResultInterface
     /**
      * @param LineCoverageQueryResult[] $lines
      */
-    private function __construct(
+    public function __construct(
         private readonly array $lines,
     ) {
     }

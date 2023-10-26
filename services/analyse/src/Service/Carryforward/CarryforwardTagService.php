@@ -9,17 +9,19 @@ use App\Query\CommitSuccessfulTagsQuery;
 use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Result\CommitQueryResult;
 use App\Service\History\CommitHistoryService;
-use App\Service\QueryService;
+use App\Service\QueryServiceInterface;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CarryforwardTagService implements CarryforwardTagServiceInterface
 {
     public function __construct(
         private readonly CommitHistoryService $commitHistoryService,
-        private readonly QueryService $queryService,
+        #[Autowire(service: 'App\Service\CachingQueryService')]
+        private readonly QueryServiceInterface $queryService,
         private readonly LoggerInterface $carryforwardLogger
     ) {
     }

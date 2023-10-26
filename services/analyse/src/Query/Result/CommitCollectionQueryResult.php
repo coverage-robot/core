@@ -10,7 +10,7 @@ class CommitCollectionQueryResult implements QueryResultInterface
     /**
      * @param CommitQueryResult[] $commits
      */
-    private function __construct(
+    public function __construct(
         private readonly array $commits,
     ) {
     }

@@ -12,7 +12,7 @@ use DateTime;
 use DateTimeInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Models\Enum\Provider;
 
 class TotalUploadsQuery implements QueryInterface
 {
@@ -86,12 +86,52 @@ class TotalUploadsQuery implements QueryInterface
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
-        if (
-            !$parameterBag ||
-            !$parameterBag->has(QueryParameter::EVENT) ||
-            !($parameterBag->get(QueryParameter::EVENT) instanceof EventInterface)
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::EVENT);
+        if (!$parameterBag) {
+            throw new QueryException(
+                sprintf('Query %s requires parameters to be provided.', self::class)
+            );
         }
+
+        if (
+            !$parameterBag->has(QueryParameter::COMMIT) ||
+            !(
+                is_array($parameterBag->get(QueryParameter::COMMIT)) ||
+                is_string($parameterBag->get(QueryParameter::COMMIT))
+            ) ||
+            empty($parameterBag->get(QueryParameter::COMMIT))
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::COMMIT);
+        }
+
+        if (
+            !$parameterBag->has(QueryParameter::REPOSITORY) ||
+            !is_string($parameterBag->get(QueryParameter::REPOSITORY))
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
+        }
+
+        if (
+            !$parameterBag->has(QueryParameter::OWNER) ||
+            !is_string($parameterBag->get(QueryParameter::OWNER))
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::OWNER);
+        }
+
+        if (
+            !$parameterBag->has(QueryParameter::PROVIDER) ||
+            !$parameterBag->get(QueryParameter::PROVIDER) instanceof Provider
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::PROVIDER);
+        }
+    }
+
+    /**
+     * This can't be cached for extended periods of time, as its common (and very likely) the
+     * uploads on a particular commit will change over time, and we need to be able to respond
+     * to that.
+     */
+    public function isCachable(): bool
+    {
+        return false;
     }
 }

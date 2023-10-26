@@ -12,7 +12,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class CoverageAnalyserService
 {
     public function __construct(
-        private readonly QueryService $queryService,
+        #[Autowire(service: 'App\Service\CachingQueryService')]
+        private readonly QueryServiceInterface $queryService,
         #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
         private readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]

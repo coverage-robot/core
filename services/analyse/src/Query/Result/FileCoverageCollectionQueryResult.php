@@ -10,7 +10,7 @@ class FileCoverageCollectionQueryResult implements QueryResultInterface
     /**
      * @param FileCoverageQueryResult[] $files
      */
-    private function __construct(
+    public function __construct(
         private readonly array $files,
     ) {
     }

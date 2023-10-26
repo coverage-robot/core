@@ -1,9 +1,10 @@
 resource "aws_dynamodb_table" "cache_table" {
-  name           = format("coverage-analyse-query-cache-%s", var.environment)
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
-  write_capacity = 5
-  hash_key       = "cacheKey"
+  name                        = format("coverage-analyse-query-cache-%s", var.environment)
+  billing_mode                = "PROVISIONED"
+  read_capacity               = 5
+  write_capacity              = 5
+  hash_key                    = "cacheKey"
+  deletion_protection_enabled = true
 
   attribute {
     name = "cacheKey"

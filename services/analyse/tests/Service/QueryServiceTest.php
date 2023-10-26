@@ -3,7 +3,6 @@
 namespace App\Tests\Service;
 
 use App\Client\BigQueryClient;
-use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
@@ -22,7 +21,6 @@ use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -89,10 +87,7 @@ class QueryServiceTest extends TestCase
             ->with($mockQueryJobConfiguration)
             ->willReturn($this->createMock(QueryResults::class));
 
-        $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
-
-        $result = $queryService->runQuery($query, $queryParameterBag);
+        $result = $queryService->runQuery($query, new QueryParameterBag());
 
         $this->assertEquals($queryResult, $result);
     }
@@ -179,12 +174,9 @@ class QueryServiceTest extends TestCase
             ->with($mockQueryJobConfiguration)
             ->willThrowException(new GoogleException());
 
-        $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
-
         $this->expectException(GoogleException::class);
 
-        $queryService->runQuery(TotalCoverageQuery::class, $queryParameterBag);
+        $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
     public function testRunQueryWithQueryException(): void
@@ -223,12 +215,9 @@ class QueryServiceTest extends TestCase
             ->with($mockQueryJobConfiguration)
             ->willThrowException(new QueryException());
 
-        $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(QueryParameter::EVENT, $this->createMock(Upload::class));
-
         $this->expectException(QueryException::class);
 
-        $queryService->runQuery(TotalCoverageQuery::class, $queryParameterBag);
+        $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
     public static function queryDataProvider(): array

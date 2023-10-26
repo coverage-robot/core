@@ -11,7 +11,7 @@ use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class QueryService
+class QueryService implements QueryServiceInterface
 {
     /**
      * @param BigQueryClient $bigQueryClient
@@ -27,8 +27,6 @@ class QueryService
     }
 
     /**
-     * @param class-string $queryClass
-     *
      * @throws GoogleException
      * @throws QueryException
      */
@@ -36,12 +34,26 @@ class QueryService
         string $queryClass,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
+        return $this->runQueryAndParseResult(
+            $this->getQueryClass($queryClass),
+            $parameterBag
+        );
+    }
+
+    /**
+     * Get a fully instantiated query class from the query class string.
+     *
+     * @param class-string<QueryInterface> $queryClass
+     * @throws QueryException
+     */
+    public function getQueryClass(string $queryClass): QueryInterface
+    {
         foreach ($this->queries as $query) {
             if (
                 $query instanceof $queryClass &&
                 is_subclass_of($query, QueryInterface::class)
             ) {
-                return $this->runQueryAndParseResult($query, $parameterBag);
+                return $query;
             }
         }
 
