@@ -90,7 +90,7 @@ class DynamoDbClient
                         'result' => [
                             'S' => $this->serializer->serialize($queryResult, 'json'),
                         ],
-                        'ttl' => [
+                        'expiry' => [
                             'N' => (string)(time() + self::DEFAULT_QUERY_CACHE_TTL)
                         ],
                     ],
