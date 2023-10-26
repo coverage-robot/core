@@ -41,7 +41,7 @@ class DynamoDbClientTest extends TestCase
                         );
                         $this->assertEquals($parameters['Item']['cacheKey']['S'], 'mock-cache-key');
                         $this->assertEquals($parameters['Item']['result']['S'], 'mock-serialized-result');
-                        $this->assertIsNumeric($parameters['Item']['ttl']['N']);
+                        $this->assertIsNumeric($parameters['Item']['expiry']['N']);
                         return true;
                     }
                 )
