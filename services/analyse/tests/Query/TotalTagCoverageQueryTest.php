@@ -131,6 +131,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
+              tag as tagName,
               STRUCT(tag as name, commit as commit) as tag,
               COUNT(*) as lines,
               COALESCE(
@@ -164,7 +165,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             FROM
               lines
             GROUP BY
-              tag,
+              tagName,
               commit
             SQL,
             <<<SQL
@@ -298,6 +299,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
+              tag as tagName,
               STRUCT(tag as name, commit as commit) as tag,
               COUNT(*) as lines,
               COALESCE(
@@ -331,7 +333,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             FROM
               lines
             GROUP BY
-              tag,
+              tagName,
               commit
             SQL
         ];
