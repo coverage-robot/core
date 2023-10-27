@@ -38,7 +38,9 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                 []
               ) as successfulTags,
               COALESCE(
-                MAX(ingestTime),
+                STRING(
+                  MAX(ingestTime)
+                ),
                 NULL
               ) as latestSuccessfulUpload
             FROM

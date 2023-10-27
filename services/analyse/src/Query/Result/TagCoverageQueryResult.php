@@ -2,6 +2,7 @@
 
 namespace App\Query\Result;
 
+use App\Enum\QueryResult;
 use Packages\Models\Model\Tag;
 
 class TagCoverageQueryResult extends CoverageQueryResult
@@ -26,5 +27,17 @@ class TagCoverageQueryResult extends CoverageQueryResult
     public function getTag(): Tag
     {
         return $this->tag;
+    }
+
+    /**
+     * Since this implements the coverage query result base class, the type needs to
+     * be overridden so that the serializer knows the correct discriminator value to use
+     * when serializing/de-serializing this object.
+     *
+     * @see QueryResultInterface
+     */
+    public function getType(): string
+    {
+        return QueryResult::TAG_COVERAGE->value;
     }
 }
