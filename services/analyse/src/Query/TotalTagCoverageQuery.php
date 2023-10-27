@@ -40,7 +40,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         return <<<SQL
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
-            STRUCT(tag as name, commit as commit),
+            STRUCT(tag as name, commit as commit) as tag,
             COUNT(*) as lines,
             COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
             COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
