@@ -264,8 +264,10 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                         $publishableCoverageData->getDiffCoveragePercentage(),
                         count($publishableCoverageData->getSuccessfulUploads()),
                         0,
-                        $this->serializer->normalize($publishableCoverageData->getTagCoverage()->getTags()),
-                        $this->serializer->normalize($publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()),
+                        (array)$this->serializer->normalize($publishableCoverageData->getTagCoverage()->getTags()),
+                        (array)$this->serializer->normalize(
+                            $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
+                        ),
                         $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
                     ),
                     new PublishableCheckRunMessage(
