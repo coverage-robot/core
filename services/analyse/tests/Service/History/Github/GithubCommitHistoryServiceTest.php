@@ -20,7 +20,7 @@ class GithubCommitHistoryServiceTest extends TestCase
     }
 
     #[DataProvider('commitDataProvider')]
-    public function testGetPrecedingCommits(array $response, array $expectedCommits): void
+    public function testGetPrecedingCommits(array $responseEdges, array $expectedCommits): void
     {
         $githubClient = $this->createMock(GithubAppInstallationClient::class);
         $gqlClient = $this->createMock(GraphQL::class);
@@ -29,13 +29,29 @@ class GithubCommitHistoryServiceTest extends TestCase
         $mockUpload->method('getCommit')
             ->willReturn('uploaded-commit');
 
-        $githubClient->expects($this->once())
-            ->method('graphql')
+        $githubClient->method('graphql')
             ->willReturn($gqlClient);
 
-        $gqlClient->expects($this->once())
+        $gqlClient->expects($this->exactly(count($responseEdges)))
             ->method('execute')
-            ->willReturn($response);
+            ->willReturnOnConsecutiveCalls(
+                ...array_map(
+                    fn(array $edges) => [
+                        'data' => [
+                            'repository' => [
+                                'ref' => [
+                                    'target' => [
+                                        'history' => [
+                                            'edges' => $edges
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    $responseEdges
+                )
+            );
 
         $service = new GithubCommitHistoryService($githubClient);
 
@@ -47,46 +63,26 @@ class GithubCommitHistoryServiceTest extends TestCase
         return [
             'No commits' => [
                 [
-                    'data' => [
-                        'repository' => [
-                            'ref' => [
-                                'target' => [
-                                    'history' => [
-                                        'edges' => []
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
+                    []
                 ],
                 []
             ],
-            'Multiple commits' => [
+            'Single page of commits' => [
                 [
-                    'data' => [
-                        'repository' => [
-                            'ref' => [
-                                'target' => [
-                                    'history' => [
-                                        'edges' => [
-                                            [
-                                                'node' => [
-                                                    'oid' => 'uploaded-commit'
-                                                ]
-                                            ],
-                                            [
-                                                'node' => [
-                                                    'oid' => '1234567890'
-                                                ]
-                                            ],
-                                            [
-                                                'node' => [
-                                                    'oid' => '0987654321'
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
+                    [
+                        [
+                            'node' => [
+                                'oid' => 'uploaded-commit'
+                            ]
+                        ],
+                        [
+                            'node' => [
+                                'oid' => '1234567890'
+                            ]
+                        ],
+                        [
+                            'node' => [
+                                'oid' => '0987654321'
                             ]
                         ]
                     ]
@@ -94,6 +90,111 @@ class GithubCommitHistoryServiceTest extends TestCase
                 [
                     '1234567890',
                     '0987654321'
+                ]
+            ],
+            'Multiple pages of commits' => [
+                [
+                    [
+                        [
+                            'node' => [
+                                'oid' => 'uploaded-commit'
+                            ]
+                        ],
+                        ...array_fill(
+                            0,
+                            98,
+                            [
+                                'node' => [
+                                    'oid' => '1234567890'
+                                ]
+                            ]
+                        ),
+                        [
+                            'node' => [
+                                'oid' => '999'
+                            ]
+                        ]
+                    ],
+                    [
+                        [
+                            'node' => [
+                                'oid' => '999'
+                            ]
+                        ],
+                        ...array_fill(
+                            0,
+                            99,
+                            [
+                                'node' => [
+                                    'oid' => '0987654321'
+                                ]
+                            ]
+                        ),
+                    ],
+                    [
+                        [
+                            'node' => [
+                                'oid' => '45678'
+                            ]
+                        ],
+                        [
+                            'node' => [
+                                'oid' => '45678'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    ...array_fill(0, 98, '1234567890'),
+                    '999',
+                    ...array_fill(0, 99, '0987654321'),
+                    ...array_fill(0, 2, '45678')
+                ]
+            ],
+            'Partial page of commits' => [
+                [
+                    [
+                        [
+                            'node' => [
+                                'oid' => 'uploaded-commit'
+                            ]
+                        ],
+                        ...array_fill(
+                            0,
+                            98,
+                            [
+                                'node' => [
+                                    'oid' => '1234567890'
+                                ]
+                            ]
+                        ),
+                        [
+                            'node' => [
+                                'oid' => '999'
+                            ]
+                        ]
+                    ],
+                    [
+                        [
+                            'node' => [
+                                'oid' => '999'
+                            ]
+                        ],
+                        ...array_fill(
+                            0,
+                            30,
+                            [
+                                'node' => [
+                                    'oid' => '0987654321'
+                                ]
+                            ]
+                        ),
+                    ]
+                ],
+                [
+                    ...array_fill(0, 98, '1234567890'),
+                    '999',
+                    ...array_fill(0, 30, '0987654321')
                 ]
             ]
         ];
