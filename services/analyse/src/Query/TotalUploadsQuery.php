@@ -8,16 +8,28 @@ use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
-use DateTime;
-use DateTimeInterface;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalUploadsQuery implements QueryInterface
 {
     use UploadTableAwareTrait;
     use ScopeAwareTrait;
+
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly EnvironmentService $environmentService
+    ) {
+    }
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -26,9 +38,16 @@ class TotalUploadsQuery implements QueryInterface
 
         return <<<SQL
         SELECT
-            "{$parameterBag?->get(QueryParameter::COMMIT)}" as commit,
             COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
-            COALESCE(ARRAY_AGG(tag), []) as successfulTags,
+            COALESCE(
+                ARRAY_AGG(
+                    STRUCT(
+                        tag as name,
+                        "{$parameterBag?->get(QueryParameter::COMMIT)}" as commit
+                    )
+                ),
+                []
+            ) as successfulTags,
             COALESCE(MAX(ingestTime), NULL) as latestSuccessfulUpload
         FROM
             `$table`
@@ -46,6 +65,7 @@ class TotalUploadsQuery implements QueryInterface
     /**
      * @throws GoogleException
      * @throws QueryException
+     * @throws ExceptionInterface
      */
     public function parseResults(QueryResults $results): TotalUploadsQueryResult
     {
@@ -57,30 +77,10 @@ class TotalUploadsQuery implements QueryInterface
         $row = $results->rows()
             ->current();
 
-        if (!is_string($row['commit'])) {
-            throw QueryException::typeMismatch(gettype($row['commit']), 'string');
-        }
-
-        if (!is_array($row['successfulUploads'])) {
-            throw QueryException::typeMismatch(gettype($row['successfulUploads']), 'array');
-        }
-
-        if (!is_array($row['successfulTags'])) {
-            throw QueryException::typeMismatch(gettype($row['successfulTags']), 'array');
-        }
-
-        if (
-            !is_null($row['latestSuccessfulUpload']) &&
-            !$row['latestSuccessfulUpload'] instanceof DateTime
-        ) {
-            throw QueryException::typeMismatch(gettype($row['latestSuccessfulUpload']), 'DateTime or null');
-        }
-
-        return TotalUploadsQueryResult::from(
-            $row['commit'],
-            $row['successfulUploads'],
-            $row['successfulTags'],
-            $row['latestSuccessfulUpload']?->format(DateTimeInterface::ATOM)
+        return $this->serializer->denormalize(
+            $row,
+            TotalUploadsQueryResult::class,
+            'array'
         );
     }
 

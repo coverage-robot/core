@@ -2,7 +2,6 @@
 
 namespace App\Query\Result;
 
-use App\Exception\QueryException;
 use Packages\Models\Model\Tag;
 
 class CommitQueryResult implements QueryResultInterface
@@ -15,27 +14,6 @@ class CommitQueryResult implements QueryResultInterface
         private readonly string $commit,
         private readonly array $tags
     ) {
-    }
-
-    /**
-     * @throws QueryException
-     */
-    public static function from(array $result): self
-    {
-        if (
-            is_string($result['commit'] ?? null) &&
-            is_array($result['tags'] ?? null)
-        ) {
-            return new self(
-                (string)$result['commit'],
-                array_map(
-                    fn(string $name) => new Tag($name, (string)$result['commit']),
-                    (array)$result['tags']
-                )
-            );
-        }
-
-        throw QueryException::invalidQueryResult();
     }
 
     public function getCommit(): string

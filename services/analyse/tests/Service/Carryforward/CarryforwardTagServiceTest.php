@@ -3,6 +3,7 @@
 namespace App\Tests\Service\Carryforward;
 
 use App\Query\Result\CommitCollectionQueryResult;
+use App\Query\Result\CommitQueryResult;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
@@ -52,24 +53,35 @@ class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturn(
-                CommitCollectionQueryResult::from([
+                new CommitCollectionQueryResult(
                     [
-                        'commit' => 'mock-commit-2',
-                        'tags' => ['tag-1', 'tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-4',
-                        'tags' => ['tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-5',
-                        'tags' => ['tag-4']
-                    ],
-                    [
-                        'commit' => 'mock-commit-7',
-                        'tags' => ['tag-3']
+                        new CommitQueryResult(
+                            'mock-commit-2',
+                            [
+                                new Tag('tag-1', 'mock-commit-2'),
+                                new Tag('tag-2', 'mock-commit-2')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-4',
+                            [
+                                new Tag('tag-2', 'mock-commit-4')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-5',
+                            [
+                                new Tag('tag-4', 'mock-commit-5')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-7',
+                            [
+                                new Tag('tag-3', 'mock-commit-7')
+                            ]
+                        )
                     ]
-                ])
+                )
             );
 
         $tags = $carryforwardTagService->getTagsToCarryforward(
@@ -168,24 +180,35 @@ class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturn(
-                CommitCollectionQueryResult::from([
+                new CommitCollectionQueryResult(
                     [
-                        'commit' => 'mock-commit-2',
-                        'tags' => ['tag-1', 'tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-4',
-                        'tags' => ['tag-2']
-                    ],
-                    [
-                        'commit' => 'mock-commit-5',
-                        'tags' => ['tag-4']
-                    ],
-                    [
-                        'commit' => 'mock-commit-7',
-                        'tags' => ['tag-3']
+                        new CommitQueryResult(
+                            'mock-commit-2',
+                            [
+                                new Tag('tag-1', 'mock-commit-2'),
+                                new Tag('tag-2', 'mock-commit-2')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-4',
+                            [
+                                new Tag('tag-2', 'mock-commit-4')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-5',
+                            [
+                                new Tag('tag-4', 'mock-commit-5')
+                            ]
+                        ),
+                        new CommitQueryResult(
+                            'mock-commit-7',
+                            [
+                                new Tag('tag-3', 'mock-commit-7')
+                            ]
+                        )
                     ]
-                ])
+                )
             );
 
         // This shouldn't really happen (no current tags), as the upload we're analysing currently

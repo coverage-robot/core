@@ -16,12 +16,14 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
 {
     public function getQueryClass(): QueryInterface
     {
         return new CommitSuccessfulTagsQuery(
+            $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::PRODUCTION,
@@ -41,7 +43,9 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
             <<<SQL
             SELECT
               commit,
-              ARRAY_AGG(tag) as tags,
+              ARRAY_AGG(
+                STRUCT(tag as name, commit as commit)
+              ) as tags,
             FROM
               `mock-table`
             WHERE
@@ -55,7 +59,9 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
             <<<SQL
             SELECT
               commit,
-              ARRAY_AGG(tag) as tags,
+              ARRAY_AGG(
+                STRUCT(tag as name, commit as commit)
+              ) as tags,
             FROM
               `mock-table`
             WHERE
@@ -132,7 +138,12 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'commit' => 'mock-commit',
-                        'tags' => ['mock-tag']
+                        'tags' => [
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit'
+                            ]
+                        ]
                     ]
                 ],
             ],
@@ -140,11 +151,25 @@ class CommitSuccessfulTagsQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'commit' => 'mock-commit',
-                        'tags' => ['mock-tag']
+                        'tags' => [
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit'
+                            ]
+                        ]
                     ],
                     [
                         'commit' => 'mock-commit-2',
-                        'tags' => ['mock-tag', 'mock-tag-2']
+                        'tags' => [
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit-2'
+                            ],
+                            [
+                                'name' => 'mock-tag-2',
+                                'commit' => 'mock-commit-2'
+                            ]
+                        ]
                     ]
                 ]
             ]

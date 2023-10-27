@@ -8,6 +8,7 @@ use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -21,11 +22,12 @@ use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class QueryServiceTest extends TestCase
+class QueryServiceTest extends KernelTestCase
 {
     #[DataProvider('queryDataProvider')]
     public function testRunQuery(string $query, QueryResultInterface $queryResult): void
@@ -39,6 +41,7 @@ class QueryServiceTest extends TestCase
             [
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalCoverageQuery::class,
                     '',
                     TotalCoverageQuery::class === $query ? $queryResult :
@@ -46,6 +49,7 @@ class QueryServiceTest extends TestCase
                 ),
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalUploadsQuery::class,
                     '',
                     TotalUploadsQuery::class === $query ? $queryResult :
@@ -53,6 +57,7 @@ class QueryServiceTest extends TestCase
                 ),
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalTagCoverageQuery::class,
                     '',
                     TotalTagCoverageQuery::class === $query ? $queryResult :
@@ -60,6 +65,7 @@ class QueryServiceTest extends TestCase
                 ),
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     LineCoverageQuery::class,
                     '',
                     LineCoverageQuery::class === $query ? $queryResult :
@@ -103,18 +109,21 @@ class QueryServiceTest extends TestCase
             [
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalCoverageQuery::class,
                     null,
                     $this->createMock(CoverageQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalUploadsQuery::class,
                     null,
                     $this->createMock(TotalUploadsQueryResult::class)
                 ),
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     LineCoverageQuery::class,
                     null,
                     $this->createMock(LineCoverageCollectionQueryResult::class)
@@ -149,6 +158,7 @@ class QueryServiceTest extends TestCase
             [
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalCoverageQuery::class,
                     '',
                     $this->createMock(CoverageQueryResult::class)
@@ -190,6 +200,7 @@ class QueryServiceTest extends TestCase
             [
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalCoverageQuery::class,
                     '',
                     $this->createMock(CoverageQueryResult::class)
@@ -225,32 +236,41 @@ class QueryServiceTest extends TestCase
         return [
             'Total coverage query' => [
                 TotalCoverageQuery::class,
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 0
-                ])
+                new CoverageQueryResult(
+                    0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             ],
             'Total commit uploads query' => [
                 TotalUploadsQuery::class,
-                TotalUploadsQueryResult::from('mock-commit', ['1', '2'], ['tag-1'])
+                new TotalUploadsQueryResult(
+                    [1, 2],
+                    [
+                        new Tag('tag-1', 'mock-commit'),
+                        new Tag('tag-2', 'mock-commit')
+                    ],
+                    null
+                )
             ],
             'Diff coverage query' => [
                 LineCoverageQuery::class,
-                LineCoverageCollectionQueryResult::from([
+                new LineCoverageCollectionQueryResult(
                     [
-                        'fileName' => 'test-file-1',
-                        'lineNumber' => 1,
-                        'state' => LineState::UNCOVERED->value
-                    ],
-                    [
-                        'fileName' => 'test-file-2',
-                        'lineNumber' => 2,
-                        'state' => LineState::COVERED->value
-                    ],
-                ])
+                        new LineCoverageQueryResult(
+                            'test-file-1',
+                            1,
+                            LineState::UNCOVERED
+                        ),
+                        new LineCoverageQueryResult(
+                            'test-file-2',
+                            2,
+                            LineState::COVERED
+                        ),
+                    ]
+                )
             ],
         ];
     }

@@ -5,12 +5,18 @@ namespace App\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class FileCoverageQuery extends AbstractLineCoverageQuery
 {
@@ -20,6 +26,16 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
 
     private const LINES_TABLE_ALIAS = 'lines';
     private const UPLOAD_TABLE_ALIAS = 'upload';
+
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly EnvironmentService $environmentService
+    ) {
+        parent::__construct($environmentService);
+    }
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -91,6 +107,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     /**
      * @throws GoogleException
      * @throws QueryException
+     * @throws ExceptionInterface
      */
     public function parseResults(QueryResults $results): FileCoverageCollectionQueryResult
     {
@@ -101,6 +118,10 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         /** @var array $files */
         $files = $results->rows();
 
-        return FileCoverageCollectionQueryResult::from($files);
+        return $this->serializer->denormalize(
+            ['files' => $files],
+            FileCoverageCollectionQueryResult::class,
+            'array'
+        );
     }
 }

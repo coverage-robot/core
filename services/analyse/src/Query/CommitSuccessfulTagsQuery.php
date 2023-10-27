@@ -8,14 +8,28 @@ use App\Model\QueryParameterBag;
 use App\Query\Result\CommitCollectionQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CommitSuccessfulTagsQuery implements QueryInterface
 {
     use ScopeAwareTrait;
     use UploadTableAwareTrait;
+
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly EnvironmentService $environmentService
+    ) {
+    }
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -26,7 +40,12 @@ class CommitSuccessfulTagsQuery implements QueryInterface
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             commit,
-            ARRAY_AGG(tag) as tags,
+            ARRAY_AGG(
+                STRUCT(
+                    tag as name,
+                    commit as commit
+                )
+            ) as tags,
         FROM
             `{$table}`
         WHERE
@@ -47,6 +66,7 @@ class CommitSuccessfulTagsQuery implements QueryInterface
      * @return CommitCollectionQueryResult
      * @throws GoogleException
      * @throws QueryException
+     * @throws ExceptionInterface
      */
     public function parseResults(QueryResults $results): CommitCollectionQueryResult
     {
@@ -57,7 +77,11 @@ class CommitSuccessfulTagsQuery implements QueryInterface
         /** @var array $commits */
         $commits = $results->rows();
 
-        return CommitCollectionQueryResult::from($commits);
+        return $this->serializer->denormalize(
+            ['commits' => $commits],
+            CommitCollectionQueryResult::class,
+            'array'
+        );
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void

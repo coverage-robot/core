@@ -17,6 +17,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class LineCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -380,6 +381,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
     public function getQueryClass(): QueryInterface
     {
         return new LineCoverageQuery(
+            $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::PRODUCTION,

@@ -8,7 +8,7 @@ use App\Service\EnvironmentService;
 trait UploadTableAwareTrait
 {
     public function __construct(
-        private EnvironmentService $environmentService
+        private readonly EnvironmentService $environmentService
     ) {
     }
 

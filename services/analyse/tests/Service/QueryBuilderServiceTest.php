@@ -59,6 +59,7 @@ class QueryBuilderServiceTest extends KernelTestCase
             $queryBuilder->build(
                 MockQueryFactory::createMock(
                     $this,
+                    $this->getContainer(),
                     TotalCoverageQuery::class,
                     'SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"',
                     $this->createMock(CoverageQueryResult::class)
@@ -85,6 +86,7 @@ class QueryBuilderServiceTest extends KernelTestCase
         $queryBuilder->build(
             MockQueryFactory::createMock(
                 $this,
+                $this->getContainer(),
                 TotalCoverageQuery::class,
                 '',
                 $this->createMock(CoverageQueryResult::class)

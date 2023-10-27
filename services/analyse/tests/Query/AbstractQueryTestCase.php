@@ -11,10 +11,10 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 
-abstract class AbstractQueryTestCase extends TestCase
+abstract class AbstractQueryTestCase extends KernelTestCase
 {
     abstract public function getQueryClass(): QueryInterface;
 

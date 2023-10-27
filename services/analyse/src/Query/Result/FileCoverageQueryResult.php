@@ -2,8 +2,6 @@
 
 namespace App\Query\Result;
 
-use App\Exception\QueryException;
-
 class FileCoverageQueryResult extends CoverageQueryResult
 {
     public function __construct(
@@ -21,24 +19,6 @@ class FileCoverageQueryResult extends CoverageQueryResult
             $partial,
             $uncovered
         );
-    }
-
-    public static function from(array $result): self
-    {
-        if (is_string($result['fileName'] ?? null)) {
-            $coverage = parent::from($result);
-
-            return new self(
-                (string)$result['fileName'],
-                $coverage->getCoveragePercentage(),
-                $coverage->getLines(),
-                $coverage->getCovered(),
-                $coverage->getPartial(),
-                $coverage->getUncovered()
-            );
-        }
-
-        throw QueryException::invalidQueryResult();
     }
 
     public function getFileName(): string

@@ -8,18 +8,27 @@ use App\Query\Result\QueryResultInterface;
 use Packages\Models\Enum\Environment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MockQueryFactory
 {
     /**
      * @param TestCase $testCase
+     * @param ContainerInterface $container
      * @param string $queryClass
      * @param string|null $queryString
      * @param mixed|null $parsedResults
-     * @return MockObject
+     * @return QueryInterface|MockObject
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public static function createMock(
         TestCase $testCase,
+        ContainerInterface $container,
         string $queryClass,
         ?string $queryString,
         QueryResultInterface $parsedResults
@@ -27,6 +36,7 @@ class MockQueryFactory
         $mockQuery = $testCase->getMockBuilder($queryClass)
             ->setConstructorArgs(
                 [
+                    $container->get(SerializerInterface::class),
                     MockEnvironmentServiceFactory::getMock(
                         $testCase,
                         Environment::TESTING,

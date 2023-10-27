@@ -5,16 +5,21 @@ namespace App\Tests\Model;
 use App\Model\CachingPublishableCoverageData;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,11 +49,12 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetUploads(): void
     {
-        $result = TotalUploadsQueryResult::from(
-            'mock-commit',
+        $result = new TotalUploadsQueryResult(
             ['a'],
-            ['c'],
-            '2023-09-09T01:22:00+0000'
+            [
+                new Tag('c', 'mock-commit')
+            ],
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
         );
 
         $this->mockQueryService->expects($this->once())
@@ -71,11 +77,12 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetSuccessfulUploads(): void
     {
-        $result = TotalUploadsQueryResult::from(
-            'mock-commit',
+        $result = new TotalUploadsQueryResult(
             ['a'],
-            ['c'],
-            '2023-09-09T01:22:00+0000'
+            [
+                new Tag('c', 'mock-commit')
+            ],
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
         );
 
         $this->mockQueryService->expects($this->once(2))
@@ -98,11 +105,12 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetLatestSuccessfulUpload(): void
     {
-        $result = TotalUploadsQueryResult::from(
-            'mock-commit',
+        $result = new TotalUploadsQueryResult(
             ['a'],
-            ['c'],
-            '2023-09-09T01:22:00+0000'
+            [
+                new Tag('c', 'mock-commit')
+            ],
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
         );
 
         $this->mockQueryService->expects($this->once(2))
@@ -110,7 +118,7 @@ class CachingPublishableCoverageDataTest extends TestCase
             ->willReturnOnConsecutiveCalls($result);
 
         $this->assertEquals(
-            DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
             $this->cachedPublishableCoverageData->getLatestSuccessfulUpload()
         );
 
@@ -118,7 +126,7 @@ class CachingPublishableCoverageDataTest extends TestCase
             ->method('runQuery');
 
         $this->assertEquals(
-            DateTimeImmutable::createFromFormat(\DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
+            DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000'),
             $this->cachedPublishableCoverageData->getLatestSuccessfulUpload()
         );
     }
@@ -128,14 +136,20 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 0.0
-                ])
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
+                ),
+                new CoverageQueryResult(
+                    0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             );
 
         $this->assertEquals(3, $this->cachedPublishableCoverageData->getAtLeastPartiallyCoveredLines());
@@ -151,14 +165,20 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 97.1
-                ])
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
+                ),
+                new CoverageQueryResult(
+                    97.1,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             );
 
         $this->assertEquals(97.1, $this->cachedPublishableCoverageData->getCoveragePercentage());
@@ -174,14 +194,20 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 97.0
-                ])
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
+                ),
+                new CoverageQueryResult(
+                    97.0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             );
 
         $this->assertEquals(3, $this->cachedPublishableCoverageData->getUncoveredLines());
@@ -197,14 +223,20 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 97.0
-                ])
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
+                ),
+                new CoverageQueryResult(
+                    97.0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             );
 
         $this->assertEquals(6, $this->cachedPublishableCoverageData->getTotalLines());
@@ -217,31 +249,38 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetTagCoverage(): void
     {
-        $files = TagCoverageCollectionQueryResult::from([
+        $tags = new TagCoverageCollectionQueryResult(
             [
-                'tag' => 'custom-tag',
-                'commit' => 'commit-sha',
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.0
+                new TagCoverageQueryResult(
+                    new Tag('custom-tag', 'commit-sha'),
+                    97.0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             ]
-        ]);
+        );
 
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                $files
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    null
+                ),
+                $tags
             );
 
-        $this->assertEquals($files, $this->cachedPublishableCoverageData->getTagCoverage());
+        $this->assertEquals($tags, $this->cachedPublishableCoverageData->getTagCoverage());
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertEquals($files, $this->cachedPublishableCoverageData->getTagCoverage());
+        $this->assertEquals($tags, $this->cachedPublishableCoverageData->getTagCoverage());
     }
 
     public function testGetDiffCoveragePercentage(): void
@@ -249,14 +288,20 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
-                CoverageQueryResult::from([
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3,
-                    'coveragePercentage' => 97.0
-                ])
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    null
+                ),
+                new CoverageQueryResult(
+                    97.0,
+                    6,
+                    1,
+                    2,
+                    3
+                )
             );
 
         $this->assertEquals(97.0, $this->cachedPublishableCoverageData->getDiffCoveragePercentage());
@@ -269,21 +314,29 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetLeastCoveredDiffFiles(): void
     {
-        $files = FileCoverageCollectionQueryResult::from([
+        $files = new FileCoverageCollectionQueryResult(
             [
-                'fileName' => 'foo.php',
-                'lines' => 6,
-                'covered' => 1,
-                'partial' => 2,
-                'uncovered' => 3,
-                'coveragePercentage' => 97.0
+                new FileCoverageQueryResult(
+                    'foo.php',
+                    97.0,
+                    6,
+                    1,
+                    2,
+                    3,
+                )
             ]
-        ]);
+        );
 
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    null
+                ),
                 $files
             );
 
@@ -297,18 +350,26 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetDiffLineCoverage(): void
     {
-        $lines = LineCoverageCollectionQueryResult::from([
+        $lines = new LineCoverageCollectionQueryResult(
             [
-                'fileName' => 'foo.php',
-                'lineNumber' => 6,
-                'state' => LineState::COVERED->value,
+                new LineCoverageQueryResult(
+                    'foo.php',
+                    6,
+                    LineState::COVERED
+                )
             ]
-        ]);
+        );
 
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                TotalUploadsQueryResult::from('mock-commit', ['mock-upload'], ['tag-1']),
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    null
+                ),
                 $lines
             );
 

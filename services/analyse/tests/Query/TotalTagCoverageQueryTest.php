@@ -16,6 +16,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -130,8 +131,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
-              tag,
-              commit,
+              STRUCT(tag as name, commit as commit),
               COUNT(*) as lines,
               COALESCE(
                 SUM(
@@ -298,8 +298,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
-              tag,
-              commit,
+              STRUCT(tag as name, commit as commit),
               COUNT(*) as lines,
               COALESCE(
                 SUM(
@@ -341,6 +340,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     public function getQueryClass(): QueryInterface
     {
         return new TotalTagCoverageQuery(
+            $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::PRODUCTION,
@@ -414,8 +414,10 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             [
                 [
                     [
-                        'tag' => '1',
-                        'commit' => 'mock-commit',
+                        'tag' => [
+                            'name' => '1',
+                            'commit' => 'mock-commit',
+                        ],
                         'lines' => 1,
                         'covered' => 1,
                         'partial' => 0,
@@ -427,8 +429,10 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             [
                 [
                     [
-                        'tag' => '2',
-                        'commit' => 'mock-commit',
+                        'tag' => [
+                            'name' => '2',
+                            'commit' => 'mock-commit',
+                        ],
                         'lines' => 1,
                         'covered' => 0,
                         'partial' => 1,
@@ -436,8 +440,10 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'coveragePercentage' => 0.0
                     ],
                     [
-                        'tag' => '3',
-                        'commit' => 'mock-commit-2',
+                        'tag' => [
+                            'name' => '3',
+                            'commit' => 'mock-commit-2',
+                        ],
                         'lines' => 1,
                         'covered' => 0,
                         'partial' => 0,
@@ -445,8 +451,10 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'coveragePercentage' => 0.0
                     ],
                     [
-                        'tag' => '4',
-                        'commit' => 'mock-commit-2',
+                        'tag' => [
+                            'name' => '4',
+                            'commit' => 'mock-commit-2',
+                        ],
                         'lines' => 1,
                         'covered' => 0,
                         'partial' => 0,

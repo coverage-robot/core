@@ -12,16 +12,15 @@ use App\Query\TotalUploadsQuery;
 use App\Service\CachingQueryService;
 use App\Service\QueryBuilderService;
 use App\Service\QueryService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use Monolog\Test\TestCase;
-use Packages\Models\Enum\Environment;
+use App\Tests\Mock\Factory\MockQueryFactory;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CachingQueryServiceTest extends TestCase
+class CachingQueryServiceTest extends KernelTestCase
 {
     public function testRunUncacheableQuery(): void
     {
-        $queryResult = TotalUploadsQueryResult::from('', [], []);
+        $queryResult = new TotalUploadsQueryResult([], [], null);
 
         $parameters = new QueryParameterBag();
         $parameters->set(QueryParameter::COMMIT, 'mock-commit');
@@ -31,11 +30,12 @@ class CachingQueryServiceTest extends TestCase
             ->method('getQueryClass')
             ->with(TotalUploadsQuery::class)
             ->willReturn(
-                new TotalUploadsQuery(
-                    MockEnvironmentServiceFactory::getMock(
-                        $this,
-                        Environment::TESTING
-                    )
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalUploadsQuery::class,
+                    '',
+                    $queryResult
                 )
             );
 
@@ -85,11 +85,12 @@ class CachingQueryServiceTest extends TestCase
             ->method('getQueryClass')
             ->with(TotalCoverageQuery::class)
             ->willReturn(
-                new TotalCoverageQuery(
-                    MockEnvironmentServiceFactory::getMock(
-                        $this,
-                        Environment::TESTING
-                    )
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalCoverageQuery::class,
+                    '',
+                    $queryResult
                 )
             );
 
@@ -135,11 +136,12 @@ class CachingQueryServiceTest extends TestCase
             ->method('getQueryClass')
             ->with(TotalCoverageQuery::class)
             ->willReturn(
-                new TotalCoverageQuery(
-                    MockEnvironmentServiceFactory::getMock(
-                        $this,
-                        Environment::TESTING
-                    )
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalCoverageQuery::class,
+                    '',
+                    $this->createMock(CoverageQueryResult::class)
                 )
             );
         $mockQueryService->expects($this->never())

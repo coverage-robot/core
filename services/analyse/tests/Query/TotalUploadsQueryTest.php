@@ -9,7 +9,6 @@ use App\Query\QueryInterface;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalUploadsQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use DateTime;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Environment;
@@ -17,6 +16,7 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalUploadsQueryTest extends AbstractQueryTestCase
 {
@@ -25,13 +25,16 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             <<<SQL
             SELECT
-              "mock-commit" as commit,
               COALESCE(
                 ARRAY_AGG(uploadId),
                 []
               ) as successfulUploads,
               COALESCE(
-                ARRAY_AGG(tag),
+                ARRAY_AGG(
+                  STRUCT(
+                    tag as name, "mock-commit" as commit
+                  )
+                ),
                 []
               ) as successfulTags,
               COALESCE(
@@ -52,6 +55,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
     public function getQueryClass(): QueryInterface
     {
         return new TotalUploadsQuery(
+            $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::PRODUCTION,
@@ -101,38 +105,54 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
         return [
             [
                 [
-                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1'],
-                    'successfulTags' => ['tag-1'],
-                    'pendingUploads' => [],
-                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
+                    'successfulTags' => [
+                        [
+                            'name' => 'tag-1',
+                            'commit' => 'mock-commit'
+                        ]
+                    ],
+                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
                 ]
             ],
             [
                 [
-                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2'],
-                    'successfulTags' => ['tag-1', 'tag-2'],
-                    'pendingUploads' => ['3'],
-                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
+                    'successfulTags' => [
+                        [
+                            'name' => 'tag-1',
+                            'commit' => 'mock-commit'
+                        ],
+                        [
+                            'name' => 'tag-2',
+                            'commit' => 'mock-commit'
+                        ]
+                    ],
+                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
                 ]
             ],
             [
                 [
-                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                    'successfulTags' => ['tag-1'],
-                    'pendingUploads' => [],
-                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
+                    'successfulTags' => [
+                        [
+                            'name' => 'tag-1',
+                            'commit' => 'mock-commit'
+                        ]
+                    ],
+                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
                 ],
             ],
             [
                 [
-                    'commit' => 'mock-commit',
                     'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
-                    'successfulTags' => ['tag-1'],
-                    'pendingUploads' => ['9', '10'],
-                    'latestSuccessfulUpload' => new DateTime('2023-09-09T12:00:00+0000')
+                    'successfulTags' => [
+                        [
+                            'name' => 'tag-1',
+                            'commit' => 'mock-commit'
+                        ]
+                    ],
+                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
                 ]
             ],
             [
@@ -140,7 +160,6 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'commit' => 'mock-commit',
                     'successfulUploads' => [],
                     'successfulTags' => [],
-                    'pendingUploads' => ['9', '10'],
                     'latestSuccessfulUpload' => null
                 ]
             ],

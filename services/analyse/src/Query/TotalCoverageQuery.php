@@ -5,11 +5,17 @@ namespace App\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalCoverageQuery extends AbstractLineCoverageQuery
 {
@@ -17,6 +23,16 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
     use CarryforwardAwareTrait;
 
     private const UPLOAD_TABLE_ALIAS = 'upload';
+
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly EnvironmentService $environmentService
+    ) {
+        parent::__construct($environmentService);
+    }
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -80,6 +96,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
     /**
      * @throws GoogleException
      * @throws QueryException
+     * @throws ExceptionInterface
      */
     public function parseResults(QueryResults $results): CoverageQueryResult
     {
@@ -91,6 +108,10 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         $coverageValues = $results->rows()
             ->current();
 
-        return CoverageQueryResult::from($coverageValues);
+        return $this->serializer->denormalize(
+            $coverageValues,
+            CoverageQueryResult::class,
+            'array'
+        );
     }
 }
