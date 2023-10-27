@@ -74,11 +74,10 @@ class CommitSuccessfulTagsQuery implements QueryInterface
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        /** @var array $commits */
         $commits = $results->rows();
 
         return $this->serializer->denormalize(
-            ['commits' => $commits],
+            ['commits' => iterator_to_array($commits)],
             CommitCollectionQueryResult::class,
             'array'
         );

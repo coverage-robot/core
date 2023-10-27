@@ -115,11 +115,10 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        /** @var array $files */
         $files = $results->rows();
 
         return $this->serializer->denormalize(
-            ['files' => $files],
+            ['files' => iterator_to_array($files)],
             FileCoverageCollectionQueryResult::class,
             'array'
         );

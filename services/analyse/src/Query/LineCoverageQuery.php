@@ -76,11 +76,10 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        /** @var array $lines */
         $lines = $results->rows();
 
         return $this->serializer->denormalize(
-            ['lines' => $lines],
+            ['lines' => iterator_to_array($lines)],
             LineCoverageCollectionQueryResult::class,
             'array'
         );
