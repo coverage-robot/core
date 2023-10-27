@@ -2,8 +2,6 @@
 
 namespace App\Query\Result;
 
-use App\Enum\QueryResult;
-
 class FileCoverageQueryResult extends CoverageQueryResult
 {
     public function __construct(
@@ -26,17 +24,5 @@ class FileCoverageQueryResult extends CoverageQueryResult
     public function getFileName(): string
     {
         return $this->fileName;
-    }
-
-    /**
-     * Since this implements the coverage query result base class, the type needs to
-     * be overridden so that the serializer knows the correct discriminator value to use
-     * when serializing/de-serializing this object.
-     *
-     * @see QueryResultInterface
-     */
-    public function getType(): string
-    {
-        return QueryResult::FILE_COVERAGE->value;
     }
 }
