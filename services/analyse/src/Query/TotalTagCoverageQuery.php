@@ -6,15 +6,30 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     use CarryforwardAwareTrait;
 
     private const UPLOAD_TABLE_ALIAS = 'upload';
+
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly EnvironmentService $environmentService
+    ) {
+        parent::__construct($environmentService);
+    }
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
@@ -25,8 +40,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         return <<<SQL
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
-            tag,
-            commit,
+            STRUCT(tag as name, commit as commit),
             COUNT(*) as lines,
             COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
             COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
@@ -130,6 +144,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
     /**
      * @throws GoogleException
      * @throws QueryException
+     * @throws ExceptionInterface
      */
     public function parseResults(QueryResults $results): TagCoverageCollectionQueryResult
     {
@@ -137,8 +152,12 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $rows = $results->rows();
+        $tags = $results->rows();
 
-        return TagCoverageCollectionQueryResult::from($rows);
+        return $this->serializer->denormalize(
+            ["tags" => $tags],
+            TagCoverageCollectionQueryResult::class,
+            'array'
+        );
     }
 }

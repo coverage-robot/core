@@ -26,7 +26,7 @@ class DynamoDbClientTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
 
-        $queryResult = TotalUploadsQueryResult::from('', [], []);
+        $queryResult = new TotalUploadsQueryResult([], [], null);
 
         $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
 
@@ -102,7 +102,7 @@ class DynamoDbClientTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
 
-        $queryResult = TotalUploadsQueryResult::from('', [], []);
+        $queryResult = new TotalUploadsQueryResult([], [], null);
 
         $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
 

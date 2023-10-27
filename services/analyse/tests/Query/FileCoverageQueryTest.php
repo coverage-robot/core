@@ -16,12 +16,14 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class FileCoverageQueryTest extends AbstractQueryTestCase
 {
     public function getQueryClass(): QueryInterface
     {
         return new FileCoverageQuery(
+            $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::getMock(
                 $this,
                 Environment::PRODUCTION,
