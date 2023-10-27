@@ -131,7 +131,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
-              STRUCT(tag as name, commit as commit),
+              STRUCT(tag as name, commit as commit) as tag,
               COUNT(*) as lines,
               COALESCE(
                 SUM(
@@ -298,7 +298,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber
               )
             SELECT
-              STRUCT(tag as name, commit as commit),
+              STRUCT(tag as name, commit as commit) as tag,
               COUNT(*) as lines,
               COALESCE(
                 SUM(
