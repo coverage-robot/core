@@ -6,9 +6,7 @@ use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Enum\EnvironmentVariable;
 use App\Model\PublishableCoverageDataInterface;
-use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
-use App\Query\Result\TagCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\EnvironmentService;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -266,33 +264,8 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                         $publishableCoverageData->getDiffCoveragePercentage(),
                         count($publishableCoverageData->getSuccessfulUploads()),
                         0,
-                        array_map(
-                            function (TagCoverageQueryResult $tag) {
-                                return [
-                                    'tag' => [
-                                        'name' => $tag->getTag()->getName(),
-                                        'commit' => $tag->getTag()->getCommit(),
-                                    ],
-                                    'coveragePercentage' => $tag->getCoveragePercentage(),
-                                    'lines' => $tag->getLines(),
-                                    'covered' => $tag->getCovered(),
-                                    'partial' => $tag->getPartial(),
-                                    'uncovered' => $tag->getUncovered(),
-                                ];
-                            },
-                            $publishableCoverageData->getTagCoverage()->getTags()
-                        ),
-                        array_map(
-                            function (FileCoverageQueryResult $file) {
-                                return [
-                                    'fileName' => $file->getFileName(),
-                                    'coveragePercentage' => $file->getCoveragePercentage(),
-                                    'lines' => $file->getLines(),
-                                    'covered' => $file->getCovered(),
-                                    'partial' => $file->getPartial(),
-                                    'uncovered' => $file->getUncovered(),
-                                ];
-                            },
+                        (array)$this->serializer->normalize($publishableCoverageData->getTagCoverage()->getTags()),
+                        (array)$this->serializer->normalize(
                             $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                         ),
                         $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
