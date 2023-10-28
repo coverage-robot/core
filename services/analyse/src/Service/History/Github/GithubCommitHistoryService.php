@@ -62,10 +62,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 $event->getRepository(),
                 $event->getRef(),
                 $commitsPerPage,
-                $this->makeCursor(
-                    empty($commits) ? $event->getCommit() : end($commits),
-                    $commitsPerPage
-                )
+                empty($commits) ? $event->getCommit() : end($commits)
             );
 
             $commits = [
@@ -112,8 +109,8 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         string $owner,
         string $repository,
         string $ref,
-        int $maxCommits,
-        string $cursor
+        int $commitsPerPage,
+        string $beforeCommit
     ): array {
         /** @var Result $result */
         $result = $this->githubClient->graphql()
@@ -125,7 +122,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                       name
                       target {
                         ... on Commit {
-                          history(before: "{$cursor}", last: {$maxCommits}) {
+                          history(before: "{$this->makeCursor($beforeCommit, $commitsPerPage)}", last: {$commitsPerPage}) {
                             nodes {
                               oid
                             }
@@ -141,10 +138,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $result = $result['data']['repository']['ref']['target']['history']['nodes'] ?? [];
 
         $commits = array_map(
-            static function (array $commit) use ($cursor): ?string {
+            static function (array $commit) use ($beforeCommit): ?string {
                 if (
                     isset($commit['oid']) &&
-                    $commit['oid'] !== explode(' ', $cursor)[0]
+                    $commit['oid'] !== $beforeCommit
                 ) {
                     /**
                      * The Github API will return the before commit (the one used as the cursor in the
