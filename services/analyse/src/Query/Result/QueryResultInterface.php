@@ -18,6 +18,8 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
         QueryResult::TAG_COVERAGE->value => TagCoverageQueryResult::class,
 
         QueryResult::TOTAL_UPLOADS->value => TotalUploadsQueryResult::class,
+
+        QueryResult::TAG_AVAILABILITY_COLLECTION->value => TagAvailabilityCollectionQueryResult::class,
         QueryResult::TAG_AVAILABILITY->value => TagAvailabilityQueryResult::class,
 
         /**

@@ -55,7 +55,12 @@ enum QueryResult: string
     case TOTAL_UPLOADS = 'TOTAL_UPLOADS';
 
     /**
-     * Information about the availability of tags for various commits in a repository.
+     * A collection of tags which have been uploaded in the past, and the commits they were uploaded on.
+     */
+    case TAG_AVAILABILITY_COLLECTION = 'TAG_AVAILABILITY_COLLECTION';
+
+    /**
+     * Information about the availability of a tag on various commits in a repository.
      */
     case TAG_AVAILABILITY = 'TAG_AVAILABILITY';
 }
