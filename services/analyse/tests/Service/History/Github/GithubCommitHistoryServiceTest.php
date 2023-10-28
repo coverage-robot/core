@@ -9,12 +9,16 @@ use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class GithubCommitHistoryServiceTest extends TestCase
 {
     public function testGetProvider(): void
     {
-        $service = new GithubCommitHistoryService($this->createMock(GithubAppInstallationClient::class));
+        $service = new GithubCommitHistoryService(
+            $this->createMock(GithubAppInstallationClient::class),
+            new NullLogger()
+        );
 
         $this->assertEquals(Provider::GITHUB->value, $service->getProvider());
     }
@@ -53,7 +57,7 @@ class GithubCommitHistoryServiceTest extends TestCase
                 )
             );
 
-        $service = new GithubCommitHistoryService($githubClient);
+        $service = new GithubCommitHistoryService($githubClient, new NullLogger());
 
         $this->assertEquals($expectedCommits, $service->getPrecedingCommits($mockUpload));
     }

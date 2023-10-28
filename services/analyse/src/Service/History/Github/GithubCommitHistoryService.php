@@ -7,6 +7,7 @@ use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\EventInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-type Result = array{
@@ -37,8 +38,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
      */
     private const COMMITS_PER_PAGE = 100;
 
-    public function __construct(private readonly GithubAppInstallationClient $githubClient)
-    {
+    public function __construct(
+        private readonly GithubAppInstallationClient $githubClient,
+        private readonly LoggerInterface $githubHistoryLogger
+    ) {
     }
 
     /**
@@ -54,7 +57,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         do {
             $commitsPerPage = min(
                 self::COMMITS_PER_PAGE,
-                self::TOTAL_COMMITS - count($commits)
+                self::TOTAL_COMMITS - count($commits) + 1
             );
 
             $historicCommits = $this->getHistoricCommits(
@@ -70,11 +73,39 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 ...$historicCommits
             ];
 
+            $this->githubHistoryLogger->info(
+                sprintf(
+                    'Fetched %s preceding commits from GitHub for %s',
+                    $commitsPerPage,
+                    (string)$event
+                ),
+                [
+                    'commitsPerPage' => $commitsPerPage,
+                    'historicCommits' => $historicCommits,
+                    'totalCommits' => count($commits)
+                ]
+            );
+
             if (count($historicCommits) < $commitsPerPage - 1) {
                 // We must be on the last page, as the results returned from the API are
                 // one less than the total commits per page provided (one less, because the first
                 // result will be the before commit we provided, which will have been
                 // filtered out)
+
+                $this->githubHistoryLogger->info(
+                    sprintf(
+                        'Stopped fetching commits from GitHub for %s, as %s commits were returned when %s were requested',
+                        (string)$event,
+                        $commitsPerPage,
+                        count($historicCommits)
+                    ),
+                    [
+                        'commitsPerPage' => $commitsPerPage,
+                        'historicCommits' => $historicCommits,
+                        'totalCommits' => count($commits)
+                    ]
+                );
+
                 break;
             }
         } while (count($commits) < self::TOTAL_COMMITS);
