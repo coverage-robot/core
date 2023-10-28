@@ -15,10 +15,8 @@ use Packages\Models\Model\Event\EventInterface;
  *                  ref: array{
  *                      target: array{
  *                          history: array{
- *                              edges: array{
- *                                  node: array{
- *                                      oid: string
- *                                  }
+ *                              nodes: array{
+ *                                  oid: string
  *                              }[]
  *                          }
  *                      }
@@ -50,10 +48,13 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     {
         $this->githubClient->authenticateAsRepositoryOwner($event->getOwner());
 
+        /** @var string[] $commits */
+        $commits = [];
+
         do {
             $commitsPerPage = min(
                 self::COMMITS_PER_PAGE,
-                self::TOTAL_COMMITS - count($commits ?? [])
+                self::TOTAL_COMMITS - count($commits)
             );
 
             $historicCommits = $this->getHistoricCommits(
@@ -62,13 +63,13 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 $event->getRef(),
                 $commitsPerPage,
                 $this->makeCursor(
-                    !isset($commits) ? $event->getCommit() : end($commits),
+                    empty($commits) ? $event->getCommit() : end($commits),
                     $commitsPerPage
                 )
             );
 
             $commits = [
-                ...($commits ?? []),
+                ...$commits,
                 ...$historicCommits
             ];
 
@@ -114,6 +115,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         int $maxCommits,
         string $cursor
     ): array {
+        /** @var Result $result */
         $result = $this->githubClient->graphql()
             ->execute(
                 <<<GQL
