@@ -94,7 +94,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
 
                 $this->githubHistoryLogger->info(
                     sprintf(
-                        'Stopped fetching commits from GitHub for %s, as %s commits were returned when %s were requested',
+                        'Stopped fetching commits from GitHub for %s, as %s commits returned when %s were requested',
                         (string)$event,
                         $commitsPerPage,
                         count($historicCommits)
