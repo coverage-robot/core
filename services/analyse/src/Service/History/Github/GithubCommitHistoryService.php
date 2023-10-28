@@ -122,7 +122,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                       name
                       target {
                         ... on Commit {
-                          history(before: "{$this->makeCursor($beforeCommit, $commitsPerPage)}", last: {$commitsPerPage}) {
+                          history(
+                            before: "{$this->makeCursor($beforeCommit, $commitsPerPage)}",
+                            last: {$commitsPerPage}
+                          ) {
                             nodes {
                               oid
                             }
