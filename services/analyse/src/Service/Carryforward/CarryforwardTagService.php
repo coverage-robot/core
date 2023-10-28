@@ -49,7 +49,15 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tagsNotSeen = array_filter(
             $tagAvailability->getAvailableTagNames(),
-            static fn(string $tagName) => !in_array($tagName, $existingTags, true)
+            function (string $tagName) use ($existingTags) {
+                foreach ($existingTags as $tag) {
+                    if ($tag->getName() === $tagName) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
         );
 
         for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; $page++) {
