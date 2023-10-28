@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
         QueryResult::TAG_COVERAGE_COLLECTION->value => TagCoverageCollectionQueryResult::class,
         QueryResult::TAG_COVERAGE->value => TagCoverageQueryResult::class,
         QueryResult::TOTAL_UPLOADS->value => TotalUploadsQueryResult::class,
+        QueryResult::TAG_AVAILABILITY->value => TagAvailabilityQueryResult::class,
 
         /**
          * The ordering of this map is **very** important, as this dictates what the serializer will output

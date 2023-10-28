@@ -53,4 +53,9 @@ enum QueryResult: string
      * Information about the uploads for commits in the data warehouse.
      */
     case TOTAL_UPLOADS = 'TOTAL_UPLOADS';
+
+    /**
+     * Information about the availability of tags for various commits in a repository.
+     */
+    case TAG_AVAILABILITY = 'TAG_AVAILABILITY';
 }

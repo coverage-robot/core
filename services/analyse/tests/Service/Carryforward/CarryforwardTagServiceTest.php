@@ -2,228 +2,300 @@
 
 namespace App\Tests\Service\Carryforward;
 
-use App\Query\Result\CommitCollectionQueryResult;
-use App\Query\Result\CommitQueryResult;
+use App\Enum\QueryParameter;
+use App\Model\QueryParameterBag;
+use App\Query\Result\TagAvailabilityCollectionQueryResult;
+use App\Query\Result\TagAvailabilityQueryResult;
+use App\Query\TagAvailabilityQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
+use DateTimeImmutable;
+use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
+use Packages\Models\Model\Event\JobStateChange;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
 class CarryforwardTagServiceTest extends TestCase
 {
-    public function testCarryingForwardTagsFromPreviousCommits(): void
+    public function testNoTagsToCarryforward(): void
     {
         $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
+        $mockCommitHistoryService->expects($this->never())
+            ->method('getPrecedingCommits');
         $mockQueryService = $this->createMock(QueryService::class);
-
-        $mockCommitHistoryService->expects($this->once())
-            ->method('getPrecedingCommits')
-            ->willReturn([
-                'mock-commit-2',
-                'mock-commit-3',
-                'mock-commit-4',
-                'mock-commit-5',
-                'mock-commit-6',
-                'mock-commit-7'
-            ]);
-
-        $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
-            $mockQueryService,
-            new NullLogger()
-        );
-
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit-1',
-            ['mock-parent-commit'],
-            'mock-ref',
-            'mock-project-root',
-            null,
-            new Tag('mock-tag', 'mock-commit-1')
-        );
-
         $mockQueryService->expects($this->once())
             ->method('runQuery')
+            ->with(
+                TagAvailabilityQuery::class,
+                self::callback(
+                    function (QueryParameterBag $queryParameterBag) {
+                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        return true;
+                    }
+                )
+            )
             ->willReturn(
-                new CommitCollectionQueryResult(
+                new TagAvailabilityCollectionQueryResult(
                     [
-                        new CommitQueryResult(
-                            'mock-commit-2',
-                            [
-                                new Tag('tag-1', 'mock-commit-2'),
-                                new Tag('tag-2', 'mock-commit-2')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-4',
-                            [
-                                new Tag('tag-2', 'mock-commit-4')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-5',
-                            [
-                                new Tag('tag-4', 'mock-commit-5')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-7',
-                            [
-                                new Tag('tag-3', 'mock-commit-7')
-                            ]
-                        )
+                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
+                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-3', 'mock-commit-2']),
                     ]
                 )
             );
 
-        $tags = $carryforwardTagService->getTagsToCarryforward(
-            $upload,
-            [
-                new Tag('tag-4', 'mock-commit-1')
-            ]
-        );
-
-        $this->assertEquals(
-            [
-                new Tag('tag-1', 'mock-commit-2'),
-                new Tag('tag-2', 'mock-commit-2'),
-                new Tag('tag-3', 'mock-commit-7')
-            ],
-            $tags
-        );
-    }
-
-    public function testNoTagsNeedCarryingForward(): void
-    {
-        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockQueryService = $this->createMock(QueryService::class);
-
         $carryforwardTagService = new CarryforwardTagService(
             $mockCommitHistoryService,
             $mockQueryService,
             new NullLogger()
         );
 
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit-1',
-            ['mock-parent-commit'],
-            'mock-ref',
-            'mock-project-root',
-            null,
-            new Tag('mock-tag', 'mock-commit-1')
+        $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
+            new JobStateChange(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-ref',
+                'mock-commit',
+                null,
+                '',
+                0,
+                JobState::COMPLETED,
+                true,
+                new DateTimeImmutable()
+            ),
+            ['tag-1', 'tag-2']
         );
 
-        $mockQueryService->expects($this->never())
-            ->method('runQuery');
-
-        $tags = $carryforwardTagService->getTagsToCarryforward(
-            $upload,
-            [
-                new Tag('tag-4', 'mock-commit-1'),
-                new Tag('tag-2', 'mock-commit-1'),
-            ]
-        );
-
-        $this->assertEquals(
-            [],
-            $tags
-        );
+        $this->assertEquals([], $carryforwardTags);
     }
 
-    public function testCarryingForwardWithNoCurrentTags(): void
+    public function testTagToCarryforwardFromRecentCommit(): void
     {
         $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockQueryService = $this->createMock(QueryService::class);
-
         $mockCommitHistoryService->expects($this->once())
             ->method('getPrecedingCommits')
-            ->willReturn([
-                'mock-commit-2',
-                'mock-commit-3',
-                'mock-commit-4',
-                'mock-commit-5',
-                'mock-commit-6',
-                'mock-commit-7'
-            ]);
-
-        $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
-            $mockQueryService,
-            new NullLogger()
-        );
-
-        $upload = new Upload(
-            'mock-uuid',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit-1',
-            ['mock-parent-commit'],
-            'mock-ref',
-            'mock-project-root',
-            null,
-            new Tag('mock-tag', 'mock-commit-1')
-        );
-
+            ->willReturn(
+                [
+                    'mock-commit',
+                    'mock-commit-2',
+                    'mock-commit-3',
+                ]
+            );
+        $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
+            ->with(
+                TagAvailabilityQuery::class,
+                self::callback(
+                    function (QueryParameterBag $queryParameterBag) {
+                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        return true;
+                    }
+                )
+            )
             ->willReturn(
-                new CommitCollectionQueryResult(
+                new TagAvailabilityCollectionQueryResult(
                     [
-                        new CommitQueryResult(
-                            'mock-commit-2',
-                            [
-                                new Tag('tag-1', 'mock-commit-2'),
-                                new Tag('tag-2', 'mock-commit-2')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-4',
-                            [
-                                new Tag('tag-2', 'mock-commit-4')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-5',
-                            [
-                                new Tag('tag-4', 'mock-commit-5')
-                            ]
-                        ),
-                        new CommitQueryResult(
-                            'mock-commit-7',
-                            [
-                                new Tag('tag-3', 'mock-commit-7')
-                            ]
-                        )
+                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
+                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-3', 'mock-commit-2']),
                     ]
                 )
             );
 
-        // This shouldn't really happen (no current tags), as the upload we're analysing currently
-        // should _always_ be in BigQuery, but we should handle it gracefully if something goes wrong
-        // during BigQuery persistence.
-        $tags = $carryforwardTagService->getTagsToCarryforward($upload, []);
+        $carryforwardTagService = new CarryforwardTagService(
+            $mockCommitHistoryService,
+            $mockQueryService,
+            new NullLogger()
+        );
+
+        $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
+            new JobStateChange(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-ref',
+                'mock-current-commit',
+                null,
+                '',
+                0,
+                JobState::COMPLETED,
+                true,
+                new DateTimeImmutable()
+            ),
+            ['tag-1']
+        );
 
         $this->assertEquals(
             [
-                new Tag('tag-1', 'mock-commit-2'),
-                new Tag('tag-2', 'mock-commit-2'),
-                new Tag('tag-4', 'mock-commit-5'),
-                new Tag('tag-3', 'mock-commit-7')
+                new Tag('tag-2', 'mock-commit-2')
             ],
-            $tags
+            $carryforwardTags
+        );
+    }
+
+    public function testTagsToCarryforwardFromMultiplePagesOfCommits(): void
+    {
+        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
+        $mockCommitHistoryService->expects($this->exactly(3))
+            ->method('getPrecedingCommits')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'mock-commit',
+                    'mock-commit-2',
+                    'mock-commit-3',
+                ],
+                [
+                    'mock-commit-4',
+                    'mock-commit-5',
+                    'mock-commit-6',
+                ],
+                [
+                    'mock-commit-7',
+                    'mock-commit-8',
+                    'mock-commit-9',
+                ]
+            );
+        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with(
+                TagAvailabilityQuery::class,
+                self::callback(
+                    function (QueryParameterBag $queryParameterBag) {
+                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                new TagAvailabilityCollectionQueryResult(
+                    [
+                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
+                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-8', 'mock-commit-11']),
+                    ]
+                )
+            );
+
+        $carryforwardTagService = new CarryforwardTagService(
+            $mockCommitHistoryService,
+            $mockQueryService,
+            new NullLogger()
+        );
+
+        $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
+            new JobStateChange(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-ref',
+                'mock-current-commit',
+                null,
+                '',
+                0,
+                JobState::COMPLETED,
+                true,
+                new DateTimeImmutable()
+            ),
+            []
+        );
+
+        $this->assertEquals(
+            [
+                new Tag('tag-1', 'mock-commit'),
+                new Tag('tag-2', 'mock-commit-8')
+            ],
+            $carryforwardTags
+        );
+    }
+
+    public function testTagsToCarryforwardOutOfRangeOfCommits(): void
+    {
+        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
+        $mockCommitHistoryService->expects($this->exactly(5))
+            ->method('getPrecedingCommits')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'mock-commit',
+                    'mock-commit-2',
+                    'mock-commit-3',
+                ],
+                [
+                    'mock-commit-4',
+                    'mock-commit-5',
+                    'mock-commit-6',
+                ],
+                [
+                    'mock-commit-7',
+                    'mock-commit-8',
+                    'mock-commit-9',
+                ],
+                [
+                    'mock-commit-10',
+                    'mock-commit-11',
+                    'mock-commit-12',
+                ],
+                [
+                    'mock-commit-13',
+                    'mock-commit-14',
+                    'mock-commit-15',
+                ]
+            );
+        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with(
+                TagAvailabilityQuery::class,
+                self::callback(
+                    function (QueryParameterBag $queryParameterBag) {
+                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                new TagAvailabilityCollectionQueryResult(
+                    [
+                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
+                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-1010', 'mock-commit-999']),
+                    ]
+                )
+            );
+
+        $carryforwardTagService = new CarryforwardTagService(
+            $mockCommitHistoryService,
+            $mockQueryService,
+            new NullLogger()
+        );
+
+        $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
+            new JobStateChange(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-ref',
+                'mock-current-commit',
+                null,
+                '',
+                0,
+                JobState::COMPLETED,
+                true,
+                new DateTimeImmutable()
+            ),
+            []
+        );
+
+        $this->assertEquals(
+            [
+                new Tag('tag-1', 'mock-commit')
+            ],
+            $carryforwardTags
         );
     }
 }

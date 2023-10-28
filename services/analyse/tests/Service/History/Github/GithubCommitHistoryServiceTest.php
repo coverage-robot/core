@@ -24,152 +24,128 @@ class GithubCommitHistoryServiceTest extends TestCase
     }
 
     #[DataProvider('commitDataProvider')]
-    public function testGetPrecedingCommits(array $responseEdges, array $expectedCommits): void
-    {
+    public function testGetPrecedingCommits(
+        int $page,
+        array $response,
+        int $expectedOffset,
+        array $expectedCommits
+    ): void {
         $githubClient = $this->createMock(GithubAppInstallationClient::class);
         $gqlClient = $this->createMock(GraphQL::class);
 
         $mockUpload = $this->createMock(Upload::class);
+        $mockUpload->method('getOwner')
+            ->willReturn('mock-owner');
+        $mockUpload->method('getRepository')
+            ->willReturn('mock-repository');
+        $mockUpload->method('getRef')
+            ->willReturn('mock-ref');
         $mockUpload->method('getCommit')
             ->willReturn('uploaded-commit');
 
         $githubClient->method('graphql')
             ->willReturn($gqlClient);
 
-        $gqlClient->expects($this->exactly(count($responseEdges)))
+        $gqlClient->expects($this->once())
             ->method('execute')
-            ->willReturnOnConsecutiveCalls(
-                ...array_map(
-                    fn(array $edges) => [
-                        'data' => [
-                            'repository' => [
-                                'ref' => [
-                                    'target' => [
-                                        'history' => [
-                                            'nodes' => $edges
-                                        ]
-                                    ]
+            ->with(
+                self::callback(function (string $query) use ($expectedOffset) {
+                    $this->assertEquals(
+                        <<<GQL
+                        {
+                          repository(owner: "mock-owner", name: "mock-repository") {
+                            ref(qualifiedName: "mock-ref") {
+                              name
+                              target {
+                                ... on Commit {
+                                  history(
+                                    before: "uploaded-commit {$expectedOffset}",
+                                    last: 100
+                                  ) {
+                                    nodes {
+                                      oid
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                        GQL,
+                        $query
+                    );
+                    return true;
+                })
+            )
+            ->willReturn([
+                'data' => [
+                    'repository' => [
+                        'ref' => [
+                            'target' => [
+                                'history' => [
+                                    'nodes' => $response
                                 ]
                             ]
                         ]
-                    ],
-                    $responseEdges
-                )
-            );
+                    ]
+                ]
+            ]);
 
         $service = new GithubCommitHistoryService($githubClient, new NullLogger());
 
-        $this->assertEquals($expectedCommits, $service->getPrecedingCommits($mockUpload));
+        $this->assertEquals($expectedCommits, $service->getPrecedingCommits($mockUpload, $page));
     }
 
     public static function commitDataProvider(): array
     {
         return [
-            'No commits' => [
-                [
-                    []
-                ],
-                []
-            ],
-            'Single page of commits' => [
-                [
+            'First page' => [
+                1,
+                array_fill(
+                    0,
+                    100,
                     [
-                        [
-                            'oid' => 'uploaded-commit'
-                        ],
-                        [
-                            'oid' => '1234567890'
-                        ],
-                        [
-                            'oid' => '0987654321'
-                        ]
+                        'oid' => '11111111'
                     ]
-                ],
-                [
-                    '1234567890',
-                    '0987654321'
-                ]
+                ),
+                101,
+                array_fill(
+                    0,
+                    100,
+                    '11111111'
+                )
             ],
-            'Multiple pages of commits' => [
-                [
+            'Second page' => [
+                2,
+                array_fill(
+                    0,
+                    100,
                     [
-                        [
-                            'oid' => 'uploaded-commit'
-                        ],
-                        ...array_fill(
-                            0,
-                            98,
-                            [
-                                'oid' => '1234567890'
-                            ]
-                        ),
-                        [
-                            'oid' => '999'
-                        ]
-                    ],
-                    [
-                        [
-                            'oid' => '999'
-                        ],
-                        ...array_fill(
-                            0,
-                            99,
-                            [
-                                'oid' => '0987654321'
-                            ]
-                        ),
-                    ],
-                    [
-                        [
-                            'oid' => '45678'
-                        ],
-                        [
-                            'oid' => '45678'
-                        ]
+                        'oid' => '222222222'
                     ]
-                ],
-                [
-                    ...array_fill(0, 98, '1234567890'),
-                    '999',
-                    ...array_fill(0, 99, '0987654321'),
-                    ...array_fill(0, 2, '45678')
-                ]
+                ),
+                201,
+                array_fill(
+                    0,
+                    100,
+                    '222222222'
+                )
             ],
-            'Partial page of commits' => [
-                [
+            'Tenth page' => [
+                10,
+                array_fill(
+                    0,
+                    100,
                     [
-                        [
-                            'oid' => 'uploaded-commit'
-                        ],
-                        ...array_fill(
-                            0,
-                            98,
-                            [
-                                'oid' => '1234567890'
-                            ]
-                        ),
-                        [
-                            'oid' => '999'
-                        ]
-                    ],
-                    [
-                        [
-                            'oid' => '999'
-                        ],
-                        ...array_fill(
-                            0,
-                            30,
-                            [
-                                'oid' => '0987654321'
-                            ]
-                        ),
+                        'oid' => '9999999999'
                     ]
-                ],
-                [
-                    ...array_fill(0, 98, '1234567890'),
-                    '999',
-                    ...array_fill(0, 30, '0987654321')
-                ]
+                ),
+                1001,
+                array_fill(
+                    0,
+                    100,
+                    '9999999999'
+                )
             ]
         ];
     }

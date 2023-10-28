@@ -2,6 +2,7 @@
 
 namespace App\Service\History\Github;
 
+use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -28,16 +29,6 @@ use Psr\Log\LoggerInterface;
  */
 class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
-    /**
-     * The total number of commits to carry forward coverage from in the commit tree
-     */
-    private const TOTAL_COMMITS = 200;
-
-    /**
-     * The number of commits the GitHub GraphQL API can support per page
-     */
-    private const COMMITS_PER_PAGE = 100;
-
     public function __construct(
         private readonly GithubAppInstallationClient $githubClient,
         private readonly LoggerInterface $githubHistoryLogger
@@ -47,68 +38,38 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     /**
      * @inheritDoc
      */
-    public function getPrecedingCommits(EventInterface $event): array
+    public function getPrecedingCommits(EventInterface $event, int $page = 1): array
     {
         $this->githubClient->authenticateAsRepositoryOwner($event->getOwner());
+
+        $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
 
         /** @var string[] $commits */
         $commits = [];
 
-        do {
-            $commitsPerPage = min(
-                self::COMMITS_PER_PAGE,
-                self::TOTAL_COMMITS - count($commits) + 1
-            );
-
-            $historicCommits = $this->getHistoricCommits(
+        $commits = [
+            ...$commits,
+            ...$this->getHistoricCommits(
                 $event->getOwner(),
                 $event->getRepository(),
                 $event->getRef(),
-                $commitsPerPage,
-                empty($commits) ? $event->getCommit() : end($commits)
-            );
+                $event->getCommit(),
+                $offset
+            )
+        ];
 
-            $commits = [
-                ...$commits,
-                ...$historicCommits
-            ];
-
-            $this->githubHistoryLogger->info(
-                sprintf(
-                    'Fetched %s preceding commits from GitHub for %s',
-                    $commitsPerPage,
-                    (string)$event
-                ),
-                [
-                    'commitsPerPage' => $commitsPerPage,
-                    'historicCommits' => $historicCommits,
-                    'totalCommits' => count($commits)
-                ]
-            );
-
-            if (count($historicCommits) < $commitsPerPage - 1) {
-                // We must be on the last page, as the results returned from the API are
-                // one less than the total commits per page provided (one less, because the first
-                // result will be the before commit we provided, which will have been
-                // filtered out)
-
-                $this->githubHistoryLogger->info(
-                    sprintf(
-                        'Stopped fetching commits from GitHub for %s, as %s commits returned when %s were requested',
-                        (string)$event,
-                        $commitsPerPage,
-                        count($historicCommits)
-                    ),
-                    [
-                        'commitsPerPage' => $commitsPerPage,
-                        'historicCommits' => $historicCommits,
-                        'totalCommits' => count($commits)
-                    ]
-                );
-
-                break;
-            }
-        } while (count($commits) < self::TOTAL_COMMITS);
+        $this->githubHistoryLogger->info(
+            sprintf(
+                'Fetched %s preceding commits from GitHub for %s',
+                CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE,
+                (string)$event
+            ),
+            [
+                'commitsToRetrieve' => CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE,
+                'offset' => $offset,
+                'commits' => $commits,
+            ]
+        );
 
         return $commits;
     }
@@ -116,20 +77,20 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     /**
      * The cursor GitHub's GraphQL API uses follows the pattern of:
      *
-     * ```<starting commit SHA> <number of preceding commits>```
+     * ```<starting commit SHA> <offset with a minimum of the number of proceeding commits>```
      *
-     * (i.e. 3a6d549ba8bba3987d04fa6ae7b861e8e054968e8 100)
+     * (i.e. 3a6d549ba8bba3987d04fa6ae7b861e8e054968e8 100, or a6d549ba8bba3987d04fa6ae7b861e8e054968e8 200)
      *
      * This method makes a compatible cursor which allows us to paginate
      * through the API, fetching all of the preceding commits up the tree with
      * a predictable response.
      */
-    private function makeCursor(string $lastCommit, int $commitsPerPage): string
+    private function makeCursor(string $lastCommit, int $offset): string
     {
         return sprintf(
             '%s %s',
             $lastCommit,
-            $commitsPerPage
+            $offset
         );
     }
 
@@ -140,9 +101,11 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         string $owner,
         string $repository,
         string $ref,
-        int $commitsPerPage,
-        string $beforeCommit
+        string $beforeCommit,
+        int $offset
     ): array {
+        $commitsPerPage = CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
+
         /** @var Result $result */
         $result = $this->githubClient->graphql()
             ->execute(
@@ -154,7 +117,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                       target {
                         ... on Commit {
                           history(
-                            before: "{$this->makeCursor($beforeCommit, $commitsPerPage)}",
+                            before: "{$this->makeCursor($beforeCommit, $offset)}",
                             last: {$commitsPerPage}
                           ) {
                             nodes {
@@ -171,27 +134,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
 
         $result = $result['data']['repository']['ref']['target']['history']['nodes'] ?? [];
 
-        $commits = array_map(
-            static function (array $commit) use ($beforeCommit): ?string {
-                if (
-                    isset($commit['oid']) &&
-                    $commit['oid'] !== $beforeCommit
-                ) {
-                    /**
-                     * The Github API will return the before commit (the one used as the cursor in the
-                     * query), meaning we want to filter that out of the results, so that the returned
-                     * commits are **only** those which preceding the cursor.
-                     */
-                    return $commit['oid'];
-                }
-
-                return null;
-            },
+        return array_map(
+            static fn(array $commit): string => $commit['oid'],
             $result
         );
-
-        // Remove any nulls and re-index the array
-        return array_values(array_filter($commits));
     }
 
     public static function getProvider(): string
