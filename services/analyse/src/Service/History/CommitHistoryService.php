@@ -29,6 +29,7 @@ class CommitHistoryService
     /**
      * Get the commits which preceded a given commit in the tree.
      *
+     * @return string[]
      * @throws RuntimeException
      */
     public function getPrecedingCommits(EventInterface $event, int $page = 1): array

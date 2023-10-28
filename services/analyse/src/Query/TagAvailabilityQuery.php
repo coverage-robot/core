@@ -105,8 +105,7 @@ class TagAvailabilityQuery implements QueryInterface
             throw new QueryException('Query was not complete when attempting to parse results.');
         }
 
-        $row = $results->rows()
-            ->current();
+        $row = $results->rows();
 
         return $this->serializer->denormalize(
             ['tagAvailability' => iterator_to_array($row)],

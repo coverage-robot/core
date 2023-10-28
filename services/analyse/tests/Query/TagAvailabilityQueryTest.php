@@ -10,7 +10,6 @@ use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
-use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Event\Upload;
@@ -57,18 +56,13 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
     #[DataProvider('resultsDataProvider')]
     public function testParseResults(array $queryResult): void
     {
-        $mockIterator = $this->createMock(ItemIterator::class);
-        $mockIterator->expects($this->once())
-            ->method('current')
-            ->willReturn($queryResult);
-
         $mockBigQueryResult = $this->createMock(QueryResults::class);
         $mockBigQueryResult->expects($this->once())
             ->method('isComplete')
             ->willReturn(true);
         $mockBigQueryResult->expects($this->once())
             ->method('rows')
-            ->willReturn($mockIterator);
+            ->willReturn($queryResult);
 
         $result = $this->getQueryClass()
             ->parseResults($mockBigQueryResult);

@@ -27,6 +27,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
+     * @param Tag[] $existingTags
      * @return Tag[]
      */
     public function getTagsToCarryforward(EventInterface $event, array $existingTags): array

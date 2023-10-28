@@ -31,6 +31,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
+     * @param Tag[] $existingTags
      * @return Tag[]
      */
     public function getTagsToCarryforward(EventInterface $event, array $existingTags): array
@@ -43,6 +44,9 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             QueryParameterBag::fromEvent($event)
         );
 
+        /**
+         * @var string[] $tagsNotSeen
+         */
         $tagsNotSeen = array_filter(
             $tagAvailability->getAvailableTagNames(),
             static fn(string $tagName) => !in_array($tagName, $existingTags, true)
@@ -98,11 +102,14 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         int $page = 0,
         array $tagsNotSeen = []
     ): array {
-        if ($tagsNotSeen === []) {
-            return [];
-        }
-
         $carryforwardTags = [];
+
+        if ($tagsNotSeen === []) {
+            return [
+                $tagsNotSeen,
+                $carryforwardTags
+            ];
+        }
 
         $commitsFromTree = $this->commitHistoryService->getPrecedingCommits($event, $page);
 
