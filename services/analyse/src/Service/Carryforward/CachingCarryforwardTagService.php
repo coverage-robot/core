@@ -2,7 +2,6 @@
 
 namespace App\Service\Carryforward;
 
-use App\Exception\QueryException;
 use Packages\Models\Model\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use WeakMap;
@@ -28,7 +27,8 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     }
 
     /**
-     * @throws QueryException
+     * @param Tag[] $existingTags
+     * @return Tag[]
      */
     public function getTagsToCarryforward(EventInterface $event, array $existingTags): array
     {

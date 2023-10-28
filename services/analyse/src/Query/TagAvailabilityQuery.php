@@ -5,7 +5,7 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\CommitCollectionQueryResult;
+use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use App\Service\EnvironmentService;
@@ -17,10 +17,10 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CommitSuccessfulTagsQuery implements QueryInterface
+class TagAvailabilityQuery implements QueryInterface
 {
-    use ScopeAwareTrait;
     use UploadTableAwareTrait;
+    use ScopeAwareTrait;
 
     /**
      * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
@@ -37,22 +37,16 @@ class CommitSuccessfulTagsQuery implements QueryInterface
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
-        {$this->getNamedQueries($table, $parameterBag)}
         SELECT
-            commit,
-            ARRAY_AGG(
-                STRUCT(
-                    tag as name,
-                    commit as commit
-                )
-            ) as tags,
+          tag as tagName,
+          ARRAY_AGG(commit) as availableCommits,
         FROM
-            `{$table}`
+          `{$table}`
         WHERE
             {$commitScope} AND
             {$repositoryScope}
         GROUP BY
-            commit
+          tag
         SQL;
     }
 
@@ -61,45 +55,12 @@ class CommitSuccessfulTagsQuery implements QueryInterface
         return '';
     }
 
-    /**
-     * @param QueryResults $results
-     * @return CommitCollectionQueryResult
-     * @throws GoogleException
-     * @throws QueryException
-     * @throws ExceptionInterface
-     */
-    public function parseResults(QueryResults $results): CommitCollectionQueryResult
-    {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
-        $commits = $results->rows();
-
-        return $this->serializer->denormalize(
-            ['commits' => iterator_to_array($commits)],
-            CommitCollectionQueryResult::class,
-            'array'
-        );
-    }
-
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
         if (!$parameterBag) {
             throw new QueryException(
                 sprintf('Query %s requires parameters to be provided.', self::class)
             );
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::COMMIT) ||
-            !(
-                is_array($parameterBag->get(QueryParameter::COMMIT)) ||
-                is_string($parameterBag->get(QueryParameter::COMMIT))
-            ) ||
-            empty($parameterBag->get(QueryParameter::COMMIT))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::COMMIT);
         }
 
         if (
@@ -125,17 +86,31 @@ class CommitSuccessfulTagsQuery implements QueryInterface
     }
 
     /**
-     * The successful tags on a commit _could_ be cached (in theory). This is because,
-     * generally speaking, this query will only be performed using older commits in the
-     * commit tree, and any time a new commit is made, the query parameters will end up
-     * changing.
-     *
-     * However, there is a use case where newer commits in the tree could still be receiving
-     * uploads while we're doing processing, so therefore a hard cache would get in the
-     * way of that.
+     * This query can't be cached, as it doesnt use any discernible parameters which will
+     * ensure the cached query is still up to date.
      */
     public function isCachable(): bool
     {
         return false;
+    }
+
+    /**
+     * @throws ExceptionInterface
+     * @throws GoogleException
+     * @throws QueryException
+     */
+    public function parseResults(QueryResults $results): TagAvailabilityCollectionQueryResult
+    {
+        if (!$results->isComplete()) {
+            throw new QueryException('Query was not complete when attempting to parse results.');
+        }
+
+        $row = $results->rows();
+
+        return $this->serializer->denormalize(
+            ['tagAvailability' => iterator_to_array($row)],
+            TagAvailabilityCollectionQueryResult::class,
+            'array'
+        );
     }
 }

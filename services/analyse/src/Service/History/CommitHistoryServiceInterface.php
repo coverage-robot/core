@@ -11,5 +11,5 @@ interface CommitHistoryServiceInterface
     /**
      * @return string[]
      */
-    public function getPrecedingCommits(EventInterface $event): array;
+    public function getPrecedingCommits(EventInterface $event, int $page): array;
 }

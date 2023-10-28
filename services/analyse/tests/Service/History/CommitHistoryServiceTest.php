@@ -14,9 +14,23 @@ class CommitHistoryServiceTest extends TestCase
 {
     public function testGetPrecedingCommitsUsingValidProvider(): void
     {
+        $event = new Upload(
+            'uploadId',
+            Provider::GITHUB,
+            'owner',
+            'repository',
+            'commit',
+            [],
+            'ref',
+            'project-root',
+            12,
+            new Tag('tag', 'commit'),
+        );
+
         $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
         $mockGithubHistoryService->expects($this->once())
             ->method('getPrecedingCommits')
+            ->with($event, 2)
             ->willReturn([]);
 
         $historyService = new CommitHistoryService(
@@ -28,18 +42,8 @@ class CommitHistoryServiceTest extends TestCase
         $this->assertEquals(
             [],
             $historyService->getPrecedingCommits(
-                new Upload(
-                    'uploadId',
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'commit',
-                    [],
-                    'ref',
-                    'project-root',
-                    12,
-                    new Tag('tag', 'commit'),
-                )
+                $event,
+                2
             )
         );
     }

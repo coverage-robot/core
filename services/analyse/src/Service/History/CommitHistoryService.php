@@ -7,28 +7,32 @@ use Packages\Models\Model\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CommitHistoryService implements CommitHistoryServiceInterface
+class CommitHistoryService
 {
+    /**
+     * The total number of commits which should be returned per page.
+     */
+    public const COMMITS_TO_RETURN_PER_PAGE = 100;
+
     /**
      * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
         #[TaggedIterator(
             'app.commit_history',
-            defaultIndexMethod: 'getProvider',
-            exclude: ['CommitHistoryService']
+            defaultIndexMethod: 'getProvider'
         )]
         private readonly iterable $parsers
     ) {
     }
 
     /**
-     * Get the commits which preceded the given upload - these are the parent commits
-     * of the one recorded during the upload.
+     * Get the commits which preceded a given commit in the tree.
      *
+     * @return string[]
      * @throws RuntimeException
      */
-    public function getPrecedingCommits(EventInterface $event): array
+    public function getPrecedingCommits(EventInterface $event, int $page = 1): array
     {
         $service = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
 
@@ -41,6 +45,6 @@ class CommitHistoryService implements CommitHistoryServiceInterface
             );
         }
 
-        return $service->getPrecedingCommits($event);
+        return $service->getPrecedingCommits($event, $page);
     }
 }
