@@ -29,8 +29,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
             FROM
               `mock-table`
             WHERE
-              commit = "mock-commit"
-              AND repository = "mock-repository"
+              repository = "mock-repository"
               AND owner = "mock-owner"
               AND provider = "github"
             GROUP BY

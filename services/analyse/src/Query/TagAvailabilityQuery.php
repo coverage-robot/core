@@ -33,7 +33,6 @@ class TagAvailabilityQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $commitScope = self::getCommitScope($parameterBag);
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
@@ -43,7 +42,6 @@ class TagAvailabilityQuery implements QueryInterface
         FROM
           `{$table}`
         WHERE
-            {$commitScope} AND
             {$repositoryScope}
         GROUP BY
           tag
