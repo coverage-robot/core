@@ -61,7 +61,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 $event->getRepository(),
                 $event->getRef(),
                 $commitsPerPage,
-                !isset($commits) ? $event->getCommit() : end($commits)
+                $this->makeCursor(
+                    !isset($commits) ? $event->getCommit() : end($commits),
+                    $commitsPerPage
+                )
             );
 
             $commits = [
@@ -82,6 +85,26 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     }
 
     /**
+     * The cursor GitHub's GraphQL API uses follows the pattern of:
+     *
+     * ```<starting commit SHA> <number of preceding commits>```
+     *
+     * (i.e. 3a6d549ba8bba3987d04fa6ae7b861e8e054968e8 100)
+     *
+     * This method makes a compatible cursor which allows us to paginate
+     * through the API, fetching all of the preceding commits up the tree with
+     * a predictable response.
+     */
+    private function makeCursor(string $lastCommit, int $commitsPerPage): string
+    {
+        return sprintf(
+            '%s %s',
+            $lastCommit,
+            $commitsPerPage
+        );
+    }
+
+    /**
      * @return string[]
      */
     private function getHistoricCommits(
@@ -89,7 +112,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         string $repository,
         string $ref,
         int $maxCommits,
-        string $beforeCommit
+        string $cursor
     ): array {
         $result = $this->githubClient->graphql()
             ->execute(
@@ -100,17 +123,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                       name
                       target {
                         ... on Commit {
-                          history(before: "{$beforeCommit}", first: {$maxCommits}) {
-                            edges {
-                              node {
-                                oid
-                              }
+                          history(before: "{$cursor}", last: {$maxCommits}) {
+                            nodes {
+                              oid
                             }
-                            pageInfo {
-                              hasPreviousPage
-                              hasNextPage
-                            }
-                            totalCount
                           }
                         }
                       }
@@ -120,20 +136,20 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 GQL
             );
 
-        $result = $result['data']['repository']['ref']['target']['history']['edges'] ?? [];
+        $result = $result['data']['repository']['ref']['target']['history']['nodes'] ?? [];
 
         $commits = array_map(
-            static function (array $commit) use ($beforeCommit): ?string {
+            static function (array $commit) use ($cursor): ?string {
                 if (
-                    isset($commit['node']['oid']) &&
-                    $commit['node']['oid'] !== $beforeCommit
+                    isset($commit['oid']) &&
+                    $commit['oid'] !== explode(' ', $cursor)[0]
                 ) {
                     /**
                      * The Github API will return the before commit (the one used as the cursor in the
                      * query), meaning we want to filter that out of the results, so that the returned
                      * commits are **only** those which preceding the cursor.
                      */
-                    return $commit['node']['oid'];
+                    return $commit['oid'];
                 }
 
                 return null;

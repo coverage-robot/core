@@ -42,7 +42,7 @@ class GithubCommitHistoryServiceTest extends TestCase
                                 'ref' => [
                                     'target' => [
                                         'history' => [
-                                            'edges' => $edges
+                                            'nodes' => $edges
                                         ]
                                     ]
                                 ]
@@ -71,19 +71,13 @@ class GithubCommitHistoryServiceTest extends TestCase
                 [
                     [
                         [
-                            'node' => [
-                                'oid' => 'uploaded-commit'
-                            ]
+                            'oid' => 'uploaded-commit'
                         ],
                         [
-                            'node' => [
-                                'oid' => '1234567890'
-                            ]
+                            'oid' => '1234567890'
                         ],
                         [
-                            'node' => [
-                                'oid' => '0987654321'
-                            ]
+                            'oid' => '0987654321'
                         ]
                     ]
                 ],
@@ -96,51 +90,37 @@ class GithubCommitHistoryServiceTest extends TestCase
                 [
                     [
                         [
-                            'node' => [
-                                'oid' => 'uploaded-commit'
-                            ]
+                            'oid' => 'uploaded-commit'
                         ],
                         ...array_fill(
                             0,
                             98,
                             [
-                                'node' => [
-                                    'oid' => '1234567890'
-                                ]
+                                'oid' => '1234567890'
                             ]
                         ),
                         [
-                            'node' => [
-                                'oid' => '999'
-                            ]
+                            'oid' => '999'
                         ]
                     ],
                     [
                         [
-                            'node' => [
-                                'oid' => '999'
-                            ]
+                            'oid' => '999'
                         ],
                         ...array_fill(
                             0,
                             99,
                             [
-                                'node' => [
-                                    'oid' => '0987654321'
-                                ]
+                                'oid' => '0987654321'
                             ]
                         ),
                     ],
                     [
                         [
-                            'node' => [
-                                'oid' => '45678'
-                            ]
+                            'oid' => '45678'
                         ],
                         [
-                            'node' => [
-                                'oid' => '45678'
-                            ]
+                            'oid' => '45678'
                         ]
                     ]
                 ],
@@ -155,38 +135,28 @@ class GithubCommitHistoryServiceTest extends TestCase
                 [
                     [
                         [
-                            'node' => [
-                                'oid' => 'uploaded-commit'
-                            ]
+                            'oid' => 'uploaded-commit'
                         ],
                         ...array_fill(
                             0,
                             98,
                             [
-                                'node' => [
-                                    'oid' => '1234567890'
-                                ]
+                                'oid' => '1234567890'
                             ]
                         ),
                         [
-                            'node' => [
-                                'oid' => '999'
-                            ]
+                            'oid' => '999'
                         ]
                     ],
                     [
                         [
-                            'node' => [
-                                'oid' => '999'
-                            ]
+                            'oid' => '999'
                         ],
                         ...array_fill(
                             0,
                             30,
                             [
-                                'node' => [
-                                    'oid' => '0987654321'
-                                ]
+                                'oid' => '0987654321'
                             ]
                         ),
                     ]
