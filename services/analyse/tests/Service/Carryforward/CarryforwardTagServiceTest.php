@@ -67,7 +67,10 @@ class CarryforwardTagServiceTest extends TestCase
                 true,
                 new DateTimeImmutable()
             ),
-            ['tag-1', 'tag-2']
+            [
+                new Tag('tag-1', 'mock-commit'),
+                new Tag('tag-2', 'mock-commit')
+            ]
         );
 
         $this->assertEquals([], $carryforwardTags);
@@ -127,7 +130,9 @@ class CarryforwardTagServiceTest extends TestCase
                 true,
                 new DateTimeImmutable()
             ),
-            ['tag-1']
+            [
+                new Tag('tag-1', 'mock-current-commit')
+            ]
         );
 
         $this->assertEquals(
