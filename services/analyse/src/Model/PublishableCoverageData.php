@@ -183,6 +183,22 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     }
 
     /**
+     * Get the total coverage percentage of just the lines added to the commits diff.
+     *
+     * It's important to note that the coverage against a commits diff **does not** make use
+     * of tagged coverage which has been carried forward from a previous commit.
+     *
+     * There's a very particular reason the carried forward coverage isn't factored into the diff
+     * coverage. That's because, by definition, coverage which was generated against an older diff
+     * cannot be guaranteed to represent the line coverage of the current commit (i.e. added lines
+     * will have offset line in the original coverage file, code which has been moved will not be
+     * represented in the original coverage file, etc).
+     *
+     * That's not a problem though, because, by definition, if the coverage has been carried forward
+     * its assumed not have changed. And therefore we _should_ be safe under the assumption that whatever
+     * coverage has been uploaded currently, is the only coverage which will impact the diff thats
+     * currently being analysed.
+     *
      * @throws QueryException
      */
     public function getDiffCoveragePercentage(): float
@@ -191,13 +207,6 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->event)
-        );
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
-                $this->getUploads()->getSuccessfulTags()
-            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -213,6 +222,22 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     }
 
     /**
+     * Get the files which have the least coverage against a commits diff.
+     *
+     * It's important to note that the coverage against a commits diff **does not** make use
+     * of tagged coverage which has been carried forward from a previous commit.
+     *
+     * There's a very particular reason the carried forward coverage isn't factored into the diff
+     * coverage. That's because, by definition, coverage which was generated against an older diff
+     * cannot be guaranteed to represent the line coverage of the current commit (i.e. added lines
+     * will have offset line in the original coverage file, code which has been moved will not be
+     * represented in the original coverage file, etc).
+     *
+     * That's not a problem though, because, by definition, if the coverage has been carried forward
+     * its assumed not have changed. And therefore we _should_ be safe under the assumption that whatever
+     * coverage has been uploaded currently, is the only coverage which will impact the diff thats
+     * currently being analysed.
+     *
      * @throws QueryException
      */
     public function getLeastCoveredDiffFiles(
@@ -228,13 +253,6 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             $limit
         );
         $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
-                $this->getUploads()->getSuccessfulTags()
-            )
-        );
-        $params->set(
             QueryParameter::UPLOADS_SCOPE,
             $this->getSuccessfulUploads()
         );
@@ -248,6 +266,22 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     }
 
     /**
+     * Get the line coverage of a commits diff.
+     *
+     * It's important to note that the line coverage against a commits diff **does not** make use
+     * of tagged coverage which has been carried forward from a previous commit.
+     *
+     * There's a very particular reason the carried forward coverage isn't factored into the diff
+     * coverage. That's because, by definition, coverage which was generated against an older diff
+     * cannot be guaranteed to represent the line coverage of the current commit (i.e. added lines
+     * will have offset line in the original coverage file, code which has been moved will not be
+     * represented in the original coverage file, etc).
+     *
+     * That's not a problem though, because, by definition, if the coverage has been carried forward
+     * its assumed not have changed. And therefore we _should_ be safe under the assumption that whatever
+     * coverage has been uploaded currently, is the only coverage which will impact the diff thats
+     * currently being analysed.
+     *
      * @throws QueryException
      */
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
@@ -256,13 +290,6 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $params->set(
             QueryParameter::LINE_SCOPE,
             $this->diffParser->get($this->event)
-        );
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
-                $this->getUploads()->getSuccessfulTags()
-            )
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
