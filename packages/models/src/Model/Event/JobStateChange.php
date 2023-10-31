@@ -24,6 +24,7 @@ class JobStateChange implements EventInterface
         private readonly string|int $externalId,
         private readonly int $index,
         private readonly JobState $state,
+        private readonly JobState $suiteState,
         private readonly bool $initialState,
         #[Context(
             normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
@@ -76,6 +77,11 @@ class JobStateChange implements EventInterface
     public function getState(): JobState
     {
         return $this->state;
+    }
+
+    public function getSuiteState(): JobState
+    {
+        return $this->suiteState;
     }
 
     public function isInitialState(): bool

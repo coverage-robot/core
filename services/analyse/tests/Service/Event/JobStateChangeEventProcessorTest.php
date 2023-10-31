@@ -39,7 +39,8 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             'pullRequest' => 'mock-pull-request',
             'externalId' => 'mock-id',
             'index' => 0,
-            'state' => JobState::COMPLETED->value,
+            'state' => JobState::IN_PROGRESS->value,
+            'suiteState' => JobState::IN_PROGRESS->value,
             'initialState' => true,
             'eventTime' => '2021-01-01T00:00:00+00:00',
         ];
@@ -115,6 +116,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             'externalId' => 'mock-id',
             'index' => 1,
             'state' => JobState::COMPLETED->value,
+            'suiteState' => JobState::COMPLETED->value,
             'initialState' => true,
             'eventTime' => '2021-01-01T00:00:00+00:00',
         ];
@@ -231,6 +233,163 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
                 )
             )
             ->willReturn(true);
+
+        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
+
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
+            new NullLogger(),
+            $this->getContainer()->get(SerializerInterface::class),
+            $mockCoverageAnalysisService,
+            $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id',
+                ]
+            ),
+            $mockSqsMessageClient,
+            $mockEventBridgeEventClient,
+        );
+
+        $jobStateChangeEventProcessor->process(
+            new EventBridgeEvent([
+                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail' => $jobStateChange
+            ])
+        );
+    }
+
+    public function testProcessCompetingLastJobs(): void
+    {
+        $jobStateChange = [
+            'provider' => Provider::GITHUB->value,
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository',
+            'ref' => 'mock-ref',
+            'commit' => 'mock-commit',
+            'pullRequest' => 'mock-pull-request',
+            'externalId' => 'mock-id',
+            'index' => 1,
+            'state' => JobState::COMPLETED->value,
+            'suiteState' => JobState::COMPLETED->value,
+            'initialState' => true,
+            'eventTime' => '2021-01-01T00:00:00+00:00',
+        ];
+
+        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockPublishableCoverageData->expects($this->never())
+            ->method('getCoveragePercentage');
+        $mockPublishableCoverageData->expects($this->never())
+            ->method('getTagCoverage');
+
+        $mockCoverageAnalysisService = $this->createMock(CoverageAnalyserService::class);
+        $mockCoverageAnalysisService->expects($this->once())
+            ->method('analyse')
+            ->willReturn($mockPublishableCoverageData);
+
+        $mockCheckRunsApi = $this->createMock(CheckRuns::class);
+        $mockCheckRunsApi->expects($this->once())
+            ->method('allForReference')
+            ->willReturn([
+                'check_runs' => [
+                    [
+                        'id' => 'different-job',
+                        'completed_at' => '2023-02-01T00:00:00+00:00',
+                        'status' => 'completed',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                    [
+                        'id' => 'mock-id',
+                        'completed_at' => '2023-03-01T00:00:00+00:00',
+                        'status' => 'completed',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                    [
+                        'id' => 'a-competing-job',
+                        'completed_at' => '2023-03-01T00:00:05+00:00',
+                        'status' => 'completed',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                ]
+            ]);
+
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient->expects($this->once())
+            ->method('checkRuns')
+            ->willReturn($mockCheckRunsApi);
+
+        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
+        $mockSqsMessageClient->expects($this->never())
+            ->method('queuePublishableMessage');
+
+        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
+
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
+            new NullLogger(),
+            $this->getContainer()->get(SerializerInterface::class),
+            $mockCoverageAnalysisService,
+            $mockGithubAppInstallationClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id',
+                ]
+            ),
+            $mockSqsMessageClient,
+            $mockEventBridgeEventClient,
+        );
+
+        $jobStateChangeEventProcessor->process(
+            new EventBridgeEvent([
+                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail' => $jobStateChange
+            ])
+        );
+    }
+
+    public function testProcessCompletedJobInMiddleOfSuite(): void
+    {
+        $jobStateChange = [
+            'provider' => Provider::GITHUB->value,
+            'owner' => 'mock-owner',
+            'repository' => 'mock-repository',
+            'ref' => 'mock-ref',
+            'commit' => 'mock-commit',
+            'pullRequest' => 'mock-pull-request',
+            'externalId' => 'mock-id',
+            'index' => 1,
+            'state' => JobState::COMPLETED->value,
+            'suiteState' => JobState::IN_PROGRESS->value,
+            'initialState' => true,
+            'eventTime' => '2021-01-01T00:00:00+00:00',
+        ];
+
+        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockPublishableCoverageData->expects($this->never())
+            ->method('getCoveragePercentage');
+        $mockPublishableCoverageData->expects($this->never())
+            ->method('getTagCoverage');
+
+        $mockCoverageAnalysisService = $this->createMock(CoverageAnalyserService::class);
+        $mockCoverageAnalysisService->expects($this->once())
+            ->method('analyse')
+            ->willReturn($mockPublishableCoverageData);
+
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient->expects($this->never())
+            ->method('checkRuns');
+
+        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
+        $mockSqsMessageClient->expects($this->never())
+            ->method('queuePublishableMessage');
 
         $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
 

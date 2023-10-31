@@ -56,7 +56,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
             $this->eventProcessorLogger->info(
                 sprintf(
-                    'Starting analysis on %s.',
+                    'Starting to process %s.',
                     (string)$jobStateChange
                 )
             );
@@ -67,11 +67,26 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $jobStateChange->isInitialState() &&
                 $jobStateChange->getIndex() === 0
             ) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        '%s is the initial job. Queuing up the initial check run to be published.',
+                        (string)$jobStateChange
+                    )
+                );
+
                 $successful = $this->queueStartCheckRun($jobStateChange);
             } elseif (
+                $jobStateChange->getSuiteState() === JobState::COMPLETED &&
                 $jobStateChange->getState() === JobState::COMPLETED &&
                 $this->isAllCheckRunsFinished($jobStateChange)
             ) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        '%s is the final job. Queuing up the final check run to be published.',
+                        (string)$jobStateChange
+                    )
+                );
+
                 $successful = $this->queueFinalCheckRun(
                     $jobStateChange,
                     $coverageData
@@ -91,6 +106,13 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                     )
                 );
             } else {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        'Ignoring %s as it is not the start or end check run.',
+                        (string)$jobStateChange
+                    )
+                );
+
                 return;
             }
 
