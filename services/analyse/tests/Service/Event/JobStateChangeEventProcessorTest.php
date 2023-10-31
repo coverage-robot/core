@@ -383,9 +383,43 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             ->method('analyse')
             ->willReturn($mockPublishableCoverageData);
 
+
+        $mockCheckRunsApi = $this->createMock(CheckRuns::class);
+        $mockCheckRunsApi->expects($this->once())
+            ->method('allForReference')
+            ->willReturn([
+                'check_runs' => [
+                    [
+                        'id' => 'different-job',
+                        'completed_at' => '2023-02-01T00:00:00+00:00',
+                        'status' => 'completed',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                    [
+                        'id' => 'mock-id',
+                        'completed_at' => '2023-03-01T00:00:00+00:00',
+                        'status' => 'completed',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                    [
+                        'id' => 'a-competing-job',
+                        'completed_at' => '2023-03-01T00:00:05+00:00',
+                        'status' => 'in_progress',
+                        'app' => [
+                            'id' => 'github-app',
+                        ],
+                    ],
+                ]
+            ]);
+
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
-        $mockGithubAppInstallationClient->expects($this->never())
-            ->method('checkRuns');
+        $mockGithubAppInstallationClient->expects($this->once())
+            ->method('checkRuns')
+            ->willReturn($mockCheckRunsApi);
 
         $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
         $mockSqsMessageClient->expects($this->never())

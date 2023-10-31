@@ -76,7 +76,6 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
 
                 $successful = $this->queueStartCheckRun($jobStateChange);
             } elseif (
-                $jobStateChange->getSuiteState() === JobState::COMPLETED &&
                 $jobStateChange->getState() === JobState::COMPLETED &&
                 $this->isAllCheckRunsFinished($jobStateChange)
             ) {
