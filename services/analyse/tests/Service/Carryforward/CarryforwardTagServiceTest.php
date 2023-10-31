@@ -64,6 +64,7 @@ class CarryforwardTagServiceTest extends TestCase
                 '',
                 0,
                 JobState::COMPLETED,
+                JobState::COMPLETED,
                 true,
                 new DateTimeImmutable()
             ),
@@ -126,6 +127,7 @@ class CarryforwardTagServiceTest extends TestCase
                 null,
                 '',
                 0,
+                JobState::COMPLETED,
                 JobState::COMPLETED,
                 true,
                 new DateTimeImmutable()
@@ -203,6 +205,7 @@ class CarryforwardTagServiceTest extends TestCase
                 null,
                 '',
                 0,
+                JobState::COMPLETED,
                 JobState::COMPLETED,
                 true,
                 new DateTimeImmutable()
@@ -289,6 +292,7 @@ class CarryforwardTagServiceTest extends TestCase
                 null,
                 '',
                 0,
+                JobState::COMPLETED,
                 JobState::COMPLETED,
                 true,
                 new DateTimeImmutable()

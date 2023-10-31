@@ -30,6 +30,7 @@ class EventHandlerTest extends TestCase
             'mock-id',
             0,
             JobState::COMPLETED,
+            JobState::COMPLETED,
             true,
             new DateTimeImmutable()
         );
