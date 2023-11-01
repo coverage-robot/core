@@ -59,7 +59,7 @@ class GcsPersistServiceTest extends KernelTestCase
             ->willReturn($this->createMock(LoadJobConfiguration::class));
         $mockTable->expects($this->once())
             ->method('insertRow')
-            ->willReturn(new InsertResponse(['insertErrors' => []], []));
+            ->willReturn(new InsertResponse([], []));
 
         $mockBigQueryClient = $this->createMock(BigQueryClient::class);
         $mockBigQueryClient->expects($this->exactly(2))
@@ -92,20 +92,22 @@ class GcsPersistServiceTest extends KernelTestCase
             new NullLogger()
         );
 
-        $gcsPersistService->persist(
-            new Upload(
-                Uuid::uuid4()->toString(),
-                Provider::GITHUB,
-                '',
-                '',
-                '',
-                [],
-                'mock-branch-reference',
-                'project/root',
-                1,
-                new Tag('mock-tag', '')
-            ),
-            new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+        $this->assertTrue(
+            $gcsPersistService->persist(
+                new Upload(
+                    Uuid::uuid4()->toString(),
+                    Provider::GITHUB,
+                    '',
+                    '',
+                    '',
+                    [],
+                    'mock-branch-reference',
+                    'project/root',
+                    1,
+                    new Tag('mock-tag', '')
+                ),
+                new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+            )
         );
     }
 
@@ -174,20 +176,22 @@ class GcsPersistServiceTest extends KernelTestCase
             new NullLogger()
         );
 
-        $gcsPersistService->persist(
-            new Upload(
-                Uuid::uuid4()->toString(),
-                Provider::GITHUB,
-                '',
-                '',
-                '',
-                [],
-                'mock-branch-reference',
-                'project/root',
-                1,
-                new Tag('mock-tag', '')
-            ),
-            new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+        $this->assertFalse(
+            $gcsPersistService->persist(
+                new Upload(
+                    Uuid::uuid4()->toString(),
+                    Provider::GITHUB,
+                    '',
+                    '',
+                    '',
+                    [],
+                    'mock-branch-reference',
+                    'project/root',
+                    1,
+                    new Tag('mock-tag', '')
+                ),
+                new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+            )
         );
     }
 }

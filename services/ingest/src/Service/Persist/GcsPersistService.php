@@ -192,7 +192,7 @@ class GcsPersistService implements PersistServiceInterface
             )
             ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload));
 
-        return $response->failedRows() == 0;
+        return $response->isSuccessful();
     }
 
     private function totalLines(Coverage $coverage): int
