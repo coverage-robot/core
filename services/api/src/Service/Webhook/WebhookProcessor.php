@@ -13,7 +13,7 @@ class WebhookProcessor
      * @param WebhookProcessorInterface[] $webhookProcessors
      */
     public function __construct(
-        #[TaggedIterator('app.webhook_processor', defaultIndexMethod: 'getProcessorEvent')]
+        #[TaggedIterator('app.webhook_processor', defaultIndexMethod: 'getEvent')]
         private readonly iterable $webhookProcessors
     ) {
     }
