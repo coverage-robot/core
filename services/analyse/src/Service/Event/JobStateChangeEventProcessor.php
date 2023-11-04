@@ -15,6 +15,7 @@ use Exception;
 use JsonException;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Event\Enum\Event;
+use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\JobStateChange;
@@ -97,7 +98,6 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 );
 
                 $this->eventBridgeEventService->publishEvent(
-                    Event::COVERAGE_FINALISED,
                     new CoverageFinalised(
                         $event->getProvider(),
                         $event->getOwner(),
@@ -129,8 +129,7 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 );
 
                 $this->eventBridgeEventService->publishEvent(
-                    Event::ANALYSE_FAILURE,
-                    $event
+                    new AnalyseFailure($event)
                 );
 
                 return true;

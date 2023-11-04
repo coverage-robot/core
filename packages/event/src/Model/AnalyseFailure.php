@@ -3,66 +3,66 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 
 class AnalyseFailure implements EventInterface
 {
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
-        private readonly string|int|null $pullRequest,
-        private readonly DateTimeImmutable $eventTime
+        private readonly EventInterface $event
     ) {
     }
 
     public function getProvider(): Provider
     {
-        return $this->provider;
+        return $this->event->getProvider();
     }
 
     public function getOwner(): string
     {
-        return $this->owner;
+        return $this->event->getOwner();
     }
 
     public function getRepository(): string
     {
-        return $this->repository;
+        return $this->event->getRepository();
     }
 
     public function getCommit(): string
     {
-        return $this->commit;
+        return $this->event->getCommit();
     }
 
     public function getPullRequest(): int|string|null
     {
-        return $this->pullRequest;
+        return $this->event->getPullRequest();
     }
 
     public function getRef(): string
     {
-        return $this->ref;
+        return $this->event->getRef();
+    }
+
+    public function getType(): Event
+    {
+        return Event::ANALYSE_FAILURE;
     }
 
     public function getEventTime(): DateTimeImmutable
     {
-        return $this->eventTime;
+        return $this->event->getIngestTime();
     }
 
     public function __toString(): string
     {
         return sprintf(
-            'IngestFailure#%s-%s-%s-%s-%s-%s',
-            $this->provider->value,
-            $this->owner,
-            $this->repository,
-            $this->ref,
-            $this->commit,
-            $this->pullRequest ?? ''
+            'AnalyseFailure#%s-%s-%s-%s-%s-%s',
+            $this->getProvider()->value,
+            $this->getOwner(),
+            $this->getRepository(),
+            $this->getRef(),
+            $this->getCommit(),
+            $this->getPullRequest() ?? ''
         );
     }
 }

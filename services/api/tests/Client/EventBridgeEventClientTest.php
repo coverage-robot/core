@@ -44,7 +44,7 @@ class EventBridgeEventClientTest extends KernelTestCase
             'eventTime' => $eventTime->format(DateTimeInterface::ATOM),
         ];
 
-        $pipelineComplete = new JobStateChange(
+        $jobStateChange = new JobStateChange(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
@@ -96,10 +96,7 @@ class EventBridgeEventClientTest extends KernelTestCase
             $this->getContainer()->get(SerializerInterface::class)
         );
 
-        $success = $eventBridgeEventService->publishEvent(
-            Event::JOB_STATE_CHANGE,
-            $pipelineComplete
-        );
+        $success = $eventBridgeEventService->publishEvent($jobStateChange);
 
         $this->assertEquals($expectSuccess, $success);
     }

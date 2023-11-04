@@ -13,9 +13,10 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use Packages\Event\Enum\Event;
 use Packages\Event\Enum\EventSource;
+use Packages\Event\Model\IngestSuccess;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -25,17 +26,19 @@ class EventBridgeEventServiceTest extends TestCase
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
-        $upload = new Upload(
-            'mock-upload-id',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            ['mock-parent'],
-            'mock-ref',
-            'mock-project-root',
-            null,
-            new Tag('mock-tag', 'mock-commit')
+        $ingestSuccessEvent = new IngestSuccess(
+            new Upload(
+                'mock-upload-id',
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-commit',
+                ['mock-parent'],
+                'mock-ref',
+                'mock-project-root',
+                null,
+                new Tag('mock-tag', 'mock-commit')
+            )
         );
 
         $mockResult = ResultMockFactory::create(
@@ -55,7 +58,7 @@ class EventBridgeEventServiceTest extends TestCase
                             'EventBusName' => 'mock-event-bus',
                             'Source' => EventSource::INGEST->value,
                             'DetailType' => Event::INGEST_SUCCESS->value,
-                            'Detail' => json_encode($upload, JSON_THROW_ON_ERROR),
+                            'Detail' => 'mock-serialized-ingest-event',
                         ])
                     ],
                 ])
@@ -76,19 +79,16 @@ class EventBridgeEventServiceTest extends TestCase
                 $this,
                 serializeMap: [
                     [
-                        $upload,
+                        $ingestSuccessEvent,
                         'json',
                         [],
-                        json_encode($upload, JSON_THROW_ON_ERROR)
+                        'mock-serialized-ingest-event'
                     ]
                 ]
             )
         );
 
-        $success = $eventBridgeEventService->publishEvent(
-            Event::INGEST_SUCCESS,
-            $upload
-        );
+        $success = $eventBridgeEventService->publishEvent($ingestSuccessEvent);
 
         $this->assertEquals($expectSuccess, $success);
     }

@@ -3,15 +3,14 @@
 namespace App\Tests\Service\Persist;
 
 use App\Client\EventBridgeEventClient;
-use App\Service\Persist\BigQueryPersistService;
 use App\Service\Persist\EventBridgePersistService;
 use App\Service\Persist\GcsPersistService;
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
+use Packages\Event\Model\IngestSuccess;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -25,7 +24,7 @@ class EventBridgePersistServiceTest extends TestCase
         $eventService = $this->createMock(EventBridgeEventClient::class);
         $eventService->expects($this->once())
             ->method('publishEvent')
-            ->with(Event::INGEST_SUCCESS, $upload)
+            ->with($this->isInstanceOf(IngestSuccess::class))
             ->willReturn(true);
 
         $eventBridgePersistService = new EventBridgePersistService($eventService, new NullLogger());
