@@ -131,7 +131,7 @@ jobs:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}/infrastructure
 
-    api-tests:
+    orchestrator-tests:
         name: "Orchestrator Tests"
         runs-on: ubuntu-latest
         needs: lint
@@ -167,7 +167,7 @@ jobs:
                     token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
                         ${{ env.working-directory }}/coverage.xml
-                    tag: api-service
+                    tag: orchestrator-service
                 continue-on-error: true
 
             -   name: Upload coverage to artifact storage
@@ -226,7 +226,7 @@ jobs:
         runs-on: ubuntu-latest
         needs: orchestrator-tests
         if: github.ref == 'refs/heads/main'
-        environment: api-prod
+        environment: orchestrator-prod
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         permissions:
