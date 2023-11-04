@@ -3,18 +3,18 @@ resource "aws_dynamodb_table" "event_table" {
   billing_mode                = "PROVISIONED"
   read_capacity               = 5
   write_capacity              = 5
-  hash_key                    = "ownerKey"
-  range_key                   = "event"
+  hash_key                    = "identifier"
+  range_key                   = "version"
   deletion_protection_enabled = true
 
   attribute {
-    name = "ownerKey"
+    name = "identifier"
     type = "S"
   }
 
   attribute {
-    name = "event"
-    type = "S"
+    name = "version"
+    type = "N"
   }
 
   ttl {

@@ -9,6 +9,8 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "async-aws/async-aws-bundle": "^1.12",
+        "async-aws/dynamo-db": "^3.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/event": "*",

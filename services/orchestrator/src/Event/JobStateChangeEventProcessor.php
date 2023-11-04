@@ -4,16 +4,17 @@ namespace App\Event;
 
 use App\Client\DynamoDbClient;
 use App\Enum\OrchestratedEventState;
-use App\Model\Ingestion;
+use App\Model\Job;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
+use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
-use Packages\Event\Model\IngestFailure;
-use Packages\Event\Model\IngestSuccess;
+use Packages\Event\Model\JobStateChange;
+use Packages\Models\Enum\JobState;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-abstract class AbstractIngestEventProcessor implements OrchestratorEventProcessorInterface
+class JobStateChangeEventProcessor implements OrchestratorEventProcessorInterface
 {
     public function __construct(
         private readonly EventStoreService $eventStoreService,
@@ -24,10 +25,7 @@ abstract class AbstractIngestEventProcessor implements OrchestratorEventProcesso
 
     public function process(EventInterface $event): bool
     {
-        if (
-            !$event instanceof IngestSuccess &&
-            !$event instanceof IngestFailure
-        ) {
+        if (!$event instanceof JobStateChange) {
             $this->ingestEventProcessorLogger->critical(
                 'Event is not intended to be processed by this processor',
                 [
@@ -37,15 +35,16 @@ abstract class AbstractIngestEventProcessor implements OrchestratorEventProcesso
             return false;
         }
 
-        $newState = new Ingestion(
+        $newState = new Job(
             $event->getProvider(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
-            match (true) {
-                $event instanceof IngestSuccess => OrchestratedEventState::SUCCESS,
-                $event instanceof IngestFailure => OrchestratedEventState::FAILURE
-            }
+            match ($event->getState()) {
+                JobState::IN_PROGRESS => OrchestratedEventState::ONGOING,
+                default => OrchestratedEventState::SUCCESS
+            },
+            $event->getExternalId()
         );
 
         $stateChanges = $this->dynamoDbClient->getStateChangesByIdentifier($newState->getIdentifier());
@@ -81,5 +80,10 @@ abstract class AbstractIngestEventProcessor implements OrchestratorEventProcesso
 
             return null;
         }
+    }
+
+    public static function getEvent(): string
+    {
+        return Event::JOB_STATE_CHANGE->value;
     }
 }
