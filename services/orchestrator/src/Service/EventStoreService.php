@@ -53,7 +53,7 @@ class EventStoreService
     /**
      * Reduce a pre-existing set of state changes into a single event, representing the current
      * state of the event.
-     * 
+     *
      * @throws ExceptionInterface
      */
     public function reduceStateChanges(array $stateChanges): OrchestratedEventInterface
