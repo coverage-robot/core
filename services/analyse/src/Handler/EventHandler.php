@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class EventHandler extends EventBridgeHandler
 {
     /**
-* @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
+     * @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
      */
     public function __construct(
         private readonly EventProcessorServiceInterface $eventProcessorService,
