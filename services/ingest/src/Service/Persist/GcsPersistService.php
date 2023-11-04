@@ -12,7 +12,7 @@ use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\File;
 use Psr\Log\LoggerInterface;
 

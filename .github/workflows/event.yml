@@ -1,0 +1,62 @@
+name: Event Package
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'packages/event/**'
+            - '.github/workflows/packages.yml'
+
+    pull_request:
+        branches:
+            - main
+        paths:
+            - 'packages/event/**'
+            - '.github/workflows/packages.yml'
+
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        shell: bash
+        working-directory: './packages/event/'
+
+env:
+    php-version: "8.2"
+    working-directory: './packages/event/'
+
+jobs:
+    event-tests:
+        name: "Event Tests"
+        runs-on: ubuntu-latest
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+
+            -   name: Validate Composer configuration
+                run: composer validate
+
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress
+
+            -   name: Run PHPUnit
+                run: |
+                    composer test:unit -- --coverage-clover='./coverage.xml' --configuration='./phpunit.xml.dist'
+                shell: bash
+
+            -   uses: coverage-robot/action@v1.0.2
+                with:
+                    token: ${{ secrets.COVERAGE_TOKEN }}
+                    files: |
+                        ${{ env.working-directory }}/coverage.xml
+                    tag: event-package
+                continue-on-error: true

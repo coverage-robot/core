@@ -4,8 +4,8 @@ namespace App\Tests\Service\History;
 
 use App\Service\History\CommitHistoryService;
 use App\Service\History\Github\GithubCommitHistoryService;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

@@ -7,7 +7,7 @@ use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use Packages\Models\Model\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;

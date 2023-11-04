@@ -11,11 +11,12 @@ use App\Query\Result\TagCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\JobStateChangeEventProcessor;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use Bref\Event\EventBridge\EventBridgeEvent;
+use DateTimeImmutable;
 use Github\Api\Repository\Checks\CheckRuns;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\JobStateChange;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Enum\PublishableCheckRunStatus;
@@ -30,20 +31,20 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
 {
     public function testProcessFirstJob(): void
     {
-        $jobStateChange = [
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'ref' => 'mock-ref',
-            'commit' => 'mock-commit',
-            'pullRequest' => 'mock-pull-request',
-            'externalId' => 'mock-id',
-            'index' => 0,
-            'state' => JobState::IN_PROGRESS->value,
-            'suiteState' => JobState::IN_PROGRESS->value,
-            'initialState' => true,
-            'eventTime' => '2021-01-01T00:00:00+00:00',
-        ];
+        $jobStateChange = new JobStateChange(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            'mock-pull-request',
+            'mock-id',
+            0,
+            JobState::IN_PROGRESS,
+            JobState::IN_PROGRESS,
+            true,
+            new DateTimeImmutable('2021-01-01T00:00:00+00:00')
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->never())
@@ -96,30 +97,25 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             $mockEventBridgeEventClient,
         );
 
-        $jobStateChangeEventProcessor->process(
-            new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
-                'detail' => $jobStateChange
-            ])
-        );
+        $jobStateChangeEventProcessor->process($jobStateChange);
     }
 
     public function testProcessLastJob(): void
     {
-        $jobStateChange = [
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'ref' => 'mock-ref',
-            'commit' => 'mock-commit',
-            'pullRequest' => 'mock-pull-request',
-            'externalId' => 'mock-id',
-            'index' => 1,
-            'state' => JobState::COMPLETED->value,
-            'suiteState' => JobState::COMPLETED->value,
-            'initialState' => true,
-            'eventTime' => '2021-01-01T00:00:00+00:00',
-        ];
+        $jobStateChange = new JobStateChange(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            'mock-pull-request',
+            'mock-id',
+            1,
+            JobState::COMPLETED,
+            JobState::COMPLETED,
+            true,
+            new DateTimeImmutable('2021-01-01T00:00:00+00:00')
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->atLeastOnce())
@@ -252,30 +248,25 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             $mockEventBridgeEventClient,
         );
 
-        $jobStateChangeEventProcessor->process(
-            new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
-                'detail' => $jobStateChange
-            ])
-        );
+        $jobStateChangeEventProcessor->process($jobStateChange);
     }
 
     public function testProcessCompetingLastJobs(): void
     {
-        $jobStateChange = [
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'ref' => 'mock-ref',
-            'commit' => 'mock-commit',
-            'pullRequest' => 'mock-pull-request',
-            'externalId' => 'mock-id',
-            'index' => 1,
-            'state' => JobState::COMPLETED->value,
-            'suiteState' => JobState::COMPLETED->value,
-            'initialState' => true,
-            'eventTime' => '2021-01-01T00:00:00+00:00',
-        ];
+        $jobStateChange = new JobStateChange(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            'mock-pull-request',
+            'mock-id',
+            1,
+            JobState::COMPLETED,
+            JobState::COMPLETED,
+            true,
+            new DateTimeImmutable('2021-01-01T00:00:00+00:00')
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->never())
@@ -347,30 +338,25 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             $mockEventBridgeEventClient,
         );
 
-        $jobStateChangeEventProcessor->process(
-            new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
-                'detail' => $jobStateChange
-            ])
-        );
+        $jobStateChangeEventProcessor->process($jobStateChange);
     }
 
     public function testProcessCompletedJobInMiddleOfSuite(): void
     {
-        $jobStateChange = [
-            'provider' => Provider::GITHUB->value,
-            'owner' => 'mock-owner',
-            'repository' => 'mock-repository',
-            'ref' => 'mock-ref',
-            'commit' => 'mock-commit',
-            'pullRequest' => 'mock-pull-request',
-            'externalId' => 'mock-id',
-            'index' => 1,
-            'state' => JobState::COMPLETED->value,
-            'suiteState' => JobState::IN_PROGRESS->value,
-            'initialState' => true,
-            'eventTime' => '2021-01-01T00:00:00+00:00',
-        ];
+        $jobStateChange = new JobStateChange(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            'mock-pull-request',
+            'mock-id',
+            1,
+            JobState::COMPLETED,
+            JobState::IN_PROGRESS,
+            true,
+            new DateTimeImmutable('2021-01-01T00:00:00+00:00')
+        );
 
         $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
         $mockPublishableCoverageData->expects($this->never())
@@ -443,19 +429,14 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
             $mockEventBridgeEventClient,
         );
 
-        $jobStateChangeEventProcessor->process(
-            new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
-                'detail' => $jobStateChange
-            ])
-        );
+        $jobStateChangeEventProcessor->process($jobStateChange);
     }
 
     public function testProcessorEvent(): void
     {
         $this->assertEquals(
-            CoverageEvent::JOB_STATE_CHANGE->value,
-            JobStateChangeEventProcessor::getProcessorEvent()
+            Event::JOB_STATE_CHANGE->value,
+            JobStateChangeEventProcessor::getEvent()
         );
     }
 }

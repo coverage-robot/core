@@ -13,12 +13,11 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use Monolog\Test\TestCase;
+use Packages\Event\Enum\Event;
+use Packages\Event\Enum\EventSource;
+use Packages\Event\Model\CoverageFinalised;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class EventBridgeEventServiceTest extends TestCase
@@ -26,22 +25,16 @@ class EventBridgeEventServiceTest extends TestCase
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
-        $detail = [
-            'upload' => new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-commit',
-                ['mock-parent-commit'],
-                'mock-ref',
-                'mock-project-root',
-                null,
-                new Tag('mock-tag', 'mock-commit'),
-                new DateTimeImmutable()
-            ),
-            'coveragePercentage' => '99'
-        ];
+        $detail = new CoverageFinalised(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            null,
+            99,
+            new DateTimeImmutable()
+        );
 
         $mockResult = ResultMockFactory::create(PutEventsResponse::class, [
             'FailedEntryCount' => $failedEntryCount,
@@ -55,8 +48,8 @@ class EventBridgeEventServiceTest extends TestCase
                     'Entries' => [
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
-                            'Source' => CoverageEventSource::ANALYSE->value,
-                            'DetailType' => CoverageEvent::COVERAGE_FINALISED->value,
+                            'Source' => EventSource::ANALYSE->value,
+                            'DetailType' => Event::COVERAGE_FINALISED->value,
                             'Detail' => 'mock-serialized-json'
                         ])
                     ],
@@ -87,10 +80,7 @@ class EventBridgeEventServiceTest extends TestCase
             )
         );
 
-        $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::COVERAGE_FINALISED,
-            $detail
-        );
+        $success = $eventBridgeEventService->publishEvent($detail);
 
         $this->assertEquals($expectSuccess, $success);
     }

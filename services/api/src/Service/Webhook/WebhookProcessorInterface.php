@@ -18,5 +18,5 @@ interface WebhookProcessorInterface
     /**
      * The webhook event that this processor is responsible for handling.
      */
-    public static function getProcessorEvent(): string;
+    public static function getEvent(): string;
 }

@@ -6,8 +6,8 @@ use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\EventInterface;
 use Psr\Log\LoggerInterface;
 
 /**

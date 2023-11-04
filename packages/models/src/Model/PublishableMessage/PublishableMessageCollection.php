@@ -4,7 +4,7 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use Countable;
 use DateTimeInterface;
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 
 class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {

@@ -137,3 +137,16 @@ updates:
             - "php"
             - "chore"
             - "bump-patch"
+
+    ## Event package dependencies
+    -   package-ecosystem: "composer"
+        directory: "packages/event"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"

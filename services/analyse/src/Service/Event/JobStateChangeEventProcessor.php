@@ -9,23 +9,25 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\EnvironmentService;
-use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTime;
 use DateTimeImmutable;
 use Exception;
 use JsonException;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\AnalyseFailure;
+use Packages\Event\Model\CoverageFinalised;
+use Packages\Event\Model\EventInterface;
+use Packages\Event\Model\JobStateChange;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Model\Event\CoverageFinalised;
-use Packages\Models\Model\Event\JobStateChange;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
 use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -46,60 +48,63 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
     ) {
     }
 
-    public function process(EventBridgeEvent $event): void
+    public function process(EventInterface $event): bool
     {
-        try {
-            $jobStateChange = $this->serializer->denormalize(
-                $event->getDetail(),
-                JobStateChange::class
+        if (!$event instanceof JobStateChange) {
+            throw new RuntimeException(
+                sprintf(
+                    'Event is not an instance of %s',
+                    JobStateChange::class
+                )
             );
+        }
 
+        try {
             $this->eventProcessorLogger->info(
                 sprintf(
                     'Starting to process %s.',
-                    (string)$jobStateChange
+                    (string)$event
                 )
             );
 
-            $coverageData = $this->coverageAnalyserService->analyse($jobStateChange);
+            $coverageData = $this->coverageAnalyserService->analyse($event);
 
             if (
-                $jobStateChange->isInitialState() &&
-                $jobStateChange->getIndex() === 0
+                $event->isInitialState() &&
+                $event->getIndex() === 0
             ) {
                 $this->eventProcessorLogger->info(
                     sprintf(
                         '%s is the initial job. Queuing up the initial check run to be published.',
-                        (string)$jobStateChange
+                        (string)$event
                     )
                 );
 
-                $successful = $this->queueStartCheckRun($jobStateChange);
+                $successful = $this->queueStartCheckRun($event);
             } elseif (
-                $jobStateChange->getState() === JobState::COMPLETED &&
-                $this->isAllCheckRunsFinished($jobStateChange)
+                $event->getState() === JobState::COMPLETED &&
+                $this->isAllCheckRunsFinished($event)
             ) {
                 $this->eventProcessorLogger->info(
                     sprintf(
                         '%s is the final job. Queuing up the final check run to be published.',
-                        (string)$jobStateChange
+                        (string)$event
                     )
                 );
 
                 $successful = $this->queueFinalCheckRun(
-                    $jobStateChange,
+                    $event,
                     $coverageData
                 );
 
                 $this->eventBridgeEventService->publishEvent(
-                    CoverageEvent::COVERAGE_FINALISED,
                     new CoverageFinalised(
-                        $jobStateChange->getProvider(),
-                        $jobStateChange->getOwner(),
-                        $jobStateChange->getRepository(),
-                        $jobStateChange->getRef(),
-                        $jobStateChange->getCommit(),
-                        $jobStateChange->getPullRequest(),
+                        $event->getProvider(),
+                        $event->getOwner(),
+                        $event->getRepository(),
+                        $event->getRef(),
+                        $event->getCommit(),
+                        $event->getPullRequest(),
                         $coverageData->getCoveragePercentage(),
                         new DateTimeImmutable()
                     )
@@ -108,42 +113,43 @@ class JobStateChangeEventProcessor implements EventProcessorInterface
                 $this->eventProcessorLogger->info(
                     sprintf(
                         'Ignoring %s as it is not the start or end check run.',
-                        (string)$jobStateChange
+                        (string)$event
                     )
                 );
 
-                return;
+                return true;
             }
 
             if (!$successful) {
                 $this->eventProcessorLogger->critical(
                     sprintf(
                         'Attempt to publish coverage for %s was unsuccessful.',
-                        (string)$jobStateChange
+                        (string)$event
                     )
                 );
 
                 $this->eventBridgeEventService->publishEvent(
-                    CoverageEvent::ANALYSE_FAILURE,
-                    $jobStateChange
+                    new AnalyseFailure($event)
                 );
 
-                return;
+                return true;
             }
         } catch (JsonException $e) {
             $this->eventProcessorLogger->critical(
                 'Exception while parsing event details.',
                 [
                     'exception' => $e,
-                    'event' => $event->toArray(),
+                    'event' => $event,
                 ]
             );
         }
+
+        return true;
     }
 
-    public static function getProcessorEvent(): string
+    public static function getEvent(): string
     {
-        return CoverageEvent::JOB_STATE_CHANGE->value;
+        return Event::JOB_STATE_CHANGE->value;
     }
 
     /**

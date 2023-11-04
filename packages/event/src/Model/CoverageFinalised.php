@@ -1,8 +1,9 @@
 <?php
 
-namespace Packages\Models\Model\Event;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 
 class CoverageFinalised implements EventInterface
@@ -52,6 +53,11 @@ class CoverageFinalised implements EventInterface
     public function getCoveragePercentage(): float
     {
         return $this->coveragePercentage;
+    }
+
+    public function getType(): Event
+    {
+        return Event::COVERAGE_FINALISED;
     }
 
     public function getEventTime(): DateTimeImmutable

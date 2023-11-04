@@ -4,7 +4,7 @@ namespace App\Tests\Command;
 
 use App\Handler\EventHandler;
 use Bref\Event\InvalidLambdaEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +27,7 @@ class InvokeEventCommandTest extends KernelTestCase
         $command = $application->find('app:invoke_event');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'event' => CoverageEvent::COVERAGE_FINALISED->value,
+            'event' => Event::COVERAGE_FINALISED->value,
             'body' => '["mock-event-detail"]'
         ]);
 
@@ -50,7 +50,7 @@ class InvokeEventCommandTest extends KernelTestCase
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
         $commandTester->execute([
-            'event' => CoverageEvent::COVERAGE_FINALISED->value,
+            'event' => Event::COVERAGE_FINALISED->value,
             'body' => '["mock-event-detail"]'
         ]);
 

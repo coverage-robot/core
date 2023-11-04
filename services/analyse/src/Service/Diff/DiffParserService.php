@@ -3,7 +3,7 @@
 namespace App\Service\Diff;
 
 use App\Service\ProviderAwareInterface;
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace Packages\Models\Model\Event;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Event\Enum\Event;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\Context;
@@ -87,6 +88,11 @@ class JobStateChange implements EventInterface
     public function isInitialState(): bool
     {
         return $this->initialState;
+    }
+
+    public function getType(): Event
+    {
+        return Event::JOB_STATE_CHANGE;
     }
 
     public function getEventTime(): DateTimeImmutable

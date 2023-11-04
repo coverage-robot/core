@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d7f642a8b6198137d773f04f8fcf6600",
+    "content-hash": "89eb8c20f73933890945cfc9a4fc3446",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -665,12 +665,48 @@
             "time": "2023-01-15T23:15:59+00:00"
         },
         {
+            "name": "coverage-robot/event",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/event",
+                "reference": "efe3d6a9560f35cf834bb67c3d0a34385d858eb9"
+            },
+            "require": {
+                "psr/log": "^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Event\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Packages\\Event\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test:unit": [
+                    "@putenv XDEBUG_MODE=coverage",
+                    "phpunit --configuration=./phpunit.xml.dist"
+                ]
+            },
+            "description": "Shared event logic across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "coverage-robot/models",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
             },
             "type": "library",
             "autoload": {

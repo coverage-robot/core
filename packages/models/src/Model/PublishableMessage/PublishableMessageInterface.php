@@ -3,8 +3,8 @@
 namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeInterface;
+use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\Event\EventInterface;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 

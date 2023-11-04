@@ -16,6 +16,7 @@
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/clients": "^1.0",
+        "coverage-robot/event": "*",
         "coverage-robot/models": "^1.0",
         "doctrine/sql-formatter": "^1.1",
         "google/cloud-bigquery": "^1.24",
@@ -90,6 +91,10 @@
         "symfony/symfony": "*"
     },
     "repositories": [
+        {
+            "type": "path",
+            "url": "../../packages/event"
+        },
         {
             "type": "path",
             "url": "../../packages/models"

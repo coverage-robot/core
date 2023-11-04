@@ -6,7 +6,6 @@ use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
-use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
@@ -14,8 +13,8 @@ use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Model\Event\JobStateChange;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -106,7 +105,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
 
         $this->publishEvent(
-            CoverageEvent::JOB_STATE_CHANGE,
             new JobStateChange(
                 $webhook->getProvider(),
                 $webhook->getOwner(),
@@ -178,13 +176,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    private function publishEvent(CoverageEvent $event, JobStateChange $jobStateChange): void
+    private function publishEvent(JobStateChange $jobStateChange): void
     {
         try {
-            $this->eventBridgeEventClient->publishEvent(
-                $event,
-                $jobStateChange
-            );
+            $this->eventBridgeEventClient->publishEvent($jobStateChange);
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(
@@ -198,8 +193,8 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         }
     }
 
-    public static function getProcessorEvent(): string
+    public static function getEvent(): string
     {
-        return WebhookProcessorEvent::JOB_STATE_CHANGE->value;
+        return Event::JOB_STATE_CHANGE->value;
     }
 }

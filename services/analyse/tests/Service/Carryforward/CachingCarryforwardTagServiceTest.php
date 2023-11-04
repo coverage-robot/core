@@ -4,7 +4,7 @@ namespace App\Tests\Service\Carryforward;
 
 use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagService;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 

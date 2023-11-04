@@ -4,9 +4,9 @@ namespace App\Service\Persist;
 
 use App\Client\EventBridgeEventClient;
 use JsonException;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Model\IngestSuccess;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Event\Upload;
 use Psr\Log\LoggerInterface;
 
 class EventBridgePersistService implements PersistServiceInterface
@@ -22,10 +22,7 @@ class EventBridgePersistService implements PersistServiceInterface
      */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
-        $published = $this->eventBridgeEventService->publishEvent(
-            CoverageEvent::INGEST_SUCCESS,
-            $upload
-        );
+        $published = $this->eventBridgeEventService->publishEvent(new IngestSuccess($upload));
 
         $this->sqsPersistServiceLogger->info(
             sprintf(

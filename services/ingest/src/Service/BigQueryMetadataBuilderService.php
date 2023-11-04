@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Exception\PersistException;
 use JsonException;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
 use Psr\Log\LoggerInterface;

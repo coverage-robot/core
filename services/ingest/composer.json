@@ -16,6 +16,7 @@
         "async-aws/simple-s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
+        "coverage-robot/event": "*",
         "coverage-robot/models": "*",
         "google/cloud-bigquery": "^1.24",
         "google/cloud-storage": "^1.33",
@@ -93,6 +94,10 @@
         {
             "type": "path",
             "url": "../../packages/models"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/event"
         }
     ],
     "extra": {

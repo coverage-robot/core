@@ -6,9 +6,9 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -77,7 +77,7 @@ class InvokeCommand extends Command
 
             $this->handler->handleEventBridge(
                 new EventBridgeEvent([
-                    'detail-type' => CoverageEvent::INGEST_SUCCESS,
+                    'detail-type' => Event::INGEST_SUCCESS,
                     'detail' => $this->serializer->serialize($upload, 'json')
                 ]),
                 Context::fake()

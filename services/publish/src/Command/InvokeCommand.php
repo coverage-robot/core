@@ -8,10 +8,10 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
@@ -22,6 +22,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * This command is a helper for manually invoking the publish handler locally.
@@ -35,8 +36,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the publish handler')]
 class InvokeCommand extends Command
 {
-    public function __construct(private readonly EventHandler $handler)
-    {
+    public function __construct(
+        private readonly EventHandler $handler,
+        private readonly SerializerInterface $serializer
+    ) {
         parent::__construct();
     }
 
@@ -91,7 +94,7 @@ class InvokeCommand extends Command
                         [
                             'eventSource' => 'aws:sqs',
                             'messageId' => '1',
-                            'body' => json_encode(
+                            'body' => $this->serializer->serialize(
                                 new PublishableMessageCollection(
                                     $upload,
                                     [
@@ -133,7 +136,8 @@ class InvokeCommand extends Command
                                             $validUntil
                                         )
                                     ]
-                                )
+                                ),
+                                'json'
                             ),
                             'attributes' => [
                                 'ApproximateReceiveCount' => '1',

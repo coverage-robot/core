@@ -2,50 +2,33 @@
 
 namespace App\Handler;
 
-use App\Service\Event\EventProcessorInterface;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Psr\Log\LoggerInterface;
-use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\EventInterface;
+use Packages\Event\Service\EventProcessorServiceInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends EventBridgeHandler
 {
-    /**
-     * @param EventProcessorInterface[] $eventProcessors
-     */
     public function __construct(
-        private readonly LoggerInterface $handlerLogger,
-        #[TaggedIterator('app.event_processor', defaultIndexMethod: 'getProcessorEvent')]
-        private readonly iterable $eventProcessors
+        private readonly EventProcessorServiceInterface $eventProcessorService,
+        private readonly SerializerInterface $serializer
     ) {
     }
 
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
-        $eventType = CoverageEvent::from($event->getDetailType());
+        $eventType = Event::from($event->getDetailType());
 
-        $processor = (iterator_to_array($this->eventProcessors)[$eventType->value]) ?? null;
-
-        if (!$processor instanceof EventProcessorInterface) {
-            throw new RuntimeException(
-                sprintf(
-                    'No event processor for %s',
-                    $eventType->value
-                )
-            );
-        }
-
-        $this->handlerLogger->info(
-            sprintf(
-                'Processing %s using %s.',
-                $eventType->value,
-                get_class($processor)
+        $this->eventProcessorService->process(
+            $eventType,
+            $this->serializer->deserialize(
+                $event->getDetail(),
+                EventInterface::class,
+                'json'
             )
         );
-
-        $processor->process($event);
     }
 }

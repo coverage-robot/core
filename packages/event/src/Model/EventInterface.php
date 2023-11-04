@@ -1,9 +1,9 @@
 <?php
 
-namespace Packages\Models\Model\Event;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
-use Packages\Models\Enum\EventType;
+use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
@@ -11,9 +11,12 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 #[DiscriminatorMap(
     'type',
     [
-        EventType::UPLOAD->value => Upload::class,
-        EventType::JOB_STATE_CHANGE->value => JobStateChange::class,
-        EventType::COVERAGE_FINALISED->value => CoverageFinalised::class
+        Event::UPLOAD->value => Upload::class,
+        Event::JOB_STATE_CHANGE->value => JobStateChange::class,
+        Event::COVERAGE_FINALISED->value => CoverageFinalised::class,
+        Event::INGEST_SUCCESS->value => IngestSuccess::class,
+        Event::INGEST_FAILURE->value => IngestFailure::class,
+        Event::ANALYSE_FAILURE->value => AnalyseFailure::class,
     ]
 )]
 interface EventInterface extends Stringable
@@ -29,6 +32,8 @@ interface EventInterface extends Stringable
     public function getPullRequest(): int|string|null;
 
     public function getRef(): string;
+
+    public function getType(): Event;
 
     public function getEventTime(): DateTimeImmutable;
 }

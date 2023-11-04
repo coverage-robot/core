@@ -6,7 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,7 +33,7 @@ class InvokeEventCommand extends Command
         try {
             $this->eventHandler->handleEventBridge(
                 new EventBridgeEvent([
-                    'detail-type' => CoverageEvent::from($input->getArgument('event'))->value,
+                    'detail-type' => Event::from($input->getArgument('event'))->value,
                     'detail' => $input->getArgument('body'),
                 ]),
                 Context::fake()

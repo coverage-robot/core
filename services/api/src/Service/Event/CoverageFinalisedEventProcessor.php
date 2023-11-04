@@ -3,9 +3,9 @@
 namespace App\Service\Event;
 
 use App\Repository\ProjectRepository;
-use Bref\Event\EventBridge\EventBridgeEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Model\Event\CoverageFinalised;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\CoverageFinalised;
+use Packages\Event\Model\EventInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -23,35 +23,40 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
      */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
-        private readonly ProjectRepository $projectRepository,
-        private readonly SerializerInterface $serializer
+        private readonly ProjectRepository $projectRepository
     ) {
     }
 
-    public function process(EventBridgeEvent $event): void
+    public function process(EventInterface $event): bool
     {
-        $coverageFinalised = $this->serializer->denormalize(
-            $event->getDetail(),
-            CoverageFinalised::class
-        );
+        if (!$event instanceof CoverageFinalised) {
+            $this->eventHandlerLogger->warning(
+                'Event skipped as it was not a CoverageFinalised event.',
+                [
+                    'event' => $event
+                ]
+            );
 
-        $coveragePercentage = $coverageFinalised->getCoveragePercentage();
+            return true;
+        }
 
-        if (!in_array($coverageFinalised->getRef(), self::REFS, true)) {
+        $coveragePercentage = $event->getCoveragePercentage();
+
+        if (!in_array($event->getRef(), self::REFS, true)) {
             $this->eventHandlerLogger->info(
                 'Event skipped as it was not for a main ref.',
                 [
-                    'detailType' => $event->getDetailType(),
-                    'detail' => $event->getDetail(),
+                    'event' => $event
                 ]
             );
-            return;
+
+            return true;
         }
 
         $project = $this->projectRepository->findOneBy([
-            'provider' => $coverageFinalised->getProvider(),
-            'owner' => $coverageFinalised->getOwner(),
-            'repository' => $coverageFinalised->getRepository(),
+            'provider' => $event->getProvider(),
+            'owner' => $event->getOwner(),
+            'repository' => $event->getRepository(),
             'enabled' => true,
         ]);
 
@@ -59,11 +64,10 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
             $this->eventHandlerLogger->warning(
                 'Event skipped as it was not related to a valid project.',
                 [
-                    'detailType' => $event->getDetailType(),
-                    'detail' => $event->getDetail(),
+                    'event' => $event
                 ]
             );
-            return;
+            return true;
         }
 
         $project->setCoveragePercentage($coveragePercentage);
@@ -75,16 +79,17 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
                 (string)$project
             ),
             [
-                'detailType' => $event->getDetailType(),
-                'detail' => $event->getDetail(),
+                'event' => $event
             ]
         );
 
         $this->projectRepository->save($project, true);
+
+        return true;
     }
 
-    public static function getProcessorEvent(): string
+    public static function getEvent(): string
     {
-        return CoverageEvent::COVERAGE_FINALISED->value;
+        return Event::COVERAGE_FINALISED->value;
     }
 }
