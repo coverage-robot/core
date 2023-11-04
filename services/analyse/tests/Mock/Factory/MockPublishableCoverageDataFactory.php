@@ -7,7 +7,7 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

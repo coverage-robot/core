@@ -9,8 +9,8 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use JsonException;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\EventBus\CoverageEventSource;
+use Packages\Event\Enum\Event;
+use Packages\Event\Enum\EventSource;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBridgeEventClient
@@ -26,14 +26,14 @@ class EventBridgeEventClient
      * @throws HttpException
      * @throws JsonException
      */
-    public function publishEvent(CoverageEvent $event, object $detail): bool
+    public function publishEvent(Event $event, object $detail): bool
     {
         $events = $this->eventBridgeClient->putEvents(
             new PutEventsRequest([
                 'Entries' => [
                     new PutEventsRequestEntry([
                         'EventBusName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_BUS),
-                        'Source' => CoverageEventSource::INGEST->value,
+                        'Source' => EventSource::INGEST->value,
                         'DetailType' => $event->value,
                         'Detail' => $this->serializer->serialize(
                             $detail,

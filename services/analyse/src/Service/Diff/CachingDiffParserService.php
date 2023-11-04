@@ -2,7 +2,7 @@
 
 namespace App\Service\Diff;
 
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use WeakMap;
 
 class CachingDiffParserService implements DiffParserServiceInterface

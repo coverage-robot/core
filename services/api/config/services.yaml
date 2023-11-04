@@ -24,6 +24,12 @@ services:
         # runtime
         public: true
 
+    Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'
+
+    Packages\Event\Service\EventProcessorService:
+        arguments:
+            $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
+
     PUGX\Poser\Render\:
         resource: '../vendor/badges/poser/src/Render'
 

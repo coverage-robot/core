@@ -11,11 +11,11 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
+use Packages\Event\Enum\Event;
+use Packages\Event\Enum\EventSource;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -53,8 +53,8 @@ class EventBridgeEventServiceTest extends TestCase
                     'Entries' => [
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
-                            'Source' => CoverageEventSource::INGEST->value,
-                            'DetailType' => CoverageEvent::INGEST_SUCCESS->value,
+                            'Source' => EventSource::INGEST->value,
+                            'DetailType' => Event::INGEST_SUCCESS->value,
                             'Detail' => json_encode($upload, JSON_THROW_ON_ERROR),
                         ])
                     ],
@@ -86,7 +86,7 @@ class EventBridgeEventServiceTest extends TestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::INGEST_SUCCESS,
+            Event::INGEST_SUCCESS,
             $upload
         );
 

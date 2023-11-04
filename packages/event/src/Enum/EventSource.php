@@ -1,8 +1,8 @@
 <?php
 
-namespace Packages\Models\Enum\EventBus;
+namespace Packages\Event\Enum;
 
-enum CoverageEventSource: string
+enum EventSource: string
 {
     case API = 'service.api';
     case INGEST = 'service.ingest';

@@ -13,7 +13,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;

@@ -3,15 +3,11 @@
 namespace App\Tests\Command;
 
 use App\Entity\Project;
-use App\Handler\EventHandler;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
-use Bref\Event\InvalidLambdaEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\Provider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class NewProjectCommandTest extends KernelTestCase

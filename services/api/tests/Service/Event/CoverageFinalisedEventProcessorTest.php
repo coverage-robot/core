@@ -7,9 +7,9 @@ use App\Repository\ProjectRepository;
 use App\Service\Event\CoverageFinalisedEventProcessor;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\CoverageFinalised;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\CoverageFinalised;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Serializer\Serializer;
@@ -55,7 +55,7 @@ class CoverageFinalisedEventProcessorTest extends TestCase
         $eventProcessor->process(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
+                    'detail-type' => Event::INGEST_SUCCESS->value,
                     'detail' => $coverageFinalised
                 ]
             )
@@ -102,7 +102,7 @@ class CoverageFinalisedEventProcessorTest extends TestCase
         $eventProcessor->process(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::COVERAGE_FINALISED->value,
+                    'detail-type' => Event::COVERAGE_FINALISED->value,
                     'detail' => []
                 ]
             )
@@ -154,7 +154,7 @@ class CoverageFinalisedEventProcessorTest extends TestCase
         $eventProcessor->process(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::INGEST_SUCCESS->value,
+                    'detail-type' => Event::INGEST_SUCCESS->value,
                     'detail' => []
                 ]
             )

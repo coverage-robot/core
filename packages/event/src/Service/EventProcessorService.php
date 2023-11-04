@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Handler;
+namespace Packages\Event\Service;
 
-use App\Service\Event\EventProcessorInterface;
-use Bref\Context\Context;
-use Bref\Event\EventBridge\EventBridgeEvent;
-use Bref\Event\EventBridge\EventBridgeHandler;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\EventInterface;
+use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class EventHandler extends EventBridgeHandler
+class EventProcessorService implements EventProcessorServiceInterface
 {
     /**
      * @param EventProcessorInterface[] $eventProcessors
      */
     public function __construct(
-        private readonly LoggerInterface $handlerLogger,
-        #[TaggedIterator('app.event_processor', defaultIndexMethod: 'getProcessorEvent')]
+        private readonly LoggerInterface $eventProcessorLogger,
         private readonly iterable $eventProcessors
     ) {
     }
 
-    public function handleEventBridge(EventBridgeEvent $event, Context $context): void
+    /**
+     * @inheritDoc
+     */
+    public function process(Event $eventType, EventInterface $event): bool
     {
-        $eventType = CoverageEvent::from($event->getDetailType());
-
         $processor = (iterator_to_array($this->eventProcessors)[$eventType->value]) ?? null;
 
         if (!$processor instanceof EventProcessorInterface) {
@@ -38,7 +35,7 @@ class EventHandler extends EventBridgeHandler
             );
         }
 
-        $this->handlerLogger->info(
+        $this->eventProcessorLogger->info(
             sprintf(
                 'Processing %s using %s.',
                 $eventType->value,
@@ -46,6 +43,6 @@ class EventHandler extends EventBridgeHandler
             )
         );
 
-        $processor->process($event);
+        return $processor->process($event);
     }
 }

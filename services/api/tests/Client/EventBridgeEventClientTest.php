@@ -12,12 +12,12 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Event\Enum\Event;
+use Packages\Event\Enum\EventSource;
+use Packages\Event\Model\JobStateChange;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\JobStateChange;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -29,7 +29,7 @@ class EventBridgeEventClientTest extends KernelTestCase
     {
         $eventTime = new DateTimeImmutable();
         $event = [
-            'type' => CoverageEvent::JOB_STATE_CHANGE->value,
+            'type' => Event::JOB_STATE_CHANGE->value,
             'provider' => Provider::GITHUB->value,
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
@@ -74,8 +74,8 @@ class EventBridgeEventClientTest extends KernelTestCase
                     'Entries' => [
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
-                            'Source' => CoverageEventSource::API->value,
-                            'DetailType' => CoverageEvent::JOB_STATE_CHANGE->value,
+                            'Source' => EventSource::API->value,
+                            'DetailType' => Event::JOB_STATE_CHANGE->value,
                             'Detail' => json_encode($event),
                         ])
                     ],
@@ -97,7 +97,7 @@ class EventBridgeEventClientTest extends KernelTestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::JOB_STATE_CHANGE,
+            Event::JOB_STATE_CHANGE,
             $pipelineComplete
         );
 

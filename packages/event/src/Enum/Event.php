@@ -1,8 +1,8 @@
 <?php
 
-namespace Packages\Models\Enum\EventBus;
+namespace Packages\Event\Enum;
 
-enum CoverageEvent: string
+enum Event: string
 {
     /**
      * Ingestion of a new file has occurred successfully.
@@ -29,4 +29,9 @@ enum CoverageEvent: string
      * A job which is being tracked has changed state (i.e. started, completed, queued, etc).
      */
     case JOB_STATE_CHANGE = 'JOB_STATE_CHANGE';
+
+    /**
+     * A new coverage file has been uploaded.
+     */
+    case UPLOAD = 'UPLOAD';
 }

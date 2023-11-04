@@ -14,8 +14,8 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Github\Api\Repository\Checks\CheckRuns;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Enum\PublishableCheckRunStatus;
@@ -98,7 +98,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
 
         $jobStateChangeEventProcessor->process(
             new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail-type' => Event::JOB_STATE_CHANGE->value,
                 'detail' => $jobStateChange
             ])
         );
@@ -254,7 +254,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
 
         $jobStateChangeEventProcessor->process(
             new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail-type' => Event::JOB_STATE_CHANGE->value,
                 'detail' => $jobStateChange
             ])
         );
@@ -349,7 +349,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
 
         $jobStateChangeEventProcessor->process(
             new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail-type' => Event::JOB_STATE_CHANGE->value,
                 'detail' => $jobStateChange
             ])
         );
@@ -445,7 +445,7 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
 
         $jobStateChangeEventProcessor->process(
             new EventBridgeEvent([
-                'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                'detail-type' => Event::JOB_STATE_CHANGE->value,
                 'detail' => $jobStateChange
             ])
         );
@@ -454,8 +454,8 @@ class JobStateChangeEventProcessorTest extends KernelTestCase
     public function testProcessorEvent(): void
     {
         $this->assertEquals(
-            CoverageEvent::JOB_STATE_CHANGE->value,
-            JobStateChangeEventProcessor::getProcessorEvent()
+            Event::JOB_STATE_CHANGE->value,
+            JobStateChangeEventProcessor::getEvent()
         );
     }
 }

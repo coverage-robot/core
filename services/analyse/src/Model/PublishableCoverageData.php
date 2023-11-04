@@ -18,7 +18,7 @@ use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface

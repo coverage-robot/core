@@ -16,9 +16,9 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
 use Packages\Models\Model\Coverage;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -121,7 +121,7 @@ class EventHandler extends S3Handler
                     ]
                 );
 
-                $this->eventBridgeEventService->publishEvent(CoverageEvent::INGEST_FAILURE, $upload);
+                $this->eventBridgeEventService->publishEvent(Event::INGEST_FAILURE, $upload);
             } catch (DeletionException $e) {
                 $this->handlerLogger->error(
                     'Failed to successfully delete ingested coverage file.',

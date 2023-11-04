@@ -7,7 +7,7 @@ use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
-use Packages\Models\Model\Event\Upload;
+use Packages\Event\Model\Upload;
 use PHPUnit\Framework\TestCase;
 
 class CoverageAnalyserServiceTest extends TestCase

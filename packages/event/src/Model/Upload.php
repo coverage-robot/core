@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Models\Model\Event;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;

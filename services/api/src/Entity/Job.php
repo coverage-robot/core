@@ -11,6 +11,9 @@ use Packages\Models\Enum\JobState;
 #[ORM\UniqueConstraint(
     columns: ['project_id', 'external_id']
 )]
+#[ORM\Index(
+    columns: ['project_id', 'commit']
+)]
 class Job
 {
     #[ORM\Id]

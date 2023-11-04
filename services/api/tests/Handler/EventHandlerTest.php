@@ -6,7 +6,7 @@ use App\Handler\EventHandler;
 use App\Service\Event\EventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -15,7 +15,7 @@ class EventHandlerTest extends TestCase
     public function testHandleEventBridge(): void
     {
         $event = new EventBridgeEvent([
-            'detail-type' => CoverageEvent::COVERAGE_FINALISED->value,
+            'detail-type' => Event::COVERAGE_FINALISED->value,
             'detail' => ''
         ]);
 

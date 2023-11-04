@@ -7,11 +7,11 @@ use App\Service\Event\JobStateChangeEventProcessor;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use DateTimeImmutable;
-use Packages\Models\Enum\EventBus\CoverageEvent;
+use Packages\Event\Enum\Event;
+use Packages\Event\Model\EventInterface;
+use Packages\Event\Model\JobStateChange;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\EventInterface;
-use Packages\Models\Model\Event\JobStateChange;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use ValueError;
@@ -42,14 +42,14 @@ class EventHandlerTest extends TestCase
         $handler = new EventHandler(
             new NullLogger(),
             [
-                CoverageEvent::JOB_STATE_CHANGE->value => $mockProcessor,
+                Event::JOB_STATE_CHANGE->value => $mockProcessor,
             ]
         );
 
         $handler->handleEventBridge(
             new EventBridgeEvent(
                 [
-                    'detail-type' => CoverageEvent::JOB_STATE_CHANGE->value,
+                    'detail-type' => Event::JOB_STATE_CHANGE->value,
                     'detail' => [
                         'provider' => $jobStateChange->getProvider()->value,
                         'commit' => $jobStateChange->getCommit(),
@@ -76,7 +76,7 @@ class EventHandlerTest extends TestCase
         $handler = new EventHandler(
             new NullLogger(),
             [
-                CoverageEvent::JOB_STATE_CHANGE->value => $mockProcessor,
+                Event::JOB_STATE_CHANGE->value => $mockProcessor,
             ]
         );
 

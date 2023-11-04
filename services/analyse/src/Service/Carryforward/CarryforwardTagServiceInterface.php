@@ -2,7 +2,7 @@
 
 namespace App\Service\Carryforward;
 
-use Packages\Models\Model\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use Packages\Models\Model\Tag;
 
 interface CarryforwardTagServiceInterface

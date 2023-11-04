@@ -13,11 +13,11 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use Monolog\Test\TestCase;
+use Packages\Event\Enum\Event;
+use Packages\Event\Enum\EventSource;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\EventBus\CoverageEvent;
-use Packages\Models\Enum\EventBus\CoverageEventSource;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Event\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -55,8 +55,8 @@ class EventBridgeEventServiceTest extends TestCase
                     'Entries' => [
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
-                            'Source' => CoverageEventSource::ANALYSE->value,
-                            'DetailType' => CoverageEvent::COVERAGE_FINALISED->value,
+                            'Source' => EventSource::ANALYSE->value,
+                            'DetailType' => Event::COVERAGE_FINALISED->value,
                             'Detail' => 'mock-serialized-json'
                         ])
                     ],
@@ -88,7 +88,7 @@ class EventBridgeEventServiceTest extends TestCase
         );
 
         $success = $eventBridgeEventService->publishEvent(
-            CoverageEvent::COVERAGE_FINALISED,
+            Event::COVERAGE_FINALISED,
             $detail
         );
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Packages\Models\Model\Event;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
 
-class CoverageFinalised implements EventInterface
+class AnalyseFailure implements EventInterface
 {
     public function __construct(
         private readonly Provider $provider,
@@ -14,7 +14,6 @@ class CoverageFinalised implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly string|int|null $pullRequest,
-        private readonly float $coveragePercentage,
         private readonly DateTimeImmutable $eventTime
     ) {
     }
@@ -49,11 +48,6 @@ class CoverageFinalised implements EventInterface
         return $this->ref;
     }
 
-    public function getCoveragePercentage(): float
-    {
-        return $this->coveragePercentage;
-    }
-
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
@@ -62,7 +56,7 @@ class CoverageFinalised implements EventInterface
     public function __toString(): string
     {
         return sprintf(
-            'CoverageFinalised#%s-%s-%s-%s-%s-%s',
+            'IngestFailure#%s-%s-%s-%s-%s-%s',
             $this->provider->value,
             $this->owner,
             $this->repository,

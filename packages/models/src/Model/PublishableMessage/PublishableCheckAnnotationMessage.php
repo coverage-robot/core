@@ -4,8 +4,8 @@ namespace Packages\Models\Model\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Event\EventInterface;
 
 class PublishableCheckAnnotationMessage implements PublishableMessageInterface
 {
