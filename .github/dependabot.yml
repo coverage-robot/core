@@ -75,6 +75,31 @@ updates:
             - "chore"
             - "bump-patch"
 
+    ## Orchestrator service dependencies
+    -   package-ecosystem: "composer"
+        directory: "services/orchestrator"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
+
+    -   package-ecosystem: "terraform"
+        directory: "services/orchestrator/infrastructure"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "terraform"
+            - "chore"
+            - "bump-patch"
+
     ## Global infrastructure dependencies
     -   package-ecosystem: "terraform"
         directory: "infrastructure"

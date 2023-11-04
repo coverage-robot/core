@@ -22,6 +22,11 @@ services:
         links:
             - localstack
 
+    orchestrator:
+        extends:
+            file: services/orchestrator/docker-compose.yml
+            service: lambda
+
     api:
         extends:
             file: services/api/docker-compose.yml
