@@ -16,10 +16,10 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
-use Packages\Event\Enum\Event;
+use Packages\Event\Model\IngestFailure;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
-use Packages\Event\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
@@ -65,7 +65,7 @@ class EventHandlerTest extends KernelTestCase
         $mockEventBridgeEventService
             ->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
             ->method('publishEvent')
-            ->with(Event::INGEST_FAILURE);
+            ->with($this->isInstanceOf(IngestFailure::class));
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
@@ -136,7 +136,7 @@ class EventHandlerTest extends KernelTestCase
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())
             ->method('publishEvent')
-            ->with(Event::INGEST_FAILURE);
+            ->with($this->isInstanceOf(IngestFailure::class));
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),

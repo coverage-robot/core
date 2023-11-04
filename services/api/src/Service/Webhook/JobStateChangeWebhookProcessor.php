@@ -105,7 +105,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
 
         $this->publishEvent(
-            Event::JOB_STATE_CHANGE,
             new JobStateChange(
                 $webhook->getProvider(),
                 $webhook->getOwner(),
@@ -177,13 +176,10 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    private function publishEvent(Event $event, JobStateChange $jobStateChange): void
+    private function publishEvent(JobStateChange $jobStateChange): void
     {
         try {
-            $this->eventBridgeEventClient->publishEvent(
-                $event,
-                $jobStateChange
-            );
+            $this->eventBridgeEventClient->publishEvent($jobStateChange);
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(

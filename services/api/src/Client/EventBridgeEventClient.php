@@ -9,7 +9,6 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use JsonException;
-use Packages\Event\Enum\Event;
 use Packages\Event\Enum\EventSource;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -27,7 +26,7 @@ class EventBridgeEventClient
      * @throws HttpException
      * @throws JsonException
      */
-    public function publishEvent(Event $event, EventInterface $detail): bool
+    public function publishEvent(EventInterface $event): bool
     {
         $events = $this->eventBridgeClient->putEvents(
             new PutEventsRequest([
@@ -35,8 +34,8 @@ class EventBridgeEventClient
                     new PutEventsRequestEntry([
                         'EventBusName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_BUS),
                         'Source' => EventSource::API->value,
-                        'DetailType' => $event->value,
-                        'Detail' => $this->serializer->serialize($detail, 'json')
+                        'DetailType' => $event->getType()->value,
+                        'Detail' => $this->serializer->serialize($event, 'json')
                     ])
                 ],
             ])
