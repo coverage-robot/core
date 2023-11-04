@@ -5,6 +5,7 @@ namespace Packages\Event\Model;
 use DateTimeImmutable;
 use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 class IngestFailure implements EventInterface
 {
@@ -13,16 +14,24 @@ class IngestFailure implements EventInterface
     ) {
     }
 
+    public function getUpload(): EventInterface
+    {
+        return $this->upload;
+    }
+
+    #[Ignore]
     public function getProvider(): Provider
     {
         return $this->upload->getProvider();
     }
 
+    #[Ignore]
     public function getOwner(): string
     {
         return $this->upload->getOwner();
     }
 
+    #[Ignore]
     public function getRepository(): string
     {
         return $this->upload->getRepository();
@@ -33,20 +42,25 @@ class IngestFailure implements EventInterface
         return $this->upload->getCommit();
     }
 
+    #[Ignore]
     public function getPullRequest(): int|string|null
     {
         return $this->upload->getPullRequest();
     }
 
+    #[Ignore]
     public function getRef(): string
     {
         return $this->upload->getRef();
     }
 
+    #[Ignore]
     public function getType(): Event
     {
         return Event::INGEST_FAILURE;
     }
+
+    #[Ignore]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->upload->getIngestTime();
