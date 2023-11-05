@@ -20,3 +20,7 @@ variable "deployment_hash" {
 variable "event_store_arn" {
   type = string
 }
+
+variable "event_store_name" {
+  type = string
+}
