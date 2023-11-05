@@ -15,6 +15,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -29,6 +30,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the orchestration event handler')]
 class InvokeCommand extends Command
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface $serializer
+     */
     public function __construct(
         private readonly EventHandler $handler,
         private readonly SerializerInterface $serializer

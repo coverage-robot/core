@@ -33,7 +33,10 @@ class DynamoDbClient
     ) {
     }
 
-    public function storeEventChange(OrchestratedEventInterface $event, int $version, array $change): bool
+    /**
+     * Store an event's state change as a new item in the event store.
+     */
+    public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): bool
     {
         try {
             $response = $this->dynamoDbClient->putItem(
@@ -84,11 +87,11 @@ class DynamoDbClient
     }
 
     /**
-     * @return array<array-key, string>
+     * Get all of the state changes for a particular event.
      *
      * @throws RuntimeException
      */
-    public function getStateChangesByIdentifier(string $identifier): array
+    public function getStateChangesByIdentifier(OrchestratedEventInterface $event): array
     {
         try {
             $response = $this->dynamoDbClient->query(
@@ -98,12 +101,20 @@ class DynamoDbClient
                             EnvironmentVariable::EVENT_STORE
                         ),
                         'Select' => Select::ALL_ATTRIBUTES,
+                        /**
+                         * Consistent reads are required to ensure we get the latest version of the event, rather
+                         * than an eventually consistent set of query results.
+                         */
                         'ConsistentRead' => true,
+                        /**
+                         * For these types of model queries, we only ever need to look over the identifier primary
+                         * key to find all of the recorded event changes.
+                         */
                         'KeyConditions' => [
                             'identifier' => [
                                 'AttributeValueList' => [
                                     [
-                                        'S' => $identifier
+                                        'S' => (string)$event
                                     ]
                                 ],
                                 'ComparisonOperator' => ComparisonOperator::EQ
@@ -118,7 +129,7 @@ class DynamoDbClient
             $this->dynamoDbClientLogger->error(
                 'Failed to retrieve changes for identifier.',
                 [
-                    'identifier' => $identifier,
+                    'identifier' => (string)$event,
                     'exception' => $exception
                 ]
             );
@@ -126,12 +137,16 @@ class DynamoDbClient
             throw new RuntimeException('Failed to retrieve changes for identifier.', 0, $exception);
         }
 
+        /** @var list<array> $stateChanges */
         $stateChanges = [];
         foreach ($response->getItems() as $item) {
-            $stateChanges[] = $this->serializer->decode(
-                $item['event']->getS(),
+            /** @var array $stateChange */
+            $stateChange = $this->serializer->decode(
+                $item['event']->getS() ?? '[]',
                 'json'
             );
+
+            $stateChanges[] = $stateChange;
         }
 
         return $stateChanges;
