@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 )]
 interface OrchestratedEventInterface extends Stringable
 {
-
     public function getProvider(): Provider;
 
     public function getOwner(): string;
