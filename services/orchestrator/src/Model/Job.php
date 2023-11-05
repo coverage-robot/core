@@ -54,7 +54,7 @@ class Job implements OrchestratedEventInterface
             $this->provider->value,
             $this->owner,
             $this->repository,
-            $this->commit
+            $this->externalId
         );
     }
 }

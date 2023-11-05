@@ -14,9 +14,15 @@ class IngestFailure implements EventInterface
     ) {
     }
 
-    public function getUpload(): EventInterface
+    public function getUpload(): Upload
     {
         return $this->upload;
+    }
+
+    #[Ignore]
+    public function getUploadId(): string
+    {
+        return $this->upload->getUploadId();
     }
 
     #[Ignore]

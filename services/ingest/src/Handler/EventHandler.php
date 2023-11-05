@@ -17,6 +17,7 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use Packages\Event\Model\IngestFailure;
+use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
@@ -73,6 +74,8 @@ class EventHandler extends S3Handler
                     $metadata,
                     Upload::class
                 );
+
+                $this->triggerIngestionStartedEvent($upload);
 
                 $this->handlerLogger->info(
                     sprintf(
@@ -144,6 +147,17 @@ class EventHandler extends S3Handler
         return $this->coverageFileRetrievalService->ingestFromS3(
             $coverageFile->getBucket(),
             $coverageFile->getObject()
+        );
+    }
+
+    /**
+     * Publish an event to EventBridge to indicate that we have started to ingest
+     * a new file. This will allow other services to track the progress of the ingestion
+     */
+    private function triggerIngestionStartedEvent(Upload $upload): bool
+    {
+        return $this->eventBridgeEventService->publishEvent(
+            new IngestStarted($upload)
         );
     }
 

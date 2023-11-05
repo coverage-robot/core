@@ -5,6 +5,11 @@ namespace Packages\Event\Enum;
 enum Event: string
 {
     /**
+     * A new file has been uploaded, and is being processed.
+     */
+    case INGEST_STARTED = 'INGEST_STARTED';
+
+    /**
      * Ingestion of a new file has occurred successfully.
      */
     case INGEST_SUCCESS = 'INGEST_SUCCESS';
