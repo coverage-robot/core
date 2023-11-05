@@ -56,7 +56,7 @@ class JobStateChangeEventProcessorTest extends TestCase
             ->method('storeStateChange')
             ->with(
                 $this->isInstanceOf(Job::class),
-                0,
+                1,
                 ['mock' => 'change']
             )
             ->willReturn(true);
@@ -113,7 +113,7 @@ class JobStateChangeEventProcessorTest extends TestCase
             ->method('storeStateChange')
             ->with(
                 $this->isInstanceOf(Job::class),
-                1,
+                2,
                 ['mock' => 'change']
             )
             ->willReturn(true);

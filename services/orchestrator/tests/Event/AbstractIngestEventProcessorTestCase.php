@@ -79,7 +79,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             ->method('storeStateChange')
             ->with(
                 $this->isInstanceOf(Ingestion::class),
-                0,
+                1,
                 ['mock' => 'change']
             )
             ->willReturn(true);
@@ -137,7 +137,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             ->method('storeStateChange')
             ->with(
                 $this->isInstanceOf(Ingestion::class),
-                1,
+                2,
                 ['mock' => 'change']
             )
             ->willReturn(true);
