@@ -59,6 +59,8 @@ module "orchestrator" {
 
   environment = local.environment
   region      = var.region
+
+  event_store_arn = module.event_store.event_table.arn
 }
 
 module "event_store" {
