@@ -1,0 +1,102 @@
+{
+    "name": "coverage-robot/core",
+    "description": "The result orchestrator service.",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.2",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "async-aws/async-aws-bundle": "^1.12",
+        "async-aws/dynamo-db": "^3.0",
+        "bref/bref": "^2.0",
+        "bref/symfony-bridge": "^0.2.1",
+        "coverage-robot/event": "*",
+        "coverage-robot/models": "*",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.23",
+        "symfony/console": "6.3.*",
+        "symfony/dotenv": "6.3.*",
+        "symfony/flex": "^2",
+        "symfony/framework-bundle": "6.3.*",
+        "symfony/monolog-bundle": "^3.8",
+        "symfony/property-access": "6.3.*",
+        "symfony/property-info": "6.3.*",
+        "symfony/runtime": "6.3.*",
+        "symfony/serializer": "6.3.*",
+        "symfony/yaml": "6.3.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.1",
+        "psalm/plugin-symfony": "^5.0",
+        "squizlabs/php_codesniffer": "^3.7",
+        "vimeo/psalm": "^5.15"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*"
+    },
+    "scripts": {
+        "lint:style": "phpcs",
+        "lint:static-analysis": "psalm",
+        "lint:security": "psalm --taint-analysis",
+        "test:unit": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration=./phpunit.xml.dist"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../packages/event"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/models"
+        }
+    ],
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "6.3.*"
+        }
+    }
+}

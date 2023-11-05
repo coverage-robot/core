@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Handler\EventHandler:
+        # The handler must be public so that Bref is able to run it through the Symfony
+        # runtime
+        public: true
+
+    Psr\Container\ContainerInterface: '@service_container'
+
+    Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'
+
+    Packages\Event\Service\EventProcessorService:
+        arguments:
+            $eventProcessors: !tagged_iterator { tag: 'app.orchestrator_event_processor', default_index_method: 'getEvent'}
