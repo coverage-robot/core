@@ -16,3 +16,7 @@ variable "php_version" {
 variable "deployment_hash" {
   type = string
 }
+
+variable "event_store_arn" {
+  type = string
+}

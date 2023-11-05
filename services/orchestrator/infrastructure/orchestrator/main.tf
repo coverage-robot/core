@@ -57,6 +57,18 @@ resource "aws_iam_policy" "orchestrator_policy" {
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:Get*",
+          "dynamodb:Query",
+          "dynamodb:PutItem"
+        ]
+        Resource = [
+          var.event_store_arn
+        ]
+      }
     ]
   })
 }
