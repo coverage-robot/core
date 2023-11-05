@@ -123,6 +123,14 @@ resource "aws_cloudwatch_event_rule" "service" {
   EOF
 }
 
+resource "aws_cloudwatch_event_target" "service" {
+  event_bus_name = data.terraform_remote_state.core.outputs.coverage_event_bus.name
+
+  rule      = aws_cloudwatch_event_rule.service.name
+  target_id = "coverage-orchestrator-service"
+  arn       = aws_lambda_function.service.arn
+}
+
 resource "aws_lambda_permission" "lambda_permissions" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.service.function_name
