@@ -149,7 +149,7 @@ class EventStoreServiceTest extends KernelTestCase
         ];
     }
 
-    public function stateChangesDataProvider(): array
+    public static function stateChangesDataProvider(): array
     {
         return [
             [

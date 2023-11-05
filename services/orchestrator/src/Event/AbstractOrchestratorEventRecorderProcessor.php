@@ -19,7 +19,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
 
     protected function recordStateChangeInStore(OrchestratedEventInterface $newState): bool
     {
-        $stateChanges = $this->dynamoDbClient->getStateChangesByIdentifier($newState);
+        $stateChanges = $this->dynamoDbClient->getStateChangesForEvent($newState);
 
         $currentState = $this->reduceToOrchestratorEvent($stateChanges);
 
@@ -56,7 +56,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
 
         return $this->dynamoDbClient->storeStateChange(
             $newState,
-            count($stateChanges),
+            count($stateChanges) + 1,
             $change
         );
     }

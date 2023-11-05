@@ -9,6 +9,7 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
 use AsyncAws\DynamoDb\Enum\Select;
+use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -40,34 +41,36 @@ class DynamoDbClient
     {
         try {
             $response = $this->dynamoDbClient->putItem(
-                [
-                    'TableName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_STORE),
-                    'ConditionExpression' => 'attribute_not_exists(version)',
-                    'ReturnValuesOnConditionCheckFailure' => ReturnValuesOnConditionCheckFailure::ALL_OLD,
-                    'Item' => [
-                        'identifier' => [
-                            'S' => (string)$event,
+                new PutItemInput(
+                    [
+                        'TableName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_STORE),
+                        'ConditionExpression' => 'attribute_not_exists(version)',
+                        'ReturnValuesOnConditionCheckFailure' => ReturnValuesOnConditionCheckFailure::ALL_OLD,
+                        'Item' => [
+                            'identifier' => [
+                                'S' => (string)$event,
+                            ],
+                            'provider' => [
+                                'S' => $event->getProvider()->value
+                            ],
+                            'owner' => [
+                                'S' => $event->getOwner()
+                            ],
+                            'repository' => [
+                                'S' => $event->getRepository()
+                            ],
+                            'version' => [
+                                'N' => (string)$version
+                            ],
+                            'event' => [
+                                'S' => $this->serializer->serialize($change, 'json')
+                            ],
+                            'expiry' => [
+                                'N' => (string)(time() + self::DEFAULT_EVENT_TTL)
+                            ],
                         ],
-                        'provider' => [
-                            'S' => $event->getProvider()->value
-                        ],
-                        'owner' => [
-                            'S' => $event->getOwner()
-                        ],
-                        'repository' => [
-                            'S' => $event->getRepository()
-                        ],
-                        'version' => [
-                            'N' => (string)$version
-                        ],
-                        'event' => [
-                            'S' => $this->serializer->serialize($change, 'json')
-                        ],
-                        'expiry' => [
-                            'N' => (string)(time() + self::DEFAULT_EVENT_TTL)
-                        ],
-                    ],
-                ]
+                    ]
+                )
             );
 
             $response->resolve();
@@ -91,7 +94,7 @@ class DynamoDbClient
      *
      * @throws RuntimeException
      */
-    public function getStateChangesByIdentifier(OrchestratedEventInterface $event): array
+    public function getStateChangesForEvent(OrchestratedEventInterface $event): array
     {
         try {
             $response = $this->dynamoDbClient->query(

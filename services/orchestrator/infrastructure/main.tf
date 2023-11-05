@@ -39,27 +39,27 @@ data "terraform_remote_state" "core" {
   }
 }
 
-#data "archive_file" "deployment" {
-#  type        = "zip"
-#  source_dir  = "${path.module}/../"
-#  output_path = "${path.module}/deployment.zip"
-#  excludes = [
-#    "composer.lock",
-#    "README.md",
-#    "tests",
-#    "infrastructure"
-#  ]
-#}
-#
-#module "orchestrator" {
-#  source = "./orchestrator"
-#
-#  php_version     = var.php_version
-#  deployment_hash = data.archive_file.deployment.output_base64sha256
-#
-#  environment = local.environment
-#  region      = var.region
-#}
+data "archive_file" "deployment" {
+  type        = "zip"
+  source_dir  = "${path.module}/../"
+  output_path = "${path.module}/deployment.zip"
+  excludes = [
+    "composer.lock",
+    "README.md",
+    "tests",
+    "infrastructure"
+  ]
+}
+
+module "orchestrator" {
+  source = "./orchestrator"
+
+  php_version     = var.php_version
+  deployment_hash = data.archive_file.deployment.output_base64sha256
+
+  environment = local.environment
+  region      = var.region
+}
 
 module "event_store" {
   source = "./event_store"
