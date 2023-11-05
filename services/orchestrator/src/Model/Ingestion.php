@@ -36,7 +36,7 @@ class Ingestion implements OrchestratedEventInterface
         return $this->repository;
     }
 
-    public function getCurrentState(): OrchestratedEventState
+    public function getState(): OrchestratedEventState
     {
         return $this->state;
     }

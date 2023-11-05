@@ -6,6 +6,7 @@ use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
 use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[DiscriminatorMap(
     'type',
@@ -16,9 +17,14 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 )]
 interface OrchestratedEventInterface
 {
-    public function getProvider(): Provider;
-    public function getOwner(): string;
-    public function getRepository(): string;
+    #[Ignore]
     public function getIdentifier(): string;
-    public function getCurrentState(): OrchestratedEventState;
+
+    public function getProvider(): Provider;
+
+    public function getOwner(): string;
+
+    public function getRepository(): string;
+
+    public function getState(): OrchestratedEventState;
 }

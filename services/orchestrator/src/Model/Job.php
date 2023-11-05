@@ -13,7 +13,7 @@ class Job implements OrchestratedEventInterface
         private readonly string $repository,
         private readonly string $commit,
         private readonly OrchestratedEventState $state,
-        private readonly string $externalId
+        private readonly string|int $externalId
     ) {
     }
 
@@ -37,12 +37,12 @@ class Job implements OrchestratedEventInterface
         return $this->repository;
     }
 
-    public function getCurrentState(): OrchestratedEventState
+    public function getState(): OrchestratedEventState
     {
         return $this->state;
     }
 
-    public function getExternalId(): string
+    public function getExternalId(): string|int
     {
         return $this->externalId;
     }

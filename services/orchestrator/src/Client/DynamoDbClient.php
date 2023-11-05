@@ -6,10 +6,12 @@ use App\Enum\EnvironmentVariable;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
+use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
+use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Input\QueryInput;
-use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DynamoDbClient
@@ -79,6 +81,8 @@ class DynamoDbClient
 
     /**
      * @return array<array-key, string>
+     *
+     * @throws RuntimeException
      */
     public function getStateChangesByIdentifier(string $identifier): array
     {
@@ -89,10 +93,16 @@ class DynamoDbClient
                         'TableName' => $this->environmentService->getVariable(
                             EnvironmentVariable::EVENT_STORE
                         ),
+                        'Select' => Select::ALL_ATTRIBUTES,
                         'ConsistentRead' => true,
-                        'Key' => [
+                        'KeyConditions' => [
                             'identifier' => [
-                                'S' => $identifier,
+                                'AttributeValueList' => [
+                                    [
+                                        'S' => $identifier
+                                    ]
+                                ],
+                                'ComparisonOperator' => ComparisonOperator::EQ
                             ],
                         ],
                     ]
@@ -108,16 +118,15 @@ class DynamoDbClient
                     'exception' => $exception
                 ]
             );
+
+            throw new RuntimeException('Failed to retrieve changes for identifier.', 0, $exception);
         }
 
-        $changes = array_column(
-            $response->getItems(),
-            'event'
-        );
+        $stateChanges = [];
+        foreach ($response->getItems() as $item) {
+            $stateChanges[] = $item['event']->getS();
+        }
 
-        return array_map(
-            static fn (AttributeValue $item) => $item->getS(),
-            $changes
-        );
+        return array_filter($stateChanges);
     }
 }

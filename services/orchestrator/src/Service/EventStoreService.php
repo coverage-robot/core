@@ -58,24 +58,14 @@ class EventStoreService
      */
     public function reduceStateChanges(array $stateChanges): OrchestratedEventInterface
     {
-        $reducingEvent = null;
-        $latestKnownState = [];
-
-        foreach ($stateChanges as $stateChange) {
-            if (
-                $reducingEvent &&
-                $reducingEvent !== $stateChange['type']
-            ) {
-                continue;
-            }
-
-            $reducingEvent = $stateChange['type'];
-
-            $latestKnownState = array_merge(
-                $latestKnownState,
+        $latestKnownState = array_reduce(
+            $stateChanges,
+            static fn (array $finalState, array $stateChange) => array_merge(
+                $finalState,
                 $stateChange
-            );
-        }
+            ),
+            []
+        );
 
         return $this->serializer->denormalize(
             $latestKnownState,
