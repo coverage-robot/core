@@ -5,28 +5,31 @@ namespace App\Event;
 use App\Client\DynamoDbClient;
 use App\Enum\OrchestratedEventState;
 use App\Model\Job;
-use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
 use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\JobStateChange;
 use Packages\Models\Enum\JobState;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class JobStateChangeEventProcessor implements OrchestratorEventProcessorInterface
+class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProcessor
 {
     public function __construct(
-        private readonly EventStoreService $eventStoreService,
-        private readonly DynamoDbClient $dynamoDbClient,
-        private readonly LoggerInterface $ingestEventProcessorLogger
+        EventStoreService $eventStoreService,
+        DynamoDbClient $dynamoDbClient,
+        private readonly LoggerInterface $jobEventProcessorLogger
     ) {
+        parent::__construct(
+            $eventStoreService,
+            $dynamoDbClient,
+            $jobEventProcessorLogger
+        );
     }
 
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof JobStateChange) {
-            $this->ingestEventProcessorLogger->critical(
+            $this->jobEventProcessorLogger->critical(
                 'Event is not intended to be processed by this processor',
                 [
                     'event' => $event::class
@@ -47,39 +50,7 @@ class JobStateChangeEventProcessor implements OrchestratorEventProcessorInterfac
             $event->getExternalId()
         );
 
-        $stateChanges = $this->dynamoDbClient->getStateChangesByIdentifier($newState->getIdentifier());
-
-        $currentState = $this->reduceToOrchestratorEvent($stateChanges);
-
-        $change = $this->eventStoreService->getStateChange(
-            $currentState,
-            $newState
-        );
-
-        $this->dynamoDbClient->storeEventChange(
-            $newState,
-            count($stateChanges),
-            $change
-        );
-
-        return true;
-    }
-
-    private function reduceToOrchestratorEvent(array $stateChanges): ?OrchestratedEventInterface
-    {
-        try {
-            return $this->eventStoreService->reduceStateChanges($stateChanges);
-        } catch (ExceptionInterface $e) {
-            $this->ingestEventProcessorLogger->error(
-                'Failed to reduce state changes into event.',
-                [
-                    'stateChanges' => $stateChanges,
-                    'exception' => $e
-                ]
-            );
-
-            return null;
-        }
+        return $this->recordStateChangeInStore($newState);
     }
 
     public static function getEvent(): string

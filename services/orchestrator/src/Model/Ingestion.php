@@ -41,12 +41,14 @@ class Ingestion implements OrchestratedEventInterface
         return $this->state;
     }
 
-    public function getIdentifier(): string
+    public function __toString(): string
     {
         return sprintf(
-            'Ingestion#%s-%s',
+            'Ingestion#%s-%s-%s-%s',
+            $this->provider->value,
             $this->owner,
-            $this->repository
+            $this->repository,
+            $this->commit
         );
     }
 }

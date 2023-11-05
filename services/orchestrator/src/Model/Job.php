@@ -47,12 +47,14 @@ class Job implements OrchestratedEventInterface
         return $this->externalId;
     }
 
-    public function getIdentifier(): string
+    public function __toString(): string
     {
         return sprintf(
-            'Ingestion#%s-%s',
+            'Job#%s-%s-%s-%s',
+            $this->provider->value,
             $this->owner,
-            $this->repository
+            $this->repository,
+            $this->commit
         );
     }
 }

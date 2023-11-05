@@ -29,8 +29,7 @@ class EventHandler extends EventBridgeHandler
             Event::from($event->getDetailType()),
             $this->serializer->denormalize(
                 $event->getDetail(),
-                EventInterface::class,
-                'json'
+                EventInterface::class
             )
         );
     }

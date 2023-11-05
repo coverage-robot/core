@@ -5,8 +5,8 @@ namespace App\Model;
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
 use Packages\Models\Enum\Provider;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
-use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[DiscriminatorMap(
     'type',
@@ -15,10 +15,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
         OrchestratedEvent::JOB->value => Job::class,
     ]
 )]
-interface OrchestratedEventInterface
+interface OrchestratedEventInterface extends Stringable
 {
-    #[Ignore]
-    public function getIdentifier(): string;
 
     public function getProvider(): Provider;
 

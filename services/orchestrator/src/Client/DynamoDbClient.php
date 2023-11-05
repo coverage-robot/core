@@ -12,6 +12,7 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DynamoDbClient
@@ -21,6 +22,9 @@ class DynamoDbClient
      */
     private const DEFAULT_EVENT_TTL = 43200;
 
+    /**
+     * @param SerializerInterface&DecoderInterface $serializer
+     */
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
         private readonly EnvironmentService $environmentService,
@@ -39,7 +43,7 @@ class DynamoDbClient
                     'ReturnValuesOnConditionCheckFailure' => ReturnValuesOnConditionCheckFailure::ALL_OLD,
                     'Item' => [
                         'identifier' => [
-                            'S' => $event->getIdentifier(),
+                            'S' => (string)$event,
                         ],
                         'provider' => [
                             'S' => $event->getProvider()->value
@@ -51,7 +55,7 @@ class DynamoDbClient
                             'S' => $event->getRepository()
                         ],
                         'version' => [
-                            'N' => $version
+                            'N' => (string)$version
                         ],
                         'event' => [
                             'S' => $this->serializer->serialize($change, 'json')
@@ -124,9 +128,12 @@ class DynamoDbClient
 
         $stateChanges = [];
         foreach ($response->getItems() as $item) {
-            $stateChanges[] = $item['event']->getS();
+            $stateChanges[] = $this->serializer->decode(
+                $item['event']->getS(),
+                'json'
+            );
         }
 
-        return array_filter($stateChanges);
+        return $stateChanges;
     }
 }
