@@ -52,6 +52,7 @@ class EventStoreServiceTest extends KernelTestCase
                 'mock-owner',
                 'mock-repo',
                 '1',
+                'mock-upload-id',
                 OrchestratedEventState::ONGOING
             ),
             new Job(
@@ -116,6 +117,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-owner',
                     'mock-repo',
                     '1',
+                    'mock-upload-id',
                     OrchestratedEventState::ONGOING
                 ),
                 [
@@ -123,6 +125,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'owner' => 'mock-owner',
                     'repository' => 'mock-repo',
                     'commit' => '1',
+                    'uploadId' => 'mock-upload-id',
                     'state' => OrchestratedEventState::ONGOING->value,
                     'type' => OrchestratedEvent::INGESTION->value
                 ]
@@ -133,6 +136,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-owner',
                     'mock-repo',
                     '1',
+                    'mock-upload-id',
                     OrchestratedEventState::ONGOING
                 ),
                 new Ingestion(
@@ -140,6 +144,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-owner',
                     'mock-repo',
                     '1',
+                    'mock-upload-id',
                     OrchestratedEventState::SUCCESS
                 ),
                 [
@@ -159,6 +164,7 @@ class EventStoreServiceTest extends KernelTestCase
                         'owner' => 'mock-owner',
                         'repository' => 'mock-repo',
                         'commit' => '1',
+                        'uploadId' => 'mock-upload-id',
                         'state' => OrchestratedEventState::ONGOING->value,
                         'type' => OrchestratedEvent::INGESTION->value
                     ],
@@ -177,6 +183,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-owner',
                     'mock-repo',
                     '2',
+                    'mock-upload-id',
                     OrchestratedEventState::FAILURE
                 )
             ],
