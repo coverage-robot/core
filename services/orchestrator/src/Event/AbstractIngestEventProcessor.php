@@ -8,6 +8,7 @@ use App\Model\Ingestion;
 use App\Service\EventStoreService;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\IngestFailure;
+use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Psr\Log\LoggerInterface;
 
@@ -28,6 +29,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
     public function process(EventInterface $event): bool
     {
         if (
+            !$event instanceof IngestStarted &&
             !$event instanceof IngestSuccess &&
             !$event instanceof IngestFailure
         ) {
@@ -45,7 +47,9 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
+            $event->getUploadId(),
             match (true) {
+                $event instanceof IngestStarted => OrchestratedEventState::ONGOING,
                 $event instanceof IngestSuccess => OrchestratedEventState::SUCCESS,
                 $event instanceof IngestFailure => OrchestratedEventState::FAILURE
             }

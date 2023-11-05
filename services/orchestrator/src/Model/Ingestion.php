@@ -12,8 +12,14 @@ class Ingestion implements OrchestratedEventInterface
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
+        private readonly string $uploadId,
         private readonly OrchestratedEventState $state
     ) {
+    }
+
+    public function getUploadId(): string
+    {
+        return $this->uploadId;
     }
 
     public function getProvider(): Provider
@@ -48,7 +54,7 @@ class Ingestion implements OrchestratedEventInterface
             $this->provider->value,
             $this->owner,
             $this->repository,
-            $this->commit
+            $this->uploadId
         );
     }
 }

@@ -7,7 +7,7 @@ use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class IngestSuccess implements EventInterface
+class IngestStarted implements EventInterface
 {
     public function __construct(
         private readonly Upload $upload
@@ -24,7 +24,7 @@ class IngestSuccess implements EventInterface
     {
         return $this->upload->getUploadId();
     }
-    
+
     #[Ignore]
     public function getProvider(): Provider
     {
@@ -43,7 +43,6 @@ class IngestSuccess implements EventInterface
         return $this->upload->getRepository();
     }
 
-    #[Ignore]
     public function getCommit(): string
     {
         return $this->upload->getCommit();
@@ -64,7 +63,7 @@ class IngestSuccess implements EventInterface
     #[Ignore]
     public function getType(): Event
     {
-        return Event::INGEST_SUCCESS;
+        return Event::INGEST_STARTED;
     }
 
     #[Ignore]
@@ -76,7 +75,7 @@ class IngestSuccess implements EventInterface
     public function __toString(): string
     {
         return sprintf(
-            'IngestSuccess#%s-%s-%s-%s-%s-%s',
+            'IngestStarted#%s-%s-%s-%s-%s-%s',
             $this->getProvider()->value,
             $this->getOwner(),
             $this->getRepository(),

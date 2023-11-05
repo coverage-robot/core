@@ -16,7 +16,6 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
-use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
@@ -62,10 +61,15 @@ class EventHandlerTest extends KernelTestCase
             ->willReturn(true);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService
-            ->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(IngestFailure::class));
+        $mockEventBridgeEventService->expects(
+            $this->exactly(
+                    // An event for every coverage file which is starting to be ingested
+                count($coverageFiles) +
+                    // An event for every coverage file which failed to be ingested
+                    count($coverageFiles) - count($expectedOutputKeys)
+            )
+        )
+            ->method('publishEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
@@ -134,9 +138,8 @@ class EventHandlerTest extends KernelTestCase
             ->willThrowException(PersistException::from(new Exception('Failed to persist')));
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(IngestFailure::class));
+        $mockEventBridgeEventService->expects($this->exactly(2))
+            ->method('publishEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
@@ -199,7 +202,14 @@ class EventHandlerTest extends KernelTestCase
             ->willReturn(true);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->exactly(count($coverageFiles) - count($expectedOutputKeys)))
+        $mockEventBridgeEventService->expects(
+            $this->exactly(
+                    // An event for every coverage file which is starting to be ingested
+                count($coverageFiles) +
+                    // An event for every coverage file which ingested successfully
+                    count($coverageFiles) - count($expectedOutputKeys)
+            )
+        )
             ->method('publishEvent');
 
         $handler = new EventHandler(
