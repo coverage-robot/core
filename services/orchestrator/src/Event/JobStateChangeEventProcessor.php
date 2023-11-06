@@ -44,8 +44,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             $event->getRepository(),
             $event->getCommit(),
             match ($event->getState()) {
-                JobState::IN_PROGRESS => OrchestratedEventState::ONGOING,
-                default => OrchestratedEventState::SUCCESS
+                JobState::COMPLETED => OrchestratedEventState::SUCCESS,
+                default => OrchestratedEventState::ONGOING
             },
             $event->getExternalId()
         );
