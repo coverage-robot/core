@@ -5,7 +5,7 @@ namespace App\Model;
 use App\Enum\OrchestratedEventState;
 use Packages\Models\Enum\Provider;
 
-class Ingestion implements OrchestratedEventInterface
+class Ingestion extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,
@@ -15,6 +15,7 @@ class Ingestion implements OrchestratedEventInterface
         private readonly string $uploadId,
         private readonly OrchestratedEventState $state
     ) {
+        parent::__construct($provider, $owner, $repository);
     }
 
     public function getUploadId(): string
@@ -45,6 +46,14 @@ class Ingestion implements OrchestratedEventInterface
     public function getState(): OrchestratedEventState
     {
         return $this->state;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUniqueIdentifier(): string
+    {
+        return $this->__toString();
     }
 
     public function __toString(): string
