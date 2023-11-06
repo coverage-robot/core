@@ -37,6 +37,9 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
             useJitter: true
         );
 
+        /**
+         * @var bool $result
+         */
         $result = $backoff->run(function () use ($newState) {
             try {
                 $this->orchestratorEventRecorderProcessor->info(
