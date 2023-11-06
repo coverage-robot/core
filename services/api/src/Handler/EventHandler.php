@@ -9,10 +9,15 @@ use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Service\EventProcessorServiceInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends EventBridgeHandler
 {
+    /**
+     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
+     */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
         private readonly EventProcessorServiceInterface $eventProcessor,
@@ -35,10 +40,9 @@ class EventHandler extends EventBridgeHandler
 
         $this->eventProcessor->process(
             Event::from($event->getDetailType()),
-            $this->serializer->deserialize(
+            $this->serializer->denormalize(
                 $event->getDetail(),
-                EventInterface::class,
-                'json'
+                EventInterface::class
             )
         );
     }
