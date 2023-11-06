@@ -520,9 +520,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "efe3d6a9560f35cf834bb67c3d0a34385d858eb9"
+                "reference": "71d8fd55d82119401b5b531a011c4ffbf8ec3971"
             },
             "require": {
+                "coverage-robot/models": "*",
                 "psr/log": "^3.0"
             },
             "require-dev": {
@@ -556,7 +557,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -3418,16 +3419,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.4.0",
+            "version": "v2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "46bebc3d097d1bb1dce04c5ba83658afd79988f9"
+                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/46bebc3d097d1bb1dce04c5ba83658afd79988f9",
-                "reference": "46bebc3d097d1bb1dce04c5ba83658afd79988f9",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
+                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
                 "shasum": ""
             },
             "require": {
@@ -3463,7 +3464,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.4.0"
+                "source": "https://github.com/symfony/flex/tree/v2.4.1"
             },
             "funding": [
                 {
@@ -3479,7 +3480,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-22T18:05:25+00:00"
+            "time": "2023-10-30T18:35:17+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -8238,5 +8239,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
