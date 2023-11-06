@@ -48,14 +48,6 @@ class Job extends AbstractOrchestratedEvent
         return $this->externalId;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getUniqueIdentifier(): string
-    {
-        return $this->__toString();
-    }
-
     public function __toString(): string
     {
         return sprintf(

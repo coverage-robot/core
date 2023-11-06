@@ -48,14 +48,6 @@ class Ingestion extends AbstractOrchestratedEvent
         return $this->state;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getUniqueIdentifier(): string
-    {
-        return $this->__toString();
-    }
-
     public function __toString(): string
     {
         return sprintf(
