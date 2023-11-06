@@ -37,7 +37,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
             useJitter: true
         );
 
-        return $backoff->run(function () use ($newState) {
+        $result = $backoff->run(function () use ($newState) {
             try {
                 $this->orchestratorEventRecorderProcessor->info(
                     sprintf(
@@ -60,6 +60,8 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
                 return false;
             }
         });
+
+        return $result === true;
     }
 
     /**
