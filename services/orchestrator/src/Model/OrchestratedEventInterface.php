@@ -23,5 +23,23 @@ interface OrchestratedEventInterface extends Stringable
 
     public function getRepository(): string;
 
+    public function getCommit(): string;
+
     public function getState(): OrchestratedEventState;
+
+    /**
+     * Get a unique identifier for the repository this particular event belongs to
+     *
+     * This is for query patterns which involve querying for state changes for _specific events_
+     * under a particular repository.
+     */
+    public function getUniqueRepositoryIdentifier(): string;
+
+    /**
+     * Get a unique identifier for this particular event.
+     *
+     * This is for query patterns which involve querying state changes over the
+     * event store for _exactly one_ event.
+     */
+    public function getUniqueIdentifier(): string;
 }

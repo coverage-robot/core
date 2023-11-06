@@ -5,7 +5,7 @@ namespace App\Model;
 use App\Enum\OrchestratedEventState;
 use Packages\Models\Enum\Provider;
 
-class Job implements OrchestratedEventInterface
+class Job extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,
@@ -15,6 +15,7 @@ class Job implements OrchestratedEventInterface
         private readonly OrchestratedEventState $state,
         private readonly string|int $externalId
     ) {
+        parent::__construct($provider, $owner, $repository);
     }
 
     public function getProvider(): Provider

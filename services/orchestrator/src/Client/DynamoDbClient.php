@@ -9,6 +9,7 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
 use AsyncAws\DynamoDb\Enum\Select;
+use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,8 @@ class DynamoDbClient
 
     /**
      * Store an event's state change as a new item in the event store.
+     *
+     * @throws ConditionalCheckFailedException
      */
     public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): bool
     {
@@ -48,7 +51,10 @@ class DynamoDbClient
                         'ReturnValuesOnConditionCheckFailure' => ReturnValuesOnConditionCheckFailure::ALL_OLD,
                         'Item' => [
                             'identifier' => [
-                                'S' => (string)$event,
+                                'S' => $event->getUniqueIdentifier(),
+                            ],
+                            'repositoryIdentifier' => [
+                                'S' => $event->getUniqueRepositoryIdentifier(),
                             ],
                             'provider' => [
                                 'S' => $event->getProvider()->value
@@ -58,6 +64,9 @@ class DynamoDbClient
                             ],
                             'repository' => [
                                 'S' => $event->getRepository()
+                            ],
+                            'commit' => [
+                                'S' => $event->getCommit()
                             ],
                             'version' => [
                                 'N' => (string)$version
@@ -74,6 +83,18 @@ class DynamoDbClient
             );
 
             $response->resolve();
+        } catch (ConditionalCheckFailedException $exception) {
+            $this->dynamoDbClientLogger->info(
+                'State change with version number for event already exists.',
+                [
+                    'event' => (string)$event,
+                    'version' => $version,
+                    'change' => $change,
+                    'exception' => $exception
+                ]
+            );
+
+            throw $exception;
         } catch (HttpException $exception) {
             $this->dynamoDbClientLogger->error(
                 'Failed to put event into store.',
