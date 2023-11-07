@@ -17,6 +17,15 @@ resource "aws_dynamodb_table" "event_table" {
     type = "N"
   }
 
+  global_secondary_index {
+    name            = "repositoryIdentifier-commit-index"
+    hash_key        = "repositoryIdentifier"
+    range_key       = "commit"
+    projection_type = "ALL"
+    write_capacity  = 2
+    read_capacity   = 2
+  }
+
   ttl {
     attribute_name = "expiry"
     enabled        = true

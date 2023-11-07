@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Model\EventStateChange;
+use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -23,7 +25,7 @@ class EventStoreService
      * Get the state change between our last known state, and the new
      * state of an event.
      */
-    public function getStateChange(
+    public function getStateChangeForEvent(
         ?OrchestratedEventInterface $currentState,
         OrchestratedEventInterface $newState
     ): array {
@@ -56,13 +58,13 @@ class EventStoreService
      *
      * @throws ExceptionInterface
      */
-    public function reduceStateChanges(array $stateChanges): OrchestratedEventInterface
+    public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface
     {
         $latestKnownState = array_reduce(
-            $stateChanges,
-            static fn (array $finalState, array $stateChange) => array_merge(
+            $stateChanges->getStateChanges(),
+            static fn (array $finalState, EventStateChange $stateChange) => array_merge(
                 $finalState,
-                $stateChange
+                $stateChange->getEvent()
             ),
             []
         );

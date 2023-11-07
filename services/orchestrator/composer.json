@@ -11,6 +11,7 @@
         "ext-iconv": "*",
         "async-aws/async-aws-bundle": "^1.12",
         "async-aws/dynamo-db": "^3.0",
+        "async-aws/event-bridge": "^1.5",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/event": "*",

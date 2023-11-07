@@ -39,9 +39,9 @@ class JobStateChangeEventProcessorTest extends TestCase
     {
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->never())
-            ->method('reduceStateChanges');
+            ->method('reduceStateChangesToEvent');
         $mockEventStoreService->expects($this->once())
-            ->method('getStateChange')
+            ->method('getStateChangeForEvent')
             ->with(
                 null,
                 $this->isInstanceOf(Job::class)
@@ -93,10 +93,10 @@ class JobStateChangeEventProcessorTest extends TestCase
 
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->once())
-            ->method('reduceStateChanges')
+            ->method('reduceStateChangesToEvent')
             ->willReturn($mockJob);
         $mockEventStoreService->expects($this->once())
-            ->method('getStateChange')
+            ->method('getStateChangeForEvent')
             ->with(
                 $mockJob,
                 $this->isInstanceOf(Job::class)

@@ -45,10 +45,10 @@ class InvokeCommand extends Command
         try {
             $jobStateChange = new JobStateChange(
                 Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
+                'coverage-robot',
+                'core',
                 'mock-ref',
-                'mock-commit',
+                '12db14417f44a5371fe1c95171d6f96e4e210138',
                 null,
                 'mock-job-id',
                 0,

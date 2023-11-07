@@ -27,7 +27,7 @@ class EventStoreServiceTest extends KernelTestCase
             $this->getContainer()->get(SerializerInterface::class)
         );
 
-        $stateChange = $eventStoreService->getStateChange(
+        $stateChange = $eventStoreService->getStateChangeForEvent(
             $currentState,
             $newState
         );
@@ -46,7 +46,7 @@ class EventStoreServiceTest extends KernelTestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $eventStoreService->getStateChange(
+        $eventStoreService->getStateChangeForEvent(
             new Ingestion(
                 Provider::GITHUB,
                 'mock-owner',
@@ -75,7 +75,7 @@ class EventStoreServiceTest extends KernelTestCase
             $this->getContainer()->get(SerializerInterface::class)
         );
 
-        $reducedState = $eventStoreService->reduceStateChanges(
+        $reducedState = $eventStoreService->reduceStateChangesToEvent(
             $stateChanges
         );
 
@@ -93,7 +93,7 @@ class EventStoreServiceTest extends KernelTestCase
 
         $this->expectException(MissingConstructorArgumentsException::class);
 
-        $eventStoreService->reduceStateChanges(
+        $eventStoreService->reduceStateChangesToEvent(
             [
                 [
                     'some' => 'invalid',

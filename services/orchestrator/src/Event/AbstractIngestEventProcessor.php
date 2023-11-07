@@ -3,9 +3,13 @@
 namespace App\Event;
 
 use App\Client\DynamoDbClient;
+use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Model\Ingestion;
 use App\Service\EventStoreService;
+use DateTimeImmutable;
+use Model\UploadsFinalised;
+use Model\UploadsStarted;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
@@ -14,15 +18,18 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRecorderProcessor
 {
+    use OverallCommitStateAwareTrait;
+
     public function __construct(
-        EventStoreService $eventStoreService,
-        DynamoDbClient $dynamoDbClient,
-        private readonly LoggerInterface $ingestEventProcessorLogger
+        private readonly EventStoreService $eventStoreService,
+        private readonly DynamoDbClient $dynamoDbClient,
+        private readonly EventBridgeEventClient $eventBridgeEventClient,
+        private readonly LoggerInterface $eventProcessorLogger
     ) {
         parent::__construct(
             $eventStoreService,
             $dynamoDbClient,
-            $ingestEventProcessorLogger
+            $eventProcessorLogger
         );
     }
 
@@ -33,7 +40,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             !$event instanceof IngestSuccess &&
             !$event instanceof IngestFailure
         ) {
-            $this->ingestEventProcessorLogger->critical(
+            $this->eventProcessorLogger->critical(
                 'Event is not intended to be processed by this processor',
                 [
                     'event' => $event::class
@@ -55,6 +62,56 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             }
         );
 
-        return $this->recordStateChangeInStore($newState);
+        if ($this->areNoEventsForCommit($newState)) {
+            $this->eventProcessorLogger->info(
+                'No events for commit, publishing event.',
+                [
+                    'event' => (string)$event,
+                    'newState' => (string)$newState,
+                ]
+            );
+
+            $this->eventBridgeEventClient->publishEvent(
+                new UploadsStarted(
+                    $newState->getProvider(),
+                    $newState->getOwner(),
+                    $newState->getRepository(),
+                    $event->getRef(),
+                    $newState->getCommit(),
+                    $event->getPullRequest(),
+                    new DateTimeImmutable()
+                )
+            );
+        }
+
+        $hasRecordedStateChange = $this->recordStateChangeInStore($newState);
+
+        if (
+            $hasRecordedStateChange &&
+            $newState->getState() === OrchestratedEventState::SUCCESS &&
+            $this->areAllEventsForCommitInFinishedState($newState)
+        ) {
+            $this->eventProcessorLogger->info(
+                'All events are in a finished state, publishing event.',
+                [
+                    'event' => (string)$event,
+                    'newState' => (string)$newState,
+                ]
+            );
+
+            $this->eventBridgeEventClient->publishEvent(
+                new UploadsFinalised(
+                    $newState->getProvider(),
+                    $newState->getOwner(),
+                    $newState->getRepository(),
+                    $event->getRef(),
+                    $newState->getCommit(),
+                    $event->getPullRequest(),
+                    new DateTimeImmutable()
+                )
+            );
+        }
+
+        return $hasRecordedStateChange;
     }
 }

@@ -62,9 +62,9 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     {
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->never())
-            ->method('reduceStateChanges');
+            ->method('reduceStateChangesToEvent');
         $mockEventStoreService->expects($this->once())
-            ->method('getStateChange')
+            ->method('getStateChangeForEvent')
             ->with(
                 null,
                 $this->isInstanceOf(Ingestion::class)
@@ -117,10 +117,10 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->once())
-            ->method('reduceStateChanges')
+            ->method('reduceStateChangesToEvent')
             ->willReturn($mockJob);
         $mockEventStoreService->expects($this->once())
-            ->method('getStateChange')
+            ->method('getStateChangeForEvent')
             ->with(
                 $mockJob,
                 $this->isInstanceOf(Ingestion::class)
