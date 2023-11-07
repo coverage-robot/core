@@ -7,16 +7,6 @@ resource "aws_dynamodb_table" "event_table" {
   range_key                   = "version"
   deletion_protection_enabled = true
 
-  attribute {
-    name = "identifier"
-    type = "S"
-  }
-
-  attribute {
-    name = "version"
-    type = "N"
-  }
-
   global_secondary_index {
     name            = "repositoryIdentifier-commit-index"
     hash_key        = "repositoryIdentifier"
@@ -24,6 +14,26 @@ resource "aws_dynamodb_table" "event_table" {
     projection_type = "ALL"
     write_capacity  = 2
     read_capacity   = 2
+  }
+
+  attribute {
+    name = "identifier"
+    type = "S"
+  }
+
+  attribute {
+    name = "repositoryIdentifier"
+    type = "S"
+  }
+
+  attribute {
+    name = "commit"
+    type = "S"
+  }
+
+  attribute {
+    name = "version"
+    type = "N"
   }
 
   ttl {
