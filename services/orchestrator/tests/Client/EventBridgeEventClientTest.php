@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Client;
 
 use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
@@ -15,24 +15,23 @@ use DateTimeImmutable;
 use Monolog\Test\TestCase;
 use Packages\Event\Enum\Event;
 use Packages\Event\Enum\EventSource;
-use Packages\Event\Model\CoverageFinalised;
+use Packages\Event\Model\UploadsFinalised;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class EventBridgeEventServiceTest extends TestCase
+class EventBridgeEventClientTest extends TestCase
 {
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
-        $detail = new CoverageFinalised(
+        $detail = new UploadsFinalised(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
             'mock-ref',
             'mock-commit',
             null,
-            99,
             new DateTimeImmutable()
         );
 
@@ -48,8 +47,8 @@ class EventBridgeEventServiceTest extends TestCase
                     'Entries' => [
                         new PutEventsRequestEntry([
                             'EventBusName' => 'mock-event-bus',
-                            'Source' => EventSource::ANALYSE->value,
-                            'DetailType' => Event::COVERAGE_FINALISED->value,
+                            'Source' => EventSource::ORCHESTRATOR->value,
+                            'DetailType' => Event::UPLOADS_FINALISED->value,
                             'Detail' => 'mock-serialized-json'
                         ])
                     ],
