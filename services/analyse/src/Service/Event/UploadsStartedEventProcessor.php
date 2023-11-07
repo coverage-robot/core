@@ -3,9 +3,9 @@
 namespace App\Service\Event;
 
 use App\Client\SqsMessageClient;
-use Model\UploadsStarted;
 use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
+use Packages\Event\Model\UploadsStarted;
 use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
 use Psr\Log\LoggerInterface;
@@ -50,15 +50,15 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
      * Right now, this is:
      * 2. An in progress check run
      */
-    private function queueStartCheckRun(UploadsStarted $jobStateChange): bool
+    private function queueStartCheckRun(UploadsStarted $uploadsStarted): bool
     {
         return $this->sqsMessageClient->queuePublishableMessage(
             new PublishableCheckRunMessage(
-                $jobStateChange,
+                $uploadsStarted,
                 PublishableCheckRunStatus::IN_PROGRESS,
                 [],
                 0,
-                $jobStateChange->getEventTime()
+                $uploadsStarted->getEventTime()
             )
         );
     }

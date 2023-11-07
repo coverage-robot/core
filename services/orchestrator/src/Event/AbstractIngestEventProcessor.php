@@ -8,12 +8,12 @@ use App\Enum\OrchestratedEventState;
 use App\Model\Ingestion;
 use App\Service\EventStoreService;
 use DateTimeImmutable;
-use Model\UploadsFinalised;
-use Model\UploadsStarted;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
+use Packages\Event\Model\UploadsFinalised;
+use Packages\Event\Model\UploadsStarted;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRecorderProcessor

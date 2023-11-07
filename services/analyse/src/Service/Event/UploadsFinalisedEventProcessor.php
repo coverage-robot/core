@@ -8,11 +8,11 @@ use App\Model\PublishableCoverageDataInterface;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use DateTimeImmutable;
-use Model\UploadsFinalised;
 use Packages\Event\Enum\Event;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\EventInterface;
+use Packages\Event\Model\UploadsFinalised;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\PublishableCheckRunStatus;
 use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
@@ -98,21 +98,21 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      *    the diff
      */
     private function queueFinalCheckRun(
-        UploadsFinalised $jobStateChange,
+        UploadsFinalised $uploadsFinalised,
         PublishableCoverageDataInterface $publishableCoverageData
     ): bool {
         $annotations = array_map(
-            function (LineCoverageQueryResult $line) use ($jobStateChange, $publishableCoverageData) {
+            function (LineCoverageQueryResult $line) use ($uploadsFinalised, $publishableCoverageData) {
                 if ($line->getState() !== LineState::UNCOVERED) {
                     return null;
                 }
 
                 return new PublishableCheckAnnotationMessage(
-                    $jobStateChange,
+                    $uploadsFinalised,
                     $line->getFileName(),
                     $line->getLineNumber(),
                     $line->getState(),
-                    $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
+                    $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                 );
             },
             $publishableCoverageData->getDiffLineCoverage()->getLines()
@@ -120,10 +120,10 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         return $this->sqsMessageClient->queuePublishableMessage(
             new PublishableMessageCollection(
-                $jobStateChange,
+                $uploadsFinalised,
                 [
                     new PublishablePullRequestMessage(
-                        $jobStateChange,
+                        $uploadsFinalised,
                         $publishableCoverageData->getCoveragePercentage(),
                         $publishableCoverageData->getDiffCoveragePercentage(),
                         count($publishableCoverageData->getSuccessfulUploads()),
@@ -132,14 +132,14 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         (array)$this->serializer->normalize(
                             $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
                         ),
-                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
+                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     ),
                     new PublishableCheckRunMessage(
-                        $jobStateChange,
+                        $uploadsFinalised,
                         PublishableCheckRunStatus::SUCCESS,
                         array_filter($annotations),
                         $publishableCoverageData->getCoveragePercentage(),
-                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $jobStateChange->getEventTime()
+                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )
                 ]
             ),

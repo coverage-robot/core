@@ -8,11 +8,11 @@ use App\Enum\OrchestratedEventState;
 use App\Model\Job;
 use App\Service\EventStoreService;
 use DateTimeImmutable;
-use Model\UploadsFinalised;
-use Model\UploadsStarted;
 use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\JobStateChange;
+use Packages\Event\Model\UploadsFinalised;
+use Packages\Event\Model\UploadsStarted;
 use Packages\Models\Enum\JobState;
 use Psr\Log\LoggerInterface;
 

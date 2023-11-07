@@ -126,7 +126,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
      */
     protected function reduceToOrchestratorEvent(EventStateChangeCollection $stateChanges): ?OrchestratedEventInterface
     {
-        if ($stateChanges->getStateChanges() === []) {
+        if ($stateChanges->getEvents() === []) {
             return null;
         }
 

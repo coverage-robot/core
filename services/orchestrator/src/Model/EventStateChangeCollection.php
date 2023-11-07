@@ -2,19 +2,19 @@
 
 namespace App\Model;
 
-class EventStateChangeCollection
+class EventStateChangeCollection implements \Countable
 {
     /**
-     * @param EventStateChange[] $stateChanges
+     * @param EventStateChange[] $events
      */
     public function __construct(
-        private array $stateChanges
+        private array $events
     ) {
     }
 
     public function setStateChange(EventStateChange $stateChange): void
     {
-        $this->stateChanges[$stateChange->getVersion()] = $stateChange;
+        $this->events[$stateChange->getVersion()] = $stateChange;
     }
 
     /**
@@ -22,9 +22,14 @@ class EventStateChangeCollection
      *
      * @return EventStateChange[]
      */
-    public function getStateChanges(): array
+    public function getEvents(): array
     {
-        ksort($this->stateChanges);
-        return $this->stateChanges;
+        ksort($this->events);
+        return $this->events;
+    }
+
+    public function count(): int
+    {
+        return count($this->events);
     }
 }

@@ -28,15 +28,15 @@ class DynamoDbClient
      */
     private const DEFAULT_EVENT_TTL = 43200;
 
-    private const REPOSITORY_IDENTIFIER_COLUMN = "repositoryIdentifier";
+    private const REPOSITORY_IDENTIFIER_COLUMN = 'repositoryIdentifier';
 
-    private const COMMIT_COLUMN = "commit";
+    private const COMMIT_COLUMN = 'commit';
 
     /**
      * The name of the index used to query for all of the events for a particular
      * repository and commit.
      */
-    private const REPOSITORY_COMMIT_INDEX = self:: REPOSITORY_IDENTIFIER_COLUMN."-".self::COMMIT_COLUMN."-index";
+    private const REPOSITORY_COMMIT_INDEX = self:: REPOSITORY_IDENTIFIER_COLUMN . '-' . self::COMMIT_COLUMN . '-index';
 
     /**
      * @param SerializerInterface&DecoderInterface&DenormalizerInterface $serializer
@@ -178,12 +178,12 @@ class DynamoDbClient
         $stateChanges = new EventStateChangeCollection([]);
         foreach ($response->getItems() as $item) {
             $stateChange = new EventStateChange(
-                Provider::from($item['provider']->getS()),
-                $item['identifier']->getS(),
-                $item['owner']->getS(),
-                $item['repository']->getS(),
+                Provider::from((string)$item['provider']->getS()),
+                (string)$item['identifier']->getS(),
+                (string)$item['owner']->getS(),
+                (string)$item['repository']->getS(),
                 (int)$item['version']->getN(),
-                $this->serializer->decode(
+                (array)$this->serializer->decode(
                     $item['event']->getS() ?? '[]',
                     'json'
                 ),
@@ -199,7 +199,8 @@ class DynamoDbClient
     /**
      * Get all of the state changes for all events in a particular repository and commit.
      *
-     * @throws RuntimeException
+     * @param OrchestratedEventInterface $event
+     * @return EventStateChangeCollection[]
      */
     public function getEventStateChangesForCommit(OrchestratedEventInterface $event): array
     {
@@ -259,12 +260,12 @@ class DynamoDbClient
         $stateChanges = [];
         foreach ($response->getItems() as $item) {
             $stateChange = new EventStateChange(
-                Provider::from($item['provider']->getS()),
-                $item['identifier']->getS(),
-                $item['owner']->getS(),
-                $item['repository']->getS(),
+                Provider::from((string)$item['provider']->getS()),
+                (string)$item['identifier']->getS(),
+                (string)$item['owner']->getS(),
+                (string)$item['repository']->getS(),
                 (int)$item['version']->getN(),
-                $this->serializer->decode(
+                (array)$this->serializer->decode(
                     $item['event']->getS() ?? '[]',
                     'json'
                 ),

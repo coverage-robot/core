@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class UploadsFinalisedEventProcessorTest extends TestCase
 {
-
     public function testGetEvent(): void
     {
         $this->assertEquals(

@@ -61,7 +61,7 @@ class EventStoreService
     public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface
     {
         $latestKnownState = array_reduce(
-            $stateChanges->getStateChanges(),
+            $stateChanges->getEvents(),
             static fn (array $finalState, EventStateChange $stateChange) => array_merge(
                 $finalState,
                 $stateChange->getEvent()

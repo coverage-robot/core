@@ -1,10 +1,9 @@
 <?php
 
-namespace Model;
+namespace Packages\Event\Model;
 
 use DateTimeImmutable;
 use Packages\Event\Enum\Event;
-use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\Provider;
 
 class UploadsStarted implements EventInterface
