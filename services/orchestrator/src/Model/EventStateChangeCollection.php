@@ -7,22 +7,15 @@ class EventStateChangeCollection implements \Countable
     /**
      * @var EventStateChange[] $events
      */
-    private array $events;
+    private array $events = [];
 
     /**
      * @param EventStateChange[] $events
      */
-    public function __construct(
-        array $events
-    ) {
-        $this->events = array_reduce(
-            $events,
-            static fn(array $events, EventStateChange $event) => array_replace(
-                $events,
-                [$event->getVersion() => $event]
-            ),
-            []
-        );
+    public function __construct(array $events = []) {
+        foreach ($events as $event) {
+            $this->setStateChange($event);
+        }
     }
 
     public function setStateChange(EventStateChange $stateChange): void

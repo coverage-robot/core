@@ -270,16 +270,16 @@ class DynamoDbClient
     private function parseEventStateChange(array $item): EventStateChange
     {
         return new EventStateChange(
-            Provider::from((string)$item['provider']?->getS()),
-            (string)(isset($item['identifier']) ? $item['identifier']?->getS() : ''),
-            (string)(isset($item['owner']) ? $item['owner']?->getS() : ''),
-            (string)(isset($item['repository']) ? $item['repository']?->getS() : ''),
-            (int)(isset($item['version']) ? $item['version']?->getN() : 1),
+            Provider::from((string)$item['provider']->getS()),
+            (string)(isset($item['identifier']) ? $item['identifier']->getS() : ''),
+            (string)(isset($item['owner']) ? $item['owner']->getS() : ''),
+            (string)(isset($item['repository']) ? $item['repository']->getS() : ''),
+            (int)(isset($item['version']) ? $item['version']->getN() : 1),
             (array)$this->serializer->decode(
-                (string)(isset($item['event']) ? $item['event']?->getS() : '[]'),
+                (string)(isset($item['event']) ? $item['event']->getS() : '[]'),
                 'json'
             ),
-            (int)(isset($item['expiry']) ? $item['expiry']?->getN() : '')
+            (int)(isset($item['expiry']) ? $item['expiry']->getN() : '')
         );
     }
 }
