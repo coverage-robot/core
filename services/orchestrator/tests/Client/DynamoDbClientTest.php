@@ -6,6 +6,7 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Model\EventStateChange;
+use App\Model\EventStateChangeCollection;
 use App\Model\Job;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
@@ -236,6 +237,158 @@ class DynamoDbClientTest extends KernelTestCase
             ],
             $client->getStateChangesForEvent($mockEvent)
                 ->getEvents()
+        );
+    }
+
+    public function testGetEventStateChangesForCommit(): void
+    {
+        $mockEvent = new Job(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-commit',
+            OrchestratedEventState::SUCCESS,
+            'mock-external-id'
+        );
+
+        $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
+
+        $client = new DynamoDbClient(
+            $mockClient,
+            MockEnvironmentServiceFactory::getMock(
+                $this,
+                Environment::PRODUCTION,
+                [
+                    EnvironmentVariable::EVENT_STORE->value => 'event-store'
+                ]
+            ),
+            $this->getContainer()->get(SerializerInterface::class),
+            new NullLogger()
+        );
+
+        $mockOutput = ResultMockFactory::create(
+            QueryOutput::class,
+            [
+                'input' => new QueryInput(),
+                'Items' => [
+                    [
+                        'provider' => new AttributeValue(
+                            [
+                                'S' => Provider::GITHUB->value
+                            ]
+                        ),
+                        'identifier' => new AttributeValue(
+                            [
+                                'S' => 'mock-identifier'
+                            ]
+                        ),
+                        'version' => new AttributeValue(
+                            [
+                                'N' => '1'
+                            ]
+                        ),
+                        'event' => new AttributeValue(
+                            [
+                                'S' => '{"mock": "item"}'
+                            ]
+                        )
+                    ],
+                    [
+                        'provider' => new AttributeValue(
+                            [
+                                'S' => Provider::GITHUB->value
+                            ]
+                        ),
+                        'identifier' => new AttributeValue(
+                            [
+                                'S' => 'mock-identifier-2'
+                            ]
+                        ),
+                        'version' => new AttributeValue(
+                            [
+                                'N' => '1'
+                            ]
+                        ),
+                        'event' => new AttributeValue(
+                            [
+                                'S' => '{"mock": "item-2"}'
+                            ]
+                        )
+                    ]
+                ]
+            ]
+        );
+
+        $mockClient->expects($this->once())
+            ->method('query')
+            ->with(
+                self::callback(
+                    function (QueryInput $input) use ($mockEvent) {
+                        $this->assertEquals(
+                            'event-store',
+                            $input->getTableName()
+                        );
+                        $this->assertEquals(
+                            'repositoryIdentifier-commit-index',
+                            $input->getIndexName()
+                        );
+                        $this->assertEquals(
+                            [
+                                'repositoryIdentifier' => Condition::create([
+                                    'AttributeValueList' => [
+                                        [
+                                            'S' => $mockEvent->getUniqueRepositoryIdentifier()
+                                        ]
+                                    ],
+                                    'ComparisonOperator' => ComparisonOperator::EQ
+                                ]),
+                                'commit' => Condition::create([
+                                    'AttributeValueList' => [
+                                        [
+                                            'S' => $mockEvent->getCommit()
+                                        ]
+                                    ],
+                                    'ComparisonOperator' => ComparisonOperator::EQ
+                                ])
+                            ],
+                            $input->getKeyConditions()
+                        );
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($mockOutput);
+
+        $this->assertEquals(
+            [
+                'mock-identifier' => new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        '',
+                        '',
+                        1,
+                        [
+                            'mock' => 'item'
+                        ],
+                        0
+                    )
+                ]),
+                'mock-identifier-2' => new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier-2',
+                        '',
+                        '',
+                        1,
+                        [
+                            'mock' => 'item-2'
+                        ],
+                        0
+                    )
+                ])
+            ],
+            $client->getEventStateChangesForCommit($mockEvent)
         );
     }
 }
