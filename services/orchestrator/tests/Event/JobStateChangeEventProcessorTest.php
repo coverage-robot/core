@@ -3,7 +3,10 @@
 namespace App\Tests\Event;
 
 use App\Client\DynamoDbClient;
+use App\Client\EventBridgeEventClient;
 use App\Event\JobStateChangeEventProcessor;
+use App\Model\EventStateChange;
+use App\Model\EventStateChangeCollection;
 use App\Model\Job;
 use App\Service\EventStoreService;
 use DateTimeImmutable;
@@ -23,6 +26,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $this->createMock(EventStoreService::class),
             $this->createMock(DynamoDbClient::class),
+            $this->createMock(EventBridgeEventClient::class),
             new NullLogger()
         );
 
@@ -51,7 +55,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getStateChangesForEvent')
-            ->willReturn([]);
+            ->willReturn(new EventStateChangeCollection([]));
         $mockDynamoDbClient->expects($this->once())
             ->method('storeStateChange')
             ->with(
@@ -64,6 +68,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
             $mockDynamoDbClient,
+            $this->createMock(EventBridgeEventClient::class),
             new NullLogger()
         );
 
@@ -106,9 +111,19 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getStateChangesForEvent')
-            ->willReturn([
-                ['existing' => 'change']
-            ]);
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'change'],
+                        1
+                    )
+                ])
+            );
         $mockDynamoDbClient->expects($this->once())
             ->method('storeStateChange')
             ->with(
@@ -121,6 +136,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
             $mockDynamoDbClient,
+            $this->createMock(EventBridgeEventClient::class),
             new NullLogger()
         );
 

@@ -5,6 +5,7 @@ namespace App\Tests\Client;
 use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
+use App\Model\EventStateChange;
 use App\Model\Job;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
@@ -142,6 +143,16 @@ class DynamoDbClientTest extends KernelTestCase
                 'input' => new QueryInput(),
                 'Items' => [
                     [
+                        'provider' => new AttributeValue(
+                            [
+                                'S' => Provider::GITHUB->value
+                            ]
+                        ),
+                        'version' => new AttributeValue(
+                            [
+                                'N' => '1'
+                            ]
+                        ),
                         'event' => new AttributeValue(
                             [
                                 'S' => '{"mock": "item"}'
@@ -149,6 +160,16 @@ class DynamoDbClientTest extends KernelTestCase
                         )
                     ],
                     [
+                        'provider' => new AttributeValue(
+                            [
+                                'S' => Provider::GITHUB->value
+                            ]
+                        ),
+                        'version' => new AttributeValue(
+                            [
+                                'N' => '2'
+                            ]
+                        ),
                         'event' => new AttributeValue(
                             [
                                 'S' => '{"mock": "item-2"}'
@@ -190,14 +211,31 @@ class DynamoDbClientTest extends KernelTestCase
 
         $this->assertEquals(
             [
-                [
-                    'mock' => 'item'
-                ],
-                [
-                    'mock' => 'item-2'
-                ]
+                1 => new EventStateChange(
+                    Provider::GITHUB,
+                    '',
+                    '',
+                    '',
+                    1,
+                    [
+                        'mock' => 'item'
+                    ],
+                    0
+                ),
+                2 => new EventStateChange(
+                    Provider::GITHUB,
+                    '',
+                    '',
+                    '',
+                    2,
+                    [
+                        'mock' => 'item-2'
+                    ],
+                    0
+                )
             ],
             $client->getStateChangesForEvent($mockEvent)
+                ->getEvents()
         );
     }
 }

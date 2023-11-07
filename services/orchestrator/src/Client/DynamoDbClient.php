@@ -14,6 +14,7 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
+use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Models\Enum\Provider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -177,20 +178,9 @@ class DynamoDbClient
 
         $stateChanges = new EventStateChangeCollection([]);
         foreach ($response->getItems() as $item) {
-            $stateChange = new EventStateChange(
-                Provider::from((string)$item['provider']->getS()),
-                (string)$item['identifier']->getS(),
-                (string)$item['owner']->getS(),
-                (string)$item['repository']->getS(),
-                (int)$item['version']->getN(),
-                (array)$this->serializer->decode(
-                    $item['event']->getS() ?? '[]',
-                    'json'
-                ),
-                (int)$item['expiry']->getN()
+            $stateChanges->setStateChange(
+                $this->parseEventStateChange($item)
             );
-
-            $stateChanges->setStateChange($stateChange);
         }
 
         return $stateChanges;
@@ -259,18 +249,7 @@ class DynamoDbClient
         /** @var EventStateChangeCollection[] $stateChanges */
         $stateChanges = [];
         foreach ($response->getItems() as $item) {
-            $stateChange = new EventStateChange(
-                Provider::from((string)$item['provider']->getS()),
-                (string)$item['identifier']->getS(),
-                (string)$item['owner']->getS(),
-                (string)$item['repository']->getS(),
-                (int)$item['version']->getN(),
-                (array)$this->serializer->decode(
-                    $item['event']->getS() ?? '[]',
-                    'json'
-                ),
-                (int)$item['expiry']->getN()
-            );
+            $stateChange = $this->parseEventStateChange($item);
 
             if (!array_key_exists($stateChange->getIdentifier(), $stateChanges)) {
                 $stateChanges[$stateChange->getIdentifier()] = new EventStateChangeCollection([]);
@@ -280,5 +259,27 @@ class DynamoDbClient
         }
 
         return $stateChanges;
+    }
+
+    /**
+     * Parse a single state change item from DynamoDB into a state change object which
+     * can be used in collections and for reducing into an event.
+     *
+     * @param AttributeValue[] $item
+     */
+    private function parseEventStateChange(array $item): EventStateChange
+    {
+        return new EventStateChange(
+            Provider::from((string)$item['provider']?->getS()),
+            (string)(isset($item['identifier']) ? $item['identifier']?->getS() : ''),
+            (string)(isset($item['owner']) ? $item['owner']?->getS() : ''),
+            (string)(isset($item['repository']) ? $item['repository']?->getS() : ''),
+            (int)(isset($item['version']) ? $item['version']?->getN() : 1),
+            (array)$this->serializer->decode(
+                (string)(isset($item['event']) ? $item['event']?->getS() : '[]'),
+                'json'
+            ),
+            (int)(isset($item['expiry']) ? $item['expiry']?->getN() : '')
+        );
     }
 }
