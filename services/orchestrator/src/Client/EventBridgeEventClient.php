@@ -31,7 +31,7 @@ class EventBridgeEventClient
                 'Entries' => [
                     new PutEventsRequestEntry([
                         'EventBusName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_BUS),
-                        'Source' => EventSource::ANALYSE->value,
+                        'Source' => EventSource::ORCHESTRATOR->value,
                         'DetailType' => $event->getType()->value,
                         'Detail' => $this->serializer->serialize($event, 'json')
                     ])
