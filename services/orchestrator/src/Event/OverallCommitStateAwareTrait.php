@@ -55,12 +55,17 @@ trait OverallCommitStateAwareTrait
             maxAttempts: 4,
             strategy: new PolynomialStrategy(150, 3),
             waitCap: 6000,
-            decider: static fn ($attempt, $maxAttempts, $result) => ($attempt <= $maxAttempts) && $result == true
+            decider: static fn (
+                int $attempt,
+                int $maxAttempts,
+                bool $result
+            ) => ($attempt <= $maxAttempts) && $result == true
         );
 
         $previousTotalStateChanges = -1;
 
-        return $polling->run(function () use ($newState, &$previousTotalStateChanges) {
+        /** @var bool $result */
+        $result = $polling->run(function () use ($newState, &$previousTotalStateChanges) {
             $mostRecentEventStateChanges = $this->dynamoDbClient->getEventStateChangesForCommit($newState);
 
             $currentTotalStateChanges = array_sum(
@@ -125,5 +130,7 @@ trait OverallCommitStateAwareTrait
 
             return true;
         });
+
+        return $result;
     }
 }
