@@ -128,7 +128,8 @@ resource "aws_cloudwatch_event_rule" "service" {
   event_pattern = <<EOF
   {
     "detail-type": [
-      "JOB_STATE_CHANGE"
+      "UPLOADS_STARTED",
+      "UPLOADS_FINALISED",
     ]
   }
   EOF
