@@ -66,7 +66,8 @@ resource "aws_iam_policy" "orchestrator_policy" {
           "dynamodb:PutItem"
         ]
         Resource = [
-          var.event_store_arn
+          var.event_store_arn,
+          "${var.event_store_arn}/index/*"
         ]
       }
     ]
