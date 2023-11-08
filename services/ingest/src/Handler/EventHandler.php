@@ -98,9 +98,9 @@ class EventHandler extends S3Handler
                     $this->persistCoverage($upload, $coverage);
                 }
 
-                $this->deleteFile($coverageFile);
-
                 $this->triggerIngestionSuccessEvent($upload);
+
+                $this->deleteFile($coverageFile);
 
                 $this->handlerLogger->info(
                     sprintf(
