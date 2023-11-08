@@ -3,6 +3,7 @@
 namespace App\Event;
 
 use App\Client\DynamoDbClient;
+use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
@@ -16,7 +17,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
     public function __construct(
         private readonly EventStoreService $eventStoreService,
         private readonly DynamoDbClient $dynamoDbClient,
-        private readonly LoggerInterface $orchestratorEventRecorderProcessor
+        private readonly LoggerInterface $eventProcessorLogger
     ) {
     }
 
@@ -42,7 +43,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
          */
         $result = $backoff->run(function () use ($newState) {
             try {
-                $this->orchestratorEventRecorderProcessor->info(
+                $this->eventProcessorLogger->info(
                     sprintf(
                         'Attempting to record state change for %s in event store.',
                         (string)$newState
@@ -53,7 +54,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
             } catch (ConditionalCheckFailedException) {
                 // Because of the strict versioning required for state change event sourcing,
                 // its entirely possible that two contending
-                $this->orchestratorEventRecorderProcessor->info(
+                $this->eventProcessorLogger->info(
                     sprintf(
                         'Conditional check for %s failed during persistence to the event store.',
                         (string)$newState
@@ -81,13 +82,13 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
 
         $currentState = $this->reduceToOrchestratorEvent($stateChanges);
 
-        $change = $this->eventStoreService->getStateChange(
+        $change = $this->eventStoreService->getStateChangeForEvent(
             $currentState,
             $newState
         );
 
         if ($change === []) {
-            $this->orchestratorEventRecorderProcessor->info(
+            $this->eventProcessorLogger->info(
                 sprintf(
                     'No change detected in event state for %s.',
                     (string)$newState
@@ -101,7 +102,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
             return true;
         }
 
-        $this->orchestratorEventRecorderProcessor->info(
+        $this->eventProcessorLogger->info(
             sprintf(
                 'Change detected in event state for %s, recording in event store.',
                 (string)$newState
@@ -123,16 +124,16 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
      * Reduce the state changes recorded in the event store down into the correct orchestrator event,
      * or fallback in the case the event is corrupt in the event store (i.e cannot be deserialized).
      */
-    protected function reduceToOrchestratorEvent(array $stateChanges): ?OrchestratedEventInterface
+    protected function reduceToOrchestratorEvent(EventStateChangeCollection $stateChanges): ?OrchestratedEventInterface
     {
-        if ($stateChanges === []) {
+        if ($stateChanges->getEvents() === []) {
             return null;
         }
 
         try {
-            return $this->eventStoreService->reduceStateChanges($stateChanges);
+            return $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
         } catch (ExceptionInterface $e) {
-            $this->orchestratorEventRecorderProcessor->error(
+            $this->eventProcessorLogger->error(
                 'Failed to reduce state changes into event.',
                 [
                     'stateChanges' => $stateChanges,

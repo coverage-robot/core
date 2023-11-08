@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5aa90484317665266069c56b3682c9a3",
+    "content-hash": "af783a2c639402fd04baa7c152047307",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -204,6 +204,63 @@
                 }
             ],
             "time": "2023-09-07T06:56:44+00:00"
+        },
+        {
+            "name": "async-aws/event-bridge",
+            "version": "1.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/event-bridge.git",
+                "reference": "f13aef3bd4da43689c9a894c93d7160597e174bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/f13aef3bd4da43689c9a894c93d7160597e174bb",
+                "reference": "f13aef3bd4da43689c9a894c93d7160597e174bb",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.9",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\EventBridge\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "EventBridge client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "event-bridge",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-08-07T20:00:50+00:00"
         },
         {
             "name": "bref/bref",

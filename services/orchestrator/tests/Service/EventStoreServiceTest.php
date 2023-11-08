@@ -4,6 +4,8 @@ namespace App\Tests\Service;
 
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
+use App\Model\EventStateChange;
+use App\Model\EventStateChangeCollection;
 use App\Model\Ingestion;
 use App\Model\Job;
 use App\Model\OrchestratedEventInterface;
@@ -27,7 +29,7 @@ class EventStoreServiceTest extends KernelTestCase
             $this->getContainer()->get(SerializerInterface::class)
         );
 
-        $stateChange = $eventStoreService->getStateChange(
+        $stateChange = $eventStoreService->getStateChangeForEvent(
             $currentState,
             $newState
         );
@@ -46,7 +48,7 @@ class EventStoreServiceTest extends KernelTestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $eventStoreService->getStateChange(
+        $eventStoreService->getStateChangeForEvent(
             new Ingestion(
                 Provider::GITHUB,
                 'mock-owner',
@@ -68,14 +70,14 @@ class EventStoreServiceTest extends KernelTestCase
 
     #[DataProvider('stateChangesDataProvider')]
     public function testReduceStateChanges(
-        array $stateChanges,
+        EventStateChangeCollection $stateChanges,
         OrchestratedEventInterface $expectedReducedState
     ): void {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class)
         );
 
-        $reducedState = $eventStoreService->reduceStateChanges(
+        $reducedState = $eventStoreService->reduceStateChangesToEvent(
             $stateChanges
         );
 
@@ -93,17 +95,35 @@ class EventStoreServiceTest extends KernelTestCase
 
         $this->expectException(MissingConstructorArgumentsException::class);
 
-        $eventStoreService->reduceStateChanges(
-            [
+        $eventStoreService->reduceStateChangesToEvent(
+            new EventStateChangeCollection(
                 [
-                    'some' => 'invalid',
-                    'values' => ['x','y'],
-                    'type' => OrchestratedEvent::JOB->value,
-                ],
-                [
-                    'new-value' => 'z'
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        [
+                            'some' => 'invalid',
+                            'values' => ['x','y'],
+                            'type' => OrchestratedEvent::JOB->value,
+                        ],
+                        0
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        2,
+                        [
+                            'new-value' => 'z'
+                        ],
+                        0
+                    )
                 ]
-            ]
+            )
         );
     }
 
@@ -158,26 +178,61 @@ class EventStoreServiceTest extends KernelTestCase
     {
         return [
             [
-                [
+                new EventStateChangeCollection(
                     [
-                        'provider' => Provider::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repo',
-                        'commit' => '1',
-                        'uploadId' => 'mock-upload-id',
-                        'state' => OrchestratedEventState::ONGOING->value,
-                        'type' => OrchestratedEvent::INGESTION->value
-                    ],
-                    [
-                        'state' => OrchestratedEventState::SUCCESS->value,
-                    ],
-                    [
-                        'state' => OrchestratedEventState::FAILURE->value,
-                    ],
-                    [
-                        'commit' => '2',
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            1,
+                            [
+                                'provider' => Provider::GITHUB->value,
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repo',
+                                'commit' => '1',
+                                'uploadId' => 'mock-upload-id',
+                                'state' => OrchestratedEventState::ONGOING->value,
+                                'type' => OrchestratedEvent::INGESTION->value
+                            ],
+                            0
+                        ),
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            2,
+                            [
+                                'state' => OrchestratedEventState::SUCCESS->value,
+                            ],
+                            0
+                        ),
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            3,
+                            [
+                                'state' => OrchestratedEventState::ONGOING->value,
+                            ],
+                            0
+                        ),
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            4,
+                            [
+                                'commit' => '2',
+                                'state' => OrchestratedEventState::FAILURE->value,
+                            ],
+                            0
+                        )
                     ]
-                ],
+                ),
                 new Ingestion(
                     Provider::GITHUB,
                     'mock-owner',
@@ -188,23 +243,49 @@ class EventStoreServiceTest extends KernelTestCase
                 )
             ],
             [
-                [
+                new EventStateChangeCollection(
                     [
-                        'provider' => Provider::GITHUB->value,
-                        'owner' => 'mock-owner',
-                        'repository' => 'mock-repo',
-                        'commit' => '1',
-                        'state' => OrchestratedEventState::ONGOING->value,
-                        'type' => OrchestratedEvent::JOB->value,
-                        'externalId' => 'mock-external-id'
-                    ],
-                    [
-                        'state' => OrchestratedEventState::FAILURE->value,
-                    ],
-                    [
-                        'state' => OrchestratedEventState::SUCCESS->value,
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            1,
+                            [
+                                'provider' => Provider::GITHUB->value,
+                                'owner' => 'mock-owner',
+                                'repository' => 'mock-repo',
+                                'commit' => '1',
+                                'state' => OrchestratedEventState::ONGOING->value,
+                                'type' => OrchestratedEvent::JOB->value,
+                                'externalId' => 'mock-external-id'
+                            ],
+                            0
+                        ),
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            2,
+                            [
+                                'state' => OrchestratedEventState::FAILURE->value,
+                            ],
+                            0
+                        ),
+                        new EventStateChange(
+                            Provider::GITHUB,
+                            'mock-identifier',
+                            'mock-owner',
+                            'mock-repository',
+                            3,
+                            [
+                                'state' => OrchestratedEventState::SUCCESS->value,
+                            ],
+                            0
+                        )
                     ]
-                ],
+                ),
                 new Job(
                     Provider::GITHUB,
                     'mock-owner',

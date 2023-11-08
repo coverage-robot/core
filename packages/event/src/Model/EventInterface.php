@@ -3,6 +3,8 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Model\UploadsFinalised;
+use Model\UploadsStarted;
 use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 use Stringable;
@@ -11,7 +13,9 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 #[DiscriminatorMap(
     'type',
     [
+        Event::UPLOADS_STARTED->value => UploadsStarted::class,
         Event::UPLOAD->value => Upload::class,
+        Event::UPLOADS_FINALISED->value => UploadsFinalised::class,
         Event::JOB_STATE_CHANGE->value => JobStateChange::class,
         Event::COVERAGE_FINALISED->value => CoverageFinalised::class,
         Event::INGEST_STARTED->value => IngestStarted::class,

@@ -36,7 +36,18 @@ enum Event: string
     case JOB_STATE_CHANGE = 'JOB_STATE_CHANGE';
 
     /**
+     * The first of (potentially multiple) uploads has now been seen for a commit.
+     */
+    case UPLOADS_STARTED = 'UPLOADS_STARTED';
+
+    /**
      * A new coverage file has been uploaded.
      */
     case UPLOAD = 'UPLOAD';
+
+    /**
+     * All uploads for a given commit have been processed, and there are no more uploads
+     * expected to arrive (i.e. all jobs have also finished).
+     */
+    case UPLOADS_FINALISED = 'UPLOADS_FINALISED';
 }
