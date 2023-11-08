@@ -45,10 +45,10 @@ trait OverallCommitStateAwareTrait
     public function areAllEventsForCommitInFinishedState(OrchestratedEventInterface $newState): bool
     {
         $this->eventProcessorLogger->info(
-           sprintf(
-               'Beginning polling for to see if all events remain finished in commit for %s.',
-               (string)$newState
-           ),
+            sprintf(
+                'Beginning polling for to see if all events remain finished in commit for %s.',
+                (string)$newState
+            ),
         );
 
         $polling = new Backoff(
