@@ -108,7 +108,9 @@ trait OverallCommitStateAwareTrait
                             ),
                             [
                                 'previousTotalStateChanges' => $previousTotalStateChanges,
-                                'currentTotalStateChanges' => $currentTotalStateChanges
+                                'currentTotalStateChanges' => $currentTotalStateChanges,
+                                'ongoingEvent' => (string)$event,
+                                'stateChanges' => $stateChanges->count()
                             ]
                         );
                         return false;
