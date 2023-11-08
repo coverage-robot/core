@@ -129,7 +129,7 @@ resource "aws_cloudwatch_event_rule" "service" {
   {
     "detail-type": [
       "UPLOADS_STARTED",
-      "UPLOADS_FINALISED",
+      "UPLOADS_FINALISED"
     ]
   }
   EOF
