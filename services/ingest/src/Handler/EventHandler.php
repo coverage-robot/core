@@ -76,8 +76,6 @@ class EventHandler extends S3Handler
                     Upload::class
                 );
 
-                $this->triggerIngestionStartedEvent($upload);
-
                 $this->handlerLogger->info(
                     sprintf(
                         'Starting to ingest %s for %s.',
@@ -92,6 +90,10 @@ class EventHandler extends S3Handler
                 );
 
                 if (count($coverage) > 0) {
+                    // We only want to broadcast the ingestion started event if the know theres coverage to
+                    // persist, as otherwise we can wind up in contention with very fast start and finish events
+                    $this->triggerIngestionStartedEvent($upload);
+
                     // Only try persisting the parsed coverage if the report contains coverage
                     // content. This will prevent us from publishing events when the report was
                     // empty coverage

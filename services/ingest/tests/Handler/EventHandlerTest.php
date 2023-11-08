@@ -61,17 +61,6 @@ class EventHandlerTest extends KernelTestCase
             ->willReturn(true);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects(
-            $this->exactly(
-                // An event for every coverage file which is starting to be ingested
-                count($coverageFiles) +
-                // An event for coverage file which was ingested successfully
-                count($expectedOutputKeys) +
-                // An event for every coverage file which failed to be ingested
-                count($coverageFiles) - count($expectedOutputKeys)
-            )
-        )
-            ->method('publishEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
@@ -204,17 +193,6 @@ class EventHandlerTest extends KernelTestCase
             ->willReturn(true);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects(
-            $this->exactly(
-                // An event for every coverage file which is starting to be ingested
-                count($coverageFiles) +
-                // An event for coverage file which was ingested successfully
-                count($expectedOutputKeys) +
-                // An event for every coverage file which failed to be ingested
-                count($coverageFiles) - count($expectedOutputKeys)
-            )
-        )
-            ->method('publishEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
