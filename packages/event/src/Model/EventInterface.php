@@ -3,8 +3,6 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
-use Model\UploadsFinalised;
-use Model\UploadsStarted;
 use Packages\Event\Enum\Event;
 use Packages\Models\Enum\Provider;
 use Stringable;
