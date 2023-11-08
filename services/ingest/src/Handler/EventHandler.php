@@ -18,6 +18,7 @@ use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
+use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
@@ -99,6 +100,8 @@ class EventHandler extends S3Handler
 
                 $this->deleteFile($coverageFile);
 
+                $this->triggerIngestionSuccessEvent($upload);
+
                 $this->handlerLogger->info(
                     sprintf(
                         'Successfully ingested and persisted %s using %s parser.',
@@ -158,6 +161,18 @@ class EventHandler extends S3Handler
     {
         return $this->eventBridgeEventService->publishEvent(
             new IngestStarted($upload)
+        );
+    }
+
+    /**
+     * Publish an event to EventBridge to indicate that we have finished ingesting a
+     * new file successfully. This will allow other services to track the progress of
+     * the ingestion
+     */
+    public function triggerIngestionSuccessEvent(Upload $upload): bool
+    {
+        return $this->eventBridgeEventService->publishEvent(
+            new IngestSuccess($upload)
         );
     }
 
