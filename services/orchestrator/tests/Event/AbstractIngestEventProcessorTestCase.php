@@ -12,6 +12,7 @@ use App\Service\EventStoreService;
 use DateInterval;
 use DateTimeImmutable;
 use Packages\Event\Model\IngestFailure;
+use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
@@ -29,7 +30,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     abstract public static function getEventProcessor(): string;
 
     /**
-     * @return class-string<IngestSuccess|IngestFailure>
+     * @return class-string<IngestSuccess|IngestFailure|IngestStarted>
      */
     abstract public static function getEvent(): string;
 
@@ -110,7 +111,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                         null
-                    )
+                    ),
+                    new DateTimeImmutable()
                 )
             )
         );
@@ -182,7 +184,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                         null
-                    )
+                    ),
+                    new DateTimeImmutable()
                 )
             )
         );
@@ -243,8 +246,9 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         '',
                         null,
                         new Tag('mock-tag', 'mock-commit'),
-                        $eventTime->sub(new DateInterval('PT10S'))
-                    )
+                        $eventTime->sub(new DateInterval('PT30S'))
+                    ),
+                    $eventTime->sub(new DateInterval('PT10S'))
                 )
             )
         );
