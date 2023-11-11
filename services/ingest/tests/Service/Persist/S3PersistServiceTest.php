@@ -37,7 +37,6 @@ class S3PersistServiceTest extends KernelTestCase
             'sourceFormat' => $coverage->getSourceFormat()->value,
             'commit' => $upload->getCommit(),
             'parent' => json_encode($upload->getParent()),
-            'ingestTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
             'uploadId' => $upload->getUploadId(),
             'provider' => $upload->getProvider()->value,
             'owner' => $upload->getOwner(),
