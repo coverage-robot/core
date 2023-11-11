@@ -11,6 +11,7 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
+use DateTimeImmutable;
 use Packages\Event\Enum\Event;
 use Packages\Event\Enum\EventSource;
 use Packages\Event\Model\IngestSuccess;
@@ -38,7 +39,8 @@ class EventBridgeEventServiceTest extends TestCase
                 'mock-project-root',
                 null,
                 new Tag('mock-tag', 'mock-commit')
-            )
+            ),
+            new DateTimeImmutable()
         );
 
         $mockResult = ResultMockFactory::create(

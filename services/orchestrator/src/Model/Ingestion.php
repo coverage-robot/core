@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
+use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
 
 class Ingestion extends AbstractOrchestratedEvent
@@ -13,7 +14,8 @@ class Ingestion extends AbstractOrchestratedEvent
         private readonly string $repository,
         private readonly string $commit,
         private readonly string $uploadId,
-        private readonly OrchestratedEventState $state
+        private readonly OrchestratedEventState $state,
+        private readonly DateTimeImmutable $eventTime,
     ) {
         parent::__construct($provider, $owner, $repository);
     }
@@ -46,6 +48,11 @@ class Ingestion extends AbstractOrchestratedEvent
     public function getState(): OrchestratedEventState
     {
         return $this->state;
+    }
+
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->eventTime;
     }
 
     public function __toString(): string

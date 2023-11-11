@@ -8,10 +8,11 @@ use App\Event\AbstractIngestEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Ingestion;
-use App\Model\Job;
 use App\Service\EventStoreService;
+use DateInterval;
 use DateTimeImmutable;
 use Packages\Event\Model\IngestFailure;
+use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
@@ -29,7 +30,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     abstract public static function getEventProcessor(): string;
 
     /**
-     * @return class-string<IngestSuccess|IngestFailure>
+     * @return class-string<IngestSuccess|IngestFailure|IngestStarted>
      */
     abstract public static function getEvent(): string;
 
@@ -110,7 +111,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                         null
-                    )
+                    ),
+                    new DateTimeImmutable()
                 )
             )
         );
@@ -118,16 +120,19 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     public function testHandlingEventWithExistingStateChanges(): void
     {
-        $mockJob = $this->createMock(Job::class);
+        $mockIngestion = $this->createMock(Ingestion::class);
+        $mockIngestion->expects($this->once())
+            ->method('getEventTime')
+            ->willReturn(new DateTimeImmutable());
 
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
-            ->willReturn($mockJob);
+            ->willReturn($mockIngestion);
         $mockEventStoreService->expects($this->once())
             ->method('getStateChangeForEvent')
             ->with(
-                $mockJob,
+                $mockIngestion,
                 $this->isInstanceOf(Ingestion::class)
             )
             ->willReturn(['mock' => 'change']);
@@ -179,7 +184,71 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                         null
+                    ),
+                    new DateTimeImmutable()
+                )
+            )
+        );
+    }
+
+    public function testStateChangeIsDroppedForOutOfOrderEvents(): void
+    {
+        $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
+
+        $mockIngestion = $this->createMock(Ingestion::class);
+        $mockIngestion->method('getEventTime')
+            ->willReturn($eventTime);
+
+        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService->expects($this->once())
+            ->method('reduceStateChangesToEvent')
+            ->willReturn($mockIngestion);
+        $mockEventStoreService->expects($this->never())
+            ->method('getStateChangeForEvent');
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getStateChangesForEvent')
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'change'],
+                        1
                     )
+                ])
+            );
+        $mockDynamoDbClient->expects($this->never())
+            ->method('storeStateChange');
+
+        $ingestEventProcessor = new ($this::getEventProcessor())(
+            $mockEventStoreService,
+            $mockDynamoDbClient,
+            $this->createMock(EventBridgeEventClient::class),
+            new NullLogger()
+        );
+
+        $this->assertFalse(
+            $ingestEventProcessor->process(
+                new ($this::getEvent())(
+                    new Upload(
+                        'mock-upload',
+                        Provider::GITHUB,
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-commit',
+                        [],
+                        'mock-ref',
+                        '',
+                        null,
+                        new Tag('mock-tag', 'mock-commit'),
+                        $eventTime->sub(new DateInterval('PT30S'))
+                    ),
+                    $eventTime->sub(new DateInterval('PT10S'))
                 )
             )
         );

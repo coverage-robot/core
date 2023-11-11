@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
+use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
@@ -26,6 +27,8 @@ interface OrchestratedEventInterface extends Stringable
     public function getCommit(): string;
 
     public function getState(): OrchestratedEventState;
+
+    public function getEventTime(): DateTimeImmutable;
 
     /**
      * Get a unique identifier for the repository this particular event belongs to

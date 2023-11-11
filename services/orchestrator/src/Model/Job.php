@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
+use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
 
 class Job extends AbstractOrchestratedEvent
@@ -13,6 +14,7 @@ class Job extends AbstractOrchestratedEvent
         private readonly string $repository,
         private readonly string $commit,
         private readonly OrchestratedEventState $state,
+        private readonly DateTimeImmutable $eventTime,
         private readonly string|int $externalId
     ) {
         parent::__construct($provider, $owner, $repository);
@@ -41,6 +43,11 @@ class Job extends AbstractOrchestratedEvent
     public function getState(): OrchestratedEventState
     {
         return $this->state;
+    }
+
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->eventTime;
     }
 
     public function getExternalId(): string|int

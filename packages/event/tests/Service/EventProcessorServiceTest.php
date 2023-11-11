@@ -31,7 +31,8 @@ class EventProcessorServiceTest extends TestCase
                 null,
                 new Tag('mock-tag', 'mock-commit'),
                 new DateTimeImmutable()
-            )
+            ),
+            new DateTimeImmutable()
         );
 
         $mockProcessor = $this->createMock(EventProcessorInterface::class);
@@ -71,7 +72,8 @@ class EventProcessorServiceTest extends TestCase
                 null,
                 new Tag('mock-tag', 'mock-commit'),
                 new DateTimeImmutable()
-            )
+            ),
+            new DateTimeImmutable()
         );
 
         $mockProcessor = $this->createMock(EventProcessorInterface::class);
