@@ -49,21 +49,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
                     return false;
                 }
 
-                if ($exception instanceof ConditionalCheckFailedException) {
-                    // An event has already been recorded with the version number we're attempting to
-                    // use. That means we haven't factored in the latest state of the event, so we should
-                    // retry.
-                    $this->eventProcessorLogger->info(
-                        sprintf(
-                            'Conditional check for %s failed during persistence to the event store.',
-                            (string)$newState
-                        )
-                    );
-
-                    return true;
-                }
-
-                return ($attempt <= $maxAttempts) && !$result;
+                return ($attempt <= $maxAttempts) && (!$result || $exception);
             }
         );
 
@@ -151,11 +137,25 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements Orchestrato
             ]
         );
 
-        return $this->dynamoDbClient->storeStateChange(
-            $newState,
-            count($stateChanges) + 1,
-            $change
-        );
+        try {
+            return $this->dynamoDbClient->storeStateChange(
+                $newState,
+                count($stateChanges) + 1,
+                $change
+            );
+        } catch (ConditionalCheckFailedException) {
+            // An event has already been recorded with the version number we're attempting to
+            // use. That means we haven't factored in the latest state of the event, so we should
+            // retry.
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Conditional check for %s failed during persistence to the event store.',
+                    (string)$newState
+                )
+            );
+
+            return false;
+        }
     }
 
     /**
