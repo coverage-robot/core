@@ -49,7 +49,7 @@ class Job extends AbstractOrchestratedEvent
     {
         return $this->eventTime;
     }
-    
+
     public function getExternalId(): string|int
     {
         return $this->externalId;

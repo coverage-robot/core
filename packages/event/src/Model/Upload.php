@@ -29,10 +29,10 @@ class Upload implements EventInterface
         private readonly string $projectRoot,
         private readonly string|int|null $pullRequest,
         private readonly Tag $tag,
-        ?DateTimeInterface $ingestTime = null
+        ?DateTimeInterface $eventTime = null
     ) {
-        if ($ingestTime) {
-            $this->ingestTime = DateTimeImmutable::createFromInterface($ingestTime);
+        if ($eventTime) {
+            $this->ingestTime = DateTimeImmutable::createFromInterface($eventTime);
             return;
         }
         $this->ingestTime = new DateTimeImmutable();
@@ -73,10 +73,6 @@ class Upload implements EventInterface
         return $this->pullRequest;
     }
 
-    public function getIngestTime(): DateTimeImmutable
-    {
-        return $this->ingestTime;
-    }
 
     public function getEventTime(): DateTimeImmutable
     {

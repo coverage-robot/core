@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Exception\PersistException;
 use JsonException;
-use Packages\Models\Model\Coverage;
 use Packages\Event\Model\Upload;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
 use Psr\Log\LoggerInterface;
@@ -36,7 +36,7 @@ class BigQueryMetadataBuilderService
     ): array {
         return [
             'uploadId' => $upload->getUploadId(),
-            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+            'ingestTime' => $upload->getEventTime()->format('Y-m-d H:i:s'),
             'provider' => $upload->getProvider(),
             'owner' => $upload->getOwner(),
             'repository' => $upload->getRepository(),
@@ -60,7 +60,7 @@ class BigQueryMetadataBuilderService
     {
         return [
             'uploadId' => $upload->getUploadId(),
-            'ingestTime' => $upload->getIngestTime()->format('Y-m-d H:i:s'),
+            'ingestTime' => $upload->getEventTime()->format('Y-m-d H:i:s'),
             'provider' => $upload->getProvider(),
             'owner' => $upload->getOwner(),
             'repository' => $upload->getRepository(),

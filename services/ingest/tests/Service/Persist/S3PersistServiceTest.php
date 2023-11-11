@@ -6,13 +6,13 @@ use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\EventType;
 use Packages\Models\Enum\LineType;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Line\Branch;
@@ -37,7 +37,7 @@ class S3PersistServiceTest extends KernelTestCase
             'sourceFormat' => $coverage->getSourceFormat()->value,
             'commit' => $upload->getCommit(),
             'parent' => json_encode($upload->getParent()),
-            'ingestTime' => $upload->getIngestTime()->format(DateTimeImmutable::ATOM),
+            'ingestTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
             'uploadId' => $upload->getUploadId(),
             'provider' => $upload->getProvider()->value,
             'owner' => $upload->getOwner(),

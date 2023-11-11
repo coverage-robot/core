@@ -16,6 +16,7 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
+use DateTimeImmutable;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -129,7 +130,12 @@ class EventHandler extends S3Handler
                     ]
                 );
 
-                $this->eventBridgeEventService->publishEvent(new IngestFailure($upload));
+                $this->eventBridgeEventService->publishEvent(
+                    new IngestFailure(
+                        $upload,
+                        new DateTimeImmutable()
+                    )
+                );
             } catch (DeletionException $e) {
                 $this->handlerLogger->error(
                     'Failed to successfully delete ingested coverage file.',
@@ -162,7 +168,10 @@ class EventHandler extends S3Handler
     private function triggerIngestionStartedEvent(Upload $upload): bool
     {
         return $this->eventBridgeEventService->publishEvent(
-            new IngestStarted($upload)
+            new IngestStarted(
+                $upload,
+                new DateTimeImmutable()
+            )
         );
     }
 
@@ -174,7 +183,10 @@ class EventHandler extends S3Handler
     public function triggerIngestionSuccessEvent(Upload $upload): bool
     {
         return $this->eventBridgeEventService->publishEvent(
-            new IngestSuccess($upload)
+            new IngestSuccess(
+                $upload,
+                new DateTimeImmutable()
+            )
         );
     }
 

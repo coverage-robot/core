@@ -54,7 +54,7 @@ class Ingestion extends AbstractOrchestratedEvent
     {
         return $this->eventTime;
     }
-    
+
     public function __toString(): string
     {
         return sprintf(

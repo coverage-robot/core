@@ -60,7 +60,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                 $event instanceof IngestSuccess => OrchestratedEventState::SUCCESS,
                 $event instanceof IngestFailure => OrchestratedEventState::FAILURE
             },
-            $event->getUpload()->getIngestTime()
+            $event->getEventTime()
         );
 
         if ($this->areNoEventsForCommit($newState)) {

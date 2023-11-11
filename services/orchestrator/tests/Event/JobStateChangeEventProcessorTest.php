@@ -34,7 +34,8 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertFalse(
             $jobStateChangeEventProcessor->process(
                 new IngestSuccess(
-                    $this->createMock(Upload::class)
+                    $this->createMock(Upload::class),
+                    new DateTimeImmutable()
                 )
             )
         );

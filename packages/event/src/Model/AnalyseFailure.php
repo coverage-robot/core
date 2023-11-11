@@ -10,7 +10,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 class AnalyseFailure implements EventInterface
 {
     public function __construct(
-        private readonly EventInterface $event
+        private readonly EventInterface $event,
+        private readonly DateTimeImmutable $eventTime
     ) {
     }
 
@@ -55,16 +56,14 @@ class AnalyseFailure implements EventInterface
         return $this->event->getRef();
     }
 
-    #[Ignore]
     public function getType(): Event
     {
         return Event::ANALYSE_FAILURE;
     }
 
-    #[Ignore]
     public function getEventTime(): DateTimeImmutable
     {
-        return $this->event->getIngestTime();
+        return $this->eventTime;
     }
 
     public function __toString(): string

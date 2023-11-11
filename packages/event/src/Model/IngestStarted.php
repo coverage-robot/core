@@ -10,7 +10,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 class IngestStarted implements EventInterface
 {
     public function __construct(
-        private readonly Upload $upload
+        private readonly Upload $upload,
+        private readonly DateTimeImmutable $eventTime
     ) {
     }
 
@@ -60,16 +61,14 @@ class IngestStarted implements EventInterface
         return $this->upload->getRef();
     }
 
-    #[Ignore]
     public function getType(): Event
     {
         return Event::INGEST_STARTED;
     }
 
-    #[Ignore]
     public function getEventTime(): DateTimeImmutable
     {
-        return $this->upload->getIngestTime();
+        return $this->eventTime;
     }
 
     public function __toString(): string

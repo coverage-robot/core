@@ -38,7 +38,8 @@ class EventBridgeEventServiceTest extends TestCase
                 'mock-project-root',
                 null,
                 new Tag('mock-tag', 'mock-commit')
-            )
+            ),
+            new DateTimeImmutable()
         );
 
         $mockResult = ResultMockFactory::create(
