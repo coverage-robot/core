@@ -66,7 +66,10 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
 
             $this->eventBridgeEventService->publishEvent(
-                new AnalyseFailure($event)
+                new AnalyseFailure(
+                    $event,
+                    new DateTimeImmutable()
+                )
             );
 
             return false;
