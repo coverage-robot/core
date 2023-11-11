@@ -18,6 +18,7 @@ use AsyncAws\DynamoDb\Result\PutItemOutput;
 use AsyncAws\DynamoDb\Result\QueryOutput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use AsyncAws\DynamoDb\ValueObject\Condition;
+use DateTimeImmutable;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Psr\Log\NullLogger;
@@ -34,6 +35,7 @@ class DynamoDbClientTest extends KernelTestCase
             'mock-repository',
             'mock-commit',
             OrchestratedEventState::SUCCESS,
+            new DateTimeImmutable(),
             'mock-external-id'
         );
 
@@ -120,6 +122,7 @@ class DynamoDbClientTest extends KernelTestCase
             'mock-repository',
             'mock-commit',
             OrchestratedEventState::SUCCESS,
+            new DateTimeImmutable(),
             'mock-external-id'
         );
 
@@ -248,6 +251,7 @@ class DynamoDbClientTest extends KernelTestCase
             'mock-repository',
             'mock-commit',
             OrchestratedEventState::SUCCESS,
+            new DateTimeImmutable(),
             'mock-external-id'
         );
 

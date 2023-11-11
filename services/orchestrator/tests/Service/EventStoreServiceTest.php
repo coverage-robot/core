@@ -10,6 +10,8 @@ use App\Model\Ingestion;
 use App\Model\Job;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
+use DateInterval;
+use DateTimeImmutable;
 use InvalidArgumentException;
 use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -55,7 +57,8 @@ class EventStoreServiceTest extends KernelTestCase
                 'mock-repo',
                 '1',
                 'mock-upload-id',
-                OrchestratedEventState::ONGOING
+                OrchestratedEventState::ONGOING,
+                new DateTimeImmutable()
             ),
             new Job(
                 Provider::GITHUB,
@@ -63,6 +66,7 @@ class EventStoreServiceTest extends KernelTestCase
                 'mock-repo',
                 '1',
                 OrchestratedEventState::ONGOING,
+                new DateTimeImmutable(),
                 'mock-external-id'
             )
         );
@@ -129,6 +133,8 @@ class EventStoreServiceTest extends KernelTestCase
 
     public static function orchestratedEventsDataProvider(): array
     {
+        $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
+
         return [
             [
                 null,
@@ -138,7 +144,8 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-repo',
                     '1',
                     'mock-upload-id',
-                    OrchestratedEventState::ONGOING
+                    OrchestratedEventState::ONGOING,
+                    $eventTime
                 ),
                 [
                     'provider' => Provider::GITHUB->value,
@@ -147,7 +154,8 @@ class EventStoreServiceTest extends KernelTestCase
                     'commit' => '1',
                     'uploadId' => 'mock-upload-id',
                     'state' => OrchestratedEventState::ONGOING->value,
-                    'type' => OrchestratedEvent::INGESTION->value
+                    'type' => OrchestratedEvent::INGESTION->value,
+                    'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
                 ]
             ],
             [
@@ -157,7 +165,8 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-repo',
                     '1',
                     'mock-upload-id',
-                    OrchestratedEventState::ONGOING
+                    OrchestratedEventState::ONGOING,
+                    $eventTime
                 ),
                 new Ingestion(
                     Provider::GITHUB,
@@ -165,10 +174,36 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-repo',
                     '1',
                     'mock-upload-id',
-                    OrchestratedEventState::SUCCESS
+                    OrchestratedEventState::SUCCESS,
+                    $eventTime
                 ),
                 [
                     'state' => OrchestratedEventState::SUCCESS->value
+                ]
+            ],
+            [
+                new Ingestion(
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repo',
+                    '1',
+                    'mock-upload-id',
+                    OrchestratedEventState::ONGOING,
+                    $eventTime
+                ),
+                new Ingestion(
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repo',
+                    '1',
+                    'mock-upload-id',
+                    OrchestratedEventState::SUCCESS,
+                    $eventTime->add(new DateInterval('PT1S'))
+                ),
+                [
+                    'state' => OrchestratedEventState::SUCCESS->value,
+                    'eventTime' => $eventTime->add(new DateInterval('PT1S'))
+                        ->format(DateTimeImmutable::ATOM)
                 ]
             ]
         ];
@@ -176,6 +211,8 @@ class EventStoreServiceTest extends KernelTestCase
 
     public static function stateChangesDataProvider(): array
     {
+        $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
+
         return [
             [
                 new EventStateChangeCollection(
@@ -193,7 +230,8 @@ class EventStoreServiceTest extends KernelTestCase
                                 'commit' => '1',
                                 'uploadId' => 'mock-upload-id',
                                 'state' => OrchestratedEventState::ONGOING->value,
-                                'type' => OrchestratedEvent::INGESTION->value
+                                'type' => OrchestratedEvent::INGESTION->value,
+                                'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
                             ],
                             0
                         ),
@@ -239,7 +277,8 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-repo',
                     '2',
                     'mock-upload-id',
-                    OrchestratedEventState::FAILURE
+                    OrchestratedEventState::FAILURE,
+                    $eventTime
                 )
             ],
             [
@@ -258,6 +297,7 @@ class EventStoreServiceTest extends KernelTestCase
                                 'commit' => '1',
                                 'state' => OrchestratedEventState::ONGOING->value,
                                 'type' => OrchestratedEvent::JOB->value,
+                                'eventTime' => $eventTime->format(DateTimeImmutable::ATOM),
                                 'externalId' => 'mock-external-id'
                             ],
                             0
@@ -270,6 +310,8 @@ class EventStoreServiceTest extends KernelTestCase
                             2,
                             [
                                 'state' => OrchestratedEventState::FAILURE->value,
+                                'eventTime' => $eventTime->add(new DateInterval('PT1S'))
+                                    ->format(DateTimeImmutable::ATOM),
                             ],
                             0
                         ),
@@ -292,6 +334,7 @@ class EventStoreServiceTest extends KernelTestCase
                     'mock-repo',
                     '1',
                     OrchestratedEventState::SUCCESS,
+                    $eventTime->add(new DateInterval('PT1S')),
                     'mock-external-id'
                 )
             ]

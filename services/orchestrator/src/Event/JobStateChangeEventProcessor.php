@@ -54,6 +54,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
                 JobState::COMPLETED => OrchestratedEventState::SUCCESS,
                 default => OrchestratedEventState::ONGOING
             },
+            $event->getEventTime(),
             $event->getExternalId()
         );
 
