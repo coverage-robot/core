@@ -5,8 +5,9 @@ namespace App\Event;
 use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
+use App\Model\Finalised;
 use App\Model\Job;
-use App\Service\EventStoreService;
+use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Packages\Event\Enum\Event;
 use Packages\Event\Model\EventInterface;
@@ -15,13 +16,15 @@ use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Model\UploadsStarted;
 use Packages\Models\Enum\JobState;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProcessor
 {
     use OverallCommitStateAwareTrait;
 
     public function __construct(
-        private readonly EventStoreService $eventStoreService,
+        #[Autowire(service: 'App\Service\CachingEventStoreService')]
+        private readonly EventStoreServiceInterface $eventStoreService,
         private readonly DynamoDbClient $dynamoDbClient,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
         private readonly LoggerInterface $eventProcessorLogger
@@ -58,7 +61,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             $event->getExternalId()
         );
 
-        if ($this->areNoEventsForCommit($newState)) {
+        if ($this->isNoEventsForCommit($newState)) {
             $this->eventProcessorLogger->info(
                 'No events for commit, publishing event.',
                 [
@@ -85,7 +88,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
         if (
             $hasRecordedStateChange &&
             $newState->getState() === OrchestratedEventState::SUCCESS &&
-            $this->areAllEventsForCommitInFinishedState($newState)
+            $this->isReadyToFinalise($newState)
         ) {
             $this->eventProcessorLogger->info(
                 'All events are in a finished state, publishing event.',
@@ -95,22 +98,33 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
                 ]
             );
 
-            $this->eventBridgeEventClient->publishEvent(
-                new UploadsFinalised(
-                    $newState->getProvider(),
-                    $newState->getOwner(),
-                    $newState->getRepository(),
-                    $event->getRef(),
-                    $newState->getCommit(),
-                    $event->getPullRequest(),
-                    new DateTimeImmutable()
-                )
+            $finalisedEvent = new Finalised(
+                $newState->getProvider(),
+                $newState->getOwner(),
+                $newState->getRepository(),
+                $event->getRef(),
+                $newState->getCommit(),
+                $event->getPullRequest(),
+                new DateTimeImmutable()
             );
+
+            if ($this->recordFinalisedEvent($finalisedEvent)) {
+                $this->eventBridgeEventClient->publishEvent(
+                    new UploadsFinalised(
+                        $finalisedEvent->getProvider(),
+                        $finalisedEvent->getOwner(),
+                        $finalisedEvent->getRepository(),
+                        $finalisedEvent->getRef(),
+                        $finalisedEvent->getCommit(),
+                        $finalisedEvent->getPullRequest(),
+                        $finalisedEvent->getEventTime()
+                    )
+                );
+            }
         }
 
         return $hasRecordedStateChange;
     }
-
 
     public static function getEvent(): string
     {
