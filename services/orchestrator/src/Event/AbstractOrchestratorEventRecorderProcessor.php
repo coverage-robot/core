@@ -6,7 +6,7 @@ use App\Client\DynamoDbClient;
 use App\Exception\OutOfOrderEventException;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
-use App\Service\EventStoreService;
+use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 abstract class AbstractOrchestratorEventRecorderProcessor implements OrchestratorEventProcessorInterface
 {
     public function __construct(
-        private readonly EventStoreService $eventStoreService,
+        private readonly EventStoreServiceInterface $eventStoreService,
         private readonly DynamoDbClient $dynamoDbClient,
         private readonly LoggerInterface $eventProcessorLogger
     ) {

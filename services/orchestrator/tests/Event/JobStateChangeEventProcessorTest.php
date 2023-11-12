@@ -4,9 +4,11 @@ namespace App\Tests\Event;
 
 use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
+use App\Enum\OrchestratedEventState;
 use App\Event\JobStateChangeEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
+use App\Model\Finalised;
 use App\Model\Job;
 use App\Service\EventStoreService;
 use DateInterval;
@@ -231,6 +233,97 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertEquals(
             Event::JOB_STATE_CHANGE->value,
             JobStateChangeEventProcessor::getEvent()
+        );
+    }
+
+    public function testNotFinalisingWhenAlreadyBeenFinalised(): void
+    {
+        $mockJob = $this->createMock(Job::class);
+        $mockJob->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
+        $mockJob->expects($this->once())
+            ->method('getEventTime')
+            ->willReturn(new DateTimeImmutable());
+        $mockFinalised = $this->createMock(Finalised::class);
+        $mockFinalised->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
+
+        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService->expects($this->exactly(3))
+            ->method('reduceStateChangesToEvent')
+            ->willReturnOnConsecutiveCalls(
+                $mockJob,
+                $mockFinalised,
+                $mockFinalised
+            );
+        $mockEventStoreService->expects($this->once())
+            ->method('getStateChangeForEvent')
+            ->with(
+                $mockJob,
+                $this->isInstanceOf(Job::class)
+            )
+            ->willReturn(['mock' => 'change']);
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->atLeastOnce())
+            ->method('getEventStateChangesForCommit')
+            ->willReturn(
+                [
+                    new EventStateChangeCollection([])
+                ]
+            );
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getStateChangesForEvent')
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'change'],
+                        1
+                    )
+                ])
+            );
+        $mockDynamoDbClient->expects($this->once())
+            ->method('storeStateChange')
+            ->with(
+                $this->isInstanceOf(Job::class),
+                2,
+                ['mock' => 'change']
+            )
+            ->willReturn(true);
+
+        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
+        $mockEventBridgeEventClient->expects($this->never())
+            ->method('publishEvent');
+
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
+            $mockEventStoreService,
+            $mockDynamoDbClient,
+            $mockEventBridgeEventClient,
+            new NullLogger()
+        );
+
+        $this->assertTrue(
+            $jobStateChangeEventProcessor->process(
+                new JobStateChange(
+                    Provider::GITHUB,
+                    'owner',
+                    'repository',
+                    'ref',
+                    'commit',
+                    null,
+                    'external-id',
+                    0,
+                    JobState::COMPLETED,
+                    JobState::COMPLETED,
+                    false,
+                    new DateTimeImmutable()
+                )
+            )
         );
     }
 }

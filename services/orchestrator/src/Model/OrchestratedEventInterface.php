@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
     [
         OrchestratedEvent::INGESTION->value => Ingestion::class,
         OrchestratedEvent::JOB->value => Job::class,
+        OrchestratedEvent::FINALISED->value => Finalised::class,
     ]
 )]
 interface OrchestratedEventInterface extends Stringable

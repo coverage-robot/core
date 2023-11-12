@@ -6,12 +6,11 @@ use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventStoreService
+class EventStoreService implements EventStoreServiceInterface
 {
     /**
      * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
@@ -22,8 +21,7 @@ class EventStoreService
     }
 
     /**
-     * Get the state change between our last known state, and the new
-     * state of an event.
+     * @inheritDoc
      */
     public function getStateChangeForEvent(
         ?OrchestratedEventInterface $currentState,
@@ -53,10 +51,7 @@ class EventStoreService
     }
 
     /**
-     * Reduce a pre-existing set of state changes into a single event, representing the current
-     * state of the event.
-     *
-     * @throws ExceptionInterface
+     * @inheritDoc
      */
     public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface
     {
