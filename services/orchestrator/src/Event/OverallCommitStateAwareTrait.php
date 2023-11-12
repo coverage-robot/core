@@ -144,7 +144,7 @@ trait OverallCommitStateAwareTrait
             $this->dynamoDbClient->storeStateChange(
                 $newFinalisedState,
                 $this->finalisedEventStateChanges ?
-                    count($this->finalisedEventStateChanges->getEvents()) :
+                    count($this->finalisedEventStateChanges->getEvents()) + 1 :
                     1,
                 $this->eventStoreService->getStateChangeForEvent(
                     $currentFinalisedState,
