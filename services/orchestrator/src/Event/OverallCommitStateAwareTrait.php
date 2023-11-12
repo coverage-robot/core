@@ -70,7 +70,7 @@ trait OverallCommitStateAwareTrait
             decider: static fn (
                 int $attempt,
                 int $maxAttempts,
-                bool $result
+                ?bool $result
             ) => ($attempt <= $maxAttempts) && $result == true
         );
 

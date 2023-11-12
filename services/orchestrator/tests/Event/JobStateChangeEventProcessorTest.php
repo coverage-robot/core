@@ -4,9 +4,12 @@ namespace App\Tests\Event;
 
 use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
+use App\Enum\OrchestratedEventState;
 use App\Event\JobStateChangeEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
+use App\Model\Finalised;
+use App\Model\Ingestion;
 use App\Model\Job;
 use App\Service\EventStoreService;
 use DateInterval;
@@ -17,6 +20,7 @@ use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
+use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -231,6 +235,97 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertEquals(
             Event::JOB_STATE_CHANGE->value,
             JobStateChangeEventProcessor::getEvent()
+        );
+    }
+
+    public function testNotFinalisingWhenAlreadyBeenFinalised(): void
+    {
+        $mockIngestion = $this->createMock(Ingestion::class);
+        $mockIngestion->expects($this->once())
+            ->method('getEventTime')
+            ->willReturn(new DateTimeImmutable());
+        $mockFinalised = $this->createMock(Finalised::class);
+        $mockFinalised->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
+
+        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService->expects($this->exactly(3))
+            ->method('reduceStateChangesToEvent')
+            ->willReturnOnConsecutiveCalls(
+                $mockIngestion,
+                $mockFinalised,
+                $mockFinalised
+            );
+        $mockEventStoreService->expects($this->once())
+            ->method('getStateChangeForEvent')
+            ->with(
+                $mockIngestion,
+                $this->isInstanceOf(Ingestion::class)
+            )
+            ->willReturn(['mock' => 'change']);
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->atLeastOnce())
+            ->method('getEventStateChangesForCommit')
+            ->willReturn(
+                [
+                    new EventStateChangeCollection([])
+                ]
+            );
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getStateChangesForEvent')
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'change'],
+                        1
+                    )
+                ])
+            );
+        $mockDynamoDbClient->expects($this->once())
+            ->method('storeStateChange')
+            ->with(
+                $this->isInstanceOf(Ingestion::class),
+                2,
+                ['mock' => 'change']
+            )
+            ->willReturn(true);
+
+        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
+        $mockEventBridgeEventClient->expects($this->never())
+            ->method('publishEvent');
+
+        $ingestEventProcessor = new ($this::getEventProcessor())(
+            $mockEventStoreService,
+            $mockDynamoDbClient,
+            $mockEventBridgeEventClient,
+            new NullLogger()
+        );
+
+        $this->assertTrue(
+            $ingestEventProcessor->process(
+                new ($this::getEvent())(
+                    new Upload(
+                        'mock-upload',
+                        Provider::GITHUB,
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-commit',
+                        [],
+                        'mock-ref',
+                        '',
+                        null,
+                        new Tag('mock-tag', 'mock-commit'),
+                        null
+                    ),
+                    new DateTimeImmutable()
+                )
+            )
         );
     }
 }
