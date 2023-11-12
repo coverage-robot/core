@@ -25,6 +25,7 @@
         </include>
         <exclude>
             <directory suffix=".php">tests</directory>
+            <directory suffix=".php">src/Model</directory>
         </exclude>
     </source>
 </phpunit>
