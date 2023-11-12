@@ -16,7 +16,7 @@ interface EventStoreServiceInterface
         ?OrchestratedEventInterface $currentState,
         OrchestratedEventInterface $newState
     ): array;
-    
+
     /**
      * Reduce a pre-existing set of state changes into a single event, representing the current
      * state of the event.

@@ -15,7 +15,7 @@ class Finalised extends AbstractOrchestratedEvent
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
-        private readonly int|string $pullRequest,
+        private readonly int|string|null $pullRequest,
         private readonly DateTimeImmutable $eventTime,
     ) {
         parent::__construct($provider, $owner, $repository);
@@ -46,7 +46,7 @@ class Finalised extends AbstractOrchestratedEvent
         return $this->commit;
     }
 
-    public function getPullRequest(): int|string
+    public function getPullRequest(): int|string|null
     {
         return $this->pullRequest;
     }

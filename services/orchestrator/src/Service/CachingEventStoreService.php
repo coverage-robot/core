@@ -8,11 +8,17 @@ use WeakMap;
 
 class CachingEventStoreService implements EventStoreServiceInterface
 {
+    /**
+     * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface>
+     */
     private WeakMap $reducerCache;
-    
+
     public function __construct(
         private readonly EventStoreService $eventStoreService
     ) {
+        /**
+         * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface>
+         */
         $this->reducerCache = new WeakMap();
     }
 

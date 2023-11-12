@@ -136,16 +136,14 @@ trait OverallCommitStateAwareTrait
      */
     public function recordFinalisedEvent(Finalised $newFinalisedState): bool
     {
-        $hasAlreadyBeenFinalised = !!$this->finalisedEventStateChanges;
-
-        $currentFinalisedState = $hasAlreadyBeenFinalised ?
+        $currentFinalisedState = $this->finalisedEventStateChanges ?
             $this->eventStoreService->reduceStateChangesToEvent($this->finalisedEventStateChanges)
             : null;
 
         try {
             $this->dynamoDbClient->storeStateChange(
                 $newFinalisedState,
-                $hasAlreadyBeenFinalised ?
+                $this->finalisedEventStateChanges ?
                     count($this->finalisedEventStateChanges->getEvents()) :
                     1,
                 $this->eventStoreService->getStateChangeForEvent(
