@@ -92,7 +92,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
         if (
             $hasRecordedStateChange &&
-            $newState->getState() === OrchestratedEventState::SUCCESS &&
+            $newState->getState() !== OrchestratedEventState::ONGOING &&
             $this->isReadyToFinalise($newState)
         ) {
             $this->eventProcessorLogger->info(

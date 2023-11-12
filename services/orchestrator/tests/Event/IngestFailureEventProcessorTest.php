@@ -42,6 +42,8 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
         $mockIngestion = $this->createMock(Ingestion::class);
+        $mockIngestion->method('getState')
+            ->willReturn(OrchestratedEventState::FAILURE);
         $mockIngestion->expects($this->once())
             ->method('getEventTime')
             ->willReturn(new DateTimeImmutable());

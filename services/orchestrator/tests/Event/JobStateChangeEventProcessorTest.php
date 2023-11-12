@@ -9,7 +9,6 @@ use App\Event\JobStateChangeEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Finalised;
-use App\Model\Ingestion;
 use App\Model\Job;
 use App\Service\EventStoreService;
 use DateInterval;
@@ -240,6 +239,8 @@ class JobStateChangeEventProcessorTest extends TestCase
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
         $mockJob = $this->createMock(Job::class);
+        $mockJob->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
         $mockJob->expects($this->once())
             ->method('getEventTime')
             ->willReturn(new DateTimeImmutable());
@@ -259,7 +260,7 @@ class JobStateChangeEventProcessorTest extends TestCase
             ->method('getStateChangeForEvent')
             ->with(
                 $mockJob,
-                $this->isInstanceOf(Ingestion::class)
+                $this->isInstanceOf(Job::class)
             )
             ->willReturn(['mock' => 'change']);
 
@@ -289,7 +290,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockDynamoDbClient->expects($this->once())
             ->method('storeStateChange')
             ->with(
-                $this->isInstanceOf(Ingestion::class),
+                $this->isInstanceOf(Job::class),
                 2,
                 ['mock' => 'change']
             )
