@@ -20,7 +20,6 @@ use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
 use Packages\Models\Enum\JobState;
 use Packages\Models\Enum\Provider;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -240,8 +239,8 @@ class JobStateChangeEventProcessorTest extends TestCase
 
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
-        $mockIngestion = $this->createMock(Ingestion::class);
-        $mockIngestion->expects($this->once())
+        $mockJob = $this->createMock(Job::class);
+        $mockJob->expects($this->once())
             ->method('getEventTime')
             ->willReturn(new DateTimeImmutable());
         $mockFinalised = $this->createMock(Finalised::class);
@@ -252,14 +251,14 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockEventStoreService->expects($this->exactly(3))
             ->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
-                $mockIngestion,
+                $mockJob,
                 $mockFinalised,
                 $mockFinalised
             );
         $mockEventStoreService->expects($this->once())
             ->method('getStateChangeForEvent')
             ->with(
-                $mockIngestion,
+                $mockJob,
                 $this->isInstanceOf(Ingestion::class)
             )
             ->willReturn(['mock' => 'change']);
@@ -300,7 +299,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockEventBridgeEventClient->expects($this->never())
             ->method('publishEvent');
 
-        $ingestEventProcessor = new ($this::getEventProcessor())(
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
             $mockDynamoDbClient,
             $mockEventBridgeEventClient,
@@ -308,21 +307,19 @@ class JobStateChangeEventProcessorTest extends TestCase
         );
 
         $this->assertTrue(
-            $ingestEventProcessor->process(
-                new ($this::getEvent())(
-                    new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
-                        null
-                    ),
+            $jobStateChangeEventProcessor->process(
+                new JobStateChange(
+                    Provider::GITHUB,
+                    'owner',
+                    'repository',
+                    'ref',
+                    'commit',
+                    null,
+                    'external-id',
+                    0,
+                    JobState::COMPLETED,
+                    JobState::COMPLETED,
+                    false,
                     new DateTimeImmutable()
                 )
             )

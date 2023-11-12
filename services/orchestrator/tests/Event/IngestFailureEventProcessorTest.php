@@ -2,6 +2,8 @@
 
 namespace App\Tests\Event;
 
+use App\Client\DynamoDbClient;
+use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\IngestFailureEventProcessor;
 use App\Model\EventStateChange;
