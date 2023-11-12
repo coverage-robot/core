@@ -1,8 +1,8 @@
 resource "aws_dynamodb_table" "event_table" {
   name                        = format("coverage-orchestrator-event-store-%s", var.environment)
   billing_mode                = "PROVISIONED"
-  read_capacity               = 5
-  write_capacity              = 5
+  read_capacity               = 3
+  write_capacity              = 3
   hash_key                    = "identifier"
   range_key                   = "version"
   deletion_protection_enabled = true
@@ -12,8 +12,8 @@ resource "aws_dynamodb_table" "event_table" {
     hash_key        = "repositoryIdentifier"
     range_key       = "commit"
     projection_type = "ALL"
-    write_capacity  = 2
-    read_capacity   = 2
+    write_capacity  = 3
+    read_capacity   = 5
   }
 
   attribute {
