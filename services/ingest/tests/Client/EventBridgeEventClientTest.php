@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service;
+namespace App\Tests\Client;
 
 use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
@@ -22,7 +22,7 @@ use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class EventBridgeEventServiceTest extends TestCase
+class EventBridgeEventClientTest extends TestCase
 {
     #[DataProvider('failedEntryCountDataProvider')]
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
@@ -61,6 +61,7 @@ class EventBridgeEventServiceTest extends TestCase
                             'Source' => EventSource::INGEST->value,
                             'DetailType' => Event::INGEST_SUCCESS->value,
                             'Detail' => 'mock-serialized-ingest-event',
+                            'TraceHeader' => 'mock-trace-id'
                         ])
                     ],
                 ])
