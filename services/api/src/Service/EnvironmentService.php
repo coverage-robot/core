@@ -19,6 +19,6 @@ class EnvironmentService
 
     public function getVariable(EnvironmentVariable $variable): string
     {
-        return $_ENV[$variable->value] ?: '';
+        return $_ENV[$variable->value] ?: (string)getenv($variable->value);
     }
 }
