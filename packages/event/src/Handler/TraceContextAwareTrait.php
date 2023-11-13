@@ -37,12 +37,13 @@ trait TraceContextAwareTrait
             return;
         }
 
+        /** @var array $context */
         $context = json_decode($_SERVER['LAMBDA_INVOCATION_CONTEXT'], true);
 
         if (empty($context['traceId'] ?? '')) {
             return;
         }
 
-        putenv(self::TRACE_HEADER . '=' . $context['traceId']);
+        putenv(self::TRACE_HEADER . '=' . (string)$context['traceId']);
     }
 }
