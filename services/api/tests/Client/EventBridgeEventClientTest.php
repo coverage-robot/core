@@ -77,6 +77,7 @@ class EventBridgeEventClientTest extends KernelTestCase
                             'Source' => EventSource::API->value,
                             'DetailType' => Event::JOB_STATE_CHANGE->value,
                             'Detail' => json_encode($event),
+                            'TraceHeader' => 'mock-trace-id'
                         ])
                     ],
                 ])

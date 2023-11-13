@@ -15,6 +15,8 @@ class MockEnvironmentServiceFactory
         Environment $environment,
         array $variables = []
     ): EnvironmentService&MockObject {
+        $variables = self::getEnvironmentVariablesWithMockDefaults($variables);
+
         $mockEnvironmentService = $testCase->getMockBuilder(EnvironmentService::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -35,5 +37,15 @@ class MockEnvironmentServiceFactory
             );
 
         return $mockEnvironmentService;
+    }
+
+    private static function getEnvironmentVariablesWithMockDefaults(array $variables): array
+    {
+        return array_merge(
+            [
+                EnvironmentVariable::TRACE_ID->value => 'mock-trace-id'
+            ],
+            $variables
+        );
     }
 }

@@ -49,7 +49,8 @@ class EventBridgeEventClientTest extends TestCase
                             'EventBusName' => 'mock-event-bus',
                             'Source' => EventSource::ORCHESTRATOR->value,
                             'DetailType' => Event::UPLOADS_FINALISED->value,
-                            'Detail' => 'mock-serialized-json'
+                            'Detail' => 'mock-serialized-json',
+                            'TraceHeader' => 'mock-trace-id'
                         ])
                     ],
                 ])

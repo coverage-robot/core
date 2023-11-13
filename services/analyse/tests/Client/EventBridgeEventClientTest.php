@@ -50,7 +50,8 @@ class EventBridgeEventClientTest extends TestCase
                             'EventBusName' => 'mock-event-bus',
                             'Source' => EventSource::ANALYSE->value,
                             'DetailType' => Event::COVERAGE_FINALISED->value,
-                            'Detail' => 'mock-serialized-json'
+                            'Detail' => 'mock-serialized-json',
+                            'TraceHeader' => 'mock-trace-id'
                         ])
                     ],
                 ])
@@ -64,7 +65,7 @@ class EventBridgeEventClientTest extends TestCase
                 $this,
                 Environment::TESTING,
                 [
-                    EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
+                    EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus',
                 ]
             ),
             MockSerializerFactory::getMock(
