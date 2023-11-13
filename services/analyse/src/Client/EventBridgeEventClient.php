@@ -8,8 +8,8 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
-use Handler\TraceContextAwareTrait;
 use Packages\Event\Enum\EventSource;
+use Packages\Event\Handler\TraceContextAwareTrait;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 

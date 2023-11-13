@@ -9,7 +9,7 @@ use App\Service\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
-use Handler\TraceContextAwareTrait;
+use Packages\Event\Handler\TraceContextAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

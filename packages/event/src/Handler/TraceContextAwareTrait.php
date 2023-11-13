@@ -1,13 +1,15 @@
 <?php
 
-namespace Handler;
+namespace Packages\Event\Handler;
 
 use Bref\Context\Context;
 
 trait TraceContextAwareTrait
 {
+    private const TRACE_HEADER = '_X_AMZN_TRACE_ID';
+
     public function setTraceHeaderFromContext(Context $context): void
     {
-        putenv('_X_AMZN_TRACE_ID=' . $context->getTraceId());
+        putenv(self::TRACE_HEADER . '=' . $context->getTraceId());
     }
 }
