@@ -51,6 +51,17 @@ resource "aws_iam_policy" "api_policy" {
       {
         Effect = "Allow"
         Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords",
+          "xray:GetSamplingRules",
+          "xray:GetSamplingTargets",
+          "xray:GetSamplingStatisticSummaries"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "s3:PutObject",
           "s3:PutObjectAcl"
         ]
@@ -99,6 +110,13 @@ resource "aws_lambda_function" "api" {
       local.bref_extension_layers["gd-${var.php_version}"][var.region]
     )
   ]
+
+  tracing_config {
+    # Enable AWS X-Ray for tracing of Lambda invocations. This is also paired with
+    # permissions applied on the IAM policy, so theres sufficient permissions to write
+    # traces
+    mode = "Active"
+  }
 
   environment {
     variables = {
