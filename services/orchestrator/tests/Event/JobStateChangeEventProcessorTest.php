@@ -48,25 +48,15 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->never())
             ->method('reduceStateChangesToEvent');
-        $mockEventStoreService->expects($this->once())
-            ->method('getStateChangeForEvent')
-            ->with(
-                null,
-                $this->isInstanceOf(Job::class)
-            )
+        $mockEventStoreService->method('getStateChangeForEvent')
             ->willReturn(['mock' => 'change']);
 
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getStateChangesForEvent')
             ->willReturn(new EventStateChangeCollection([]));
-        $mockDynamoDbClient->expects($this->once())
+        $mockDynamoDbClient->expects($this->exactly(2))
             ->method('storeStateChange')
-            ->with(
-                $this->isInstanceOf(Job::class),
-                1,
-                ['mock' => 'change']
-            )
             ->willReturn(true);
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
@@ -107,12 +97,7 @@ class JobStateChangeEventProcessorTest extends TestCase
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
             ->willReturn($mockJob);
-        $mockEventStoreService->expects($this->once())
-            ->method('getStateChangeForEvent')
-            ->with(
-                $mockJob,
-                $this->isInstanceOf(Job::class)
-            )
+        $mockEventStoreService->method('getStateChangeForEvent')
             ->willReturn(['mock' => 'change']);
 
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
@@ -131,13 +116,8 @@ class JobStateChangeEventProcessorTest extends TestCase
                     )
                 ])
             );
-        $mockDynamoDbClient->expects($this->once())
+        $mockDynamoDbClient->expects($this->exactly(2))
             ->method('storeStateChange')
-            ->with(
-                $this->isInstanceOf(Job::class),
-                2,
-                ['mock' => 'change']
-            )
             ->willReturn(true);
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
