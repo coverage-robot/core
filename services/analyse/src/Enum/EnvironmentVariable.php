@@ -16,4 +16,6 @@ enum EnvironmentVariable: string
     case PUBLISH_QUEUE = 'PUBLISH_QUEUE';
 
     case QUERY_CACHE_TABLE_NAME = 'QUERY_CACHE_TABLE_NAME';
+
+    case TRACE_ID = '_X_AMZN_TRACE_ID';
 }

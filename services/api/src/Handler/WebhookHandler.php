@@ -9,6 +9,7 @@ use App\Service\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
+use Handler\TraceContextAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -16,6 +17,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class WebhookHandler extends SqsHandler
 {
+    use TraceContextAwareTrait;
+
     /**
      * @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
      */
@@ -29,6 +32,8 @@ class WebhookHandler extends SqsHandler
 
     public function handleSqs(SqsEvent $event, Context $context): void
     {
+        $this->setTraceHeaderFromContext($context);
+
         foreach ($event->getRecords() as $record) {
             $webhook = $this->serializer->deserialize(
                 $record->getBody(),

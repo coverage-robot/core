@@ -17,6 +17,7 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use DateTimeImmutable;
+use Handler\TraceContextAwareTrait;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -29,6 +30,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends S3Handler
 {
+    use TraceContextAwareTrait;
+
     /**
      * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
      */
@@ -48,6 +51,8 @@ class EventHandler extends S3Handler
      */
     public function handleS3(S3Event $event, Context $context): void
     {
+        $this->setTraceHeaderFromContext($context);
+        
         foreach ($event->getRecords() as $coverageFile) {
             try {
                 $source = $this->retrieveFile($coverageFile);

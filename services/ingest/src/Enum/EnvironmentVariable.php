@@ -10,4 +10,6 @@ enum EnvironmentVariable: string
     case BIGQUERY_UPLOAD_TABLE = 'BIGQUERY_UPLOAD_TABLE';
 
     case EVENT_BUS = 'EVENT_BUS';
+
+    case TRACE_ID = '_X_AMZN_TRACE_ID';
 }

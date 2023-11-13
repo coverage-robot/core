@@ -39,6 +39,17 @@ class EventBridgeEventClient
                             $event,
                             'json'
                         ),
+
+                        /**
+                         * The trace header will be propagated to the next service in the chain if provided
+                         * from a previous request.
+                         *
+                         * This value is propagated into the environment in a number of methods. But in the
+                         * Event Bus context that's handled by a trait.
+                         *
+                         * @see TraceContextAwareTrait
+                         */
+                        'TraceHeader' => $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID),
                     ])
                 ],
             ])
