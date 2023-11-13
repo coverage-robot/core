@@ -410,7 +410,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f7a43dce8b78364eef1ef8e9d8f30fe709bf70ab"
+                "reference": "71d8fd55d82119401b5b531a011c4ffbf8ec3971"
             },
             "require": {
                 "coverage-robot/models": "*",
@@ -447,7 +447,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -4421,16 +4421,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v6.3.7",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9758b6c69d179936435d0ffb577c3708d57e38a8"
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9758b6c69d179936435d0ffb577c3708d57e38a8",
-                "reference": "9758b6c69d179936435d0ffb577c3708d57e38a8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3493af8a8dad7fa91c77fa473ba23ecd95334a92",
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92",
                 "shasum": ""
             },
             "require": {
@@ -4473,7 +4473,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v6.3.7"
+                "source": "https://github.com/symfony/yaml/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -4489,7 +4489,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-28T23:31:00+00:00"
+            "time": "2023-11-06T10:58:05+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -7104,5 +7104,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
