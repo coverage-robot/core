@@ -50,6 +50,17 @@ resource "aws_iam_policy" "analyse_policy" {
       {
         Effect = "Allow"
         Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords",
+          "xray:GetSamplingRules",
+          "xray:GetSamplingTargets",
+          "xray:GetSamplingStatisticSummaries"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "events:PutEvents"
         ]
         Resource = [
@@ -98,6 +109,13 @@ resource "aws_lambda_function" "analyse" {
   runtime       = "provided.al2"
   handler       = "App\\Handler\\EventHandler"
   architectures = ["arm64"]
+
+  tracing_config {
+    # Enable AWS X-Ray for tracing of Lambda invocations. This is also paired with
+    # permissions applied on the IAM policy, so theres sufficient permissions to write
+    # traces
+    mode = "Active"
+  }
 
   layers = [
     format(
