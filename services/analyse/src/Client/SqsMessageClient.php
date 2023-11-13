@@ -23,29 +23,31 @@ class SqsMessageClient
 
     public function queuePublishableMessage(PublishableMessageInterface $publishableMessage): bool
     {
-        $response = $this->sqsClient->sendMessage(
-            new SendMessageRequest([
-                'QueueUrl' => $this->environmentService->getVariable(EnvironmentVariable::PUBLISH_QUEUE),
-                'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
-                'MessageGroupId' => $publishableMessage->getMessageGroup(),
+        $request = [
+            'QueueUrl' => $this->environmentService->getVariable(EnvironmentVariable::PUBLISH_QUEUE),
+            'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
+            'MessageGroupId' => $publishableMessage->getMessageGroup(),
+        ];
 
-                /**
-                 * The trace header will be propagated to the next service in the chain if provided
-                 * from a previous request.
-                 *
-                 * This value is propagated into the environment in a number of methods. But in the
-                 * SQS context that's handled by a trait in the event processors.
-                 *
-                 * @see TraceContextAwareTrait
-                 */
-                'MessageSystemAttributes' => [
-                    MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [
-                        'StringValue' => $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID),
-                        'DataType' => 'String',
-                    ],
+        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID)) {
+            /**
+             * The trace header will be propagated to the next service in the chain if provided
+             * from a previous request.
+             *
+             * This value is propagated into the environment in a number of methods. But in the
+             * SQS context that's handled by a trait in the event processors.
+             *
+             * @see TraceContextAwareTrait
+             */
+            $request['MessageSystemAttributes'] = [
+                MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [
+                    'StringValue' => $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID),
+                    'DataType' => 'String',
                 ],
-            ])
-        );
+            ];
+        }
+
+        $response = $this->sqsClient->sendMessage(new SendMessageRequest($request));
 
         try {
             $response->resolve();
