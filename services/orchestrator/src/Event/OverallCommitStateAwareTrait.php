@@ -268,10 +268,10 @@ trait OverallCommitStateAwareTrait
         if (!$lastIngestionTime && !$finalisedTime) {
             // This is an edge case (but entirely possible) - theres been no uploads, and we haven't
             // written a finalised event yet. By convention, we _do_ want to finalise even if theres
-            // been no uploads so we'll return true.
+            // been no uploads so we'll return false.
             $this->eventProcessorLogger->info(
                 sprintf(
-                    'Theres been no uploads, or finalised events for %s, so returning true.',
+                    'Theres been no uploads, or finalised events for %s, so returning false.',
                     (string) $newState
                 ),
                 [
@@ -279,7 +279,7 @@ trait OverallCommitStateAwareTrait
                     'finalisedTime' => $finalisedTime
                 ]
             );
-            return true;
+            return false;
         }
 
         return $finalisedTime && $lastIngestionTime < $finalisedTime;
