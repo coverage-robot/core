@@ -30,7 +30,7 @@ class WebhookHandler extends SqsHandler
 
     public function handleSqs(SqsEvent $event, Context $context): void
     {
-        TraceContext::setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromContext($context);
 
         foreach ($event->getRecords() as $record) {
             $webhook = $this->serializer->deserialize(
