@@ -13,7 +13,7 @@ class UploadSignerService
 {
     public function __construct(
         #[Autowire(service: S3Client::class)]
-        private readonly PresignableClientInterface $client
+        private readonly S3Client|PresignableClientInterface $client
     ) {
     }
 
