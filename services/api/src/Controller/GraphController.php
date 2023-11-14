@@ -8,8 +8,8 @@ use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\BadgeService;
-use Packages\Event\Handler\TraceContextAwareTrait;
 use Packages\Models\Enum\Provider;
+use Packages\Telemetry\TraceContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,14 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GraphController extends AbstractController
 {
-    use TraceContextAwareTrait;
-
     public function __construct(
         private readonly BadgeService $badgeService,
         private readonly AuthTokenService $authTokenService,
         private readonly ProjectRepository $projectRepository
     ) {
-        $this->setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromEnvironment();
     }
 
     #[Route(

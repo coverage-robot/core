@@ -18,6 +18,7 @@
         "coverage-robot/clients": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/models": "^1.0",
+        "coverage-robot/telemetry": "^1.0",
         "doctrine/sql-formatter": "^1.1",
         "google/cloud-bigquery": "^1.24",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -102,6 +103,10 @@
         {
             "type": "path",
             "url": "../../packages/clients"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/telemetry"
         }
     ],
     "extra": {

@@ -5,13 +5,14 @@ namespace App\Service;
 use App\Client\PresignableClientInterface;
 use App\Model\SignedUrl;
 use AsyncAws\S3\Input\PutObjectRequest;
+use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class UploadSignerService
 {
     public function __construct(
-        #[Autowire(service: 'App\Client\S3Client')]
+        #[Autowire(service: S3Client::class)]
         private readonly PresignableClientInterface $client
     ) {
     }

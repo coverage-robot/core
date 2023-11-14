@@ -19,6 +19,7 @@
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/event": "*",
         "coverage-robot/models": "*",
+        "coverage-robot/telemetry": "^1.0",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.15",
@@ -93,6 +94,10 @@
         {
             "type": "path",
             "url": "../../packages/event"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/telemetry"
         }
     ],
     "extra": {

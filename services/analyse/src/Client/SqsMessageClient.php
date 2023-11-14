@@ -37,7 +37,7 @@ class SqsMessageClient
              * This value is propagated into the environment in a number of methods. But in the
              * SQS context that's handled by a trait in the event processors.
              *
-             * @see TraceContextAwareTrait
+             * @see TraceContext
              */
             $request['MessageSystemAttributes'] = [
                 MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [

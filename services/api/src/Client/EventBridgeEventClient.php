@@ -43,7 +43,7 @@ class EventBridgeEventClient
              * This value is propagated into the environment in a number of methods. But in the
              * Event Bus context that's handled by a trait.
              *
-             * @see TraceContextAwareTrait
+             * @see TraceContext
              */
             $request['TraceHeader'] = $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID);
         }

@@ -6,7 +6,7 @@ use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
-use Packages\Event\Handler\TraceContextAwareTrait;
+use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,14 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadController extends AbstractController
 {
-    use TraceContextAwareTrait;
-
     public function __construct(
         private readonly UploadService $uploadService,
         private readonly AuthTokenService $authTokenService,
         private readonly LoggerInterface $uploadLogger
     ) {
-        $this->setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromEnvironment();
     }
 
     #[Route('/upload', name: 'upload', methods: ['POST'])]
