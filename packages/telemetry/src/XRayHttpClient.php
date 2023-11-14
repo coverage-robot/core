@@ -18,7 +18,8 @@ class XRayHttpClient implements HttpClientInterface
 {
     private const TRACE_HEADER = 'X-Amzn-Trace-Id';
 
-    public function __construct(private ?HttpClientInterface $client = null) {
+    public function __construct(private ?HttpClientInterface $client = null)
+    {
         if (!$this->client) {
             $this->client = HttpClient::create();
 
