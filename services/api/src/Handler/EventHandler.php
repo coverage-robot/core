@@ -28,7 +28,7 @@ class EventHandler extends EventBridgeHandler
 
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
-        TraceContext::setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromContext($context);
 
         $this->eventHandlerLogger->info(
             sprintf(

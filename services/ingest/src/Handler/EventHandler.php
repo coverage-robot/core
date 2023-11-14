@@ -49,7 +49,7 @@ class EventHandler extends S3Handler
      */
     public function handleS3(S3Event $event, Context $context): void
     {
-        TraceContext::setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromContext($context);
 
         foreach ($event->getRecords() as $coverageFile) {
             try {
