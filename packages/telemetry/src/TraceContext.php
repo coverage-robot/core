@@ -1,12 +1,12 @@
 <?php
 
-namespace Packages\Event\Handler;
+namespace Packages\Telemetry;
 
 use Bref\Context\Context;
 
-trait TraceContextAwareTrait
+class TraceContext
 {
-    private const TRACE_HEADER = '_X_AMZN_TRACE_ID';
+    public const TRACE_ENV_VAR = '_X_AMZN_TRACE_ID';
 
     private const LAMBDA_INVOCATION_CONTEXT = 'LAMBDA_INVOCATION_CONTEXT';
 
@@ -17,13 +17,13 @@ trait TraceContextAwareTrait
      * This method extracts the trace ID and applies it directly to the environment
      * variables ready for use later.
      */
-    public function setTraceHeaderFromContext(Context $context): void
+    public static function setTraceHeaderFromContext(Context $context): void
     {
         if (empty($context->getTraceId())) {
             return;
         }
 
-        putenv(self::TRACE_HEADER . '=' . $context->getTraceId());
+        putenv(self::TRACE_ENV_VAR . '=' . $context->getTraceId());
     }
 
     /**
@@ -31,19 +31,19 @@ trait TraceContextAwareTrait
      * into the environment variables as JSON. This method will unwrap the context and
      * extract the AWS X-Ray trace header.
      */
-    public function setTraceHeaderFromEnvironment(): void
+    public static function setTraceHeaderFromEnvironment(): void
     {
-        if (!isset($_SERVER['LAMBDA_INVOCATION_CONTEXT'])) {
+        if (!isset($_SERVER[self::LAMBDA_INVOCATION_CONTEXT])) {
             return;
         }
 
         /** @var array $context */
-        $context = json_decode($_SERVER['LAMBDA_INVOCATION_CONTEXT'], true);
+        $context = json_decode($_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
 
         if (empty($context['traceId'] ?? '')) {
             return;
         }
 
-        putenv(self::TRACE_HEADER . '=' . (string)$context['traceId']);
+        putenv(self::TRACE_ENV_VAR . '=' . (string)$context['traceId']);
     }
 }

@@ -9,8 +9,8 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use Packages\Event\Enum\EventSource;
-use Packages\Event\Handler\TraceContextAwareTrait;
 use Packages\Event\Model\EventInterface;
+use Packages\Telemetry\TraceContext;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBridgeEventClient
@@ -42,7 +42,7 @@ class EventBridgeEventClient
              * This value is propagated into the environment in a number of methods. But in the
              * Event Bus context that's handled by a trait.
              *
-             * @see TraceContextAwareTrait
+             * @see TraceContext
              */
             $request['TraceHeader'] = $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID);
         }

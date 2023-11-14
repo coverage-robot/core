@@ -18,6 +18,7 @@
         "bref/symfony-bridge": "^0.2.1",
         "coverage-robot/event": "*",
         "coverage-robot/models": "*",
+        "coverage-robot/telemetry": "^1.0",
         "google/cloud-bigquery": "^1.24",
         "google/cloud-storage": "^1.33",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -98,6 +99,10 @@
         {
             "type": "path",
             "url": "../../packages/event"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/telemetry"
         }
     ],
     "extra": {

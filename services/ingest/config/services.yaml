@@ -16,3 +16,9 @@ services:
         public: true
 
     Psr\Container\ContainerInterface: '@service_container'
+
+    AsyncAws\Core\AbstractApi:
+        arguments:
+            # Inject the decorated Http Client which will provide the X-Ray tracing
+            # header onto every AWS request
+            $httpClient: '@Packages\Telemetry\XRayHttpClient'

@@ -23,6 +23,12 @@ services:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
 
+    AsyncAws\Core\AbstractApi:
+        arguments:
+            # Inject the decorated Http Client which will provide the X-Ray tracing
+            # header onto every AWS request
+            $httpClient: '@Packages\Telemetry\XRayHttpClient'
+
     SebastianBergmann\Diff\Parser: ~
 
     Doctrine\SqlFormatter\NullHighlighter: ~

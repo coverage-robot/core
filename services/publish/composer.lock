@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c55bafa55b6d2b51e2fb93f597408d94",
+    "content-hash": "0d0c3376521cef0217ce2a0ed8e92c3a",
     "packages": [
         {
             "name": "bref/bref",
@@ -220,7 +220,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "4a432d8f69403623defa2e30e835cc33ef7cafd9"
+                "reference": "ba6c3e62bd4e66864a92ea01176575f01ebccaac"
             },
             "require": {
                 "knplabs/github-api": "^3.11",
@@ -259,7 +259,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "71d8fd55d82119401b5b531a011c4ffbf8ec3971"
+                "reference": "f7a43dce8b78364eef1ef8e9d8f30fe709bf70ab"
             },
             "require": {
                 "coverage-robot/models": "*",
@@ -296,7 +296,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
             },
             "type": "library",
             "autoload": {
@@ -305,6 +305,25 @@
                 }
             },
             "description": "Shared models across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "coverage-robot/telemetry",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/telemetry",
+                "reference": "96de72598ae7f93d2637fd04ff8409db63a5915b"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Telemetry\\": "src/"
+                }
+            },
+            "description": "Shared telemetry tooling across the services",
             "transport-options": {
                 "relative": true
             }
@@ -7653,5 +7672,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

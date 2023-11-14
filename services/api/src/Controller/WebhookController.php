@@ -10,8 +10,8 @@ use App\Model\Webhook\WebhookInterface;
 use App\Service\EnvironmentService;
 use App\Service\WebhookSignatureService;
 use Exception;
-use Packages\Event\Handler\TraceContextAwareTrait;
 use Packages\Models\Enum\Provider;
+use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +24,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class WebhookController extends AbstractController
 {
-    use TraceContextAwareTrait;
-
     /**
      * @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
      */
@@ -36,7 +34,7 @@ class WebhookController extends AbstractController
         private readonly EnvironmentService $environmentService,
         private readonly SqsMessageClient $sqsMessageClient
     ) {
-        $this->setTraceHeaderFromEnvironment();
+        TraceContext::setTraceHeaderFromEnvironment();
     }
 
     #[Route(
