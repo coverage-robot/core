@@ -30,7 +30,15 @@ services:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
 
-    AsyncAws\Core\AbstractApi:
+    Packages\Telemetry\XRayHttpClient: ~
+
+    AsyncAws\EventBridge\EventBridgeClient:
+        arguments:
+            # Inject the decorated Http Client which will provide the X-Ray tracing
+            # header onto every AWS request
+            $httpClient: '@Packages\Telemetry\XRayHttpClient'
+
+    AsyncAws\Sqs\SqsClient:
         arguments:
             # Inject the decorated Http Client which will provide the X-Ray tracing
             # header onto every AWS request
