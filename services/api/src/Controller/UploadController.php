@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UploadController extends AbstractController
 {
-
     public function __construct(
         private readonly UploadService $uploadService,
         private readonly AuthTokenService $authTokenService,
