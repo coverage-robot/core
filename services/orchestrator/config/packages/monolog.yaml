@@ -21,7 +21,7 @@ services:
 
     metrics_formatter:
         class: Monolog\Formatter\LineFormatter
-        arguments: [ "%%message%%" ]
+        arguments: [ "%%message%%\n" ]
 
     Monolog\Processor\PsrLogMessageProcessor:
         tags: { name: monolog.processor, handler: nested }
