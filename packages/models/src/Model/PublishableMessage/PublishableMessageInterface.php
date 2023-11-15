@@ -47,4 +47,12 @@ interface PublishableMessageInterface extends Stringable
      * is created).
      */
     public function getValidUntil(): DateTimeInterface;
+
+    /**
+     * The type of message that's being published.
+     *
+     * This represents the medium in which the information is going to be shown in. For example,
+     * that could be a Pull Request comment, or a Check Run, or a singular Check Annotation.
+     */
+    public function getType(): PublishableMessage;
 }

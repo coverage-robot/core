@@ -22,6 +22,8 @@ use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Metric\MetricService;
 use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -39,7 +41,8 @@ class EventHandler extends S3Handler
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
         private readonly EventBridgeEventClient $eventBridgeEventService,
-        private readonly LoggerInterface $handlerLogger
+        private readonly LoggerInterface $handlerLogger,
+        private readonly MetricService $metricService
     ) {
     }
 
@@ -185,6 +188,18 @@ class EventHandler extends S3Handler
      */
     public function triggerIngestionSuccessEvent(Upload $upload): bool
     {
+        $this->metricService->put(
+            metric: 'ingested_files',
+            value: 1,
+            unit: Unit::COUNT,
+            dimensions: [
+                ['owner']
+            ],
+            properties: [
+                'owner' => $upload->getOwner()
+            ]
+        );
+
         return $this->eventBridgeEventService->publishEvent(
             new IngestSuccess(
                 $upload,

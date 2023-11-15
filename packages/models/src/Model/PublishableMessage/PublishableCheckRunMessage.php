@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\PublishableCheckRunStatus;
+use Packages\Models\Enum\PublishableMessage;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
 {
@@ -56,6 +57,11 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function getCoveragePercentage(): float
     {
         return $this->coveragePercentage;
+    }
+
+    public function getType(): PublishableMessage
+    {
+        return PublishableMessage::CheckRun;
     }
 
     public function getMessageGroup(): string

@@ -3,6 +3,8 @@
 namespace App\Service\Publisher;
 
 use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Metric\MetricService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -11,7 +13,8 @@ class MessagePublisherService
     public function __construct(
         #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
-        private readonly LoggerInterface $publisherServiceLogger
+        private readonly LoggerInterface $publisherServiceLogger,
+        private readonly MetricService $metricService
     ) {
     }
 
@@ -57,7 +60,27 @@ class MessagePublisherService
                 continue;
             }
 
-            $successful = $publisher->publish($publishableMessage) && $successful;
+            $publishSucceeded = $publisher->publish($publishableMessage);
+
+            if ($publishSucceeded) {
+                $this->metricService->put(
+                    metric: 'published_results',
+                    value: 1,
+                    unit: Unit::COUNT,
+                    dimensions: [
+                        ['owner'],
+                        ['owner', 'type']
+                    ],
+                    properties: [
+                        'owner' => $publishableMessage->getEvent()
+                            ->getOwner(),
+                        'type' => $publishableMessage->getType()
+                            ->value
+                    ]
+                );
+            }
+
+            $successful = $publishSucceeded && $successful;
 
             $this->publisherServiceLogger->info(
                 sprintf(
