@@ -8,7 +8,7 @@ monolog:
 
     metrics:
       type: stream
-      path: "php://stderr"
+      path: "php://stdout"
       formatter: metrics_formatter
       level: info
       channels: [ 'metrics' ]

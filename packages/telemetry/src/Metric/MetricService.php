@@ -57,7 +57,7 @@ class MetricService
                         ->getTimestamp(),
                     $unit,
                     $resolution,
-                    array_merge([[$metric]], $dimensions ?? []),
+                    array_merge([[self::FUNCTION_NAME]], $dimensions ?? []),
                     $properties
                 ),
                 'json'
