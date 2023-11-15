@@ -4,12 +4,26 @@ monolog:
       type: stream
       path: "php://stderr"
       formatter: Monolog\Formatter\LineFormatter
+      channels: ['!metrics']
 
-  channels: [ "upload" ]
+    metrics:
+      type: stream
+      path: "php://stderr"
+      formatter: metrics_formatter
+      level: info
+      channels: [ 'metrics' ]
+
+  channels: [ "upload", "metrics" ]
 
 services:
+  Monolog\Formatter\JsonFormatter: ~
+
   Monolog\Formatter\LineFormatter:
     arguments: [ "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n" ]
+
+  metrics_formatter:
+      class: Monolog\Formatter\LineFormatter
+      arguments: [ "%%message%%" ]
 
   Monolog\Processor\PsrLogMessageProcessor:
     tags: { name: monolog.processor, handler: nested }

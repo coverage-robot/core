@@ -6,6 +6,8 @@ use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Metric\MetricService;
 use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +21,8 @@ class UploadController extends AbstractController
     public function __construct(
         private readonly UploadService $uploadService,
         private readonly AuthTokenService $authTokenService,
-        private readonly LoggerInterface $uploadLogger
+        private readonly LoggerInterface $uploadLogger,
+        private readonly MetricService $metricService
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }
@@ -43,6 +46,15 @@ class UploadController extends AbstractController
                 [
                     'parameters' => $parameters,
                     'signedUrl' => $signedUrl
+                ]
+            );
+
+            $this->metricService->put(
+                metric: 'signed_uploads',
+                value: 1,
+                unit: Unit::COUNT,
+                properties: [
+                    'owner' => $parameters->getOwner()
                 ]
             );
 

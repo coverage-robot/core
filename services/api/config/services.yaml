@@ -14,6 +14,14 @@ services:
 
     Random\Randomizer: ~
 
+    # Metric publishing
+    Symfony\Component\Clock\NativeClock: ~
+
+    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
+
+    Packages\Telemetry\Metric\MetricService: ~
+
+    # Event processing
     App\Handler\EventHandler:
         # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
@@ -30,6 +38,7 @@ services:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
 
+    # Coverage badge generation
     PUGX\Poser\Render\:
         resource: '../vendor/badges/poser/src/Render'
 
