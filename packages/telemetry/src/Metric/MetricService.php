@@ -54,7 +54,7 @@ class MetricService
                     $metric,
                     $value,
                     $this->clock->now()
-                        ->getTimestamp(),
+                        ->format("Uv"),
                     $unit,
                     $resolution,
                     array_merge([[self::FUNCTION_NAME]], $dimensions ?? []),
