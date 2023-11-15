@@ -73,7 +73,7 @@ class MessagePublisherService
                     ],
                     properties: [
                         'owner' => $publishableMessage->getEvent()
-                            ->getOwner(),
+                            ?->getOwner(),
                         'type' => $publishableMessage->getType()
                             ->value
                     ]
