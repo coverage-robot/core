@@ -17,6 +17,14 @@ services:
 
     Psr\Container\ContainerInterface: '@service_container'
 
+    # Metric publishing
+    Symfony\Component\Clock\NativeClock: ~
+
+    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
+
+    Packages\Telemetry\Metric\MetricService: ~
+
+    # Event processing
     Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'
 
     Packages\Event\Service\EventProcessorService:

@@ -17,6 +17,14 @@ services:
 
     Psr\Container\ContainerInterface: '@service_container'
 
+    # Metric publishing
+    Symfony\Component\Clock\NativeClock: ~
+
+    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
+
+    Packages\Telemetry\Metric\MetricService: ~
+
+    # Message publishing
     Packages\Clients\Client\Github\GithubAppClient:
         arguments:
             $appId: '%env(GITHUB_APP_ID)%'
