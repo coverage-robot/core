@@ -10,6 +10,7 @@ use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use DateTimeImmutable;
 use Packages\Models\Enum\Provider;
+use Packages\Telemetry\Metric\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -46,7 +47,12 @@ class UploadControllerTest extends KernelTestCase
             ->with($parameters, 'mock-project-token')
             ->willReturn(true);
 
-        $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
+        $uploadController = new UploadController(
+            $uploadService,
+            $authTokenService,
+            new NullLogger(),
+            $this->createMock(MetricService::class)
+        );
 
         $uploadController->setContainer($this->getContainer());
 
@@ -75,7 +81,12 @@ class UploadControllerTest extends KernelTestCase
         $authTokenService->expects($this->never())
             ->method('validateParametersWithUploadToken');
 
-        $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
+        $uploadController = new UploadController(
+            $uploadService,
+            $authTokenService,
+            new NullLogger(),
+            $this->createMock(MetricService::class)
+        );
 
         $uploadController->setContainer($this->getContainer());
 
@@ -106,7 +117,12 @@ class UploadControllerTest extends KernelTestCase
         $authTokenService->expects($this->never())
             ->method('validateParametersWithUploadToken');
 
-        $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
+        $uploadController = new UploadController(
+            $uploadService,
+            $authTokenService,
+            new NullLogger(),
+            $this->createMock(MetricService::class)
+        );
 
         $uploadController->setContainer($this->getContainer());
 
@@ -138,7 +154,12 @@ class UploadControllerTest extends KernelTestCase
             ->method('validateParametersWithUploadToken')
             ->willReturn(false);
 
-        $uploadController = new UploadController($uploadService, $authTokenService, new NullLogger());
+        $uploadController = new UploadController(
+            $uploadService,
+            $authTokenService,
+            new NullLogger(),
+            $this->createMock(MetricService::class)
+        );
 
         $uploadController->setContainer($this->getContainer());
 
