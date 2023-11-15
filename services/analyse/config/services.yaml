@@ -17,12 +17,21 @@ services:
 
     Psr\Container\ContainerInterface: '@service_container'
 
+    # Metric publishing
+    Symfony\Component\Clock\NativeClock: ~
+
+    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
+
+    Packages\Telemetry\Metric\MetricService: ~
+
+    # Event processing
     Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'
 
     Packages\Event\Service\EventProcessorService:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
 
+    # Analysing coverage data
     SebastianBergmann\Diff\Parser: ~
 
     Doctrine\SqlFormatter\NullHighlighter: ~

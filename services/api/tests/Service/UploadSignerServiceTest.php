@@ -14,6 +14,7 @@ class UploadSignerServiceTest extends TestCase
     public function testSignRequest(): void
     {
         $mockClient = $this->createMock(PresignableClientInterface::class);
+
         $expiry = new DateTimeImmutable();
         $input = new PutObjectRequest();
 

@@ -15,12 +15,13 @@ use Google\Cloud\BigQuery\LoadJobConfiguration;
 use Google\Cloud\BigQuery\Table;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use Packages\Event\Model\Upload;
 use Packages\Models\Enum\CoverageFormat;
 use Packages\Models\Enum\Environment;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
+use Packages\Telemetry\Metric\MetricService;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -89,7 +90,8 @@ class GcsPersistServiceTest extends KernelTestCase
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-upload-table'
                 ]
             ),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $this->assertTrue(
@@ -173,7 +175,8 @@ class GcsPersistServiceTest extends KernelTestCase
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
                 ]
             ),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $this->assertFalse(

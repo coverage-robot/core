@@ -11,9 +11,11 @@ use App\Service\EnvironmentService;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
-use Packages\Models\Model\Coverage;
 use Packages\Event\Model\Upload;
+use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Metric\MetricService;
 use Psr\Log\LoggerInterface;
 
 class GcsPersistService implements PersistServiceInterface
@@ -34,7 +36,8 @@ class GcsPersistService implements PersistServiceInterface
         private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentService $environmentService,
-        private readonly LoggerInterface $gcsPersistServiceLogger
+        private readonly LoggerInterface $gcsPersistServiceLogger,
+        private readonly MetricService $metricService
     ) {
     }
 
@@ -62,32 +65,50 @@ class GcsPersistService implements PersistServiceInterface
             )
         );
 
-        $hasAddedUpload = false;
-        if ($isCoverageLoaded) {
-            $hasAddedUpload = $this->streamUploadRow($upload);
+        if (!$isCoverageLoaded) {
+            $this->gcsPersistServiceLogger->error(
+                sprintf(
+                    'Coverage was not loaded for %s',
+                    (string)$upload
+                )
+            );
 
-            if (!$hasAddedUpload) {
-                $this->gcsPersistServiceLogger->error(
-                    sprintf(
-                        'Unable to add upload to BigQuery for %s',
-                        (string)$upload
-                    )
-                );
-            }
+            return false;
         }
+
+        $hasAddedUpload = $this->streamUploadRow($upload);
+
+        if (!$hasAddedUpload) {
+            $this->gcsPersistServiceLogger->error(
+                sprintf(
+                    'Unable to add upload for persisted coverage %s',
+                    (string)$upload
+                )
+            );
+
+            return false;
+        }
+
+        $this->metricService->put(
+            metric: 'ingested_lines',
+            value: $this->totalLines($coverage),
+            unit: Unit::COUNT,
+            dimensions: [
+                ['owner']
+            ],
+            properties: [
+                'owner' => $upload->getOwner()
+            ]
+        );
 
         $this->gcsPersistServiceLogger->info(
             sprintf(
                 'Persisting %s to Google Cloud Storage (and loading to BigQuery) has finished',
                 (string)$upload
-            ),
-            [
-                'coverage' => $isCoverageLoaded,
-                'upload' => $hasAddedUpload
-            ]
+            )
         );
 
-        return $isCoverageLoaded && $hasAddedUpload;
+        return true;
     }
 
     private function triggerLoadJob(Upload $upload, StorageObject $object): bool

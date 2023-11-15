@@ -19,6 +19,7 @@ use Exception;
 use Packages\Event\Model\Upload;
 use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Coverage;
+use Packages\Telemetry\Metric\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
@@ -68,7 +69,8 @@ class EventHandlerTest extends KernelTestCase
             $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -98,7 +100,8 @@ class EventHandlerTest extends KernelTestCase
             $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -138,7 +141,8 @@ class EventHandlerTest extends KernelTestCase
             $mockCoverageFileParserService,
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $handler->handleS3(
@@ -200,7 +204,8 @@ class EventHandlerTest extends KernelTestCase
             $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $handler->handleS3($event, Context::fake());

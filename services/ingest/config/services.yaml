@@ -16,3 +16,10 @@ services:
         public: true
 
     Psr\Container\ContainerInterface: '@service_container'
+
+    # Metric publishing
+    Symfony\Component\Clock\NativeClock: ~
+
+    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
+
+    Packages\Telemetry\Metric\MetricService: ~

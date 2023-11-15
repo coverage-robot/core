@@ -5,6 +5,7 @@ namespace Packages\Models\Model\PublishableMessage;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Event\Model\EventInterface;
+use Packages\Models\Enum\PublishableMessage;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
 {
@@ -70,6 +71,11 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getLeastCoveredDiffFiles(): array
     {
         return $this->leastCoveredDiffFiles;
+    }
+
+    public function getType(): PublishableMessage
+    {
+        return PublishableMessage::PullRequest;
     }
 
     public function __toString(): string
