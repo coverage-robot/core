@@ -4,7 +4,7 @@ namespace App\Tests\Service;
 
 use App\Kernel;
 use App\Service\EnvironmentService;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

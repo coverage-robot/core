@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Models\Enum;
+namespace Packages\Message\PublishableMessage;
 
 enum PublishableCheckRunStatus: string
 {

@@ -2,8 +2,8 @@
 
 namespace App\Service\Formatter;
 
+use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 
 class CheckAnnotationFormatterService
 {

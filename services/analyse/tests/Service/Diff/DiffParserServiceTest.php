@@ -4,8 +4,8 @@ namespace App\Tests\Service\Diff;
 
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

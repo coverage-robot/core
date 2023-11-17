@@ -4,7 +4,7 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 
 trait ScopeAwareTrait
 {

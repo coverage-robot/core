@@ -2,9 +2,9 @@
 
 namespace App\Service\Publisher;
 
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Metric\MetricService;
+use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 

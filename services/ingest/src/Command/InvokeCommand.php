@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Handler\EventHandler;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
@@ -29,7 +29,7 @@ class InvokeCommand extends Command
 
     public function __construct(
         private readonly EventHandler $handler,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct();
     }

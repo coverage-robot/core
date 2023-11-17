@@ -7,10 +7,10 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
-use App\Service\EnvironmentService;
 use App\Service\WebhookSignatureService;
 use Exception;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +31,7 @@ class WebhookController extends AbstractController
         private readonly LoggerInterface $webhookLogger,
         private readonly WebhookSignatureService $webhookSignatureService,
         private readonly SerializerInterface $serializer,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SqsMessageClient $sqsMessageClient
     ) {
         TraceContext::setTraceHeaderFromEnvironment();

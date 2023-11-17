@@ -2,7 +2,7 @@
 
 namespace App\Service\Diff;
 
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.diff_parser')]

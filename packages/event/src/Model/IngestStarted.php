@@ -3,8 +3,8 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 class IngestStarted implements EventInterface

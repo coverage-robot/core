@@ -4,7 +4,7 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ class DynamoDbClient
 
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $dynamoDbClientLogger
     ) {

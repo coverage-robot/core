@@ -72,7 +72,7 @@ enum QueryParameter: string
      * Provider::GITHUB
      * ```
      *
-     * @see \Packages\Models\Enum\Provider
+     * @see \Packages\Contracts\Provider\Provider
      */
     case PROVIDER = 'PROVIDER';
 }

@@ -23,7 +23,7 @@ use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Metric\MetricService;
+use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;

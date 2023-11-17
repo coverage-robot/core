@@ -2,7 +2,7 @@
 
 namespace App\Service\Carryforward;
 
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use WeakMap;
 

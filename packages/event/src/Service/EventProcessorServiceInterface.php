@@ -2,8 +2,8 @@
 
 namespace Packages\Event\Service;
 
-use Packages\Event\Enum\Event;
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\EventInterface;
 
 interface EventProcessorServiceInterface
 {

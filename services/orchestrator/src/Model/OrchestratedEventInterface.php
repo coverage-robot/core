@@ -5,7 +5,7 @@ namespace App\Model;
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
 use DateTimeImmutable;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 

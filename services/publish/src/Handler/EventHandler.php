@@ -9,8 +9,8 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
-use Packages\Models\Model\PublishableMessage\PublishableMessageCollection;
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishableMessageCollection;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends SqsHandler

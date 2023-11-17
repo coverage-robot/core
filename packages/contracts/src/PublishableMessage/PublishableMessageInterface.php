@@ -1,30 +1,20 @@
 <?php
 
-namespace Packages\Models\Model\PublishableMessage;
+namespace Packages\Contracts\PublishableMessage;
 
 use DateTimeInterface;
-use Packages\Event\Model\EventInterface;
-use Packages\Models\Enum\PublishableMessage;
+use Packages\Contracts\Event\EventInterface;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
-#[DiscriminatorMap(
-    'type',
-    [
-        PublishableMessage::PullRequest->value => PublishablePullRequestMessage::class,
-        PublishableMessage::CheckAnnotation->value => PublishableCheckAnnotationMessage::class,
-        PublishableMessage::CheckRun->value => PublishableCheckRunMessage::class,
-        PublishableMessage::Collection->value => PublishableMessageCollection::class,
-    ]
-)]
 interface PublishableMessageInterface extends Stringable
 {
     /**
      * Get the event the message is was generated for (this may be an upload, or some
      * other event, like a pipeline finishing).
      *
-     * Its not always the case that a message is associated to a specific upload - for example, a collection of messages ({@see PublishableMessageCollection})
-     * might be for different ones.
+     * Its not always the case that a message is associated to a specific upload - for
+     * example, a collection of messages ({@see PublishableMessageCollection}) might be
+     * for different ones.
      *
      * @return EventInterface|null
      */

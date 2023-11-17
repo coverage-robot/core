@@ -7,7 +7,7 @@ use App\Model\QueryParameterBag;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -27,7 +27,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
      */
     public function __construct(
         private readonly SerializerInterface $serializer,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);
     }

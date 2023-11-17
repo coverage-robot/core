@@ -5,7 +5,7 @@ namespace App\Tests\Mock\Factory;
 use App\Enum\EnvironmentVariable;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;

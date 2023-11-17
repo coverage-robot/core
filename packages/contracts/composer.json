@@ -1,0 +1,15 @@
+{
+    "name": "coverage-robot/contracts",
+    "description": "Decoupled contracts usable across the services",
+    "type": "library",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Packages\\Contracts\\": "src/"
+        }
+    }
+}

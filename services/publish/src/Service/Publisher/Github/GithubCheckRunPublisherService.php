@@ -4,7 +4,6 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\EnvironmentService;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
@@ -13,11 +12,12 @@ use DateTimeInterface;
 use Doctrine\Common\Annotations\Annotation;
 use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
-use Packages\Models\Enum\Provider;
-use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Provider\Provider;
+use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +40,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         private readonly CheckRunFormatterService $checkRunFormatterService,
         private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
         private readonly GithubAppInstallationClient $client,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $checkPublisherLogger
     ) {
     }

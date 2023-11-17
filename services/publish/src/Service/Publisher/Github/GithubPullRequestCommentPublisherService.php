@@ -4,13 +4,13 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\EnvironmentService;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
-use Packages\Models\Enum\Provider;
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Provider\Provider;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +19,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     public function __construct(
         private readonly GithubAppInstallationClient $client,
         private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
     }

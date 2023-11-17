@@ -13,11 +13,11 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use Monolog\Test\TestCase;
-use Packages\Event\Enum\Event;
-use Packages\Event\Enum\EventSource;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\EventSource;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\CoverageFinalised;
-use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class EventBridgeEventClientTest extends TestCase

@@ -2,10 +2,7 @@
 
 namespace Packages\Event\Model;
 
-use DateTimeImmutable;
-use Packages\Event\Enum\Event;
-use Packages\Models\Enum\Provider;
-use Stringable;
+use Packages\Contracts\Event\Event;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 
 #[DiscriminatorMap(
@@ -22,21 +19,6 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
         Event::ANALYSE_FAILURE->value => AnalyseFailure::class,
     ]
 )]
-interface EventInterface extends Stringable
+interface EventInterface extends \Packages\Contracts\Event\EventInterface
 {
-    public function getProvider(): Provider;
-
-    public function getOwner(): string;
-
-    public function getRepository(): string;
-
-    public function getCommit(): string;
-
-    public function getPullRequest(): int|string|null;
-
-    public function getRef(): string;
-
-    public function getType(): Event;
-
-    public function getEventTime(): DateTimeImmutable;
 }

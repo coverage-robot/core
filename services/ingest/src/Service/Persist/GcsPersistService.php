@@ -7,7 +7,7 @@ use App\Client\GoogleCloudStorageClient;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PersistException;
 use App\Service\BigQueryMetadataBuilderService;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
@@ -15,7 +15,7 @@ use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Metric\MetricService;
+use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
 
 class GcsPersistService implements PersistServiceInterface
@@ -28,14 +28,14 @@ class GcsPersistService implements PersistServiceInterface
      * @param GoogleCloudStorageClient $googleCloudStorageClient
      * @param BigQueryClient $bigQueryClient
      * @param BigQueryMetadataBuilderService $bigQueryMetadataBuilderService
-     * @param EnvironmentService $environmentService
+     * @param EnvironmentServiceInterface $environmentService
      * @param LoggerInterface $gcsPersistServiceLogger
      */
     public function __construct(
         private readonly GoogleCloudStorageClient $googleCloudStorageClient,
         private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $gcsPersistServiceLogger,
         private readonly MetricService $metricService
     ) {

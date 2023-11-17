@@ -1,0 +1,145 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "6f1347e698b9490a86f1428558c8cae7",
+    "packages": [
+        {
+            "name": "coverage-robot/contracts",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../contracts",
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Contracts\\": "src/"
+                }
+            },
+            "description": "Decoupled contracts usable across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "coverage-robot/event",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../event",
+                "reference": "356ff459d9c143e640efc116489b385975685aff"
+            },
+            "require": {
+                "coverage-robot/contracts": "^1.0",
+                "coverage-robot/models": "*",
+                "psr/log": "^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Event\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Packages\\Event\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test:unit": [
+                    "@putenv XDEBUG_MODE=coverage",
+                    "phpunit --configuration=./phpunit.xml.dist"
+                ]
+            },
+            "description": "Shared event logic across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "coverage-robot/models",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../models",
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Models\\": "src/"
+                }
+            },
+            "description": "Shared models across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "psr/log",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/log/tree/3.0.0"
+            },
+            "time": "2021-07-14T16:46:02+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

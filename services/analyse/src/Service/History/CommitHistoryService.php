@@ -3,7 +3,7 @@
 namespace App\Service\History;
 
 use App\Service\ProviderAwareInterface;
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 

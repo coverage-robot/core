@@ -3,12 +3,12 @@
 namespace App\Query\Trait;
 
 use App\Enum\EnvironmentVariable;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 trait UploadTableAwareTrait
 {
     public function __construct(
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
     }
 

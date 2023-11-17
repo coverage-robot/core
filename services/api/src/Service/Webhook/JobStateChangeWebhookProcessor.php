@@ -9,11 +9,11 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -24,7 +24,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
     }
 

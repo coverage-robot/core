@@ -6,8 +6,8 @@ use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\Event\CoverageFinalisedEventProcessor;
 use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\CoverageFinalised;
-use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

@@ -3,7 +3,7 @@
 namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckRunFormatterService;
-use Packages\Models\Enum\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -7,11 +7,19 @@
     "prefer-stable": true,
     "require": {
         "psr/log": "^3.0",
-        "psr/clock": "^1.0"
+        "psr/clock": "^1.0",
+        "coverage-robot/contracts": "^1.0",
+        "symfony/serializer": "^6.3"
     },
     "autoload": {
         "psr-4": {
             "Packages\\Telemetry\\": "src/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../contracts"
+        }
+    ]
 }

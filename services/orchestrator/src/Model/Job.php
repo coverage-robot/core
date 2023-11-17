@@ -4,7 +4,7 @@ namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
 use DateTimeImmutable;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 
 class Job extends AbstractOrchestratedEvent
 {

@@ -9,7 +9,7 @@ use App\Model\GraphParameters;
 use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;

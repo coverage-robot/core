@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 
 class EventStateChange
 {
