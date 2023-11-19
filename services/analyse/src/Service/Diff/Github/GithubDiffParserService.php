@@ -151,12 +151,6 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         /** @var array<array-key, array> $files */
         $files = $commit['files'] ?? [];
 
-//        if (empty($files)) {
-//            throw new RuntimeException(
-//                sprintf('Unable to generate diff using commit for %s in %s repository.', $sha, $repository)
-//            );
-//        }
-
         return array_reduce(
             $files,
             fn(string $diff, array $file) => <<<DIFF
