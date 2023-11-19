@@ -15,10 +15,10 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
+use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
-use Packages\Models\Enum\JobState;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

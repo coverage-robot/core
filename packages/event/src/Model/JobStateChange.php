@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Enum\JobState;
+use Packages\Event\Enum\JobState;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 

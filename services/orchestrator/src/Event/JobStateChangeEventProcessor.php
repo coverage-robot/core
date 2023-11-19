@@ -11,10 +11,10 @@ use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Event\Enum\JobState;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Model\UploadsStarted;
-use Packages\Models\Enum\JobState;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 

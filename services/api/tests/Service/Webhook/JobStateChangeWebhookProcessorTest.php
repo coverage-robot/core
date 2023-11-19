@@ -11,7 +11,7 @@ use App\Repository\JobRepository;
 use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
-use Packages\Models\Enum\JobState;
+use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
