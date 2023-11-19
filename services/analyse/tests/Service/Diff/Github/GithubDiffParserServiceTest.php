@@ -183,6 +183,48 @@ class GithubDiffParserServiceTest extends TestCase
         );
     }
 
+    public function testGetEmptyDiffFromCommit(): void
+    {
+        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockRepoApi = $this->createMock(Repo::class);
+
+        $parser = new GithubDiffParserService(
+            $mockApiClient,
+            new Parser(),
+            new NullLogger()
+        );
+
+        $mockUpload = $this->getMockUpload();
+
+        $mockUpload->expects($this->exactly(3))
+            ->method('getPullRequest')
+            ->willReturn(null);
+        $mockUpload->expects($this->atLeast(1))
+            ->method('getCommit');
+
+        $mockApiClient->expects($this->once())
+            ->method('authenticateAsRepositoryOwner')
+            ->with('mock-owner');
+        $mockApiClient->expects($this->once())
+            ->method('repo')
+            ->willReturn($mockRepoApi);
+        $mockRepoApi->expects($this->once())
+            ->method('commits')
+            ->willReturn($mockRepoApi);
+        $mockRepoApi->expects($this->once())
+            ->method('show')
+            ->willReturn([
+                'files' => []
+            ]);
+
+        $addedLines = $parser->get($mockUpload);
+
+        $this->assertEquals(
+            [],
+            $addedLines
+        );
+    }
+
     public function testGetProvider(): void
     {
         $parser = new GithubDiffParserService(

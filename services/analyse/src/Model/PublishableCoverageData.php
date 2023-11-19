@@ -203,10 +203,16 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffCoveragePercentage(): float
     {
+        $diff = $this->diffParser->get($this->event);
+
+        if ($diff == []) {
+            return 0;
+        }
+
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->event)
+            $diff
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -243,10 +249,16 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getLeastCoveredDiffFiles(
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
+        $diff = $this->diffParser->get($this->event);
+
+        if ($diff == []) {
+            return new FileCoverageCollectionQueryResult([]);
+        }
+
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->event)
+            $diff
         );
         $params->set(
             QueryParameter::LIMIT,
@@ -286,10 +298,16 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
+        $diff = $this->diffParser->get($this->event);
+
+        if ($diff == []) {
+            return new LineCoverageCollectionQueryResult([]);
+        }
+
         $params = QueryParameterBag::fromEvent($this->event);
         $params->set(
             QueryParameter::LINE_SCOPE,
-            $this->diffParser->get($this->event)
+            $diff
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,

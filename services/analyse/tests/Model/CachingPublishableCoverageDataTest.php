@@ -29,11 +29,15 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     private QueryService|MockObject $mockQueryService;
 
+    private DiffParserService|MockObject $mockDiffParserService;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->mockQueryService = $this->createMock(QueryService::class);
+
+        $this->mockDiffParserService = $this->createMock(DiffParserService::class);
 
         $upload = $this->createMock(Upload::class);
         $upload->method('getProvider')
@@ -41,7 +45,7 @@ class CachingPublishableCoverageDataTest extends TestCase
 
         $this->cachedPublishableCoverageData = new CachingPublishableCoverageData(
             $this->mockQueryService,
-            $this->createMock(DiffParserService::class),
+            $this->mockDiffParserService,
             $this->createMock(CarryforwardTagService::class),
             $upload
         );
@@ -285,6 +289,14 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetDiffCoveragePercentage(): void
     {
+        $this->mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    'foo.php' => [1,2,3]
+                ]
+            );
+
         $this->mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
@@ -306,6 +318,8 @@ class CachingPublishableCoverageDataTest extends TestCase
 
         $this->assertEquals(97.0, $this->cachedPublishableCoverageData->getDiffCoveragePercentage());
 
+        $this->mockDiffParserService->expects($this->never())
+            ->method('get');
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
 
@@ -314,6 +328,14 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     public function testGetLeastCoveredDiffFiles(): void
     {
+        $this->mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    'foo.php' => [1,2,3]
+                ]
+            );
+
         $files = new FileCoverageCollectionQueryResult(
             [
                 new FileCoverageQueryResult(
@@ -344,12 +366,22 @@ class CachingPublishableCoverageDataTest extends TestCase
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
+        $this->mockDiffParserService->expects($this->never())
+            ->method('get');
 
         $this->assertEquals($files, $this->cachedPublishableCoverageData->getLeastCoveredDiffFiles(1));
     }
 
     public function testGetDiffLineCoverage(): void
     {
+        $this->mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    'foo.php' => [1,2,3]
+                ]
+            );
+
         $lines = new LineCoverageCollectionQueryResult(
             [
                 new LineCoverageQueryResult(
@@ -377,7 +409,32 @@ class CachingPublishableCoverageDataTest extends TestCase
 
         $this->mockQueryService->expects($this->never())
             ->method('runQuery');
+        $this->mockDiffParserService->expects($this->never())
+            ->method('get');
 
         $this->assertEquals($lines, $this->cachedPublishableCoverageData->getDiffLineCoverage());
+    }
+
+    public function testDiffMethodsNeverQueryWhenDiffEmpty(): void
+    {
+        $this->mockDiffParserService->expects($this->exactly(3))
+            ->method('get')
+            ->willReturn([]);
+
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertEquals(
+            0,
+            $this->cachedPublishableCoverageData->getDiffCoveragePercentage()
+        );
+        $this->assertEquals(
+            new LineCoverageCollectionQueryResult([]),
+            $this->cachedPublishableCoverageData->getDiffLineCoverage()
+        );
+        $this->assertEquals(
+            new FileCoverageCollectionQueryResult([]),
+            $this->cachedPublishableCoverageData->getLeastCoveredDiffFiles()
+        );
     }
 }
