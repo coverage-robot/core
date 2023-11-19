@@ -6,7 +6,7 @@ use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Contracts\Event\Event;
-use Packages\Contracts\Event\EventInterface;
+use Packages\Event\Model\EventInterface;
 use Packages\Event\Service\EventProcessorServiceInterface;
 use Packages\Telemetry\TraceContext;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
