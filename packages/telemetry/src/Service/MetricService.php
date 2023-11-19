@@ -134,7 +134,7 @@ class MetricService
                     EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION
                 ),
                 self::FUNCTION_NAME => $this->environmentService->getVariable(
-                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION
+                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_NAME
                 ),
             ],
             ...$customProperties
