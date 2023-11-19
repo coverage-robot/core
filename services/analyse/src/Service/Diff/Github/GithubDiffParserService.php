@@ -8,7 +8,6 @@ use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
 
@@ -152,11 +151,11 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         /** @var array<array-key, array> $files */
         $files = $commit['files'] ?? [];
 
-        if (empty($files)) {
-            throw new RuntimeException(
-                sprintf('Unable to generate diff using commit for %s in %s repository.', $sha, $repository)
-            );
-        }
+//        if (empty($files)) {
+//            throw new RuntimeException(
+//                sprintf('Unable to generate diff using commit for %s in %s repository.', $sha, $repository)
+//            );
+//        }
 
         return array_reduce(
             $files,
