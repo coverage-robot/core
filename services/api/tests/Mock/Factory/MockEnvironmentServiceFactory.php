@@ -3,8 +3,8 @@
 namespace App\Tests\Mock\Factory;
 
 use App\Enum\EnvironmentVariable;
-use App\Service\EnvironmentService;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -14,10 +14,10 @@ class MockEnvironmentServiceFactory
         TestCase $testCase,
         Environment $environment,
         array $variables = []
-    ): EnvironmentService&MockObject {
+    ): EnvironmentServiceInterface&MockObject {
         $variables = self::getEnvironmentVariablesWithMockDefaults($variables);
 
-        $mockEnvironmentService = $testCase->getMockBuilder(EnvironmentService::class)
+        $mockEnvironmentService = $testCase->getMockBuilder(EnvironmentServiceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

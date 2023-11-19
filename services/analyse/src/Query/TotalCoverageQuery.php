@@ -5,10 +5,9 @@ namespace App\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\CoverageQueryResult;
-use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Models\Enum\LineState;
@@ -29,7 +28,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
      */
     public function __construct(
         private readonly SerializerInterface $serializer,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);
     }

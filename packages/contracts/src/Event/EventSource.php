@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Event\Enum;
+namespace Packages\Contracts\Event;
 
 enum EventSource: string
 {

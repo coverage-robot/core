@@ -3,12 +3,12 @@
 namespace Packages\Event\Tests\Service;
 
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Event\Service\EventProcessorService;
-use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

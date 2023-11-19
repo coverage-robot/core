@@ -3,11 +3,10 @@
 namespace Packages\Telemetry;
 
 use Bref\Context\Context;
+use Packages\Telemetry\Enum\EnvironmentVariable;
 
 class TraceContext
 {
-    public const TRACE_ENV_VAR = '_X_AMZN_TRACE_ID';
-
     private const LAMBDA_INVOCATION_CONTEXT = 'LAMBDA_INVOCATION_CONTEXT';
 
     /**
@@ -23,7 +22,7 @@ class TraceContext
             return;
         }
 
-        putenv(self::TRACE_ENV_VAR . '=' . $context->getTraceId());
+        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $context->getTraceId());
     }
 
     /**
@@ -44,6 +43,6 @@ class TraceContext
             return;
         }
 
-        putenv(self::TRACE_ENV_VAR . '=' . (string)$context['traceId']);
+        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . (string)$context['traceId']);
     }
 }

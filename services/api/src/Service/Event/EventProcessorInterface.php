@@ -3,7 +3,7 @@
 namespace App\Service\Event;
 
 use Bref\Event\EventBridge\EventBridgeEvent;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.event_processor')]

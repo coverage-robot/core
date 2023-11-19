@@ -5,11 +5,11 @@ namespace App\Tests\Service\Event;
 use App\Client\SqsMessageClient;
 use App\Service\Event\UploadsStartedEventProcessor;
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsStarted;
-use Packages\Models\Enum\Provider;
-use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

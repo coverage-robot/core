@@ -3,12 +3,12 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -16,7 +16,7 @@ class SqsMessageClient
 {
     public function __construct(
         private readonly SqsClient $sqsClient,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {
     }

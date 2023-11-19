@@ -6,7 +6,6 @@ use App\Enum\EnvironmentVariable;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
-use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -15,7 +14,8 @@ use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
@@ -44,7 +44,7 @@ class DynamoDbClient
      */
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $dynamoDbClientLogger
     ) {

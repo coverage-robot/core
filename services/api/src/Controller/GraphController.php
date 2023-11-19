@@ -8,7 +8,7 @@ use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\BadgeService;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\TraceContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -7,7 +7,7 @@ use App\Exception\SigningException;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Metric\MetricService;
+use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

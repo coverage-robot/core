@@ -8,10 +8,10 @@ use App\Model\QueryParameterBag;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
-use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -27,7 +27,7 @@ class TagAvailabilityQuery implements QueryInterface
      */
     public function __construct(
         private readonly SerializerInterface $serializer,
-        private readonly EnvironmentService $environmentService
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
     }
 

@@ -5,7 +5,7 @@ namespace App\Tests\Client;
 use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\TestCase;
 
 class BigQueryClientTest extends TestCase

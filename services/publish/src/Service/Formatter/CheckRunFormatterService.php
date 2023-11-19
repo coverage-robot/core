@@ -2,7 +2,7 @@
 
 namespace App\Service\Formatter;
 
-use Packages\Models\Enum\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 
 class CheckRunFormatterService
 {

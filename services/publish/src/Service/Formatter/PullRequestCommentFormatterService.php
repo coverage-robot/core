@@ -4,8 +4,8 @@
 namespace App\Service\Formatter;
 
 use DateTimeZone;
-use Packages\Event\Model\EventInterface;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Contracts\Event\EventInterface;
+use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 
 class PullRequestCommentFormatterService
 {

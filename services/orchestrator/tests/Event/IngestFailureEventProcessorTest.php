@@ -12,10 +12,10 @@ use App\Model\Finalised;
 use App\Model\Ingestion;
 use App\Service\EventStoreService;
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
-use Packages\Models\Enum\Provider;
 use Packages\Models\Model\Tag;
 use Psr\Log\NullLogger;
 

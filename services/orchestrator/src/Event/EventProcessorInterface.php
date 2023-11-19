@@ -2,7 +2,6 @@
 
 namespace App\Event;
 
-use Packages\Event\Processor\EventProcessorInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
@@ -10,6 +9,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
  * in the event store.
  */
 #[AutoconfigureTag('app.orchestrator_event_processor')]
-interface OrchestratorEventProcessorInterface extends EventProcessorInterface
+interface EventProcessorInterface extends \Packages\Event\Processor\EventProcessorInterface
 {
 }

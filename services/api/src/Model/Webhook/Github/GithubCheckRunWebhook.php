@@ -7,8 +7,8 @@ use App\Enum\WebhookType;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\SignedWebhookInterface;
-use Packages\Models\Enum\JobState;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
+use Packages\Event\Enum\JobState;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
 class GithubCheckRunWebhook extends AbstractWebhook implements

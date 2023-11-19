@@ -4,9 +4,10 @@ namespace App\Service;
 
 use App\Enum\EnvironmentVariable;
 use App\Kernel;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
-class EnvironmentService
+class EnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(private readonly Kernel $kernel)
     {
@@ -17,8 +18,11 @@ class EnvironmentService
         return Environment::from($this->kernel->getEnvironment());
     }
 
-    public function getVariable(EnvironmentVariable $variable): string
+    /**
+     * @param EnvironmentVariable $variable
+     */
+    public function getVariable($variable): string
     {
-        return $_ENV[$variable->value] ?: (string)getenv($variable->value);
+        return (string)($_ENV[$variable->value] ?: getenv($variable->value));
     }
 }

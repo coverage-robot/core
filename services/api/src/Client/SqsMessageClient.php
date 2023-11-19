@@ -4,7 +4,7 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\WebhookInterface;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\SendMessageRequest;
@@ -16,7 +16,7 @@ class SqsMessageClient
 {
     public function __construct(
         private readonly SqsClient $sqsClient,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {
     }

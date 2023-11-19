@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12e22a2b72658e37a52b42ab8e835058",
+    "content-hash": "04f4979c55a7c425143fe326f9c34c1c",
     "packages": [
         {
             "name": "bref/bref",
@@ -254,14 +254,34 @@
             }
         },
         {
+            "name": "coverage-robot/contracts",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/contracts",
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Contracts\\": "src/"
+                }
+            },
+            "description": "Decoupled contracts usable across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "coverage-robot/event",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f7a43dce8b78364eef1ef8e9d8f30fe709bf70ab"
+                "reference": "356ff459d9c143e640efc116489b385975685aff"
             },
             "require": {
+                "coverage-robot/contracts": "^1.0",
                 "coverage-robot/models": "*",
                 "psr/log": "^3.0"
             },
@@ -291,6 +311,28 @@
             }
         },
         {
+            "name": "coverage-robot/message",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/message",
+                "reference": "60232743d0fb616dad0f70cbc02286cd5ffe54f6"
+            },
+            "require": {
+                "coverage-robot/event": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Message\\": "src/"
+                }
+            },
+            "description": "Decoupled queue messages usable across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "coverage-robot/models",
             "version": "1.0.0",
             "dist": {
@@ -315,11 +357,13 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "00d7815792d6ee805189f12bcff0433a0450c6d5"
+                "reference": "df1639a1e9e632ab4fbed174f9381a62b838ccd3"
             },
             "require": {
+                "coverage-robot/contracts": "^1.0",
                 "psr/clock": "^1.0",
-                "psr/log": "^3.0"
+                "psr/log": "^3.0",
+                "symfony/serializer": "^6.3"
             },
             "type": "library",
             "autoload": {

@@ -4,9 +4,9 @@ namespace App\Tests\Service\Publisher;
 
 use App\Service\Publisher\MessagePublisherService;
 use App\Tests\Mock\Factory\MockPublisherFactory;
-use Packages\Models\Enum\PublishableMessage;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Telemetry\Metric\MetricService;
+use Packages\Contracts\PublishableMessage\PublishableMessage;
+use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

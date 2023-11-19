@@ -2,7 +2,7 @@
 
 namespace App\Model\Webhook;
 
-use Packages\Models\Enum\JobState;
+use Packages\Event\Enum\JobState;
 
 interface PipelineStateChangeWebhookInterface
 {

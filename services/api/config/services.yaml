@@ -19,7 +19,9 @@ services:
 
     Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
 
-    Packages\Telemetry\Metric\MetricService: ~
+    Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
+
+    Packages\Telemetry\Service\MetricService: ~
 
     # Event processing
     App\Handler\EventHandler:

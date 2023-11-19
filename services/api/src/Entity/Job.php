@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\JobRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Packages\Models\Enum\JobState;
+use Packages\Event\Enum\JobState;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 #[ORM\UniqueConstraint(

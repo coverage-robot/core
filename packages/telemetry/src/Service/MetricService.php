@@ -1,7 +1,9 @@
 <?php
 
-namespace Packages\Telemetry\Metric;
+namespace Packages\Telemetry\Service;
 
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Enum\Resolution;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Model\Metric\Metadata;
@@ -27,6 +29,7 @@ class MetricService
     public function __construct(
         private readonly LoggerInterface $metricsLogger,
         private readonly ClockInterface $clock,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface&NormalizerInterface $serializer
     ) {
     }
@@ -127,8 +130,12 @@ class MetricService
     {
         return array_merge(
             [
-                self::FUNCTION_VERSION => getenv('AWS_LAMBDA_FUNCTION_VERSION'),
-                self::FUNCTION_NAME => getenv('AWS_LAMBDA_FUNCTION_NAME'),
+                self::FUNCTION_VERSION => $this->environmentService->getVariable(
+                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION
+                ),
+                self::FUNCTION_NAME => $this->environmentService->getVariable(
+                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION
+                ),
             ],
             ...$customProperties
         );

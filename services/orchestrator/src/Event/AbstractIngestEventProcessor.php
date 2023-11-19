@@ -9,7 +9,7 @@ use App\Model\Finalised;
 use App\Model\Ingestion;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;

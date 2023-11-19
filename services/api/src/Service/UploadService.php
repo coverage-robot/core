@@ -8,6 +8,7 @@ use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -25,7 +26,7 @@ class UploadService
      */
     public function __construct(
         private readonly UploadSignerService $uploadSignerService,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $uploadLogger

@@ -6,7 +6,7 @@ use App\Model\CachingPublishableCoverageData;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService

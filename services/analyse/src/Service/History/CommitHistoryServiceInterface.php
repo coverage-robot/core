@@ -2,7 +2,7 @@
 
 namespace App\Service\History;
 
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.commit_history')]

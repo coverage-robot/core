@@ -7,7 +7,7 @@ use App\Query\QueryInterface;
 use App\Service\QueryBuilderService;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;

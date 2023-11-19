@@ -3,11 +3,11 @@
 namespace App\Service\Event;
 
 use App\Client\SqsMessageClient;
-use Packages\Event\Enum\Event;
-use Packages\Event\Model\EventInterface;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\UploadsStarted;
-use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Model\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 

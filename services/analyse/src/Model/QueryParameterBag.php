@@ -3,8 +3,8 @@
 namespace App\Model;
 
 use App\Enum\QueryParameter;
-use Packages\Event\Model\EventInterface;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Provider\Provider;
 use WeakMap;
 
 /**

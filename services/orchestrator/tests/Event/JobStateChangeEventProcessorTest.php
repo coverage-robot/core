@@ -13,12 +13,12 @@ use App\Model\Job;
 use App\Service\EventStoreService;
 use DateInterval;
 use DateTimeImmutable;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
+use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
-use Packages\Models\Enum\JobState;
-use Packages\Models\Enum\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

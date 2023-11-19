@@ -1,11 +1,11 @@
 <?php
 
-namespace Packages\Models\Model\PublishableMessage;
+namespace Packages\Message\PublishableMessage;
 
 use Countable;
 use DateTimeInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
-use Packages\Models\Enum\PublishableMessage;
 
 class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {

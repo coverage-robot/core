@@ -4,8 +4,8 @@ namespace Packages\Event\Model;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Packages\Event\Enum\Event;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Event\Event;
+use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;

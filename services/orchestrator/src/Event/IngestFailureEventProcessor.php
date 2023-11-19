@@ -2,7 +2,7 @@
 
 namespace App\Event;
 
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
 
 class IngestFailureEventProcessor extends AbstractIngestEventProcessor
 {

@@ -4,8 +4,8 @@ namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use Packages\Event\Model\Upload;
+use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
 use PHPUnit\Framework\TestCase;
 
 class CheckAnnotationFormatterServiceTest extends TestCase

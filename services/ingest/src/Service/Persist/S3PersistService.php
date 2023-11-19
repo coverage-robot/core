@@ -3,12 +3,12 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
-use App\Service\EnvironmentService;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
-use Packages\Models\Model\Coverage;
 use Packages\Event\Model\Upload;
+use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -25,7 +25,7 @@ class S3PersistService implements PersistServiceInterface
      */
     public function __construct(
         private readonly SimpleS3Client $s3Client,
-        private readonly EnvironmentService $environmentService,
+        private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $s3PersistServiceLogger
     ) {

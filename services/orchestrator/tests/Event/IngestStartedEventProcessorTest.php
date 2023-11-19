@@ -3,7 +3,7 @@
 namespace App\Tests\Event;
 
 use App\Event\IngestStartedEventProcessor;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
 use Packages\Event\Model\IngestStarted;
 
 class IngestStartedEventProcessorTest extends AbstractIngestEventProcessorTestCase

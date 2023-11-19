@@ -8,9 +8,9 @@ use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
-use Packages\Models\Model\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Model\PublishableMessage\PublishableMessageInterface;
-use Packages\Models\Model\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 

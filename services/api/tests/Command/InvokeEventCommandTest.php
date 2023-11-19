@@ -4,7 +4,7 @@ namespace App\Tests\Command;
 
 use App\Handler\EventHandler;
 use Bref\Event\InvalidLambdaEvent;
-use Packages\Event\Enum\Event;
+use Packages\Contracts\Event\Event;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;

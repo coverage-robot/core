@@ -11,7 +11,7 @@ use App\Service\Webhook\WebhookProcessor;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
-use Packages\Models\Enum\JobState;
+use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

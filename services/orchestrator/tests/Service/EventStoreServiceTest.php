@@ -13,7 +13,7 @@ use App\Service\EventStoreService;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;

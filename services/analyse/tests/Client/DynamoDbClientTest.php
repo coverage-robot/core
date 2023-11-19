@@ -12,7 +12,7 @@ use AsyncAws\Core\Response;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use AsyncAws\DynamoDb\Result\GetItemOutput;
 use AsyncAws\DynamoDb\Result\PutItemOutput;
-use Packages\Models\Enum\Environment;
+use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

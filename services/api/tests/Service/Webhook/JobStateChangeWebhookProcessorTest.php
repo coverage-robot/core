@@ -10,8 +10,8 @@ use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use Packages\Models\Enum\Environment;
-use Packages\Models\Enum\JobState;
+use Packages\Contracts\Environment\Environment;
+use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

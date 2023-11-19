@@ -5,7 +5,7 @@ namespace App\Tests\Command;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;

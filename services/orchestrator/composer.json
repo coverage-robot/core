@@ -14,6 +14,7 @@
         "async-aws/event-bridge": "^1.5",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^0.2.1",
+        "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/models": "*",
         "coverage-robot/telemetry": "^1.0",
@@ -99,6 +100,10 @@
         {
             "type": "path",
             "url": "../../packages/telemetry"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/contracts"
         }
     ],
     "extra": {

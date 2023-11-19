@@ -1,12 +1,12 @@
 <?php
 
-namespace Packages\Models\Model\PublishableMessage;
+namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Packages\Models\Enum\LineState;
-use Packages\Models\Enum\PublishableMessage;
 
 class PublishableCheckAnnotationMessage implements PublishableMessageInterface
 {

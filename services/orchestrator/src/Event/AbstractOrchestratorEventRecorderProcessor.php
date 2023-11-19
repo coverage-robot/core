@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 use STS\Backoff\Backoff;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-abstract class AbstractOrchestratorEventRecorderProcessor implements OrchestratorEventProcessorInterface
+abstract class AbstractOrchestratorEventRecorderProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly EventStoreServiceInterface $eventStoreService,

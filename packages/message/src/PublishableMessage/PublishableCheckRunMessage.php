@@ -1,12 +1,11 @@
 <?php
 
-namespace Packages\Models\Model\PublishableMessage;
+namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
-use Packages\Models\Enum\PublishableCheckRunStatus;
-use Packages\Models\Enum\PublishableMessage;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
 {

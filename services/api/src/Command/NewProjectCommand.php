@@ -6,7 +6,7 @@ use App\Entity\Project;
 use App\Exception\AuthenticationException;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -3,7 +3,7 @@
 namespace App\Tests\Model;
 
 use App\Model\SigningParameters;
-use Packages\Models\Enum\Provider;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
 class SigningParametersTest extends TestCase
