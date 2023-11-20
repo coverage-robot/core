@@ -31,8 +31,8 @@ env:
     working-directory: './packages/telemetry/'
 
 jobs:
-    client-tests:
-        name: "Client Tests"
+    telemetry-tests:
+        name: "telemetry Tests"
         runs-on: ubuntu-latest
 
         steps:
