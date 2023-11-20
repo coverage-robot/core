@@ -11,10 +11,27 @@
         "coverage-robot/contracts": "^1.0",
         "symfony/serializer": "^6.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^10.4",
+        "estahn/phpunit-json-assertions": "^4.0",
+        "symfony/property-access": "^6.3",
+        "bref/bref": "^2.1"
+    },
     "autoload": {
         "psr-4": {
             "Packages\\Telemetry\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Packages\\Telemetry\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test:unit": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration=./phpunit.xml.dist"
+        ]
     },
     "repositories": [
         {

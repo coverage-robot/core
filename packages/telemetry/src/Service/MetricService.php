@@ -23,8 +23,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class MetricService
 {
     private const NAMESPACE = 'Metrics';
-    private const FUNCTION_VERSION = 'functionVersion';
-    private const FUNCTION_NAME = 'functionName';
+    public const FUNCTION_VERSION = 'functionVersion';
+    public const FUNCTION_NAME = 'functionName';
 
     public function __construct(
         private readonly LoggerInterface $metricsLogger,
