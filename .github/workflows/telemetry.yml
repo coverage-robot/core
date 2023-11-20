@@ -32,7 +32,7 @@ env:
 
 jobs:
     telemetry-tests:
-        name: "telemetry Tests"
+        name: "Telemetry Tests"
         runs-on: ubuntu-latest
 
         steps:
