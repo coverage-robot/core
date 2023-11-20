@@ -175,3 +175,16 @@ updates:
             - "php"
             - "chore"
             - "bump-patch"
+
+    ## Telemetry package dependencies
+    -   package-ecosystem: "composer"
+        directory: "packages/telemetry"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
