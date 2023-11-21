@@ -736,7 +736,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -755,7 +755,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "356ff459d9c143e640efc116489b385975685aff"
+                "reference": "e14d67cb8a26b4ff60532956f0d7517d7147404d"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -793,7 +793,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -812,7 +812,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "84d78f45595076336fc4dc95cd03ccff0dc18c83"
+                "reference": "5d892db29d4d69d77f7c2ef336cba569bfb371a1"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -7366,16 +7366,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v6.3.7",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "641472dd3d6dc3c4d0fdd1496ebd1b55c72e43d9"
+                "reference": "b3ad1515a276473f7919ac97e560017284a7c4bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/641472dd3d6dc3c4d0fdd1496ebd1b55c72e43d9",
-                "reference": "641472dd3d6dc3c4d0fdd1496ebd1b55c72e43d9",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/b3ad1515a276473f7919ac97e560017284a7c4bf",
+                "reference": "b3ad1515a276473f7919ac97e560017284a7c4bf",
                 "shasum": ""
             },
             "require": {
@@ -7440,7 +7440,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v6.3.7"
+                "source": "https://github.com/symfony/serializer/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -7456,7 +7456,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-26T18:15:14+00:00"
+            "time": "2023-11-07T10:11:25+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -10623,5 +10623,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
