@@ -32,6 +32,7 @@ env:
     php-version: "8.2"
     working-directory: './services/orchestrator'
     workspace: 'prod'
+    sentry-dsn: 'https://c644e5a97104f653906046185e8f2404@o4506265435176960.ingest.sentry.io/4506265484918784'
 
 jobs:
     build:
@@ -250,6 +251,7 @@ jobs:
                 uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    envkey_SENTRY_DSN: ${{ env.sentry-dsn }}
                     directory: ${{ env.working-directory }}
                     file_name: .env.local
                     fail_on_empty: false
