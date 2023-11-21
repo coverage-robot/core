@@ -32,6 +32,7 @@ env:
     php-version: "8.2"
     working-directory: './services/api'
     workspace: 'prod'
+    sentry-dsn: 'https://3fe0ad1c28c3c5d75ce984a7135c45b3@o4506265435176960.ingest.sentry.io/4506265495732224'
 
 jobs:
     build:
@@ -250,6 +251,7 @@ jobs:
                 uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    envkey_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
                     envkey_DATABASE_USERNAME: ${{ secrets.API_SERVICE_DB_USERNAME }}
                     envkey_DATABASE_PASSWORD: ${{ secrets.API_SERVICE_DB_PASSWORD }}
                     envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
