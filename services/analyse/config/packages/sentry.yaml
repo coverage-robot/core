@@ -1,7 +1,8 @@
 when@prod:
     sentry:
         dsn: '%env(SENTRY_DSN)%'
-        traces_sample_rate: 1.0
+        options:
+            traces_sample_rate: 1.0
 
         register_error_listener: false
         register_error_handler: false
