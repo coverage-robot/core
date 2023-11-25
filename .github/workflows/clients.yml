@@ -27,7 +27,7 @@ defaults:
         working-directory: './packages/clients/'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './packages/clients/'
 
 jobs:

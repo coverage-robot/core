@@ -29,7 +29,7 @@ defaults:
         working-directory: './services/api'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './services/api'
     workspace: 'prod'
     sentry-dsn: 'https://3fe0ad1c28c3c5d75ce984a7135c45b3@o4506265435176960.ingest.sentry.io/4506265495732224'

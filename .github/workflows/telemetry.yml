@@ -27,7 +27,7 @@ defaults:
         working-directory: './packages/telemetry/'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './packages/telemetry/'
 
 jobs:
