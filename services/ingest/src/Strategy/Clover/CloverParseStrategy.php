@@ -45,8 +45,15 @@ class CloverParseStrategy implements ParseStrategyInterface
             if (!$reader->read()) {
                 throw new ValueError('Unable to read XML.');
             }
-        } catch (ValueError $exception) {
-            $this->parseStrategyLogger->error('Unable to build XML reader.');
+        } catch (ValueError | ParseException) {
+            /**
+             * This happens _a lot_ when checking if a file is supported by the Clover parser because its
+             * very common that we _wont_ receive XML here (aka Lcov files), and any non-XML content will
+             * result in the XML reader (rightly) throwing an exception.
+             *
+             * In either case, no need to log anything here, just return that the file is not supported by
+             * the parser and expect that the caller will handle that (and any logging required).
+             */
             return false;
         }
 
