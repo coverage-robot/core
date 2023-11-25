@@ -3,11 +3,18 @@
 namespace Packages\Clients\Tests\Client\Github;
 
 use Github\Api\Apps;
+use Github\Api\GraphQL;
+use Github\Api\Issue;
+use Github\Api\PullRequest;
+use Github\Api\Repo;
+use Github\Api\Repository\Checks\CheckRuns;
 use Github\AuthMethod;
+use Github\ResultPager;
 use OutOfBoundsException;
 use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 class GithubAppInstallationClientTest extends TestCase
 {
@@ -114,5 +121,40 @@ class GithubAppInstallationClientTest extends TestCase
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
+    }
+
+    public function testCommonEndpointsAreAvailable(): void
+    {
+        $client = new GithubAppInstallationClient(
+            $this->createMock(GithubAppClient::class),
+            $this->createMock(GithubAppClient::class)
+        );
+
+        $this->assertInstanceOf(Issue::class, $client->issue());
+        $this->assertInstanceOf(Repo::class, $client->repo());
+        $this->assertInstanceOf(PullRequest::class, $client->pullRequest());
+        $this->assertInstanceOf(CheckRuns::class, $client->checkRuns());
+        $this->assertInstanceOf(GraphQL::class, $client->graphql());
+        $this->assertInstanceOf(ResultPager::class, $client->pagination());
+    }
+
+    public function testGettingLastResponse(): void
+    {
+        $mockLastResponse = $this->createMock(ResponseInterface::class);
+
+        $installationClient = $this->createMock(GithubAppClient::class);
+        $client = new GithubAppInstallationClient(
+            $this->createMock(GithubAppClient::class),
+            $installationClient
+        );
+
+        $installationClient->expects($this->once())
+            ->method('getLastResponse')
+            ->willReturn($mockLastResponse);
+
+        $this->assertEquals(
+            $mockLastResponse,
+            $client->getLastResponse()
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Packages\Clients\Tests\Client\Github;
 
+use Github\Api\Apps;
 use Lcobucci\JWT\UnencryptedToken;
 use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Clients\Generator\JwtGenerator;
@@ -28,5 +29,16 @@ class GithubAppClientTest extends TestCase
             'some-path/file.pem',
             $jwtGenerator
         );
+    }
+
+    public function testCommonEndpointsAreAvailable(): void
+    {
+        $client = new GithubAppClient(
+            'mock-app-id',
+            'some-path/file.pem',
+            $this->createMock(JwtGenerator::class)
+        );
+
+        $this->assertInstanceOf(Apps::class, $client->apps());
     }
 }
