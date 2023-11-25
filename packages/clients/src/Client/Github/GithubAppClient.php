@@ -13,11 +13,6 @@ use Packages\Clients\Generator\JwtGenerator;
 class GithubAppClient extends Client
 {
     /**
-     * @param string $appId
-     * @param JwtGenerator $jwtGenerator
-     * @param Builder|null $httpClientBuilder
-     * @param string|null $apiVersion
-     * @param string|null $enterpriseUrl
      * @throws ClientException
      */
     public function __construct(
