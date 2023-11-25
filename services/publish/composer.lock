@@ -220,7 +220,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "6b0b5dd4e64924471d6d36e9a613e5d75ebd61f9"
+                "reference": "1a6082f60334829af8fb782b32e1e6a9ca7e9dd6"
             },
             "require": {
                 "knplabs/github-api": "^3.11",
@@ -259,7 +259,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -278,7 +278,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "356ff459d9c143e640efc116489b385975685aff"
+                "reference": "e14d67cb8a26b4ff60532956f0d7517d7147404d"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -316,7 +316,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "60232743d0fb616dad0f70cbc02286cd5ffe54f6"
+                "reference": "d65d04218e2549ec8f3fbc7e94c5eae18bcf0c69"
             },
             "require": {
                 "coverage-robot/event": "^1.0"
@@ -338,7 +338,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -357,7 +357,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "84d78f45595076336fc4dc95cd03ccff0dc18c83"
+                "reference": "5d892db29d4d69d77f7c2ef336cba569bfb371a1"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -6001,16 +6001,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v6.3.7",
+            "version": "v6.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9758b6c69d179936435d0ffb577c3708d57e38a8"
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9758b6c69d179936435d0ffb577c3708d57e38a8",
-                "reference": "9758b6c69d179936435d0ffb577c3708d57e38a8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3493af8a8dad7fa91c77fa473ba23ecd95334a92",
+                "reference": "3493af8a8dad7fa91c77fa473ba23ecd95334a92",
                 "shasum": ""
             },
             "require": {
@@ -6053,7 +6053,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v6.3.7"
+                "source": "https://github.com/symfony/yaml/tree/v6.3.8"
             },
             "funding": [
                 {
@@ -6069,7 +6069,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-28T23:31:00+00:00"
+            "time": "2023-11-06T10:58:05+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -8684,5 +8684,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
