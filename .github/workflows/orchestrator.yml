@@ -29,7 +29,7 @@ defaults:
         working-directory: './services/orchestrator'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './services/orchestrator'
     workspace: 'prod'
     sentry-dsn: 'https://c644e5a97104f653906046185e8f2404@o4506265435176960.ingest.sentry.io/4506265484918784'

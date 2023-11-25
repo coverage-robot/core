@@ -10,7 +10,7 @@ variable "environment" {
 
 variable "php_version" {
   type    = string
-  default = "php-82"
+  default = "php-83"
 }
 
 variable "deployment_hash" {

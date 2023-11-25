@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile_inline: |
-        FROM bref/php-82-fpm-dev:2
+        FROM bref/php-83-fpm-dev:2
         COPY --from=bref/extra-gd-php-82:1 /opt /opt
 
     ports: [ '8000:8000' ]
@@ -19,7 +19,7 @@ services:
       HANDLER: public/index.php
 
   event_listener:
-    image: bref/php-82-fpm-dev:2
+    image: bref/php-83-fpm-dev:2
     volumes:
       - .:/var/task:ro
       - ./var:/var/task/var

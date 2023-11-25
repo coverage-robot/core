@@ -29,7 +29,7 @@ defaults:
         working-directory: './services/analyse'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './services/analyse'
     workspace: 'prod'
     sentry-dsn: 'https://11d57bc1e42c49e61647965b0b45f4ae@o4506265435176960.ingest.sentry.io/4506265470894081'

@@ -29,7 +29,7 @@ defaults:
         working-directory: './services/ingest'
 
 env:
-    php-version: "8.2"
+    php-version: "8.3"
     working-directory: './services/ingest'
     workspace: 'prod'
     sentry-dsn: 'https://6a792bd4106f38cbd9c195540f3a8147@o4506265435176960.ingest.sentry.io/4506265444220928'
