@@ -2,32 +2,27 @@
 
 namespace App\Event;
 
-use App\Client\DynamoDbClient;
 use App\Enum\OrchestratedEventState;
+use App\Event\Backoff\BackoffStrategyInterface;
+use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
 use App\Model\EventStateChangeCollection;
 use App\Model\Finalised;
 use App\Model\Ingestion;
 use App\Model\OrchestratedEventInterface;
+use App\Service\EventStoreService;
 use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use Psr\Log\LoggerInterface;
-use STS\Backoff\Backoff;
-use STS\Backoff\Strategies\PolynomialStrategy;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\Attribute\Required;
 
 trait OverallCommitStateAwareTrait
 {
-    /**
-     * The state changes seen for the finalised event.
-     *
-     * This event is special, as it should (by convention) only exist once in each
-     * commit.
-     */
-    private ?EventStateChangeCollection $finalisedEventStateChanges = null;
+    private BackoffStrategyInterface $backoffStrategy;
 
     public function __construct(
+        #[Autowire(service: EventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly DynamoDbClient $dynamoDbClient,
         private readonly LoggerInterface $eventProcessorLogger
     ) {
     }
@@ -36,9 +31,12 @@ trait OverallCommitStateAwareTrait
      * A helper method which looks at the event store and checks if there are any
      * events stored for the commit yet.
      */
-    public function isNoEventsForCommit(OrchestratedEventInterface $newState): bool
+    public function isNoEventsForCommit(OrchestratedEventInterface $currentState): bool
     {
-        $events = $this->dynamoDbClient->getEventStateChangesForCommit($newState);
+        $events = $this->eventStoreService->getAllStateChangesForCommit(
+            $currentState->getUniqueRepositoryIdentifier(),
+            $currentState->getCommit()
+        );
 
         return count($events) == 0;
     }
@@ -48,81 +46,70 @@ trait OverallCommitStateAwareTrait
      * 1. Any uploads which have been uploaded but not published to the version control provider yet.
      * 2. Other ongoing events, meaning the coverage may not yet be ready.
      *
-     * This method uses a polynomial backoff algorithm to retry checking the event
-     * store, in the case subsequent events are being written to the event store soon
-     * after.
-     *
-     * The retry interval is: 0ms, 150ms, 1200ms, 4050ms, 6000ms
+     * @see ReadyToFinaliseBackoffStrategy
      */
-    public function isReadyToFinalise(OrchestratedEventInterface $newState): bool
+    public function isReadyToFinalise(OrchestratedEventInterface $currentState): bool
     {
         $this->eventProcessorLogger->info(
             sprintf(
                 'Beginning polling for to see if all events remain finished in commit for %s.',
-                (string)$newState
+                (string)$currentState
             ),
-        );
-
-        $polling = new Backoff(
-            maxAttempts: 4,
-            strategy: new PolynomialStrategy(150, 3),
-            waitCap: 6000,
-            decider: static fn (
-                int $attempt,
-                int $maxAttempts,
-                ?bool $result
-            ) => ($attempt <= $maxAttempts) && $result == true
         );
 
         $previousTotalStateChanges = -1;
 
         /** @var bool $result */
-        $result = $polling->run(function () use ($newState, &$previousTotalStateChanges) {
-            $mostRecentEventStateChanges = $this->dynamoDbClient->getEventStateChangesForCommit($newState);
-
-            $currentTotalStateChanges = array_sum(
-                array_map(
-                    static fn(EventStateChangeCollection $stateChanges) => count($stateChanges->getEvents()),
-                    $mostRecentEventStateChanges
-                )
-            );
-
-            if (
-                $previousTotalStateChanges >= 0 &&
-                $currentTotalStateChanges > $previousTotalStateChanges
-            ) {
-                // Theres new state events since we last checked, so we should stop polling
-                // as a new event will have been processed and will have assessed our state
-                // as finished (i.e. we aren't needed anymore)
-                $this->eventProcessorLogger->info(
-                    sprintf(
-                        'New state events have been recorded since last check, stopping polling on %s.',
-                        (string)$newState
-                    ),
-                    [
-                        'previousTotalStateChanges' => $previousTotalStateChanges,
-                        'currentTotalStateChanges' => $currentTotalStateChanges
-                    ]
+        $result = $this->backoffStrategy
+            ->run(function () use ($currentState, &$previousTotalStateChanges) {
+                $mostRecentEventStateChanges = $this->eventStoreService->getAllStateChangesForCommit(
+                    $currentState->getUniqueRepositoryIdentifier(),
+                    $currentState->getCommit()
                 );
 
-                return false;
-            }
+                $currentTotalStateChanges = array_sum(
+                    array_map(
+                        static fn(EventStateChangeCollection $stateChanges) => count($stateChanges->getEvents()),
+                        $mostRecentEventStateChanges
+                    )
+                );
 
-            if ($this->isAnOngoingEventPresent($newState, $mostRecentEventStateChanges)) {
-                // At least one of the events is still ongoing, so we can stop polling
-                return false;
-            }
+                if (
+                    $previousTotalStateChanges >= 0 &&
+                    $currentTotalStateChanges > $previousTotalStateChanges
+                ) {
+                    // Theres new state events since we last checked, so we should stop polling
+                    // as a new event will have been processed and will have assessed our state
+                    // as finished (i.e. we aren't needed anymore)
+                    $this->eventProcessorLogger->info(
+                        sprintf(
+                            'New state events have been recorded since last check, stopping polling on %s.',
+                            (string)$currentState
+                        ),
+                        [
+                            'previousTotalStateChanges' => $previousTotalStateChanges,
+                            'currentTotalStateChanges' => $currentTotalStateChanges
+                        ]
+                    );
 
-            if ($this->isAlreadyFinalised($newState, $mostRecentEventStateChanges)) {
-                // All of the ingestion events have already been covered by a different
-                // finalised event, so we can stop polling
-                return false;
-            }
+                    return false;
+                }
 
-            $previousTotalStateChanges = $currentTotalStateChanges;
+                if ($this->isAnOngoingEventPresent($currentState, $mostRecentEventStateChanges)) {
+                    // At least one of the events is still ongoing, so we can stop polling
+                    return false;
+                }
 
-            return true;
-        });
+                if ($this->isAlreadyFinalised($currentState, $mostRecentEventStateChanges)) {
+                    // All of the ingestion events have already been covered by a different
+                    // finalised event, so we can stop polling
+                    return false;
+                }
+
+                $previousTotalStateChanges = $currentTotalStateChanges;
+
+                return true;
+            });
 
         return $result;
     }
@@ -136,21 +123,8 @@ trait OverallCommitStateAwareTrait
      */
     public function recordFinalisedEvent(Finalised $newFinalisedState): bool
     {
-        $currentFinalisedState = $this->finalisedEventStateChanges ?
-            $this->eventStoreService->reduceStateChangesToEvent($this->finalisedEventStateChanges)
-            : null;
-
         try {
-            $this->dynamoDbClient->storeStateChange(
-                $newFinalisedState,
-                $this->finalisedEventStateChanges ?
-                    count($this->finalisedEventStateChanges->getEvents()) + 1 :
-                    1,
-                $this->eventStoreService->getStateChangeForEvent(
-                    $currentFinalisedState,
-                    $newFinalisedState
-                )
-            );
+            return $this->eventStoreService->storeStateChange($newFinalisedState) !== false;
         } catch (ConditionalCheckFailedException) {
             $this->eventProcessorLogger->info(
                 'Finalised event has already been published, skipping.',
@@ -161,8 +135,6 @@ trait OverallCommitStateAwareTrait
 
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -178,33 +150,32 @@ trait OverallCommitStateAwareTrait
         array $collections
     ): bool {
         foreach ($collections as $stateChanges) {
-            try {
-                $event = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
+            $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
-                if ($event->getState() === OrchestratedEventState::ONGOING) {
-                    $this->eventProcessorLogger->info(
-                        sprintf(
-                            'Existing state is in ongoing state for %s.',
-                            (string)$newState
-                        ),
-                        [
-                            'ongoingEvent' => (string)$event,
-                            'stateChanges' => $stateChanges->count()
-                        ]
-                    );
-
-                    return true;
-                }
-            } catch (ExceptionInterface $e) {
+            if (!$previousState) {
                 $this->eventProcessorLogger->warning(
                     'Unable to reduce state changes back into an event, skipping.',
                     [
-                        'stateChanges' => $stateChanges,
-                        'exception' => $e
+                        'stateChanges' => $stateChanges
                     ]
                 );
 
                 continue;
+            }
+
+            if ($previousState->getState() === OrchestratedEventState::ONGOING) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        'Existing state is in ongoing state for %s.',
+                        (string)$newState
+                    ),
+                    [
+                        'ongoingEvent' => (string)$previousState,
+                        'stateChanges' => $stateChanges->count()
+                    ]
+                );
+
+                return true;
             }
         }
 
@@ -227,41 +198,39 @@ trait OverallCommitStateAwareTrait
         $finalisedTime = null;
 
         foreach ($collections as $stateChanges) {
-            try {
-                $event = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
+            $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
-                if ($event instanceof Ingestion) {
-                    if ($event->getState() === OrchestratedEventState::ONGOING) {
-                        continue;
-                    }
-
-                    if (
-                        !$lastIngestionTime ||
-                        $event->getEventTime() > $lastIngestionTime
-                    ) {
-                        $lastIngestionTime = $event->getEventTime();
-                    }
-                }
-
-                if ($event instanceof Finalised) {
-                    if (
-                        !$finalisedTime ||
-                        $event->getEventTime() > $finalisedTime
-                    ) {
-                        $finalisedTime = $event->getEventTime();
-                        $this->finalisedEventStateChanges = $stateChanges;
-                    }
-                }
-            } catch (ExceptionInterface $e) {
+            if (!$previousState) {
                 $this->eventProcessorLogger->warning(
                     'Unable to reduce state changes back into an event, skipping.',
                     [
-                        'stateChanges' => $stateChanges,
-                        'exception' => $e
+                        'stateChanges' => $stateChanges
                     ]
                 );
 
                 continue;
+            }
+
+            if ($previousState instanceof Ingestion) {
+                if ($previousState->getState() === OrchestratedEventState::ONGOING) {
+                    continue;
+                }
+
+                if (
+                    !$lastIngestionTime ||
+                    $previousState->getEventTime() > $lastIngestionTime
+                ) {
+                    $lastIngestionTime = $previousState->getEventTime();
+                }
+            }
+
+            if ($previousState instanceof Finalised) {
+                if (
+                    !$finalisedTime ||
+                    $previousState->getEventTime() > $finalisedTime
+                ) {
+                    $finalisedTime = $previousState->getEventTime();
+                }
             }
         }
 
@@ -283,5 +252,15 @@ trait OverallCommitStateAwareTrait
         }
 
         return $finalisedTime && $lastIngestionTime < $finalisedTime;
+    }
+
+    #[Required]
+    public function withReadyToFinaliseBackoffStrategy(
+        #[Autowire(service: ReadyToFinaliseBackoffStrategy::class)]
+        BackoffStrategyInterface $backoffStrategy
+    ): static {
+        $this->backoffStrategy = $backoffStrategy;
+
+        return $this;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Event;
 
-use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\IngestFailureEventProcessor;
@@ -17,7 +16,6 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
-use Psr\Log\NullLogger;
 
 class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
@@ -39,44 +37,31 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
         );
     }
 
-    public function testNotFinalisingWhenAlreadyBeenFinalised(): void
+    public function testHandlingEventWhenOthersOngoing(): void
     {
         $mockIngestion = $this->createMock(Ingestion::class);
         $mockIngestion->method('getState')
-            ->willReturn(OrchestratedEventState::FAILURE);
+            ->willReturn(OrchestratedEventState::ONGOING);
         $mockIngestion->expects($this->once())
             ->method('getEventTime')
             ->willReturn(new DateTimeImmutable());
-        $mockFinalised = $this->createMock(Finalised::class);
-        $mockFinalised->method('getState')
-            ->willReturn(OrchestratedEventState::SUCCESS);
 
         $mockEventStoreService = $this->createMock(EventStoreService::class);
-        $mockEventStoreService->expects($this->exactly(3))
+        $mockEventStoreService->expects($this->exactly(2))
             ->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
                 $mockIngestion,
-                $mockFinalised,
-                $mockFinalised
-            );
-        $mockEventStoreService->expects($this->once())
-            ->method('getStateChangeForEvent')
-            ->with(
                 $mockIngestion,
-                $this->isInstanceOf(Ingestion::class)
-            )
-            ->willReturn(['mock' => 'change']);
-
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
-        $mockDynamoDbClient->expects($this->atLeastOnce())
-            ->method('getEventStateChangesForCommit')
+            );
+        $mockEventStoreService->expects($this->atLeastOnce())
+            ->method('getAllStateChangesForCommit')
             ->willReturn(
                 [
                     new EventStateChangeCollection([])
                 ]
             );
-        $mockDynamoDbClient->expects($this->once())
-            ->method('getStateChangesForEvent')
+        $mockEventStoreService->expects($this->once())
+            ->method('getAllStateChangesForEvent')
             ->willReturn(
                 new EventStateChangeCollection([
                     new EventStateChange(
@@ -86,28 +71,100 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
                         'mock-repository',
                         1,
                         ['mock' => 'change'],
-                        1
+                        null
                     )
                 ])
             );
-        $mockDynamoDbClient->expects($this->once())
+        $mockEventStoreService->expects($this->once())
             ->method('storeStateChange')
-            ->with(
-                $this->isInstanceOf(Ingestion::class),
-                2,
-                ['mock' => 'change']
-            )
-            ->willReturn(true);
+            ->willReturn($this->createMock(EventStateChange::class));
 
         $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventClient->expects($this->never())
             ->method('publishEvent');
 
-        $ingestEventProcessor = new ($this::getEventProcessor())(
+        $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockDynamoDbClient,
-            $mockEventBridgeEventClient,
-            new NullLogger()
+            $mockEventBridgeEventClient
+        );
+
+        $this->assertTrue(
+            $ingestEventProcessor->process(
+                new ($this::getEvent())(
+                    new Upload(
+                        'mock-upload',
+                        Provider::GITHUB,
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-commit',
+                        [],
+                        'mock-ref',
+                        '',
+                        null,
+                        new Tag('mock-tag', 'mock-commit'),
+                        null
+                    ),
+                    new DateTimeImmutable()
+                )
+            )
+        );
+    }
+
+    public function testNotFinalisingWhenAlreadyBeenFinalised(): void
+    {
+        $mockIngestion = $this->createMock(Ingestion::class);
+        $mockIngestion->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
+        $mockIngestion->method('getEventTime')
+            ->willReturn(new DateTimeImmutable());
+        $mockFinalised = $this->createMock(Finalised::class);
+        $mockFinalised->method('getEventTime')
+            ->willReturn(new DateTimeImmutable());
+        $mockFinalised->method('getState')
+            ->willReturn(OrchestratedEventState::SUCCESS);
+
+        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService->method('reduceStateChangesToEvent')
+            ->willReturnOnConsecutiveCalls(
+                $mockIngestion,
+                $mockFinalised,
+                $mockIngestion,
+                $mockFinalised
+            );
+        $mockEventStoreService->expects($this->atLeastOnce())
+            ->method('getAllStateChangesForCommit')
+            ->willReturn(
+                [
+                    new EventStateChangeCollection([]),
+                    new EventStateChangeCollection([])
+                ]
+            );
+        $mockEventStoreService->expects($this->once())
+            ->method('getAllStateChangesForEvent')
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'change'],
+                        null
+                    )
+                ])
+            );
+        $mockEventStoreService->expects($this->once())
+            ->method('storeStateChange')
+            ->willReturn($this->createMock(EventStateChange::class));
+
+        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
+        $mockEventBridgeEventClient->expects($this->never())
+            ->method('publishEvent');
+
+        $ingestEventProcessor = $this->getIngestEventProcessor(
+            $mockEventStoreService,
+            $mockEventBridgeEventClient
         );
 
         $this->assertTrue(

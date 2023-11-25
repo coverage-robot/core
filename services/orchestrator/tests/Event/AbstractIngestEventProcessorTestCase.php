@@ -2,13 +2,14 @@
 
 namespace App\Tests\Event;
 
-use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
 use App\Event\AbstractIngestEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Ingestion;
 use App\Service\EventStoreService;
+use App\Tests\Mock\FakeEventStoreRecorderBackoffStrategy;
+use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
@@ -36,11 +37,9 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     public function testHandlingInvalidEvent(): void
     {
-        $ingestEventProcessor = new ($this::getEventProcessor())(
+        $ingestEventProcessor = $this->getIngestEventProcessor(
             $this->createMock(EventStoreService::class),
-            $this->createMock(DynamoDbClient::class),
-            $this->createMock(EventBridgeEventClient::class),
-            new NullLogger()
+            $this->createMock(EventBridgeEventClient::class)
         );
 
         $this->assertFalse(
@@ -66,87 +65,22 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     public function testHandlingEventWithNoExistingStateChanges(): void
     {
         $mockEventStoreService = $this->createMock(EventStoreService::class);
-        $mockEventStoreService->expects($this->never())
-            ->method('reduceStateChangesToEvent');
-        $mockEventStoreService->method('getStateChangeForEvent')
-            ->willReturn(['mock' => 'change']);
-
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
-        $mockDynamoDbClient->expects($this->once())
-            ->method('getStateChangesForEvent')
-            ->willReturn(new EventStateChangeCollection([]));
-        $mockDynamoDbClient->expects($this->atMost(2))
-            ->method('storeStateChange')
-            ->willReturn(true);
-
-        $ingestEventProcessor = new ($this::getEventProcessor())(
-            $mockEventStoreService,
-            $mockDynamoDbClient,
-            $this->createMock(EventBridgeEventClient::class),
-            new NullLogger()
-        );
-
-        $this->assertTrue(
-            $ingestEventProcessor->process(
-                new ($this::getEvent())(
-                    new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
-                        null
-                    ),
-                    new DateTimeImmutable()
-                )
-            )
-        );
-    }
-
-    public function testHandlingEventWithExistingStateChanges(): void
-    {
-        $mockIngestion = $this->createMock(Ingestion::class);
-        $mockIngestion->expects($this->once())
-            ->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
-
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
-            ->willReturn($mockIngestion);
-        $mockEventStoreService->method('getStateChangeForEvent')
+            ->willReturn(null);
+        $mockEventStoreService->method('getStateChangesBetweenEvent')
             ->willReturn(['mock' => 'change']);
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
-        $mockDynamoDbClient->expects($this->once())
-            ->method('getStateChangesForEvent')
-            ->willReturn(
-                new EventStateChangeCollection([
-                    new EventStateChange(
-                        Provider::GITHUB,
-                        'mock-identifier',
-                        'mock-owner',
-                        'mock-repository',
-                        1,
-                        ['mock' => 'change'],
-                        1
-                    )
-                ])
-            );
-        $mockDynamoDbClient->expects($this->atMost(2))
+        $mockEventStoreService->expects($this->once())
+            ->method('getAllStateChangesForEvent')
+            ->willReturn(new EventStateChangeCollection([]));
+        $mockEventStoreService->expects($this->atMost(2))
             ->method('storeStateChange')
-            ->willReturn(true);
+            ->willReturn($this->createMock(EventStateChange::class));
 
-        $ingestEventProcessor = new ($this::getEventProcessor())(
+        $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockDynamoDbClient,
-            $this->createMock(EventBridgeEventClient::class),
-            new NullLogger()
+            $this->createMock(EventBridgeEventClient::class)
         );
 
         $this->assertTrue(
@@ -183,12 +117,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
             ->willReturn($mockIngestion);
-        $mockEventStoreService->expects($this->never())
-            ->method('getStateChangeForEvent');
-
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
-        $mockDynamoDbClient->expects($this->once())
-            ->method('getStateChangesForEvent')
+        $mockEventStoreService->expects($this->once())
+            ->method('getAllStateChangesForEvent')
             ->willReturn(
                 new EventStateChangeCollection([
                     new EventStateChange(
@@ -198,18 +128,16 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-repository',
                         1,
                         ['mock' => 'change'],
-                        1
+                        null
                     )
                 ])
             );
-        $mockDynamoDbClient->expects($this->never())
+        $mockEventStoreService->expects($this->never())
             ->method('storeStateChange');
 
-        $ingestEventProcessor = new ($this::getEventProcessor())(
+        $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockDynamoDbClient,
-            $this->createMock(EventBridgeEventClient::class),
-            new NullLogger()
+            $this->createMock(EventBridgeEventClient::class)
         );
 
         $this->assertFalse(
@@ -232,5 +160,23 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                 )
             )
         );
+    }
+
+    protected function getIngestEventProcessor(
+        EventStoreService $mockEventStoreService,
+        EventBridgeEventClient $eventBridgeEventClient
+    ): AbstractIngestEventProcessor {
+        $ingestEventProcessor = new ($this::getEventProcessor())(
+            $mockEventStoreService,
+            $eventBridgeEventClient,
+            new NullLogger(),
+            new FakeEventStoreRecorderBackoffStrategy()
+        );
+
+        // Ensure any backoff which occurs when waiting to finalise the coverage
+        // is skipped.
+        $ingestEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+
+        return $ingestEventProcessor;
     }
 }

@@ -2,23 +2,20 @@
 
 namespace App\Event;
 
-use App\Client\DynamoDbClient;
+use App\Event\Backoff\BackoffStrategyInterface;
 use App\Exception\OutOfOrderEventException;
-use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use Exception;
 use Psr\Log\LoggerInterface;
-use STS\Backoff\Backoff;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 abstract class AbstractOrchestratorEventRecorderProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly DynamoDbClient $dynamoDbClient,
-        private readonly LoggerInterface $eventProcessorLogger
+        private readonly LoggerInterface $eventProcessorLogger,
+        private readonly BackoffStrategyInterface $backoffStrategy
     ) {
     }
 
@@ -32,40 +29,22 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
      *
      * @throws Exception
      */
-    protected function recordStateChangeInStore(OrchestratedEventInterface $newState): bool
+    protected function recordStateChangeInStore(OrchestratedEventInterface $previousState): bool
     {
-        $backoff = new Backoff(
-            maxAttempts: 3,
-            useJitter: true,
-            decider: function (
-                int $attempt,
-                int $maxAttempts,
-                ?bool $result,
-                ?Exception $exception = null
-            ) use ($newState) {
-                if ($exception instanceof OutOfOrderEventException) {
-                    // Theres no point in re-trying this, as the event is out of order (i.e.
-                    // a newer event has already been recorded)
-                    return false;
-                }
-
-                return ($attempt <= $maxAttempts) && (!$result || $exception);
-            }
-        );
-
         /**
          * @var bool|null $result
          */
-        $result = $backoff->run(function () use ($newState) {
-            $this->eventProcessorLogger->info(
-                sprintf(
-                    'Attempting to record state change for %s in event store.',
-                    (string)$newState
-                )
-            );
+        $result = $this->backoffStrategy
+            ->run(function () use ($previousState) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        'Attempting to record state change for %s in event store.',
+                        (string)$previousState
+                    )
+                );
 
-            return $this->tryToRecordStateChangeInStore($newState);
-        });
+                return $this->tryToRecordStateChangeInStore($previousState);
+            });
 
         return $result === true;
     }
@@ -82,67 +61,43 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
      * @throws ConditionalCheckFailedException
      * @throws OutOfOrderEventException
      */
-    private function tryToRecordStateChangeInStore(OrchestratedEventInterface $newState): bool
+    private function tryToRecordStateChangeInStore(OrchestratedEventInterface $currentState): bool
     {
-        $stateChanges = $this->dynamoDbClient->getStateChangesForEvent($newState);
+        $stateChanges = $this->eventStoreService->getAllStateChangesForEvent($currentState);
 
-        $currentState = $this->reduceToOrchestratorEvent($stateChanges);
+        $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
         if (
-            $currentState &&
-            $currentState->getEventTime() > $newState->getEventTime()
+            $previousState &&
+            $previousState->getEventTime() > $currentState->getEventTime()
         ) {
             $this->eventProcessorLogger->info(
                 sprintf(
-                    'Dropping change change for %s as it is older than the current state.',
-                    (string)$newState
+                    'Dropping change for %s as it is older than the current state.',
+                    (string)$currentState
                 ),
                 [
-                    'current' => $currentState->getEventTime(),
-                    'new' => $newState->getEventTime()
+                    'current' => $previousState->getEventTime(),
+                    'new' => $currentState->getEventTime()
                 ]
             );
 
             throw new OutOfOrderEventException('Event is older than the current state.');
         }
 
-        $change = $this->eventStoreService->getStateChangeForEvent(
-            $currentState,
-            $newState
-        );
-
-        if ($change === []) {
-            $this->eventProcessorLogger->info(
-                sprintf(
-                    'No change detected in event state for %s.',
-                    (string)$newState
-                ),
-                [
-                    'event' => $newState::class,
-                    'stateChanges' => $stateChanges
-                ]
-            );
-
-            return true;
-        }
-
         $this->eventProcessorLogger->info(
             sprintf(
                 'Change detected in event state for %s, recording in event store.',
-                (string)$newState
+                (string)$currentState
             ),
             [
-                'event' => $newState::class,
+                'event' => $currentState::class,
                 'stateChanges' => $stateChanges
             ]
         );
 
         try {
-            return $this->dynamoDbClient->storeStateChange(
-                $newState,
-                count($stateChanges) + 1,
-                $change
-            );
+            return $this->eventStoreService->storeStateChange($currentState) !== false;
         } catch (ConditionalCheckFailedException) {
             // An event has already been recorded with the version number we're attempting to
             // use. That means we haven't factored in the latest state of the event, so we should
@@ -150,36 +105,11 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
             $this->eventProcessorLogger->info(
                 sprintf(
                     'Conditional check for %s failed during persistence to the event store.',
-                    (string)$newState
+                    (string)$currentState
                 )
             );
 
             return false;
-        }
-    }
-
-    /**
-     * Reduce the state changes recorded in the event store down into the correct orchestrator event,
-     * or fallback in the case the event is corrupt in the event store (i.e cannot be deserialized).
-     */
-    protected function reduceToOrchestratorEvent(EventStateChangeCollection $stateChanges): ?OrchestratedEventInterface
-    {
-        if ($stateChanges->getEvents() === []) {
-            return null;
-        }
-
-        try {
-            return $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
-        } catch (ExceptionInterface $e) {
-            $this->eventProcessorLogger->error(
-                'Failed to reduce state changes into event.',
-                [
-                    'stateChanges' => $stateChanges,
-                    'exception' => $e
-                ]
-            );
-
-            return null;
         }
     }
 }
