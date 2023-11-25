@@ -8,6 +8,8 @@ use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
 
 class CachingQueryService implements QueryServiceInterface
@@ -17,6 +19,7 @@ class CachingQueryService implements QueryServiceInterface
         public readonly QueryService $queryService,
         public readonly QueryBuilderService $queryBuilderService,
         public readonly DynamoDbClient $dynamoDbClient,
+        private readonly MetricService $mertricService
     ) {
     }
 
@@ -65,6 +68,18 @@ class CachingQueryService implements QueryServiceInterface
 
             $result = $this->runUncachedQuery($queryClass, $parameterBag);
 
+            $this->mertricService->put(
+                metric: 'query-cache-miss',
+                value: 1,
+                unit: Unit::COUNT,
+                dimensions: [
+                    ['query']
+                ],
+                properties: [
+                    'query' => $queryClass
+                ]
+            );
+
             $this->dynamoDbClient->putQueryResultInCache($cacheKey, $result);
 
             return $result;
@@ -77,6 +92,18 @@ class CachingQueryService implements QueryServiceInterface
                 'result' => $result,
                 'queryClass' => $queryClass,
                 'parameterBag' => $parameterBag
+            ]
+        );
+
+        $this->mertricService->put(
+            metric: 'query-cache-hit',
+            value: 1,
+            unit: Unit::COUNT,
+            dimensions: [
+                ['query']
+            ],
+            properties: [
+                'query' => $queryClass
             ]
         );
 
