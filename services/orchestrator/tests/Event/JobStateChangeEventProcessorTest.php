@@ -52,10 +52,6 @@ class JobStateChangeEventProcessorTest extends TestCase
     public function testHandlingEventWithNoExistingStateChanges(): void
     {
         $mockEventStoreService = $this->createMock(EventStoreService::class);
-//        $mockEventStoreService->expects($this->never())
-//            ->method('reduceStateChangesToEvent');
-//        $mockEventStoreService->method('getStateChangesBetweenEvent')
-//            ->willReturn(['mock' => 'change']);
         $mockEventStoreService->expects($this->once())
             ->method('getAllStateChangesForEvent')
             ->willReturn(new EventStateChangeCollection([]));
@@ -84,10 +80,7 @@ class JobStateChangeEventProcessorTest extends TestCase
                     'commit',
                     null,
                     'external-id',
-                    0,
                     JobState::COMPLETED,
-                    JobState::IN_PROGRESS,
-                    false,
                     new DateTimeImmutable()
                 )
             )
@@ -145,10 +138,7 @@ class JobStateChangeEventProcessorTest extends TestCase
                     'commit',
                     null,
                     'external-id',
-                    0,
                     JobState::COMPLETED,
-                    JobState::IN_PROGRESS,
-                    false,
                     $eventTime->sub(new DateInterval('PT10S'))
                 )
             )
@@ -230,10 +220,7 @@ class JobStateChangeEventProcessorTest extends TestCase
                     'commit',
                     null,
                     'external-id',
-                    0,
                     JobState::COMPLETED,
-                    JobState::COMPLETED,
-                    false,
                     new DateTimeImmutable()
                 )
             )
@@ -313,10 +300,7 @@ class JobStateChangeEventProcessorTest extends TestCase
                     'commit',
                     null,
                     'external-id',
-                    0,
                     JobState::COMPLETED,
-                    JobState::COMPLETED,
-                    false,
                     new DateTimeImmutable()
                 )
             )

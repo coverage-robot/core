@@ -34,17 +34,6 @@ class JobStateChangeWebhookProcessorTest extends TestCase
             )
             ->willReturn(null);
         $mockJobRepository->expects($this->once())
-            ->method('findBy')
-            ->with(
-                [
-                    'project' => $mockProject,
-                    'commit' => 'mock-commit'
-                ]
-            )
-            ->willReturn([
-                $newJob
-            ]);
-        $mockJobRepository->expects($this->once())
             ->method('create')
             ->willReturn($newJob);
         $mockJobRepository->expects($this->once())
@@ -100,15 +89,6 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 ]
             )
             ->willReturn($job);
-        $mockJobRepository->expects($this->once())
-            ->method('findBy')
-            ->with(
-                [
-                    'project' => $mockProject,
-                    'commit' => 'mock-commit'
-                ]
-            )
-            ->willReturn([$job]);
         $mockJobRepository->expects($this->never())
             ->method('create');
         $mockJobRepository->expects($this->once())
