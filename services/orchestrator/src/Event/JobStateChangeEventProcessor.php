@@ -29,7 +29,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
         private readonly EventStoreServiceInterface $eventStoreService,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
         private readonly LoggerInterface $eventProcessorLogger,
-        #[Autowire(EventStoreRecorderBackoffStrategy::class)]
+        #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
     ) {
         parent::__construct(
