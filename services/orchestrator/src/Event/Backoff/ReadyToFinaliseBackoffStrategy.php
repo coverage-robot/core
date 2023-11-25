@@ -37,7 +37,6 @@ class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
     /**
      * @inheritDoc
      */
-    #[\Override]
     public function run(callable $callback): mixed
     {
         return $this->backoff->run($callback);

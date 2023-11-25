@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -21,11 +22,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class EventStoreService implements EventStoreServiceInterface
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface&DecoderInterface $serializer,
         private readonly DynamoDbClient $dynamoDbClient,
         private readonly LoggerInterface $eventStoreLogger
     ) {
@@ -134,9 +132,9 @@ class EventStoreService implements EventStoreServiceInterface
             );
         }
 
-        try {
-            $version = count($existingStateChanges) + 1;
+        $version = count($existingStateChanges) + 1;
 
+        try {
             $successful = $this->dynamoDbClient->storeStateChange($event, $version, $diff);
 
             if (!$successful) {
@@ -250,6 +248,11 @@ class EventStoreService implements EventStoreServiceInterface
      */
     private function parseEventStateChange(array $item): EventStateChange
     {
+        $eventTime = null;
+        if (isset($item['eventTime']) && is_string($item['eventTime']->getN())) {
+            $eventTime = DateTimeImmutable::createFromFormat('U', $item['eventTime']->getN()) ?: null;
+        }
+
         return new EventStateChange(
             Provider::from((string)$item['provider']->getS()),
             (string)(isset($item['identifier']) ? $item['identifier']->getS() : ''),
@@ -260,9 +263,7 @@ class EventStoreService implements EventStoreServiceInterface
                 (string)(isset($item['event']) ? $item['event']->getS() : '[]'),
                 'json'
             ),
-            isset($item['eventTime']) ?
-                DateTimeImmutable::createFromFormat('U', $item['eventTime']->getN())
-                : null
+            $eventTime
         );
     }
 }

@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
-use Override;
 use WeakMap;
 
 class CachingEventStoreService implements EventStoreServiceInterface
@@ -24,7 +23,6 @@ class CachingEventStoreService implements EventStoreServiceInterface
         $this->reducerCache = new WeakMap();
     }
 
-    #[Override]
     public function getStateChangesBetweenEvent(
         ?OrchestratedEventInterface $currentState,
         OrchestratedEventInterface $newState
@@ -32,31 +30,33 @@ class CachingEventStoreService implements EventStoreServiceInterface
         return $this->eventStoreService->getStateChangesBetweenEvent($currentState, $newState);
     }
 
-    #[Override]
-    public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface
+    public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface|null
     {
         if (isset($this->reducerCache[$stateChanges])) {
             return $this->reducerCache[$stateChanges];
         }
 
-        $this->reducerCache[$stateChanges] = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
+        $event = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
-        return $this->reducerCache[$stateChanges];
+        if ($event) {
+            $this->reducerCache[$stateChanges] = $event;
+
+            return $this->reducerCache[$stateChanges];
+        }
+
+        return $event;
     }
 
-    #[Override]
     public function storeStateChange(OrchestratedEventInterface $event): EventStateChange|false
     {
         return $this->eventStoreService->storeStateChange($event);
     }
 
-    #[Override]
     public function getAllStateChangesForCommit(string $repositoryIdentifier, string $commit): array
     {
         return $this->eventStoreService->getAllStateChangesForCommit($repositoryIdentifier, $commit);
     }
 
-    #[Override]
     public function getAllStateChangesForEvent(OrchestratedEventInterface $event): EventStateChangeCollection
     {
         return $this->eventStoreService->getAllStateChangesForEvent($event);
