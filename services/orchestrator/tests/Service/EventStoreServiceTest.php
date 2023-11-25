@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Client\DynamoDbClient;
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
 use App\Model\EventStateChange;
@@ -10,13 +11,14 @@ use App\Model\Ingestion;
 use App\Model\Job;
 use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
+use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventStoreServiceTest extends KernelTestCase
@@ -28,10 +30,12 @@ class EventStoreServiceTest extends KernelTestCase
         array $expectedStateChange
     ): void {
         $eventStoreService = new EventStoreService(
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            $this->createMock(DynamoDbClient::class),
+            new NullLogger()
         );
 
-        $stateChange = $eventStoreService->getStateChangeForEvent(
+        $stateChange = $eventStoreService->getStateChangesBetweenEvent(
             $currentState,
             $newState
         );
@@ -45,12 +49,14 @@ class EventStoreServiceTest extends KernelTestCase
     public function testThrowsExceptionWhenEventsAreNotComparable(): void
     {
         $eventStoreService = new EventStoreService(
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            $this->createMock(DynamoDbClient::class),
+            new NullLogger()
         );
 
         $this->expectException(InvalidArgumentException::class);
 
-        $eventStoreService->getStateChangeForEvent(
+        $eventStoreService->getStateChangesBetweenEvent(
             new Ingestion(
                 Provider::GITHUB,
                 'mock-owner',
@@ -78,7 +84,9 @@ class EventStoreServiceTest extends KernelTestCase
         OrchestratedEventInterface $expectedReducedState
     ): void {
         $eventStoreService = new EventStoreService(
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            $this->createMock(DynamoDbClient::class),
+            new NullLogger()
         );
 
         $reducedState = $eventStoreService->reduceStateChangesToEvent(
@@ -94,12 +102,12 @@ class EventStoreServiceTest extends KernelTestCase
     public function testReducingStateChangesWithCorruptEventSource(): void
     {
         $eventStoreService = new EventStoreService(
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            $this->createMock(DynamoDbClient::class),
+            new NullLogger()
         );
 
-        $this->expectException(MissingConstructorArgumentsException::class);
-
-        $eventStoreService->reduceStateChangesToEvent(
+        $previousEvent = $eventStoreService->reduceStateChangesToEvent(
             new EventStateChangeCollection(
                 [
                     new EventStateChange(
@@ -113,7 +121,7 @@ class EventStoreServiceTest extends KernelTestCase
                             'values' => ['x','y'],
                             'type' => OrchestratedEvent::JOB->value,
                         ],
-                        0
+                        null
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -124,10 +132,216 @@ class EventStoreServiceTest extends KernelTestCase
                         [
                             'new-value' => 'z'
                         ],
-                        0
+                        null
                     )
                 ]
             )
+        );
+
+        $this->assertNull($previousEvent);
+    }
+
+    public function testStoringEmptyStateChange(): void
+    {
+        /**
+         * @var SerializerInterface $serializer
+         */
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
+
+        $eventTime = new DateTimeImmutable();
+
+        $event = new Ingestion(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repo',
+            '1',
+            'mock-upload-id',
+            OrchestratedEventState::SUCCESS,
+            $eventTime
+        );
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getStateChangesForEvent')
+            ->willReturn([
+                [
+                    'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
+                    'version' => new AttributeValue(['N' => 1]),
+                    'event' => new AttributeValue(['S' => $serializer->serialize($event, 'json')]),
+                ],
+            ]);
+        $mockDynamoDbClient->expects($this->never())
+            ->method('storeStateChange');
+
+        $eventStoreService = new EventStoreService(
+            $serializer,
+            $mockDynamoDbClient,
+            new NullLogger()
+        );
+
+        $stateChange = $eventStoreService->storeStateChange($event);
+
+        $this->assertEquals(
+            [],
+            $stateChange->getEvent()
+        );
+    }
+
+    public function testStoringStateChanges(): void
+    {
+        /**
+         * @var SerializerInterface $serializer
+         */
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
+
+        $eventTime = new DateTimeImmutable();
+
+        $ongoingEvent = new Ingestion(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repo',
+            '1',
+            'mock-upload-id',
+            OrchestratedEventState::ONGOING,
+            $eventTime
+        );
+
+        $completeEvent = new Ingestion(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repo',
+            '1',
+            'mock-upload-id',
+            OrchestratedEventState::SUCCESS,
+            $eventTime
+        );
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getStateChangesForEvent')
+            ->willReturn([
+                [
+                    'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
+                    'version' => new AttributeValue(['N' => 1]),
+                    'event' => new AttributeValue(['S' => $serializer->serialize($ongoingEvent, 'json')]),
+                ],
+            ]);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('storeStateChange')
+            ->with(
+                $completeEvent,
+                2,
+                [
+                    'state' => OrchestratedEventState::SUCCESS->value,
+                ]
+            )
+            ->willReturn(true);
+
+        $eventStoreService = new EventStoreService(
+            $serializer,
+            $mockDynamoDbClient,
+            new NullLogger()
+        );
+
+        $stateChange = $eventStoreService->storeStateChange($completeEvent);
+
+        $this->assertEquals(
+            2,
+            $stateChange->getVersion()
+        );
+        $this->assertEquals(
+            [
+                'state' => OrchestratedEventState::SUCCESS->value,
+            ],
+            $stateChange->getEvent()
+        );
+    }
+
+
+    public function testGettingStateChangesForCommit(): void
+    {
+        /**
+         * @var SerializerInterface $serializer
+         */
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getEventStateChangesForCommit')
+            ->willReturn([
+                [
+                    'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
+                    'version' => new AttributeValue(['N' => 1]),
+                    'identifier' => new AttributeValue(['S' => 'mock-identifier-1']),
+                    'event' => new AttributeValue(['S' => '{"mock": "value"}']),
+                ],
+                [
+                    'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
+                    'version' => new AttributeValue(['N' => 1]),
+                    'identifier' => new AttributeValue(['S' => 'mock-identifier-2']),
+                    'event' => new AttributeValue(['S' => '{"mock": "value-2"}']),
+                ],
+                [
+                    'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
+                    'version' => new AttributeValue(['N' => 2]),
+                    'identifier' => new AttributeValue(['S' => 'mock-identifier-2']),
+                    'event' => new AttributeValue(['S' => '{"mock": "value-3"}']),
+                ],
+            ]);
+
+        $eventStoreService = new EventStoreService(
+            $serializer,
+            $mockDynamoDbClient,
+            new NullLogger()
+        );
+
+        $stateChanges = $eventStoreService->getAllStateChangesForCommit(
+            'mock-repository-identifier',
+            'mock-commit'
+        );
+
+        $this->assertEquals(
+            [
+                1 => new EventStateChange(
+                    Provider::GITHUB,
+                    'mock-identifier-1',
+                    '',
+                    '',
+                    1,
+                    [
+                        'mock' => 'value'
+                    ],
+                    null
+                )
+            ],
+            $stateChanges['mock-identifier-1']->getEvents()
+        );
+        $this->assertEquals(
+            [
+                1 =>  new EventStateChange(
+                    Provider::GITHUB,
+                    'mock-identifier-2',
+                    '',
+                    '',
+                    1,
+                    [
+                        'mock' => 'value-2'
+                    ],
+                    null
+                ),
+                2 =>  new EventStateChange(
+                    Provider::GITHUB,
+                    'mock-identifier-2',
+                    '',
+                    '',
+                    2,
+                    [
+                        'mock' => 'value-3'
+                    ],
+                    null
+                )
+            ],
+            $stateChanges['mock-identifier-2']->getEvents()
         );
     }
 
@@ -233,7 +447,7 @@ class EventStoreServiceTest extends KernelTestCase
                                 'type' => OrchestratedEvent::INGESTION->value,
                                 'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
                             ],
-                            0
+                            null
                         ),
                         new EventStateChange(
                             Provider::GITHUB,
@@ -244,7 +458,7 @@ class EventStoreServiceTest extends KernelTestCase
                             [
                                 'state' => OrchestratedEventState::SUCCESS->value,
                             ],
-                            0
+                            null
                         ),
                         new EventStateChange(
                             Provider::GITHUB,
@@ -255,7 +469,7 @@ class EventStoreServiceTest extends KernelTestCase
                             [
                                 'state' => OrchestratedEventState::ONGOING->value,
                             ],
-                            0
+                            null
                         ),
                         new EventStateChange(
                             Provider::GITHUB,
@@ -267,7 +481,7 @@ class EventStoreServiceTest extends KernelTestCase
                                 'commit' => '2',
                                 'state' => OrchestratedEventState::FAILURE->value,
                             ],
-                            0
+                            null
                         )
                     ]
                 ),
@@ -300,7 +514,7 @@ class EventStoreServiceTest extends KernelTestCase
                                 'eventTime' => $eventTime->format(DateTimeImmutable::ATOM),
                                 'externalId' => 'mock-external-id'
                             ],
-                            0
+                            null
                         ),
                         new EventStateChange(
                             Provider::GITHUB,
@@ -313,7 +527,7 @@ class EventStoreServiceTest extends KernelTestCase
                                 'eventTime' => $eventTime->add(new DateInterval('PT1S'))
                                     ->format(DateTimeImmutable::ATOM),
                             ],
-                            0
+                            null
                         ),
                         new EventStateChange(
                             Provider::GITHUB,
@@ -324,7 +538,7 @@ class EventStoreServiceTest extends KernelTestCase
                             [
                                 'state' => OrchestratedEventState::SUCCESS->value,
                             ],
-                            0
+                            null
                         )
                     ]
                 ),

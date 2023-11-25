@@ -2,11 +2,13 @@
 
 namespace App\Event;
 
-use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
+use App\Event\Backoff\BackoffStrategyInterface;
+use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
 use App\Model\Finalised;
 use App\Model\Job;
+use App\Service\CachingEventStoreService;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
@@ -23,16 +25,17 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
     use OverallCommitStateAwareTrait;
 
     public function __construct(
-        #[Autowire(service: 'App\Service\CachingEventStoreService')]
+        #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly DynamoDbClient $dynamoDbClient,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
-        private readonly LoggerInterface $eventProcessorLogger
+        private readonly LoggerInterface $eventProcessorLogger,
+        #[Autowire(EventStoreRecorderBackoffStrategy::class)]
+        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
     ) {
         parent::__construct(
             $eventStoreService,
-            $dynamoDbClient,
-            $eventProcessorLogger
+            $eventProcessorLogger,
+            $eventStoreRecorderBackoffStrategy
         );
     }
 

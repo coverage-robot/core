@@ -2,11 +2,13 @@
 
 namespace App\Event;
 
-use App\Client\DynamoDbClient;
 use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
+use App\Event\Backoff\BackoffStrategyInterface;
+use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
 use App\Model\Finalised;
 use App\Model\Ingestion;
+use App\Service\CachingEventStoreService;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Event\EventInterface;
@@ -23,16 +25,17 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
     use OverallCommitStateAwareTrait;
 
     public function __construct(
-        #[Autowire(service: 'App\Service\CachingEventStoreService')]
+        #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly DynamoDbClient $dynamoDbClient,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
-        private readonly LoggerInterface $eventProcessorLogger
+        private readonly LoggerInterface $eventProcessorLogger,
+        #[Autowire(EventStoreRecorderBackoffStrategy::class)]
+        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
     ) {
         parent::__construct(
             $eventStoreService,
-            $dynamoDbClient,
-            $eventProcessorLogger
+            $eventProcessorLogger,
+            $eventStoreRecorderBackoffStrategy
         );
     }
 
@@ -52,7 +55,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             return false;
         }
 
-        $newState = new Ingestion(
+        $currentState = new Ingestion(
             $event->getProvider(),
             $event->getOwner(),
             $event->getRepository(),
@@ -66,49 +69,49 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $event->getEventTime()
         );
 
-        if ($this->isNoEventsForCommit($newState)) {
+        if ($this->isNoEventsForCommit($currentState)) {
             $this->eventProcessorLogger->info(
                 'No events for commit, publishing event.',
                 [
                     'event' => (string)$event,
-                    'newState' => (string)$newState,
+                    'newState' => (string)$currentState,
                 ]
             );
 
             $this->eventBridgeEventClient->publishEvent(
                 new UploadsStarted(
-                    $newState->getProvider(),
-                    $newState->getOwner(),
-                    $newState->getRepository(),
+                    $currentState->getProvider(),
+                    $currentState->getOwner(),
+                    $currentState->getRepository(),
                     $event->getRef(),
-                    $newState->getCommit(),
+                    $currentState->getCommit(),
                     $event->getPullRequest(),
                     new DateTimeImmutable()
                 )
             );
         }
 
-        $hasRecordedStateChange = $this->recordStateChangeInStore($newState);
+        $hasRecordedStateChange = $this->recordStateChangeInStore($currentState);
 
         if (
             $hasRecordedStateChange &&
-            $newState->getState() !== OrchestratedEventState::ONGOING &&
-            $this->isReadyToFinalise($newState)
+            $currentState->getState() !== OrchestratedEventState::ONGOING &&
+            $this->isReadyToFinalise($currentState)
         ) {
             $this->eventProcessorLogger->info(
                 'All events are in a finished state, publishing event.',
                 [
                     'event' => (string)$event,
-                    'newState' => (string)$newState,
+                    'newState' => (string)$currentState,
                 ]
             );
 
             $finalisedEvent = new Finalised(
-                $newState->getProvider(),
-                $newState->getOwner(),
-                $newState->getRepository(),
+                $currentState->getProvider(),
+                $currentState->getOwner(),
+                $currentState->getRepository(),
                 $event->getRef(),
-                $newState->getCommit(),
+                $currentState->getCommit(),
                 $event->getPullRequest(),
                 new DateTimeImmutable()
             );

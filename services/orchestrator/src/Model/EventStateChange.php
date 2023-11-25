@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 
 class EventStateChange
@@ -13,7 +14,7 @@ class EventStateChange
         private readonly string $repository,
         private readonly int $version,
         private readonly array $event,
-        private readonly int $expiry
+        private readonly ?DateTimeImmutable $eventTime = null
     ) {
     }
 
@@ -47,8 +48,8 @@ class EventStateChange
         return $this->event;
     }
 
-    public function getExpiry(): int
+    private function getEventTime(): ?DateTimeImmutable
     {
-        return $this->expiry;
+        return $this->eventTime;
     }
 }
