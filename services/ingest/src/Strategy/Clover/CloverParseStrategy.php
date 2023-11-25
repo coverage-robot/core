@@ -45,7 +45,7 @@ class CloverParseStrategy implements ParseStrategyInterface
             if (!$reader->read()) {
                 throw new ValueError('Unable to read XML.');
             }
-        } catch (ValueError|ParseException) {
+        } catch (ValueError | ParseException) {
             /**
              * This happens _a lot_ when checking if a file is supported by the Clover parser because its
              * very common that we _wont_ receive XML here (aka Lcov files), and any non-XML content will
