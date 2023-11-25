@@ -42,7 +42,6 @@ class SqsMessageClientTest extends KernelTestCase
             100.0,
             100.0,
             1,
-            0,
             [],
             [],
             new DateTimeImmutable()

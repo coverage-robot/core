@@ -14,7 +14,6 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly float $coveragePercentage,
         private readonly float $diffCoveragePercentage,
         private readonly int $successfulUploads,
-        private readonly int $pendingUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
         private readonly DateTimeImmutable $validUntil,
@@ -56,11 +55,6 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getSuccessfulUploads(): int
     {
         return $this->successfulUploads;
-    }
-
-    public function getPendingUploads(): int
-    {
-        return $this->pendingUploads;
     }
 
     public function getTagCoverage(): array

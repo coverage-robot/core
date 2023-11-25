@@ -131,7 +131,6 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         $publishableCoverageData->getCoveragePercentage(),
                         $publishableCoverageData->getDiffCoveragePercentage(),
                         count($publishableCoverageData->getSuccessfulUploads()),
-                        0,
                         (array)$this->serializer->normalize($publishableCoverageData->getTagCoverage()->getTags()),
                         (array)$this->serializer->normalize(
                             $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()

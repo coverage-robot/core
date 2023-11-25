@@ -47,7 +47,6 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     100.0,
                     100.0,
                     2,
-                    0,
                     [
                         [
                             'tag' => [

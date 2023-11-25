@@ -40,7 +40,6 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                 100,
                 100,
                 1,
-                0,
                 [],
                 [],
                 new DateTimeImmutable()
@@ -116,7 +115,6 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                 100,
                 100,
                 1,
-                0,
                 [],
                 [],
                 new DateTimeImmutable()
@@ -194,7 +192,6 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                 100,
                 100,
                 1,
-                0,
                 [],
                 [],
                 new DateTimeImmutable()
