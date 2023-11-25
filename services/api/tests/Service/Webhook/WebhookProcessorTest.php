@@ -31,15 +31,9 @@ class WebhookProcessorTest extends KernelTestCase
             $this->createMock(Project::class),
             $this->getContainer()->get(SerializerInterface::class)
                 ->denormalize(
-                    array_merge(
-                        [
-                            'type' => $type->value,
-                        ],
-                        $payload
-                    ),
+                    ['type' => $type->value, ...$payload],
                     WebhookInterface::class
-                ),
-            true
+                )
         );
     }
 
@@ -50,7 +44,9 @@ class WebhookProcessorTest extends KernelTestCase
                 WebhookType::GITHUB_CHECK_RUN,
                 json_decode(
                     file_get_contents($payload),
-                    true
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
                 )
             ];
         }

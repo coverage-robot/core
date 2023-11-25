@@ -20,20 +20,6 @@ class QueryParameterBag
         $this->parameters = new WeakMap();
     }
 
-    /**
-     * @param QueryParameter $key
-     * @return (
-     *  $key is QueryParameter::COMMIT ?
-     *      string :
-     *      ($key is QueryParameter::LINE_SCOPE ?
-     *          array :
-     *          ($key is QueryParameter::PROVIDER ?
-     *              Provider :
-     *              int
-     *          )
-     *      )
-     * )|null
-     */
     public function get(QueryParameter $key): mixed
     {
         return $this->parameters[$key] ?? null;

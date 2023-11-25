@@ -68,7 +68,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
                     }
 
                     if ($line->getType() !== Line::REMOVED) {
-                        $offset++;
+                        ++$offset;
                     }
                 }
             }
@@ -153,7 +153,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
 
         return array_reduce(
             $files,
-            fn(string $diff, array $file) => <<<DIFF
+            static fn(string $diff, array $file) => <<<DIFF
                 $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}

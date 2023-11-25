@@ -13,7 +13,6 @@ class AuthenticationException extends Exception
 
     /**
      * @param Exception|null $exception
-     * @return self
      */
     public static function invalidUploadToken(): self
     {

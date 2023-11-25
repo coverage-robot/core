@@ -4,11 +4,11 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\WebhookInterface;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -29,7 +29,7 @@ class SqsMessageClient
             'MessageGroupId' => $webhook->getMessageGroup(),
         ];
 
-        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID)) {
+        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID) !== '') {
             /**
              * The trace header will be propagated to the next service in the chain if provided
              * from a previous request.

@@ -21,9 +21,11 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
         private readonly CarryforwardTagService $carryforwardTagService
     ) {
         /**
-         * @var WeakMap<EventInterface, array{ existingTags: Tag[], result: Tag[] }[]>
+         * @var WeakMap<EventInterface, array{ existingTags: Tag[], result: Tag[] }[]> $cache
          */
-        $this->cache = new WeakMap();
+        $cache = new WeakMap();
+
+        $this->cache = $cache;
     }
 
     /**

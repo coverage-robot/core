@@ -5,6 +5,7 @@ namespace App\Service\Carryforward;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
+use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -24,7 +25,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
     public function __construct(
         private readonly CommitHistoryService $commitHistoryService,
-        #[Autowire(service: 'App\Service\CachingQueryService')]
+        #[Autowire(service: CachingQueryService::class)]
         private readonly QueryServiceInterface $queryService,
         private readonly LoggerInterface $carryforwardLogger
     ) {
@@ -49,7 +50,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tagsNotSeen = array_filter(
             $tagAvailability->getAvailableTagNames(),
-            function (string $tagName) use ($existingTags) {
+            static function (string $tagName) use ($existingTags) {
                 foreach ($existingTags as $tag) {
                     if ($tag->getName() === $tagName) {
                         return false;
@@ -60,7 +61,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             }
         );
 
-        for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; $page++) {
+        for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
             if ($tagsNotSeen === []) {
                 break;
             }

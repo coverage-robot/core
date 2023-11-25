@@ -12,11 +12,11 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class CoverageAnalyserService
 {
     public function __construct(
-        #[Autowire(service: 'App\Service\CachingQueryService')]
+        #[Autowire(service: \App\Service\CachingQueryService::class)]
         private readonly QueryServiceInterface $queryService,
-        #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
+        #[Autowire(service: \App\Service\Diff\CachingDiffParserService::class)]
         private readonly DiffParserServiceInterface $diffParser,
-        #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
+        #[Autowire(service: \App\Service\Carryforward\CachingCarryforwardTagService::class)]
         private readonly CarryforwardTagServiceInterface $carryforwardTagService
     ) {
     }

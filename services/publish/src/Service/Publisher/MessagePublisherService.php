@@ -20,9 +20,6 @@ class MessagePublisherService
 
     /**
      * Publish the message with _all_ publishers which support it.
-     *
-     * @param PublishableMessageInterface $publishableMessage
-     * @return bool
      */
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {

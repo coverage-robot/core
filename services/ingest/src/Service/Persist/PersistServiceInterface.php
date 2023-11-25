@@ -13,9 +13,6 @@ interface PersistServiceInterface
      * Persist a parsed coverage file to a particular service. For example, S3 or
      * BigQuery.
      *
-     * @param Upload $upload
-     * @param Coverage $coverage
-     * @return bool
      */
     public function persist(Upload $upload, Coverage $coverage): bool;
 
@@ -25,7 +22,6 @@ interface PersistServiceInterface
      *
      * The higher the number, the earlier the persistence service will be located in the collection.
      *
-     * @return int
      */
     public static function getPriority(): int;
 }

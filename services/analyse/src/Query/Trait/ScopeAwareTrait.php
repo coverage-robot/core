@@ -146,8 +146,11 @@ trait ScopeAwareTrait
      */
     private static function getLimit(?QueryParameterBag $parameterBag): string
     {
-        if ($parameterBag && $parameterBag->has(QueryParameter::LIMIT)) {
-            return 'LIMIT ' . (string)$parameterBag->get(QueryParameter::LIMIT);
+        /** @var int|string|null $limit */
+        $limit = $parameterBag?->get(QueryParameter::LIMIT);
+
+        if ($limit !== null) {
+            return 'LIMIT ' . $limit;
         }
 
         return '';

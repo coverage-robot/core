@@ -6,9 +6,9 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -127,12 +127,10 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
-        $carryforwardScope = !empty(
-            $scope = self::getCarryforwardTagsScope(
-                $parameterBag,
-                self::UPLOAD_TABLE_ALIAS
-            )
-        ) ? 'OR ' . $scope : '';
+        $carryforwardScope = ($scope = self::getCarryforwardTagsScope(
+            $parameterBag,
+            self::UPLOAD_TABLE_ALIAS
+        )) === '' ? '' : 'OR ' . $scope;
 
         return <<<SQL
         (

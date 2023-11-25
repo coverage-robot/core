@@ -16,9 +16,11 @@ class CachingDiffParserService implements DiffParserServiceInterface
         private readonly DiffParserService $diffParserService
     ) {
         /**
-         * @var WeakMap<EventInterface, int[][]>
+         * @var WeakMap<EventInterface, int[][]> $cache
          */
-        $this->cache = new WeakMap();
+        $cache = new WeakMap();
+
+        $this->cache = $cache;
     }
 
     public function get(EventInterface $event): array

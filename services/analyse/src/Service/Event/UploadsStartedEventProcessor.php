@@ -18,6 +18,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
         private readonly SqsMessageClient $sqsMessageClient
     ) {
     }
+
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof UploadsStarted) {

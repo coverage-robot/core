@@ -3,12 +3,12 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use JsonException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,7 +38,7 @@ class EventBridgeEventClient
             ),
         ];
 
-        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID)) {
+        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID) !== '') {
             /**
              * The trace header will be propagated to the next service in the chain if provided
              * from a previous request.

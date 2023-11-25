@@ -7,10 +7,10 @@ use App\Client\GoogleCloudStorageClient;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PersistException;
 use App\Service\BigQueryMetadataBuilderService;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
@@ -20,17 +20,10 @@ use Psr\Log\LoggerInterface;
 
 class GcsPersistService implements PersistServiceInterface
 {
-    public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
+    final public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
 
     private const OUTPUT_KEY = '%s%s.json';
 
-    /**
-     * @param GoogleCloudStorageClient $googleCloudStorageClient
-     * @param BigQueryClient $bigQueryClient
-     * @param BigQueryMetadataBuilderService $bigQueryMetadataBuilderService
-     * @param EnvironmentServiceInterface $environmentService
-     * @param LoggerInterface $gcsPersistServiceLogger
-     */
     public function __construct(
         private readonly GoogleCloudStorageClient $googleCloudStorageClient,
         private readonly BigQueryClient $bigQueryClient,
@@ -41,11 +34,6 @@ class GcsPersistService implements PersistServiceInterface
     ) {
     }
 
-    /**
-     * @param Upload $upload
-     * @param Coverage $coverage
-     * @return bool
-     */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         $body = $this->getLineCoverageFileBody($upload, $coverage);
@@ -196,7 +184,8 @@ class GcsPersistService implements PersistServiceInterface
                             $coverage,
                             $file,
                             $line
-                        )
+                        ),
+                        JSON_THROW_ON_ERROR
                     ) . "\n"
                 );
             }

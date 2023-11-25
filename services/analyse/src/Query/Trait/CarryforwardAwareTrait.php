@@ -67,7 +67,7 @@ trait CarryforwardAwareTrait
 
             $filtering = implode(' OR ', $filtering);
 
-            $repositoryScope = !empty($repositoryScope) ? 'AND ' . $repositoryScope : '';
+            $repositoryScope = $repositoryScope === '' ? '' : 'AND ' . $repositoryScope;
 
             return <<<SQL
             (

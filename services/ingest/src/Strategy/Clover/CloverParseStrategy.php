@@ -19,11 +19,15 @@ use XMLReader;
 class CloverParseStrategy implements ParseStrategyInterface
 {
     private const PROJECT = 'project';
+
     private const FILE = 'file';
+
     private const LINE = 'line';
 
     private const STATEMENT = 'stmt';
+
     private const METHOD = 'method';
+
     private const CONDITION = 'cond';
 
     public function __construct(
@@ -170,6 +174,7 @@ class CloverParseStrategy implements ParseStrategyInterface
                 if ($line !== null) {
                     end($files)->setLine($line);
                 }
+
                 break;
         }
 

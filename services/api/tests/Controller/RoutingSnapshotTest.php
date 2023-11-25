@@ -12,8 +12,8 @@ class RoutingSnapshotTest extends KernelTestCase
     {
         try {
             $router = (static::getContainer())->get('router');
-        } catch (Exception $e) {
-            $this->fail($e->getMessage());
+        } catch (Exception $exception) {
+            $this->fail($exception->getMessage());
         }
 
         if ($router === null) {

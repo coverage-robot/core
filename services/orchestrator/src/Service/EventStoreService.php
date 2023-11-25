@@ -36,16 +36,16 @@ class EventStoreService implements EventStoreServiceInterface
         ?OrchestratedEventInterface $currentState,
         OrchestratedEventInterface $newState
     ): array {
-        if (!$currentState) {
+        if (!$currentState instanceof OrchestratedEventInterface) {
             return (array)$this->serializer->normalize($newState);
         }
 
-        if (get_class($currentState) !== get_class($newState)) {
+        if ($currentState::class !== $newState::class) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Events must be of the same type. %s and %s provided.',
-                    get_class($currentState),
-                    get_class($newState)
+                    $currentState::class,
+                    $newState::class
                 )
             );
         }
@@ -66,10 +66,10 @@ class EventStoreService implements EventStoreServiceInterface
     {
         $latestKnownState = array_reduce(
             $stateChanges->getEvents(),
-            static fn (array $finalState, EventStateChange $stateChange) => array_merge(
-                $finalState,
-                $stateChange->getEvent()
-            ),
+            static fn (array $finalState, EventStateChange $stateChange) => [
+                ...$finalState,
+                ...$stateChange->getEvent()
+            ],
             []
         );
 
@@ -197,16 +197,16 @@ class EventStoreService implements EventStoreServiceInterface
             }
 
             return $stateChanges;
-        } catch (HttpException $exception) {
+        } catch (HttpException $httpException) {
             $this->eventStoreLogger->error(
                 'Failed to retrieve changes for identifier.',
                 [
                     'identifier' => $repositoryIdentifier,
-                    'exception' => $exception
+                    'exception' => $httpException
                 ]
             );
 
-            throw new EventStoreException('Failed to retrieve changes for identifier.', 0, $exception);
+            throw new EventStoreException('Failed to retrieve changes for identifier.', 0, $httpException);
         }
     }
 
@@ -227,16 +227,16 @@ class EventStoreService implements EventStoreServiceInterface
             }
 
             return $stateChanges;
-        } catch (HttpException $exception) {
+        } catch (HttpException $httpException) {
             $this->eventStoreLogger->error(
                 'Failed to retrieve changes for identifier.',
                 [
                     'identifier' => (string)$event,
-                    'exception' => $exception
+                    'exception' => $httpException
                 ]
             );
 
-            throw new EventStoreException('Failed to retrieve changes for identifier.', 0, $exception);
+            throw new EventStoreException('Failed to retrieve changes for identifier.', 0, $httpException);
         }
     }
 

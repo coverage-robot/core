@@ -3,12 +3,12 @@
 namespace App\Command;
 
 use App\Handler\EventHandler;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -34,7 +34,7 @@ class InvokeCommand extends Command
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $this->addArgument('key', InputArgument::REQUIRED, 'The key of the file to retrieve');
     }
@@ -64,8 +64,8 @@ class InvokeCommand extends Command
             );
 
             return Command::SUCCESS;
-        } catch (InvalidLambdaEvent $e) {
-            $output->writeln($e->getMessage());
+        } catch (InvalidLambdaEvent $invalidLambdaEvent) {
+            $output->writeln($invalidLambdaEvent->getMessage());
             return Command::FAILURE;
         }
     }

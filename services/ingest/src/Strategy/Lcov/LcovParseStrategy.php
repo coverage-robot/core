@@ -17,10 +17,13 @@ use Psr\Log\LoggerInterface;
 class LcovParseStrategy implements ParseStrategyInterface
 {
     private const FILE = 'SF';
+
     private const LINE_DATA = 'DA';
 
     private const BRANCH_DATA = 'BRDA';
+
     private const FUNCTION = 'FN';
+
     private const FUNCTION_DATA = 'FNDA';
 
     private const LINE_STRUCTURE = '/^(?<type>\w+):(?<data>.*)$/';
@@ -40,7 +43,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         'BRH' => '\d+$'
     ];
 
-    public const END_OF_RECORD_MARKER = 'end_of_record';
+    final public const END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
         private readonly LoggerInterface $parseStrategyLogger,
@@ -59,7 +62,7 @@ class LcovParseStrategy implements ParseStrategyInterface
             $record = trim($record);
 
             // Skip empty lines and end-of-record markers
-            if (empty($record) || $record === self::END_OF_RECORD_MARKER) {
+            if ($record === '' || $record === self::END_OF_RECORD_MARKER) {
                 continue;
             }
 
@@ -107,7 +110,7 @@ class LcovParseStrategy implements ParseStrategyInterface
             $record = trim($record);
 
             // Skip empty lines and end-of-record markers
-            if (empty($record) || $record === self::END_OF_RECORD_MARKER) {
+            if ($record === '' || $record === self::END_OF_RECORD_MARKER) {
                 continue;
             }
 
@@ -162,6 +165,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                         )
                     );
                 }
+
                 break;
             case self::BRANCH_DATA:
                 $lineNumber = $extractedData['lineNumber'];
@@ -196,6 +200,7 @@ class LcovParseStrategy implements ParseStrategyInterface
                         )
                     );
                 }
+
                 break;
         }
 

@@ -34,12 +34,13 @@ class EventHandler extends SqsHandler
          */
         $messages = array_reduce(
             $messages,
-            function (array $messages, PublishableMessageInterface $message) {
+            static function (array $messages, PublishableMessageInterface $message) {
+
                 if ($message instanceof PublishableMessageCollection) {
-                    return array_merge($messages, $message->getMessages());
+                    return [...$messages, ...$message->getMessages()];
                 }
 
-                return array_merge($messages, [$message]);
+                return [...$messages, $message];
             },
             []
         );
@@ -82,7 +83,7 @@ class EventHandler extends SqsHandler
             );
             $currentNewestMessage = $messages[$attributes['MessageGroupId']] ?? null;
 
-            if (!$currentNewestMessage) {
+            if ($currentNewestMessage === null) {
                 // This is the first set of messages to publish for this owner/repository
                 $messages[$attributes['MessageGroupId']] = $newMessage;
                 continue;

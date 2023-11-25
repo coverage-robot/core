@@ -18,9 +18,11 @@ class CachingEventStoreService implements EventStoreServiceInterface
         private readonly EventStoreService $eventStoreService
     ) {
         /**
-         * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface>
+         * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface> $cache
          */
-        $this->reducerCache = new WeakMap();
+        $cache = new WeakMap();
+
+        $this->reducerCache = $cache;
     }
 
     public function getStateChangesBetweenEvent(
@@ -38,7 +40,7 @@ class CachingEventStoreService implements EventStoreServiceInterface
 
         $event = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
-        if ($event) {
+        if ($event instanceof OrchestratedEventInterface) {
             $this->reducerCache[$stateChanges] = $event;
 
             return $this->reducerCache[$stateChanges];

@@ -114,6 +114,9 @@ jobs:
             -   name: Run PHP_CodeSniffer
                 run: composer lint:style
 
+            -   name: Run Rector
+                run: composer lint:rector
+
             -   name: Run Psalm
                 run: composer lint:static-analysis
 

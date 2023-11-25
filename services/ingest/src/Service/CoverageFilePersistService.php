@@ -21,9 +21,6 @@ class CoverageFilePersistService
     /**
      * Persist a parsed project's coverage file into all supported services.
      *
-     * @param Upload $upload
-     * @param Coverage $coverage
-     * @return bool
      */
     public function persist(Upload $upload, Coverage $coverage): bool
     {

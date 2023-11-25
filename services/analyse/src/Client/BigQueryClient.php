@@ -3,8 +3,8 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\BigQuery\Dataset;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient
 {

@@ -31,7 +31,7 @@ class CachingPublishableCoverageDataTest extends TestCase
 
     private DiffParserService|MockObject $mockDiffParserService;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -89,7 +89,7 @@ class CachingPublishableCoverageDataTest extends TestCase
             DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
         );
 
-        $this->mockQueryService->expects($this->once(2))
+        $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls($result);
 
@@ -117,7 +117,7 @@ class CachingPublishableCoverageDataTest extends TestCase
             DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, '2023-09-09T01:22:00+0000')
         );
 
-        $this->mockQueryService->expects($this->once(2))
+        $this->mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls($result);
 

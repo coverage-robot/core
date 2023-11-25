@@ -14,7 +14,7 @@ use Packages\Event\Enum\JobState;
 #[ORM\Index(
     columns: ['project_id', 'commit']
 )]
-class Job
+class Job implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

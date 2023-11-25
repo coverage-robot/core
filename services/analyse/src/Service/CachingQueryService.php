@@ -53,7 +53,7 @@ class CachingQueryService implements QueryServiceInterface
 
         $result = $this->dynamoDbClient->tryFromQueryCache($cacheKey);
 
-        if (!$result) {
+        if (!$result instanceof QueryResultInterface) {
             $this->queryServiceLogger->info(
                 'Cache miss. Running query and caching result.',
                 [

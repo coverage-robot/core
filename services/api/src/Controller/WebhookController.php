@@ -56,28 +56,22 @@ class WebhookController extends AbstractController
              * webhook event correctly.
              */
             $webhook = $this->serializer->denormalize(
-                array_merge(
-                    $request->toArray(),
-                    [
-                        'type' => WebhookType::tryFrom(
-                            sprintf(
-                                '%s_%s',
-                                Provider::tryFrom($provider)?->value ?? '',
-                                $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
-                            )
-                        )?->value,
-                        'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest($request)
-                    ]
-                ),
+                [...$request->toArray(), 'type' => WebhookType::tryFrom(
+                    sprintf(
+                        '%s_%s',
+                        Provider::tryFrom($provider)?->value ?? '',
+                        $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
+                    )
+                )?->value, 'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest($request)],
                 WebhookInterface::class
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             // Occurs whenever the denormalized fails to denormalize the payload. This
             // common as providers frequently send payloads which aren't ones want to act on
             $this->webhookLogger->info(
                 'Failed to denormalize webhook payload.',
                 [
-                    'exception' => $e,
+                    'exception' => $exception,
                 ]
             );
 
@@ -123,10 +117,12 @@ class WebhookController extends AbstractController
             EnvironmentVariable::WEBHOOK_SECRET
         );
 
+        $signature = $webhook->getSignature();
+
         if (
-            !$webhook->getSignature() ||
+            !$signature ||
             !$this->webhookSignatureService->validatePayloadSignature(
-                (string)$webhook->getSignature(),
+                $signature,
                 $originalPayload,
                 $secret
             )

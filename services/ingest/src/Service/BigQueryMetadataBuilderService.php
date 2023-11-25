@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Exception\PersistException;
+use DateTimeImmutable;
 use JsonException;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
@@ -46,7 +47,7 @@ class BigQueryMetadataBuilderService
             'tag' => $upload->getTag()->getName(),
             'sourceFormat' => $coverage->getSourceFormat(),
             'fileName' => $file->getFileName(),
-            'generatedAt' => $coverage->getGeneratedAt() ?
+            'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
                 $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
                 null,
             'type' => $line->getType(),
@@ -80,9 +81,7 @@ class BigQueryMetadataBuilderService
         $line = $this->serializer->normalize($line);
 
         $metadata = array_map(
-            function (mixed $key, mixed $value): ?array {
-                return $this->mapMetadataRecord($key, $value);
-            },
+            fn(mixed $key, mixed $value): ?array => $this->mapMetadataRecord($key, $value),
             array_keys($line),
             array_values($line)
         );
@@ -90,6 +89,11 @@ class BigQueryMetadataBuilderService
         return array_filter($metadata);
     }
 
+    /**
+     * @param (int|string) $key
+     *
+     * @psalm-param array-key $key
+     */
     private function mapMetadataRecord(mixed $key, mixed $value): ?array
     {
         try {
@@ -112,7 +116,6 @@ class BigQueryMetadataBuilderService
 
     /**
      * @throws JsonException
-     * @throws PersistException
      */
     private function stringifyDataType(mixed $value): string
     {

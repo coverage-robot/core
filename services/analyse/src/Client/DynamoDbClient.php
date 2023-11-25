@@ -4,9 +4,9 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Input\GetItemInput;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -44,12 +44,12 @@ class DynamoDbClient
             );
 
             $response->resolve();
-        } catch (HttpException $exception) {
+        } catch (HttpException $httpException) {
             $this->dynamoDbClientLogger->error(
                 'Failed to retrieve query result in cache.',
                 [
                     'cacheKey' => $cacheKey,
-                    'exception' => $exception
+                    'exception' => $httpException
                 ]
             );
 
@@ -98,12 +98,12 @@ class DynamoDbClient
             );
 
             $response->resolve();
-        } catch (HttpException $exception) {
+        } catch (HttpException $httpException) {
             $this->dynamoDbClientLogger->error(
                 'Failed to put query result in cache.',
                 [
                     'cacheKey' => $cacheKey,
-                    'exception' => $exception
+                    'exception' => $httpException
                 ]
             );
 

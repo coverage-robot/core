@@ -14,7 +14,10 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
+use App\Service\CachingQueryService;
+use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
+use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
@@ -26,11 +29,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public const DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
 
     public function __construct(
-        #[Autowire(service: 'App\Service\CachingQueryService')]
+        #[Autowire(service: CachingQueryService::class)]
         protected readonly QueryServiceInterface $queryService,
-        #[Autowire(service: 'App\Service\Diff\CachingDiffParserService')]
+        #[Autowire(service: CachingDiffParserService::class)]
         protected readonly DiffParserServiceInterface $diffParser,
-        #[Autowire(service: 'App\Service\Carryforward\CachingCarryforwardTagService')]
+        #[Autowire(service: CachingCarryforwardTagService::class)]
         protected readonly CarryforwardTagServiceInterface $carryforwardTagService,
         protected readonly EventInterface $event
     ) {
