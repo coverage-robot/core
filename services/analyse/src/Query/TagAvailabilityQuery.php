@@ -61,7 +61,26 @@ class TagAvailabilityQuery implements QueryInterface
             );
         }
 
-        throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
+        if (
+            !$parameterBag->has(QueryParameter::REPOSITORY) ||
+            !is_string($parameterBag->get(QueryParameter::REPOSITORY))
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
+        }
+
+        if (
+            !$parameterBag->has(QueryParameter::OWNER) ||
+            !is_string($parameterBag->get(QueryParameter::OWNER))
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::OWNER);
+        }
+
+        if (
+            !$parameterBag->has(QueryParameter::PROVIDER) ||
+            !$parameterBag->get(QueryParameter::PROVIDER) instanceof Provider
+        ) {
+            throw QueryException::invalidParameters(QueryParameter::PROVIDER);
+        }
     }
 
     /**

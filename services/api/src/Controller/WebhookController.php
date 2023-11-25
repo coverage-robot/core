@@ -56,13 +56,17 @@ class WebhookController extends AbstractController
              * webhook event correctly.
              */
             $webhook = $this->serializer->denormalize(
-                [...$request->toArray(), 'type' => WebhookType::tryFrom(
-                    sprintf(
-                        '%s_%s',
-                        Provider::tryFrom($provider)?->value ?? '',
-                        $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
-                    )
-                )?->value, 'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest($request)],
+                [
+                    ...$request->toArray(),
+                    'type' => WebhookType::tryFrom(
+                        sprintf(
+                            '%s_%s',
+                            Provider::tryFrom($provider)?->value ?? '',
+                            $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
+                        )
+                    )?->value,
+                    'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest($request)
+                ],
                 WebhookInterface::class
             );
         } catch (Exception $exception) {

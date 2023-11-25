@@ -72,9 +72,11 @@ jobs:
             -   name: Warm testing environment cache
                 run: php bin/console cache:warmup --env=test
 
+                # The base rector config needs to be available for the linting step
             -   name: Archive build package
                 run: |
                     cp -r ${{ github.workspace }}/.git ./
+                    cp -r ${{ github.workspace }}/rector.php ./
                     zip -q -r build.zip ./
 
             -   name: Upload build package to artifact storage
@@ -105,6 +107,7 @@ jobs:
                 run: |
                     umask 644
                     unzip -q build.zip -d ./
+                    mv ./rector.php ${{ github.workspace }}/rector.php
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
@@ -155,6 +158,7 @@ jobs:
                 run: |
                     umask 644
                     unzip -q build.zip -d ./
+                    mv ./rector.php ${{ github.workspace }}/rector.php
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
@@ -209,6 +213,7 @@ jobs:
                 run: |
                     umask 644
                     unzip -q build.zip -d ./
+                    mv ./rector.php ${{ github.workspace }}/rector.php
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: aws-actions/configure-aws-credentials@v4
