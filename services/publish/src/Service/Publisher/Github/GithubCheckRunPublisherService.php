@@ -339,7 +339,8 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     ): array {
         return array_filter(
             $publishableMessage->getAnnotations(),
-            function (PublishableCheckAnnotationMessage $annotation) use ($currentAnnotations) {
+            static function (PublishableCheckAnnotationMessage $annotation) use ($currentAnnotations) {
+
                 foreach ($currentAnnotations as $currentAnnotation) {
                     if (
                         $annotation->getFileName() === $currentAnnotation['path'] &&
@@ -379,7 +380,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 )
         );
 
-        if (!empty($checkRuns)) {
+        if ($checkRuns !== []) {
             $checkRun = reset($checkRuns);
 
             $checkRunId = $checkRun['id'];

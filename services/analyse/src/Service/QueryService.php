@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 class QueryService implements QueryServiceInterface
 {
     /**
-     * @param BigQueryClient $bigQueryClient
      * @param QueryInterface[] $queries
      */
     public function __construct(

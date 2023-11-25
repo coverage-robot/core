@@ -11,7 +11,7 @@ class RetrievalException extends RuntimeException
     {
         return new RetrievalException(
             sprintf('An error occurred when retrieving: %s.', $exception->getMessage()),
-            intval($exception->getCode()),
+            (int) $exception->getCode(),
             $exception
         );
     }

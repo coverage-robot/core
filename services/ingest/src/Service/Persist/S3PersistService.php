@@ -3,10 +3,10 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
@@ -32,9 +32,6 @@ class S3PersistService implements PersistServiceInterface
     }
 
     /**
-     * @param Upload $upload
-     * @param Coverage $coverage
-     * @return bool
      * @throws JsonException
      */
     public function persist(Upload $upload, Coverage $coverage): bool
@@ -145,11 +142,7 @@ class S3PersistService implements PersistServiceInterface
                     implode(
                         ', ',
                         array_map(
-                        /**
-                         * @param array-key $key
-                         * @throws JsonException
-                         */
-                            static fn(string $key, string|array $value) => sprintf(
+                            static fn(string|int $key, string|array $value): string => sprintf(
                                 '%s: %s',
                                 ucfirst((string)$key),
                                 json_encode($value, JSON_THROW_ON_ERROR)

@@ -16,12 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 class MockQueryFactory
 {
     /**
-     * @param TestCase $testCase
-     * @param ContainerInterface $container
-     * @param string $queryClass
      * @param string|null $queryString
      * @param mixed|null $parsedResults
-     * @return QueryInterface|MockObject
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

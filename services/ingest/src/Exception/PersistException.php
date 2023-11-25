@@ -11,7 +11,7 @@ class PersistException extends RuntimeException
     {
         return new PersistException(
             sprintf('An error occurred when persisting: %s.', $exception->getMessage()),
-            intval($exception->getCode()),
+            (int) $exception->getCode(),
             $exception
         );
     }

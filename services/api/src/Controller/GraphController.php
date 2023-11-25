@@ -60,10 +60,10 @@ class GraphController extends AbstractController
                     'Content-Type' => 'image/svg+xml',
                 ]
             );
-        } catch (AuthenticationException $e) {
+        } catch (AuthenticationException $authenticationException) {
             return $this->json(
                 [
-                    'error' => $e->getMessage()
+                    'error' => $authenticationException->getMessage()
                 ],
                 Response::HTTP_UNAUTHORIZED
             );

@@ -55,7 +55,7 @@ class TagAvailabilityQuery implements QueryInterface
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
-        if (!$parameterBag) {
+        if (!$parameterBag instanceof QueryParameterBag) {
             throw new QueryException(
                 sprintf('Query %s requires parameters to be provided.', self::class)
             );

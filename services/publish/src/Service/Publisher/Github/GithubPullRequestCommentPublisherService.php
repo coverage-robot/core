@@ -132,7 +132,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
+            static fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
                 $comment['user']['node_id'] === $botId
         );
 

@@ -17,8 +17,6 @@ interface ParseStrategyInterface
      * that if this method returns true, the parser will do a best-effort attempt
      * to produce a valid model of the coverage data.
      *
-     * @param string $content
-     * @return bool
      */
     public function supports(string $content): bool;
 
@@ -26,9 +24,6 @@ interface ParseStrategyInterface
      * Parse an arbitrary string (which is presumed to be a coverage file) using a given
      * strategy.
      *
-     * @param string $projectRoot
-     * @param string $content
-     * @return Coverage
      */
     public function parse(string $projectRoot, string $content): Coverage;
 }

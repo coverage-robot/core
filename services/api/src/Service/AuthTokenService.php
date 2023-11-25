@@ -17,8 +17,9 @@ class AuthTokenService
     /**
      * Produces a token with a length of 50 (`TOKEN_LENGTH * 2`)
      */
-    public const TOKEN_LENGTH = 25;
-    public const MAX_TOKEN_RETRIES = 3;
+    final public const TOKEN_LENGTH = 25;
+
+    final public const MAX_TOKEN_RETRIES = 3;
 
     public function __construct(
         private readonly ProjectRepository $projectRepository,
@@ -56,9 +57,20 @@ class AuthTokenService
 
         $authHeader = $request->headers->get('Authorization');
 
-        if (!is_string($authHeader) || !str_starts_with($authHeader, 'Basic ')) {
+        if ($authHeader === null) {
             $this->authTokenLogger->info(
-                'Authorization header provided, but in an unsupported wrong format.',
+                'Authorization header not provided.',
+                [
+                    'request' => $request->toArray()
+                ]
+            );
+
+            return null;
+        }
+
+        if (!str_starts_with($authHeader, 'Basic ')) {
+            $this->authTokenLogger->info(
+                'Authorization header provided, but in an unsupported wrong format (not Basic).',
                 [
                     'headers' => $authHeader,
                     'request' => $request->toArray()
@@ -70,7 +82,7 @@ class AuthTokenService
         // Decode the encoded token from the request header
         $uploadToken = base64_decode(
             substr(
-                (string)$authHeader,
+                $authHeader,
                 6
             )
         );
@@ -180,7 +192,7 @@ class AuthTokenService
 
             $isUnique = $this->projectRepository->findOneBy([$field => $token]) === null;
 
-            $attempts++;
+            ++$attempts;
         } while ($attempts < self::MAX_TOKEN_RETRIES && !$isUnique);
 
         if (!$isUnique) {

@@ -50,7 +50,7 @@ class TotalUploadsQuery implements QueryInterface
             ) as successfulTags,
             COALESCE(STRING(MAX(ingestTime)), NULL) as latestSuccessfulUpload
         FROM
-            `$table`
+            `{$table}`
         WHERE
             {$commitScope} AND
             {$repositoryScope}
@@ -86,7 +86,7 @@ class TotalUploadsQuery implements QueryInterface
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
-        if (!$parameterBag) {
+        if (!$parameterBag instanceof QueryParameterBag) {
             throw new QueryException(
                 sprintf('Query %s requires parameters to be provided.', self::class)
             );
@@ -94,11 +94,11 @@ class TotalUploadsQuery implements QueryInterface
 
         if (
             !$parameterBag->has(QueryParameter::COMMIT) ||
-            !(
-                is_array($parameterBag->get(QueryParameter::COMMIT)) ||
-                is_string($parameterBag->get(QueryParameter::COMMIT))
+            (
+                !is_array($parameterBag->get(QueryParameter::COMMIT)) &&
+                !is_string($parameterBag->get(QueryParameter::COMMIT))
             ) ||
-            empty($parameterBag->get(QueryParameter::COMMIT))
+            ($parameterBag->get(QueryParameter::COMMIT) === [] || $parameterBag->get(QueryParameter::COMMIT) === '')
         ) {
             throw QueryException::invalidParameters(QueryParameter::COMMIT);
         }

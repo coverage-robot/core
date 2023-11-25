@@ -41,11 +41,6 @@ class MockEnvironmentServiceFactory
 
     private static function getEnvironmentVariablesWithMockDefaults(array $variables): array
     {
-        return array_merge(
-            [
-                EnvironmentVariable::TRACE_ID->value => 'mock-trace-id'
-            ],
-            $variables
-        );
+        return [EnvironmentVariable::TRACE_ID->value => 'mock-trace-id', ...$variables];
     }
 }

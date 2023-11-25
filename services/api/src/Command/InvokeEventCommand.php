@@ -40,8 +40,8 @@ class InvokeEventCommand extends Command
             );
 
             return Command::SUCCESS;
-        } catch (InvalidLambdaEvent $e) {
-            $output->writeln($e->getMessage());
+        } catch (InvalidLambdaEvent $invalidLambdaEvent) {
+            $output->writeln($invalidLambdaEvent->getMessage());
             return Command::FAILURE;
         }
     }

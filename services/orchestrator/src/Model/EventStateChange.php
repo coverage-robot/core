@@ -48,7 +48,7 @@ class EventStateChange
         return $this->event;
     }
 
-    private function getEventTime(): ?DateTimeImmutable
+    public function getEventTime(): ?DateTimeImmutable
     {
         return $this->eventTime;
     }

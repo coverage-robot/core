@@ -68,15 +68,15 @@ class UploadService
                 $parameters,
                 SigningParameters::class
             );
-        } catch (SigningException $exception) {
+        } catch (SigningException $signingException) {
             $this->uploadLogger->error(
-                $exception->getMessage(),
+                $signingException->getMessage(),
                 [
                     'parameters' => $parameters
                 ]
             );
 
-            throw $exception;
+            throw $signingException;
         }
     }
 
@@ -115,16 +115,14 @@ class UploadService
         SigningParameters $signingParameters
     ): PutObjectRequest {
         /** @var array<string, string> $metadata */
-        $metadata = array_merge(
-            (array)$this->serializer->normalize($signingParameters),
-            [
-                'uploadId' => $uploadId,
-                'parent' => $this->serializer->serialize(
-                    $signingParameters->getParent(),
-                    'json'
-                )
-            ]
-        );
+        $metadata = [
+            ...(array)$this->serializer->normalize($signingParameters),
+            'uploadId' => $uploadId,
+            'parent' => $this->serializer->serialize(
+                $signingParameters->getParent(),
+                'json'
+            )
+        ];
 
         return new PutObjectRequest([
             'Bucket' => $bucket,

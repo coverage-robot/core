@@ -57,26 +57,24 @@ class EventHandler extends S3Handler
         foreach ($event->getRecords() as $coverageFile) {
             try {
                 $source = $this->retrieveFile($coverageFile);
-                $metadata = array_merge(
-                    $source->getMetadata(),
-                    [
-                        'uploadId' => $source->getMetadata()['uploadid'] ??
-                                $source->getMetadata()['uploadId'] ?? null,
-                        'projectRoot' => $source->getMetadata()['projectroot'] ??
-                                $source->getMetadata()['projectRoot'] ?? null,
-                        'pullRequest' => $source->getMetadata()['pullrequest'] ??
-                                $source->getMetadata()['pullRequest'] ?? null,
-                        'tag' => [
-                            'name' => $source->getMetadata()['tag'],
-                            'commit' => $source->getMetadata()['commit']
-                        ],
-                        'parent' => $this->serializer->deserialize(
-                            $source->getMetadata()['parent'],
-                            'string[]',
-                            'json'
-                        )
-                    ]
-                );
+                $metadata = [
+                    ...$source->getMetadata(),
+                    'uploadId' => $source->getMetadata()['uploadid'] ??
+                        $source->getMetadata()['uploadId'] ?? null,
+                    'projectRoot' => $source->getMetadata()['projectroot'] ??
+                        $source->getMetadata()['projectRoot'] ?? null,
+                    'pullRequest' => $source->getMetadata()['pullrequest'] ??
+                        $source->getMetadata()['pullRequest'] ?? null,
+                    'tag' => [
+                        'name' => $source->getMetadata()['tag'],
+                        'commit' => $source->getMetadata()['commit']
+                    ],
+                    'parent' => $this->serializer->deserialize(
+                        $source->getMetadata()['parent'],
+                        'string[]',
+                        'json'
+                    )
+                ];
 
                 $upload = $this->serializer->denormalize(
                     $metadata,

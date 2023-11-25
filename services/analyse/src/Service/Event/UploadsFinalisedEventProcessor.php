@@ -105,7 +105,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         PublishableCoverageDataInterface $publishableCoverageData
     ): bool {
         $annotations = array_map(
-            function (LineCoverageQueryResult $line) use ($uploadsFinalised, $publishableCoverageData) {
+            static function (LineCoverageQueryResult $line) use ($uploadsFinalised, $publishableCoverageData) {
+
                 if ($line->getState() !== LineState::UNCOVERED) {
                     return null;
                 }

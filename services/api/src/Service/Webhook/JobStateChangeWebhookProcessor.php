@@ -134,7 +134,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             ]
         );
 
-        if (!$job) {
+        if ($job === null) {
             return $this->jobRepository->create(
                 $project,
                 $webhook->getCommit(),

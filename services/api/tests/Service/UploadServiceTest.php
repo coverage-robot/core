@@ -51,11 +51,11 @@ class UploadServiceTest extends KernelTestCase
             new NullLogger()
         );
 
-        if (!$expectedParameters) {
+        if (!$expectedParameters instanceof SigningParameters) {
             $this->expectException(MissingConstructorArgumentsException::class);
         }
 
-        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
+        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters], JSON_THROW_ON_ERROR));
 
         $signingParameters = $uploadService->getSigningParametersFromRequest($request);
 
@@ -73,9 +73,9 @@ class UploadServiceTest extends KernelTestCase
             new NullLogger()
         );
 
-        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters]));
+        $request = new Request([], [], [], [], [], [], json_encode(['data' => $parameters], JSON_THROW_ON_ERROR));
 
-        if (!$expectedParameters) {
+        if (!$expectedParameters instanceof SigningParameters) {
             $this->expectException(MissingConstructorArgumentsException::class);
         }
 

@@ -18,19 +18,15 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
-        $commitScope = !empty($scope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) ? $scope : '';
-        $repositoryScope = !empty(
-            $scope = self::getRepositoryScope(
-                $parameterBag,
-                self::UPLOAD_TABLE_ALIAS
-            )
-        ) ? 'AND ' . $scope : '';
-        $uploadScope = !empty(
-            $scope = self::getUploadsScope(
-                $parameterBag,
-                self::UPLOAD_TABLE_ALIAS
-            )
-        ) ? 'AND ' . $scope : '';
+        $commitScope = ($scope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) === '' ? '' : $scope;
+        $repositoryScope = ($scope = self::getRepositoryScope(
+            $parameterBag,
+            self::UPLOAD_TABLE_ALIAS
+        )) === '' ? '' : 'AND ' . $scope;
+        $uploadScope = ($scope = self::getUploadsScope(
+            $parameterBag,
+            self::UPLOAD_TABLE_ALIAS
+        )) === '' ? '' : 'AND ' . $scope;
 
         return <<<SQL
         {$commitScope}
@@ -94,8 +90,8 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                         branchHits
                 ) as branchHits
             FROM
-                `$table` as upload
-            INNER JOIN `$lineCoverageTable` as lines ON lines.uploadId = upload.uploadId
+                `{$table}` as upload
+            INNER JOIN `{$lineCoverageTable}` as lines ON lines.uploadId = upload.uploadId
             WHERE
                 {$this->getUnnestQueryFiltering($table, $parameterBag)}
         )

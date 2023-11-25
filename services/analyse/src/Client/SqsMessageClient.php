@@ -29,7 +29,7 @@ class SqsMessageClient
             'MessageGroupId' => $publishableMessage->getMessageGroup(),
         ];
 
-        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID)) {
+        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID) !== '') {
             /**
              * The trace header will be propagated to the next service in the chain if provided
              * from a previous request.

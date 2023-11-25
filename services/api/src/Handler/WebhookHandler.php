@@ -51,7 +51,7 @@ class WebhookHandler extends SqsHandler
     {
         $project = $this->getProject($webhook);
 
-        if (!$project) {
+        if (!$project instanceof Project) {
             return;
         }
 

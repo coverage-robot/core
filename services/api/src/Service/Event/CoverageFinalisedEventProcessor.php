@@ -60,7 +60,7 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
             'enabled' => true,
         ]);
 
-        if (!$project) {
+        if ($project === null) {
             $this->eventHandlerLogger->warning(
                 'Event skipped as it was not related to a valid project.',
                 [

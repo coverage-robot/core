@@ -53,12 +53,13 @@ trait DiffAwareTrait
                 ) OR
                 SQL;
             }
+
             $filtering = substr($filtering, 0, -3);
 
-            if (!empty($filtering)) {
+            if ($filtering !== '') {
                 return <<<SQL
                 (
-                    $filtering
+                    {$filtering}
                 )
                 SQL;
             }

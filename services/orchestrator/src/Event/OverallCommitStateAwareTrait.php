@@ -224,13 +224,11 @@ trait OverallCommitStateAwareTrait
                 }
             }
 
-            if ($previousState instanceof Finalised) {
-                if (
-                    !$finalisedTime ||
-                    $previousState->getEventTime() > $finalisedTime
-                ) {
-                    $finalisedTime = $previousState->getEventTime();
-                }
+            if (
+                $previousState instanceof Finalised && (!$finalisedTime ||
+                $previousState->getEventTime() > $finalisedTime)
+            ) {
+                $finalisedTime = $previousState->getEventTime();
             }
         }
 

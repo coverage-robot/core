@@ -171,11 +171,9 @@ class Project implements Stringable
 
     public function removeJob(Job $job): static
     {
-        if ($this->jobs->removeElement($job)) {
-            // set the owning side to null (unless already changed)
-            if ($job->getProject() === $this) {
-                $job->setProject(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->jobs->removeElement($job) && $job->getProject() === $this) {
+            $job->setProject(null);
         }
 
         return $this;

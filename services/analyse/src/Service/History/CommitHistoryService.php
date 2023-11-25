@@ -12,7 +12,7 @@ class CommitHistoryService
     /**
      * The total number of commits which should be returned per page.
      */
-    public const COMMITS_TO_RETURN_PER_PAGE = 100;
+    final public const COMMITS_TO_RETURN_PER_PAGE = 100;
 
     /**
      * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers

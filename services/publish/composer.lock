@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2147881f8407c2c0621c0c7b54bd966d",
+    "content-hash": "9ee3ddd73620aa2a5740d8ebd4c64129",
     "packages": [
         {
             "name": "bref/bref",
@@ -220,7 +220,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "1a6082f60334829af8fb782b32e1e6a9ca7e9dd6"
+                "reference": "6b0b5dd4e64924471d6d36e9a613e5d75ebd61f9"
             },
             "require": {
                 "knplabs/github-api": "^3.11",
@@ -259,7 +259,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
             },
             "type": "library",
             "autoload": {
@@ -278,7 +278,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "e14d67cb8a26b4ff60532956f0d7517d7147404d"
+                "reference": "356ff459d9c143e640efc116489b385975685aff"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -316,7 +316,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "d65d04218e2549ec8f3fbc7e94c5eae18bcf0c69"
+                "reference": "60232743d0fb616dad0f70cbc02286cd5ffe54f6"
             },
             "require": {
                 "coverage-robot/event": "^1.0"
@@ -338,7 +338,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
             },
             "type": "library",
             "autoload": {
@@ -357,7 +357,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "5d892db29d4d69d77f7c2ef336cba569bfb371a1"
+                "reference": "84d78f45595076336fc4dc95cd03ccff0dc18c83"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -6992,6 +6992,68 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
+            "name": "phpstan/phpstan",
+            "version": "1.10.44",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-11-21T16:30:46+00:00"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "10.1.7",
             "source": {
@@ -7477,6 +7539,62 @@
                 "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.04"
             },
             "time": "2023-11-10T07:14:46+00:00"
+        },
+        {
+            "name": "rector/rector",
+            "version": "0.18.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rectorphp/rector.git",
+                "reference": "f36bc0a707fd8af301df5108740ce41f9db8eded"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f36bc0a707fd8af301df5108740ce41f9db8eded",
+                "reference": "f36bc0a707fd8af301df5108740ce41f9db8eded",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0",
+                "phpstan/phpstan": "^1.10.35"
+            },
+            "conflict": {
+                "rector/rector-doctrine": "*",
+                "rector/rector-downgrade-php": "*",
+                "rector/rector-phpunit": "*",
+                "rector/rector-symfony": "*"
+            },
+            "bin": [
+                "bin/rector"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Instant Upgrade and Automated Refactoring of any PHP code",
+            "keywords": [
+                "automation",
+                "dev",
+                "migration",
+                "refactoring"
+            ],
+            "support": {
+                "issues": "https://github.com/rectorphp/rector/issues",
+                "source": "https://github.com/rectorphp/rector/tree/0.18.10"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-11-16T19:42:21+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -8684,5 +8802,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

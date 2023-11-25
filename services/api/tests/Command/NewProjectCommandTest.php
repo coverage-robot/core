@@ -27,7 +27,7 @@ class NewProjectCommandTest extends KernelTestCase
                         $project->getUploadToken() === 'mock-upload-token' &&
                         $project->getId() === null &&
                         $project->getCoveragePercentage() === null &&
-                        $project->isEnabled() === true
+                        $project->isEnabled()
                 ),
                 true
             );

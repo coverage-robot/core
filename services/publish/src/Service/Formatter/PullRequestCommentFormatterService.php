@@ -37,13 +37,12 @@ class PullRequestCommentFormatterService
 
     private function getSummary(EventInterface $event, PublishablePullRequestMessage $message): string
     {
-        $pendingUploads = $message->getPendingUploads() > 0 ? sprintf(
-            ' (and **%s** still pending)',
-            $message->getPendingUploads()
-        ) : '';
-
-        return "> Merging #{$event->getPullRequest()} which has **{$message->getSuccessfulUploads(
-        )}** successfully uploaded coverage file(s){$pendingUploads} on {$event->getCommit()}";
+        return sprintf(
+            '> Merging #%s which has **%d** successfully uploaded coverage file(s) on %s',
+            $event->getPullRequest() ?? 'unknown',
+            $message->getSuccessfulUploads(),
+            $event->getCommit()
+        );
     }
 
     private function getLastUpdateTime(EventInterface $event): string
@@ -55,8 +54,12 @@ class PullRequestCommentFormatterService
 
     private function getTagCoverageTable(EventInterface $event, PublishablePullRequestMessage $message): string
     {
+        $pullRequest = $event->getPullRequest();
         if (count($message->getTagCoverage()) == 0) {
-            return "> No uploaded tags in #{$event->getPullRequest()}";
+            return sprintf(
+                '> No uploaded tags%s',
+                $pullRequest !== null ? ' in #' . $pullRequest : ''
+            );
         }
 
         return sprintf(
@@ -94,10 +97,14 @@ class PullRequestCommentFormatterService
 
     private function getFileImpactTable(EventInterface $event, PublishablePullRequestMessage $message): string
     {
+        $pullRequest = $event->getPullRequest();
         $files = $message->getLeastCoveredDiffFiles();
 
         if (count($files) == 0) {
-            return "> No impacted files in #{$event->getPullRequest()}";
+            return sprintf(
+                '> No impacted files%s',
+                $pullRequest !== null ? ' in #' . $pullRequest : ''
+            );
         }
 
         return sprintf(

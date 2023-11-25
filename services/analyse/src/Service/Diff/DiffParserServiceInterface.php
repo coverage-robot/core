@@ -15,7 +15,6 @@ interface DiffParserServiceInterface
      * will either be from the commit, or the PR, depending
      * on the context of the upload.
      *
-     * @param EventInterface $event
      * @return array<array-key, int[]>
      */
     public function get(EventInterface $event): array;

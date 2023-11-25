@@ -3,8 +3,8 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\Storage\StorageClient;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 class GoogleCloudStorageClient extends StorageClient
 {

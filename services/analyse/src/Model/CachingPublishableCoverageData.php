@@ -32,7 +32,7 @@ class CachingPublishableCoverageData extends PublishableCoverageData
 
     public function getUploads(): TotalUploadsQueryResult
     {
-        if (!$this->uploads) {
+        if (!$this->uploads instanceof TotalUploadsQueryResult) {
             $this->uploads = parent::getUploads();
         }
 
@@ -77,7 +77,7 @@ class CachingPublishableCoverageData extends PublishableCoverageData
 
     public function getTagCoverage(): TagCoverageCollectionQueryResult
     {
-        if (!$this->tagCoverage) {
+        if (!$this->tagCoverage instanceof TagCoverageCollectionQueryResult) {
             $this->tagCoverage = parent::getTagCoverage();
         }
 
@@ -105,7 +105,7 @@ class CachingPublishableCoverageData extends PublishableCoverageData
 
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
-        if (!$this->diffLineCoverage) {
+        if (!$this->diffLineCoverage instanceof LineCoverageCollectionQueryResult) {
             $this->diffLineCoverage = parent::getDiffLineCoverage();
         }
 

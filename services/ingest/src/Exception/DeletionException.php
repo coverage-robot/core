@@ -11,7 +11,7 @@ class DeletionException extends Exception
     {
         return new DeletionException(
             sprintf('An error occurred when deleting: %s.', $exception->getMessage()),
-            intval($exception->getCode()),
+            (int) $exception->getCode(),
             $exception
         );
     }

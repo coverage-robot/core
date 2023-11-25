@@ -50,7 +50,7 @@ class QueryBuilderService
     {
         $parameters = [];
 
-        if ($parameterBag) {
+        if ($parameterBag instanceof QueryParameterBag) {
             /**
              * @psalm-suppress all
              */

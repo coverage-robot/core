@@ -144,8 +144,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 JobState::COMPLETED,
                 JobState::COMPLETED
-            ),
-            true
+            )
         );
     }
 
@@ -189,8 +188,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 JobState::COMPLETED,
                 JobState::COMPLETED
-            ),
-            true
+            )
         );
     }
 }

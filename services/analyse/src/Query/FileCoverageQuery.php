@@ -8,9 +8,9 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -24,6 +24,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     use CarryforwardAwareTrait;
 
     private const LINES_TABLE_ALIAS = 'lines';
+
     private const UPLOAD_TABLE_ALIAS = 'upload';
 
     /**
@@ -79,18 +80,14 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
-        $carryforwardScope = !empty(
-            $scope = self::getCarryforwardTagsScope(
-                $parameterBag,
-                self::UPLOAD_TABLE_ALIAS
-            )
-        ) ? 'OR ' . $scope : '';
-        $lineScope = !empty(
-            $scope = self::getLineScope(
-                $parameterBag,
-                self::LINES_TABLE_ALIAS
-            )
-        ) ? 'AND ' . $scope : '';
+        $carryforwardScope = ($scope = self::getCarryforwardTagsScope(
+            $parameterBag,
+            self::UPLOAD_TABLE_ALIAS
+        )) === '' ? '' : 'OR ' . $scope;
+        $lineScope = ($scope = self::getLineScope(
+            $parameterBag,
+            self::LINES_TABLE_ALIAS
+        )) === '' ? '' : 'AND ' . $scope;
 
         return <<<SQL
         (

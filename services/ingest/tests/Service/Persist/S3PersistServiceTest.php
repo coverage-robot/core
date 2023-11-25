@@ -36,7 +36,7 @@ class S3PersistServiceTest extends KernelTestCase
         $metadata = [
             'sourceFormat' => $coverage->getSourceFormat()->value,
             'commit' => $upload->getCommit(),
-            'parent' => json_encode($upload->getParent()),
+            'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR),
             'uploadId' => $upload->getUploadId(),
             'provider' => $upload->getProvider()->value,
             'owner' => $upload->getOwner(),
@@ -109,11 +109,11 @@ class S3PersistServiceTest extends KernelTestCase
             new Tag('mock-tag', '')
         );
 
-        for ($numberOfLines = 1; $numberOfLines <= 10; $numberOfLines++) {
+        for ($numberOfLines = 1; $numberOfLines <= 10; ++$numberOfLines) {
             $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
             $expectedWrittenLines = [];
 
-            for ($numberOfFiles = 1; $numberOfFiles <= 3; $numberOfFiles++) {
+            for ($numberOfFiles = 1; $numberOfFiles <= 3; ++$numberOfFiles) {
                 // Clone the coverage object so that we can add an additional file per yield, while
                 // modifying the original object
                 $coverage = clone $coverage;
@@ -134,7 +134,7 @@ class S3PersistServiceTest extends KernelTestCase
                     $numberOfLines
                 );
 
-                for ($i = 1; $i <= $numberOfLines; $i++) {
+                for ($i = 1; $i <= $numberOfLines; ++$i) {
                     $line = match ($i % 3) {
                         0 => new Branch($i, $i % 2, [0 => 0, 1 => 2, 3 => 0]),
                         1 => new Statement($i, $i % 2),
@@ -167,7 +167,7 @@ class S3PersistServiceTest extends KernelTestCase
             ),
             LineType::BRANCH => sprintf(
                 "BranchHits: %s, Type: \"%s\", LineNumber: \"%s\", LineHits: \"%s\"\n",
-                json_encode($line->getBranchHits()),
+                json_encode($line->getBranchHits(), JSON_THROW_ON_ERROR),
                 $line->getType()->value,
                 $line->getLineNumber(),
                 $line->getLineHits()
