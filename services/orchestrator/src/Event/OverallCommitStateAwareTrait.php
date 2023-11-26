@@ -12,6 +12,8 @@ use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
 use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -225,31 +227,54 @@ trait OverallCommitStateAwareTrait
             }
 
             if (
-                $previousState instanceof Finalised && (!$finalisedTime ||
-                $previousState->getEventTime() > $finalisedTime)
+                $previousState instanceof Finalised &&
+                (!$finalisedTime || $previousState->getEventTime() > $finalisedTime)
             ) {
                 $finalisedTime = $previousState->getEventTime();
             }
         }
 
-        if (!$lastIngestionTime && !$finalisedTime) {
-            // This is an edge case (but entirely possible) - theres been no uploads, and we haven't
-            // written a finalised event yet. By convention, we _do_ want to finalise even if theres
-            // been no uploads so we'll return false.
-            $this->eventProcessorLogger->info(
-                sprintf(
-                    'Theres been no uploads, or finalised events for %s, so returning false.',
-                    (string) $newState
-                ),
-                [
-                    'lastIngestionTime' => $lastIngestionTime,
-                    'finalisedTime' => $finalisedTime
-                ]
-            );
+        if (!$finalisedTime instanceof DateTimeImmutable) {
+            // The results have never been finalised before - we're good to finalise the coverage now!
             return false;
         }
 
-        return $finalisedTime && $lastIngestionTime < $finalisedTime;
+        if ($lastIngestionTime && $lastIngestionTime > $finalisedTime) {
+            /**
+             * This indicates that at some point we've indirectly finalised the coverage results on a commit
+             * **before** all of the coverage files were ingested. This is potentially an error, because it
+             * could cause unexpected behaviour with annotations reporting lines as uncovered when in fact
+             * they were covered by coverage we were yet to receive (and because they're are immutable, we
+             * can't go back and delete annotations).
+             *
+             * We still need to publish results though, because the new coverage may have impacted the results
+             * in such a way that the resulting data is different, and as such, leaving it out and dropping the
+             * message could cause more harm than good.
+             *
+             * Equally, it may not be our fault at all (and something we couldn't guard against) - i.e. all jobs
+             * finished a while ago but someone came back along and re-ran an old job much later which provided
+             * us coverage we may or may not have had the first time.
+             */
+            $this->eventProcessorLogger->error(
+                sprintf(
+                    'New coverage has been ingested (%s) on a commit AFTER the results for the commit have' .
+                    'already been finalised (%s).',
+                    $lastIngestionTime->format(DateTimeInterface::ATOM),
+                    $finalisedTime->format(DateTimeInterface::ATOM)
+                ),
+                [
+                    'owner' => $newState->getOwner(),
+                    'repository' => $newState->getRepository(),
+                    'commit' => $newState->getCommit()
+                ]
+            );
+
+            return false;
+        }
+
+        // The results have already been finalised before, and nothing has changed meaningfully since, so we're okay
+        // to leave it as is!
+        return true;
     }
 
     #[Required]
