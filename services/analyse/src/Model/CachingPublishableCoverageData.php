@@ -21,7 +21,7 @@ class CachingPublishableCoverageData extends PublishableCoverageData
 
     private ?TagCoverageCollectionQueryResult $tagCoverage = null;
 
-    private float|null|bool $diffCoveragePercentage = false;
+    private float|null|false $diffCoveragePercentage = false;
 
     private ?LineCoverageCollectionQueryResult $diffLineCoverage = null;
 
