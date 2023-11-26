@@ -233,25 +233,12 @@ trait OverallCommitStateAwareTrait
             }
         }
 
-        if (!$lastIngestionTime && !$finalisedTime) {
-            // This is an edge case (but entirely possible) - theres been no uploads, and we haven't
-            // written a finalised event yet. By convention, we _do_ want to finalise even if theres
-            // been no uploads so we'll return false.
-            $this->eventProcessorLogger->info(
-                sprintf(
-                    'Theres been no uploads, or finalised events for %s, so returning false.',
-                    (string) $newState
-                ),
-                [
-                    'lastIngestionTime' => $lastIngestionTime,
-                    'finalisedTime' => $finalisedTime
-                ]
-            );
-
+        if (!$finalisedTime) {
+            // The results have never been finalised before - we're good to finalise the coverage now!
             return false;
         }
 
-        if ($finalisedTime && $lastIngestionTime > $finalisedTime) {
+        if ($lastIngestionTime && $lastIngestionTime > $finalisedTime) {
             /**
              * This indicates that at some point we've indirectly finalised the coverage results on a commit
              * **before** all of the coverage files were ingested. This is potentially an error, because it
@@ -284,7 +271,9 @@ trait OverallCommitStateAwareTrait
             return false;
         }
 
-        return $finalisedTime && $lastIngestionTime < $finalisedTime;
+        // The results have already been finalised before, and nothing has changed meaningfully since, so we're okay
+        // to leave it as is!
+        return true;
     }
 
     #[Required]
