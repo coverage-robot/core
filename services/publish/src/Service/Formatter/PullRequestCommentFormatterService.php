@@ -11,13 +11,17 @@ class PullRequestCommentFormatterService
 {
     public function format(EventInterface $event, PublishablePullRequestMessage $message): string
     {
+        $diffCoveragePercentage = $message->getDiffCoveragePercentage() !== null ?
+            sprintf('%s%%', $message->getDiffCoveragePercentage()) :
+            '&oslash;';
+
         return <<<MARKDOWN
         ## Coverage Report
         {$this->getSummary($event, $message)}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
-        | {$message->getCoveragePercentage()}% | {$message->getDiffCoveragePercentage()}% |
+        | {$message->getCoveragePercentage()}% | {$diffCoveragePercentage} |
 
         <details>
           <summary>Tags</summary>

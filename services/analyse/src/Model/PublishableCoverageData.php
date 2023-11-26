@@ -204,7 +204,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      *
      * @throws QueryException
      */
-    public function getDiffCoveragePercentage(): float
+    public function getDiffCoveragePercentage(): float|null
     {
         $diff = $this->diffParser->get($this->event);
 
@@ -226,6 +226,13 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
          * @var CoverageQueryResult $diffCoverage
          */
         $diffCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
+
+        if ($diffCoverage->getLines() === 0) {
+            // Theres no 'coverable' lines in the diff (i.e. lines which could've been run by any of the
+            // tests), so therefore theres no diff coverage. By default, the coverage percentage will show as
+            // 0%, which would be a bit misleading, given when none of the diff was testable in the first place.
+            return null;
+        }
 
         return $diffCoverage->getCoveragePercentage();
     }

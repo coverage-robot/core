@@ -326,6 +326,45 @@ class CachingPublishableCoverageDataTest extends TestCase
         $this->assertEquals(97.0, $this->cachedPublishableCoverageData->getDiffCoveragePercentage());
     }
 
+    public function testGetDiffCoveragePercentageWhenDiffHasNoCoverableLines(): void
+    {
+        $this->mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    'foo.php' => [1,2,3]
+                ]
+            );
+
+        $this->mockQueryService->expects($this->exactly(2))
+            ->method('runQuery')
+            ->willReturnOnConsecutiveCalls(
+                new TotalUploadsQueryResult(
+                    ['mock-upload'],
+                    [
+                        new Tag('tag-1', 'mock-commit')
+                    ],
+                    null
+                ),
+                new CoverageQueryResult(
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            );
+
+        $this->assertNull($this->cachedPublishableCoverageData->getDiffCoveragePercentage());
+
+        $this->mockDiffParserService->expects($this->never())
+            ->method('get');
+        $this->mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertNull($this->cachedPublishableCoverageData->getDiffCoveragePercentage());
+    }
+
     public function testGetLeastCoveredDiffFiles(): void
     {
         $this->mockDiffParserService->expects($this->once())

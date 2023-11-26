@@ -1,0 +1,23 @@
+## Coverage Report
+> Merging #12 which has **2** successfully uploaded coverage file(s) on mock-commit
+
+| Total Coverage | Diff Coverage |
+| --- | --- |
+| 100% | &oslash; |
+
+<details>
+  <summary>Tags</summary>
+
+  | Tag | Lines | Covered | Partial | Uncovered | Coverage |
+| --- | --- | --- | --- | --- | --- |
+| mock-tag | 100 | 48 | 2 | 50 | 50% |
+| mock-tag-2<br><sub>(Carried forward from mock-commit-2)</sub> | 2 | 0 | 0 | 2 | 0% |
+</details>
+
+<details>
+  <summary>Impacted Files</summary>
+
+  > No impacted files in #12
+</details>
+
+*Last update at 10:12am UTC*
