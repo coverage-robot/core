@@ -187,7 +187,7 @@ class EventHandler extends S3Handler
     public function triggerIngestionSuccessEvent(Upload $upload): bool
     {
         $this->metricService->put(
-            metric: 'ingested_files',
+            metric: 'IngestedFiles',
             value: 1,
             unit: Unit::COUNT,
             dimensions: [

@@ -61,7 +61,7 @@ class MessagePublisherService
 
             if ($publishSucceeded) {
                 $this->metricService->put(
-                    metric: 'published_results',
+                    metric: 'PublishedResults',
                     value: 1,
                     unit: Unit::COUNT,
                     dimensions: [

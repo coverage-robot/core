@@ -50,9 +50,12 @@ class UploadController extends AbstractController
             );
 
             $this->metricService->put(
-                metric: 'signed_uploads',
+                metric: 'SignedUploads',
                 value: 1,
                 unit: Unit::COUNT,
+                dimensions: [
+                    ['owner']
+                ],
                 properties: [
                     'owner' => $parameters->getOwner()
                 ]
