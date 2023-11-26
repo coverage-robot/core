@@ -78,7 +78,7 @@ class GcsPersistService implements PersistServiceInterface
         }
 
         $this->metricService->put(
-            metric: 'ingested_lines',
+            metric: 'IngestedLines',
             value: $this->totalLines($coverage),
             unit: Unit::COUNT,
             dimensions: [
