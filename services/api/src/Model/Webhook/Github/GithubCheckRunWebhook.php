@@ -24,8 +24,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string $ref,
         protected readonly string $commit,
         protected readonly string|int|null $pullRequest,
-        protected readonly JobState $jobState,
-        protected readonly JobState $suiteState,
+        protected readonly JobState $jobState
     ) {
     }
 
@@ -66,12 +65,6 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     public function getAppId(): int|string
     {
         return (string)$this->appId;
-    }
-
-    #[SerializedPath('[check_run][check_suite][status]')]
-    public function getSuiteState(): JobState
-    {
-        return $this->suiteState;
     }
 
     #[SerializedPath('[check_run][status]')]

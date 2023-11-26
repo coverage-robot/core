@@ -37,10 +37,7 @@ class EventBridgeEventClientTest extends KernelTestCase
             'commit' => 'mock-commit',
             'pullRequest' => null,
             'externalId' => 'mock-id',
-            'index' => 0,
             'state' => JobState::COMPLETED->value,
-            'suiteState' => JobState::COMPLETED->value,
-            'initialState' => false,
             'eventTime' => $eventTime->format(DateTimeInterface::ATOM),
         ];
 
@@ -52,10 +49,7 @@ class EventBridgeEventClientTest extends KernelTestCase
             'mock-commit',
             null,
             'mock-id',
-            0,
             JobState::COMPLETED,
-            JobState::COMPLETED,
-            false,
             $eventTime
         );
 

@@ -172,7 +172,6 @@ class WebhookHandlerTest extends KernelTestCase
                     'mock-ref',
                     'mock-commit',
                     'mock-pull-request',
-                    JobState::COMPLETED,
                     JobState::COMPLETED
                 )
             ]

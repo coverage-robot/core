@@ -51,10 +51,7 @@ class InvokeCommand extends Command
                 '12db14417f44a5371fe1c95171d6f96e4e210138',
                 null,
                 'mock-job-id',
-                0,
                 JobState::COMPLETED,
-                JobState::IN_PROGRESS,
-                false,
                 new DateTimeImmutable()
             );
 

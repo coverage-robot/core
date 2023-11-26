@@ -12,8 +12,7 @@ use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Enum\JobState;
-use Packages\Event\Model\JobStateChange;
+use Packages\Event\Model\UploadsFinalised;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -54,18 +53,13 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new JobStateChange(
+            new UploadsFinalised(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
                 null,
-                '',
-                0,
-                JobState::COMPLETED,
-                JobState::COMPLETED,
-                true,
                 new DateTimeImmutable()
             ),
             [
@@ -118,18 +112,13 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new JobStateChange(
+            new UploadsFinalised(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
-                'mock-current-commit',
+                'mock-commit',
                 null,
-                '',
-                0,
-                JobState::COMPLETED,
-                JobState::COMPLETED,
-                true,
                 new DateTimeImmutable()
             ),
             [
@@ -196,18 +185,13 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new JobStateChange(
+            new UploadsFinalised(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
-                'mock-current-commit',
+                'mock-commit',
                 null,
-                '',
-                0,
-                JobState::COMPLETED,
-                JobState::COMPLETED,
-                true,
                 new DateTimeImmutable()
             ),
             []
@@ -283,18 +267,13 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new JobStateChange(
+            new UploadsFinalised(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
-                'mock-current-commit',
+                'mock-commit',
                 null,
-                '',
-                0,
-                JobState::COMPLETED,
-                JobState::COMPLETED,
-                true,
                 new DateTimeImmutable()
             ),
             []

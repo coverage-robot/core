@@ -9,10 +9,10 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
@@ -68,25 +68,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
 
         $job = $this->findOrCreateJob($project, $webhook);
-        $isNewJob = $job->getId() === null;
-
-        if (
-            !$isNewJob &&
-            $job->getState() === $webhook->getJobState()
-        ) {
-            // The state of the job hasn't actually changed, so theres no benefit
-            // in updating the job or publishing an event.
-            $this->webhookProcessorLogger->info(
-                sprintf(
-                    'Ignoring as job state has not changed: %s',
-                    (string)$webhook
-                ),
-                [
-                    'jobId' => $job->getId()
-                ]
-            );
-            return;
-        }
 
         $job->setState($webhook->getJobState());
         $job->setUpdatedAt(new DateTimeImmutable());
@@ -100,7 +81,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             ),
             [
                 'jobId' => $job->getId(),
-                'isNewJob' => $isNewJob
+                'isNewJob' => $job->getId() === null
             ]
         );
 
@@ -113,10 +94,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 $webhook->getCommit(),
                 $webhook->getPullRequest(),
                 $webhook->getExternalId(),
-                $this->getJobIndex($job, $project, $webhook),
                 $webhook->getJobState(),
-                $webhook->getSuiteState(),
-                $isNewJob,
                 new DateTimeImmutable()
             )
         );

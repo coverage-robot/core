@@ -12,9 +12,6 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 class JobStateChange implements EventInterface
 {
-    /**
-     * @param array-key|int $index
-     */
     public function __construct(
         private readonly Provider $provider,
         private readonly string $owner,
@@ -23,10 +20,7 @@ class JobStateChange implements EventInterface
         private readonly string $commit,
         private readonly string|int|null $pullRequest,
         private readonly string|int $externalId,
-        private readonly int $index,
         private readonly JobState $state,
-        private readonly JobState $suiteState,
-        private readonly bool $initialState,
         #[Context(
             normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
             denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
@@ -70,24 +64,9 @@ class JobStateChange implements EventInterface
         return $this->externalId;
     }
 
-    public function getIndex(): int
-    {
-        return $this->index;
-    }
-
     public function getState(): JobState
     {
         return $this->state;
-    }
-
-    public function getSuiteState(): JobState
-    {
-        return $this->suiteState;
-    }
-
-    public function isInitialState(): bool
-    {
-        return $this->initialState;
     }
 
     public function getType(): Event
