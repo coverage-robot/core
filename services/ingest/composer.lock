@@ -586,7 +586,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -605,7 +605,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "356ff459d9c143e640efc116489b385975685aff"
+                "reference": "e14d67cb8a26b4ff60532956f0d7517d7147404d"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -643,7 +643,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -662,7 +662,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "84d78f45595076336fc4dc95cd03ccff0dc18c83"
+                "reference": "5d892db29d4d69d77f7c2ef336cba569bfb371a1"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -2320,16 +2320,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.24.3",
+            "version": "1.24.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "12f01d214f1c73b9c91fdb3b1c415e4c70652083"
+                "reference": "6bd0c26f3786cd9b7c359675cb789e35a8e07496"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/12f01d214f1c73b9c91fdb3b1c415e4c70652083",
-                "reference": "12f01d214f1c73b9c91fdb3b1c415e4c70652083",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6bd0c26f3786cd9b7c359675cb789e35a8e07496",
+                "reference": "6bd0c26f3786cd9b7c359675cb789e35a8e07496",
                 "shasum": ""
             },
             "require": {
@@ -2361,9 +2361,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.24.3"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.24.4"
             },
-            "time": "2023-11-18T20:15:32+00:00"
+            "time": "2023-11-26T18:29:22+00:00"
         },
         {
             "name": "psr/cache",
@@ -9681,5 +9681,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
