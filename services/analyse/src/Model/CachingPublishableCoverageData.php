@@ -21,7 +21,7 @@ class CachingPublishableCoverageData extends PublishableCoverageData
 
     private ?TagCoverageCollectionQueryResult $tagCoverage = null;
 
-    private ?float $diffCoveragePercentage = null;
+    private float|null|false $diffCoveragePercentage = false;
 
     private ?LineCoverageCollectionQueryResult $diffLineCoverage = null;
 
@@ -84,9 +84,9 @@ class CachingPublishableCoverageData extends PublishableCoverageData
         return $this->tagCoverage;
     }
 
-    public function getDiffCoveragePercentage(): float
+    public function getDiffCoveragePercentage(): float|null
     {
-        if (!$this->diffCoveragePercentage) {
+        if ($this->diffCoveragePercentage === false) {
             $this->diffCoveragePercentage = parent::getDiffCoveragePercentage();
         }
 

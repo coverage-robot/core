@@ -48,8 +48,11 @@ interface PublishableCoverageDataInterface
 
     /**
      * Get the total coverage percentage the PR diff.
+     *
+     * If the return is null, that represents that the diff was not 'coverable', as in,
+     * none of the changed lines had tests which reporting >=0 hits on them.
      */
-    public function getDiffCoveragePercentage(): float;
+    public function getDiffCoveragePercentage(): float|null;
 
     /**
      * Get the coverage percentage for each file in the PR diff, ordered by least covered

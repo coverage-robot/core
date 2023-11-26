@@ -12,7 +12,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function __construct(
         private readonly EventInterface $event,
         private readonly float $coveragePercentage,
-        private readonly float $diffCoveragePercentage,
+        private readonly ?float $diffCoveragePercentage,
         private readonly int $successfulUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
@@ -47,7 +47,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         return $this->coveragePercentage;
     }
 
-    public function getDiffCoveragePercentage(): float
+    public function getDiffCoveragePercentage(): float|null
     {
         return $this->diffCoveragePercentage;
     }
