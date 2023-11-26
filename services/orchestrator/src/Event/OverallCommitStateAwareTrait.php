@@ -12,6 +12,7 @@ use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreService;
 use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -233,7 +234,7 @@ trait OverallCommitStateAwareTrait
             }
         }
 
-        if (!$finalisedTime) {
+        if (!$finalisedTime instanceof DateTimeImmutable) {
             // The results have never been finalised before - we're good to finalise the coverage now!
             return false;
         }
