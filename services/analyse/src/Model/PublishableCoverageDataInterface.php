@@ -48,7 +48,7 @@ interface PublishableCoverageDataInterface
 
     /**
      * Get the total coverage percentage the PR diff.
-     * 
+     *
      * If the return is null, that represents that the diff was not 'coverable', as in,
      * none of the changed lines had tests which reporting >=0 hits on them.
      */

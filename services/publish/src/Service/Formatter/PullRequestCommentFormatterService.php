@@ -11,17 +11,13 @@ class PullRequestCommentFormatterService
 {
     public function format(EventInterface $event, PublishablePullRequestMessage $message): string
     {
-        $diffCoveragePercentage = $message->getDiffCoveragePercentage() !== null ?
-            sprintf('%s%%', $message->getDiffCoveragePercentage()) :
-            '&oslash;';
-
         return <<<MARKDOWN
         ## Coverage Report
         {$this->getSummary($event, $message)}
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
-        | {$message->getCoveragePercentage()}% | {$diffCoveragePercentage} |
+        | {$message->getCoveragePercentage()}% | {$this->getDiffCoveragePercentage($message)} |
 
         <details>
           <summary>Tags</summary>
@@ -47,6 +43,19 @@ class PullRequestCommentFormatterService
             $message->getSuccessfulUploads(),
             $event->getCommit()
         );
+    }
+
+    private function getDiffCoveragePercentage(PublishablePullRequestMessage $message): string
+    {
+        $diffCoveragePercentage = $message->getDiffCoveragePercentage();
+
+        if ($diffCoveragePercentage === null) {
+            // No diff coverage means that none of the changed lines had tests which reported >=0 hits
+            // on them, so we're safe to show that in the PR comment.
+            return '&oslash;';
+        }
+
+        return sprintf('%s%%', $diffCoveragePercentage);
     }
 
     private function getLastUpdateTime(EventInterface $event): string
