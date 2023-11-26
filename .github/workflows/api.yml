@@ -259,7 +259,7 @@ jobs:
                 uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-                    envkey_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+                    envkey_SENTRY_DSN: ${{ env.sentry-dsn }}
                     envkey_DATABASE_USERNAME: ${{ secrets.API_SERVICE_DB_USERNAME }}
                     envkey_DATABASE_PASSWORD: ${{ secrets.API_SERVICE_DB_PASSWORD }}
                     envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
