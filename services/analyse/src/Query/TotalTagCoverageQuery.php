@@ -60,6 +60,8 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         GROUP BY
             tagName,
             commit
+        ORDER BY
+            tagName ASC
         SQL;
     }
 

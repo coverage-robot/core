@@ -11,9 +11,9 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -167,6 +167,8 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             GROUP BY
               tagName,
               commit
+            ORDER BY
+              tagName ASC
             SQL,
             <<<SQL
             WITH
@@ -335,6 +337,8 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             GROUP BY
               tagName,
               commit
+            ORDER BY
+              tagName ASC
             SQL
         ];
     }
