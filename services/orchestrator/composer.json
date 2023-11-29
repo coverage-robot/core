@@ -31,7 +31,7 @@
         "symfony/property-access": "6.3.*",
         "symfony/property-info": "6.3.*",
         "symfony/runtime": "6.4.*",
-        "symfony/serializer": "6.3.*",
+        "symfony/serializer": "6.4.*",
         "symfony/yaml": "6.3.*"
     },
     "require-dev": {
