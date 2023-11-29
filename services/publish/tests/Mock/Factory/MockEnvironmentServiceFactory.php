@@ -15,7 +15,9 @@ class MockEnvironmentServiceFactory
         Environment $environment,
         array $variables = []
     ): EnvironmentServiceInterface&MockObject {
-        $mockEnvironmentService = $testCase->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService = $testCase->getMockBuilder(EnvironmentServiceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockEnvironmentService->method('getEnvironment')
             ->willReturn($environment);

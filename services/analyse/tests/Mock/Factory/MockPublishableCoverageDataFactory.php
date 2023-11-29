@@ -40,21 +40,29 @@ class MockPublishableCoverageDataFactory
 
     private static function getMockQueryService(TestCase $test): QueryService|MockObject
     {
-        return $test->createMock(QueryService::class);
+        return $test->getMockBuilder(QueryService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private static function getMockDiffParser(TestCase $test): DiffParserService|MockObject
     {
-        return $test->createMock(DiffParserService::class);
+        return $test->getMockBuilder(DiffParserService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private static function getMockUpload(TestCase $test): Upload|MockObject
     {
-        return $test->createMock(Upload::class);
+        return $test->getMockBuilder(Upload::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     private static function getMockCarryforwardTagService(TestCase $test): CarryforwardTagService|MockObject
     {
-        return $test->createMock(CarryforwardTagService::class);
+        return $test->getMockBuilder(CarryforwardTagService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

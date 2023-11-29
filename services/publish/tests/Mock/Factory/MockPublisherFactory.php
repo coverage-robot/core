@@ -14,7 +14,8 @@ class MockPublisherFactory
         bool $supported = true,
         bool $publishSuccessfully = true
     ): MockObject {
-        $mockPublisher = $test->createMock(PublisherServiceInterface::class);
+        $mockPublisher = $test->getMockBuilder(PublisherServiceInterface::class)
+            ->getMock();
 
         $mockPublisher->method('supports')
             ->willReturn($supported);

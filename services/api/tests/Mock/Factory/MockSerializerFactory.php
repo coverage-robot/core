@@ -13,7 +13,9 @@ class MockSerializerFactory
         array $serializeMap = [],
         array $deserializeMap = []
     ): SerializerInterface&MockObject {
-        $mockSerializer = $test->createMock(SerializerInterface::class);
+        $mockSerializer = $test->getMockBuilder(SerializerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockSerializer->method('serialize')
             ->willReturnMap($serializeMap);
