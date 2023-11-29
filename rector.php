@@ -11,7 +11,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
         /**
          * Basic code quality rules - more specific rules are already
-         * inforced by Psalm and PHP_CS
+         * enforced by Psalm and PHP_CS
          */
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
