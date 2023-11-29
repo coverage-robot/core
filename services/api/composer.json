@@ -29,7 +29,7 @@
         "sentry/sentry-symfony": "^4.12",
         "symfony/clock": "6.3.*",
         "symfony/console": "6.3.*",
-        "symfony/dotenv": "6.3.*",
+        "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.3.*",
         "symfony/monolog-bundle": "^3.8",
