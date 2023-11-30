@@ -34,7 +34,7 @@
         "symfony/monolog-bundle": "^3.8",
         "symfony/property-access": "6.4.*",
         "symfony/property-info": "6.3.*",
-        "symfony/runtime": "6.3.*",
+        "symfony/runtime": "6.4.*",
         "symfony/serializer": "6.3.*",
         "symfony/yaml": "7.0.*"
     },
