@@ -14,7 +14,7 @@
         "async-aws/event-bridge": "^1.5",
         "async-aws/sqs": "^1.9",
         "bref/bref": "^2.0",
-        "bref/symfony-bridge": "^0.2.1",
+        "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/clients": "^1.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
