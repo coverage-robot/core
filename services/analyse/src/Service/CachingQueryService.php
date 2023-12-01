@@ -69,7 +69,7 @@ class CachingQueryService implements QueryServiceInterface
             $result = $this->runUncachedQuery($queryClass, $parameterBag);
 
             $this->mertricService->put(
-                metric: 'query-cache-miss',
+                metric: 'QueryCacheMiss',
                 value: 1,
                 unit: Unit::COUNT,
                 dimensions: [
@@ -96,7 +96,7 @@ class CachingQueryService implements QueryServiceInterface
         );
 
         $this->mertricService->put(
-            metric: 'query-cache-hit',
+            metric: 'QueryCacheHit',
             value: 1,
             unit: Unit::COUNT,
             dimensions: [
