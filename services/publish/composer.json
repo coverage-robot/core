@@ -10,7 +10,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "bref/bref": "^2.0",
-        "bref/symfony-bridge": "^0.2.1",
+        "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/clients": "*",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
