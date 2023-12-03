@@ -9,7 +9,7 @@ use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use App\Service\BadgeService;
 use Packages\Contracts\Provider\Provider;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

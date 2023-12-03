@@ -9,6 +9,7 @@ use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Telemetry\Service\TraceContext;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 

@@ -11,7 +11,7 @@ use App\Service\WebhookSignatureService;
 use Exception;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

@@ -8,7 +8,7 @@ use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Service\EventProcessorServiceInterface;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
