@@ -24,7 +24,7 @@ use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

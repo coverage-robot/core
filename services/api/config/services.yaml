@@ -14,6 +14,8 @@ services:
 
     Random\Randomizer: ~
 
+    Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
+
     # Event processing
     App\Handler\EventHandler:
         # The handler must be public so that Bref is able to run it through the Symfony
