@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadService
@@ -26,7 +27,7 @@ class UploadService
         #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
         private readonly LoggerInterface $uploadLogger
     ) {
     }
