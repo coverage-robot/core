@@ -3,7 +3,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    Packages\Event\:
+    Packages\Clients\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
