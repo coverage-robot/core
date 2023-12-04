@@ -257,7 +257,7 @@ trait OverallCommitStateAwareTrait
              */
             $this->eventProcessorLogger->error(
                 sprintf(
-                    'New coverage has been ingested (%s) on a commit AFTER the results for the commit have' .
+                    'New coverage has been ingested (%s) on a commit AFTER the results for the commit have ' .
                     'already been finalised (%s).',
                     $lastIngestionTime->format(DateTimeInterface::ATOM),
                     $finalisedTime->format(DateTimeInterface::ATOM)

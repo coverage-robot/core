@@ -22,14 +22,6 @@ class Tag implements Stringable
         return $this->commit;
     }
 
-    public static function from(array $data): self
-    {
-        return new self(
-            (string)($data['tag'] ?? $data['name']),
-            (string)$data['commit']
-        );
-    }
-
     public function __toString(): string
     {
         return sprintf("Tag#%s-%s", $this->name, $this->commit);

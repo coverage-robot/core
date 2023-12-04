@@ -28,6 +28,8 @@ class DynamoDbClient
 
     private const COMMIT_COLUMN = 'commit';
 
+    private const VERSION_COLUMN = 'version';
+
     /**
      * The name of the index used to query for all of the events for a particular
      * repository and commit.
@@ -54,7 +56,7 @@ class DynamoDbClient
             new PutItemInput(
                 [
                     'TableName' => $this->environmentService->getVariable(EnvironmentVariable::EVENT_STORE),
-                    'ConditionExpression' => 'attribute_not_exists(version)',
+                    'ConditionExpression' => sprintf('attribute_not_exists(%s)', self::VERSION_COLUMN),
                     'ReturnValuesOnConditionCheckFailure' => ReturnValuesOnConditionCheckFailure::ALL_OLD,
                     'Item' => [
                         'identifier' => [
@@ -75,7 +77,7 @@ class DynamoDbClient
                         self::COMMIT_COLUMN => [
                             'S' => $event->getCommit()
                         ],
-                        'version' => [
+                        self::VERSION_COLUMN => [
                             'N' => (string)$version
                         ],
                         'event' => [
@@ -159,7 +161,7 @@ class DynamoDbClient
                     'Select' => Select::ALL_ATTRIBUTES,
                     /**
                      * Use the index to query for all of the events for a particular repository and
-                     * commit. THis he,ps us optimise query performance across the event store.
+                     * commit. This helps us optimise query performance across the event store.
                      */
                     'IndexName' => self::REPOSITORY_COMMIT_INDEX,
                     /**
