@@ -17,9 +17,6 @@ services:
 
     Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
 
-    # Event processing
-    Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'
-
     Packages\Event\Service\EventProcessorService:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.orchestrator_event_processor', default_index_method: 'getEvent'}

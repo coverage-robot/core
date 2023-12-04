@@ -7,22 +7,21 @@ use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
+use Packages\Event\Service\EventProcessorService;
 use Packages\Event\Service\EventProcessorServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends EventBridgeHandler
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
+        #[Autowire(service: EventProcessorService::class)]
         private readonly EventProcessorServiceInterface $eventProcessor,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface&DenormalizerInterface $serializer
     ) {
     }
 

@@ -9,6 +9,7 @@ use Github\Client;
 use Github\HttpClient\Builder;
 use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class GithubAppClient extends Client
 {
@@ -16,7 +17,9 @@ class GithubAppClient extends Client
      * @throws ClientException
      */
     public function __construct(
+        #[Autowire(env: 'GITHUB_APP_ID')]
         private readonly string $appId,
+        #[Autowire(value: '%kernel.project_dir%/config/github.pem')]
         private readonly string $privateKeyFile,
         private readonly JwtGenerator $jwtGenerator,
         ?Builder $httpClientBuilder = null,

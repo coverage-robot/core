@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Packages\Event\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'

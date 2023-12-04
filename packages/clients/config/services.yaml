@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Packages\Clients\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
