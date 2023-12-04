@@ -10,18 +10,14 @@ use Packages\Models\Model\Coverage;
 use Packages\Models\Model\File;
 use Packages\Models\Model\Line\AbstractLine;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class BigQueryMetadataBuilderService
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly LoggerInterface $metadataBuilderServiceLogger,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface&NormalizerInterface $serializer
     ) {
     }
 

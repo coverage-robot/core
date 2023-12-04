@@ -7,6 +7,7 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
+use App\Service\EnvironmentService;
 use App\Service\WebhookSignatureService;
 use Exception;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -14,23 +15,21 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class WebhookController extends AbstractController
 {
-    /**
-     * @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
-     */
     public function __construct(
         private readonly LoggerInterface $webhookLogger,
         private readonly WebhookSignatureService $webhookSignatureService,
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SqsMessageClient $sqsMessageClient
     ) {

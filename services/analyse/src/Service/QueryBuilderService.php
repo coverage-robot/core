@@ -6,18 +6,14 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use Doctrine\SqlFormatter\SqlFormatter;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class QueryBuilderService
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly SqlFormatter $sqlFormatter,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface&NormalizerInterface $serializer
     ) {
     }
 

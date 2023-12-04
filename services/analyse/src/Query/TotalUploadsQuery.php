@@ -8,13 +8,14 @@ use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalUploadsQuery implements QueryInterface
@@ -22,11 +23,9 @@ class TotalUploadsQuery implements QueryInterface
     use UploadTableAwareTrait;
     use ScopeAwareTrait;
 
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService
     ) {
     }

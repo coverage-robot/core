@@ -4,10 +4,12 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
+use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DynamoDbClient
@@ -19,6 +21,7 @@ class DynamoDbClient
 
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer,
         private readonly LoggerInterface $dynamoDbClientLogger

@@ -26,15 +26,10 @@ use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends S3Handler
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,

@@ -2,6 +2,7 @@
 
 namespace Packages\Telemetry\Service;
 
+use App\Service\EnvironmentService;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Enum\Resolution;
@@ -32,6 +33,7 @@ class MetricService
         private readonly LoggerInterface $metricsLogger,
         #[Autowire(service: NativeClock::class)]
         private readonly ClockInterface $clock,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface&NormalizerInterface $serializer
     ) {

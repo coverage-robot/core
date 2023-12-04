@@ -4,6 +4,7 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Model\OrchestratedEventInterface;
+use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -13,8 +14,7 @@ use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Symfony\Component\Serializer\Encoder\DecoderInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DynamoDbClient
@@ -34,11 +34,9 @@ class DynamoDbClient
      */
     private const REPOSITORY_COMMIT_INDEX = self:: REPOSITORY_IDENTIFIER_COLUMN . '-' . self::COMMIT_COLUMN . '-index';
 
-    /**
-     * @param SerializerInterface&DecoderInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {

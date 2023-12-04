@@ -3,6 +3,7 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
+use App\Service\EnvironmentService;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
@@ -10,7 +11,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -20,13 +21,11 @@ class S3PersistService implements PersistServiceInterface
 
     private const OUTPUT_KEY = '%s%s.txt';
 
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly SimpleS3Client $s3Client,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&NormalizerInterface $serializer,
         private readonly LoggerInterface $s3PersistServiceLogger
     ) {
     }

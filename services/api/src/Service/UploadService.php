@@ -10,9 +10,9 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadService
@@ -21,14 +21,12 @@ class UploadService
 
     private const EXPIRY_MINUTES = 5;
 
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly UploadSignerService $uploadSignerService,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly LoggerInterface $uploadLogger
     ) {
     }

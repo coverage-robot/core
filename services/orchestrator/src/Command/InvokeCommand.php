@@ -30,12 +30,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 #[AsCommand(name: 'app:invoke', description: 'Invoke the orchestration event handler')]
 class InvokeCommand extends Command
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface $serializer
-     */
     public function __construct(
         private readonly EventHandler $handler,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface&NormalizerInterface $serializer
     ) {
         parent::__construct();
     }
