@@ -7,7 +7,3 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-
-    Packages\Clients\Client\Github\GithubAppClient:
-        arguments:
-            $privateKeyFile:
