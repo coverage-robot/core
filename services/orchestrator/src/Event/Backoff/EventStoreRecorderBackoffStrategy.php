@@ -5,6 +5,7 @@ namespace App\Event\Backoff;
 use App\Exception\OutOfOrderEventException;
 use Exception;
 use STS\Backoff\Backoff;
+use STS\Backoff\Strategies\LinearStrategy;
 
 /**
  * A ready-made backoff strategy specifically for ensuring that event state changes are peristed into the
@@ -12,6 +13,8 @@ use STS\Backoff\Backoff;
  *
  * This handles scenarios where the event store is being written to, and there is another contentious write
  * occurring at the same time for the same event, which therefore invalidates the state change.
+ *
+ * The retry interval is: 0ms, 500ms, 500ms
  */
 class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
 {
@@ -20,7 +23,8 @@ class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
     public function __construct()
     {
         $this->backoff = new Backoff(
-            maxAttempts: 3,
+            maxAttempts: 2,
+            strategy: new LinearStrategy(500),
             useJitter: true,
             decider: static function (int $attempt, int $maxAttempts, ?bool $result, ?Exception $exception = null) {
                 if ($exception instanceof OutOfOrderEventException) {
