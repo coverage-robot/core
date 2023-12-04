@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Packages\Event\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+
+    Packages\Clients\Client\Github\GithubAppClient:
+        arguments:
+            $privateKeyFile:

@@ -29,12 +29,3 @@ services:
     Doctrine\SqlFormatter\SqlFormatter:
         arguments:
             $highlighter: '@Doctrine\SqlFormatter\NullHighlighter'
-
-    Packages\Clients\Client\Github\GithubAppClient:
-        arguments:
-            $appId: '%env(GITHUB_APP_ID)%'
-            $privateKeyFile: './config/github.pem'
-
-    Packages\Clients\Client\Github\GithubAppInstallationClient: ~
-
-    Packages\Clients\Generator\JwtGenerator: ~

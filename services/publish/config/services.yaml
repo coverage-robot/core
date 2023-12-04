@@ -16,13 +16,3 @@ services:
         public: true
 
     Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
-
-    # Message publishing
-    Packages\Clients\Client\Github\GithubAppClient:
-        arguments:
-            $appId: '%env(GITHUB_APP_ID)%'
-            $privateKeyFile: './config/github.pem'
-
-    Packages\Clients\Client\Github\GithubAppInstallationClient: ~
-
-    Packages\Clients\Generator\JwtGenerator: ~
