@@ -14,14 +14,7 @@ services:
 
     Random\Randomizer: ~
 
-    # Metric publishing
-    Symfony\Component\Clock\NativeClock: ~
-
-    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
-
     Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
-
-    Packages\Telemetry\Service\MetricService: ~
 
     # Event processing
     App\Handler\EventHandler:

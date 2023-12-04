@@ -4,7 +4,7 @@ namespace Packages\Telemetry\Tests;
 
 use Bref\Context\ContextBuilder;
 use Packages\Telemetry\Enum\EnvironmentVariable;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use PHPUnit\Framework\TestCase;
 
 class TraceContextTest extends TestCase

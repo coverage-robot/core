@@ -15,16 +15,7 @@ services:
         # runtime
         public: true
 
-    Psr\Container\ContainerInterface: '@service_container'
-
     Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
-
-    # Metric publishing
-    Symfony\Component\Clock\NativeClock: ~
-
-    Psr\Clock\ClockInterface: '@Symfony\Component\Clock\NativeClock'
-
-    Packages\Telemetry\Service\MetricService: ~
 
     # Event processing
     Packages\Event\Service\EventProcessorServiceInterface: '@Packages\Event\Service\EventProcessorService'

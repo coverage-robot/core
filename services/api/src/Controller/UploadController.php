@@ -8,7 +8,7 @@ use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
-use Packages\Telemetry\TraceContext;
+use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

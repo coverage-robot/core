@@ -12,6 +12,8 @@ use Packages\Telemetry\Model\Metric\MetricDirective;
 use Packages\Telemetry\Model\Metric\RootNode;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -28,6 +30,7 @@ class MetricService
 
     public function __construct(
         private readonly LoggerInterface $metricsLogger,
+        #[Autowire(service: NativeClock::class)]
         private readonly ClockInterface $clock,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface&NormalizerInterface $serializer

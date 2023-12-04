@@ -11,6 +11,7 @@ use JsonException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
+use Packages\Telemetry\Service\TraceContext;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBridgeEventClient

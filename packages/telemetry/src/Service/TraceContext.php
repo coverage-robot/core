@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Telemetry;
+namespace Packages\Telemetry\Service;
 
 use Bref\Context\Context;
 use Packages\Telemetry\Enum\EnvironmentVariable;

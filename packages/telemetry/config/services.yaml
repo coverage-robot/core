@@ -1,0 +1,11 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Packages\Telemetry\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+
+    Symfony\Component\Clock\NativeClock: ~
