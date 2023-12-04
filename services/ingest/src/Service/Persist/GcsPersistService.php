@@ -7,6 +7,7 @@ use App\Client\GoogleCloudStorageClient;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PersistException;
 use App\Service\BigQueryMetadataBuilderService;
+use App\Service\EnvironmentService;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
@@ -17,6 +18,7 @@ use Packages\Models\Model\File;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class GcsPersistService implements PersistServiceInterface
 {
@@ -28,6 +30,7 @@ class GcsPersistService implements PersistServiceInterface
         private readonly GoogleCloudStorageClient $googleCloudStorageClient,
         private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $gcsPersistServiceLogger,
         private readonly MetricService $metricService

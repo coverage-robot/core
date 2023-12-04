@@ -3,6 +3,7 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
+use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
@@ -12,12 +13,14 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Telemetry\Service\TraceContext;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBridgeEventClient
 {
     public function __construct(
         private readonly EventBridgeClient $eventBridgeClient,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {

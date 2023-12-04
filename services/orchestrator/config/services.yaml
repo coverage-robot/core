@@ -15,8 +15,6 @@ services:
         # runtime
         public: true
 
-    Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'
-
     Packages\Event\Service\EventProcessorService:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.orchestrator_event_processor', default_index_method: 'getEvent'}

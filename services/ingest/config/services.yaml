@@ -14,5 +14,3 @@ services:
         # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
         public: true
-
-    Packages\Contracts\Environment\EnvironmentServiceInterface: '@App\Service\EnvironmentService'

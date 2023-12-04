@@ -17,6 +17,7 @@ use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class QueryBuilderServiceTest extends KernelTestCase
@@ -43,7 +44,7 @@ class QueryBuilderServiceTest extends KernelTestCase
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(SerializerInterface::class)
+            $this->createMock(Serializer::class)
         );
 
         $this->assertEquals(
@@ -78,7 +79,7 @@ class QueryBuilderServiceTest extends KernelTestCase
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(SerializerInterface::class)
+            $this->createMock(Serializer::class)
         );
 
         $this->expectException(QueryException::class);

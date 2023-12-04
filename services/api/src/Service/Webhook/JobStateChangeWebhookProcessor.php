@@ -9,6 +9,7 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
+use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
@@ -17,6 +18,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
 {
@@ -24,6 +26,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
         private readonly EventBridgeEventClient $eventBridgeEventClient,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService
     ) {
     }

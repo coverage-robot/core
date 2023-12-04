@@ -21,18 +21,14 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Enum\LineState;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadsFinalisedEventProcessor implements EventProcessorInterface
 {
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&NormalizerInterface $serializer,
         private readonly CoverageAnalyserService $coverageAnalyserService,
         private readonly EventBridgeEventClient $eventBridgeEventService,
         private readonly SqsMessageClient $sqsMessageClient

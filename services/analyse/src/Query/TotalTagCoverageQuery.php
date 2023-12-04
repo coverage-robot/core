@@ -6,13 +6,14 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Trait\CarryforwardAwareTrait;
+use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
@@ -21,11 +22,9 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 
     private const UPLOAD_TABLE_ALIAS = 'upload';
 
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);

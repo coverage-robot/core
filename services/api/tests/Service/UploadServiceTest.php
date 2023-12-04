@@ -19,6 +19,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadServiceTest extends KernelTestCase
@@ -29,7 +30,7 @@ class UploadServiceTest extends KernelTestCase
             $this->createMock(UploadSignerService::class),
             $this->createMock(EnvironmentService::class),
             $this->createMock(UniqueIdGeneratorService::class),
-            $this->createMock(SerializerInterface::class),
+            $this->createMock(Serializer::class),
             new NullLogger(),
         );
 
