@@ -48,8 +48,8 @@ class GraphControllerTest extends KernelTestCase
             ->willReturn($this->createMock(Project::class));
 
         $mockBadgeService->expects($this->once())
-            ->method('getBadge')
-            ->with($this->isInstanceOf(Project::class))
+            ->method('renderCoveragePercentageBadge')
+            ->with(null)
             ->willReturn('<svg></svg>');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
@@ -82,7 +82,7 @@ class GraphControllerTest extends KernelTestCase
             ->method('findOneBy');
 
         $mockBadgeService->expects($this->never())
-            ->method('getBadge');
+            ->method('renderCoveragePercentageBadge');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 
@@ -114,7 +114,7 @@ class GraphControllerTest extends KernelTestCase
             ->method('findOneBy');
 
         $mockBadgeService->expects($this->never())
-            ->method('getBadge');
+            ->method('renderCoveragePercentageBadge');
 
         $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
 

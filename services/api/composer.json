@@ -3,7 +3,7 @@
     "description": "The api coverage service.",
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
@@ -13,13 +13,13 @@
         "async-aws/event-bridge": "^1.5",
         "async-aws/s3": "^2.0",
         "async-aws/sqs": "^1.9",
-        "badges/poser": "^2.3",
         "bref/bref": "^2.0",
         "bref/extra-php-extensions": "^1.2",
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/telemetry": "^1.0",
+        "cybercog/php-svg-font": "*",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.15",
@@ -37,6 +37,8 @@
         "symfony/property-info": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "6.4.*",
+        "symfony/twig-bridge": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
         "symfony/yaml": "7.0.*"
     },
     "config": {

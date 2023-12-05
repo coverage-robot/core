@@ -54,7 +54,9 @@ class GraphController extends AbstractController
             ]);
 
             return new Response(
-                $this->badgeService->getBadge($project),
+                $this->badgeService->renderCoveragePercentageBadge(
+                    $project->getCoveragePercentage()
+                ),
                 Response::HTTP_OK,
                 [
                     'Content-Type' => 'image/svg+xml',

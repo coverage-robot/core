@@ -10,4 +10,5 @@ return [
     Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
     Packages\Event\EventBundle::class => ['all' => true],
     Packages\Telemetry\TelemetryBundle::class => ['all' => true],
+    Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
 ];
