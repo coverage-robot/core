@@ -4,11 +4,14 @@ namespace App\Tests\Service;
 
 use App\Service\BadgeService;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Spatie\Snapshots\MatchesSnapshots;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
 
-class BadgeServiceTest extends TestCase
+class BadgeServiceTest extends KernelTestCase
 {
+    use MatchesSnapshots;
+
     #[DataProvider('projectCoverageDataProvider')]
     public function testBadgeCreation(?float $coveragePercentage, string $expectedHex, float $expectedValueWidth): void
     {
@@ -43,6 +46,23 @@ class BadgeServiceTest extends TestCase
         );
     }
 
+    #[DataProvider('projectCoverageWithIconsDataProvider')]
+    public function testBadgeRendering(
+        ?float $coveragePercentage,
+        bool $includeIcon
+    ): void {
+        /** @var BadgeService $badgeService */
+        $badgeService = $this->getContainer()
+            ->get(BadgeService::class);
+
+        $this->assertMatchesXmlSnapshot(
+            $badgeService->renderCoveragePercentageBadge(
+                $coveragePercentage,
+                $includeIcon
+            )
+        );
+    }
+
     public static function projectCoverageDataProvider(): array
     {
         return [
@@ -72,5 +92,24 @@ class BadgeServiceTest extends TestCase
                 41.94287109375
             ]
         ];
+    }
+
+    public static function projectCoverageWithIconsDataProvider(): array
+    {
+        return array_reduce(
+            self::projectCoverageDataProvider(),
+            static fn (array $carry, array $item): array => [
+                ...$carry,
+                sprintf('%s with icons', $item[0] ? $item[0] . '%' : 'null') => [
+                    $item[0],
+                    true
+                ],
+                sprintf('%s without icons', $item[0] ? $item[0] . '%' : 'null') => [
+                    $item[0],
+                    false
+                ]
+            ],
+            []
+        );
     }
 }
