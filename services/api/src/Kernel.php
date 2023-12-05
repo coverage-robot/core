@@ -9,7 +9,7 @@ class Kernel extends BrefKernel
 {
     use MicroKernelTrait;
 
-    public function getWritableCacheDirectories(): array
+    protected function getWritableCacheDirectories(): array
     {
         return [
             ...parent::getWritableCacheDirectories(),
