@@ -25,7 +25,7 @@ class BadgeServiceTest extends TestCase
                     'labelWidth' => 51.068359375,
                     'valueWidth' => $expectedValueWidth,
                     'value' => $coveragePercentage ?
-                        sprintf("%s%%", $coveragePercentage) :
+                        sprintf('%s%%', $coveragePercentage) :
                         BadgeService::NO_COVERGAGE_PERCENTAGE_VALUE,
                     'color' => $expectedHex
                 ]
