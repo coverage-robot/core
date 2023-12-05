@@ -1,39 +1,46 @@
 <?php
 
-namespace App\Tests\App\Service;
+namespace App\Tests\Service;
 
-use App\Entity\Project;
 use App\Service\BadgeService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use PUGX\Poser\Poser;
+use Twig\Environment;
 
 class BadgeServiceTest extends TestCase
 {
     #[DataProvider('projectCoverageDataProvider')]
-    public function testBadgeCreation(?float $coveragePercentage, string $expectedHex): void
+    public function testBadgeCreation(?float $coveragePercentage, string $expectedHex, float $expectedValueWidth): void
     {
-        $poser = $this->createMock(Poser::class);
+        $mockTwigEnvironment = $this->createMock(Environment::class);
 
-        $poser->expects($this->once())
-            ->method('generate')
+        $mockTwigEnvironment->expects($this->once())
+            ->method('render')
             ->with(
-                BadgeService::BADGE_LABEL,
-                $coveragePercentage !== null ?
-                    sprintf('%s%%', number_format($coveragePercentage, 2)) :
-                    'unknown',
-                $expectedHex,
-                'flat'
-            );
+                'badges/badge.svg.twig',
+                [
+                    'fontFamily' => 'dejavu sans',
+                    'label' => BadgeService::BADGE_LABEL,
+                    'iconWidth' => 15,
+                    'labelWidth' => 51.068359375,
+                    'valueWidth' => $expectedValueWidth,
+                    'value' => $coveragePercentage ?
+                        sprintf("%s%%", $coveragePercentage) :
+                        BadgeService::NO_COVERGAGE_PERCENTAGE_VALUE,
+                    'color' => $expectedHex
+                ]
+            )
+            ->willReturn('<svg></svg>');
 
-        $badgeService = new BadgeService($poser);
+        $badgeService = new BadgeService(
+            $mockTwigEnvironment,
+            'templates/'
+        );
 
-        $mockProject = $this->createMock(Project::class);
-        $mockProject->expects($this->atLeastOnce())
-            ->method('getCoveragePercentage')
-            ->willReturn($coveragePercentage);
-
-        $badgeService->getBadge($mockProject);
+        $this->assertEquals(
+            '<svg></svg>',
+            $badgeService->renderCoveragePercentageBadge($coveragePercentage)
+        );
     }
 
     public static function projectCoverageDataProvider(): array
@@ -41,23 +48,28 @@ class BadgeServiceTest extends TestCase
         return [
             [
                 99,
-                '05ff00'
+                '05ff00',
+                24.44921875
             ],
             [
                 1,
-                'ff0500'
+                'ff0500',
+                17.45068359375
             ],
             [
                 100,
-                '00ff00'
+                '00ff00',
+                31.44775390625
             ],
             [
                 null,
-                'ff0000'
+                'ff0000',
+                49.9833984375
             ],
             [
                 34.64,
-                'ffb100'
+                'ffb100',
+                41.94287109375
             ]
         ];
     }

@@ -1,0 +1,33 @@
+{% set shouldIncludeIcon = iconWidth is defined and iconWidth > 0 %}
+
+{% set padding = {"iconLeft": 5, "iconRight": 0, "labelLeft": 5, "labelRight": 7, "valueLeft": 5, "valueRight": 7} %}
+{% set iconSize = shouldIncludeIcon ? (padding["iconLeft"] + iconWidth + padding["iconRight"]) : 0 %}
+{% set labelSize = (padding["labelLeft"] + labelWidth + padding["labelRight"]) %}
+{% set valueSize = (padding["valueLeft"] + valueWidth + padding["valueRight"]) %}
+
+{% set badgeHeight = 20 %}
+{% set badgeWidth = (iconSize + labelSize + valueSize) %}
+
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ badgeWidth }}" height="20">
+    <linearGradient id="b" x2="0" y2="100%">
+        <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
+        <stop offset="1" stop-opacity=".1"/>
+    </linearGradient>
+    <mask id="a">
+        <rect width="{{ badgeWidth }}" height="20" rx="3" fill="#fff"/>
+    </mask>
+    <g mask="url(#a)">
+        <rect width="{{ iconSize + labelSize }}" height="20" fill="#555"/>
+        <rect x="{{ iconSize + labelSize }}" width="{{ valueSize }}" height="20" fill="#{{ color }}"/>
+        <rect width="{{ badgeWidth }}" height="20" fill="url(#b)"/>
+    </g>
+    <g fill="#fff" text-anchor="middle" font-family="{{ fontFamily }}, Verdana, Geneva, sans-serif" font-size="11">
+        {% if shouldIncludeIcon %}
+            {% include 'badges/icons/white.svg.twig' %}
+        {% endif %}
+        <text x="{{ iconSize + padding["labelLeft"] + (labelWidth / 2) }}" y="15" fill="#010101" fill-opacity=".3">{{ label }}</text>
+        <text x="{{ iconSize + padding["labelLeft"] + (labelWidth / 2) }}" y="14">{{ label }}</text>
+        <text x="{{ iconSize + labelSize + padding["valueLeft"] + (valueWidth / 2) }}" y="15" fill="#010101" fill-opacity=".3">{{ value }}</text>
+        <text x="{{ iconSize + labelSize + padding["valueLeft"] + (valueWidth / 2)  }}" y="14">{{ value }}</text>
+    </g>
+</svg>

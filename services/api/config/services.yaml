@@ -27,15 +27,3 @@ services:
     Packages\Event\Service\EventProcessorService:
         arguments:
             $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
-
-    # Coverage badge generation
-    PUGX\Poser\Render\:
-        resource: '../vendor/badges/poser/src/Render'
-
-    PUGX\Poser\Poser:
-        arguments:
-            $renders:
-                - '@PUGX\Poser\Render\SvgPlasticRender'
-                - '@PUGX\Poser\Render\SvgFlatSquareRender'
-                - '@PUGX\Poser\Render\SvgForTheBadgeRenderer'
-                - '@PUGX\Poser\Render\SvgFlatRender'
