@@ -188,12 +188,12 @@ class AuthTokenServiceTest extends TestCase
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
-            ->method('findOneBy')
-            ->willReturnOnConsecutiveCalls(
-                $this->createMock(Project::class),
-                $this->createMock(Project::class),
-                $this->createMock(Project::class)
-            );
+        ->method('findOneBy')
+        ->willReturnOnConsecutiveCalls(
+            $this->createMock(Project::class),
+            $this->createMock(Project::class),
+            $this->createMock(Project::class)
+        );
 
         $this->expectExceptionObject(
             TokenException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
@@ -228,29 +228,29 @@ class AuthTokenServiceTest extends TestCase
     {
         $parameters = $this->createMock(GraphParameters::class);
         $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
+        ->method('getProvider')
+        ->willReturn(Provider::GITHUB);
         $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
+        ->method('getRepository')
+        ->willReturn('mock-repository');
         $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        ->method('getOwner')
+        ->willReturn('mock-owner');
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
+        ->method('isEnabled')
+        ->willReturn(true);
 
         $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'graphToken' => 'mock-token'
-            ])
-            ->willReturn($project);
+        ->method('findOneBy')
+        ->with([
+            'provider' => Provider::GITHUB,
+            'repository' => 'mock-repository',
+            'owner' => 'mock-owner',
+            'graphToken' => 'mock-token'
+        ])
+        ->willReturn($project);
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
@@ -264,29 +264,29 @@ class AuthTokenServiceTest extends TestCase
     {
         $parameters = $this->createMock(GraphParameters::class);
         $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
+        ->method('getProvider')
+        ->willReturn(Provider::GITHUB);
         $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
+        ->method('getRepository')
+        ->willReturn('mock-repository');
         $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        ->method('getOwner')
+        ->willReturn('mock-owner');
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(false);
+        ->method('isEnabled')
+        ->willReturn(false);
 
         $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'graphToken' => 'mock-token'
-            ])
-            ->willReturn($project);
+        ->method('findOneBy')
+        ->with([
+            'provider' => Provider::GITHUB,
+            'repository' => 'mock-repository',
+            'owner' => 'mock-owner',
+            'graphToken' => 'mock-token'
+        ])
+        ->willReturn($project);
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
@@ -300,24 +300,24 @@ class AuthTokenServiceTest extends TestCase
     {
         $parameters = $this->createMock(GraphParameters::class);
         $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
+        ->method('getProvider')
+        ->willReturn(Provider::GITHUB);
         $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
+        ->method('getRepository')
+        ->willReturn('mock-repository');
         $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        ->method('getOwner')
+        ->willReturn('mock-owner');
 
         $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'graphToken' => 'mock-token'
-            ])
-            ->willReturn(null);
+        ->method('findOneBy')
+        ->with([
+            'provider' => Provider::GITHUB,
+            'repository' => 'mock-repository',
+            'owner' => 'mock-owner',
+            'graphToken' => 'mock-token'
+        ])
+        ->willReturn(null);
 
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
@@ -371,12 +371,12 @@ class AuthTokenServiceTest extends TestCase
         $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
 
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
-            ->method('findOneBy')
-            ->willReturnOnConsecutiveCalls(
-                $this->createMock(Project::class),
-                $this->createMock(Project::class),
-                $this->createMock(Project::class)
-            );
+        ->method('findOneBy')
+        ->willReturnOnConsecutiveCalls(
+            $this->createMock(Project::class),
+            $this->createMock(Project::class),
+            $this->createMock(Project::class)
+        );
 
         $this->expectExceptionObject(
             TokenException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
@@ -388,22 +388,22 @@ class AuthTokenServiceTest extends TestCase
     public static function authorizationHeaderDataProvider(): array
     {
         return [
-            'No Authorization' => [
-                null,
-                null
-            ],
-            'Basic Authorization with username' => [
-                sprintf('Basic %s', base64_encode('mock-token:')),
-                'mock-token'
-            ],
-            'Basic Authorization with password' => [
-                sprintf('Basic %s', base64_encode(':mock-token')),
-                'mock-token'
-            ],
-            'Bearer Authorization' => [
-                sprintf('Bearer %s', base64_encode('some-invalid-bearer-token')),
-                null
-            ],
+        'No Authorization' => [
+            null,
+            null
+        ],
+        'Basic Authorization with username' => [
+            sprintf('Basic %s', base64_encode('mock-token:')),
+            'mock-token'
+        ],
+        'Basic Authorization with password' => [
+            sprintf('Basic %s', base64_encode(':mock-token')),
+            'mock-token'
+        ],
+        'Bearer Authorization' => [
+            sprintf('Bearer %s', base64_encode('some-invalid-bearer-token')),
+            null
+        ],
         ];
     }
 }

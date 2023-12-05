@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "282e0ffd54a13000af2b3fc35f093397",
+    "content-hash": "bb6ec4061cb2df1dddf7a4731cd6a124",
     "packages": [
         {
             "name": "coverage-robot/contracts",
