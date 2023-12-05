@@ -1,14 +1,11 @@
 {% set shouldIncludeIcon = iconWidth is defined and iconWidth > 0 %}
-
 {% set padding = {"iconLeft": 5, "iconRight": 0, "labelLeft": 5, "labelRight": 7, "valueLeft": 5, "valueRight": 7} %}
 {% set iconSize = shouldIncludeIcon ? (padding["iconLeft"] + iconWidth + padding["iconRight"]) : 0 %}
 {% set labelSize = (padding["labelLeft"] + labelWidth + padding["labelRight"]) %}
 {% set valueSize = (padding["valueLeft"] + valueWidth + padding["valueRight"]) %}
-
 {% set badgeHeight = 20 %}
 {% set badgeWidth = (iconSize + labelSize + valueSize) %}
-
-<svg xmlns="http://www.w3.org/2000/svg" width="{{ badgeWidth }}" height="20">
+<svg width="{{ badgeWidth }}" height="20">
     <linearGradient id="b" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
         <stop offset="1" stop-opacity=".1"/>
