@@ -2,12 +2,7 @@ version: "3.9"
 
 services:
   lambda:
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM bref/php-83-fpm-dev:2
-        COPY --from=bref/extra-gd-php-82:1 /opt /opt
-
+    image: bref/php-83-fpm-dev:2
     ports: [ '8000:8000' ]
     volumes:
       - .:/var/task:ro

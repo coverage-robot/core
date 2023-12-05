@@ -99,7 +99,7 @@ resource "aws_lambda_function" "api" {
   memory_size      = 1024
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:${var.php_version}-fpm:%s",
+      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}-fpm:%s",
       var.region,
       local.bref_layers["arm-${var.php_version}-fpm"][var.region]
     )
