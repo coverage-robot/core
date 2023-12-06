@@ -43,7 +43,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         'BRH' => '\d+$'
     ];
 
-    final public const array END_OF_RECORD_MARKER = 'end_of_record';
+    final public const string END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
         private readonly LoggerInterface $parseStrategyLogger,
