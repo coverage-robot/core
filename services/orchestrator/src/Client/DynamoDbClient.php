@@ -22,13 +22,13 @@ class DynamoDbClient
     /**
      * The default TTL for each event in the store, in seconds - currently 12 hours.
      */
-    private const DEFAULT_EVENT_TTL = 43200;
+    private const int DEFAULT_EVENT_TTL = 43200;
 
-    private const REPOSITORY_IDENTIFIER_COLUMN = 'repositoryIdentifier';
+    private const string REPOSITORY_IDENTIFIER_COLUMN = 'repositoryIdentifier';
 
-    private const COMMIT_COLUMN = 'commit';
+    private const string COMMIT_COLUMN = 'commit';
 
-    private const VERSION_COLUMN = 'version';
+    private const string VERSION_COLUMN = 'version';
 
     /**
      * The name of the index used to query for all of the events for a particular
