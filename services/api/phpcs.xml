@@ -17,7 +17,7 @@
         -->
         <severity>0</severity>
     </rule>
-    <rule ref="Generic.NamingConventions.LowerCaseKeywordSniff">
+    <rule ref="Generic.PHP.LowerCaseKeywordSniff">
         <!--
         PHP 8.3 added typed constants, and PHP_CS is yet to catch
         up, so will throw false positives about keywords.
