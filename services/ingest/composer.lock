@@ -605,12 +605,15 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "e14d67cb8a26b4ff60532956f0d7517d7147404d"
+                "reference": "f3c46aa62f21174687a0105bd7fd7d9196e5690a"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
                 "coverage-robot/models": "*",
-                "psr/log": "^3.0"
+                "psr/log": "^3.0",
+                "symfony/config": "^6.4||^7.0",
+                "symfony/dependency-injection": "^6.4||^7.0",
+                "symfony/http-kernel": "^6.4||^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^10.3"
@@ -662,12 +665,15 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "5d892db29d4d69d77f7c2ef336cba569bfb371a1"
+                "reference": "5c7aea42567600a6f4d22852a50bc85707cafa5c"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
-                "psr/clock": "^1.0",
                 "psr/log": "^3.0",
+                "symfony/clock": "^7.0",
+                "symfony/config": "^6.4||^7.0",
+                "symfony/dependency-injection": "^6.4||^7.0",
+                "symfony/http-kernel": "^6.4||^7.0",
                 "symfony/serializer": "^6.3"
             },
             "require-dev": {
@@ -4442,16 +4448,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.4.1",
+            "version": "v2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4"
+                "reference": "67ee785f1aedada76461de7a7ec10cd7f8ff8d36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
-                "reference": "ae6dea68771c5fca9d172e0c0910bdd06199f6f4",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/67ee785f1aedada76461de7a7ec10cd7f8ff8d36",
+                "reference": "67ee785f1aedada76461de7a7ec10cd7f8ff8d36",
                 "shasum": ""
             },
             "require": {
@@ -4487,7 +4493,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.4.1"
+                "source": "https://github.com/symfony/flex/tree/v2.4.2"
             },
             "funding": [
                 {
@@ -4503,7 +4509,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-30T18:35:17+00:00"
+            "time": "2023-12-05T14:09:35+00:00"
         },
         {
             "name": "symfony/framework-bundle",
