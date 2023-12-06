@@ -32,7 +32,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.4.*",
         "symfony/monolog-bundle": "^3.8",
-        "symfony/property-access": "6.4.*",
+        "symfony/property-access": "7.0.*",
         "symfony/property-info": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "6.4.*",
