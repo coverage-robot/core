@@ -18,9 +18,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UploadService
 {
-    private const TARGET_BUCKET = 'coverage-ingest-%s';
+    private const string TARGET_BUCKET = 'coverage-ingest-%s';
 
-    private const EXPIRY_MINUTES = 5;
+    private const int EXPIRY_MINUTES = 5;
 
     public function __construct(
         private readonly UploadSignerService $uploadSignerService,

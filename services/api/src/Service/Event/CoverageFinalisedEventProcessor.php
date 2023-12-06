@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
-    private const REFS = [
+    private const array REFS = [
         'master',
         'main',
     ];
