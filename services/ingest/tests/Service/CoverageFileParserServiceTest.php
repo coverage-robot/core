@@ -15,7 +15,7 @@ use stdClass;
 
 class CoverageFileParserServiceTest extends TestCase
 {
-    private const STRATEGIES = [
+    private const array STRATEGIES = [
         CloverParseStrategy::class,
         LcovParseStrategy::class
     ];

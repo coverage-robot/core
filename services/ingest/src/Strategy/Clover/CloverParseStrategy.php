@@ -18,17 +18,17 @@ use XMLReader;
 
 class CloverParseStrategy implements ParseStrategyInterface
 {
-    private const PROJECT = 'project';
+    private const string PROJECT = 'project';
 
-    private const FILE = 'file';
+    private const string FILE = 'file';
 
-    private const LINE = 'line';
+    private const string LINE = 'line';
 
-    private const STATEMENT = 'stmt';
+    private const string STATEMENT = 'stmt';
 
-    private const METHOD = 'method';
+    private const string METHOD = 'method';
 
-    private const CONDITION = 'cond';
+    private const string CONDITION = 'cond';
 
     public function __construct(
         private readonly LoggerInterface $parseStrategyLogger,
