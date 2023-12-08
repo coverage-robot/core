@@ -36,7 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
-    private const MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
+    private const int MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
     public function __construct(
         private readonly CheckRunFormatterService $checkRunFormatterService,
