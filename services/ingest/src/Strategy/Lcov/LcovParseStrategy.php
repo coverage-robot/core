@@ -22,7 +22,7 @@ class LcovParseStrategy implements ParseStrategyInterface
 
     private const string BRANCH_DATA = 'BRDA';
 
-    private const string FUNCTION = 'FN';
+    private const string function = 'FN';
 
     private const string FUNCTION_DATA = 'FNDA';
 
