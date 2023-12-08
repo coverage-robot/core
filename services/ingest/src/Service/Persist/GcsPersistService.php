@@ -24,7 +24,7 @@ class GcsPersistService implements PersistServiceInterface
 {
     final public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
 
-    private const OUTPUT_KEY = '%s%s.json';
+    private const string OUTPUT_KEY = '%s%s.json';
 
     public function __construct(
         private readonly GoogleCloudStorageClient $googleCloudStorageClient,

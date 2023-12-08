@@ -16,19 +16,19 @@ use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
 {
-    private const FILE = 'SF';
+    private const string FILE = 'SF';
 
-    private const LINE_DATA = 'DA';
+    private const string LINE_DATA = 'DA';
 
-    private const BRANCH_DATA = 'BRDA';
+    private const string BRANCH_DATA = 'BRDA';
 
-    private const FUNCTION = 'FN';
+    private const string FUNCTION = 'FN';
 
-    private const FUNCTION_DATA = 'FNDA';
+    private const string FUNCTION_DATA = 'FNDA';
 
-    private const LINE_STRUCTURE = '/^(?<type>\w+):(?<data>.*)$/';
+    private const string LINE_STRUCTURE = '/^(?<type>\w+):(?<data>.*)$/';
 
-    private const COVERAGE_DATA_VALIDATION = [
+    private const array COVERAGE_DATA_VALIDATION = [
         'TN' => '.*$',
         self::FILE => '.+$',
         self::FUNCTION => '(?<lineNumber>\d+),(?<name>.+)$',
@@ -43,7 +43,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         'BRH' => '\d+$'
     ];
 
-    final public const END_OF_RECORD_MARKER = 'end_of_record';
+    final public const string END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
         private readonly LoggerInterface $parseStrategyLogger,

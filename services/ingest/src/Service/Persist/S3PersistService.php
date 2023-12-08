@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class S3PersistService implements PersistServiceInterface
 {
-    private const OUTPUT_BUCKET = 'coverage-output-%s';
+    private const string OUTPUT_BUCKET = 'coverage-output-%s';
 
-    private const OUTPUT_KEY = '%s%s.txt';
+    private const string OUTPUT_KEY = '%s%s.txt';
 
     public function __construct(
         private readonly SimpleS3Client $s3Client,
