@@ -38,7 +38,7 @@
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "6.4.*",
         "symfony/twig-bridge": "6.4.*",
-        "symfony/twig-bundle": "6.4.*",
+        "symfony/twig-bundle": "7.0.*",
         "symfony/yaml": "7.0.*"
     },
     "config": {
