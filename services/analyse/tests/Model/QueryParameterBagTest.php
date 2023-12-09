@@ -22,14 +22,14 @@ class QueryParameterBagTest extends TestCase
         );
         $queryParameterBag->set(
             QueryParameter::UPLOADS_SCOPE,
-            ""
+            ''
         );
 
         $this->assertSame(
             [
                 QueryParameter::PROVIDER->value => Provider::GITHUB,
                 QueryParameter::LINE_SCOPE->value => [],
-                QueryParameter::UPLOADS_SCOPE->value => "",
+                QueryParameter::UPLOADS_SCOPE->value => '',
             ],
             $queryParameterBag->jsonSerialize()
         );
