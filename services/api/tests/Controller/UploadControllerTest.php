@@ -94,7 +94,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"Parameters provided for signing do not match expectation."}',
+            '{"message":"Parameters provided for signing do not match expectation."}',
             $response->getContent()
         );
     }
@@ -130,7 +130,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"The provided upload token is invalid."}',
+            '{"message":"The provided upload token is invalid."}',
             $response->getContent()
         );
     }
@@ -167,7 +167,7 @@ class UploadControllerTest extends KernelTestCase
 
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
         $this->assertEquals(
-            '{"error":"The provided upload token is invalid."}',
+            '{"message":"The provided upload token is invalid."}',
             $response->getContent()
         );
     }
