@@ -12,7 +12,7 @@ use WeakMap;
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  */
-class QueryParameterBag implements \JsonSerializable
+class QueryParameterBag
 {
     private WeakMap $parameters;
 
@@ -54,10 +54,5 @@ class QueryParameterBag implements \JsonSerializable
         $parameters->set(QueryParameter::PROVIDER, $event->getProvider());
 
         return $parameters;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return iterator_to_array($this->parameters->getIterator());
     }
 }
