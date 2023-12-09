@@ -47,14 +47,11 @@ class QueryBuilderService
         $parameters = [];
 
         if ($parameterBag instanceof QueryParameterBag) {
-            /**
-             * @psalm-suppress all
-             */
-            foreach ($parameterBag->getAll() as $key => $value) {
-                $parameters[$key->value] = $value;
-            }
-
-            $parameters = $this->normaliseParameterOrder((array)$this->serializer->normalize($parameters));
+            $parameters = $this->normaliseParameterOrder(
+                (array)$this->serializer->normalize(
+                    $parameterBag->jsonSerialize()
+                )
+            );
         }
 
         return md5(
