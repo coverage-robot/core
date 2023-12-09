@@ -6,7 +6,7 @@ use Exception;
 
 class UploadError
 {
-    private string $message;
+    private readonly string $message;
 
     public function __construct(
         string|Exception $message
