@@ -21,7 +21,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
     use DiffAwareTrait;
     use CarryforwardAwareTrait;
 
-    private const UPLOAD_TABLE_ALIAS = 'upload';
+    private const string UPLOAD_TABLE_ALIAS = 'upload';
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,

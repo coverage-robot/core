@@ -8,9 +8,9 @@ use WeakMap;
 
 class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
 {
-    private const EXISTING_TAGS_CACHE_PARAM = 'existingTags';
+    private const string EXISTING_TAGS_CACHE_PARAM = 'existingTags';
 
-    private const RESULT_CACHE_PARAM = 'result';
+    private const string RESULT_CACHE_PARAM = 'result';
 
     /**
      * @var WeakMap<EventInterface, array{ existingTags: Tag[], result: Tag[] }[]>

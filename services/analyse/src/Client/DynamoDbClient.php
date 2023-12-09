@@ -17,7 +17,7 @@ class DynamoDbClient
     /**
      * The default TTL for a query cache item, in seconds - currently 6 hours.
      */
-    private const DEFAULT_QUERY_CACHE_TTL = 21600;
+    private const int DEFAULT_QUERY_CACHE_TTL = 21600;
 
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
