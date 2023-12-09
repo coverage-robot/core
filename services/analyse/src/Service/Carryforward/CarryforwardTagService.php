@@ -21,7 +21,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      *
      * @see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE
      */
-    private const MAX_COMMIT_HISTORY_PAGES = 5;
+    private const int MAX_COMMIT_HISTORY_PAGES = 5;
 
     public function __construct(
         private readonly CommitHistoryService $commitHistoryService,
