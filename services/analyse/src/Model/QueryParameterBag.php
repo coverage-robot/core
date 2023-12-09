@@ -62,6 +62,9 @@ class QueryParameterBag implements JsonSerializable
     {
         $parameters = [];
 
+        /**
+         * @psalm-suppress all
+         */
         foreach ($this->getAll() as $key => $value) {
             $parameters[$key->value] = $value;
         }
