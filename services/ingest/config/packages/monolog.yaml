@@ -17,7 +17,9 @@ monolog:
 
 services:
     Packages\Telemetry\Service\SymfonySerializerLineFormatter:
-        arguments: [ "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n" ]
+        autowire: true
+        arguments:
+            $format: "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n"
 
     metrics_formatter:
         class: Monolog\Formatter\LineFormatter

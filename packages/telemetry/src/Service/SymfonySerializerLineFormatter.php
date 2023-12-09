@@ -4,9 +4,7 @@ namespace Packages\Telemetry\Service;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * A basic line formatter for monolog which uses the Symfony Serializer to format JSON
@@ -14,9 +12,8 @@ use Symfony\Contracts\Service\Attribute\Required;
  */
 class SymfonySerializerLineFormatter extends LineFormatter implements FormatterInterface
 {
-    private SerializerInterface $serializer;
-
     public function __construct(
+        private readonly SerializerInterface $serializer,
         ?string $format = null,
         ?string $dateFormat = null,
         bool $allowInlineLineBreaks = false,
@@ -42,15 +39,5 @@ class SymfonySerializerLineFormatter extends LineFormatter implements FormatterI
     public function toJson($data, bool $ignoreErrors = false): string
     {
         return $this->serializer->serialize($data, 'json');
-    }
-
-    #[Required]
-    public function withSerializer(
-        #[Autowire(service: SerializerInterface::class)]
-        SerializerInterface $serializer
-    ): static {
-        $this->serializer = $serializer;
-
-        return $this;
     }
 }
