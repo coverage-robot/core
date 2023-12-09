@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Enum\QueryParameter;
+use JsonSerializable;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -12,8 +13,9 @@ use WeakMap;
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  */
-class QueryParameterBag
+class QueryParameterBag implements JsonSerializable
 {
+    #[Ignore]
     private WeakMap $parameters;
 
     public function __construct()
@@ -52,6 +54,17 @@ class QueryParameterBag
         $parameters->set(QueryParameter::OWNER, $event->getOwner());
         $parameters->set(QueryParameter::REPOSITORY, $event->getRepository());
         $parameters->set(QueryParameter::PROVIDER, $event->getProvider());
+
+        return $parameters;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $parameters = [];
+
+        foreach ($this->getAll() as $key => $value) {
+            $parameters[$key->value] = $value;
+        }
 
         return $parameters;
     }
