@@ -4,6 +4,7 @@ namespace Packages\Telemetry\Service;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -38,6 +39,11 @@ class SymfonySerializerLineFormatter extends LineFormatter implements FormatterI
      */
     public function toJson($data, bool $ignoreErrors = false): string
     {
-        return $this->serializer->serialize($data, 'json');
+        try {
+            return $this->serializer->serialize($data, 'json');
+        } catch (ExceptionInterface) {
+            // Fallback to the default behaviour if Symfony Serializer fails
+            return parent::toJson($data, $ignoreErrors);
+        }
     }
 }
