@@ -6,6 +6,7 @@ use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use TypeError;
 
 /**
  * A basic line formatter for monolog which uses the Symfony Serializer to format JSON
@@ -41,7 +42,7 @@ class SymfonySerializerLineFormatter extends LineFormatter implements FormatterI
     {
         try {
             return $this->serializer->serialize($data, 'json');
-        } catch (ExceptionInterface) {
+        } catch (TypeError | ExceptionInterface) {
             // Fallback to the default behaviour if Symfony Serializer fails
             return parent::toJson($data, $ignoreErrors);
         }
