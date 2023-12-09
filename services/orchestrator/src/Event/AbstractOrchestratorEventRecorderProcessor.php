@@ -77,8 +77,8 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
                     (string)$currentState
                 ),
                 [
-                    'current' => $previousState->getEventTime(),
-                    'new' => $currentState->getEventTime()
+                    'current' => $previousState,
+                    'new' => $currentState
                 ]
             );
 
@@ -91,7 +91,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
                 (string)$currentState
             ),
             [
-                'event' => $currentState::class,
+                'event' => $currentState,
                 'stateChanges' => $stateChanges
             ]
         );

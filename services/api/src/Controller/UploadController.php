@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
+use App\Model\UploadError;
 use App\Service\AuthTokenService;
 use App\Service\UploadService;
 use Packages\Telemetry\Enum\Unit;
@@ -64,16 +65,12 @@ class UploadController extends AbstractController
             return $this->json($signedUrl);
         } catch (AuthenticationException $e) {
             return $this->json(
-                [
-                    'error' => $e->getMessage()
-                ],
+                new UploadError($e),
                 Response::HTTP_UNAUTHORIZED
             );
         } catch (SigningException $e) {
             return $this->json(
-                [
-                    'error' => $e->getMessage()
-                ],
+                new UploadError($e),
                 Response::HTTP_BAD_REQUEST
             );
         }

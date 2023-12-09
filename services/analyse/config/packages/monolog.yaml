@@ -3,7 +3,7 @@ monolog:
         nested:
             type: stream
             path: "php://stderr"
-            formatter: Monolog\Formatter\LineFormatter
+            formatter: Packages\Telemetry\Service\SymfonySerializerLineFormatter
             channels: ['!metrics']
 
         metrics:
@@ -16,7 +16,7 @@ monolog:
     channels: [ "handler", "metrics" ]
 
 services:
-    Monolog\Formatter\LineFormatter:
+    Packages\Telemetry\Service\SymfonySerializerLineFormatter:
         arguments: [ "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n" ]
 
     metrics_formatter:

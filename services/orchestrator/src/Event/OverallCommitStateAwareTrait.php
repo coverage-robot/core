@@ -172,8 +172,8 @@ trait OverallCommitStateAwareTrait
                         (string)$newState
                     ),
                     [
-                        'ongoingEvent' => (string)$previousState,
-                        'stateChanges' => $stateChanges->count()
+                        'ongoingEvent' => $previousState,
+                        'stateChanges' => $stateChanges
                     ]
                 );
 
@@ -206,7 +206,7 @@ trait OverallCommitStateAwareTrait
                 $this->eventProcessorLogger->warning(
                     'Unable to reduce state changes back into an event, skipping.',
                     [
-                        'stateChanges' => $stateChanges
+                        'stateChanges' => $stateChanges->getEvents()
                     ]
                 );
 

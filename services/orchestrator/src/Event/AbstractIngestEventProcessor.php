@@ -49,7 +49,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $this->eventProcessorLogger->critical(
                 'Event is not intended to be processed by this processor',
                 [
-                    'event' => $event::class
+                    'event' => $event
                 ]
             );
             return false;
@@ -73,8 +73,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $this->eventProcessorLogger->info(
                 'No events for commit, publishing event.',
                 [
-                    'event' => (string)$event,
-                    'newState' => (string)$currentState,
+                    'event' => $event,
+                    'newState' => $currentState,
                 ]
             );
 
@@ -101,8 +101,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $this->eventProcessorLogger->info(
                 'All events are in a finished state, publishing event.',
                 [
-                    'event' => (string)$event,
-                    'newState' => (string)$currentState,
+                    'event' => $event,
+                    'newState' => $currentState,
                 ]
             );
 
