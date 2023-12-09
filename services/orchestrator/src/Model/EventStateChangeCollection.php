@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
-class EventStateChangeCollection implements \Countable
+use Countable;
+
+class EventStateChangeCollection implements Countable
 {
     /**
      * @var EventStateChange[] $events

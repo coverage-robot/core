@@ -116,7 +116,7 @@ class EventStoreService implements EventStoreServiceInterface
                     (string)$event
                 ),
                 [
-                    'event' => $event::class,
+                    'event' => $event,
                     'previousState' => $previousState,
                     'diff' => $diff
                 ]
@@ -153,7 +153,7 @@ class EventStoreService implements EventStoreServiceInterface
             $this->eventStoreLogger->info(
                 'State change with version number for event already exists.',
                 [
-                    'event' => (string)$event,
+                    'event' => $event,
                     'version' => $version,
                     'diff' => $diff,
                     'exception' => $exception
@@ -165,7 +165,7 @@ class EventStoreService implements EventStoreServiceInterface
             $this->eventStoreLogger->error(
                 'Failed to put event into store.',
                 [
-                    'event' => (string)$event,
+                    'event' => $event,
                     'exception' => $exception
                 ]
             );
@@ -231,7 +231,7 @@ class EventStoreService implements EventStoreServiceInterface
             $this->eventStoreLogger->error(
                 'Failed to retrieve changes for identifier.',
                 [
-                    'identifier' => (string)$event,
+                    'identifier' => $event,
                     'exception' => $httpException
                 ]
             );

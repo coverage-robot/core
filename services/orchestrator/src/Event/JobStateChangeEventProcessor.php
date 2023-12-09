@@ -45,7 +45,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             $this->eventProcessorLogger->critical(
                 'Event is not intended to be processed by this processor',
                 [
-                    'event' => $event::class
+                    'event' => $event
                 ]
             );
             return false;
@@ -68,8 +68,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             $this->eventProcessorLogger->info(
                 'No events for commit, publishing event.',
                 [
-                    'event' => (string)$event,
-                    'newState' => (string)$newState,
+                    'event' => $event,
+                    'newState' => $newState,
                 ]
             );
 
@@ -96,8 +96,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             $this->eventProcessorLogger->info(
                 'All events are in a finished state, publishing event.',
                 [
-                    'event' => (string)$event,
-                    'newState' => (string)$newState,
+                    'event' => $event,
+                    'newState' => $newState,
                 ]
             );
 
