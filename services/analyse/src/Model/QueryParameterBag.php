@@ -5,13 +5,14 @@ namespace App\Model;
 use App\Enum\QueryParameter;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use WeakMap;
 
 /**
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  */
-class QueryParameterBag
+class QueryParameterBag implements \JsonSerializable
 {
     private WeakMap $parameters;
 
@@ -20,11 +21,13 @@ class QueryParameterBag
         $this->parameters = new WeakMap();
     }
 
+    #[Ignore]
     public function get(QueryParameter $key): mixed
     {
         return $this->parameters[$key] ?? null;
     }
 
+    #[Ignore]
     public function getAll(): WeakMap
     {
         return clone $this->parameters;
@@ -51,5 +54,10 @@ class QueryParameterBag
         $parameters->set(QueryParameter::PROVIDER, $event->getProvider());
 
         return $parameters;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return iterator_to_array($this->parameters->getIterator());
     }
 }
