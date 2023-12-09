@@ -14,7 +14,6 @@
         "async-aws/s3": "^2.0",
         "async-aws/sqs": "^1.9",
         "bref/bref": "^2.0",
-        "bref/extra-php-extensions": "^1.2",
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
