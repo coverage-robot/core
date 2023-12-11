@@ -12,7 +12,7 @@ class PublishableMissingCoverageAnnotationMessage implements PublishableAnnotati
     public function __construct(
         private readonly EventInterface $event,
         private readonly string $fileName,
-        private readonly bool $isStartingOnMethod,
+        private readonly bool $startingOnMethod,
         private readonly int $startLineNumber,
         private readonly int $endLineNumber,
         private readonly DateTimeImmutable $validUntil
@@ -37,7 +37,7 @@ class PublishableMissingCoverageAnnotationMessage implements PublishableAnnotati
      */
     public function isStartingOnMethod(): bool
     {
-        return $this->isStartingOnMethod;
+        return $this->startingOnMethod;
     }
 
     public function getStartLineNumber(): int
