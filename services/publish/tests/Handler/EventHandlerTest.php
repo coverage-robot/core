@@ -595,7 +595,7 @@ class EventHandlerTest extends KernelTestCase
                                         'eventType' => 'UPLOAD',
                                     ],
                                     'fileName' => 'mock-file.php',
-                                    'isStartingOnMethod' => true,
+                                    'startingOnMethod' => true,
                                     'startLineNumber' => 1,
                                     'endLineNumber' => 5,
                                     'validUntil' => '2023-08-30T12:01:00+00:00',
