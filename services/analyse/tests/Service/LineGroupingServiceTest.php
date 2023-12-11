@@ -411,6 +411,36 @@ class LineGroupingServiceTest extends TestCase
                     ),
                 ]
             ],
+            'Completely uncovered branch' => [
+                $event,
+                $date,
+                [
+                    'mock-file' => range(5, 10)
+                ],
+                [
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        5,
+                        LineState::PARTIAL,
+                        false,
+                        true,
+                        false,
+                        2,
+                        0
+                    ),
+                ],
+                [
+                    new PublishablePartialBranchAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        5,
+                        5,
+                        2,
+                        0,
+                        $date
+                    ),
+                ]
+            ],
             'Multiple files' => [
                 $event,
                 $date,

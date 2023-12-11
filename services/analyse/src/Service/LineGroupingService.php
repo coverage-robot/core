@@ -119,6 +119,7 @@ class LineGroupingService
                     continue;
                 }
 
+                $isBranch = in_array(LineType::BRANCH, $lineCoverage->getTypes());
                 $isNewMethod = in_array(LineType::METHOD, $lineCoverage->getTypes());
                 $isLineCovered = $lineCoverage->getState() === LineState::COVERED;
                 $isSplitUpInDiff = $previousLineNumber &&
@@ -159,8 +160,12 @@ class LineGroupingService
 
                 if (
                     $startLine === null &&
+                    !$isBranch &&
                     !$isLineCovered
                 ) {
+                    // Only start a new block of missing coverage if we're not on a
+                    // branch (as there'll be a partial branch annotation for that),
+                    // and if the line is not covered.
                     $startLine = $lineCoverage;
                 }
 
