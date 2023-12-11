@@ -174,10 +174,8 @@ class LineGroupingService
                         );
                     }
 
-                    $startLine = $isLineCovered ? null : $lineCoverage;
+                    $startLine = null;
                     $previousLineNumber = null;
-
-                    continue;
                 }
 
                 if (
