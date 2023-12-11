@@ -45,6 +45,7 @@ class LineGroupingService
                     $event,
                     $line->getFileName(),
                     $line->getLineNumber(),
+                    $line->getLineNumber(),
                     $line->getTotalBranches(),
                     $line->getCoveredBranches(),
                     $validUntil

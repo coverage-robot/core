@@ -25,62 +25,32 @@ class LineGroupingServiceTest extends TestCase
             [
                 new LineCoverageQueryResult(
                     'mock-file',
-                    1,
+                    5,
+                    LineState::UNCOVERED,
+                    false,
+                    false,
+                    true,
+                    0,
+                    0
+                ),
+                new LineCoverageQueryResult(
+                    'mock-file',
+                    14,
                     LineState::COVERED,
                     false,
                     false,
                     true,
-                    1,
-                    1
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    2,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    1,
+                    0,
                     0
                 ),
                 new LineCoverageQueryResult(
                     'mock-file',
-                    3,
+                    16,
                     LineState::UNCOVERED,
                     false,
                     false,
                     true,
-                    1,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    4,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    1,
-                    1
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    1,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    9,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    1,
+                    0,
                     0
                 ),
             ],
@@ -180,6 +150,7 @@ class LineGroupingServiceTest extends TestCase
                     $mockEvent,
                     'mock-file',
                     1,
+                    1,
                     2,
                     1,
                     $validUntil
@@ -187,6 +158,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file',
+                    7,
                     7,
                     5,
                     2,
@@ -275,6 +247,7 @@ class LineGroupingServiceTest extends TestCase
                     $mockEvent,
                     'mock-file-1',
                     1,
+                    1,
                     2,
                     1,
                     $validUntil
@@ -282,6 +255,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-2',
+                    7,
                     7,
                     5,
                     2,
@@ -347,6 +321,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-1',
+                    1,
                     1,
                     2,
                     1,
@@ -470,6 +445,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-1',
+                    8,
                     8,
                     2,
                     1,

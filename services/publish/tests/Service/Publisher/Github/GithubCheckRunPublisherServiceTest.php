@@ -332,6 +332,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                         $upload,
                         'mock-file.php',
                         1,
+                        1,
                         5,
                         4,
                         new DateTimeImmutable()
