@@ -152,9 +152,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
@@ -324,9 +322,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
@@ -488,9 +484,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
@@ -673,9 +667,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )

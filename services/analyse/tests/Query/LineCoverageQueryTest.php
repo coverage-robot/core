@@ -136,9 +136,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
@@ -256,9 +254,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
@@ -399,9 +395,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
-                      MIN(
-                        isBranchedLineHit
-                      ) = false,
+                      MIN(isBranchedLineHit) = false,
                       "partial",
                       "covered"
                     )
