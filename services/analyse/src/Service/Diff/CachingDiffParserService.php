@@ -8,7 +8,7 @@ use WeakMap;
 class CachingDiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @var WeakMap<EventInterface, int[][]>
+     * @var WeakMap<EventInterface, array<string, int[]>>
      */
     private WeakMap $cache;
 
@@ -16,7 +16,7 @@ class CachingDiffParserService implements DiffParserServiceInterface
         private readonly DiffParserService $diffParserService
     ) {
         /**
-         * @var WeakMap<EventInterface, int[][]> $cache
+         * @var WeakMap<EventInterface, array<string, int[]>> $cache
          */
         $cache = new WeakMap();
 

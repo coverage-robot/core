@@ -70,7 +70,7 @@ interface PublishableCoverageDataInterface
     /**
      * Get the diff attached to the event which triggered this coverage analysis.
      *
-     * @return int[][]
+     * @return array<string, int[]>
      */
     public function getDiff(): array;
 

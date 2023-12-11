@@ -28,7 +28,7 @@ class LineGroupingService
      *    lines within a method which are uncovered)
      * 3. Partial branch coverage (i.e. annotating branches which are not fully covered)
      *
-     * @param int[][] $diff
+     * @param array<string, int[]> $diff
      * @param LineCoverageQueryResult[] $lineCoverage
      *
      * @return PublishableAnnotationInterface[]
@@ -98,7 +98,7 @@ class LineGroupingService
      * Annotate sequential blocks of missing coverage, including those originating from
      * method definitions.
      *
-     * @param int[][] $diff
+     * @param array<string, int[]> $diff
      * @param LineCoverageQueryResult[] $lineCoverage
      *
      * @return PublishableAnnotationInterface[]
@@ -117,7 +117,13 @@ class LineGroupingService
         $indexedCoverage = array_reduce(
             $lineCoverage,
             static function (array $index, LineCoverageQueryResult $line) {
+                if (!isset($index[$line->getFileName()])) {
+                    $index[$line->getFileName()] = [];
+                }
+
+                /** @var array<string, array<int, LineCoverageQueryResult>> $index */
                 $index[$line->getFileName()][$line->getLineNumber()] = $line;
+
                 return $index;
             },
             []
@@ -142,6 +148,7 @@ class LineGroupingService
 
                 if (
                     $startLine &&
+                    $previousLineNumber &&
                     (
                         $isNewMethod ||
                         $isLineCovered ||
