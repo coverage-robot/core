@@ -180,6 +180,7 @@ class LineGroupingServiceTest extends TestCase
                     $mockEvent,
                     'mock-file',
                     1,
+                    1,
                     2,
                     1,
                     $validUntil
@@ -187,6 +188,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file',
+                    7,
                     7,
                     5,
                     2,
@@ -275,6 +277,7 @@ class LineGroupingServiceTest extends TestCase
                     $mockEvent,
                     'mock-file-1',
                     1,
+                    1,
                     2,
                     1,
                     $validUntil
@@ -282,6 +285,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-2',
+                    7,
                     7,
                     5,
                     2,
@@ -347,6 +351,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-1',
+                    1,
                     1,
                     2,
                     1,
@@ -470,6 +475,7 @@ class LineGroupingServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $mockEvent,
                     'mock-file-1',
+                    8,
                     8,
                     2,
                     1,

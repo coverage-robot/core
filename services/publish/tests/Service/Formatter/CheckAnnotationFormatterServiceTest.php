@@ -80,6 +80,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                     $event,
                     'mock-file',
                     1,
+                    1,
                     2,
                     1,
                     $event->getEventTime()
@@ -93,6 +94,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                     'mock-file',
                     1,
                     1,
+                    1,
                     0,
                     $event->getEventTime()
                 ),
@@ -103,6 +105,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                 new PublishablePartialBranchAnnotationMessage(
                     $event,
                     'mock-file',
+                    1,
                     1,
                     5,
                     2,

@@ -12,7 +12,8 @@ class PublishablePartialBranchAnnotationMessage implements PublishableAnnotation
     public function __construct(
         private readonly EventInterface $event,
         private readonly string $fileName,
-        private readonly int $lineNumber,
+        private readonly int $startLineNumber,
+        private readonly int $endLineNumber,
         private readonly int $totalBranches,
         private readonly int $coveredBranches,
         private readonly DateTimeImmutable $validUntil,
@@ -29,19 +30,14 @@ class PublishablePartialBranchAnnotationMessage implements PublishableAnnotation
         return $this->fileName;
     }
 
-    public function getLineNumber(): int
-    {
-        return $this->lineNumber;
-    }
-
     public function getStartLineNumber(): int
     {
-        return $this->lineNumber;
+        return $this->startLineNumber;
     }
 
     public function getEndLineNumber(): int
     {
-        return $this->lineNumber;
+        return $this->endLineNumber;
     }
 
     public function getTotalBranches(): int
