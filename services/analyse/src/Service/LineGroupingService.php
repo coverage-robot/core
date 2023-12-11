@@ -10,9 +10,14 @@ use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMess
 use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Enum\LineType;
+use Psr\Log\LoggerInterface;
 
 class LineGroupingService
 {
+    public function __construct(
+        private readonly LoggerInterface $lineGroupingLogger
+    ) {
+    }
     /**
      * Group lines into annotations which can be published.
      *
@@ -37,6 +42,16 @@ class LineGroupingService
             ...$this->annotatePartialBranches($event, $lineCoverage, $validUntil),
             ...$this->annotateBlocksOfMissingCoverage($event, $diff, $lineCoverage, $validUntil),
         ];
+
+        $this->lineGroupingLogger->info(
+            sprintf(
+                'Generated %d annotations for %s from %s lines of coverage.',
+                count($annotations),
+                (string)$event,
+                count($lineCoverage)
+            ),
+            $annotations
+        );
 
         return $annotations;
     }
