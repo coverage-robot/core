@@ -12,9 +12,9 @@ use App\Query\TotalCoverageQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -32,6 +32,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -85,6 +88,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -108,13 +114,21 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
+                  COUNTIF(containsBranch = true) as totalBranches,
+                  COUNTIF(
+                    containsBranch = true
+                    AND CAST(isBranchedLineHit AS INT64) = true
+                  ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
                         CAST(isBranchedLineHit AS INT64)
-                      ) = 0,
+                      ) = false,
                       "partial",
                       "covered"
                     )
@@ -175,6 +189,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -251,6 +268,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -274,13 +294,21 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
+                  COUNTIF(containsBranch = true) as totalBranches,
+                  COUNTIF(
+                    containsBranch = true
+                    AND CAST(isBranchedLineHit AS INT64) = true
+                  ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
                         CAST(isBranchedLineHit AS INT64)
-                      ) = 0,
+                      ) = false,
                       "partial",
                       "covered"
                     )

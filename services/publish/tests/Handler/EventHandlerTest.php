@@ -8,8 +8,8 @@ use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -25,7 +25,6 @@ class EventHandlerTest extends KernelTestCase
                 self::callback(
                     function (PublishableMessageInterface $message) {
                         $this->assertInstanceOf(PublishablePullRequestMessage::class, $message);
-
                         return true;
                     }
                 )
@@ -55,8 +54,7 @@ class EventHandlerTest extends KernelTestCase
                                         'ingestTime' => '2023-09-18T01:15:37+00:00',
                                         'eventTime' => '2023-09-18T01:15:37+00:00',
                                         'commit' => 'mock-commit',
-                                        'parent' => [
-                                        ],
+                                        'parent' => [],
                                         'tag' => [
                                             'name' => 'mock-tag',
                                             'commit' => 'mock-commit',
@@ -81,8 +79,7 @@ class EventHandlerTest extends KernelTestCase
                                             'coverage' => 100,
                                         ],
                                     ],
-                                    'leastCoveredDiffFiles' => [
-                                    ],
+                                    'leastCoveredDiffFiles' => [],
                                 ],
                             ],
                             'event' => [
@@ -97,8 +94,7 @@ class EventHandlerTest extends KernelTestCase
                                 'ingestTime' => '2023-09-18T01:15:37+00:00',
                                 'eventTime' => '2023-09-18T01:15:37+00:00',
                                 'commit' => 'mock-commit',
-                                'parent' => [
-                                ],
+                                'parent' => [],
                                 'tag' => [
                                     'name' => 'mock-tag',
                                     'commit' => 'mock-commit',
@@ -178,8 +174,7 @@ class EventHandlerTest extends KernelTestCase
                                         'ingestTime' => '2023-09-18T01:28:36+00:00',
                                         'eventTime' => '2023-09-18T01:28:36+00:00',
                                         'commit' => 'mock-commit',
-                                        'parent' => [
-                                        ],
+                                        'parent' => [],
                                         'tag' => [
                                             'name' => 'mock-tag',
                                             'commit' => 'mock-commit',
@@ -205,8 +200,7 @@ class EventHandlerTest extends KernelTestCase
                                             'coverage' => 100,
                                         ],
                                     ],
-                                    'leastCoveredDiffFiles' => [
-                                    ],
+                                    'leastCoveredDiffFiles' => [],
                                 ],
                             ],
                             'event' => [
@@ -221,8 +215,7 @@ class EventHandlerTest extends KernelTestCase
                                 'ingestTime' => '2023-09-18T01:28:36+00:00',
                                 'eventTime' => '2023-09-18T01:28:36+00:00',
                                 'commit' => 'mock-commit',
-                                'parent' => [
-                                ],
+                                'parent' => [],
                                 'tag' => [
                                     'name' => 'mock-tag',
                                     'commit' => 'mock-commit',
@@ -262,8 +255,7 @@ class EventHandlerTest extends KernelTestCase
                                         'ingestTime' => '2023-09-18T01:34:28+00:00',
                                         'eventTime' => '2023-09-18T01:34:28+00:00',
                                         'commit' => 'mock-commit',
-                                        'parent' => [
-                                        ],
+                                        'parent' => [],
                                         'tag' => [
                                             'name' => 'mock-tag',
                                             'commit' => 'mock-commit',
@@ -300,8 +292,7 @@ class EventHandlerTest extends KernelTestCase
                                             'coverage' => 50,
                                         ],
                                     ],
-                                    'leastCoveredDiffFiles' => [
-                                    ],
+                                    'leastCoveredDiffFiles' => [],
                                 ],
                             ],
                             'event' => [
@@ -316,8 +307,7 @@ class EventHandlerTest extends KernelTestCase
                                 'ingestTime' => '2023-09-18T01:34:28+00:00',
                                 'eventTime' => '2023-09-18T01:34:28+00:00',
                                 'commit' => 'mock-commit',
-                                'parent' => [
-                                ],
+                                'parent' => [],
                                 'tag' => [
                                     'name' => 'mock-tag',
                                     'commit' => 'mock-commit',
@@ -377,7 +367,7 @@ class EventHandlerTest extends KernelTestCase
                                 break;
                             case 2:
                                 $this->assertInstanceOf(
-                                    PublishableCheckAnnotationMessage::class,
+                                    PublishableMissingCoverageAnnotationMessage::class,
                                     $message
                                 );
                                 $this->assertEquals(
@@ -419,8 +409,7 @@ class EventHandlerTest extends KernelTestCase
                                         'ingestTime' => '2023-09-18T01:29:37+00:00',
                                         'eventTime' => '2023-09-18T01:29:37+00:00',
                                         'commit' => 'mock-commit',
-                                        'parent' => [
-                                        ],
+                                        'parent' => [],
                                         'tag' => [
                                             'name' => 'mock-tag',
                                             'commit' => 'mock-commit',
@@ -446,8 +435,7 @@ class EventHandlerTest extends KernelTestCase
                                             'coverage' => 100,
                                         ],
                                     ],
-                                    'leastCoveredDiffFiles' => [
-                                    ],
+                                    'leastCoveredDiffFiles' => [],
                                 ],
                             ],
                             'event' => [
@@ -585,7 +573,7 @@ class EventHandlerTest extends KernelTestCase
                             'type' => 'COLLECTION',
                             'messages' => [
                                 0 => [
-                                    'type' => 'CHECK_ANNOTATION',
+                                    'type' => 'MISSING_COVERAGE_ANNOTATION',
                                     'event' => [
                                         'type' => 'UPLOAD',
                                         'uploadId' => 'mock-uuid',
@@ -607,8 +595,9 @@ class EventHandlerTest extends KernelTestCase
                                         'eventType' => 'UPLOAD',
                                     ],
                                     'fileName' => 'mock-file.php',
-                                    'lineNumber' => 1,
-                                    'lineState' => 'uncovered',
+                                    'isStartingOnMethod' => true,
+                                    'startLineNumber' => 1,
+                                    'endLineNumber' => 5,
                                     'validUntil' => '2023-08-30T12:01:00+00:00',
                                     'messageGroup' => '6bfe4fbaf34561246b97f9e8a8c66082',
                                 ],

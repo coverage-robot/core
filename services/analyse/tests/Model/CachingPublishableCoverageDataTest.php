@@ -426,7 +426,12 @@ class CachingPublishableCoverageDataTest extends TestCase
                 new LineCoverageQueryResult(
                     'foo.php',
                     6,
-                    LineState::COVERED
+                    LineState::COVERED,
+                    false,
+                    false,
+                    true,
+                    1,
+                    1
                 )
             ]
         );

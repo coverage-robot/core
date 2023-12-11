@@ -14,8 +14,8 @@ use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -123,11 +123,12 @@ class InvokeCommand extends Command
                                             $upload,
                                             PublishableCheckRunStatus::SUCCESS,
                                             [
-                                                new PublishableCheckAnnotationMessage(
+                                                new PublishableMissingCoverageAnnotationMessage(
                                                     $upload,
                                                     '.github/workflows/upload.yml',
-                                                    6,
-                                                    LineState::UNCOVERED,
+                                                    true,
+                                                    1,
+                                                    100,
                                                     $validUntil
                                                 )
                                             ],

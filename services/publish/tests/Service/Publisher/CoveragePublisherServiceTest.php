@@ -24,7 +24,7 @@ class CoveragePublisherServiceTest extends TestCase
 
         $message = $this->createMock(PublishablePullRequestMessage::class);
         $message->method('getType')
-            ->willReturn(PublishableMessage::PullRequest);
+            ->willReturn(PublishableMessage::PULL_REQUEST);
 
         $publisher = new MessagePublisherService(
             [

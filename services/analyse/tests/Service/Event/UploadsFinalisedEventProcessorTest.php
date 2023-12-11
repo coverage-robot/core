@@ -7,6 +7,7 @@ use App\Client\SqsMessageClient;
 use App\Model\PublishableCoverageDataInterface;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\UploadsFinalisedEventProcessor;
+use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
@@ -88,14 +89,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new NullLogger(),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
+            new LineGroupingService(),
             $mockEventBridgeEventService,
             $mockSqsMessageClient
         );
 
         $this->assertTrue(
-            $uploadsFinalisedEventProcessor->process(
-                $uploadsFinalised
-            )
+            $uploadsFinalisedEventProcessor->process($uploadsFinalised)
         );
     }
 
@@ -157,6 +157,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new NullLogger(),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
+            new LineGroupingService(),
             $mockEventBridgeEventService,
             $mockSqsMessageClient
         );

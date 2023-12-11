@@ -2,24 +2,64 @@
 
 namespace App\Service\Formatter;
 
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Enum\LineState;
+use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 
 class CheckAnnotationFormatterService
 {
-    public function formatTitle(PublishableCheckAnnotationMessage $annotationMessage): string
+    public function formatTitle(): string
     {
-        return sprintf(
-            '%s Line',
-            $annotationMessage->getLineState() !== LineState::UNCOVERED ? 'Covered' : 'Uncovered'
-        );
+        return 'Opportunity For New Coverage';
     }
 
-    public function format(PublishableCheckAnnotationMessage $annotationMessage): string
-    {
-        return sprintf(
-            'This line is %s by a test.',
-            $annotationMessage->getLineState() !== LineState::UNCOVERED ? 'covered' : 'not covered'
+    public function format(
+        PublishableAnnotationInterface $annotation
+    ): string {
+        return match ($annotation::class) {
+            PublishableMissingCoverageAnnotationMessage::class => $this->formatMissingCoverageAnnotation($annotation),
+            PublishablePartialBranchAnnotationMessage::class => $this->formatPartialBranchAnnotation($annotation),
+        };
+    }
+
+    private function formatMissingCoverageAnnotation(
+        PublishableMissingCoverageAnnotationMessage $annotationMessage
+    ): string {
+        $totalMissingLines = $annotationMessage->getEndLineNumber() - $annotationMessage->getStartLineNumber();
+
+        if ($annotationMessage->isStartingOnMethod()) {
+            return match ($totalMissingLines) {
+                1 => 'This method has not covered by any tests.',
+                default => sprintf(
+                    'The next %d lines of this method are not covered by any tests.',
+                    $totalMissingLines
+                )
+            };
+        }
+
+        return match ($totalMissingLines) {
+            1 => 'This line is not covered by any tests.',
+            default => sprintf(
+                'The next %d lines are not covered by any tests.',
+                $totalMissingLines
+            )
+        };
+    }
+
+    private function formatPartialBranchAnnotation(
+        PublishablePartialBranchAnnotationMessage $annotationMessage
+    ): string {
+        $coveredBranches = round(
+            ($annotationMessage->getCoveredBranches() / $annotationMessage->getTotalBranches())
+            * 100
         );
+
+        return match ($coveredBranches) {
+            0.0 => 'None of these branches are covered by tests.',
+            default => sprintf(
+                '%s%% of these branches are not covered by any tests.',
+                100 - $coveredBranches
+            ),
+        };
     }
 }

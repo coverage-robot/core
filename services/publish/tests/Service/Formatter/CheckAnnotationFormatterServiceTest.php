@@ -3,70 +3,138 @@
 namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckAnnotationFormatterService;
-use Packages\Event\Model\Upload;
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
-use Packages\Models\Enum\LineState;
+use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
+use Packages\Event\Model\UploadsFinalised;
+use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CheckAnnotationFormatterServiceTest extends TestCase
 {
-    public function testFormatTitleWithCoveredLine(): void
-    {
-        $annotationMessage = new PublishableCheckAnnotationMessage(
-            $this->createMock(Upload::class),
-            '/file.php',
-            1,
-            LineState::COVERED,
-            new \DateTimeImmutable()
-        );
-
+    #[DataProvider('annotationDataProvider')]
+    public function testFormattingAnnotation(
+        PublishableAnnotationInterface $annotation,
+        string $expectedTitle,
+        string $expectedMessage
+    ): void {
         $formatter = new CheckAnnotationFormatterService();
 
-        $this->assertEquals('Covered Line', $formatter->formatTitle($annotationMessage));
+        $this->assertEquals($expectedTitle, $formatter->formatTitle());
+        $this->assertEquals($expectedMessage, $formatter->format($annotation));
     }
 
-    public function testFormatTitleWithUncoveredLine(): void
+    public static function annotationDataProvider(): array
     {
-        $annotationMessage = new PublishableCheckAnnotationMessage(
-            $this->createMock(Upload::class),
-            '/file.php',
-            1,
-            LineState::UNCOVERED,
-            new \DateTimeImmutable()
+        $event = new UploadsFinalised(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            null,
+            new DateTimeImmutable()
         );
 
-        $formatter = new CheckAnnotationFormatterService();
-
-        $this->assertEquals('Uncovered Line', $formatter->formatTitle($annotationMessage));
-    }
-
-    public function testFormatMessageWithCoveredLine(): void
-    {
-        $annotationMessage = new PublishableCheckAnnotationMessage(
-            $this->createMock(Upload::class),
-            '/file.php',
-            1,
-            LineState::COVERED,
-            new \DateTimeImmutable()
-        );
-
-        $formatter = new CheckAnnotationFormatterService();
-
-        $this->assertEquals('This line is covered by a test.', $formatter->format($annotationMessage));
-    }
-
-    public function testFormatMessageWithUncoveredLine(): void
-    {
-        $annotationMessage = new PublishableCheckAnnotationMessage(
-            $this->createMock(Upload::class),
-            '/file.php',
-            1,
-            LineState::UNCOVERED,
-            new \DateTimeImmutable()
-        );
-
-        $formatter = new CheckAnnotationFormatterService();
-
-        $this->assertEquals('This line is not covered by a test.', $formatter->format($annotationMessage));
+        return [
+            [
+                new PublishableMissingCoverageAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    1,
+                    10,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'The next 9 lines are not covered by any tests.'
+            ],
+            [
+                new PublishableMissingCoverageAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    1,
+                    1,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'The next 0 lines are not covered by any tests.'
+            ],
+            [
+                new PublishableMissingCoverageAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    1,
+                    2,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'This line is not covered by any tests.'
+            ],
+            [
+                new PublishablePartialBranchAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    1,
+                    2,
+                    1,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                '50% of these branches are not covered by any tests.'
+            ],
+            [
+                new PublishablePartialBranchAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    1,
+                    1,
+                    0,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'None of these branches are covered by tests.'
+            ],
+            [
+                new PublishablePartialBranchAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    1,
+                    5,
+                    2,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                '60% of these branches are not covered by any tests.'
+            ],
+            [
+                new PublishableMissingCoverageAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    true,
+                    1,
+                    2,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'This method has not covered by any tests.'
+            ],
+            [
+                new PublishableMissingCoverageAnnotationMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    1,
+                    100,
+                    $event->getEventTime()
+                ),
+                'Opportunity For New Coverage',
+                'The next 99 lines are not covered by any tests.'
+            ],
+        ];
     }
 }

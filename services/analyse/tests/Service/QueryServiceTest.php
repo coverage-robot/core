@@ -262,12 +262,22 @@ class QueryServiceTest extends KernelTestCase
                         new LineCoverageQueryResult(
                             'test-file-1',
                             1,
-                            LineState::UNCOVERED
+                            LineState::UNCOVERED,
+                            true,
+                            false,
+                            false,
+                            0,
+                            0
                         ),
                         new LineCoverageQueryResult(
                             'test-file-2',
                             2,
-                            LineState::COVERED
+                            LineState::COVERED,
+                            true,
+                            false,
+                            false,
+                            0,
+                            0
                         ),
                     ]
                 )

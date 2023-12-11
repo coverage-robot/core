@@ -11,9 +11,9 @@ use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -32,6 +32,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -95,6 +98,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -118,13 +124,21 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
+                  COUNTIF(containsBranch = true) as totalBranches,
+                  COUNTIF(
+                    containsBranch = true
+                    AND CAST(isBranchedLineHit AS INT64) = true
+                  ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
                         CAST(isBranchedLineHit AS INT64)
-                      ) = 0,
+                      ) = false,
                       "partial",
                       "covered"
                     )
@@ -148,6 +162,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -201,6 +218,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -224,13 +244,21 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
+                  COUNTIF(containsBranch = true) as totalBranches,
+                  COUNTIF(
+                    containsBranch = true
+                    AND CAST(isBranchedLineHit AS INT64) = true
+                  ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
                         CAST(isBranchedLineHit AS INT64)
-                      ) = 0,
+                      ) = false,
                       "partial",
                       "covered"
                     )
@@ -254,6 +282,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -330,6 +361,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -353,13 +387,21 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                 SELECT
                   fileName,
                   lineNumber,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
+                  COUNTIF(containsBranch = true) as totalBranches,
+                  COUNTIF(
+                    containsBranch = true
+                    AND CAST(isBranchedLineHit AS INT64) = true
+                  ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
                         CAST(isBranchedLineHit AS INT64)
-                      ) = 0,
+                      ) = false,
                       "partial",
                       "covered"
                     )
@@ -472,6 +514,11 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         'fileName' => 'mock-file',
                         'lineNumber' => 1,
                         'state' => LineState::COVERED->value,
+                        'containsMethod' => false,
+                        'containsBranch' => false,
+                        'containsStatement' => true,
+                        'totalBranches' => 0,
+                        'coveredBranches' => 0,
                     ],
                 ],
             ],
@@ -481,16 +528,31 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                         'fileName' => 'mock-file',
                         'lineNumber' => 1,
                         'state' => LineState::COVERED->value,
+                        'containsMethod' => false,
+                        'containsBranch' => false,
+                        'containsStatement' => true,
+                        'totalBranches' => 0,
+                        'coveredBranches' => 0,
                     ],
                     [
                         'fileName' => 'mock-file-2',
                         'lineNumber' => 2,
                         'state' => LineState::UNCOVERED->value,
+                        'containsMethod' => false,
+                        'containsBranch' => false,
+                        'containsStatement' => true,
+                        'totalBranches' => 0,
+                        'coveredBranches' => 0,
                     ],
                     [
-                        'fileName' => 'mock-fil-3',
+                        'fileName' => 'mock-file-3',
                         'lineNumber' => 3,
                         'state' => LineState::PARTIAL->value,
+                        'containsMethod' => false,
+                        'containsBranch' => false,
+                        'containsStatement' => true,
+                        'totalBranches' => 0,
+                        'coveredBranches' => 0,
                     ],
                 ]
             ]

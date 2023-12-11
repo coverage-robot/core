@@ -15,7 +15,7 @@ use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
@@ -320,10 +320,10 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             $annotations[] = [
                 'path' => $annotation->getFileName(),
                 'annotation_level' => 'warning',
-                'title' => $this->checkAnnotationFormatterService->formatTitle($annotation),
+                'title' => $this->checkAnnotationFormatterService->formatTitle(),
                 'message' => $this->checkAnnotationFormatterService->format($annotation),
-                'start_line' => $annotation->getLineNumber(),
-                'end_line' => $annotation->getLineNumber()
+                'start_line' => $annotation->getStartLineNumber(),
+                'end_line' => $annotation->getEndLineNumber()
             ];
         }
 
@@ -334,7 +334,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     /**
      * @param Annotation[] $currentAnnotations
-     * @return PublishableCheckAnnotationMessage[]
+     * @return PublishableAnnotationInterface[]
      */
     private function filterAnnotations(
         PublishableCheckRunMessage $publishableMessage,
@@ -342,12 +342,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     ): array {
         return array_filter(
             $publishableMessage->getAnnotations(),
-            static function (PublishableCheckAnnotationMessage $annotation) use ($currentAnnotations) {
-
+            static function (PublishableAnnotationInterface $annotation) use ($currentAnnotations) {
                 foreach ($currentAnnotations as $currentAnnotation) {
                     if (
                         $annotation->getFileName() === $currentAnnotation['path'] &&
-                        $annotation->getLineNumber() === $currentAnnotation['start_line']
+                        $annotation->getStartLineNumber() === $currentAnnotation['start_line']
                     ) {
                         return false;
                     }

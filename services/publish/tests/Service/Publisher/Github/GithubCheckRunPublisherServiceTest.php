@@ -18,7 +18,8 @@ use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
-use Packages\Models\Enum\LineState;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -217,10 +218,10 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                                     [
                                         'path' => 'mock-file.php',
                                         'annotation_level' => 'warning',
-                                        'title' => 'Uncovered Line',
-                                        'message' => 'This line is not covered by a test.',
+                                        'title' => 'Opportunity For New Coverage',
+                                        'message' => 'The next 4 lines are not covered by any tests.',
                                         'start_line' => 1,
-                                        'end_line' => 1
+                                        'end_line' => 5
                                     ]
                                 ]
                             ],
@@ -236,11 +237,12 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 $upload,
                 PublishableCheckRunStatus::SUCCESS,
                 [
-                    new PublishableCheckAnnotationMessage(
+                    new PublishableMissingCoverageAnnotationMessage(
                         $upload,
                         'mock-file.php',
+                        false,
                         1,
-                        LineState::UNCOVERED,
+                        5,
                         new DateTimeImmutable()
                     )
                 ],
@@ -326,11 +328,12 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 array_fill(
                     0,
                     52,
-                    new PublishableCheckAnnotationMessage(
+                    new PublishablePartialBranchAnnotationMessage(
                         $upload,
                         'mock-file.php',
                         1,
-                        LineState::UNCOVERED,
+                        5,
+                        4,
                         new DateTimeImmutable()
                     )
                 ),
