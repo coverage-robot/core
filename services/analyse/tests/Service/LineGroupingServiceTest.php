@@ -13,6 +13,7 @@ use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessag
 use Packages\Models\Enum\LineState;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class LineGroupingServiceTest extends TestCase
 {
@@ -24,7 +25,9 @@ class LineGroupingServiceTest extends TestCase
         array $lineCoverage,
         array $expectedAnnotations
     ): void {
-        $groupingService = new LineGroupingService();
+        $groupingService = new LineGroupingService(
+            new NullLogger()
+        );
 
         $this->assertEquals(
             $expectedAnnotations,
