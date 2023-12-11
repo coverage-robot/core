@@ -18,6 +18,7 @@ class LineGroupingService
         private readonly LoggerInterface $lineGroupingLogger
     ) {
     }
+
     /**
      * Group lines into annotations which can be published.
      *
@@ -115,9 +116,8 @@ class LineGroupingService
          */
         $indexedCoverage = array_reduce(
             $lineCoverage,
-            function (array $index, LineCoverageQueryResult $line) {
+            static function (array $index, LineCoverageQueryResult $line) {
                 $index[$line->getFileName()][$line->getLineNumber()] = $line;
-
                 return $index;
             },
             []
@@ -167,7 +167,7 @@ class LineGroupingService
                         );
                     }
 
-                    $startLine = !$isLineCovered ? $lineCoverage : null;
+                    $startLine = $isLineCovered ? null : $lineCoverage;
                     $previousLineNumber = null;
 
                     continue;
