@@ -6,8 +6,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
-use Symfony\Component\Serializer\Attribute\Ignore;
-use Symfony\Component\Serializer\Attribute\SerializedName;
 
 class PublishablePartialBranchAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
 {
@@ -31,13 +29,16 @@ class PublishablePartialBranchAnnotationMessage implements PublishableAnnotation
         return $this->fileName;
     }
 
-    #[SerializedName('lineNumber')]
+    public function getLineNumber(): int
+    {
+        return $this->lineNumber;
+    }
+
     public function getStartLineNumber(): int
     {
         return $this->lineNumber;
     }
 
-    #[Ignore]
     public function getEndLineNumber(): int
     {
         return $this->lineNumber;
