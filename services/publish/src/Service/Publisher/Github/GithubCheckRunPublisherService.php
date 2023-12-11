@@ -54,7 +54,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
             return false;
         }
 
-        return $publishableMessage->getEvent()->getProvider() === Provider::GITHUB;
+        return $publishableMessage->getEvent()?->getProvider() === Provider::GITHUB;
     }
 
     /**

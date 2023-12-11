@@ -14,6 +14,14 @@ use Packages\Models\Enum\LineType;
 class LineGroupingService
 {
     /**
+     * Group lines into annotations which can be published.
+     *
+     * This takes into account a number of scenarios:
+     * 1. Blocks of missing coverage (i.e. grouping 10 sequential uncovered lines)
+     * 2. Missing coverage within method definitions (i.e. grouping 5 sequential
+     *    lines within a method which are uncovered)
+     * 3. Partial branch coverage (i.e. annotating branches which are not fully covered)
+     *
      * @param LineCoverageQueryResult[] $lines
      *
      * @return PublishableAnnotationInterface[]
@@ -75,7 +83,7 @@ class LineGroupingService
             $endLine = $line;
         }
 
-        if ($startLine) {
+        if ($startLine !== null) {
             $annotations[] = new PublishableMissingCoverageAnnotationMessage(
                 $event,
                 $startLine->getFileName(),
