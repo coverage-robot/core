@@ -37,7 +37,12 @@ class BadgeService
             ->getById($this->getFontFamily(self::FONT_FILE_NAME));
 
         $value = $coveragePercentage ?
-            sprintf('%s%%', $coveragePercentage) :
+            sprintf(
+                '%s%%',
+                floor($coveragePercentage) !== $coveragePercentage ?
+                    number_format($coveragePercentage, 2, '.', '') :
+                    $coveragePercentage
+            ) :
             self::NO_COVERGAGE_PERCENTAGE_VALUE;
 
         return $this->twig->render(

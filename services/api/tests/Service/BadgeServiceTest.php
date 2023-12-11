@@ -28,7 +28,12 @@ class BadgeServiceTest extends KernelTestCase
                     'labelWidth' => 51.068359375,
                     'valueWidth' => $expectedValueWidth,
                     'value' => $coveragePercentage ?
-                        sprintf('%s%%', $coveragePercentage) :
+                        sprintf(
+                            '%s%%',
+                            floor($coveragePercentage) !== $coveragePercentage ?
+                                number_format($coveragePercentage, 2, '.', '') :
+                                $coveragePercentage
+                        ) :
                         BadgeService::NO_COVERGAGE_PERCENTAGE_VALUE,
                     'color' => $expectedHex
                 ]
@@ -89,6 +94,11 @@ class BadgeServiceTest extends KernelTestCase
             [
                 34.64,
                 'ffb100',
+                41.94287109375
+            ],
+            [
+                34.60,
+                'ffb000',
                 41.94287109375
             ]
         ];
