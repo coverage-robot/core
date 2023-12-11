@@ -39,6 +39,9 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
             *
         FROM
             lines
+        ORDER BY
+            fileName ASC,
+            lineNumber ASC
         SQL;
     }
 
