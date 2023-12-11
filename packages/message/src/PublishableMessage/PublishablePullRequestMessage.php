@@ -69,7 +69,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::PullRequest;
+        return PublishableMessage::PULL_REQUEST;
     }
 
     public function __toString(): string

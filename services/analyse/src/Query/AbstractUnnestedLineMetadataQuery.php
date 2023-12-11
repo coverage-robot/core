@@ -8,6 +8,7 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
+use Packages\Models\Enum\LineType;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
@@ -50,6 +51,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             ]
         );
 
+        $methodType = LineType::METHOD->value;
+        $branchType = LineType::BRANCH->value;
+        $statementType = LineType::STATEMENT->value;
+
         return <<<SQL
         WITH unnested AS (
             SELECT
@@ -57,6 +62,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                 {$uploadTableAlias}.commit,
                 fileName,
                 lineNumber,
+                type = '{$methodType}' as containsMethod,
+                type = '{$branchType}' as containsBranch,
+                type = '{$statementType}' as containsStatement,
                 (
                     SELECT
                     IF (

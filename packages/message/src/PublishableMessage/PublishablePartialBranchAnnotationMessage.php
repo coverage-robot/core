@@ -6,15 +6,15 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
-use Packages\Models\Enum\LineState;
 
-class PublishableCheckAnnotationMessage implements PublishableMessageInterface
+class PublishablePartialBranchAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
         private readonly string $fileName,
         private readonly int $lineNumber,
-        private readonly LineState $lineState,
+        private readonly int $totalBranches,
+        private readonly int $coveredBranches,
         private readonly DateTimeImmutable $validUntil,
     ) {
     }
@@ -29,14 +29,24 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
         return $this->fileName;
     }
 
-    public function getLineNumber(): int
+    public function getStartLineNumber(): int
     {
         return $this->lineNumber;
     }
 
-    public function getLineState(): LineState
+    public function getEndLineNumber(): int
     {
-        return $this->lineState;
+        return $this->lineNumber;
+    }
+
+    public function getTotalBranches(): int
+    {
+        return $this->totalBranches;
+    }
+
+    public function getCoveredBranches(): int
+    {
+        return $this->coveredBranches;
     }
 
     public function getValidUntil(): DateTimeInterface
@@ -46,7 +56,7 @@ class PublishableCheckAnnotationMessage implements PublishableMessageInterface
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::CheckAnnotation;
+        return PublishableMessage::PARTIAL_BRANCH_ANNOTATION;
     }
 
     public function getMessageGroup(): string

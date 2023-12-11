@@ -5,20 +5,18 @@ namespace App\Service\Event;
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Model\PublishableCoverageDataInterface;
-use App\Query\Result\LineCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
+use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Models\Enum\LineState;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -30,6 +28,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface&NormalizerInterface $serializer,
         private readonly CoverageAnalyserService $coverageAnalyserService,
+        private readonly LineGroupingService $annotationGrouperService,
         private readonly EventBridgeEventClient $eventBridgeEventService,
         private readonly SqsMessageClient $sqsMessageClient
     ) {
@@ -100,22 +99,11 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         UploadsFinalised $uploadsFinalised,
         PublishableCoverageDataInterface $publishableCoverageData
     ): bool {
-        $annotations = array_map(
-            static function (LineCoverageQueryResult $line) use ($uploadsFinalised, $publishableCoverageData) {
-
-                if ($line->getState() !== LineState::UNCOVERED) {
-                    return null;
-                }
-
-                return new PublishableCheckAnnotationMessage(
-                    $uploadsFinalised,
-                    $line->getFileName(),
-                    $line->getLineNumber(),
-                    $line->getState(),
-                    $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
-                );
-            },
-            $publishableCoverageData->getDiffLineCoverage()->getLines()
+        $annotations = $this->annotationGrouperService->generateAnnotations(
+            $uploadsFinalised,
+            $publishableCoverageData->getDiffLineCoverage()
+                ->getLines(),
+            $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );
 
         return $this->sqsMessageClient->queuePublishableMessage(
@@ -136,7 +124,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     new PublishableCheckRunMessage(
                         $uploadsFinalised,
                         PublishableCheckRunStatus::SUCCESS,
-                        array_filter($annotations),
+                        $annotations,
                         $publishableCoverageData->getCoveragePercentage(),
                         $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )

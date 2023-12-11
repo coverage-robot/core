@@ -24,6 +24,9 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
             SELECT
                 fileName,
                 lineNumber,
+                MAX(containsMethod) as containsMethod,
+                MAX(containsBranch) as containsBranch,
+                MAX(containsStatement) as containsStatement,
                 SUM(hits) as hits,
                 branchIndex,
                 SUM(branchHit) > 0 as isBranchedLineHit
@@ -45,11 +48,19 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
             SELECT
                 fileName,
                 lineNumber,
+                MAX(containsMethod) as containsMethod,
+                MAX(containsBranch) as containsBranch,
+                MAX(containsStatement) as containsStatement,
+                COUNTIF(containsBranch = true) as totalBranches,
+                COUNTIF(
+                    containsBranch = true AND
+                    CAST(isBranchedLineHit AS INT64) = true
+                ) as coveredBranches,
                 IF(
                     SUM(hits) = 0,
                     "{$uncovered}",
                     IF (
-                        MIN(CAST(isBranchedLineHit AS INT64)) = 0,
+                        MIN(CAST(isBranchedLineHit AS INT64)) = false,
                         "{$partial}",
                         "{$covered}"
                     )

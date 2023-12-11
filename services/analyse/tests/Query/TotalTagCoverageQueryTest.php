@@ -31,6 +31,9 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (
@@ -178,6 +181,9 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   upload.commit,
                   fileName,
                   lineNumber,
+                  type = 'METHOD' as containsMethod,
+                  type = 'BRANCH' as containsBranch,
+                  type = 'STATEMENT' as containsStatement,
                   (
                     SELECT
                       IF (

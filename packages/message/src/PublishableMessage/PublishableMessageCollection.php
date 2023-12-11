@@ -49,7 +49,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::Collection;
+        return PublishableMessage::COLLECTION;
     }
 
     public function getMessageGroup(): string
