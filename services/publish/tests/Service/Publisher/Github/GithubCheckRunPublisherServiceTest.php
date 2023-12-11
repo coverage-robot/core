@@ -221,7 +221,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                                         'title' => 'Opportunity For New Coverage',
                                         'message' => 'The next 4 lines are not covered by any tests.',
                                         'start_line' => 1,
-                                        'end_line' => 5
+                                        'end_line' => 1
                                     ]
                                 ]
                             ],
