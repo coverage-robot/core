@@ -5,6 +5,7 @@ namespace App\Service\Event;
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Model\PublishableCoverageDataInterface;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Service\CoverageAnalyserService;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
@@ -99,10 +100,13 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         UploadsFinalised $uploadsFinalised,
         PublishableCoverageDataInterface $publishableCoverageData
     ): bool {
+        /** @var LineCoverageQueryResult[] $lines */
+        $lines = $publishableCoverageData->getDiffLineCoverage()
+            ->getLines();
+
         $annotations = $this->annotationGrouperService->generateAnnotations(
             $uploadsFinalised,
-            $publishableCoverageData->getDiffLineCoverage()
-                ->getLines(),
+            $lines,
             $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );
 

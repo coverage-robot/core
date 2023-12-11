@@ -50,11 +50,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
-        if (!$publishableMessage instanceof PublishableAnnotationInterface) {
+        if (!$publishableMessage instanceof PublishableCheckRunMessage) {
             return false;
         }
 
-        return $publishableMessage->getEvent()?->getProvider() === Provider::GITHUB;
+        return $publishableMessage->getEvent()->getProvider() === Provider::GITHUB;
     }
 
     /**
