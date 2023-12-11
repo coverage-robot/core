@@ -89,7 +89,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new NullLogger(),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
-            new LineGroupingService(),
+            new LineGroupingService(new NullLogger()),
             $mockEventBridgeEventService,
             $mockSqsMessageClient
         );
@@ -157,7 +157,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new NullLogger(),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
-            new LineGroupingService(),
+            new LineGroupingService(new NullLogger()),
             $mockEventBridgeEventService,
             $mockSqsMessageClient
         );
