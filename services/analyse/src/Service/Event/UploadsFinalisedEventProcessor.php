@@ -106,6 +106,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $annotations = $this->annotationGrouperService->generateAnnotations(
             $uploadsFinalised,
+            $publishableCoverageData->getDiff(),
             $lines,
             $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );

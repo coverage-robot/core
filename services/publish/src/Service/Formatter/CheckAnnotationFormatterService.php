@@ -29,7 +29,7 @@ class CheckAnnotationFormatterService
 
         if ($annotationMessage->isStartingOnMethod()) {
             return match ($totalMissingLines) {
-                1 => 'This method has not covered by any tests.',
+                1 => 'This method has not been covered by any tests.',
                 default => sprintf(
                     'The next %d lines of this method are not covered by any tests.',
                     $totalMissingLines
@@ -38,7 +38,7 @@ class CheckAnnotationFormatterService
         }
 
         return match ($totalMissingLines) {
-            1 => 'This line is not covered by any tests.',
+            0 => 'This line is not covered by any tests.',
             default => sprintf(
                 'The next %d lines are not covered by any tests.',
                 $totalMissingLines

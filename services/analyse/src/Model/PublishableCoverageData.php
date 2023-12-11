@@ -206,7 +206,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffCoveragePercentage(): float|null
     {
-        $diff = $this->diffParser->get($this->event);
+        $diff = $this->getDiff();
 
         if ($diff == []) {
             return 0;
@@ -259,7 +259,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
     public function getLeastCoveredDiffFiles(
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
-        $diff = $this->diffParser->get($this->event);
+        $diff = $this->getDiff();
 
         if ($diff == []) {
             return new FileCoverageCollectionQueryResult([]);
@@ -308,7 +308,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
-        $diff = $this->diffParser->get($this->event);
+        $diff = $this->getDiff();
 
         if ($diff == []) {
             return new LineCoverageCollectionQueryResult([]);
@@ -330,5 +330,10 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
         return $lines;
+    }
+
+    public function getDiff(): array
+    {
+        return $this->diffParser->get($this->event);
     }
 }

@@ -68,6 +68,13 @@ interface PublishableCoverageDataInterface
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult;
 
     /**
+     * Get the diff attached to the event which triggered this coverage analysis.
+     *
+     * @return array<string, int[]>
+     */
+    public function getDiff(): array;
+
+    /**
      * Get the total coverage percentage for each tag.
      */
     public function getTagCoverage(): TagCoverageCollectionQueryResult;
