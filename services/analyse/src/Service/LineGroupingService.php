@@ -131,12 +131,17 @@ class LineGroupingService
 
         foreach ($diff as $fileName => $lineNumbers) {
             $startLine = null;
+            $endLine = null;
             $previousLineNumber = null;
 
             foreach ($lineNumbers as $lineNumber) {
                 $lineCoverage = $indexedCoverage[$fileName][$lineNumber] ?? null;
 
                 if ($lineCoverage === null) {
+                    if ($startLine !== null) {
+                        $previousLineNumber = $lineNumber;
+                    }
+
                     continue;
                 }
 
@@ -144,11 +149,11 @@ class LineGroupingService
                 $isNewMethod = in_array(LineType::METHOD, $lineCoverage->getTypes());
                 $isLineCovered = $lineCoverage->getState() === LineState::COVERED;
                 $isSplitUpInDiff = $previousLineNumber &&
-                    $lineNumber - $previousLineNumber > 1;
+                    ($lineNumber - $previousLineNumber) > 1;
 
                 if (
                     $startLine &&
-                    $previousLineNumber &&
+                    $endLine &&
                     (
                         $isNewMethod ||
                         $isLineCovered ||
@@ -159,7 +164,7 @@ class LineGroupingService
 
                     if (
                         !$isPlacedOnMethod ||
-                        $startLine->getLineNumber() !== $previousLineNumber
+                        $startLine->getLineNumber() !== $endLine->getLineNumber()
                     ) {
                         // Publishing an annotation when a method signatures change isn't massively helpful,
                         // so we only want to push method-based annotations when theres more than just
@@ -169,12 +174,13 @@ class LineGroupingService
                             $fileName,
                             $isPlacedOnMethod,
                             $startLine->getLineNumber(),
-                            $previousLineNumber,
+                            $endLine->getLineNumber(),
                             $validUntil
                         );
                     }
 
                     $startLine = null;
+                    $endLine = null;
                     $previousLineNumber = null;
                 }
 
@@ -191,16 +197,17 @@ class LineGroupingService
 
                 if ($startLine !== null) {
                     $previousLineNumber = $lineCoverage->getLineNumber();
+                    $endLine = $lineCoverage;
                 }
             }
 
-            if ($startLine && $previousLineNumber) {
+            if ($startLine && $endLine) {
                 $annotations[] = new PublishableMissingCoverageAnnotationMessage(
                     $event,
                     $fileName,
                     in_array(LineType::METHOD, $startLine->getTypes()),
                     $startLine->getLineNumber(),
-                    $previousLineNumber,
+                    $endLine->getLineNumber(),
                     $validUntil
                 );
             }
