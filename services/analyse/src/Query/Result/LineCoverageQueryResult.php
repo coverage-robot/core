@@ -57,6 +57,21 @@ class LineCoverageQueryResult implements QueryResultInterface
         ];
     }
 
+    public function containsMethod(): bool
+    {
+        return $this->containsMethod;
+    }
+
+    public function containsBranch(): bool
+    {
+        return $this->containsBranch;
+    }
+
+    public function containsStatement(): bool
+    {
+        return $this->containsStatement;
+    }
+
     /**
      * Get the total number of branches for this line.
      */
