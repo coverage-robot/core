@@ -25,32 +25,62 @@ class LineGroupingServiceTest extends TestCase
             [
                 new LineCoverageQueryResult(
                     'mock-file',
-                    5,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    14,
+                    1,
                     LineState::COVERED,
                     false,
                     false,
                     true,
-                    0,
-                    0
+                    1,
+                    1
                 ),
                 new LineCoverageQueryResult(
                     'mock-file',
-                    16,
+                    2,
                     LineState::UNCOVERED,
                     false,
                     false,
                     true,
-                    0,
+                    1,
+                    0
+                ),
+                new LineCoverageQueryResult(
+                    'mock-file',
+                    3,
+                    LineState::UNCOVERED,
+                    false,
+                    false,
+                    true,
+                    1,
+                    0
+                ),
+                new LineCoverageQueryResult(
+                    'mock-file',
+                    4,
+                    LineState::COVERED,
+                    false,
+                    false,
+                    true,
+                    1,
+                    1
+                ),
+                new LineCoverageQueryResult(
+                    'mock-file',
+                    8,
+                    LineState::UNCOVERED,
+                    false,
+                    false,
+                    true,
+                    1,
+                    0
+                ),
+                new LineCoverageQueryResult(
+                    'mock-file',
+                    9,
+                    LineState::UNCOVERED,
+                    false,
+                    false,
+                    true,
+                    1,
                     0
                 ),
             ],
