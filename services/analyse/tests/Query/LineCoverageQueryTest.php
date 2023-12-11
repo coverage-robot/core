@@ -151,6 +151,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
               *
             FROM
               lines
+            ORDER BY
+              fileName ASC,
+              lineNumber ASC
             SQL,
             <<<SQL
             WITH
@@ -269,6 +272,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
               *
             FROM
               lines
+            ORDER BY
+              fileName ASC,
+              lineNumber ASC
             SQL,
             <<<SQL
             WITH
@@ -410,6 +416,9 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
               *
             FROM
               lines
+            ORDER BY
+              fileName ASC,
+              lineNumber ASC
             SQL
         ];
     }
