@@ -323,7 +323,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'title' => $this->checkAnnotationFormatterService->formatTitle(),
                 'message' => $this->checkAnnotationFormatterService->format($annotation),
                 'start_line' => $annotation->getStartLineNumber(),
-                'end_line' => $annotation->getEndLineNumber()
+
+                // We want to place the annotation on the starting line, as opposed to spreading
+                // across the start and end. If this was the end line number (i.e. 14, the annotation
+                // would end up on line 14, as opposed to where the annotation actually started).
+                'end_line' => $annotation->getStartLineNumber()
             ];
         }
 
