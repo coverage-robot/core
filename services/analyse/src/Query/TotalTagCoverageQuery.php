@@ -109,7 +109,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                     SUM(hits) = 0,
                     "{$uncovered}",
                     IF (
-                        MIN(CAST(isBranchedLineHit AS INT64)) = 0,
+                        MIN(isBranchedLineHit) = 0,
                         "{$partial}",
                         "{$covered}"
                     )

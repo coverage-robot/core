@@ -130,14 +130,14 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND CAST(isBranchedLineHit AS INT64) = true
+                    AND isBranchedLineHit = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
-                        CAST(isBranchedLineHit AS INT64)
+                        isBranchedLineHit
                       ) = false,
                       "partial",
                       "covered"
@@ -250,14 +250,14 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND CAST(isBranchedLineHit AS INT64) = true
+                    AND isBranchedLineHit = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
-                        CAST(isBranchedLineHit AS INT64)
+                        isBranchedLineHit
                       ) = false,
                       "partial",
                       "covered"
@@ -393,14 +393,14 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND CAST(isBranchedLineHit AS INT64) = true
+                    AND isBranchedLineHit = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
                     "uncovered",
                     IF (
                       MIN(
-                        CAST(isBranchedLineHit AS INT64)
+                        isBranchedLineHit
                       ) = false,
                       "partial",
                       "covered"

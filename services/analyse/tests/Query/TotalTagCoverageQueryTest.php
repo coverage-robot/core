@@ -119,7 +119,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     "uncovered",
                     IF (
                       MIN(
-                        CAST(isBranchedLineHit AS INT64)
+                        isBranchedLineHit
                       ) = 0,
                       "partial",
                       "covered"
@@ -292,7 +292,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     "uncovered",
                     IF (
                       MIN(
-                        CAST(isBranchedLineHit AS INT64)
+                        isBranchedLineHit
                       ) = 0,
                       "partial",
                       "covered"
