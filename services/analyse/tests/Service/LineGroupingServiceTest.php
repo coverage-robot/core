@@ -507,14 +507,6 @@ class LineGroupingServiceTest extends TestCase
                         'mock-file',
                         false,
                         1,
-                        1,
-                        $date
-                    ),
-                    new PublishableMissingCoverageAnnotationMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        7,
                         8,
                         $date
                     ),
@@ -739,7 +731,85 @@ class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
-            ]
+            ],
+            'Bridging uncovered diff with empty lines' => [
+                $event,
+                $date,
+                [
+                    'mock-file' => range(1, 11)
+                ],
+                [
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        1,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    // Theres 6 uncoverable lines - perhaps empty lines, or a long code comment
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        9,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        10,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ],
+                [
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        false,
+                        1,
+                        8,
+                        $date
+                    ),
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        false,
+                        10,
+                        10,
+                        $date
+                    ),
+                ]
+            ],
         ];
     }
 }
