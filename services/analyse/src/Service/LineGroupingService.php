@@ -148,7 +148,8 @@ class LineGroupingService
                 $isBranch = in_array(LineType::BRANCH, $lineCoverage->getTypes());
                 $isNewMethod = in_array(LineType::METHOD, $lineCoverage->getTypes());
                 $isLineCovered = $lineCoverage->getState() === LineState::COVERED;
-                $isSplitUpInDiff = ($lineNumber - $previousLineNumber) > 1;
+                $isSplitUpInDiff = $previousLineNumber &&
+                    ($lineNumber - $previousLineNumber) > 1;
 
                 if (
                     $startLine &&
