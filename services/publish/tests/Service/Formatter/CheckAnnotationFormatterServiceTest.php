@@ -61,7 +61,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                     $event->getEventTime()
                 ),
                 'Opportunity For New Coverage',
-                'The next 0 lines are not covered by any tests.'
+                'This line is not covered by any tests.'
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -73,7 +73,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                     $event->getEventTime()
                 ),
                 'Opportunity For New Coverage',
-                'This line is not covered by any tests.'
+                'The next 1 lines are not covered by any tests.'
             ],
             [
                 new PublishablePartialBranchAnnotationMessage(
@@ -124,7 +124,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
                     $event->getEventTime()
                 ),
                 'Opportunity For New Coverage',
-                'This method has not covered by any tests.'
+                'This method has not been covered by any tests.'
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
