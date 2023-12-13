@@ -130,6 +130,8 @@ class LineGroupingService
                         $missingEndLine,
                         $validUntil
                     );
+
+                    $missingStartLine = null;
                 }
 
                 if (
