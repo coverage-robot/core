@@ -101,7 +101,7 @@ class LineGroupingService
      * @param array<string, int[]> $diff
      * @param LineCoverageQueryResult[] $line
      *
-     * @return PublishableAnnotationInterface[]
+     * @return PublishableMissingCoverageAnnotationMessage[]
      */
     public function annotateBlocksOfMissingCoverage(
         EventInterface $event,
@@ -157,7 +157,7 @@ class LineGroupingService
             }
         }
 
-        return array_filter($annotations);
+        return $annotations;
     }
 
     /**
@@ -206,7 +206,7 @@ class LineGroupingService
         LineCoverageQueryResult $startLine,
         LineCoverageQueryResult $endLine,
         DateTimeImmutable $validUntil
-    ): ?PublishableAnnotationInterface {
+    ): PublishableMissingCoverageAnnotationMessage {
         return new PublishableMissingCoverageAnnotationMessage(
             $event,
             $startLine->getFileName(),
