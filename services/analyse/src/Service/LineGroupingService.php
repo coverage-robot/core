@@ -116,10 +116,11 @@ class LineGroupingService
         foreach ($indexedCoverage as $fileName => $coverage) {
             $missingStartLine = null;
             $missingEndLine = null;
+            $isBlockStarted = false;
 
             foreach ($coverage as $line) {
                 if (
-                    $missingStartLine &&
+                    $isBlockStarted &&
                     $this->shouldCompleteMissingCoverageBlock($line, $diff[$fileName] ?? [])
                 ) {
                     // We've reached the end of a block of missing coverage, so we should complete
@@ -130,21 +131,21 @@ class LineGroupingService
                         $validUntil
                     );
 
-                    $missingStartLine = null;
-                    $missingEndLine = null;
+                    $isBlockStarted = false;
                 }
 
                 if (
-                    $missingStartLine === null &&
+                    !$isBlockStarted &&
                     $this->shouldStartMissingCoverageBlock($line)
                 ) {
+                    $isBlockStarted = true;
                     $missingStartLine = $line;
                 }
 
-                $missingEndLine = $missingStartLine ? $line : null;
+                $missingEndLine = $isBlockStarted ? $line : null;
             }
 
-            if ($missingStartLine) {
+            if ($isBlockStarted) {
                 $annotations[] = $this->generateMissingCoverageAnnotation(
                     $event,
                     $missingStartLine,
