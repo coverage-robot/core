@@ -99,23 +99,132 @@ class LineGroupingService
      * method definitions.
      *
      * @param array<string, int[]> $diff
-     * @param LineCoverageQueryResult[] $lineCoverage
+     * @param LineCoverageQueryResult[] $line
      *
      * @return PublishableAnnotationInterface[]
      */
     public function annotateBlocksOfMissingCoverage(
         EventInterface $event,
         array $diff,
-        array $lineCoverage,
+        array $line,
         DateTimeImmutable $validUntil
     ): array {
         $annotations = [];
 
-        /**
-         * @var array<string, array<int, LineCoverageQueryResult>> $indexedCoverage
-         */
-        $indexedCoverage = array_reduce(
-            $lineCoverage,
+        $indexedCoverage = $this->getIndexedLineCoverage($line);
+
+        foreach ($indexedCoverage as $fileName => $coverage) {
+            $missingStartLine = null;
+            $missingEndLine = null;
+
+            foreach ($coverage as $line) {
+                if (
+                    $missingStartLine &&
+                    $this->shouldCompleteMissingCoverageBlock($line, $diff[$fileName] ?? [])
+                ) {
+                    // We've reached the end of a block of missing coverage, so we should complete
+                    $annotations[] = $this->generateMissingCoverageAnnotation(
+                        $event,
+                        $missingStartLine,
+                        $missingEndLine,
+                        $validUntil
+                    );
+
+                    $missingStartLine = null;
+                    $missingEndLine = null;
+                }
+
+                if (
+                    $missingStartLine === null &&
+                    $this->shouldStartMissingCoverageBlock($line)
+                ) {
+                    $missingStartLine = $line;
+                }
+
+                $missingEndLine = $missingStartLine ? $line : null;
+            }
+
+            if ($missingStartLine) {
+                $annotations[] = $this->generateMissingCoverageAnnotation(
+                    $event,
+                    $missingStartLine,
+                    $missingEndLine,
+                    $validUntil
+                );
+            }
+        }
+
+        return array_filter($annotations);
+    }
+
+    /**
+     * Check if a block of missing coverage should be started at a current line.
+     *
+     * This will happen if:
+     * 1. The current line is not covered (i.e. is missing coverage
+     * 1. We're not currently on a branch (because that'll have a partial branch annotation)
+     */
+    private function shouldStartMissingCoverageBlock(LineCoverageQueryResult $currentLine): bool
+    {
+        $isBranch = in_array(LineType::BRANCH, $currentLine->getTypes());
+        $isLineCovered = $currentLine->getState() === LineState::COVERED;
+
+        return !$isBranch && !$isLineCovered;
+    }
+
+    /**
+     * Check if a block of missing coverage should be completed at a current line.
+     *
+     * This covers three scenarios:
+     * 1. We've reached the end of a method definition (i.e. we've seen a new method signature come up)
+     * 2. The current line is now covered (i.e. the block of missing coverage has ended)
+     * 3. The current line is not sequential to the previous line (i.e. there's a gap in the diff - leaving
+     *    space for existing lines of code, unchanged by the commit)
+     */
+    private function shouldCompleteMissingCoverageBlock(LineCoverageQueryResult $currentLine, array $fileDiff): bool
+    {
+        $isNewMethod = in_array(LineType::METHOD, $currentLine->getTypes());
+        $isLineCovered = $currentLine->getState() === LineState::COVERED;
+        $isDiffSequential = in_array(
+            $currentLine->getLineNumber() - 1,
+            $fileDiff
+        );
+
+        return $isNewMethod ||
+            $isLineCovered ||
+            !$isDiffSequential;
+    }
+
+    /**
+     * Generate a missing coverage annotation for a block of missing coverage.
+     */
+    private function generateMissingCoverageAnnotation(
+        EventInterface $event,
+        LineCoverageQueryResult $startLine,
+        LineCoverageQueryResult $endLine,
+        DateTimeImmutable $validUntil
+    ): ?PublishableAnnotationInterface {
+        return new PublishableMissingCoverageAnnotationMessage(
+            $event,
+            $startLine->getFileName(),
+            in_array(LineType::METHOD, $startLine->getTypes()),
+            $startLine->getLineNumber(),
+            $endLine->getLineNumber(),
+            $validUntil
+        );
+    }
+
+    /**
+     * Index the line coverage by file name and line number, so that lookups against the
+     * diff are easier.
+     *
+     * @param LineCoverageQueryResult[] $coverage
+     * @return array<string, array<int, LineCoverageQueryResult>>
+     */
+    private function getIndexedLineCoverage(array $coverage): array
+    {
+        return array_reduce(
+            $coverage,
             static function (array $index, LineCoverageQueryResult $line) {
                 if (!isset($index[$line->getFileName()])) {
                     $index[$line->getFileName()] = [];
@@ -128,91 +237,5 @@ class LineGroupingService
             },
             []
         );
-
-        foreach ($diff as $fileName => $lineNumbers) {
-            $startLine = null;
-            $endLine = null;
-            $previousLineNumber = null;
-
-            foreach ($lineNumbers as $lineNumber) {
-                $lineCoverage = $indexedCoverage[$fileName][$lineNumber] ?? null;
-
-                if ($lineCoverage === null) {
-                    if ($startLine !== null) {
-                        $previousLineNumber = $lineNumber;
-                    }
-
-                    continue;
-                }
-
-                $isBranch = in_array(LineType::BRANCH, $lineCoverage->getTypes());
-                $isNewMethod = in_array(LineType::METHOD, $lineCoverage->getTypes());
-                $isLineCovered = $lineCoverage->getState() === LineState::COVERED;
-                $isSplitUpInDiff = $previousLineNumber &&
-                    ($lineNumber - $previousLineNumber) > 1;
-
-                if (
-                    $startLine &&
-                    $endLine &&
-                    (
-                        $isNewMethod ||
-                        $isLineCovered ||
-                        $isSplitUpInDiff
-                    )
-                ) {
-                    $isPlacedOnMethod = in_array(LineType::METHOD, $startLine->getTypes());
-
-                    if (
-                        !$isPlacedOnMethod ||
-                        $startLine->getLineNumber() !== $endLine->getLineNumber()
-                    ) {
-                        // Publishing an annotation when a method signatures change isn't massively helpful,
-                        // so we only want to push method-based annotations when theres more than just
-                        // one line changed.
-                        $annotations[] = new PublishableMissingCoverageAnnotationMessage(
-                            $event,
-                            $fileName,
-                            $isPlacedOnMethod,
-                            $startLine->getLineNumber(),
-                            $endLine->getLineNumber(),
-                            $validUntil
-                        );
-                    }
-
-                    $startLine = null;
-                    $endLine = null;
-                    $previousLineNumber = null;
-                }
-
-                if (
-                    $startLine === null &&
-                    !$isBranch &&
-                    !$isLineCovered
-                ) {
-                    // Only start a new block of missing coverage if we're not on a
-                    // branch (as there'll be a partial branch annotation for that),
-                    // and if the line is not covered.
-                    $startLine = $lineCoverage;
-                }
-
-                if ($startLine !== null) {
-                    $previousLineNumber = $lineCoverage->getLineNumber();
-                    $endLine = $lineCoverage;
-                }
-            }
-
-            if ($startLine && $endLine) {
-                $annotations[] = new PublishableMissingCoverageAnnotationMessage(
-                    $event,
-                    $fileName,
-                    in_array(LineType::METHOD, $startLine->getTypes()),
-                    $startLine->getLineNumber(),
-                    $endLine->getLineNumber(),
-                    $validUntil
-                );
-            }
-        }
-
-        return $annotations;
     }
 }
