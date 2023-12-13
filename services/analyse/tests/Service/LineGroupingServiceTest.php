@@ -720,8 +720,14 @@ class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    // We _shouldn't_ receive an annotation on the method definition
-                    // as its only a change in method signature
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file-1',
+                        true,
+                        5,
+                        5,
+                        $date
+                    ),
                     new PublishableMissingCoverageAnnotationMessage(
                         $event,
                         'mock-file-1',
@@ -806,6 +812,35 @@ class LineGroupingServiceTest extends TestCase
                         false,
                         10,
                         10,
+                        $date
+                    ),
+                ]
+            ],
+            'Method signature changed as last line of diff' => [
+                $event,
+                $date,
+                [
+                    'mock-file' => range(10, 11)
+                ],
+                [
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        11,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                ],
+                [
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        true,
+                        11,
+                        11,
                         $date
                     ),
                 ]
