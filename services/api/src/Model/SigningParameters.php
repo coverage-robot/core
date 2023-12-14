@@ -16,7 +16,9 @@ class SigningParameters implements ParametersInterface
         private readonly string $commit,
         private readonly array $parent,
         private readonly string $ref,
-        private readonly string|int|null $pullRequest
+        private readonly string|int|null $pullRequest,
+        private readonly string|null $baseRef,
+        private readonly string|null $baseCommit
     ) {
     }
 
@@ -68,5 +70,15 @@ class SigningParameters implements ParametersInterface
     public function getPullRequest(): string|int|null
     {
         return $this->pullRequest;
+    }
+
+    public function getBaseRef(): ?string
+    {
+        return $this->baseRef;
+    }
+
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
     }
 }
