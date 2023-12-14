@@ -195,8 +195,8 @@ class LineGroupingService
         LineCoverageQueryResult $missingEndLine,
         array $fileDiff
     ): bool {
-        $missingEndDiffIndex = array_search($missingEndLine->getLineNumber(), $fileDiff);
-        $currentLineDiffIndex = array_search($currentLine->getLineNumber(), $fileDiff);
+        $missingEndDiffIndex = array_search($missingEndLine->getLineNumber(), $fileDiff, true);
+        $currentLineDiffIndex = array_search($currentLine->getLineNumber(), $fileDiff, true);
 
         $isNewMethod = in_array(LineType::METHOD, $currentLine->getTypes());
         $isLineCovered = $currentLine->getState() === LineState::COVERED;
