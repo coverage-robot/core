@@ -845,6 +845,68 @@ class LineGroupingServiceTest extends TestCase
                     ),
                 ]
             ],
+            'New' => [
+                $event,
+                $date,
+                [
+                    'mock-file' => [
+                        185,
+                        240,
+                        241,
+                        242
+                    ]
+                ],
+                [
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        185,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        241,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        242,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ],
+                [
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        false,
+                        185,
+                        185,
+                        $date
+                    ),
+                    new PublishableMissingCoverageAnnotationMessage(
+                        $event,
+                        'mock-file',
+                        false,
+                        241,
+                        242,
+                        $date
+                    ),
+                ]
+            ],
         ];
     }
 }

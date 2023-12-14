@@ -28,7 +28,7 @@ class LineGroupingService
      *    lines within a method which are uncovered)
      * 3. Partial branch coverage (i.e. annotating branches which are not fully covered)
      *
-     * @param array<string, int[]> $diff
+     * @param array<string, array<int, int>> $diff
      * @param LineCoverageQueryResult[] $lineCoverage
      *
      * @return PublishableAnnotationInterface[]
@@ -98,7 +98,7 @@ class LineGroupingService
      * Annotate sequential blocks of missing coverage, including those originating from
      * method definitions.
      *
-     * @param array<string, int[]> $diff
+     * @param array<string, array<int, int>> $diff
      * @param LineCoverageQueryResult[] $line
      *
      * @return PublishableMissingCoverageAnnotationMessage[]
@@ -121,7 +121,11 @@ class LineGroupingService
                 if (
                     $missingStartLine !== null &&
                     $missingEndLine !== null &&
-                    $this->shouldCompleteMissingCoverageBlock($line, $diff[$fileName] ?? [])
+                    $this->shouldCompleteMissingCoverageBlock(
+                        $line,
+                        $missingEndLine,
+                        $diff[$fileName] ?? []
+                    )
                 ) {
                     // We've reached the end of a block of missing coverage, so we should complete
                     $annotations[] = $this->generateMissingCoverageAnnotation(
@@ -183,15 +187,27 @@ class LineGroupingService
      * 2. The current line is now covered (i.e. the block of missing coverage has ended)
      * 3. The current line is not sequential to the previous line (i.e. there's a gap in the diff - leaving
      *    space for existing lines of code, unchanged by the commit)
+     *
+     * @param array<int, int> $fileDiff
      */
-    private function shouldCompleteMissingCoverageBlock(LineCoverageQueryResult $currentLine, array $fileDiff): bool
-    {
+    private function shouldCompleteMissingCoverageBlock(
+        LineCoverageQueryResult $currentLine,
+        LineCoverageQueryResult $missingEndLine,
+        array $fileDiff
+    ): bool {
+        $missingEndDiffIndex = array_search($missingEndLine->getLineNumber(), $fileDiff, true);
+        $currentLineDiffIndex = array_search($currentLine->getLineNumber(), $fileDiff, true);
+
         $isNewMethod = in_array(LineType::METHOD, $currentLine->getTypes());
         $isLineCovered = $currentLine->getState() === LineState::COVERED;
-        $isDiffSequential = in_array(
-            $currentLine->getLineNumber() - 1,
-            $fileDiff
-        );
+
+        // Compare the indexes of the lines in the diff, to the line numbers themselves.
+        // If their differences are equal (i.e. theres 10 lines between the two in the
+        // diff, and 10 between the coverage line numbers) it means the diff is still
+        // sequential (i.e. not broken up by unchanged lines - which wouldn't show in the diff).
+        $isDiffSequential = ($missingEndDiffIndex !== false && $currentLineDiffIndex !== false) &&
+            ($currentLineDiffIndex - $missingEndDiffIndex) ===
+            ($currentLine->getLineNumber() - $missingEndLine->getLineNumber());
 
         return $isNewMethod ||
             $isLineCovered ||
