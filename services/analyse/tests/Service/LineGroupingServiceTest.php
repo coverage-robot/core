@@ -892,33 +892,17 @@ class LineGroupingServiceTest extends TestCase
                     new PublishableMissingCoverageAnnotationMessage(
                         $event,
                         'mock-file',
-                        true,
-                        11,
-                        11,
+                        false,
+                        185,
+                        185,
                         $date
                     ),
                     new PublishableMissingCoverageAnnotationMessage(
                         $event,
                         'mock-file',
-                        true,
-                        11,
-                        11,
-                        $date
-                    ),
-                    new PublishableMissingCoverageAnnotationMessage(
-                        $event,
-                        'mock-file',
-                        true,
-                        11,
-                        11,
-                        $date
-                    ),
-                    new PublishableMissingCoverageAnnotationMessage(
-                        $event,
-                        'mock-file',
-                        true,
-                        11,
-                        11,
+                        false,
+                        241,
+                        242,
                         $date
                     ),
                 ]
