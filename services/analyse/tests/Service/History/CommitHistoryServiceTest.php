@@ -24,6 +24,8 @@ class CommitHistoryServiceTest extends TestCase
             'ref',
             'project-root',
             12,
+            'commit-on-main',
+            'main',
             new Tag('tag', 'commit'),
         );
 
@@ -73,6 +75,8 @@ class CommitHistoryServiceTest extends TestCase
                 'ref',
                 'project-root',
                 12,
+                'commit-on-main',
+                'main',
                 new Tag('tag', 'commit'),
             )
         );

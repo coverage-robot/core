@@ -71,6 +71,8 @@ class InvokeCommand extends Command
                 ],
                 $input->getArgument('ref'),
                 'mock-root',
+                'commit-on-main',
+                'main',
                 $input->getArgument('pullRequest'),
                 new Tag($input->getArgument('tag'), $input->getArgument('commit')),
             );

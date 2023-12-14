@@ -85,6 +85,8 @@ class InvokeCommand extends Command
                 'mock-ref',
                 'mock-project-root',
                 null,
+                null,
+                null,
                 new Tag('mock-tag', 'mock-commit'),
             );
 

@@ -372,6 +372,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             'mock-ref',
             'mock-project-root',
             null,
+            null,
+            null,
             new Tag('mock-tag', 'mock-commit'),
         );
 
@@ -471,6 +473,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
                         [],
                         'mock-ref',
                         'mock-project-root',
+                        null,
+                        null,
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                     )
