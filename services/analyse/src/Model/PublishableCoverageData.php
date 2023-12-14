@@ -21,7 +21,6 @@ use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
-use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class PublishableCoverageData implements PublishableCoverageDataInterface
@@ -35,7 +34,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         protected readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: CachingCarryforwardTagService::class)]
         protected readonly CarryforwardTagServiceInterface $carryforwardTagService,
-        protected readonly EventInterface $event
+        protected readonly ReportInterface $report
     ) {
     }
 
@@ -44,7 +43,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
             TotalUploadsQuery::class,
-            QueryParameterBag::fromEvent($this->event)
+            QueryParameterBag::fromWaypoint($this->report)
         );
 
         return $totalUploads;
@@ -70,11 +69,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getTotalLines(): int
     {
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
+                $this->report,
                 $this->getUploads()->getSuccessfulTags()
             )
         );
@@ -94,11 +93,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getAtLeastPartiallyCoveredLines(): int
     {
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
+                $this->report,
                 $this->getUploads()->getSuccessfulTags()
             )
         );
@@ -118,11 +117,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getUncoveredLines(): int
     {
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
+                $this->report,
                 $this->getUploads()->getSuccessfulTags()
             )
         );
@@ -142,11 +141,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getCoveragePercentage(): float
     {
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
+                $this->report,
                 $this->getUploads()->getSuccessfulTags()
             )
         );
@@ -166,11 +165,11 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
      */
     public function getTagCoverage(): TagCoverageCollectionQueryResult
     {
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::CARRYFORWARD_TAGS,
             $this->carryforwardTagService->getTagsToCarryforward(
-                $this->event,
+                $this->report,
                 $this->getUploads()->getSuccessfulTags()
             )
         );
@@ -212,7 +211,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             return 0;
         }
 
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $diff
@@ -265,7 +264,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             return new FileCoverageCollectionQueryResult([]);
         }
 
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $diff
@@ -314,7 +313,7 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
             return new LineCoverageCollectionQueryResult([]);
         }
 
-        $params = QueryParameterBag::fromEvent($this->event);
+        $params = QueryParameterBag::fromWaypoint($this->report);
         $params->set(
             QueryParameter::LINE_SCOPE,
             $diff
@@ -334,6 +333,6 @@ class PublishableCoverageData implements PublishableCoverageDataInterface
 
     public function getDiff(): array
     {
-        return $this->diffParser->get($this->event);
+        return $this->diffParser->get($this->report);
     }
 }

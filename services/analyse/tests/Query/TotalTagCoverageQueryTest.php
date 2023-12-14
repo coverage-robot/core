@@ -374,7 +374,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             new Tag('mock-tag', 'mock-commit'),
         );
 
-        $carryforwardParameters = QueryParameterBag::fromEvent($upload);
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($upload);
         $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
             new Tag('1', 'mock-commit'),
             new Tag('2', 'mock-commit'),
@@ -482,7 +482,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromEvent(
+                QueryParameterBag::fromWaypoint(
                     new Upload(
                         'mock-uuid',
                         Provider::GITHUB,

@@ -2,6 +2,7 @@
 
 namespace App\Service\Diff;
 
+use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use WeakMap;
 
@@ -23,7 +24,7 @@ class CachingDiffParserService implements DiffParserServiceInterface
         $this->cache = $cache;
     }
 
-    public function get(EventInterface $event): array
+    public function get(EventInterface|ReportWaypoint $event): array
     {
         if (isset($this->cache[$event])) {
             return $this->cache[$event];

@@ -24,7 +24,7 @@ class QueryBuilderServiceTest extends KernelTestCase
 {
     public function testBuildFormatsQuery(): void
     {
-        $queryParameters = QueryParameterBag::fromEvent(
+        $queryParameters = QueryParameterBag::fromWaypoint(
             new Upload(
                 'mock-uploadId',
                 Provider::GITHUB,

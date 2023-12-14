@@ -2,6 +2,7 @@
 
 namespace App\Service\Diff\Github;
 
+use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -23,7 +24,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     /**
      * @inheritDoc
      */
-    public function get(EventInterface $event): array
+    public function get(EventInterface|ReportWaypoint $event): array
     {
         $this->client->authenticateAsRepositoryOwner($event->getOwner());
 

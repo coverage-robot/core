@@ -2,6 +2,7 @@
 
 namespace App\Service\Diff;
 
+use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
 use Packages\Contracts\Event\EventInterface;
 use RuntimeException;
@@ -25,7 +26,7 @@ class DiffParserService implements DiffParserServiceInterface
     /**
      * @inheritDoc
      */
-    public function get(EventInterface $event): array
+    public function get(EventInterface|ReportWaypoint $event): array
     {
         $parser = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
 
