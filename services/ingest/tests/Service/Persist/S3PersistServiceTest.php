@@ -43,6 +43,8 @@ class S3PersistServiceTest extends KernelTestCase
             'repository' => $upload->getRepository(),
             'ref' => $upload->getRef(),
             'pullRequest' => $upload->getPullRequest(),
+            'baseRef' => $upload->getBaseRef(),
+            'baseCommit' => $upload->getBaseCommit(),
             'tag' => $upload->getTag()->getName(),
             'eventTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
             'projectRoot' => $upload->getProjectRoot(),
