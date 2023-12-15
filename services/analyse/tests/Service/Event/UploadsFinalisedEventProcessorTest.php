@@ -4,7 +4,6 @@ namespace App\Tests\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
-use App\Model\PublishableCoverageDataInterface;
 use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\CoverageAnalyserService;
