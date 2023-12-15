@@ -63,6 +63,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
+                    0,
                     100.0,
                     2,
                     [
@@ -116,6 +117,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
+                    0,
                     null,
                     2,
                     [
@@ -154,6 +156,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $missingPullRequestUpload,
                     100.0,
+                    0,
                     null,
                     2,
                     [

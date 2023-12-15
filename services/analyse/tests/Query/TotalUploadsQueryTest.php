@@ -176,7 +176,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromEvent(
+                QueryParameterBag::fromWaypoint(
                     new Upload(
                         'mock-uuid',
                         Provider::GITHUB,

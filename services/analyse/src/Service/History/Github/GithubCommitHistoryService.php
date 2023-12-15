@@ -2,6 +2,7 @@
 
 namespace App\Service\History\Github;
 
+use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
@@ -38,7 +39,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     /**
      * @inheritDoc
      */
-    public function getPrecedingCommits(EventInterface $event, int $page = 1): array
+    public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page = 1): array
     {
         $this->githubClient->authenticateAsRepositoryOwner($event->getOwner());
 

@@ -17,6 +17,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         private readonly ?PublishableCheckRunStatus $status,
         private readonly array $annotations,
         private readonly float $coveragePercentage,
+        private readonly ?float $coverageChange,
         private readonly DateTimeImmutable $validUntil,
     ) {
     }
@@ -47,6 +48,11 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function getCoveragePercentage(): float
     {
         return $this->coveragePercentage;
+    }
+
+    public function getCoverageChange(): ?float
+    {
+        return $this->coverageChange;
     }
 
     public function getType(): PublishableMessage

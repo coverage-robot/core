@@ -2,6 +2,7 @@
 
 namespace App\Service\Diff\Github;
 
+use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -23,9 +24,16 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     /**
      * @inheritDoc
      */
-    public function get(EventInterface $event): array
+    public function get(EventInterface|ReportWaypoint $event): array
     {
         $this->client->authenticateAsRepositoryOwner($event->getOwner());
+
+        $pullRequest = match (true) {
+            // Reporting waypoints aren't linked to individual pull requests (only
+            // commits in the tree). So no need to try and extract a PR number
+            $event instanceof EventInterface => $event->getPullRequest(),
+            $event instanceof ReportWaypoint => null
+        };
 
         $this->diffParserLogger->info(
             sprintf('Fetching diff from GitHub for %s.', (string)$event),
@@ -33,15 +41,15 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
                 'owner' => $event->getOwner(),
                 'repository' => $event->getRepository(),
                 'commit' => $event->getCommit(),
-                'pull_request' => $event->getPullRequest()
+                'pull_request' => $pullRequest
             ]
         );
 
-        $diff = $event->getPullRequest() ?
+        $diff = $pullRequest ?
             $this->getPullRequestDiff(
                 $event->getOwner(),
                 $event->getRepository(),
-                (int)$event->getPullRequest()
+                (int)$pullRequest
             ) :
             $this->getCommitDiff(
                 $event->getOwner(),
@@ -80,7 +88,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
                 'owner' => $event->getOwner(),
                 'repository' => $event->getRepository(),
                 'commit' => $event->getCommit(),
-                'pullRequest' => $event->getPullRequest(),
+                'pullRequest' => $pullRequest,
                 $addedLines
             ]
         );

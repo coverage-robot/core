@@ -17,8 +17,8 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
+use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagService;
-use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
@@ -27,58 +27,72 @@ use Packages\Models\Model\Tag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class CoverageAnalyserServiceTest extends TestCase
+class CachingCoverageAnalyserServiceTest extends TestCase
 {
-    public function testAnalysingWaypoint(): void
+    public function testAnalysingIsCachedForSameEvent(): void
     {
-        $waypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-        );
+        $mockQueryService = $this->getMockedQueryService();
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);
-        $mockDiffParserService->expects($this->atLeastOnce())
-            ->method('get')
-            ->with($waypoint)
-            ->willReturn([
-                'mock-file' => [1,2,3]
-            ]);
-
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
-        $coverageAnalyserService = new CoverageAnalyserService(
-            $this->getMockedQueryService(),
+        $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
+            $mockQueryService,
             $mockDiffParserService,
             $mockCarryforwardTagService
         );
 
-        $coverageReport = $coverageAnalyserService->analyse($waypoint);
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint->method('getProvider')
+            ->willReturn(Provider::GITHUB);
+
+        $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
 
         $this->assertInstanceOf(
             ReportInterface::class,
-            $coverageReport
+            $report
         );
-        $this->assertEquals(
-            100,
-            $coverageReport->getCoveragePercentage()
+
+        $mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertSame(
+            $report,
+            $cachingCoverageAnalyserService->analyse($mockWaypoint)
         );
-        $this->assertEquals(
-            100,
-            $coverageReport->getTagCoverage()
-                ->getTags()[0]
-                ->getCoveragePercentage()
+    }
+
+    public function testAnalysingIsNotCachedForDifferentEvent(): void
+    {
+        $mockQueryService = $this->getMockedQueryService();
+
+        $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+
+        $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
+            $mockQueryService,
+            $mockDiffParserService,
+            $mockCarryforwardTagService
         );
-        $this->assertEquals(
-            100,
-            $coverageReport->getDiffCoveragePercentage()
+
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint->method('getProvider')
+            ->willReturn(Provider::GITHUB);
+
+        $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
+
+        $this->assertInstanceOf(
+            ReportInterface::class,
+            $report
         );
-        $this->assertEquals(
-            ['1'],
-            $coverageReport->getUploads()
-                ->getSuccessfulUploads()
+
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint->method('getProvider')
+            ->willReturn(Provider::GITHUB);
+
+        $this->assertNotSame(
+            $report,
+            $cachingCoverageAnalyserService->analyse($mockWaypoint)
         );
     }
 

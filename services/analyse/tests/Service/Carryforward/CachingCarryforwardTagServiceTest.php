@@ -2,9 +2,9 @@
 
 namespace App\Tests\Service\Carryforward;
 
+use App\Model\ReportWaypoint;
 use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagService;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 
@@ -22,12 +22,12 @@ class CachingCarryforwardTagServiceTest extends TestCase
 
         $cachingCarryforwardTagService = new CachingCarryforwardTagService($mockCarryforwardTagService);
 
-        $mockUpload = $this->createMock(Upload::class);
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
 
         $this->assertEquals(
             $carryforwardTags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $mockUpload,
+                $mockWaypoint,
                 [
                     new Tag('tag', 'commit')
                 ]
@@ -36,7 +36,7 @@ class CachingCarryforwardTagServiceTest extends TestCase
         $this->assertEquals(
             $carryforwardTags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $mockUpload,
+                $mockWaypoint,
                 [
                     new Tag('tag', 'commit')
                 ]
@@ -59,14 +59,14 @@ class CachingCarryforwardTagServiceTest extends TestCase
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(Upload::class),
+                $this->createMock(ReportWaypoint::class),
                 [new Tag('tag', 'commit')]
             )
         );
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(Upload::class),
+                $this->createMock(ReportWaypoint::class),
                 [new Tag('tag', 'commit')]
             )
         );

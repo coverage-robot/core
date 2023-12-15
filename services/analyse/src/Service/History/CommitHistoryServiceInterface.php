@@ -2,6 +2,7 @@
 
 namespace App\Service\History;
 
+use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -11,5 +12,5 @@ interface CommitHistoryServiceInterface
     /**
      * @return string[]
      */
-    public function getPrecedingCommits(EventInterface $event, int $page): array;
+    public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page): array;
 }

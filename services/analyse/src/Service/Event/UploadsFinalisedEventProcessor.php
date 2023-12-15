@@ -4,9 +4,11 @@ namespace App\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
-use App\Model\PublishableCoverageDataInterface;
-use App\Query\Result\LineCoverageQueryResult;
-use App\Service\CoverageAnalyserService;
+use App\Model\ReportComparison;
+use App\Model\ReportInterface;
+use App\Model\ReportWaypoint;
+use App\Service\CachingCoverageAnalyserService;
+use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
@@ -20,6 +22,7 @@ use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -28,7 +31,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface&NormalizerInterface $serializer,
-        private readonly CoverageAnalyserService $coverageAnalyserService,
+        #[Autowire(service: CachingCoverageAnalyserService::class)]
+        private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
         private readonly LineGroupingService $annotationGrouperService,
         private readonly EventBridgeEventClient $eventBridgeEventService,
         private readonly SqsMessageClient $sqsMessageClient
@@ -46,11 +50,12 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        $coverageData = $this->coverageAnalyserService->analyse($event);
+        [$coverageReport, $comparison] = $this->generateCoverageReport($event);
 
         $successful = $this->queueFinalCheckRun(
             $event,
-            $coverageData
+            $coverageReport,
+            $comparison
         );
 
         if (!$successful) {
@@ -81,7 +86,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $event->getPullRequest(),
                 $event->getBaseRef(),
                 $event->getBaseCommit(),
-                $coverageData->getCoveragePercentage(),
+                $coverageReport->getCoveragePercentage(),
                 new DateTimeImmutable()
             )
         );
@@ -100,17 +105,17 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     private function queueFinalCheckRun(
         UploadsFinalised $uploadsFinalised,
-        PublishableCoverageDataInterface $publishableCoverageData
+        ReportInterface $coverageReport,
+        ReportComparison|null $comparison
     ): bool {
-        /** @var LineCoverageQueryResult[] $lines */
-        $lines = $publishableCoverageData->getDiffLineCoverage()
+        $lines = $coverageReport->getDiffLineCoverage()
             ->getLines();
 
         $annotations = $this->annotationGrouperService->generateAnnotations(
             $uploadsFinalised,
-            $publishableCoverageData->getDiff(),
+            $coverageReport->getDiff(),
             $lines,
-            $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
+            $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );
 
         return $this->sqsMessageClient->queuePublishableMessage(
@@ -119,25 +124,69 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 [
                     new PublishablePullRequestMessage(
                         $uploadsFinalised,
-                        $publishableCoverageData->getCoveragePercentage(),
-                        $publishableCoverageData->getDiffCoveragePercentage(),
-                        count($publishableCoverageData->getSuccessfulUploads()),
-                        (array)$this->serializer->normalize($publishableCoverageData->getTagCoverage()->getTags()),
+                        $coverageReport->getCoveragePercentage(),
+                        $comparison?->getCoverageChange(),
+                        $coverageReport->getDiffCoveragePercentage(),
+                        count($coverageReport->getUploads()->getSuccessfulUploads()),
                         (array)$this->serializer->normalize(
-                            $publishableCoverageData->getLeastCoveredDiffFiles()->getFiles()
+                            $coverageReport->getTagCoverage()
+                                ->getTags()
                         ),
-                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
+                        (array)$this->serializer->normalize(
+                            $coverageReport->getLeastCoveredDiffFiles()
+                                ->getFiles()
+                        ),
+                        $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     ),
                     new PublishableCheckRunMessage(
                         $uploadsFinalised,
                         PublishableCheckRunStatus::SUCCESS,
                         $annotations,
-                        $publishableCoverageData->getCoveragePercentage(),
-                        $publishableCoverageData->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
+                        $coverageReport->getCoveragePercentage(),
+                        $comparison?->getCoverageChange(),
+                        $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )
                 ]
             ),
         );
+    }
+
+    /**
+     * Generate a coverage coverage report for the current commit, and optionally (if
+     * the event has the required data) a comparison report against the base commit.
+     *
+     * @return array{0: ReportInterface, 1: ReportComparison|null}
+     */
+    private function generateCoverageReport(EventInterface $event): array
+    {
+        $comparison = null;
+
+        $headWaypoint = $this->coverageAnalyserService->getWaypointFromEvent($event);
+        $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
+
+        // TODO: We should use the parent commit(s) as the base if its a push rather
+        //  than a pull request
+        $baseRef = $event->getBaseRef();
+        $baseCommit = $event->getBaseCommit();
+
+        if ($baseRef && $baseCommit) {
+            // Build the base using the recorded base ref and commit as the comparison
+            $baseWaypoint = new ReportWaypoint(
+                $event->getProvider(),
+                $event->getOwner(),
+                $event->getRepository(),
+                $baseRef,
+                $baseCommit
+            );
+
+            $comparison = $this->coverageAnalyserService->compare(
+                $this->coverageAnalyserService->analyse($baseWaypoint),
+                $headReport
+            );
+        }
+
+
+        return [$headReport, $comparison];
     }
 
     public static function getEvent(): string

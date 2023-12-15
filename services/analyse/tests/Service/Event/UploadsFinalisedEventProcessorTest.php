@@ -4,7 +4,9 @@ namespace App\Tests\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
-use App\Model\PublishableCoverageDataInterface;
+use App\Model\ReportComparison;
+use App\Model\ReportInterface;
+use App\Model\ReportWaypoint;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\UploadsFinalisedEventProcessor;
 use App\Service\LineGroupingService;
@@ -45,13 +47,16 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new DateTimeImmutable()
         );
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockReport = $this->createMock(ReportInterface::class);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with($uploadsFinalised)
-            ->willReturn($mockPublishableCoverageData);
+            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->willReturn($mockReport);
+
+        $mockCoverageAnalyserService->expects($this->never())
+            ->method('compare');
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())
@@ -80,6 +85,103 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                         $this->assertInstanceOf(
                             PublishableCheckRunMessage::class,
                             $message->getMessages()[1]
+                        );
+                        $this->assertEquals(
+                            null,
+                            $message->getMessages()[1]->getCoverageChange()
+                        );
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(true);
+
+        $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
+            new NullLogger(),
+            $this->getContainer()->get(SerializerInterface::class),
+            $mockCoverageAnalyserService,
+            new LineGroupingService(new NullLogger()),
+            $mockEventBridgeEventService,
+            $mockSqsMessageClient
+        );
+
+        $this->assertTrue(
+            $uploadsFinalisedEventProcessor->process($uploadsFinalised)
+        );
+    }
+
+    public function testProcessingEventWithBaseComparison(): void
+    {
+        $uploadsFinalised = new UploadsFinalised(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-ref',
+            'mock-commit',
+            1,
+            'mock-base-commit',
+            'main',
+            new DateTimeImmutable()
+        );
+
+        $mockHeadReport = $this->createMock(ReportInterface::class);
+        $mockHeadReport->method('getCoveragePercentage')
+            ->willReturn(91.0);
+        $mockBaseReport = $this->createMock(ReportInterface::class);
+        $mockBaseReport->method('getCoveragePercentage')
+            ->willReturn(90.0);
+
+        $reportComparison = new ReportComparison(
+            $mockBaseReport,
+            $mockHeadReport,
+        );
+
+        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $mockCoverageAnalyserService->expects($this->exactly(2))
+            ->method('analyse')
+            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->willReturnOnConsecutiveCalls(
+                $mockHeadReport,
+                $mockBaseReport
+            );
+
+        $mockCoverageAnalyserService->expects($this->once())
+            ->method('compare')
+            ->with($mockBaseReport, $mockHeadReport)
+            ->willReturn($reportComparison);
+
+        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
+        $mockEventBridgeEventService->expects($this->once())
+            ->method('publishEvent')
+            ->with($this->isInstanceOf(CoverageFinalised::class))
+            ->willReturn(true);
+
+        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
+        $mockSqsMessageClient->expects($this->once())
+            ->method('queuePublishableMessage')
+            ->with(
+                self::callback(
+                    function (PublishableMessageCollection $message) use ($uploadsFinalised) {
+                        $this->assertEquals(
+                            $uploadsFinalised,
+                            $message->getEvent()
+                        );
+                        $this->assertEquals(
+                            2,
+                            $message->count()
+                        );
+                        $this->assertInstanceOf(
+                            PublishablePullRequestMessage::class,
+                            $message->getMessages()[0]
+                        );
+                        $this->assertInstanceOf(
+                            PublishableCheckRunMessage::class,
+                            $message->getMessages()[1]
+                        );
+                        $this->assertEquals(
+                            1,
+                            $message->getMessages()[1]
+                                ->getCoverageChange()
                         );
                         return true;
                     }
@@ -115,13 +217,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new DateTimeImmutable()
         );
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockReport = $this->createMock(ReportInterface::class);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with($uploadsFinalised)
-            ->willReturn($mockPublishableCoverageData);
+            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->willReturn($mockReport);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())

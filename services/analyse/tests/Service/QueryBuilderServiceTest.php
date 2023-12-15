@@ -5,15 +5,14 @@ namespace App\Tests\Service;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Service\QueryBuilderService;
 use App\Tests\Mock\Factory\MockQueryFactory;
-use DateTimeImmutable;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -24,21 +23,13 @@ class QueryBuilderServiceTest extends KernelTestCase
 {
     public function testBuildFormatsQuery(): void
     {
-        $queryParameters = QueryParameterBag::fromEvent(
-            new Upload(
-                'mock-uploadId',
+        $queryParameters = QueryParameterBag::fromWaypoint(
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                'mock-commit',
-                [],
-                'main',
-                'project-root',
-                12,
-                'commit-on-main',
-                'main',
-                new Tag('mock-tag', 'mock-commit'),
-                new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
+                'mock-ref',
+                'mock-commit'
             )
         );
 
