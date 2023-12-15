@@ -55,7 +55,6 @@ class PullRequestCommentFormatterService
 
         $sign = match (true) {
             $coverageChange > 0 => '+',
-            $coverageChange < 0 => '-',
             default => '',
         };
 
