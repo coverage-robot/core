@@ -21,7 +21,9 @@ class CoverageFinalisedEventProcessorTest extends TestCase
             'mock-repository',
             'not-main-ref',
             'mock-commit',
-            '',
+            12,
+            'main',
+            'mock-main-commit',
             99.0,
             new DateTimeImmutable()
         );
@@ -61,7 +63,9 @@ class CoverageFinalisedEventProcessorTest extends TestCase
             'mock-repository',
             'main',
             'mock-commit',
-            '',
+            12,
+            'main',
+            'mock-main-commit',
             99.0,
             new DateTimeImmutable()
         ));
@@ -95,7 +99,9 @@ class CoverageFinalisedEventProcessorTest extends TestCase
                 'mock-repository',
                 'main',
                 'mock-commit',
-                '',
+                12,
+                'main',
+                'mock-main-commit',
                 99.0,
                 new DateTimeImmutable()
             )

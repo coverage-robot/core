@@ -67,6 +67,8 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 null,
+                null,
+                null,
                 JobState::COMPLETED
             )
         );
@@ -121,6 +123,8 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 null,
+                null,
+                null,
                 JobState::COMPLETED
             )
         );
@@ -163,6 +167,8 @@ class JobStateChangeWebhookProcessorTest extends TestCase
                 'mock-app-id',
                 'mock-ref',
                 'mock-commit',
+                null,
+                null,
                 null,
                 JobState::COMPLETED
             )
