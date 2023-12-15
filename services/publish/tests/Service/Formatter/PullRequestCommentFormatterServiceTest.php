@@ -63,7 +63,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
-                    0,
+                    0.1,
                     100.0,
                     2,
                     [
@@ -111,6 +111,60 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     new DateTimeImmutable()
                 ),
                 __DIR__ . '/../../Fixture/PullRequestComment/file-and-tag.txt'
+            ],
+            [
+                $pullRequestUpload,
+                new PublishablePullRequestMessage(
+                    $pullRequestUpload,
+                    100.0,
+                    -1.2,
+                    100.0,
+                    2,
+                    [
+                        [
+                            'tag' => [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit',
+                            ],
+                            'lines' => 100,
+                            'covered' => 48,
+                            'partial' => 2,
+                            'uncovered' => 50,
+                            'coveragePercentage' => 50,
+                        ],
+                        [
+                            'tag' => [
+                                'name' => 'mock-tag-2',
+                                'commit' => 'mock-commit-2',
+                            ],
+                            'lines' => 2,
+                            'covered' => 0,
+                            'partial' => 0,
+                            'uncovered' => 2,
+                            'coveragePercentage' => 0,
+                        ]
+                    ],
+                    [
+                        [
+                            'fileName' => 'mock-file',
+                            'lines' => 100,
+                            'covered' => 48,
+                            'partial' => 2,
+                            'uncovered' => 50,
+                            'coveragePercentage' => 50,
+                        ],
+                        [
+                            'fileName' => 'mock-file-2',
+                            'lines' => 100,
+                            'covered' => 100,
+                            'partial' => 0,
+                            'uncovered' => 0,
+                            'coveragePercentage' => 100.0,
+                        ]
+                    ],
+                    new DateTimeImmutable()
+                ),
+                __DIR__ . '/../../Fixture/PullRequestComment/coverage-drop.txt'
             ],
             [
                 $pullRequestUpload,

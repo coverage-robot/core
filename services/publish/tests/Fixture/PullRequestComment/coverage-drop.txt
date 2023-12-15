@@ -3,7 +3,7 @@
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
-| 100% (+0.1%) | 100% |
+| 100% (-1.2%) | 100% |
 
 <details>
   <summary>Tags</summary>
