@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use JsonSerializable;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use WeakMap;
@@ -44,7 +45,7 @@ class QueryParameterBag implements JsonSerializable
         $this->parameters[$key] = $value;
     }
 
-    public static function fromWaypoint(ReportWaypoint $waypoint): self
+    public static function fromWaypoint(EventInterface|ReportWaypoint $waypoint): self
     {
         $parameters = new self();
 

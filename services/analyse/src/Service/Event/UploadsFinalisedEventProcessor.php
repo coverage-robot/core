@@ -166,14 +166,17 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         // TODO: We should use the parent commit(s) as the base if its a push rather
         //  than a pull request
-        if ($event->getBaseRef() && $event->getBaseCommit()) {
+        $baseRef = $event->getBaseRef();
+        $baseCommit = $event->getBaseCommit();
+
+        if ($baseRef && $baseCommit) {
             // Build the base using the recorded base ref and commit as the comparison
             $baseWaypoint = new ReportWaypoint(
                 $event->getProvider(),
                 $event->getOwner(),
                 $event->getRepository(),
-                $event->getBaseRef(),
-                $event->getBaseCommit()
+                $baseRef,
+                $baseCommit
             );
 
             $comparison = $this->coverageAnalyserService->compare(

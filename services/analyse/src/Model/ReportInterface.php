@@ -37,5 +37,8 @@ interface ReportInterface extends Stringable
 
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult;
 
+    /**
+     * @return array<string, array<int, int>>
+     */
     public function getDiff(): array;
 }

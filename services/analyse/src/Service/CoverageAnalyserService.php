@@ -379,6 +379,9 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $lines;
     }
 
+    /**
+     * @return array<string, array<int, int>>
+     */
     private function getDiff(ReportWaypoint $waypoint): array
     {
         return $this->diffParser->get($waypoint);

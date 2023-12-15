@@ -95,9 +95,6 @@ class Report implements ReportInterface
         );
     }
 
-    /**
-     * @return array<string, array<int, int>>
-     */
     public function getDiff(): array
     {
         return $this->diff;
