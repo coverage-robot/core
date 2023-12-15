@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\ComparisonException;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
@@ -13,5 +14,10 @@ interface CoverageAnalyserServiceInterface
 
     public function analyse(ReportWaypoint $waypoint): ReportInterface;
 
+    /**
+     * Compare two (comparable) reports against each other.
+     *
+     * @throws ComparisonException
+     */
     public function compare(ReportInterface $base, ReportInterface $head): ReportComparison;
 }

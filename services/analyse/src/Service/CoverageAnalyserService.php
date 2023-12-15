@@ -88,7 +88,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     }
 
     /**
-     * Compare two (comparable) reports against each other.
+     * @inheritDoc
      */
     public function compare(ReportInterface $base, ReportInterface $head): ReportComparison
     {

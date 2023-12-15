@@ -2,6 +2,7 @@
 
 namespace App\Service\History;
 
+use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
 use Packages\Contracts\Event\EventInterface;
 use RuntimeException;
@@ -32,7 +33,7 @@ class CommitHistoryService
      * @return string[]
      * @throws RuntimeException
      */
-    public function getPrecedingCommits(EventInterface $event, int $page = 1): array
+    public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page = 1): array
     {
         $service = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
 

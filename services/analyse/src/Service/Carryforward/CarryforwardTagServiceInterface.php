@@ -3,6 +3,7 @@
 namespace App\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Models\Model\Tag;
 
 interface CarryforwardTagServiceInterface
@@ -14,5 +15,5 @@ interface CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array;
+    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array;
 }

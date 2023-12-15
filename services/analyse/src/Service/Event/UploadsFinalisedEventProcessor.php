@@ -4,7 +4,9 @@ namespace App\Service\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
+use App\Model\ReportComparison;
 use App\Model\ReportInterface;
+use App\Model\ReportWaypoint;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\LineGroupingService;
@@ -48,13 +50,12 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        $coverageReport = $this->coverageAnalyserService->analyse(
-            $this->coverageAnalyserService->getWaypointFromEvent($event)
-        );
+        [$coverageReport, $comparison] = $this->generateCoverageReport($event);
 
         $successful = $this->queueFinalCheckRun(
             $event,
-            $coverageReport
+            $coverageReport,
+            $comparison
         );
 
         if (!$successful) {
@@ -104,7 +105,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     private function queueFinalCheckRun(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport
+        ReportInterface $coverageReport,
+        ReportComparison|null $comparison
     ): bool {
         $lines = $coverageReport->getDiffLineCoverage()
             ->getLines();
@@ -123,6 +125,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     new PublishablePullRequestMessage(
                         $uploadsFinalised,
                         $coverageReport->getCoveragePercentage(),
+                        $comparison?->getCoverageChange(),
                         $coverageReport->getDiffCoveragePercentage(),
                         count($coverageReport->getUploads()->getSuccessfulUploads()),
                         (array)$this->serializer->normalize(
@@ -140,11 +143,47 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         PublishableCheckRunStatus::SUCCESS,
                         $annotations,
                         $coverageReport->getCoveragePercentage(),
+                        $comparison?->getCoverageChange(),
                         $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )
                 ]
             ),
         );
+    }
+
+    /**
+     * Generate a coverage coverage report for the current commit, and optionally (if
+     * the event has the required data) a comparison report against the base commit.
+     *
+     * @return array{0: ReportInterface, 1: ReportComparison|null}
+     */
+    private function generateCoverageReport(EventInterface $event): array
+    {
+        $comparison = null;
+
+        $headWaypoint = $this->coverageAnalyserService->getWaypointFromEvent($event);
+        $baseReport = $this->coverageAnalyserService->analyse($headWaypoint);
+
+        // TODO: We should use the parent commit(s) as the base if its a push rather
+        //  than a pull request
+        if ($event->getBaseRef() && $event->getBaseCommit()) {
+            // Build the base using the recorded base ref and commit as the comparison
+            $baseWaypoint = new ReportWaypoint(
+                $event->getProvider(),
+                $event->getOwner(),
+                $event->getRepository(),
+                $event->getBaseRef(),
+                $event->getBaseCommit()
+            );
+
+            $comparison = $this->coverageAnalyserService->compare(
+                $this->coverageAnalyserService->analyse($baseWaypoint),
+                $baseReport
+            );
+        }
+
+
+        return [$baseReport, $comparison];
     }
 
     public static function getEvent(): string

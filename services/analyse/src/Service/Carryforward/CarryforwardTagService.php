@@ -36,14 +36,14 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
+    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
     {
         $carryforwardTags = [];
 
         /** @var TagAvailabilityCollectionQueryResult $tagAvailability */
         $tagAvailability = $this->queryService->runQuery(
             TagAvailabilityQuery::class,
-            QueryParameterBag::fromWaypoint($waypoint)
+            QueryParameterBag::fromWaypoint($event)
         );
 
         /**
@@ -107,7 +107,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @return array{0: string[], 1: Tag[]}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
-        EventInterface $event,
+        EventInterface|ReportWaypoint $event,
         TagAvailabilityCollectionQueryResult $tagAvailability,
         int $page = 0,
         array $tagsNotSeen = []

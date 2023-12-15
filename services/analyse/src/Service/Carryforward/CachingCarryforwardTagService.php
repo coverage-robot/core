@@ -3,6 +3,7 @@
 namespace App\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use WeakMap;
 
@@ -13,7 +14,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     private const string RESULT_CACHE_PARAM = 'result';
 
     /**
-     * @var WeakMap<ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]>
+     * @var WeakMap<EventInterface|ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]>
      */
     private WeakMap $cache;
 
@@ -21,7 +22,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
         private readonly CarryforwardTagService $carryforwardTagService
     ) {
         /**
-         * @var WeakMap<ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]> $cache
+         * @var WeakMap<EventInterface|ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]> $cache
          */
         $cache = new WeakMap();
 
@@ -32,19 +33,19 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
+    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
     {
-        if ($carryforwardTags = $this->lookupExistingValueInCache($waypoint, $existingTags)) {
+        if ($carryforwardTags = $this->lookupExistingValueInCache($event, $existingTags)) {
             return $carryforwardTags;
         }
 
         $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
+            $event,
             $existingTags
         );
 
-        $this->cache[$waypoint] = array_merge(
-            ($this->cache[$waypoint] ?? []),
+        $this->cache[$event] = array_merge(
+            ($this->cache[$event] ?? []),
             [
                 [
                     self::EXISTING_TAGS_CACHE_PARAM => $existingTags,
@@ -62,13 +63,13 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      *
      * @return Tag[]|null
      */
-    private function lookupExistingValueInCache(ReportWaypoint $waypoint, array $existingTags): ?array
+    private function lookupExistingValueInCache(EventInterface|ReportWaypoint $event, array $existingTags): ?array
     {
-        if (!isset($this->cache[$waypoint])) {
+        if (!isset($this->cache[$event])) {
             return null;
         }
 
-        foreach ($this->cache[$waypoint] as $cacheValue) {
+        foreach ($this->cache[$event] as $cacheValue) {
             if (
                 array_udiff(
                     $cacheValue[self::EXISTING_TAGS_CACHE_PARAM],

@@ -5,6 +5,8 @@ namespace App\Tests\Service\Event;
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Model\PublishableCoverageDataInterface;
+use App\Model\ReportInterface;
+use App\Model\ReportWaypoint;
 use App\Service\CoverageAnalyserService;
 use App\Service\Event\UploadsFinalisedEventProcessor;
 use App\Service\LineGroupingService;
@@ -45,13 +47,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new DateTimeImmutable()
         );
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockReport = $this->createMock(ReportInterface::class);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with($uploadsFinalised)
-            ->willReturn($mockPublishableCoverageData);
+            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->willReturn($mockReport);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())
@@ -115,13 +117,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new DateTimeImmutable()
         );
 
-        $mockPublishableCoverageData = $this->createMock(PublishableCoverageDataInterface::class);
+        $mockReport = $this->createMock(ReportInterface::class);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with($uploadsFinalised)
-            ->willReturn($mockPublishableCoverageData);
+            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->willReturn($mockReport);
 
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
         $mockEventBridgeEventService->expects($this->once())
