@@ -186,7 +186,9 @@ class UploadControllerTest extends KernelTestCase
                     'mock-commit',
                     ['mock-parent-hash'],
                     'mock-branch-reference',
-                    '12'
+                    '12',
+                    'mock-base-ref',
+                    'mock-base-commit'
                 )
             ],
             'Without to pull request' => [
@@ -200,6 +202,8 @@ class UploadControllerTest extends KernelTestCase
                     'mock-commit',
                     [],
                     'mock-branch-reference',
+                    null,
+                    null,
                     null
                 )
             ]

@@ -28,6 +28,8 @@ class Upload implements EventInterface
         private readonly string $ref,
         private readonly string $projectRoot,
         private readonly string|int|null $pullRequest,
+        private readonly string|null $baseCommit,
+        private readonly string|null $baseRef,
         private readonly Tag $tag,
         ?DateTimeInterface $eventTime = null
     ) {
@@ -73,6 +75,15 @@ class Upload implements EventInterface
         return $this->pullRequest;
     }
 
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
+    }
+
+    public function getBaseRef(): ?string
+    {
+        return $this->baseRef;
+    }
 
     public function getEventTime(): DateTimeImmutable
     {

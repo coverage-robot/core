@@ -43,6 +43,8 @@ class S3PersistServiceTest extends KernelTestCase
             'repository' => $upload->getRepository(),
             'ref' => $upload->getRef(),
             'pullRequest' => $upload->getPullRequest(),
+            'baseRef' => $upload->getBaseRef(),
+            'baseCommit' => $upload->getBaseCommit(),
             'tag' => $upload->getTag()->getName(),
             'eventTime' => $upload->getEventTime()->format(DateTimeImmutable::ATOM),
             'projectRoot' => $upload->getProjectRoot(),
@@ -106,6 +108,8 @@ class S3PersistServiceTest extends KernelTestCase
             'mock-branch-reference',
             'project/root',
             1,
+            'commit-on-main',
+            'main',
             new Tag('mock-tag', '')
         );
 

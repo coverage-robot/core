@@ -12,12 +12,12 @@ use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -37,6 +37,8 @@ class EventBridgeEventClientTest extends TestCase
                 ['mock-parent'],
                 'mock-ref',
                 'mock-project-root',
+                null,
+                null,
                 null,
                 new Tag('mock-tag', 'mock-commit')
             ),

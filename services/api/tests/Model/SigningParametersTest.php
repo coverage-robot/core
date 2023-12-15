@@ -20,7 +20,9 @@ class SigningParametersTest extends TestCase
             'commit',
             ['parent'],
             'ref',
-            'pullRequest'
+            'pullRequest',
+            'baseRef',
+            'baseCommit'
         );
 
         $this->assertEquals('owner', $parameters->getOwner());
@@ -33,5 +35,7 @@ class SigningParametersTest extends TestCase
         $this->assertEquals(['parent'], $parameters->getParent());
         $this->assertEquals('ref', $parameters->getRef());
         $this->assertEquals('pullRequest', $parameters->getPullRequest());
+        $this->assertEquals('baseCommit', $parameters->getBaseCommit());
+        $this->assertEquals('baseRef', $parameters->getBaseRef());
     }
 }

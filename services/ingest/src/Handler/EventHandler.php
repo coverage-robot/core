@@ -61,6 +61,10 @@ class EventHandler extends S3Handler
                         $source->getMetadata()['projectRoot'] ?? null,
                     'pullRequest' => $source->getMetadata()['pullrequest'] ??
                         $source->getMetadata()['pullRequest'] ?? null,
+                    'baseRef' => $source->getMetadata()['baseref'] ??
+                            $source->getMetadata()['baseRef'] ?? null,
+                    'baseCommit' => $source->getMetadata()['basecommit'] ??
+                            $source->getMetadata()['baseCommit'] ?? null,
                     'tag' => [
                         'name' => $source->getMetadata()['tag'],
                         'commit' => $source->getMetadata()['commit']

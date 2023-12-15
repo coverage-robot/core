@@ -740,6 +740,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             'ref',
             'project-root',
             12,
+            'commit-on-main',
+            'main',
             new Tag('tag', 'commit'),
         );
 
@@ -860,6 +862,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                         'ref',
                         'project-root',
                         12,
+                        'commit-on-main',
+                        'main',
                         new Tag('tag', 'commit'),
                     )
                 ),

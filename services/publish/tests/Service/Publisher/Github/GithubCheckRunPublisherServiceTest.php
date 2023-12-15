@@ -439,6 +439,8 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     'mock-ref',
                     'mock-project-root',
                     null,
+                    null,
+                    null,
                     new Tag('mock-tag', 'mock-commit'),
                 ),
                 true
@@ -454,6 +456,8 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     'mock-ref',
                     'mock-project-root',
                     '1234',
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', 'mock-commit'),
                 ),
                 true
