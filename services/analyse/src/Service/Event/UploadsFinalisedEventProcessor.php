@@ -162,7 +162,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $comparison = null;
 
         $headWaypoint = $this->coverageAnalyserService->getWaypointFromEvent($event);
-        $baseReport = $this->coverageAnalyserService->analyse($headWaypoint);
+        $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
 
         // TODO: We should use the parent commit(s) as the base if its a push rather
         //  than a pull request
@@ -181,12 +181,12 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
             $comparison = $this->coverageAnalyserService->compare(
                 $this->coverageAnalyserService->analyse($baseWaypoint),
-                $baseReport
+                $headReport
             );
         }
 
 
-        return [$baseReport, $comparison];
+        return [$headReport, $comparison];
     }
 
     public static function getEvent(): string
