@@ -63,7 +63,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
-                    0,
+                    0.1,
                     100.0,
                     2,
                     [

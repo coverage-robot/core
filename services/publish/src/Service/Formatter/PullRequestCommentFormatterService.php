@@ -17,7 +17,7 @@ class PullRequestCommentFormatterService
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
-        | {$message->getCoveragePercentage()}% | {$this->getDiffCoveragePercentage($message)} |
+        | {$message->getCoveragePercentage()}%{$this->getCoverageChange($message)} | {$this->getDiffCoveragePercentage($message)} |
 
         <details>
           <summary>Tags</summary>
@@ -42,6 +42,27 @@ class PullRequestCommentFormatterService
             $event->getPullRequest() ?? 'unknown',
             $message->getSuccessfulUploads(),
             $event->getCommit()
+        );
+    }
+
+    private function getCoverageChange(PublishablePullRequestMessage $message): string
+    {
+        $coverageChange = $message->getCoverageChange();
+
+        if ($coverageChange === null) {
+            return '';
+        }
+
+        $sign = match (true) {
+            $coverageChange > 0 => '+',
+            $coverageChange < 0 => '-',
+            default => '',
+        };
+
+        return sprintf(
+            ' (%s%s%%)',
+            $sign,
+            $coverageChange
         );
     }
 
