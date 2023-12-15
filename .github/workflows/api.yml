@@ -80,7 +80,7 @@ jobs:
                     zip -q -r build.zip ./
 
             -   name: Upload build package to artifact storage
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4
                 with:
                     name: build
                     if-no-files-found: error
@@ -180,7 +180,7 @@ jobs:
 
             -   name: Upload coverage to artifact storage
                 if: ${{ github.actor != 'dependabot[bot]' }}
-                uses: actions/upload-artifact@v3
+                uses: actions/upload-artifact@v4
                 with:
                     name: coverage
                     if-no-files-found: error
