@@ -36,6 +36,7 @@ class CheckRunFormatterServiceTest extends TestCase
         return [
             [PublishableCheckRunStatus::SUCCESS, 99.98, 0, 'Total Coverage: 99.98% (0%)'],
             [PublishableCheckRunStatus::SUCCESS, 99.98, 0.01, 'Total Coverage: 99.98% (+0.01%)'],
+            [PublishableCheckRunStatus::SUCCESS, 99.98, -0.02, 'Total Coverage: 99.98% (+0.02%)'],
             [PublishableCheckRunStatus::IN_PROGRESS, 0, 0, 'Waiting for any additional coverage uploads...'],
         ];
     }
