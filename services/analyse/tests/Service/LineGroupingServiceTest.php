@@ -51,6 +51,8 @@ class LineGroupingServiceTest extends TestCase
             '',
             '',
             1,
+            'mock-base-commit',
+            'mock-base-ref',
             $date
         );
 

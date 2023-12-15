@@ -79,6 +79,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $event->getRef(),
                 $event->getCommit(),
                 $event->getPullRequest(),
+                $event->getBaseRef(),
+                $event->getBaseCommit(),
                 $coverageData->getCoveragePercentage(),
                 new DateTimeImmutable()
             )

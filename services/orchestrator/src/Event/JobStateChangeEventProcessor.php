@@ -81,6 +81,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
                     $event->getRef(),
                     $newState->getCommit(),
                     $event->getPullRequest(),
+                    $event->getBaseRef(),
+                    $event->getBaseCommit(),
                     new DateTimeImmutable()
                 )
             );
@@ -120,6 +122,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
                         $finalisedEvent->getRef(),
                         $finalisedEvent->getCommit(),
                         $finalisedEvent->getPullRequest(),
+                        $event->getBaseCommit(),
+                        $event->getBaseRef(),
                         $finalisedEvent->getEventTime()
                     )
                 );

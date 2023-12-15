@@ -47,6 +47,8 @@ class InvokeCommand extends Command
                 'mock-ref',
                 '12db14417f44a5371fe1c95171d6f96e4e210138',
                 null,
+                null,
+                null,
                 'mock-job-id',
                 JobState::COMPLETED,
                 new DateTimeImmutable()

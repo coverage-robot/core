@@ -15,6 +15,8 @@ class UploadsFinalised implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly string|int|null $pullRequest,
+        private readonly string|null $baseCommit,
+        private readonly string|null $baseRef,
         private readonly DateTimeImmutable $eventTime
     ) {
     }
@@ -47,6 +49,16 @@ class UploadsFinalised implements EventInterface
     public function getRef(): string
     {
         return $this->ref;
+    }
+
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
+    }
+
+    public function getBaseRef(): ?string
+    {
+        return $this->baseRef;
     }
 
     public function getType(): Event
