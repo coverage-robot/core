@@ -89,58 +89,56 @@ class CoverageAnalyserServiceTest extends TestCase
         $mockQueryService->expects($this->atLeastOnce())
             ->method('runQuery')
             ->willReturnCallback(
-                function (string $queryClass) {
-                    return match ($queryClass) {
-                        TotalUploadsQuery::class => new TotalUploadsQueryResult(
-                            ['1'],
-                            [new Tag('mock-tag', 'mock-commit')],
-                            null
-                        ),
-                        TotalCoverageQuery::class => new CoverageQueryResult(
-                            100,
-                            1,
-                            1,
-                            0,
-                            0
-                        ),
-                        TotalTagCoverageQuery::class => new TagCoverageCollectionQueryResult(
-                            [
-                                new TagCoverageQueryResult(
-                                    new Tag('mock-tag', 'mock-commit'),
-                                    100,
-                                    1,
-                                    0,
-                                    0,
-                                    0
-                                )
-                            ]
-                        ),
-                        FileCoverageQuery::class => new FileCoverageCollectionQueryResult(
-                            [
-                                new FileCoverageQueryResult(
-                                    'mock-file',
-                                    100,
-                                    1,
-                                    1,
-                                    0,
-                                    0
-                                )
-                            ]
-                        ),
-                        LineCoverageQuery::class => new LineCoverageCollectionQueryResult([
-                            new LineCoverageQueryResult(
-                                'mock-file',
+                static fn(string $queryClass) => match ($queryClass) {
+                    TotalUploadsQuery::class => new TotalUploadsQueryResult(
+                        ['1'],
+                        [new Tag('mock-tag', 'mock-commit')],
+                        null
+                    ),
+                    TotalCoverageQuery::class => new CoverageQueryResult(
+                        100,
+                        1,
+                        1,
+                        0,
+                        0
+                    ),
+                    TotalTagCoverageQuery::class => new TagCoverageCollectionQueryResult(
+                        [
+                            new TagCoverageQueryResult(
+                                new Tag('mock-tag', 'mock-commit'),
+                                100,
                                 1,
-                                LineState::COVERED,
-                                false,
-                                false,
-                                true,
+                                0,
                                 0,
                                 0
                             )
-                        ]),
-                        default => null,
-                    };
+                        ]
+                    ),
+                    FileCoverageQuery::class => new FileCoverageCollectionQueryResult(
+                        [
+                            new FileCoverageQueryResult(
+                                'mock-file',
+                                100,
+                                1,
+                                1,
+                                0,
+                                0
+                            )
+                        ]
+                    ),
+                    LineCoverageQuery::class => new LineCoverageCollectionQueryResult([
+                        new LineCoverageQueryResult(
+                            'mock-file',
+                            1,
+                            LineState::COVERED,
+                            false,
+                            false,
+                            true,
+                            0,
+                            0
+                        )
+                    ]),
+                    default => null,
                 }
             );
 

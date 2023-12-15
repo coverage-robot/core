@@ -10,7 +10,6 @@ use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Message\PublishableMessage\PublishableCheckAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
@@ -104,6 +103,7 @@ class InvokeCommand extends Command
                                             $upload,
                                             100,
                                             100,
+                                            0,
                                             1,
                                             [
                                                 [
@@ -135,6 +135,7 @@ class InvokeCommand extends Command
                                                 )
                                             ],
                                             100,
+                                            0,
                                             $validUntil
                                         )
                                     ]

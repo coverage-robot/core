@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
-    public const DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
+    final public const int DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
 
     public function __construct(
         #[Autowire(service: QueryService::class)]
@@ -78,11 +78,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $this->getDiffLineCoverage($waypoint),
                 $this->getDiff($waypoint)
             );
-        } catch (QueryException $e) {
+        } catch (QueryException $queryException) {
             throw new AnalysisException(
                 'Unable to analyse event for report generation.',
                 0,
-                $e
+                $queryException
             );
         }
     }
