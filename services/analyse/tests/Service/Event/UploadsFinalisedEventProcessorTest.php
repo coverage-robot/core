@@ -40,6 +40,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             'mock-ref',
             'mock-commit',
             null,
+            null,
+            null,
             new DateTimeImmutable()
         );
 
@@ -107,6 +109,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
+            null,
+            null,
             null,
             new DateTimeImmutable()
         );

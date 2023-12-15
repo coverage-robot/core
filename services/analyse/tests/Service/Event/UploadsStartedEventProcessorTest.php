@@ -32,6 +32,8 @@ class UploadsStartedEventProcessorTest extends TestCase
             'mock-ref',
             'mock-commit',
             null,
+            null,
+            null,
             new DateTimeImmutable()
         );
 
