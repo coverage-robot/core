@@ -28,11 +28,11 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     {
         $this->client->authenticateAsRepositoryOwner($event->getOwner());
 
-        $pullRequest = match ($event::class) {
+        $pullRequest = match (true) {
             // Reporting waypoints aren't linked to individual pull requests (only
             // commits in the tree). So no need to try and extract a PR number
-            EventInterface::class => $event->getPullRequest(),
-            default => null
+            $event instanceof EventInterface => $event->getPullRequest(),
+            $event instanceof ReportWaypoint => null
         };
 
         $this->diffParserLogger->info(

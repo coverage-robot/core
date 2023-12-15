@@ -28,7 +28,7 @@ class GithubDiffParserServiceTest extends TestCase
 
         $mockUpload = $this->getMockUpload();
 
-        $mockUpload->expects($this->exactly(4))
+        $mockUpload->expects($this->once())
             ->method('getPullRequest')
             ->willReturn(1);
         $mockUpload->expects($this->exactly(2))
@@ -96,7 +96,7 @@ class GithubDiffParserServiceTest extends TestCase
 
         $mockUpload = $this->getMockUpload();
 
-        $mockUpload->expects($this->exactly(3))
+        $mockUpload->expects($this->once())
             ->method('getPullRequest')
             ->willReturn(null);
         $mockUpload->expects($this->atLeast(1))
@@ -196,7 +196,7 @@ class GithubDiffParserServiceTest extends TestCase
 
         $mockUpload = $this->getMockUpload();
 
-        $mockUpload->expects($this->exactly(3))
+        $mockUpload->expects($this->once())
             ->method('getPullRequest')
             ->willReturn(null);
         $mockUpload->expects($this->atLeast(1))
