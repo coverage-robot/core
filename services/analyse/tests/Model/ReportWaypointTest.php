@@ -24,7 +24,7 @@ class ReportWaypointTest extends TestCase
     public static function waypointProvider(): array
     {
         return [
-            "Waypoints on same ref" => [
+            'Waypoints on same ref' => [
                 new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner',
@@ -41,7 +41,7 @@ class ReportWaypointTest extends TestCase
                 ),
                 true
             ],
-            "Waypoints on different refs" => [
+            'Waypoints on different refs' => [
                 new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner',
@@ -58,7 +58,7 @@ class ReportWaypointTest extends TestCase
                 ),
                 true
             ],
-            "Waypoints on same commit" => [
+            'Waypoints on same commit' => [
                 new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner',
@@ -75,7 +75,7 @@ class ReportWaypointTest extends TestCase
                 ),
                 true
             ],
-            "Waypoints on different owners" => [
+            'Waypoints on different owners' => [
                 new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner-1',
@@ -92,7 +92,7 @@ class ReportWaypointTest extends TestCase
                 ),
                 false
             ],
-            "Waypoints on different repositories" => [
+            'Waypoints on different repositories' => [
                 new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner',
