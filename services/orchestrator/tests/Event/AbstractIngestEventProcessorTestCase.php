@@ -51,6 +51,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     'ref',
                     'commit',
                     null,
+                    null,
+                    null,
                     'external-id',
                     JobState::COMPLETED,
                     new DateTimeImmutable()

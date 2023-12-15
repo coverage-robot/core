@@ -56,6 +56,18 @@ class AnalyseFailure implements EventInterface
         return $this->event->getRef();
     }
 
+    #[Ignore]
+    public function getBaseRef(): ?string
+    {
+        return $this->event->getBaseRef();
+    }
+
+    #[Ignore]
+    public function getBaseCommit(): ?string
+    {
+        return $this->event->getBaseCommit();
+    }
+
     public function getType(): Event
     {
         return Event::ANALYSE_FAILURE;

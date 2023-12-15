@@ -19,6 +19,8 @@ class JobStateChange implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly string|int|null $pullRequest,
+        private readonly string|null $baseCommit,
+        private readonly string|null $baseRef,
         private readonly string|int $externalId,
         private readonly JobState $state,
         #[Context(
@@ -57,6 +59,16 @@ class JobStateChange implements EventInterface
     public function getPullRequest(): ?string
     {
         return $this->pullRequest;
+    }
+
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
+    }
+
+    public function getBaseRef(): ?string
+    {
+        return $this->baseRef;
     }
 
     public function getExternalId(): string|int

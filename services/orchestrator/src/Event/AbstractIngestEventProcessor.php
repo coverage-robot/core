@@ -86,6 +86,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                     $event->getRef(),
                     $currentState->getCommit(),
                     $event->getPullRequest(),
+                    $event->getBaseRef(),
+                    $event->getBaseCommit(),
                     new DateTimeImmutable()
                 )
             );
@@ -125,6 +127,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                         $finalisedEvent->getRef(),
                         $finalisedEvent->getCommit(),
                         $finalisedEvent->getPullRequest(),
+                        $event->getBaseRef(),
+                        $event->getBaseCommit(),
                         $finalisedEvent->getEventTime()
                     )
                 );

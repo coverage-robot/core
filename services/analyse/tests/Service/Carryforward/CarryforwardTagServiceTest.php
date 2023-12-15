@@ -60,6 +60,8 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 null,
+                null,
+                null,
                 new DateTimeImmutable()
             ),
             [
@@ -118,6 +120,8 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                null,
+                null,
                 null,
                 new DateTimeImmutable()
             ),
@@ -191,6 +195,8 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                null,
+                null,
                 null,
                 new DateTimeImmutable()
             ),
@@ -273,6 +279,8 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                null,
+                null,
                 null,
                 new DateTimeImmutable()
             ),

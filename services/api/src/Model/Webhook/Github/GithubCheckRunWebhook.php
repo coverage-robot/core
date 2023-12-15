@@ -24,6 +24,8 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string $ref,
         protected readonly string $commit,
         protected readonly string|int|null $pullRequest,
+        protected readonly string|null $baseRef,
+        protected readonly string|null $baseCommit,
         protected readonly JobState $jobState
     ) {
     }
@@ -89,6 +91,18 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     public function getPullRequest(): string|int|null
     {
         return $this->pullRequest;
+    }
+
+    #[SerializedPath('[check_run][pull_requests][0][base][ref]')]
+    public function getBaseRef(): ?string
+    {
+        return $this->baseRef;
+    }
+
+    #[SerializedPath('[check_run][pull_requests][0][base][sha]')]
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
     }
 
     /**
