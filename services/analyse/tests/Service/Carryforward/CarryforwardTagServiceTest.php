@@ -58,6 +58,7 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                1
             ),
             [
                 new Tag('tag-1', 'mock-commit'),
@@ -115,6 +116,7 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                2
             ),
             [
                 new Tag('tag-1', 'mock-current-commit')
@@ -186,6 +188,7 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                3
             ),
             []
         );
@@ -266,6 +269,7 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
+                null
             ),
             []
         );

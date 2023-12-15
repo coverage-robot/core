@@ -13,6 +13,7 @@ class ReportWaypoint implements Stringable
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
+        private readonly string|int|null $pullRequest
     ) {
     }
 
@@ -39,6 +40,11 @@ class ReportWaypoint implements Stringable
     public function getCommit(): string
     {
         return $this->commit;
+    }
+
+    public function getPullRequest(): string|int|null
+    {
+        return $this->pullRequest;
     }
 
     public function comparable(ReportWaypoint $other): bool

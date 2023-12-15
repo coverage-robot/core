@@ -7,7 +7,7 @@ use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
+use App\Model\ReportWaypoint;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -26,7 +26,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockUpload();
+        $mockUpload = $this->getMockWaypoint();
 
         $mockUpload->expects($this->once())
             ->method('getPullRequest')
@@ -94,7 +94,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockUpload();
+        $mockUpload = $this->getMockWaypoint();
 
         $mockUpload->expects($this->once())
             ->method('getPullRequest')
@@ -194,7 +194,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockUpload();
+        $mockUpload = $this->getMockWaypoint();
 
         $mockUpload->expects($this->once())
             ->method('getPullRequest')
@@ -239,16 +239,16 @@ class GithubDiffParserServiceTest extends TestCase
         );
     }
 
-    private function getMockUpload(): Upload|MockObject
+    private function getMockWaypoint(): Upload|MockObject
     {
-        $mockUpload = $this->createMock(Upload::class);
-        $mockUpload->expects($this->exactly(4))
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint->expects($this->exactly(4))
             ->method('getOwner')
             ->willReturn('mock-owner');
-        $mockUpload->expects($this->exactly(3))
+        $mockWaypoint->expects($this->exactly(3))
             ->method('getRepository')
             ->willReturn('mock-repository');
 
-        return $mockUpload;
+        return $mockWaypoint;
     }
 }

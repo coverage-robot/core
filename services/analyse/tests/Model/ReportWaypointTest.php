@@ -31,6 +31,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    1
                 ),
                 new ReportWaypoint(
                     Provider::GITHUB,
@@ -38,6 +39,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit-2',
+                    1
                 ),
                 true
             ],
@@ -48,6 +50,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    null
                 ),
                 new ReportWaypoint(
                     Provider::GITHUB,
@@ -55,6 +58,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref-2',
                     'mock-commit-2',
+                    null
                 ),
                 true
             ],
@@ -65,6 +69,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    5
                 ),
                 new ReportWaypoint(
                     Provider::GITHUB,
@@ -72,6 +77,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    5
                 ),
                 true
             ],
@@ -82,6 +88,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    null
                 ),
                 new ReportWaypoint(
                     Provider::GITHUB,
@@ -89,6 +96,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository',
                     'mock-ref',
                     'mock-commit',
+                    null
                 ),
                 false
             ],
@@ -99,6 +107,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository-1',
                     'mock-ref',
                     'mock-commit',
+                    null
                 ),
                 new ReportWaypoint(
                     Provider::GITHUB,
@@ -106,6 +115,7 @@ class ReportWaypointTest extends TestCase
                     'mock-repository-2',
                     'mock-ref',
                     'mock-commit',
+                    null
                 ),
                 false
             ]

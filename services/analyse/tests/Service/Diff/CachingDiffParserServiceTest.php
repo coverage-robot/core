@@ -4,7 +4,7 @@ namespace App\Tests\Service\Diff;
 
 use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserService;
-use Packages\Event\Model\Upload;
+use App\Model\ReportWaypoint;
 use PHPUnit\Framework\TestCase;
 
 class CachingDiffParserServiceTest extends TestCase
@@ -19,10 +19,10 @@ class CachingDiffParserServiceTest extends TestCase
 
         $cachingDiffParser = new CachingDiffParserService($mockDiffParser);
 
-        $mockUpload = $this->createMock(Upload::class);
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
 
-        $this->assertEquals([], $cachingDiffParser->get($mockUpload));
-        $this->assertEquals([], $cachingDiffParser->get($mockUpload));
+        $this->assertEquals([], $cachingDiffParser->get($mockWaypoint));
+        $this->assertEquals([], $cachingDiffParser->get($mockWaypoint));
     }
 
     public function testDoesNotCacheDifferentUploads(): void
@@ -35,7 +35,7 @@ class CachingDiffParserServiceTest extends TestCase
 
         $cachingDiffParser = new CachingDiffParserService($mockDiffParser);
 
-        $this->assertEquals([], $cachingDiffParser->get($this->createMock(Upload::class)));
-        $this->assertEquals([], $cachingDiffParser->get($this->createMock(Upload::class)));
+        $this->assertEquals([], $cachingDiffParser->get($this->createMock(ReportWaypoint::class)));
+        $this->assertEquals([], $cachingDiffParser->get($this->createMock(ReportWaypoint::class)));
     }
 }

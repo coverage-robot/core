@@ -26,19 +26,19 @@ class DiffParserService implements DiffParserServiceInterface
     /**
      * @inheritDoc
      */
-    public function get(EventInterface|ReportWaypoint $event): array
+    public function get(ReportWaypoint $waypoint): array
     {
-        $parser = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
+        $parser = (iterator_to_array($this->parsers)[$waypoint->getProvider()->value]) ?? null;
 
         if (!$parser instanceof DiffParserServiceInterface) {
             throw new RuntimeException(
                 sprintf(
                     'No diff parser found for %s',
-                    $event->getProvider()->value
+                    $waypoint->getProvider()->value
                 )
             );
         }
 
-        return $parser->get($event);
+        return $parser->get($waypoint);
     }
 }

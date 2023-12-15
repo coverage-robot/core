@@ -5,8 +5,7 @@ namespace App\Tests\Service\Diff;
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
+use App\Model\ReportWaypoint;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -33,19 +32,13 @@ class DiffParserServiceTest extends TestCase
         $this->assertEquals(
             $diff,
             $diffParser->get(
-                new Upload(
-                    'uploadId',
+                new ReportWaypoint(
                     Provider::GITHUB,
                     'owner',
                     'repository',
-                    'commit',
-                    [],
                     'ref',
-                    'project-root',
+                    'commit',
                     12,
-                    'commit-on-main',
-                    'main',
-                    new Tag('tag', 'commit'),
                 )
             )
         );
@@ -66,19 +59,13 @@ class DiffParserServiceTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $diffParser->get(
-            new Upload(
-                'uploadId',
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'owner',
                 'repository',
-                'commit',
-                [],
                 'ref',
-                'project-root',
+                'commit',
                 12,
-                'commit-on-main',
-                'main',
-                new Tag('tag', 'commit'),
             )
         );
     }

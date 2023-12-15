@@ -29,7 +29,8 @@ class QueryBuilderServiceTest extends KernelTestCase
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
-                'mock-commit'
+                'mock-commit',
+                6
             )
         );
 
