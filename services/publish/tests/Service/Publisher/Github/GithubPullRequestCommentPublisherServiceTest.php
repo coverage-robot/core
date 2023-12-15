@@ -213,6 +213,8 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                     'mock-ref',
                     'mock-project-root',
                     '1234',
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', 'mock-commit'),
                 ),
                 true
@@ -228,6 +230,8 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
                     'mock-ref',
                     'mock-project-root',
                     null,
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', 'mock-commit'),
                 ),
                 false

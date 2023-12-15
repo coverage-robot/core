@@ -36,6 +36,8 @@ class SqsMessageClientTest extends KernelTestCase
                 'main',
                 'project-root',
                 12,
+                'commit-on-main',
+                'main',
                 new Tag('mock-tag', 'mock-commit'),
                 new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
             ),

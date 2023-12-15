@@ -113,6 +113,8 @@ class UploadServiceTest extends KernelTestCase
                         'provider' => 'github',
                         'fileName' => 'some/root/test.xml',
                         'pullRequest' => '12',
+                        'baseRef' => 'main',
+                        'baseCommit' => 'mock-base-commit',
                         'uploadId' => 'mock-uuid',
                         'ref' => 'mock-branch-reference',
                         'projectRoot' => 'some/root/'
@@ -141,7 +143,9 @@ class UploadServiceTest extends KernelTestCase
                 '2',
                 ['mock-parent-hash'],
                 'mock-branch-reference',
-                '12'
+                '12',
+                'main',
+                'mock-base-commit'
             )
         );
     }
@@ -156,6 +160,8 @@ class UploadServiceTest extends KernelTestCase
                     'projectRoot' => 'some/root/',
                     'commit' => '2',
                     'pullRequest' => '12',
+                    'baseRef' => 'main',
+                    'baseCommit' => 'mock-base-commit',
                     'parent' => ['mock-parent-hash'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
@@ -172,7 +178,9 @@ class UploadServiceTest extends KernelTestCase
                     '2',
                     ['mock-parent-hash'],
                     'mock-branch-reference',
-                    '12'
+                    '12',
+                    'main',
+                    'mock-base-commit'
                 )
             ],
             'Without to pull request' => [
@@ -197,6 +205,8 @@ class UploadServiceTest extends KernelTestCase
                     '2',
                     ['mock-parent-hash'],
                     'mock-branch-reference',
+                    null,
+                    null,
                     null
                 )
             ],
@@ -259,6 +269,8 @@ class UploadServiceTest extends KernelTestCase
                     'projectRoot' => 'some/root/',
                     'commit' => '2',
                     'pullRequest' => '12',
+                    'baseRef' => 'main',
+                    'baseCommit' => 'mock-base-commit',
                     'parent' => ['mock-parent-hash', 'e'],
                     'ref' => 'mock-branch-reference',
                     'provider' => 'github',
@@ -275,7 +287,9 @@ class UploadServiceTest extends KernelTestCase
                     '2',
                     ['mock-parent-hash', 'e'],
                     'mock-branch-reference',
-                    '12'
+                    '12',
+                    'main',
+                    'mock-base-commit'
                 )
             ],
         ];

@@ -93,6 +93,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-ref',
                         '',
                         null,
+                        'commit-on-main',
+                        'main',
                         new Tag('mock-tag', 'mock-commit'),
                         null
                     ),
@@ -150,6 +152,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-ref',
                         '',
                         null,
+                        'commit-on-main',
+                        'main',
                         new Tag('mock-tag', 'mock-commit'),
                         $eventTime->sub(new DateInterval('PT30S'))
                     ),

@@ -15,10 +15,10 @@ use Google\Cloud\BigQuery\LoadJobConfiguration;
 use Google\Cloud\BigQuery\Table;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
 use Packages\Models\Enum\CoverageFormat;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Coverage;
 use Packages\Models\Model\Tag;
 use Packages\Telemetry\Service\MetricService;
@@ -106,6 +106,8 @@ class GcsPersistServiceTest extends KernelTestCase
                     'mock-branch-reference',
                     'project/root',
                     1,
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', '')
                 ),
                 new Coverage(CoverageFormat::LCOV, 'mock/project/root')
@@ -191,6 +193,8 @@ class GcsPersistServiceTest extends KernelTestCase
                     'mock-branch-reference',
                     'project/root',
                     1,
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', '')
                 ),
                 new Coverage(CoverageFormat::LCOV, 'mock/project/root')

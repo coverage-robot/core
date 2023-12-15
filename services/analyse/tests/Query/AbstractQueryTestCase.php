@@ -44,6 +44,8 @@ abstract class AbstractQueryTestCase extends KernelTestCase
                     'mock-ref',
                     'mock-project-root',
                     12,
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', 'mock-commit')
                 )
             )

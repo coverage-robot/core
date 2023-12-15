@@ -43,6 +43,8 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 'main',
                 'project/root',
                 1234,
+                'commit-on-main',
+                'main',
                 new Tag('mock-tag', 'mock-commit'),
                 $ingestTime
             ),
