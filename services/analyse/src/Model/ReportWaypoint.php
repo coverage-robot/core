@@ -45,8 +45,7 @@ class ReportWaypoint implements Stringable
     {
         return $this->provider === $other->provider
             && $this->owner === $other->owner
-            && $this->repository === $other->repository
-            && $this->ref === $other->ref;
+            && $this->repository === $other->repository;
     }
 
     public function __toString(): string
