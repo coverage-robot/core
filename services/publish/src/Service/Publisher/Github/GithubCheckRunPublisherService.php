@@ -114,6 +114,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     $currentStatus,
                     $publishableMessage->getStatus(),
                     $publishableMessage->getCoveragePercentage(),
+                    $publishableMessage->getCoverageChange(),
                     []
                 );
             }
@@ -124,6 +125,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $commit,
                 $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
+                $publishableMessage->getCoverageChange(),
                 []
             );
             $currentStatus = $publishableMessage->getStatus();
@@ -147,6 +149,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $currentStatus,
                 $publishableMessage->getStatus(),
                 $publishableMessage->getCoveragePercentage(),
+                $publishableMessage->getCoverageChange(),
                 $chunk
             ) && $successful;
         }
@@ -163,6 +166,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         string $commit,
         ?PublishableCheckRunStatus $status,
         float $coveragePercentage,
+        ?float $coverageChange,
         array $annotations
     ): int {
         $body = match ($status) {
@@ -173,7 +177,8 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->checkRunFormatterService->formatTitle(
                         PublishableCheckRunStatus::IN_PROGRESS,
-                        $coveragePercentage
+                        $coveragePercentage,
+                        $coverageChange
                     ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
@@ -184,7 +189,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'status' => $status->value,
                 'annotations' => $annotations,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        $status,
+                        $coveragePercentage,
+                        $coverageChange
+                    ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ],
@@ -196,7 +205,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'annotations' => $annotations,
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        $status,
+                        $coveragePercentage,
+                        $coverageChange
+                    ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ]
@@ -241,6 +254,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         ?PublishableCheckRunStatus $currentStatus,
         ?PublishableCheckRunStatus $status,
         float $coveragePercentage,
+        ?float $coverageChange,
         array $annotations
     ): bool {
         $body = match ($status) {
@@ -249,7 +263,8 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->checkRunFormatterService->formatTitle(
                         $currentStatus ?? PublishableCheckRunStatus::IN_PROGRESS,
-                        $coveragePercentage
+                        $coveragePercentage,
+                        $coverageChange
                     ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
@@ -259,7 +274,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'name' => 'Coverage Robot',
                 'status' => $status->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        $status,
+                        $coveragePercentage,
+                        $coverageChange
+                    ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ]
@@ -269,7 +288,11 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'status' => 'completed',
                 'conclusion' => $status->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($status, $coveragePercentage),
+                    'title' => $this->checkRunFormatterService->formatTitle(
+                        $status,
+                        $coveragePercentage,
+                        $coverageChange
+                    ),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ],
