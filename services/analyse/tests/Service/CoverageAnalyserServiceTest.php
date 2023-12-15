@@ -37,6 +37,7 @@ class CoverageAnalyserServiceTest extends TestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
+            12
         );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);

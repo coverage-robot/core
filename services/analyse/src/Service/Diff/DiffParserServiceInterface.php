@@ -18,5 +18,5 @@ interface DiffParserServiceInterface
      *
      * @return array<string, array<int, int>>
      */
-    public function get(EventInterface|ReportWaypoint $event): array;
+    public function get(ReportWaypoint $waypoint): array;
 }

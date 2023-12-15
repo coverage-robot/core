@@ -24,37 +24,32 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     /**
      * @inheritDoc
      */
-    public function get(EventInterface|ReportWaypoint $event): array
+    public function get(ReportWaypoint $waypoint): array
     {
-        $this->client->authenticateAsRepositoryOwner($event->getOwner());
+        $this->client->authenticateAsRepositoryOwner($waypoint->getOwner());
 
-        $pullRequest = match (true) {
-            // Reporting waypoints aren't linked to individual pull requests (only
-            // commits in the tree). So no need to try and extract a PR number
-            $event instanceof EventInterface => $event->getPullRequest(),
-            $event instanceof ReportWaypoint => null
-        };
+        $pullRequest = $waypoint->getPullRequest();
 
         $this->diffParserLogger->info(
-            sprintf('Fetching diff from GitHub for %s.', (string)$event),
+            sprintf('Fetching diff from GitHub for %s.', (string)$waypoint),
             [
-                'owner' => $event->getOwner(),
-                'repository' => $event->getRepository(),
-                'commit' => $event->getCommit(),
+                'owner' => $waypoint->getOwner(),
+                'repository' => $waypoint->getRepository(),
+                'commit' => $waypoint->getCommit(),
                 'pull_request' => $pullRequest
             ]
         );
 
         $diff = $pullRequest ?
             $this->getPullRequestDiff(
-                $event->getOwner(),
-                $event->getRepository(),
+                $waypoint->getOwner(),
+                $waypoint->getRepository(),
                 (int)$pullRequest
             ) :
             $this->getCommitDiff(
-                $event->getOwner(),
-                $event->getRepository(),
-                $event->getCommit()
+                $waypoint->getOwner(),
+                $waypoint->getRepository(),
+                $waypoint->getCommit()
             );
 
         $files = $this->parser->parse($diff);
@@ -83,11 +78,11 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         }
 
         $this->diffParserLogger->info(
-            sprintf('Diff for %s has %s files with added lines.', (string)$event, count($addedLines)),
+            sprintf('Diff for %s has %s files with added lines.', (string)$waypoint, count($addedLines)),
             [
-                'owner' => $event->getOwner(),
-                'repository' => $event->getRepository(),
-                'commit' => $event->getCommit(),
+                'owner' => $waypoint->getOwner(),
+                'repository' => $waypoint->getRepository(),
+                'commit' => $waypoint->getCommit(),
                 'pullRequest' => $pullRequest,
                 $addedLines
             ]

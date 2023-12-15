@@ -176,7 +176,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $event->getOwner(),
                 $event->getRepository(),
                 $baseRef,
-                $baseCommit
+                $baseCommit,
+                null
             );
 
             $comparison = $this->coverageAnalyserService->compare(

@@ -53,7 +53,8 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),
-            $event->getCommit()
+            $event->getCommit(),
+            $event->getPullRequest()
         );
     }
 

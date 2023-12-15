@@ -9,7 +9,7 @@ use WeakMap;
 class CachingDiffParserService implements DiffParserServiceInterface
 {
     /**
-     * @var WeakMap<EventInterface|ReportWaypoint, array<string, array<int, int>>>
+     * @var WeakMap<ReportWaypoint, array<string, array<int, int>>>
      */
     private WeakMap $cache;
 
@@ -17,21 +17,21 @@ class CachingDiffParserService implements DiffParserServiceInterface
         private readonly DiffParserService $diffParserService
     ) {
         /**
-         * @var WeakMap<EventInterface|ReportWaypoint, array<string, array<int, int>>> $cache
+         * @var WeakMap<ReportWaypoint, array<string, array<int, int>>> $cache
          */
         $cache = new WeakMap();
 
         $this->cache = $cache;
     }
 
-    public function get(EventInterface|ReportWaypoint $event): array
+    public function get(ReportWaypoint $waypoint): array
     {
-        if (isset($this->cache[$event])) {
-            return $this->cache[$event];
+        if (isset($this->cache[$waypoint])) {
+            return $this->cache[$waypoint];
         }
 
-        $this->cache[$event] = $this->diffParserService->get($event);
+        $this->cache[$waypoint] = $this->diffParserService->get($waypoint);
 
-        return $this->cache[$event];
+        return $this->cache[$waypoint];
     }
 }
