@@ -12,6 +12,9 @@ class LineCoverageCollectionQueryResult implements QueryResultInterface
     ) {
     }
 
+    /**
+     * @return LineCoverageQueryResult[]
+     */
     public function getLines(): array
     {
         return $this->lines;

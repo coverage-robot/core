@@ -40,4 +40,14 @@ interface PipelineStateChangeWebhookInterface
      * The pull request the job is running on (if applicable)
      */
     public function getPullRequest(): string|int|null;
+
+    /**
+     * The ref the pull request is based on (if applicable)
+     */
+    public function getBaseRef(): string|null;
+
+    /**
+     * The commit the pull request is based on (if applicable)
+     */
+    public function getBaseCommit(): string|null;
 }

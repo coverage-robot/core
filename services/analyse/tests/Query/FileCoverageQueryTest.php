@@ -740,6 +740,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             'ref',
             'project-root',
             12,
+            'commit-on-main',
+            'main',
             new Tag('tag', 'commit'),
         );
 
@@ -748,14 +750,14 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             'mock-file-2' => [10, 11, 12]
         ];
 
-        $lineScopedParameters = QueryParameterBag::fromEvent($upload);
+        $lineScopedParameters = QueryParameterBag::fromWaypoint($upload);
         $lineScopedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
 
-        $limitedParameters = QueryParameterBag::fromEvent($upload);
+        $limitedParameters = QueryParameterBag::fromWaypoint($upload);
         $limitedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
         $limitedParameters->set(QueryParameter::LIMIT, 50);
 
-        $carryforwardParameters = QueryParameterBag::fromEvent($upload);
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($upload);
         $carryforwardParameters->set(
             QueryParameter::CARRYFORWARD_TAGS,
             [
@@ -849,7 +851,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromEvent(
+                QueryParameterBag::fromWaypoint(
                     new Upload(
                         'uploadId',
                         Provider::GITHUB,
@@ -860,6 +862,8 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                         'ref',
                         'project-root',
                         12,
+                        'commit-on-main',
+                        'main',
                         new Tag('tag', 'commit'),
                     )
                 ),

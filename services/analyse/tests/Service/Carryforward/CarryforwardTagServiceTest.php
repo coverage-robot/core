@@ -4,15 +4,14 @@ namespace App\Tests\Service\Carryforward;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
-use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\UploadsFinalised;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -53,14 +52,12 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new UploadsFinalised(
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                null,
-                new DateTimeImmutable()
             ),
             [
                 new Tag('tag-1', 'mock-commit'),
@@ -112,14 +109,12 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new UploadsFinalised(
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                null,
-                new DateTimeImmutable()
             ),
             [
                 new Tag('tag-1', 'mock-current-commit')
@@ -185,14 +180,12 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new UploadsFinalised(
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                null,
-                new DateTimeImmutable()
             ),
             []
         );
@@ -267,14 +260,12 @@ class CarryforwardTagServiceTest extends TestCase
         );
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
-            new UploadsFinalised(
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                null,
-                new DateTimeImmutable()
             ),
             []
         );

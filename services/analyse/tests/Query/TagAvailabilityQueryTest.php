@@ -10,9 +10,9 @@ use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -115,7 +115,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromEvent(
+                QueryParameterBag::fromWaypoint(
                     new Upload(
                         'mock-uuid',
                         Provider::GITHUB,
@@ -125,6 +125,8 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                         ['mock-parent-commit'],
                         'mock-ref',
                         'mock-project-root',
+                        null,
+                        null,
                         null,
                         new Tag('mock-tag', 'mock-commit-1')
                     )

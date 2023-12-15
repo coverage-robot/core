@@ -33,7 +33,7 @@ abstract class AbstractQueryTestCase extends KernelTestCase
     public static function getQueryParameters(): array
     {
         return [
-            QueryParameterBag::fromEvent(
+            QueryParameterBag::fromWaypoint(
                 new Upload(
                     'mock-upload-id',
                     Provider::GITHUB,
@@ -44,6 +44,8 @@ abstract class AbstractQueryTestCase extends KernelTestCase
                     'mock-ref',
                     'mock-project-root',
                     12,
+                    'commit-on-main',
+                    'main',
                     new Tag('mock-tag', 'mock-commit')
                 )
             )

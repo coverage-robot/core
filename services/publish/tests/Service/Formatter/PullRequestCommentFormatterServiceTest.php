@@ -35,6 +35,8 @@ class PullRequestCommentFormatterServiceTest extends TestCase
             'main',
             'project-root',
             12,
+            'commit-on-main',
+            'main',
             new Tag('mock-tag', 'mock-commit'),
             new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
         );
@@ -49,6 +51,8 @@ class PullRequestCommentFormatterServiceTest extends TestCase
             'main',
             'project-root',
             null,
+            null,
+            null,
             new Tag('mock-tag', 'mock-commit'),
             new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
         );
@@ -59,6 +63,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
+                    0,
                     100.0,
                     2,
                     [
@@ -112,6 +117,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $pullRequestUpload,
                     100.0,
+                    0,
                     null,
                     2,
                     [
@@ -150,6 +156,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 new PublishablePullRequestMessage(
                     $missingPullRequestUpload,
                     100.0,
+                    0,
                     null,
                     2,
                     [

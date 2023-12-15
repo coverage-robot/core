@@ -29,6 +29,8 @@ class EventProcessorServiceTest extends TestCase
                 'mock-ref',
                 '',
                 null,
+                null,
+                null,
                 new Tag('mock-tag', 'mock-commit'),
                 new DateTimeImmutable()
             ),
@@ -69,6 +71,8 @@ class EventProcessorServiceTest extends TestCase
                 [],
                 'mock-ref',
                 '',
+                null,
+                null,
                 null,
                 new Tag('mock-tag', 'mock-commit'),
                 new DateTimeImmutable()

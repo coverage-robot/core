@@ -40,20 +40,20 @@ class QueryParameterBag implements JsonSerializable
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, array|int|string|EventInterface|Provider $value): void
+    public function set(QueryParameter $key, array|int|string|Provider $value): void
     {
         $this->parameters[$key] = $value;
     }
 
-    public static function fromEvent(EventInterface $event): self
+    public static function fromWaypoint(EventInterface|ReportWaypoint $waypoint): self
     {
         $parameters = new self();
 
-        // Extract core parameters from upload model for ease of use
-        $parameters->set(QueryParameter::COMMIT, $event->getCommit());
-        $parameters->set(QueryParameter::OWNER, $event->getOwner());
-        $parameters->set(QueryParameter::REPOSITORY, $event->getRepository());
-        $parameters->set(QueryParameter::PROVIDER, $event->getProvider());
+        // Extract core parameters from reporting waypoint for ease of use
+        $parameters->set(QueryParameter::COMMIT, $waypoint->getCommit());
+        $parameters->set(QueryParameter::OWNER, $waypoint->getOwner());
+        $parameters->set(QueryParameter::REPOSITORY, $waypoint->getRepository());
+        $parameters->set(QueryParameter::PROVIDER, $waypoint->getProvider());
 
         return $parameters;
     }

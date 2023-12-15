@@ -3,6 +3,7 @@
 namespace App\Service\Carryforward;
 
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
@@ -35,14 +36,14 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(EventInterface $event, array $existingTags): array
+    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
     {
         $carryforwardTags = [];
 
         /** @var TagAvailabilityCollectionQueryResult $tagAvailability */
         $tagAvailability = $this->queryService->runQuery(
             TagAvailabilityQuery::class,
-            QueryParameterBag::fromEvent($event)
+            QueryParameterBag::fromWaypoint($event)
         );
 
         /**
@@ -106,7 +107,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @return array{0: string[], 1: Tag[]}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
-        EventInterface $event,
+        EventInterface|ReportWaypoint $event,
         TagAvailabilityCollectionQueryResult $tagAvailability,
         int $page = 0,
         array $tagsNotSeen = []

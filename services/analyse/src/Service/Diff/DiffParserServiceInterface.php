@@ -2,6 +2,7 @@
 
 namespace App\Service\Diff;
 
+use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -17,5 +18,5 @@ interface DiffParserServiceInterface
      *
      * @return array<string, array<int, int>>
      */
-    public function get(EventInterface $event): array;
+    public function get(EventInterface|ReportWaypoint $event): array;
 }

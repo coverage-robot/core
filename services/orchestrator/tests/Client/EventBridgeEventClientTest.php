@@ -13,11 +13,11 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use Monolog\Test\TestCase;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class EventBridgeEventClientTest extends TestCase
@@ -31,6 +31,8 @@ class EventBridgeEventClientTest extends TestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
+            null,
+            null,
             null,
             new DateTimeImmutable()
         );

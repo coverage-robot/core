@@ -11,9 +11,9 @@ use App\Query\TotalUploadsQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Environment\Environment;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -176,7 +176,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                 false
             ],
             [
-                QueryParameterBag::fromEvent(
+                QueryParameterBag::fromWaypoint(
                     new Upload(
                         'mock-uuid',
                         Provider::GITHUB,
@@ -186,6 +186,8 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                         ['mock-parent-commit'],
                         'mock-ref',
                         'mock-project-root',
+                        null,
+                        null,
                         null,
                         new Tag('mock-tag', 'mock-commit-1')
                     )

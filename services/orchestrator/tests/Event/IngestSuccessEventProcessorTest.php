@@ -101,6 +101,8 @@ class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessorTestCa
                         'mock-ref',
                         '',
                         null,
+                        null,
+                        null,
                         new Tag('mock-tag', 'mock-commit'),
                         null
                     ),
@@ -179,6 +181,8 @@ class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessorTestCa
                         [],
                         'mock-ref',
                         '',
+                        null,
+                        null,
                         null,
                         new Tag('mock-tag', 'mock-commit'),
                         null

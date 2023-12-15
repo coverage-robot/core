@@ -2,6 +2,7 @@
 
 namespace App\Service\Carryforward;
 
+use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use WeakMap;
@@ -13,7 +14,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     private const string RESULT_CACHE_PARAM = 'result';
 
     /**
-     * @var WeakMap<EventInterface, array{ existingTags: Tag[], result: Tag[] }[]>
+     * @var WeakMap<EventInterface|ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]>
      */
     private WeakMap $cache;
 
@@ -21,7 +22,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
         private readonly CarryforwardTagService $carryforwardTagService
     ) {
         /**
-         * @var WeakMap<EventInterface, array{ existingTags: Tag[], result: Tag[] }[]> $cache
+         * @var WeakMap<EventInterface|ReportWaypoint, array{ existingTags: Tag[], result: Tag[] }[]> $cache
          */
         $cache = new WeakMap();
 
@@ -32,7 +33,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(EventInterface $event, array $existingTags): array
+    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
     {
         if ($carryforwardTags = $this->lookupExistingValueInCache($event, $existingTags)) {
             return $carryforwardTags;
@@ -58,11 +59,11 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
 
     /**
      * Attempt a lookup on the cache to find an existing computed value for the given
-     * event and tags.
+     * waypoint and tags.
      *
      * @return Tag[]|null
      */
-    private function lookupExistingValueInCache(EventInterface $event, array $existingTags): ?array
+    private function lookupExistingValueInCache(EventInterface|ReportWaypoint $event, array $existingTags): ?array
     {
         if (!isset($this->cache[$event])) {
             return null;
