@@ -47,6 +47,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     PublishableCheckRunStatus::SUCCESS,
                     [],
                     100,
+                    0,
                     new DateTimeImmutable()
                 )
             )
@@ -128,6 +129,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 PublishableCheckRunStatus::SUCCESS,
                 [],
                 100,
+                0,
                 new DateTimeImmutable()
             )
         );
@@ -247,6 +249,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     )
                 ],
                 100,
+                0,
                 new DateTimeImmutable()
             )
         );
@@ -339,6 +342,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     )
                 ),
                 100,
+                0,
                 new DateTimeImmutable()
             )
         );
@@ -420,6 +424,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 PublishableCheckRunStatus::IN_PROGRESS,
                 [],
                 100,
+                0,
                 new DateTimeImmutable()
             )
         );

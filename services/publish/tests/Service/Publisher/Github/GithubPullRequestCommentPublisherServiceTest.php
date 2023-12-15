@@ -38,6 +38,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                0,
                 100,
                 1,
                 [],
@@ -113,6 +114,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                0,
                 100,
                 1,
                 [],
@@ -190,6 +192,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                0,
                 100,
                 1,
                 [],
