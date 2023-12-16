@@ -23,16 +23,16 @@ class ReportTest extends TestCase
 
         $report = new Report(
             $mockWaypoint,
-            fn() => $totalUploads,
-            fn() => 1,
-            fn() => 2,
-            fn() => 3,
-            fn() => 99.9,
-            fn() => $tagCoverage,
-            fn() => 95,
-            fn() => $leastCoveredDiffFiles,
-            fn() => $diffLineCoverage,
-            fn() => []
+            static fn() => $totalUploads,
+            static fn() => 1,
+            static fn() => 2,
+            static fn() => 3,
+            static fn() => 99.9,
+            static fn() => $tagCoverage,
+            static fn() => 95,
+            static fn() => $leastCoveredDiffFiles,
+            static fn() => $diffLineCoverage,
+            static fn() => []
         );
 
         $this->assertEquals(

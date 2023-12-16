@@ -12,95 +12,38 @@ use DateTimeImmutable;
 /**
  * A coverage report for a particular waypoint.
  *
- * This leverages Closures to lazy load metrics as they are requested.
+ * This leverages closures to lazy load metrics as they are requested, but
+ * this is entirely opt-in. If the metric has already been calculated, it can
+ * be passed in directly.
  */
 class Report implements ReportInterface
 {
     /**
-     * @var Closure():TotalUploadsQueryResult|TotalUploadsQueryResult $uploads
-     */
-    private Closure|TotalUploadsQueryResult $uploads;
-
-    /**
-     * @var Closure():int|int $totalLines
-     */
-    private Closure|int $totalLines;
-
-    /**
-     * @var int|Closure():int $atLeastPartiallyCoveredLines
-     */
-    private Closure|int $atLeastPartiallyCoveredLines;
-
-    /**
-     * @var int|Closure():int $uncoveredLines
-     */
-    private Closure|int $uncoveredLines;
-
-    /**
-     * @var float|Closure():float $coveragePercentage
-     */
-    private Closure|float $coveragePercentage;
-
-    /**
-     * @var TagCoverageCollectionQueryResult|Closure():TagCoverageCollectionQueryResult $tagCoverage
-     */
-    private Closure|TagCoverageCollectionQueryResult $tagCoverage;
-
-    /**
-     * @var (float|null)|Closure():(float|null) $diffCoveragePercentage
-     */
-    private Closure|float|null $diffCoveragePercentage;
-
-    /**
-     * @var FileCoverageCollectionQueryResult|Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
-     */
-    private Closure|FileCoverageCollectionQueryResult $leastCoveredDiffFiles;
-
-    /**
-     * @var LineCoverageCollectionQueryResult|Closure():LineCoverageCollectionQueryResult $diffLineCoverage
-     */
-    private Closure|LineCoverageCollectionQueryResult $diffLineCoverage;
-
-    /**
-     * @var array<string, array<int, int>>|Closure():array<string, array<int, int>> $diff
-     */
-    private Closure|array $diff;
-
-    /**
-     * @param Closure():TotalUploadsQueryResult $uploads
-     * @param Closure():int $totalLines
-     * @param Closure():int $atLeastPartiallyCoveredLines
-     * @param Closure():int $uncoveredLines
-     * @param Closure():float $coveragePercentage
-     * @param Closure():TagCoverageCollectionQueryResult $tagCoverage
-     * @param Closure():(float|null) $diffCoveragePercentage
-     * @param Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
-     * @param Closure():LineCoverageCollectionQueryResult $diffLineCoverage
-     * @param Closure():array<string, array<int, int>> $diff
+     * @param ReportWaypoint $waypoint
+     * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
+     * @param int|Closure():int $totalLines
+     * @param int|Closure():int $atLeastPartiallyCoveredLines
+     * @param int|Closure():int $uncoveredLines
+     * @param float|Closure():float $coveragePercentage
+     * @param TagCoverageCollectionQueryResult|Closure():TagCoverageCollectionQueryResult $tagCoverage
+     * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
+     * @param FileCoverageCollectionQueryResult|Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
+     * @param LineCoverageCollectionQueryResult|Closure():LineCoverageCollectionQueryResult $diffLineCoverage
+     * @param array<string, array<int, int>>|Closure():array<string, array<int, int>> $diff
      */
     public function __construct(
         private readonly ReportWaypoint $waypoint,
-        Closure $uploads,
-        Closure $totalLines,
-        Closure $atLeastPartiallyCoveredLines,
-        Closure $uncoveredLines,
-        Closure $coveragePercentage,
-        Closure $tagCoverage,
-        Closure $diffCoveragePercentage,
-        Closure $leastCoveredDiffFiles,
-        Closure $diffLineCoverage,
-        Closure $diff
+        private Closure|TotalUploadsQueryResult $uploads,
+        private Closure|int $totalLines,
+        private Closure|int $atLeastPartiallyCoveredLines,
+        private Closure|int $uncoveredLines,
+        private Closure|float $coveragePercentage,
+        private Closure|TagCoverageCollectionQueryResult $tagCoverage,
+        private Closure|float|null $diffCoveragePercentage,
+        private Closure|FileCoverageCollectionQueryResult $leastCoveredDiffFiles,
+        private Closure|LineCoverageCollectionQueryResult $diffLineCoverage,
+        private Closure|array $diff
     ) {
-        $this->uploads = $uploads;
-        $this->totalLines = $totalLines;
-        $this->atLeastPartiallyCoveredLines = $atLeastPartiallyCoveredLines;
-        $this->uncoveredLines = $uncoveredLines;
-        $this->coveragePercentage = $coveragePercentage;
-        $this->tagCoverage = $tagCoverage;
-        $this->diffCoveragePercentage = $diffCoveragePercentage;
-        $this->leastCoveredDiffFiles = $leastCoveredDiffFiles;
-        $this->diffLineCoverage = $diffLineCoverage;
-        $this->diff = $diff;
     }
 
     public function getWaypoint(): ReportWaypoint
@@ -204,7 +147,7 @@ class Report implements ReportInterface
         return $this->diff;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return sprintf(
             'Report#%s-%s-%s-%s-%s',
