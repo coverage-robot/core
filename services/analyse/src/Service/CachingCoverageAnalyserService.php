@@ -55,7 +55,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
     private WeakMap $tagCoverage;
 
     /**
-     * @var WeakMap<ReportWaypoint, float|null>
+     * @var WeakMap<ReportWaypoint, float|false>
      */
     private WeakMap $diffCoveragePercentage;
 
@@ -110,7 +110,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         $tagCoverageCache = new WeakMap();
         $this->tagCoverage = $tagCoverageCache;
         /**
-         * @var WeakMap<ReportWaypoint, float|null> $diffCoveragePercentageCache
+         * @var WeakMap<ReportWaypoint, float|false> $diffCoveragePercentageCache
          */
         $diffCoveragePercentageCache = new WeakMap();
         $this->diffCoveragePercentage = $diffCoveragePercentageCache;
@@ -183,10 +183,14 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
     protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         if (!isset($this->diffCoveragePercentage[$waypoint])) {
-            $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint);
+            // Weak maps can't store null values (i.e. the value is never persisted), so
+            // we're converting it to false when stored in the map
+            $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint) ?? false;
         }
 
-        return $this->diffCoveragePercentage[$waypoint];
+        return $this->diffCoveragePercentage[$waypoint] ?
+            $this->diffCoveragePercentage[$waypoint] :
+            null;
     }
 
     protected function getLeastCoveredDiffFiles(
