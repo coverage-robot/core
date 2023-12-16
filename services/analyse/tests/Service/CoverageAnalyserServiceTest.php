@@ -95,6 +95,12 @@ class CoverageAnalyserServiceTest extends TestCase
                 ->getFileName()
         );
         $this->assertEquals(
+            LineState::COVERED,
+            $coverageReport->getDiffLineCoverage()
+                ->getLines()[0]
+                ->getState()
+        );
+        $this->assertEquals(
             ['1'],
             $coverageReport->getUploads()
                 ->getSuccessfulUploads()
