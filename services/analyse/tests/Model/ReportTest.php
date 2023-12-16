@@ -39,6 +39,7 @@ class ReportTest extends TestCase
             $totalUploads,
             $report->getUploads()
         );
+        $this->assertNull($report->getLatestSuccessfulUpload());
         $this->assertEquals(
             1,
             $report->getTotalLines()
