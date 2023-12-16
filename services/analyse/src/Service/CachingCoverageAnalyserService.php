@@ -193,13 +193,9 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         ReportWaypoint $waypoint,
         int $limit = CoverageAnalyserService::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
-        if (!isset($this->leastCoveredDiffFiles[$waypoint])) {
-            $this->leastCoveredDiffFiles[$waypoint] = [];
-        }
-
         if (!array_key_exists($limit, $this->leastCoveredDiffFiles[$waypoint])) {
             $this->leastCoveredDiffFiles[$waypoint] = array_merge(
-                $this->leastCoveredDiffFiles[$waypoint],
+                $this->leastCoveredDiffFiles[$waypoint] ?? [],
                 [
                     $limit => parent::getLeastCoveredDiffFiles($waypoint, $limit)
                 ]
