@@ -67,6 +67,18 @@ class CoverageAnalyserServiceTest extends TestCase
             $coverageReport->getCoveragePercentage()
         );
         $this->assertEquals(
+            1,
+            $coverageReport->getTotalLines()
+        );
+        $this->assertEquals(
+            1,
+            $coverageReport->getAtLeastPartiallyCoveredLines()
+        );
+        $this->assertEquals(
+            0,
+            $coverageReport->getUncoveredLines()
+        );
+        $this->assertEquals(
             100,
             $coverageReport->getTagCoverage()
                 ->getTags()[0]
@@ -75,6 +87,18 @@ class CoverageAnalyserServiceTest extends TestCase
         $this->assertEquals(
             100,
             $coverageReport->getDiffCoveragePercentage()
+        );
+        $this->assertEquals(
+            'mock-file',
+            $coverageReport->getLeastCoveredDiffFiles()
+                ->getFiles()[0]
+                ->getFileName()
+        );
+        $this->assertEquals(
+            LineState::COVERED,
+            $coverageReport->getDiffLineCoverage()
+                ->getLines()[0]
+                ->getState()
         );
         $this->assertEquals(
             ['1'],

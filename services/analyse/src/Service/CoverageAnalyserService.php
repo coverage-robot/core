@@ -68,16 +68,16 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         try {
             return new Report(
                 $waypoint,
-                $this->getUploads($waypoint),
-                $this->getTotalLines($waypoint),
-                $this->getAtLeastPartiallyCoveredLines($waypoint),
-                $this->getUncoveredLines($waypoint),
-                $this->getCoveragePercentage($waypoint),
-                $this->getTagCoverage($waypoint),
-                $this->getDiffCoveragePercentage($waypoint),
-                $this->getLeastCoveredDiffFiles($waypoint),
-                $this->getDiffLineCoverage($waypoint),
-                $this->getDiff($waypoint)
+                fn() => $this->getUploads($waypoint),
+                fn() => $this->getTotalLines($waypoint),
+                fn() => $this->getAtLeastPartiallyCoveredLines($waypoint),
+                fn() => $this->getUncoveredLines($waypoint),
+                fn() => $this->getCoveragePercentage($waypoint),
+                fn() => $this->getTagCoverage($waypoint),
+                fn() => $this->getDiffCoveragePercentage($waypoint),
+                fn() => $this->getLeastCoveredDiffFiles($waypoint),
+                fn() => $this->getDiffLineCoverage($waypoint),
+                fn() => $this->getDiff($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
@@ -106,7 +106,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         );
     }
 
-    private function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
+    /**
+     * @throws QueryException
+     */
+    protected function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
@@ -117,13 +120,19 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $totalUploads;
     }
 
-    private function getSuccessfulUploads(ReportWaypoint $waypoint): array
+    /**
+     * @throws QueryException
+     */
+    protected function getSuccessfulUploads(ReportWaypoint $waypoint): array
     {
         return $this->getUploads($waypoint)
             ->getSuccessfulUploads();
     }
 
-    private function getTotalLines(ReportWaypoint $waypoint): int
+    /**
+     * @throws QueryException
+     */
+    protected function getTotalLines(ReportWaypoint $waypoint): int
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
         $params->set(
@@ -145,7 +154,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $totalCoverage->getLines();
     }
 
-    private function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
+    /**
+     * @throws QueryException
+     */
+    protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
         $params->set(
@@ -167,7 +179,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $totalCoverage->getPartial() + $totalCoverage->getCovered();
     }
 
-    private function getUncoveredLines(ReportWaypoint $waypoint): int
+    /**
+     * @throws QueryException
+     */
+    protected function getUncoveredLines(ReportWaypoint $waypoint): int
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
         $params->set(
@@ -189,7 +204,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $totalCoverage->getUncovered();
     }
 
-    private function getCoveragePercentage(ReportWaypoint $waypoint): float
+    /**
+     * @throws QueryException
+     */
+    protected function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
         $params->set(
@@ -210,7 +228,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         return $totalCoverage->getCoveragePercentage();
     }
 
-    private function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
+    /**
+     * @throws QueryException
+     */
+    protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
         $params->set(
@@ -251,7 +272,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    private function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
+    protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         $diff = $this->getDiff($waypoint);
 
@@ -303,7 +324,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    private function getLeastCoveredDiffFiles(
+    protected function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
@@ -354,7 +375,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    private function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
+    protected function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         $diff = $this->getDiff($waypoint);
 
@@ -383,7 +404,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @return array<string, array<int, int>>
      */
-    private function getDiff(ReportWaypoint $waypoint): array
+    protected function getDiff(ReportWaypoint $waypoint): array
     {
         return $this->diffParser->get($waypoint);
     }
