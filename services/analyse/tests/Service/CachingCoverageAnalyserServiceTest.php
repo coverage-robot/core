@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service;
 
-use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
@@ -29,9 +28,31 @@ use PHPUnit\Framework\TestCase;
 
 class CachingCoverageAnalyserServiceTest extends TestCase
 {
-    public function testAnalysingIsCachedForSameEvent(): void
+    public function testCachingAndLazyLoadingReportMetrics(): void
     {
-        $mockQueryService = $this->getMockedQueryService();
+        $mockQueryService = $this->createMock(QueryService::class);
+
+        // We're only performing 2 queries, meaning the others must be lazy
+        // loaded
+        $mockQueryService->expects($this->exactly(2))
+            ->method('runQuery')
+            ->willReturnCallback(
+                static fn(string $queryClass) => match ($queryClass) {
+                    TotalUploadsQuery::class => new TotalUploadsQueryResult(
+                        ['1'],
+                        [new Tag('mock-tag', 'mock-commit')],
+                        null
+                    ),
+                    TotalCoverageQuery::class => new CoverageQueryResult(
+                        95.6,
+                        2,
+                        4,
+                        1,
+                        1
+                    ),
+                    default => null,
+                }
+            );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
@@ -48,51 +69,18 @@ class CachingCoverageAnalyserServiceTest extends TestCase
 
         $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
 
-        $this->assertInstanceOf(
-            ReportInterface::class,
-            $report
+        $this->assertEquals(
+            95.6,
+            $report->getCoveragePercentage()
         );
 
+        // We never perform another query on the same metric a second time
         $mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $this->assertSame(
-            $report,
-            $cachingCoverageAnalyserService->analyse($mockWaypoint)
-        );
-    }
-
-    public function testAnalysingIsNotCachedForDifferentEvent(): void
-    {
-        $mockQueryService = $this->getMockedQueryService();
-
-        $mockDiffParserService = $this->createMock(DiffParserService::class);
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
-
-        $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
-            $mockQueryService,
-            $mockDiffParserService,
-            $mockCarryforwardTagService
-        );
-
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-
-        $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
-
-        $this->assertInstanceOf(
-            ReportInterface::class,
-            $report
-        );
-
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-
-        $this->assertNotSame(
-            $report,
-            $cachingCoverageAnalyserService->analyse($mockWaypoint)
+        $this->assertEquals(
+            95.6,
+            $report->getCoveragePercentage()
         );
     }
 

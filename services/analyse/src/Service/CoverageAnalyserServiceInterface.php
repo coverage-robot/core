@@ -10,8 +10,14 @@ use Packages\Contracts\Event\EventInterface;
 
 interface CoverageAnalyserServiceInterface
 {
+    /**
+     * Get a reporting waypoint for a realtime event which has occured.
+     */
     public function getWaypointFromEvent(EventInterface $event): ReportWaypoint;
 
+    /**
+     * Build a coverage report for a particular waypoint.
+     */
     public function analyse(ReportWaypoint $waypoint): ReportInterface;
 
     /**

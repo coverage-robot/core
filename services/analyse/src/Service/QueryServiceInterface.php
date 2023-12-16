@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
@@ -13,6 +14,8 @@ interface QueryServiceInterface
      * of parameters to filter the results.
      *
      * @param class-string<QueryInterface> $queryClass
+     *
+     * @throws QueryException
      */
     public function runQuery(
         string $queryClass,
