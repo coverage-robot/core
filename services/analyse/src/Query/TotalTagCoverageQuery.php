@@ -106,7 +106,13 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 fileName,
                 lineNumber,
                 IF(
-                    SUM(hits) = 0,
+                    -- Check that the line hits are 0 (i.e. not executed) and that, if theres a branch, it's\n
+                    -- definitely not been covered at all (as we'll want to show that as a partial line)\n
+                    SUM(hits) = 0
+                    AND COUNTIF(
+                        containsBranch = true
+                        AND isBranchedLineHit = true
+                    ) = 0,
                     "{$uncovered}",
                     IF (
                         MIN(isBranchedLineHit) = false,

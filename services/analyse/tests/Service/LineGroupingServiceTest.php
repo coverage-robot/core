@@ -847,7 +847,7 @@ class LineGroupingServiceTest extends TestCase
                     ),
                 ]
             ],
-            'New' => [
+            'Block starting with uncoverable lines' => [
                 $event,
                 $date,
                 [

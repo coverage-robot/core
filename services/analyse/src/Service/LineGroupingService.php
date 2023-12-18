@@ -80,6 +80,22 @@ class LineGroupingService
                 continue;
             }
 
+            if ($line->getTotalBranches() === $line->getCoveredBranches()) {
+                // This appears to be some kind of error - where we're incorrectly reporting a line as
+                // uncovered, when all of the branches seem to have been hit (indicating full coverage)
+                $this->lineGroupingLogger->warning(
+                    'Found a branch which is reported as not fully covered, but all of the branches are covered.',
+                    [
+                        'line' => $line,
+                        'totalBranches' => $line->getTotalBranches(),
+                        'coveredBranches' => $line->getCoveredBranches(),
+                        'event' => $event,
+                    ]
+                );
+
+                continue;
+            }
+
             $annotations[] = new PublishablePartialBranchAnnotationMessage(
                 $event,
                 $line->getFileName(),
