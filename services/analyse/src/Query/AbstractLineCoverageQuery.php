@@ -54,7 +54,7 @@ abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQue
                 COUNTIF(containsBranch = true) as totalBranches,
                 COUNTIF(
                     containsBranch = true AND
-                    isBranchedLineHit = true
+                    MIN(isBranchedLineHit) = true
                 ) as coveredBranches,
                 IF(
                     SUM(hits) = 0,

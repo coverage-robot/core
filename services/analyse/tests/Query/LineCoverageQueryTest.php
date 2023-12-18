@@ -130,7 +130,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND isBranchedLineHit = true
+                    AND MIN(isBranchedLineHit) = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
@@ -251,7 +251,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND isBranchedLineHit = true
+                    AND MIN(isBranchedLineHit) = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,
@@ -395,7 +395,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
                   COUNTIF(containsBranch = true) as totalBranches,
                   COUNTIF(
                     containsBranch = true
-                    AND isBranchedLineHit = true
+                    AND MIN(isBranchedLineHit) = true
                   ) as coveredBranches,
                   IF(
                     SUM(hits) = 0,

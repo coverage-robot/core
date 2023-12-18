@@ -75,7 +75,7 @@ class LineGroupingService
         foreach ($lineCoverage as $line) {
             if (
                 !in_array(LineType::BRANCH, $line->getTypes()) ||
-                $line->getState() === LineState::COVERED
+                $line->getTotalBranches() === $line->getCoveredBranches()
             ) {
                 continue;
             }
