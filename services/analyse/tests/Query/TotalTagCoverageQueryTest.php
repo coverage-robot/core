@@ -87,6 +87,9 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber,
                   tag,
                   commit,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
@@ -264,6 +267,9 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                   lineNumber,
                   tag,
                   commit,
+                  MAX(containsMethod) as containsMethod,
+                  MAX(containsBranch) as containsBranch,
+                  MAX(containsStatement) as containsStatement,
                   SUM(hits) as hits,
                   branchIndex,
                   SUM(branchHit) > 0 as isBranchedLineHit
