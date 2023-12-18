@@ -24,8 +24,10 @@ class ReportComparison implements Stringable
 
     public function getCoverageChange(): float
     {
-        return $this->headReport->getCoveragePercentage() -
-            $this->baseReport->getCoveragePercentage();
+        return round(
+            $this->headReport->getCoveragePercentage() - $this->baseReport->getCoveragePercentage(),
+            2
+        );
     }
 
     public function __toString(): string
