@@ -35,7 +35,7 @@ class ReportComparisonTest extends TestCase
     public static function coverageReportDataProvider(): array
     {
         return [
-            "No change in total coverage" => [
+            'No change in total coverage' => [
                 new Report(
                     new ReportWaypoint(
                         Provider::GITHUB,
@@ -78,7 +78,7 @@ class ReportComparisonTest extends TestCase
                 ),
                 0
             ],
-            "-10% change in total coverage" => [
+            '-10% change in total coverage' => [
                 new Report(
                     new ReportWaypoint(
                         Provider::GITHUB,
@@ -121,7 +121,7 @@ class ReportComparisonTest extends TestCase
                 ),
                 -10
             ],
-            "-0.33% change in total coverage" => [
+            '-0.33% change in total coverage' => [
                 new Report(
                     new ReportWaypoint(
                         Provider::GITHUB,
@@ -164,7 +164,7 @@ class ReportComparisonTest extends TestCase
                 ),
                 -0.33
             ],
-            "+5.3% change in total coverage" => [
+            '+5.3% change in total coverage' => [
                 new Report(
                     new ReportWaypoint(
                         Provider::GITHUB,
