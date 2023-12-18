@@ -127,8 +127,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                         $finalisedEvent->getRef(),
                         $finalisedEvent->getCommit(),
                         $finalisedEvent->getPullRequest(),
-                        $event->getBaseRef(),
                         $event->getBaseCommit(),
+                        $event->getBaseRef(),
                         $finalisedEvent->getEventTime()
                     )
                 );
