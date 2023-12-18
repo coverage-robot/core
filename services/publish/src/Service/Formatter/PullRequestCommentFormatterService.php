@@ -51,14 +51,17 @@ class PullRequestCommentFormatterService
             $coverageChange > 0 => sprintf(
                 '**increase** the total coverage by %s%% (compared to %s)',
                 $coverageChange,
-                $event->getBaseCommit()
+                $event->getBaseCommit() ?? 'unknown commit'
             ),
             $coverageChange < 0 => sprintf(
                 '**decrease** the total coverage by %s%% (compared to %s)',
                 abs($coverageChange),
-                $event->getBaseCommit()
+                $event->getBaseCommit() ?? 'unknown commit'
             ),
-            default => '**not change** the total coverage (compared to %s)',
+            default => sprintf(
+                '**not change** the total coverage (compared to %s)',
+                $event->getBaseCommit() ?? 'unknown commit'
+            )
         };
 
         return sprintf(
