@@ -1,5 +1,5 @@
 ## Coverage Report
-> Merging #unknown will **not change** the total coverage (compared to %s)
+> Merging #unknown will **not change** the total coverage (compared to unknown commit)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
