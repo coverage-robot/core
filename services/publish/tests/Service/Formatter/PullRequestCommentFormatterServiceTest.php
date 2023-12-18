@@ -10,17 +10,20 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Spatie\Snapshots\MatchesSnapshots;
 
 class PullRequestCommentFormatterServiceTest extends TestCase
 {
+    use MatchesSnapshots;
+
     #[DataProvider('markdownDataProvider')]
-    public function testFormat(Upload $upload, PublishablePullRequestMessage $message, string $markdownPath): void
+    public function testFormat(Upload $upload, PublishablePullRequestMessage $message): void
     {
         $formatter = new PullRequestCommentFormatterService();
 
         $markdown = $formatter->format($upload, $message);
 
-        $this->assertEquals(file_get_contents($markdownPath), $markdown);
+        $this->assertMatchesSnapshot($markdown);
     }
 
     public static function markdownDataProvider(): array
@@ -109,8 +112,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                         ]
                     ],
                     new DateTimeImmutable()
-                ),
-                __DIR__ . '/../../Fixture/PullRequestComment/file-and-tag.txt'
+                )
             ],
             [
                 $pullRequestUpload,
@@ -163,8 +165,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                         ]
                     ],
                     new DateTimeImmutable()
-                ),
-                __DIR__ . '/../../Fixture/PullRequestComment/coverage-drop.txt'
+                )
             ],
             [
                 $pullRequestUpload,
@@ -200,8 +201,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     ],
                     [],
                     new DateTimeImmutable()
-                ),
-                __DIR__ . '/../../Fixture/PullRequestComment/empty-diff-coverage.txt'
+                )
             ],
             [
                 // This would be some form of failure state, where we're somehow trying to publish a PR comment
@@ -239,8 +239,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                     ],
                     [],
                     new DateTimeImmutable()
-                ),
-                __DIR__ . '/../../Fixture/PullRequestComment/pr-comment-with-no-pr.txt'
+                )
             ]
         ];
     }

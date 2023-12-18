@@ -214,7 +214,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                         $this->assertEquals('success', $checkRun['conclusion']);
                         $this->assertEquals(
                             [
-                                'title' => 'Total Coverage: 100% (0%)',
+                                'title' => 'Total Coverage: 100% (no change)',
                                 'summary' => '',
                                 'annotations' => [
                                     [

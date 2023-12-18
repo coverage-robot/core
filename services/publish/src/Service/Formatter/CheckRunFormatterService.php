@@ -27,6 +27,10 @@ class CheckRunFormatterService
             return '';
         }
 
+        if ($coverageChange == 0) {
+            return ' (no change)';
+        }
+
         $sign = match (true) {
             $coverageChange > 0 => '+',
             default => '',

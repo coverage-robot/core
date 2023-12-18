@@ -1,9 +1,9 @@
 ## Coverage Report
-> Merging #unknown which has **2** successfully uploaded coverage file(s) on mock-commit
+> Merging #12 will **increase** the total coverage by 0.1% (compared to commit-on-main)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
-| 100% (0%) | &oslash; |
+| 100% | 100% |
 
 <details>
   <summary>Tags</summary>
@@ -17,7 +17,10 @@
 <details>
   <summary>Impacted Files</summary>
 
-  > No impacted files
+  | File | Diff Coverage |
+| --- | --- |
+| mock-file | 50% |
+| mock-file-2 | 100% |
 </details>
 
-*Last update at 10:12am UTC*
+*Last update to mock-commit at 10:12am UTC*

@@ -1,9 +1,9 @@
 ## Coverage Report
-> Merging #12 which has **2** successfully uploaded coverage file(s) on mock-commit
+> Merging #unknown will **not change** the total coverage (compared to unknown commit)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
-| 100% (+0.1%) | 100% |
+| 100% | &oslash; |
 
 <details>
   <summary>Tags</summary>
@@ -17,10 +17,7 @@
 <details>
   <summary>Impacted Files</summary>
 
-  | File | Diff Coverage |
-| --- | --- |
-| mock-file | 50% |
-| mock-file-2 | 100% |
+  > No impacted files
 </details>
 
-*Last update at 10:12am UTC*
+*Last update to mock-commit at 10:12am UTC*

@@ -17,7 +17,7 @@ class PullRequestCommentFormatterService
 
         | Total Coverage | Diff Coverage |
         | --- | --- |
-        | {$message->getCoveragePercentage()}%{$this->getCoverageChange($message)} | {$this->getDiffCoveragePercentage($message)} |
+        | {$message->getCoveragePercentage()}% | {$this->getDiffCoveragePercentage($message)} |
 
         <details>
           <summary>Tags</summary>
@@ -31,37 +31,43 @@ class PullRequestCommentFormatterService
           {$this->getFileImpactTable($event, $message)}
         </details>
 
-        *Last update at {$this->getLastUpdateTime($event)}*
+        *Last update to {$event->getCommit()} at {$this->getLastUpdateTime($event)}*
         MARKDOWN;
     }
 
     private function getSummary(EventInterface $event, PublishablePullRequestMessage $message): string
     {
-        return sprintf(
-            '> Merging #%s which has **%d** successfully uploaded coverage file(s) on %s',
-            $event->getPullRequest() ?? 'unknown',
-            $message->getSuccessfulUploads(),
-            $event->getCommit()
-        );
-    }
-
-    private function getCoverageChange(PublishablePullRequestMessage $message): string
-    {
         $coverageChange = $message->getCoverageChange();
 
         if ($coverageChange === null) {
-            return '';
+            return sprintf(
+                '> Merging #%s with %s successful uploads',
+                $event->getPullRequest() ?? 'unknown',
+                $message->getSuccessfulUploads()
+            );
         }
 
-        $sign = match (true) {
-            $coverageChange > 0 => '+',
-            default => '',
+        $coverageChangeSummary = match (true) {
+            $coverageChange > 0 => sprintf(
+                '**increase** the total coverage by %s%% (compared to %s)',
+                $coverageChange,
+                $event->getBaseCommit() ?? 'unknown commit'
+            ),
+            $coverageChange < 0 => sprintf(
+                '**decrease** the total coverage by %s%% (compared to %s)',
+                abs($coverageChange),
+                $event->getBaseCommit() ?? 'unknown commit'
+            ),
+            default => sprintf(
+                '**not change** the total coverage (compared to %s)',
+                $event->getBaseCommit() ?? 'unknown commit'
+            )
         };
 
         return sprintf(
-            ' (%s%s%%)',
-            $sign,
-            $coverageChange
+            '> Merging #%s will %s',
+            $event->getPullRequest() ?? 'unknown',
+            $coverageChangeSummary
         );
     }
 
