@@ -127,7 +127,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             return [
                 $tagsNotSeen,
                 $carryforwardTags,
-                true
+                false
             ];
         }
 
