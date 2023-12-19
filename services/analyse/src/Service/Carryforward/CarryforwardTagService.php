@@ -67,7 +67,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
             // Theres still tags which we've seen in the past, but have not yet seen in
             // the commit tree. We'll keep looking for them in the tree until we find them
-            [$tagsNotSeen, $tagsToCarryforward] = $this->lookForCarryforwardTagsInPaginatedTree(
+            [$tagsNotSeen, $tagsToCarryforward, $hasReachedEndOfHistory] = $this->lookForCarryforwardTagsInPaginatedTree(
                 $waypoint,
                 $tagAvailability,
                 $page,
@@ -78,6 +78,13 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                 ...$carryforwardTags,
                 ...$tagsToCarryforward
             ];
+
+            if ($hasReachedEndOfHistory) {
+                // We've reached the end of the commit history, so we can
+                // safely break out now and use whatever tags we've found
+                // as carryforward
+                break;
+            }
         }
 
         if ($tagsNotSeen !== []) {
@@ -102,7 +109,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * available tagged coverage for a commit.
      *
      * @param string[] $tagsNotSeen
-     * @return array{0: string[], 1: Tag[]}
+     * @return array{0: string[], 1: Tag[], 2: bool}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
         ReportWaypoint $waypoint,
@@ -157,7 +164,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
         return [
             $tagsNotSeen,
-            $carryforwardTags
+            $carryforwardTags,
+            count($commitsFromTree) < CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE
         ];
     }
 }
