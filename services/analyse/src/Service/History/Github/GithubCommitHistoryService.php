@@ -47,17 +47,17 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
      *
      * @return array{commit: string, isOnBaseRef: bool}[]
      */
-    public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page = 1): array
+    public function getPrecedingCommits(EventInterface|ReportWaypoint $waypoint, int $page = 1): array
     {
-        $this->githubClient->authenticateAsRepositoryOwner($event->getOwner());
+        $this->githubClient->authenticateAsRepositoryOwner($waypoint->getOwner());
 
         $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
 
         $commits = $this->getHistoricCommits(
-            $event->getOwner(),
-            $event->getRepository(),
-            $event->getRef(),
-            $event->getCommit(),
+            $waypoint->getOwner(),
+            $waypoint->getRepository(),
+            $waypoint->getRef(),
+            $waypoint->getCommit(),
             $offset
         );
 
@@ -65,7 +65,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
             sprintf(
                 'Fetched %s preceding commits from GitHub for %s',
                 CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE,
-                (string)$event
+                (string)$waypoint
             ),
             [
                 'commitsToRetrieve' => CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE,
