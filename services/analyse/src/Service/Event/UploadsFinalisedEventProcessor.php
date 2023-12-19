@@ -194,7 +194,9 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     private function getBaseWaypointForComparison(ReportWaypoint $headWaypoint, EventInterface $event): ?ReportWaypoint
     {
-        if (!$event->getBaseRef()) {
+        $baseRef = $event->getBaseRef();
+
+        if (!$baseRef) {
             // TODO: We should use the parent commit(s) as the base if its a push rather
             //  than a pull request
             return null;
@@ -212,7 +214,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         $event->getProvider(),
                         $event->getOwner(),
                         $event->getRepository(),
-                        $event->getBaseRef(),
+                        $baseRef,
                         $commit['commit'],
                     );
                 }
@@ -225,7 +227,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             }
         }
 
-        if ($event->getBaseCommit() !== null) {
+        $baseCommit = $event->getBaseCommit();
+        if ($baseCommit !== null) {
             // Use the base commit recorded on the event. Generally this is the base of the
             // PR, but that isn't usually ideal because the base of a PR doesnt have to be
             // a parent commit (i.e. it could be newer, and this include more coverage).
@@ -233,8 +236,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $event->getProvider(),
                 $event->getOwner(),
                 $event->getRepository(),
-                $event->getBaseRef(),
-                $event->getBaseCommit(),
+                $baseRef,
+                $baseCommit,
             );
         }
 
