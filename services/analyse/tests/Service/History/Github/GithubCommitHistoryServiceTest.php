@@ -64,6 +64,11 @@ class GithubCommitHistoryServiceTest extends TestCase
                                   ) {
                                     nodes {
                                       oid
+                                      associatedPullRequests(last: 1) {
+                                        nodes {
+                                          merged
+                                        }
+                                      }
                                     }
                                   }
                                 }
@@ -93,7 +98,10 @@ class GithubCommitHistoryServiceTest extends TestCase
 
         $service = new GithubCommitHistoryService($githubClient, new NullLogger());
 
-        $this->assertEquals($expectedCommits, $service->getPrecedingCommits($mockUpload, $page));
+        $this->assertEquals(
+            $expectedCommits,
+            $service->getPrecedingCommits($mockUpload, $page)
+        );
     }
 
     public static function commitDataProvider(): array
@@ -101,51 +109,151 @@ class GithubCommitHistoryServiceTest extends TestCase
         return [
             'First page' => [
                 1,
-                array_fill(
-                    0,
-                    100,
-                    [
-                        'oid' => '11111111'
-                    ]
-                ),
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '11111111',
+                            'associatedPullRequests' => [
+                                'nodes' => [
+                                    [
+                                        'merged' => false
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '11111111',
+                            'associatedPullRequests' => [
+                                'nodes' => [
+                                    [
+                                        'merged' => true
+                                    ]
+                                ]
+                            ]
+                        ]
+                    )
+                ],
                 101,
-                array_fill(
-                    0,
-                    100,
-                    '11111111'
-                )
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '11111111',
+                            'isOnBaseRef' => false
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '11111111',
+                            'isOnBaseRef' => true
+                        ]
+                    )
+                ]
             ],
             'Second page' => [
                 2,
-                array_fill(
-                    0,
-                    100,
-                    [
-                        'oid' => '222222222'
-                    ]
-                ),
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '222222222',
+                            'associatedPullRequests' => [
+                                'nodes' => [
+                                    [
+                                        'merged' => true
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '222222222',
+                            'associatedPullRequests' => [
+                                'nodes' => []
+                            ]
+                        ]
+                    )
+                ],
                 201,
-                array_fill(
-                    0,
-                    100,
-                    '222222222'
-                )
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '222222222',
+                            'isOnBaseRef' => true
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '222222222',
+                            'isOnBaseRef' => true
+                        ]
+                    )
+                ]
             ],
             'Tenth page' => [
                 10,
-                array_fill(
-                    0,
-                    100,
-                    [
-                        'oid' => '9999999999'
-                    ]
-                ),
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '9999999999',
+                            'associatedPullRequests' => [
+                                'nodes' => [
+                                    [
+                                        'merged' => true
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'oid' => '9999999999',
+                            'associatedPullRequests' => [
+                                'nodes' => []
+                            ]
+                        ]
+                    )
+                ],
                 1001,
-                array_fill(
-                    0,
-                    100,
-                    '9999999999'
-                )
+                [
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '9999999999',
+                            'isOnBaseRef' => true
+                        ]
+                    ),
+                    ...array_fill(
+                        0,
+                        50,
+                        [
+                            'commit' => '9999999999',
+                            'isOnBaseRef' => true
+                        ]
+                    )
+                ]
             ]
         ];
     }

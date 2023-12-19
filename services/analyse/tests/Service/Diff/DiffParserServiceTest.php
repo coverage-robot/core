@@ -2,10 +2,10 @@
 
 namespace App\Tests\Service\Diff;
 
+use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Packages\Contracts\Provider\Provider;
-use App\Model\ReportWaypoint;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -39,6 +39,8 @@ class DiffParserServiceTest extends TestCase
                     'ref',
                     'commit',
                     12,
+                    [],
+                    []
                 )
             )
         );
@@ -66,6 +68,8 @@ class DiffParserServiceTest extends TestCase
                 'ref',
                 'commit',
                 12,
+                [],
+                []
             )
         );
     }

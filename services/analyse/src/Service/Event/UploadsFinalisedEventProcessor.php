@@ -6,7 +6,6 @@ use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
-use App\Model\ReportWaypoint;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\LineGroupingService;
@@ -113,7 +112,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $annotations = $this->annotationGrouperService->generateAnnotations(
             $uploadsFinalised,
-            $coverageReport->getDiff(),
+            $coverageReport->getWaypoint()
+                ->getDiff(),
             $lines,
             $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );
@@ -171,13 +171,12 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         if ($baseRef && $baseCommit) {
             // Build the base using the recorded base ref and commit as the comparison
-            $baseWaypoint = new ReportWaypoint(
+            $baseWaypoint = $this->coverageAnalyserService->getWaypoint(
                 $event->getProvider(),
                 $event->getOwner(),
                 $event->getRepository(),
                 $baseRef,
-                $baseCommit,
-                null
+                $baseCommit
             );
 
             $comparison = $this->coverageAnalyserService->compare(

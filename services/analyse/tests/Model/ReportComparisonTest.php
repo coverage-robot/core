@@ -43,7 +43,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -63,7 +65,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -86,7 +90,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -96,8 +102,7 @@ class ReportComparisonTest extends TestCase
                     new TagCoverageCollectionQueryResult([]),
                     95,
                     new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
                     new ReportWaypoint(
@@ -106,7 +111,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -116,8 +123,7 @@ class ReportComparisonTest extends TestCase
                     new TagCoverageCollectionQueryResult([]),
                     95,
                     new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    new LineCoverageCollectionQueryResult([])
                 ),
                 -10
             ],
@@ -129,7 +135,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -139,8 +147,7 @@ class ReportComparisonTest extends TestCase
                     new TagCoverageCollectionQueryResult([]),
                     95,
                     new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
                     new ReportWaypoint(
@@ -149,7 +156,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -159,8 +168,7 @@ class ReportComparisonTest extends TestCase
                     new TagCoverageCollectionQueryResult([]),
                     95,
                     new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    new LineCoverageCollectionQueryResult([])
                 ),
                 -0.33
             ],
@@ -172,7 +180,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -182,8 +192,7 @@ class ReportComparisonTest extends TestCase
                     new TagCoverageCollectionQueryResult([]),
                     95,
                     new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
                     new ReportWaypoint(
@@ -192,7 +201,9 @@ class ReportComparisonTest extends TestCase
                         'mock-repository',
                         'mock-ref',
                         'mock-commit',
-                        null
+                        null,
+                        [],
+                        []
                     ),
                     new TotalUploadsQueryResult(['1'], [], null),
                     1,
@@ -203,7 +214,6 @@ class ReportComparisonTest extends TestCase
                     95,
                     new FileCoverageCollectionQueryResult([]),
                     new LineCoverageCollectionQueryResult([]),
-                    []
                 ),
                 5.3
             ],

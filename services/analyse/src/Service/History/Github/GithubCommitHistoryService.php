@@ -19,7 +19,12 @@ use Psr\Log\LoggerInterface;
  *                      target: array{
  *                          history: array{
  *                              nodes: array{
- *                                  oid: string
+ *                                  oid: string,
+ *                                  associatedPullRequests: array{
+ *                                      nodes: array{
+ *                                          merged: bool
+ *                                      }[]
+ *                                  }
  *                              }[]
  *                          }
  *                      }
@@ -38,6 +43,8 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
 
     /**
      * @inheritDoc
+     *
+     * @return array{commit: string, isOnBaseRef: bool}[]
      */
     public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page = 1): array
     {
@@ -45,19 +52,13 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
 
         $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
 
-        /** @var string[] $commits */
-        $commits = [];
-
-        $commits = [
-            ...$commits,
-            ...$this->getHistoricCommits(
-                $event->getOwner(),
-                $event->getRepository(),
-                $event->getRef(),
-                $event->getCommit(),
-                $offset
-            )
-        ];
+        $commits = $this->getHistoricCommits(
+            $event->getOwner(),
+            $event->getRepository(),
+            $event->getRef(),
+            $event->getCommit(),
+            $offset
+        );
 
         $this->githubHistoryLogger->info(
             sprintf(
@@ -76,27 +77,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     }
 
     /**
-     * The cursor GitHub's GraphQL API uses follows the pattern of:
-     *
-     * ```<starting commit SHA> <offset with a minimum of the number of proceeding commits>```
-     *
-     * (i.e. 3a6d549ba8bba3987d04fa6ae7b861e8e054968e8 100, or a6d549ba8bba3987d04fa6ae7b861e8e054968e8 200)
-     *
-     * This method makes a compatible cursor which allows us to paginate
-     * through the API, fetching all of the preceding commits up the tree with
-     * a predictable response.
-     */
-    private function makeCursor(string $lastCommit, int $offset): string
-    {
-        return sprintf(
-            '%s %s',
-            $lastCommit,
-            $offset
-        );
-    }
-
-    /**
-     * @return string[]
+     * @return array{commit: string, isOnBaseRef: bool}[]
      */
     private function getHistoricCommits(
         string $owner,
@@ -123,6 +104,11 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                           ) {
                             nodes {
                               oid
+                              associatedPullRequests(last: 1) {
+                                nodes {
+                                  merged
+                                }
+                              }
                             }
                           }
                         }
@@ -136,8 +122,34 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $result = $result['data']['repository']['ref']['target']['history']['nodes'] ?? [];
 
         return array_map(
-            static fn(array $commit): string => $commit['oid'],
+            static fn(array $commit): array => [
+                'commit' => $commit['oid'],
+
+                // The commit _must_ be on the base ref (i.e. not in a PR) if theres no unmerged PRs, or there
+                // was no PR to begin with (a direct push)
+                'isOnBaseRef' => $commit['associatedPullRequests']['nodes'][0]['merged'] ?? true
+            ],
             $result
+        );
+    }
+
+    /**
+     * The cursor GitHub's GraphQL API uses follows the pattern of:
+     *
+     * ```<starting commit SHA> <offset with a minimum of the number of proceeding commits>```
+     *
+     * (i.e. 3a6d549ba8bba3987d04fa6ae7b861e8e054968e8 100, or a6d549ba8bba3987d04fa6ae7b861e8e054968e8 200)
+     *
+     * This method makes a compatible cursor which allows us to paginate
+     * through the API, fetching all of the preceding commits up the tree with
+     * a predictable response.
+     */
+    private function makeCursor(string $lastCommit, int $offset): string
+    {
+        return sprintf(
+            '%s %s',
+            $lastCommit,
+            $offset
         );
     }
 

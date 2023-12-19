@@ -10,7 +10,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 interface CommitHistoryServiceInterface
 {
     /**
-     * @return string[]
+     * Get the commits which preceded a given commit in the tree.
+     *
+     * @return array{commit: string, isOnBaseRef: bool}[]
      */
     public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page): array;
 }

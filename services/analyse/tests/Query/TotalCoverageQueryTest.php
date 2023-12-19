@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
@@ -14,7 +15,6 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -374,22 +374,18 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload = new Upload(
-            'mock-uploadId',
+        $waypoint = new ReportWaypoint(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
-            'mock-commit',
-            [],
             'mock-ref',
-            'mock-project-root',
+            'mock-commit',
             null,
-            null,
-            null,
-            new Tag('mock-tag', 'mock-commit'),
+            [],
+            []
         );
 
-        $carryforwardParameters = QueryParameterBag::fromWaypoint($upload);
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
         $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
             new Tag('1', 'mock-commit'),
             new Tag('2', 'mock-commit'),
@@ -476,19 +472,15 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint(
-                    new Upload(
-                        'mock-uploadId',
+                    new ReportWaypoint(
                         Provider::GITHUB,
                         'mock-owner',
                         'mock-repository',
-                        'mock-commit',
-                        [],
                         'mock-ref',
-                        'mock-project-root',
+                        'mock-commit',
                         null,
-                        null,
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
+                        [],
+                        []
                     )
                 ),
                 true

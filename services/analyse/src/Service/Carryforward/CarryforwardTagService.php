@@ -9,7 +9,6 @@ use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
-use Packages\Contracts\Event\EventInterface;
 use Packages\Models\Model\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -25,7 +24,6 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     private const int MAX_COMMIT_HISTORY_PAGES = 5;
 
     public function __construct(
-        private readonly CommitHistoryService $commitHistoryService,
         #[Autowire(service: CachingQueryService::class)]
         private readonly QueryServiceInterface $queryService,
         private readonly LoggerInterface $carryforwardLogger
@@ -36,14 +34,14 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
+    public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
         $carryforwardTags = [];
 
         /** @var TagAvailabilityCollectionQueryResult $tagAvailability */
         $tagAvailability = $this->queryService->runQuery(
             TagAvailabilityQuery::class,
-            QueryParameterBag::fromWaypoint($event)
+            QueryParameterBag::fromWaypoint($waypoint)
         );
 
         /**
@@ -70,7 +68,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             // Theres still tags which we've seen in the past, but have not yet seen in
             // the commit tree. We'll keep looking for them in the tree until we find them
             [$tagsNotSeen, $tagsToCarryforward] = $this->lookForCarryforwardTagsInPaginatedTree(
-                $event,
+                $waypoint,
                 $tagAvailability,
                 $page,
                 $tagsNotSeen
@@ -87,7 +85,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                 sprintf(
                     'Could not find any commits to carry forward tags %s from for %s',
                     count($tagsNotSeen),
-                    (string)$event
+                    (string)$waypoint
                 ),
                 [
                     'tagsNotSeen' => $tagsNotSeen,
@@ -107,7 +105,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * @return array{0: string[], 1: Tag[]}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
-        EventInterface|ReportWaypoint $event,
+        ReportWaypoint $waypoint,
         TagAvailabilityCollectionQueryResult $tagAvailability,
         int $page = 0,
         array $tagsNotSeen = []
@@ -121,7 +119,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             ];
         }
 
-        $commitsFromTree = $this->commitHistoryService->getPrecedingCommits($event, $page);
+        $commitsFromTree = $waypoint->getHistory($page);
 
         foreach ($tagsNotSeen as $index => $tagName) {
             $availability = $tagAvailability->getAvailabilityForTagName($tagName);
@@ -129,7 +127,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             // The commits in the tree will be in descending order, and the intersection will
             // tell us which of the tag's available commits is the newest in the tree
             $tagCommitsInTree = array_intersect(
-                $commitsFromTree,
+                array_column($commitsFromTree, 'commit'),
                 $availability->getAvailableCommits(),
             );
 
@@ -146,7 +144,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
                     'Carrying forward tag %s from commit %s for %s',
                     $tagName,
                     $newestCommit,
-                    (string)$event
+                    (string)$waypoint
                 )
             );
 
