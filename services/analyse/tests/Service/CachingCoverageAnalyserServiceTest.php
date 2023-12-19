@@ -10,9 +10,11 @@ use App\Query\TotalUploadsQuery;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
+use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CachingCoverageAnalyserServiceTest extends TestCase
@@ -44,11 +46,13 @@ class CachingCoverageAnalyserServiceTest extends TestCase
             );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
         $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
+            $mockCommitHistoryService,
             $mockCarryforwardTagService
         );
 
@@ -71,5 +75,125 @@ class CachingCoverageAnalyserServiceTest extends TestCase
             95.6,
             $report->getCoveragePercentage()
         );
+    }
+
+    #[DataProvider('diffCoverageDataProvider')]
+    public function testCachingDiffCoveragePercentage(
+        array $diff,
+        CoverageQueryResult $diffCoverageQueryResult,
+        ?float $expectedDiffCoveragePercentage
+    ): void {
+        $mockQueryService = $this->createMock(QueryService::class);
+
+        // We're only performing 2 queries, meaning the others must be lazy
+        // loaded
+        $mockQueryService->expects($this->exactly(2))
+            ->method('runQuery')
+            ->willReturnCallback(
+                static fn(string $queryClass) => match ($queryClass) {
+                    TotalUploadsQuery::class => new TotalUploadsQueryResult(
+                        ['1'],
+                        [new Tag('mock-tag', 'mock-commit')],
+                        null
+                    ),
+                    TotalCoverageQuery::class => $diffCoverageQueryResult,
+                    default => null,
+                }
+            );
+
+        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint->method('getProvider')
+            ->willReturn(Provider::GITHUB);
+
+        $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->with($mockWaypoint)
+            ->willReturn($diff);
+
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+
+        $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
+            $mockQueryService,
+            $mockDiffParserService,
+            $mockCommitHistoryService,
+            $mockCarryforwardTagService
+        );
+
+        $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
+
+        $this->assertSame(
+            $expectedDiffCoveragePercentage,
+            $report->getDiffCoveragePercentage()
+        );
+
+        // We never perform another query on the same metric a second time
+        $mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $this->assertSame(
+            $expectedDiffCoveragePercentage,
+            $report->getDiffCoveragePercentage()
+        );
+    }
+
+    public static function diffCoverageDataProvider(): array
+    {
+        return [
+            'No diff coverage' => [
+                [
+                    'mock-file' => [1,2,3]
+                ],
+                new CoverageQueryResult(
+                    0.0,
+                    3,
+                    0,
+                    0,
+                    0
+                ),
+                0
+            ],
+            'Partial diff coverage' => [
+                [
+                    'mock-file' => [1,2,3]
+                ],
+                new CoverageQueryResult(
+                    66.6,
+                    3,
+                    2,
+                    0,
+                    0
+                ),
+                66.6
+            ],
+            'Full diff coverage' => [
+                [
+                    'mock-file' => [1,2,3]
+                ],
+                new CoverageQueryResult(
+                    100,
+                    3,
+                    3,
+                    0,
+                    0
+                ),
+                100
+            ],
+            'No coverable lines' => [
+                [
+                    'mock-file' => [1,2,3]
+                ],
+                new CoverageQueryResult(
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ),
+                null
+            ],
+        ];
     }
 }

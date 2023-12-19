@@ -2,11 +2,10 @@
 
 namespace App\Tests\Service\History;
 
+use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\Github\GithubCommitHistoryService;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -14,25 +13,21 @@ class CommitHistoryServiceTest extends TestCase
 {
     public function testGetPrecedingCommitsUsingValidProvider(): void
     {
-        $event = new Upload(
-            'uploadId',
+        $waypoint = new ReportWaypoint(
             Provider::GITHUB,
             'owner',
             'repository',
-            'commit',
-            [],
             'ref',
-            'project-root',
-            12,
-            'commit-on-main',
-            'main',
-            new Tag('tag', 'commit'),
+            'commit',
+            null,
+            [],
+            []
         );
 
         $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
         $mockGithubHistoryService->expects($this->once())
             ->method('getPrecedingCommits')
-            ->with($event, 2)
+            ->with($waypoint, 2)
             ->willReturn([]);
 
         $historyService = new CommitHistoryService(
@@ -44,7 +39,7 @@ class CommitHistoryServiceTest extends TestCase
         $this->assertEquals(
             [],
             $historyService->getPrecedingCommits(
-                $event,
+                $waypoint,
                 2
             )
         );
@@ -65,19 +60,15 @@ class CommitHistoryServiceTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $historyService->getPrecedingCommits(
-            new Upload(
-                'uploadId',
+            new ReportWaypoint(
                 Provider::GITHUB,
                 'owner',
                 'repository',
-                'commit',
-                [],
                 'ref',
-                'project-root',
-                12,
-                'commit-on-main',
-                'main',
-                new Tag('tag', 'commit'),
+                'commit',
+                null,
+                [],
+                []
             )
         );
     }

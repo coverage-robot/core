@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\LineCoverageQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
@@ -13,7 +14,6 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
 use Packages\Models\Enum\LineState;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -457,22 +457,18 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload = new Upload(
-            'mock-uploadId',
+        $waypoint = new ReportWaypoint(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
-            'mock-commit',
-            [],
             'mock-ref',
-            'mock-project-root',
+            'mock-commit',
             null,
-            null,
-            null,
-            new Tag('mock-tag', 'mock-commit')
+            [],
+            []
         );
 
-        $scopedParameters = QueryParameterBag::fromWaypoint($upload);
+        $scopedParameters = QueryParameterBag::fromWaypoint($waypoint);
         $scopedParameters->set(
             QueryParameter::LINE_SCOPE,
             [
@@ -481,7 +477,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             ]
         );
 
-        $carryforwardParameters = QueryParameterBag::fromWaypoint($upload);
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
         $carryforwardParameters->set(
             QueryParameter::CARRYFORWARD_TAGS,
             [
@@ -591,19 +587,15 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint(
-                    new Upload(
-                        'mock-uuid',
+                    new ReportWaypoint(
                         Provider::GITHUB,
                         'mock-owner',
                         'mock-repository',
-                        'mock-commit',
-                        [],
                         'mock-ref',
-                        'mock-project-root',
+                        'mock-commit',
                         null,
-                        null,
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
+                        [],
+                        []
                     )
                 ),
                 true

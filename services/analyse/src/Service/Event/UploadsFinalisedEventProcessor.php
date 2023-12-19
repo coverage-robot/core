@@ -9,6 +9,7 @@ use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
+use App\Service\History\CommitHistoryService;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
@@ -113,7 +114,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $annotations = $this->annotationGrouperService->generateAnnotations(
             $uploadsFinalised,
-            $coverageReport->getDiff(),
+            $coverageReport->getWaypoint()
+                ->getDiff(),
             $lines,
             $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
         );
@@ -164,30 +166,82 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $headWaypoint = $this->coverageAnalyserService->getWaypointFromEvent($event);
         $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
 
-        // TODO: We should use the parent commit(s) as the base if its a push rather
-        //  than a pull request
-        $baseRef = $event->getBaseRef();
-        $baseCommit = $event->getBaseCommit();
+        $baseWaypoint = $this->getBaseWaypointForComparison($headWaypoint, $event);
 
-        if ($baseRef && $baseCommit) {
-            // Build the base using the recorded base ref and commit as the comparison
-            $baseWaypoint = new ReportWaypoint(
-                $event->getProvider(),
-                $event->getOwner(),
-                $event->getRepository(),
-                $baseRef,
-                $baseCommit,
-                null
-            );
-
+        if ($baseWaypoint instanceof ReportWaypoint) {
+            // We've been able to generate base waypoint to compare to, so we'll generate
+            // a comparison report.
             $comparison = $this->coverageAnalyserService->compare(
                 $this->coverageAnalyserService->analyse($baseWaypoint),
                 $headReport
             );
         }
 
-
         return [$headReport, $comparison];
+    }
+
+    /**
+     * Get the base waypoint for the comparison report using the head waypoints history
+     * and the real-time event which triggered the analysis.
+     *
+     * Theres two ways we can get the base waypoint:
+     * 1. Use the first commit in the history as the base commit - this is preferable as
+     *    it ensures the commit we use as a comparison is not newer than the head commit
+     *    we're comparing against.
+     * 2. Use the base commit recorded on the event - this is generally the base of the PR
+     *    and **doesn't** guarantee that the merge point is also a parent commit of the
+     *    head, so _could_ produce unintended coverage results.
+     */
+    private function getBaseWaypointForComparison(ReportWaypoint $headWaypoint, EventInterface $event): ?ReportWaypoint
+    {
+        $baseRef = $event->getBaseRef();
+
+        if (!$baseRef) {
+            // TODO: We should use the parent commit(s) as the base if its a push rather
+            //  than a pull request
+            return null;
+        }
+
+        for ($page = 1; $page <= 5; ++$page) {
+            $history = $headWaypoint->getHistory($page);
+
+            foreach ($history as $commit) {
+                if ($commit['isOnBaseRef'] ?? true) {
+                    // Use the latest commit in the history that is on the base ref as the preferred option.
+                    // This ensures the commit is in the history (i.e. not newer than the head commit)
+
+                    return $this->coverageAnalyserService->getWaypoint(
+                        $event->getProvider(),
+                        $event->getOwner(),
+                        $event->getRepository(),
+                        $baseRef,
+                        $commit['commit'],
+                    );
+                }
+            }
+
+            if (count($history) < CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) {
+                // We must have hit the end of the tree as theres less commits than we
+                // would have fetched
+                break;
+            }
+        }
+
+        $baseCommit = $event->getBaseCommit();
+        if ($baseCommit !== null) {
+            // Use the base commit recorded on the event. Generally this is the base of the
+            // PR, but that isn't usually ideal because the base of a PR doesnt have to be
+            // a parent commit (i.e. it could be newer, and this include more coverage).
+            return $this->coverageAnalyserService->getWaypoint(
+                $event->getProvider(),
+                $event->getOwner(),
+                $event->getRepository(),
+                $baseRef,
+                $baseCommit,
+            );
+        }
+
+        return null;
     }
 
     public static function getEvent(): string

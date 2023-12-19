@@ -25,7 +25,10 @@ use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
+use App\Service\History\CommitHistoryService;
+use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService implements CoverageAnalyserServiceInterface
@@ -37,9 +40,34 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         private readonly QueryServiceInterface $queryService,
         #[Autowire(service: DiffParserService::class)]
         private readonly DiffParserServiceInterface $diffParser,
+        #[Autowire(service: CommitHistoryService::class)]
+        private readonly CommitHistoryServiceInterface $commitHistoryService,
         #[Autowire(service: CarryforwardTagService::class)]
         private readonly CarryforwardTagServiceInterface $carryforwardTagService
     ) {
+    }
+
+    /**
+     * Get a waypoint for a particular point in time (or, a commit) for a provider.
+     */
+    public function getWaypoint(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $ref,
+        string $commit,
+        string|int|null $pullRequest = null
+    ): ReportWaypoint {
+        return new ReportWaypoint(
+            $provider,
+            $owner,
+            $repository,
+            $ref,
+            $commit,
+            $pullRequest,
+            fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
+            fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint)
+        );
     }
 
     /**
@@ -48,7 +76,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     public function getWaypointFromEvent(EventInterface $event): ReportWaypoint
     {
-        return new ReportWaypoint(
+        return $this->getWaypoint(
             $event->getProvider(),
             $event->getOwner(),
             $event->getRepository(),
@@ -76,8 +104,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 fn() => $this->getTagCoverage($waypoint),
                 fn() => $this->getDiffCoveragePercentage($waypoint),
                 fn() => $this->getLeastCoveredDiffFiles($waypoint),
-                fn() => $this->getDiffLineCoverage($waypoint),
-                fn() => $this->getDiff($waypoint)
+                fn() => $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
@@ -407,5 +434,13 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     protected function getDiff(ReportWaypoint $waypoint): array
     {
         return $this->diffParser->get($waypoint);
+    }
+
+    /**
+     * @return array{commit: string, isOnBaseRef: bool}[]
+     */
+    protected function getHistory(ReportWaypoint $waypoint, int $page = 1): array
+    {
+        return $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
     }
 }

@@ -20,9 +20,6 @@ class CarryforwardTagServiceTest extends TestCase
 {
     public function testNoTagsToCarryforward(): void
     {
-        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockCommitHistoryService->expects($this->never())
-            ->method('getPrecedingCommits');
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
@@ -46,7 +43,6 @@ class CarryforwardTagServiceTest extends TestCase
             );
 
         $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
             $mockQueryService,
             new NullLogger()
         );
@@ -58,7 +54,9 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                1
+                1,
+                [],
+                []
             ),
             [
                 new Tag('tag-1', 'mock-commit'),
@@ -71,16 +69,6 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagToCarryforwardFromRecentCommit(): void
     {
-        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockCommitHistoryService->expects($this->once())
-            ->method('getPrecedingCommits')
-            ->willReturn(
-                [
-                    'mock-commit',
-                    'mock-commit-2',
-                    'mock-commit-3',
-                ]
-            );
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
@@ -104,7 +92,6 @@ class CarryforwardTagServiceTest extends TestCase
             );
 
         $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
             $mockQueryService,
             new NullLogger()
         );
@@ -116,7 +103,25 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                2
+                2,
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ]
+                    ],
+                    default => [],
+                },
+                []
             ),
             [
                 new Tag('tag-1', 'mock-current-commit')
@@ -133,26 +138,6 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagsToCarryforwardFromMultiplePagesOfCommits(): void
     {
-        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockCommitHistoryService->expects($this->exactly(3))
-            ->method('getPrecedingCommits')
-            ->willReturnOnConsecutiveCalls(
-                [
-                    'mock-commit',
-                    'mock-commit-2',
-                    'mock-commit-3',
-                ],
-                [
-                    'mock-commit-4',
-                    'mock-commit-5',
-                    'mock-commit-6',
-                ],
-                [
-                    'mock-commit-7',
-                    'mock-commit-8',
-                    'mock-commit-9',
-                ]
-            );
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
@@ -176,7 +161,6 @@ class CarryforwardTagServiceTest extends TestCase
             );
 
         $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
             $mockQueryService,
             new NullLogger()
         );
@@ -188,7 +172,69 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                3
+                3,
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'isOnBaseRef' => false
+                            ]
+                        )
+                    ],
+                    2 => [
+                        [
+                            'commit' => 'mock-commit-4',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-5',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-6',
+                            'isOnBaseRef' => true
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'isOnBaseRef' => false
+                            ]
+                        )
+                    ],
+                    3 => [
+                        [
+                            'commit' => 'mock-commit-7',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-8',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-9',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    default => [],
+                },
+                []
             ),
             []
         );
@@ -204,36 +250,6 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagsToCarryforwardOutOfRangeOfCommits(): void
     {
-        $mockCommitHistoryService = $this->createMock(CommitHistoryService::class);
-        $mockCommitHistoryService->expects($this->exactly(5))
-            ->method('getPrecedingCommits')
-            ->willReturnOnConsecutiveCalls(
-                [
-                    'mock-commit',
-                    'mock-commit-2',
-                    'mock-commit-3',
-                ],
-                [
-                    'mock-commit-4',
-                    'mock-commit-5',
-                    'mock-commit-6',
-                ],
-                [
-                    'mock-commit-7',
-                    'mock-commit-8',
-                    'mock-commit-9',
-                ],
-                [
-                    'mock-commit-10',
-                    'mock-commit-11',
-                    'mock-commit-12',
-                ],
-                [
-                    'mock-commit-13',
-                    'mock-commit-14',
-                    'mock-commit-15',
-                ]
-            );
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
@@ -257,7 +273,6 @@ class CarryforwardTagServiceTest extends TestCase
             );
 
         $carryforwardTagService = new CarryforwardTagService(
-            $mockCommitHistoryService,
             $mockQueryService,
             new NullLogger()
         );
@@ -269,7 +284,81 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-repository',
                 'mock-ref',
                 'mock-commit',
-                null
+                null,
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ]
+                    ],
+                    2 => [
+                        [
+                            'commit' => 'mock-commit-4',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-5',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-6',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    3 => [
+                        [
+                            'commit' => 'mock-commit-7',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-8',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-9',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    4 => [
+                        [
+                            'commit' => 'mock-commit-10',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-11',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-12',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    5 => [
+                        [
+                            'commit' => 'mock-commit-13',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-14',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-15',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    default => [],
+                },
+                []
             ),
             []
         );

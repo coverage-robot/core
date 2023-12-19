@@ -33,19 +33,19 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
-    public function getTagsToCarryforward(EventInterface|ReportWaypoint $event, array $existingTags): array
+    public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
-        if ($carryforwardTags = $this->lookupExistingValueInCache($event, $existingTags)) {
+        if ($carryforwardTags = $this->lookupExistingValueInCache($waypoint, $existingTags)) {
             return $carryforwardTags;
         }
 
         $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $event,
+            $waypoint,
             $existingTags
         );
 
-        $this->cache[$event] = array_merge(
-            ($this->cache[$event] ?? []),
+        $this->cache[$waypoint] = array_merge(
+            ($this->cache[$waypoint] ?? []),
             [
                 [
                     self::EXISTING_TAGS_CACHE_PARAM => $existingTags,
@@ -63,13 +63,13 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      *
      * @return Tag[]|null
      */
-    private function lookupExistingValueInCache(EventInterface|ReportWaypoint $event, array $existingTags): ?array
+    private function lookupExistingValueInCache(ReportWaypoint $waypoint, array $existingTags): ?array
     {
-        if (!isset($this->cache[$event])) {
+        if (!isset($this->cache[$waypoint])) {
             return null;
         }
 
-        foreach ($this->cache[$event] as $cacheValue) {
+        foreach ($this->cache[$waypoint] as $cacheValue) {
             if (
                 array_udiff(
                     $cacheValue[self::EXISTING_TAGS_CACHE_PARAM],

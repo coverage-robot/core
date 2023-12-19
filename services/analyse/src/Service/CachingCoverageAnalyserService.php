@@ -12,6 +12,8 @@ use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
+use App\Service\History\CommitHistoryService;
+use App\Service\History\CommitHistoryServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
@@ -74,10 +76,12 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         QueryServiceInterface $queryService,
         #[Autowire(service: CachingDiffParserService::class)]
         DiffParserServiceInterface $diffParser,
+        #[Autowire(service: CommitHistoryService::class)]
+        CommitHistoryServiceInterface $commitHistoryService,
         #[Autowire(service: CachingCarryforwardTagService::class)]
         CarryforwardTagServiceInterface $carryforwardTagService
     ) {
-        parent::__construct($queryService, $diffParser, $carryforwardTagService);
+        parent::__construct($queryService, $diffParser, $commitHistoryService, $carryforwardTagService);
 
         /**
          * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult> $uploadsCache
@@ -188,7 +192,9 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
             $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint) ?? false;
         }
 
-        return $this->diffCoveragePercentage[$waypoint] ?: null;
+        $diffCoveragePercentage = $this->diffCoveragePercentage[$waypoint];
+
+        return $diffCoveragePercentage !== false ? $diffCoveragePercentage : null;
     }
 
     protected function getLeastCoveredDiffFiles(
