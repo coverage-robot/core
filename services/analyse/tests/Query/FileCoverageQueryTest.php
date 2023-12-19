@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
@@ -13,7 +14,6 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
 use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -754,19 +754,15 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
 
     public static function getQueryParameters(): array
     {
-        $upload = new Upload(
-            'uploadId',
+        $waypoint = new ReportWaypoint(
             Provider::GITHUB,
             'mock-owner',
             'mock-repository',
+            'mock-ref',
             'mock-commit',
-            [],
-            'ref',
-            'project-root',
             12,
-            'commit-on-main',
-            'main',
-            new Tag('tag', 'commit'),
+            [],
+            []
         );
 
         $lineScope = [
@@ -774,14 +770,14 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             'mock-file-2' => [10, 11, 12]
         ];
 
-        $lineScopedParameters = QueryParameterBag::fromWaypoint($upload);
+        $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint);
         $lineScopedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
 
-        $limitedParameters = QueryParameterBag::fromWaypoint($upload);
+        $limitedParameters = QueryParameterBag::fromWaypoint($waypoint);
         $limitedParameters->set(QueryParameter::LINE_SCOPE, $lineScope);
         $limitedParameters->set(QueryParameter::LIMIT, 50);
 
-        $carryforwardParameters = QueryParameterBag::fromWaypoint($upload);
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
         $carryforwardParameters->set(
             QueryParameter::CARRYFORWARD_TAGS,
             [
@@ -876,19 +872,15 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint(
-                    new Upload(
-                        'uploadId',
+                    new ReportWaypoint(
                         Provider::GITHUB,
-                        'owner',
-                        'repository',
-                        'commit',
+                        'mock-owner',
+                        'mock-repository',
+                        'mock-ref',
+                        'mock-commit',
+                        null,
                         [],
-                        'ref',
-                        'project-root',
-                        12,
-                        'commit-on-main',
-                        'main',
-                        new Tag('tag', 'commit'),
+                        []
                     )
                 ),
                 true

@@ -31,8 +31,7 @@ class ReportTest extends TestCase
             static fn() => $tagCoverage,
             static fn() => 95,
             static fn() => $leastCoveredDiffFiles,
-            static fn() => $diffLineCoverage,
-            static fn() => []
+            static fn() => $diffLineCoverage
         );
 
         $this->assertEquals(
@@ -71,10 +70,6 @@ class ReportTest extends TestCase
         $this->assertEquals(
             $diffLineCoverage,
             $report->getDiffLineCoverage()
-        );
-        $this->assertEquals(
-            [],
-            $report->getDiff()
         );
     }
 }

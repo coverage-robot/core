@@ -28,7 +28,6 @@ class Report implements ReportInterface
      * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
      * @param FileCoverageCollectionQueryResult|Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
      * @param LineCoverageCollectionQueryResult|Closure():LineCoverageCollectionQueryResult $diffLineCoverage
-     * @param array<string, array<int, int>>|Closure():array<string, array<int, int>> $diff
      */
     public function __construct(
         private readonly ReportWaypoint $waypoint,
@@ -41,7 +40,6 @@ class Report implements ReportInterface
         private Closure|float|null $diffCoveragePercentage,
         private Closure|FileCoverageCollectionQueryResult $leastCoveredDiffFiles,
         private Closure|LineCoverageCollectionQueryResult $diffLineCoverage,
-        private Closure|array $diff
     ) {
     }
 
@@ -135,15 +133,6 @@ class Report implements ReportInterface
         }
 
         return $this->diffLineCoverage;
-    }
-
-    public function getDiff(): array
-    {
-        if (is_callable($this->diff)) {
-            $this->diff = ($this->diff)();
-        }
-
-        return $this->diff;
     }
 
     public function __toString(): string

@@ -3,13 +3,12 @@
 namespace App\Tests\Query;
 
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Service\QueryBuilderService;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
@@ -34,19 +33,15 @@ abstract class AbstractQueryTestCase extends KernelTestCase
     {
         return [
             QueryParameterBag::fromWaypoint(
-                new Upload(
-                    'mock-upload-id',
+                new ReportWaypoint(
                     Provider::GITHUB,
                     'mock-owner',
                     'mock-repository',
-                    'mock-commit',
-                    [],
                     'mock-ref',
-                    'mock-project-root',
+                    'mock-commit',
                     12,
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', 'mock-commit')
+                    [],
+                    []
                 )
             )
         ];

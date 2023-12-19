@@ -10,6 +10,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Diff\DiffParserService;
+use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
@@ -45,11 +46,13 @@ class CachingCoverageAnalyserServiceTest extends TestCase
             );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
         $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
+            $mockCommitHistoryService,
             $mockCarryforwardTagService
         );
 
@@ -110,9 +113,12 @@ class CachingCoverageAnalyserServiceTest extends TestCase
 
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+
         $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
+            $mockCommitHistoryService,
             $mockCarryforwardTagService
         );
 

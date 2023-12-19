@@ -5,6 +5,7 @@ namespace App\Tests\Query;
 use App\Enum\EnvironmentVariable;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
@@ -12,8 +13,6 @@ use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -116,19 +115,15 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint(
-                    new Upload(
-                        'mock-uuid',
+                    new ReportWaypoint(
                         Provider::GITHUB,
                         'mock-owner',
                         'mock-repository',
-                        'mock-commit',
-                        ['mock-parent-commit'],
                         'mock-ref',
-                        'mock-project-root',
+                        'mock-commit',
                         null,
-                        null,
-                        null,
-                        new Tag('mock-tag', 'mock-commit-1')
+                        [],
+                        []
                     )
                 ),
                 true

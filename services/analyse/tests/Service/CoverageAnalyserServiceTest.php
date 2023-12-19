@@ -20,6 +20,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
+use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Enum\LineState;
@@ -37,7 +38,9 @@ class CoverageAnalyserServiceTest extends TestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
-            12
+            12,
+            [],
+            []
         );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);
@@ -48,11 +51,14 @@ class CoverageAnalyserServiceTest extends TestCase
                 'mock-file' => [1,2,3]
             ]);
 
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
 
         $coverageAnalyserService = new CoverageAnalyserService(
             $this->getMockedQueryService(),
             $mockDiffParserService,
+            $mockCommitHistoryService,
             $mockCarryforwardTagService
         );
 
