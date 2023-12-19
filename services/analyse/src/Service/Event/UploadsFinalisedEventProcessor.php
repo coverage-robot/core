@@ -168,7 +168,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $baseWaypoint = $this->getBaseWaypointForComparison($headWaypoint, $event);
 
-        if ($baseWaypoint) {
+        if ($baseWaypoint instanceof ReportWaypoint) {
             // We've been able to generate base waypoint to compare to, so we'll generate
             // a comparison report.
             $comparison = $this->coverageAnalyserService->compare(
@@ -200,7 +200,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             return null;
         }
 
-        for ($page = 1; $page <= 5; $page++) {
+        for ($page = 1; $page <= 5; ++$page) {
             $history = $headWaypoint->getHistory($page);
 
             foreach ($history as $commit) {

@@ -19,7 +19,6 @@ use DateTimeImmutable;
 class Report implements ReportInterface
 {
     /**
-     * @param ReportWaypoint $waypoint
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
      * @param int|Closure():int $totalLines
      * @param int|Closure():int $atLeastPartiallyCoveredLines

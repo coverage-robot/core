@@ -103,24 +103,22 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 2,
-                static function (ReportWaypoint $waypoint, int $page) {
-                    return match ($page) {
-                        1 => [
-                            [
-                                'commit' => 'mock-commit',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-2',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-3',
-                                'isOnBaseRef' => false
-                            ]
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
                         ],
-                        default => [],
-                    };
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ]
+                    ],
+                    default => [],
                 },
                 []
             ),
@@ -174,52 +172,50 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 3,
-                static function (ReportWaypoint $waypoint, int $page) {
-                    return match ($page) {
-                        1 => [
-                            [
-                                'commit' => 'mock-commit',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-2',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-3',
-                                'isOnBaseRef' => false
-                            ]
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
                         ],
-                        2 => [
-                            [
-                                'commit' => 'mock-commit-4',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-5',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-6',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
                         ],
-                        3 => [
-                            [
-                                'commit' => 'mock-commit-7',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-8',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-9',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ]
+                    ],
+                    2 => [
+                        [
+                            'commit' => 'mock-commit-4',
+                            'isOnBaseRef' => false
                         ],
-                        default => [],
-                    };
+                        [
+                            'commit' => 'mock-commit-5',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-6',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    3 => [
+                        [
+                            'commit' => 'mock-commit-7',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-8',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-9',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    default => [],
                 },
                 []
             ),
@@ -272,80 +268,78 @@ class CarryforwardTagServiceTest extends TestCase
                 'mock-ref',
                 'mock-commit',
                 null,
-                static function (ReportWaypoint $waypoint, int $page) {
-                    return match ($page) {
-                        1 => [
-                            [
-                                'commit' => 'mock-commit',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-2',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-3',
-                                'isOnBaseRef' => false
-                            ]
+                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'isOnBaseRef' => false
                         ],
-                        2 => [
-                            [
-                                'commit' => 'mock-commit-4',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-5',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-6',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-2',
+                            'isOnBaseRef' => false
                         ],
-                        3 => [
-                            [
-                                'commit' => 'mock-commit-7',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-8',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-9',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-3',
+                            'isOnBaseRef' => false
+                        ]
+                    ],
+                    2 => [
+                        [
+                            'commit' => 'mock-commit-4',
+                            'isOnBaseRef' => false
                         ],
-                        4 => [
-                            [
-                                'commit' => 'mock-commit-10',
-                                'isOnBaseRef' => true
-                            ],
-                            [
-                                'commit' => 'mock-commit-11',
-                                'isOnBaseRef' => false
-                            ],
-                            [
-                                'commit' => 'mock-commit-12',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-5',
+                            'isOnBaseRef' => false
                         ],
-                        5 => [
-                            [
-                                'commit' => 'mock-commit-13',
-                                'isOnBaseRef' => true
-                            ],
-                            [
-                                'commit' => 'mock-commit-14',
-                                'isOnBaseRef' => true
-                            ],
-                            [
-                                'commit' => 'mock-commit-15',
-                                'isOnBaseRef' => true
-                            ]
+                        [
+                            'commit' => 'mock-commit-6',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    3 => [
+                        [
+                            'commit' => 'mock-commit-7',
+                            'isOnBaseRef' => false
                         ],
-                        default => [],
-                    };
+                        [
+                            'commit' => 'mock-commit-8',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-9',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    4 => [
+                        [
+                            'commit' => 'mock-commit-10',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-11',
+                            'isOnBaseRef' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-12',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    5 => [
+                        [
+                            'commit' => 'mock-commit-13',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-14',
+                            'isOnBaseRef' => true
+                        ],
+                        [
+                            'commit' => 'mock-commit-15',
+                            'isOnBaseRef' => true
+                        ]
+                    ],
+                    default => [],
                 },
                 []
             ),
