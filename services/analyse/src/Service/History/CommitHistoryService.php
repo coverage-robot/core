@@ -4,11 +4,10 @@ namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
-use Packages\Contracts\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CommitHistoryService
+class CommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * The total number of commits which should be returned per page.
@@ -32,19 +31,19 @@ class CommitHistoryService
      *
      * @throws RuntimeException
      */
-    public function getPrecedingCommits(EventInterface|ReportWaypoint $event, int $page = 1): array
+    public function getPrecedingCommits(ReportWaypoint $waypoint, int $page = 1): array
     {
-        $service = (iterator_to_array($this->parsers)[$event->getProvider()->value]) ?? null;
+        $service = (iterator_to_array($this->parsers)[$waypoint->getProvider()->value]) ?? null;
 
         if (!$service instanceof CommitHistoryServiceInterface) {
             throw new RuntimeException(
                 sprintf(
                     'No commit history service for %s',
-                    $event->getProvider()->value
+                    $waypoint->getProvider()->value
                 )
             );
         }
 
-        return $service->getPrecedingCommits($event, $page);
+        return $service->getPrecedingCommits($waypoint, $page);
     }
 }
