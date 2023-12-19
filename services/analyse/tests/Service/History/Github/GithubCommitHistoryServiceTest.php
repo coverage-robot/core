@@ -66,7 +66,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                                       oid
                                       associatedPullRequests(last: 1) {
                                         nodes {
-                                          merged
+                                          merged,
+                                          headRefName
                                         }
                                       }
                                     }
@@ -118,7 +119,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                             'associatedPullRequests' => [
                                 'nodes' => [
                                     [
-                                        'merged' => false
+                                        'merged' => false,
+                                        'headRefName' => 'mock-ref'
                                     ]
                                 ]
                             ]
@@ -132,7 +134,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                             'associatedPullRequests' => [
                                 'nodes' => [
                                     [
-                                        'merged' => true
+                                        'merged' => true,
+                                        'headRefName' => 'mock-ref-2'
                                     ]
                                 ]
                             ]
@@ -170,7 +173,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                             'associatedPullRequests' => [
                                 'nodes' => [
                                     [
-                                        'merged' => true
+                                        'merged' => true,
+                                        'headRefName' => 'mock-ref'
                                     ]
                                 ]
                             ]
@@ -218,7 +222,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                             'associatedPullRequests' => [
                                 'nodes' => [
                                     [
-                                        'merged' => true
+                                        'merged' => false,
+                                        'headRefName' => 'mock-ref-2'
                                     ]
                                 ]
                             ]

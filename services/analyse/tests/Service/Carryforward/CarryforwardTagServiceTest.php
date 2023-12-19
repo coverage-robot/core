@@ -9,6 +9,7 @@ use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
@@ -185,7 +186,15 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit-3',
                             'isOnBaseRef' => false
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'isOnBaseRef' => false
+                            ]
+                        )
                     ],
                     2 => [
                         [
@@ -199,7 +208,15 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit-6',
                             'isOnBaseRef' => true
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'isOnBaseRef' => false
+                            ]
+                        )
                     ],
                     3 => [
                         [
