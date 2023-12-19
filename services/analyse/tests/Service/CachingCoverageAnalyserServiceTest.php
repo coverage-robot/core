@@ -136,9 +136,9 @@ class CachingCoverageAnalyserServiceTest extends TestCase
     public static function diffCoverageDataProvider(): array
     {
         return [
-            "No diff coverage" => [
+            'No diff coverage' => [
                 [
-                    "mock-file" => [1,2,3]
+                    'mock-file' => [1,2,3]
                 ],
                 new CoverageQueryResult(
                     0.0,
@@ -149,9 +149,9 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 ),
                 0
             ],
-            "Partial diff coverage" => [
+            'Partial diff coverage' => [
                 [
-                    "mock-file" => [1,2,3]
+                    'mock-file' => [1,2,3]
                 ],
                 new CoverageQueryResult(
                     66.6,
@@ -162,9 +162,9 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 ),
                 66.6
             ],
-            "Full diff coverage" => [
+            'Full diff coverage' => [
                 [
-                    "mock-file" => [1,2,3]
+                    'mock-file' => [1,2,3]
                 ],
                 new CoverageQueryResult(
                     100,
@@ -175,9 +175,9 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 ),
                 100
             ],
-            "No coverable lines" => [
+            'No coverable lines' => [
                 [
-                    "mock-file" => [1,2,3]
+                    'mock-file' => [1,2,3]
                 ],
                 new CoverageQueryResult(
                     0,
