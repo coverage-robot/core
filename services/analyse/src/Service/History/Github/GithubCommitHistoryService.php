@@ -106,7 +106,8 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                               oid
                               associatedPullRequests(last: 1) {
                                 nodes {
-                                  merged
+                                  merged,
+                                  headRefName
                                 }
                               }
                             }
@@ -125,9 +126,11 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
             static fn(array $commit): array => [
                 'commit' => $commit['oid'],
 
-                // The commit _must_ be on the base ref (i.e. not in a PR) if theres no unmerged PRs, or there
-                // was no PR to begin with (a direct push)
-                'isOnBaseRef' => $commit['associatedPullRequests']['nodes'][0]['merged'] ?? true
+                // The commit _must_ be on the base ref (i.e. not in a PR) if theres no
+                // unmerged PRs, there was no PR to begin with (a direct push), or the only open
+                // PR is not on the same ref as we started on
+                'isOnBaseRef' => ($commit['associatedPullRequests']['nodes'][0]['merged'] ?? true) ||
+                    ($commit['associatedPullRequests']['nodes'][0]['headRefName'] ?? null) !== $ref
             ],
             $result
         );
