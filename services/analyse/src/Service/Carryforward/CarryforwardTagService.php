@@ -67,7 +67,11 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
             // Theres still tags which we've seen in the past, but have not yet seen in
             // the commit tree. We'll keep looking for them in the tree until we find them
-            [$tagsNotSeen, $tagsToCarryforward, $hasReachedEndOfHistory] = $this->lookForCarryforwardTagsInPaginatedTree(
+            [
+                $tagsNotSeen,
+                $tagsToCarryforward,
+                $hasReachedEndOfHistory
+            ] = $this->lookForCarryforwardTagsInPaginatedTree(
                 $waypoint,
                 $tagAvailability,
                 $page,
