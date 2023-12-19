@@ -188,9 +188,9 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
             $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint) ?? false;
         }
 
-        return $this->diffCoveragePercentage[$waypoint] !== false ?
-            $this->diffCoveragePercentage[$waypoint] :
-            null;
+        $diffCoveragePercentage = $this->diffCoveragePercentage[$waypoint];
+
+        return $diffCoveragePercentage !== false ? $diffCoveragePercentage : null;
     }
 
     protected function getLeastCoveredDiffFiles(
