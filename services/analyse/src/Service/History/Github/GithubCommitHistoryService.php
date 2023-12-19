@@ -22,7 +22,8 @@ use Psr\Log\LoggerInterface;
  *                                  oid: string,
  *                                  associatedPullRequests: array{
  *                                      nodes: array{
- *                                          merged: bool
+ *                                          merged: bool,
+ *                                          headRefName: string
  *                                      }[]
  *                                  }
  *                              }[]
