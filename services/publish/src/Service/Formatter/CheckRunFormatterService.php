@@ -31,7 +31,9 @@ class CheckRunFormatterService
         if ($coverageChange == 0) {
             return sprintf(
                 ' (no change compared to %s)',
-                $this->abbreviateCommit($baseCommit)
+                $baseCommit ?
+                    $this->abbreviateCommit($baseCommit) :
+                    'unknown commit'
             );
         }
 
@@ -42,7 +44,9 @@ class CheckRunFormatterService
                 default => '',
             },
             $coverageChange,
-            $this->abbreviateCommit($baseCommit)
+            $baseCommit ?
+                $this->abbreviateCommit($baseCommit) :
+                'unknown commit'
         );
     }
 
