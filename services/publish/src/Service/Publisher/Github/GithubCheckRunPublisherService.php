@@ -160,15 +160,6 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         array $annotations
     ): int {
         $body = match ($publishableMessage->getStatus()) {
-            null => [
-                'name' => 'Coverage Robot',
-                'head_sha' => $commit,
-                'annotations' => $annotations,
-                'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
-                ]
-            ],
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
@@ -179,7 +170,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ],
-            default => [
+            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
                 'status' => 'completed',
@@ -233,14 +224,6 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         array $annotations
     ): bool {
         $body = match ($publishableMessage->getStatus()) {
-            null => [
-                'name' => 'Coverage Robot',
-                'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
-                    'annotations' => $annotations,
-                ]
-            ],
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'status' => $publishableMessage->getStatus()->value,
@@ -250,7 +233,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     'annotations' => $annotations,
                 ]
             ],
-            default => [
+            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
