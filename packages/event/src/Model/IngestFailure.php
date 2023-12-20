@@ -50,6 +50,9 @@ class IngestFailure implements EventInterface
         return $this->upload->getCommit();
     }
 
+    /**
+     * @return string[]
+     */
     #[Ignore]
     public function getParent(): array
     {
