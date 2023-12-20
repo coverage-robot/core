@@ -251,7 +251,6 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $event->getOwner(),
                 $event->getRepository(),
                 $event->getRef(),
-
                 // Use the first parent commit as the base commit as this will
                 // be the commit of the base in the case of a merge commit
                 $event->getParent()[0],
