@@ -159,7 +159,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      *
      * @return array{0: ReportInterface, 1: ReportComparison|null}
      */
-    private function generateCoverageReport(EventInterface $event): array
+    private function generateCoverageReport(UploadsFinalised $event): array
     {
         $comparison = null;
 
@@ -184,60 +184,77 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      * Get the base waypoint for the comparison report using the head waypoints history
      * and the real-time event which triggered the analysis.
      *
-     * Theres two ways we can get the base waypoint:
+     * Theres three ways we can get the base waypoint (in priority order):
      * 1. Use the first commit in the history as the base commit - this is preferable as
      *    it ensures the commit we use as a comparison is not newer than the head commit
      *    we're comparing against.
      * 2. Use the base commit recorded on the event - this is generally the base of the PR
      *    and **doesn't** guarantee that the merge point is also a parent commit of the
      *    head, so _could_ produce unintended coverage results.
+     * 3. Use the parent commit recorded on the event - this is generally preferred for push
+     *    or merge events which won't have a base ref (because theres no independent base).
      */
-    private function getBaseWaypointForComparison(ReportWaypoint $headWaypoint, EventInterface $event): ?ReportWaypoint
-    {
+    private function getBaseWaypointForComparison(
+        ReportWaypoint $headWaypoint,
+        UploadsFinalised $event
+    ): ?ReportWaypoint {
         $baseRef = $event->getBaseRef();
 
-        if (!$baseRef) {
-            // TODO: We should use the parent commit(s) as the base if its a push rather
-            //  than a pull request
-            return null;
-        }
+        if ($baseRef) {
+            // We've got a base ref, meaning theres a good chance we can do a larger
+            // comparison across commits (i.e. PR comparisons, etc)
+            for ($page = 1; $page <= 5; ++$page) {
+                $history = $headWaypoint->getHistory($page);
 
-        for ($page = 1; $page <= 5; ++$page) {
-            $history = $headWaypoint->getHistory($page);
+                foreach ($history as $commit) {
+                    if ($commit['isOnBaseRef'] ?? true) {
+                        // Use the latest commit in the history that is on the base ref as the preferred option.
+                        // This ensures the commit is in the history (i.e. not newer than the head commit)
 
-            foreach ($history as $commit) {
-                if ($commit['isOnBaseRef'] ?? true) {
-                    // Use the latest commit in the history that is on the base ref as the preferred option.
-                    // This ensures the commit is in the history (i.e. not newer than the head commit)
+                        return $this->coverageAnalyserService->getWaypoint(
+                            $event->getProvider(),
+                            $event->getOwner(),
+                            $event->getRepository(),
+                            $baseRef,
+                            $commit['commit'],
+                        );
+                    }
+                }
 
-                    return $this->coverageAnalyserService->getWaypoint(
-                        $event->getProvider(),
-                        $event->getOwner(),
-                        $event->getRepository(),
-                        $baseRef,
-                        $commit['commit'],
-                    );
+                if (count($history) < CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) {
+                    // We must have hit the end of the tree as theres less commits than we
+                    // would have fetched
+                    break;
                 }
             }
 
-            if (count($history) < CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) {
-                // We must have hit the end of the tree as theres less commits than we
-                // would have fetched
-                break;
+            $baseCommit = $event->getBaseCommit();
+            if ($baseCommit !== null) {
+                // Use the base commit recorded on the event. Generally this is the base of the
+                // PR, but that isn't usually ideal because the base of a PR doesnt have to be
+                // a parent commit (i.e. it could be newer, and this include more coverage).
+                return $this->coverageAnalyserService->getWaypoint(
+                    $event->getProvider(),
+                    $event->getOwner(),
+                    $event->getRepository(),
+                    $baseRef,
+                    $baseCommit,
+                );
             }
         }
 
-        $baseCommit = $event->getBaseCommit();
-        if ($baseCommit !== null) {
-            // Use the base commit recorded on the event. Generally this is the base of the
-            // PR, but that isn't usually ideal because the base of a PR doesnt have to be
-            // a parent commit (i.e. it could be newer, and this include more coverage).
+        if ($event->getParent() !== []) {
+            // Use the parent commits as the base comparison if theres no base
+            // provided in any other means
             return $this->coverageAnalyserService->getWaypoint(
                 $event->getProvider(),
                 $event->getOwner(),
                 $event->getRepository(),
-                $baseRef,
-                $baseCommit,
+                $event->getRef(),
+
+                // Use the first parent commit as the base commit as this will
+                // be the commit of the base in the case of a merge commit
+                $event->getParent()[0],
             );
         }
 
