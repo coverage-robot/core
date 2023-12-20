@@ -34,6 +34,7 @@ class CheckAnnotationFormatterServiceTest extends TestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
+            [],
             null,
             null,
             null,
