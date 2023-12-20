@@ -47,6 +47,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     PublishableCheckRunStatus::SUCCESS,
                     [],
                     100,
+                    'mock-base-commit',
                     0,
                     new DateTimeImmutable()
                 )
@@ -129,6 +130,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 PublishableCheckRunStatus::SUCCESS,
                 [],
                 100,
+                'mock-base-commit',
                 0,
                 new DateTimeImmutable()
             )
@@ -214,7 +216,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                         $this->assertEquals('success', $checkRun['conclusion']);
                         $this->assertEquals(
                             [
-                                'title' => 'Total Coverage: 100% (no change)',
+                                'title' => 'Total Coverage: 100% (no change compared to mock-ba)',
                                 'summary' => '',
                                 'annotations' => [
                                     [
@@ -249,6 +251,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     )
                 ],
                 100,
+                'mock-base-commit',
                 0,
                 new DateTimeImmutable()
             )
@@ -342,6 +345,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                     )
                 ),
                 100,
+                'mock-base-commit',
                 0,
                 new DateTimeImmutable()
             )
@@ -424,6 +428,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 PublishableCheckRunStatus::IN_PROGRESS,
                 [],
                 100,
+                'mock-base-commit',
                 0,
                 new DateTimeImmutable()
             )

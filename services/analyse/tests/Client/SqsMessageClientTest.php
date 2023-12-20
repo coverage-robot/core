@@ -42,6 +42,7 @@ class SqsMessageClientTest extends KernelTestCase
                 new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
             ),
             100.0,
+            'commit-on-main',
             0,
             100.0,
             1,

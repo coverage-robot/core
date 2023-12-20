@@ -2,45 +2,53 @@
 
 namespace App\Service\Formatter;
 
+use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 
 class CheckRunFormatterService
 {
-    public function formatTitle(
-        PublishableCheckRunStatus $status,
-        float $coveragePercentage,
-        ?float $coverageChange
-    ): string {
-        return match ($status) {
+    public function formatTitle(PublishableCheckRunMessage $message): string
+    {
+        return match ($message->getStatus()) {
             default => sprintf(
                 'Total Coverage: %s%%%s',
-                $coveragePercentage,
-                $this->getCoverageChange($coverageChange)
+                $message->getCoveragePercentage(),
+                $this->getCoverageChange(
+                    $message->getBaseCommit(),
+                    $message->getCoverageChange()
+                )
             ),
             PublishableCheckRunStatus::IN_PROGRESS => 'Waiting for any additional coverage uploads...',
         };
     }
 
-    private function getCoverageChange(?float $coverageChange): string
+    private function getCoverageChange(?string $baseCommit, ?float $coverageChange): string
     {
         if ($coverageChange === null) {
             return '';
         }
 
         if ($coverageChange == 0) {
-            return ' (no change)';
+            return sprintf(
+                ' (no change compared to %s)',
+                $this->abbreviateCommit($baseCommit)
+            );
         }
 
-        $sign = match (true) {
-            $coverageChange > 0 => '+',
-            default => '',
-        };
-
         return sprintf(
-            ' (%s%s%%)',
-            $sign,
-            $coverageChange
+            ' (%s%s%% compared to %s)',
+            match (true) {
+                $coverageChange > 0 => '+',
+                default => '',
+            },
+            $coverageChange,
+            $this->abbreviateCommit($baseCommit)
         );
+    }
+
+    private function abbreviateCommit(string $commit): string
+    {
+        return substr($commit, 0, 7);
     }
 
     public function formatSummary(): string

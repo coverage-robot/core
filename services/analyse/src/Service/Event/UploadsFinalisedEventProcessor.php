@@ -127,6 +127,9 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     new PublishablePullRequestMessage(
                         $uploadsFinalised,
                         $coverageReport->getCoveragePercentage(),
+                        $comparison?->getBaseReport()
+                            ->getWaypoint()
+                            ->getCommit(),
                         $comparison?->getCoverageChange(),
                         $coverageReport->getDiffCoveragePercentage(),
                         count($coverageReport->getUploads()->getSuccessfulUploads()),
@@ -145,6 +148,9 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         PublishableCheckRunStatus::SUCCESS,
                         $annotations,
                         $coverageReport->getCoveragePercentage(),
+                        $comparison?->getBaseReport()
+                            ->getWaypoint()
+                            ->getCommit(),
                         $comparison?->getCoverageChange(),
                         $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )
@@ -207,10 +213,17 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $history = $headWaypoint->getHistory($page);
 
                 foreach ($history as $commit) {
-                    if ($commit['isOnBaseRef'] ?? true) {
+                    if ($commit['isOnBaseRef']) {
+                        $this->eventProcessorLogger->info(
+                            sprintf(
+                                'Extracted %s from history to use as the base commit for comparison to %s',
+                                $commit['commit'],
+                                (string)$headWaypoint
+                            )
+                        );
+
                         // Use the latest commit in the history that is on the base ref as the preferred option.
                         // This ensures the commit is in the history (i.e. not newer than the head commit)
-
                         return $this->coverageAnalyserService->getWaypoint(
                             $event->getProvider(),
                             $event->getOwner(),
@@ -230,6 +243,14 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
             $baseCommit = $event->getBaseCommit();
             if ($baseCommit !== null) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        'Extracted %s from event base to use as the base commit for comparison to %s',
+                        $baseCommit,
+                        (string)$headWaypoint
+                    )
+                );
+
                 // Use the base commit recorded on the event. Generally this is the base of the
                 // PR, but that isn't usually ideal because the base of a PR doesnt have to be
                 // a parent commit (i.e. it could be newer, and this include more coverage).
@@ -244,6 +265,14 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         }
 
         if ($event->getParent() !== []) {
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Extracted %s from event parents to use as the base commit for comparison to %s',
+                    (string)$event->getParent()[0],
+                    (string)$headWaypoint
+                )
+            );
+
             // Use the parent commits as the base comparison if theres no base
             // provided in any other means
             return $this->coverageAnalyserService->getWaypoint(
@@ -256,6 +285,13 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 (string)$event->getParent()[0],
             );
         }
+
+        $this->eventProcessorLogger->warning(
+            sprintf(
+                'Unable to find base commit for comparison to %s',
+                (string)$headWaypoint
+            )
+        );
 
         return null;
     }

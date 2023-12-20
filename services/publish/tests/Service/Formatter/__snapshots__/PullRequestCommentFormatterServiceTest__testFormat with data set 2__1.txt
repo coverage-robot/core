@@ -1,5 +1,5 @@
 ## Coverage Report
-> Merging #12 will **not change** the total coverage (compared to commit-on-main)
+> Merging #12 will **not change** the total coverage (compared to mock-base-commit)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |

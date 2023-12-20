@@ -38,6 +38,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                'mock-base-commit',
                 0,
                 100,
                 1,
@@ -114,6 +115,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                'mock-base-commit',
                 0,
                 100,
                 1,
@@ -192,6 +194,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 $upload,
                 100,
+                'mock-base-commit',
                 0,
                 100,
                 1,

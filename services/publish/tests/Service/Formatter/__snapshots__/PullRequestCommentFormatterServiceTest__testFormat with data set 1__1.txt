@@ -1,5 +1,5 @@
 ## Coverage Report
-> Merging #12 will **decrease** the total coverage by 1.2% (compared to commit-on-main)
+> Merging #12 will **decrease** the total coverage by 1.2% (compared to mock-base-commit)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |

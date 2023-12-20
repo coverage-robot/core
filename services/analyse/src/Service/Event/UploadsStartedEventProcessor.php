@@ -59,6 +59,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
                 PublishableCheckRunStatus::IN_PROGRESS,
                 [],
                 0,
+                null,
                 0,
                 $uploadsStarted->getEventTime()
             )
