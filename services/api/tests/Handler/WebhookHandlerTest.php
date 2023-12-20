@@ -171,6 +171,7 @@ class WebhookHandlerTest extends KernelTestCase
                     'mock-app-id',
                     'mock-ref',
                     'mock-commit',
+                    'mock-parent-commit',
                     'mock-pull-request',
                     'mock-base-ref',
                     'mock-base-commit',

@@ -31,6 +31,7 @@ class EventBridgeEventClientTest extends TestCase
             'mock-repository',
             'mock-ref',
             'mock-commit',
+            ['mock-parent-1'],
             null,
             null,
             null,

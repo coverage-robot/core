@@ -51,6 +51,12 @@ class IngestSuccess implements EventInterface
     }
 
     #[Ignore]
+    public function getParent(): array
+    {
+        return $this->upload->getParent();
+    }
+
+    #[Ignore]
     public function getPullRequest(): int|string|null
     {
         return $this->upload->getPullRequest();

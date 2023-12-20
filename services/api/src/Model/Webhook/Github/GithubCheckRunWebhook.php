@@ -23,6 +23,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string|int $appId,
         protected readonly string $ref,
         protected readonly string $commit,
+        protected readonly ?string $parent,
         protected readonly string|int|null $pullRequest,
         protected readonly string|null $baseRef,
         protected readonly string|null $baseCommit,
@@ -85,6 +86,12 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     public function getCommit(): string
     {
         return $this->commit;
+    }
+
+    #[SerializedPath('[check_run][check_suite][before]')]
+    public function getParent(): ?string
+    {
+        return $this->parent;
     }
 
     #[SerializedPath('[check_run][pull_requests][0][number]')]
