@@ -17,6 +17,11 @@ interface PipelineStateChangeWebhookInterface
     public function getCommit(): string;
 
     /**
+     * The parent commit of the commit the job is running on.
+     */
+    public function getParent(): string;
+
+    /**
      * The unique identifier of the job which is running.
      *
      * For example, the check run id for GitHub.

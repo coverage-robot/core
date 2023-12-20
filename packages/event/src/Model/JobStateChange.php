@@ -60,6 +60,9 @@ class JobStateChange implements EventInterface
         return $this->commit;
     }
 
+    /**
+     * @return string[]
+     */
     public function getParent(): array
     {
         return $this->parent;

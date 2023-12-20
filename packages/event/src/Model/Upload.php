@@ -18,6 +18,9 @@ class Upload implements EventInterface
     )]
     private readonly DateTimeImmutable $ingestTime;
 
+    /**
+     * @param string[] $parent
+     */
     public function __construct(
         private readonly string $uploadId,
         private readonly Provider $provider,
