@@ -8,12 +8,16 @@ use Packages\Contracts\Provider\Provider;
 
 class UploadsFinalised implements EventInterface
 {
+    /**
+     * @param string[] $parent
+     */
     public function __construct(
         private readonly Provider $provider,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
+        private readonly array $parent,
         private readonly string|int|null $pullRequest,
         private readonly string|null $baseCommit,
         private readonly string|null $baseRef,
@@ -39,6 +43,11 @@ class UploadsFinalised implements EventInterface
     public function getCommit(): string
     {
         return $this->commit;
+    }
+
+    public function getParent(): array
+    {
+        return $this->parent;
     }
 
     public function getPullRequest(): int|string|null

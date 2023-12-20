@@ -50,6 +50,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     'repository',
                     'ref',
                     'commit',
+                    ['parent-1'],
                     null,
                     null,
                     null,

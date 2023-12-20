@@ -44,6 +44,11 @@ class AnalyseFailure implements EventInterface
         return $this->event->getCommit();
     }
 
+    public function getParent(): array
+    {
+        return $this->upload->getParent();
+    }
+
     #[Ignore]
     public function getPullRequest(): int|string|null
     {
