@@ -102,6 +102,7 @@ class InvokeCommand extends Command
                                         new PublishablePullRequestMessage(
                                             $upload,
                                             100,
+                                            null,
                                             100,
                                             0,
                                             1,
@@ -135,6 +136,7 @@ class InvokeCommand extends Command
                                                 )
                                             ],
                                             100,
+                                            null,
                                             0,
                                             $validUntil
                                         )

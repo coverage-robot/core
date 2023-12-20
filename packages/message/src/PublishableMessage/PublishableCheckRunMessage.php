@@ -14,9 +14,10 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
      */
     public function __construct(
         private readonly EventInterface $event,
-        private readonly ?PublishableCheckRunStatus $status,
+        private readonly PublishableCheckRunStatus $status,
         private readonly array $annotations,
         private readonly float $coveragePercentage,
+        private readonly ?string $baseCommit,
         private readonly ?float $coverageChange,
         private readonly DateTimeImmutable $validUntil,
     ) {
@@ -27,7 +28,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         return $this->event;
     }
 
-    public function getStatus(): ?PublishableCheckRunStatus
+    public function getStatus(): PublishableCheckRunStatus
     {
         return $this->status;
     }
@@ -48,6 +49,11 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function getCoveragePercentage(): float
     {
         return $this->coveragePercentage;
+    }
+
+    public function getBaseCommit(): ?string
+    {
+        return $this->baseCommit;
     }
 
     public function getCoverageChange(): ?float

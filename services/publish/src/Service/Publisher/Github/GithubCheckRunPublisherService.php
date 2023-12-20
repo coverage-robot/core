@@ -111,10 +111,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                     $owner,
                     $repository,
                     $checkRunId,
-                    $currentStatus,
-                    $publishableMessage->getStatus(),
-                    $publishableMessage->getCoveragePercentage(),
-                    $publishableMessage->getCoverageChange(),
+                    $publishableMessage,
                     []
                 );
             }
@@ -123,9 +120,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $owner,
                 $repository,
                 $commit,
-                $publishableMessage->getStatus(),
-                $publishableMessage->getCoveragePercentage(),
-                $publishableMessage->getCoverageChange(),
+                $publishableMessage,
                 []
             );
             $currentStatus = $publishableMessage->getStatus();
@@ -146,10 +141,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $owner,
                 $repository,
                 $checkRunId,
-                $currentStatus,
-                $publishableMessage->getStatus(),
-                $publishableMessage->getCoveragePercentage(),
-                $publishableMessage->getCoverageChange(),
+                $publishableMessage,
                 $chunk
             ) && $successful;
         }
@@ -164,52 +156,29 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         string $owner,
         string $repository,
         string $commit,
-        ?PublishableCheckRunStatus $status,
-        float $coveragePercentage,
-        ?float $coverageChange,
+        PublishableCheckRunMessage $publishableMessage,
         array $annotations
     ): int {
-        $body = match ($status) {
-            null => [
-                'name' => 'Coverage Robot',
-                'head_sha' => $commit,
-                'annotations' => $annotations,
-                'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        PublishableCheckRunStatus::IN_PROGRESS,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
-                ]
-            ],
+        $body = match ($publishableMessage->getStatus()) {
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
-                'status' => $status->value,
+                'status' => $publishableMessage->getStatus()->value,
                 'annotations' => $annotations,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        $status,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
+                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ],
-            default => [
+            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
                 'status' => 'completed',
-                'conclusion' => $status->value,
+                'conclusion' => $publishableMessage->getStatus()->value,
                 'annotations' => $annotations,
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        $status,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
+                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                 ]
             ]
@@ -251,48 +220,25 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         string $owner,
         string $repository,
         int $checkRunId,
-        ?PublishableCheckRunStatus $currentStatus,
-        ?PublishableCheckRunStatus $status,
-        float $coveragePercentage,
-        ?float $coverageChange,
+        PublishableCheckRunMessage $publishableMessage,
         array $annotations
     ): bool {
-        $body = match ($status) {
-            null => [
-                'name' => 'Coverage Robot',
-                'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        $currentStatus ?? PublishableCheckRunStatus::IN_PROGRESS,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
-                    'annotations' => $annotations,
-                ]
-            ],
+        $body = match ($publishableMessage->getStatus()) {
             PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
-                'status' => $status->value,
+                'status' => $publishableMessage->getStatus()->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        $status,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
+                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ]
             ],
-            default => [
+            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
-                'conclusion' => $status->value,
+                'conclusion' => $publishableMessage->getStatus()->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle(
-                        $status,
-                        $coveragePercentage,
-                        $coverageChange
-                    ),
+                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
                     'summary' => $this->checkRunFormatterService->formatSummary(),
                     'annotations' => $annotations,
                 ],

@@ -37,6 +37,7 @@ class PullRequestCommentFormatterService
 
     private function getSummary(EventInterface $event, PublishablePullRequestMessage $message): string
     {
+        $baseCommit = $message->getBaseCommit();
         $coverageChange = $message->getCoverageChange();
 
         if ($coverageChange === null) {
@@ -51,16 +52,16 @@ class PullRequestCommentFormatterService
             $coverageChange > 0 => sprintf(
                 '**increase** the total coverage by %s%% (compared to %s)',
                 $coverageChange,
-                $event->getBaseCommit() ?? 'unknown commit'
+                $baseCommit ?? 'unknown commit'
             ),
             $coverageChange < 0 => sprintf(
                 '**decrease** the total coverage by %s%% (compared to %s)',
                 abs($coverageChange),
-                $event->getBaseCommit() ?? 'unknown commit'
+                $baseCommit ?? 'unknown commit'
             ),
             default => sprintf(
                 '**not change** the total coverage (compared to %s)',
-                $event->getBaseCommit() ?? 'unknown commit'
+                $baseCommit ?? 'unknown commit'
             )
         };
 

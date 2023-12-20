@@ -3,6 +3,8 @@
 namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckRunFormatterService;
+use Packages\Event\Model\UploadsFinalised;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +22,17 @@ class CheckRunFormatterServiceTest extends TestCase
 
         $this->assertEquals(
             $expectedTitle,
-            $formatter->formatTitle($status, $coveragePercentage, $coverageChange)
+            $formatter->formatTitle(
+                new PublishableCheckRunMessage(
+                    $this->createMock(UploadsFinalised::class),
+                    $status,
+                    [],
+                    $coveragePercentage,
+                    'mock-base-commit',
+                    $coverageChange,
+                    new \DateTimeImmutable()
+                )
+            )
         );
     }
 
@@ -35,9 +47,9 @@ class CheckRunFormatterServiceTest extends TestCase
     {
         return [
             [PublishableCheckRunStatus::SUCCESS, 99.98, null, 'Total Coverage: 99.98%'],
-            [PublishableCheckRunStatus::SUCCESS, 99.98, 0, 'Total Coverage: 99.98% (no change)'],
-            [PublishableCheckRunStatus::SUCCESS, 99.98, 0.01, 'Total Coverage: 99.98% (+0.01%)'],
-            [PublishableCheckRunStatus::SUCCESS, 99.98, -0.02, 'Total Coverage: 99.98% (-0.02%)'],
+            [PublishableCheckRunStatus::SUCCESS, 99.98, 0, 'Total Coverage: 99.98% (no change compared to mock-ba)'],
+            [PublishableCheckRunStatus::SUCCESS, 99.98, 0.01, 'Total Coverage: 99.98% (+0.01% compared to mock-ba)'],
+            [PublishableCheckRunStatus::SUCCESS, 99.98, -0.02, 'Total Coverage: 99.98% (-0.02% compared to mock-ba)'],
             [PublishableCheckRunStatus::IN_PROGRESS, 0, 0, 'Waiting for any additional coverage uploads...'],
         ];
     }
