@@ -50,6 +50,7 @@ class LineGroupingServiceTest extends TestCase
             'mock-repository',
             '',
             '',
+            ['mock-parent-1'],
             1,
             'mock-base-commit',
             'mock-base-ref',

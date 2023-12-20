@@ -12,12 +12,16 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 class JobStateChange implements EventInterface
 {
+    /**
+     * @param string[] $parent
+     */
     public function __construct(
         private readonly Provider $provider,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
+        private readonly array $parent,
         private readonly string|int|null $pullRequest,
         private readonly string|null $baseCommit,
         private readonly string|null $baseRef,
@@ -54,6 +58,14 @@ class JobStateChange implements EventInterface
     public function getCommit(): string
     {
         return $this->commit;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getParent(): array
+    {
+        return $this->parent;
     }
 
     public function getPullRequest(): ?string
