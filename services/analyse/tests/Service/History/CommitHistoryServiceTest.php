@@ -19,7 +19,7 @@ class CommitHistoryServiceTest extends TestCase
             repository: 'repository',
             ref: 'ref',
             commit: 'commit',
-                        history: [],
+            history: [],
             diff: []
         );
 
@@ -65,7 +65,7 @@ class CommitHistoryServiceTest extends TestCase
                 repository: 'repository',
                 ref: 'ref',
                 commit: 'commit',
-                                history: [],
+                history: [],
                 diff: []
             )
         );

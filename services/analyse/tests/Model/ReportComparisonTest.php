@@ -63,7 +63,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -86,7 +86,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -106,7 +106,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -129,7 +129,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -149,7 +149,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -172,7 +172,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),
@@ -192,7 +192,7 @@ class ReportComparisonTest extends TestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     ),
                     uploads: new TotalUploadsQueryResult(['1'], [], null),

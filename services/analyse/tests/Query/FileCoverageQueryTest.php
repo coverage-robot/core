@@ -878,7 +878,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                         repository: 'mock-repository',
                         ref: 'mock-ref',
                         commit: 'mock-commit',
-                                                history: [],
+                        history: [],
                         diff: []
                     )
                 ),

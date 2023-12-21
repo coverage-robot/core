@@ -128,7 +128,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-base-commit',
-                        history: [
+            history: [
                 [
                     'commit' => 'mock-commit',
                     'isOnBaseRef' => false
@@ -147,7 +147,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-parent-base-commit',
-                        history: [],
+            history: [],
             diff: []
         );
 
@@ -269,7 +269,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-                        history: [],
+            history: [],
             diff: []
         );
 
@@ -279,7 +279,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-                        history: [],
+            history: [],
             diff: []
         );
 
@@ -401,7 +401,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-                        history: [],
+            history: [],
             diff: []
         );
 
@@ -411,7 +411,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-parent-1',
-                        history: [],
+            history: [],
             diff: []
         );
 
