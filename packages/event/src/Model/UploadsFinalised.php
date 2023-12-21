@@ -19,8 +19,8 @@ class UploadsFinalised implements EventInterface
         private readonly string $commit,
         private readonly array $parent,
         private readonly string|int|null $pullRequest = null,
-        private readonly string|null $baseCommit = null,
-        private readonly string|null $baseRef = null,
+        private readonly ?string $baseCommit = null,
+        private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
         if ($this->eventTime === null) {

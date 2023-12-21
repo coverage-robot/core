@@ -17,8 +17,8 @@ class SigningParameters implements ParametersInterface
         private readonly array $parent,
         private readonly string $ref,
         private readonly string|int|null $pullRequest,
-        private readonly string|null $baseRef,
-        private readonly string|null $baseCommit
+        private readonly ?string $baseRef,
+        private readonly ?string $baseCommit
     ) {
     }
 

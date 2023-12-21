@@ -49,10 +49,10 @@ interface PipelineStateChangeWebhookInterface
     /**
      * The ref the pull request is based on (if applicable)
      */
-    public function getBaseRef(): string|null;
+    public function getBaseRef(): ?string;
 
     /**
      * The commit the pull request is based on (if applicable)
      */
-    public function getBaseCommit(): string|null;
+    public function getBaseCommit(): ?string;
 }

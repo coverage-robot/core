@@ -24,8 +24,8 @@ class Upload implements EventInterface
         private readonly string $projectRoot,
         private readonly Tag $tag,
         private readonly string|int|null $pullRequest = null,
-        private readonly string|null $baseCommit = null,
-        private readonly string|null $baseRef = null,
+        private readonly ?string $baseCommit = null,
+        private readonly ?string $baseRef = null,
         private ?DateTimeInterface $eventTime = null
     ) {
         if ($this->eventTime === null) {

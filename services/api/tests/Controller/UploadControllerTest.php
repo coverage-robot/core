@@ -177,34 +177,34 @@ class UploadControllerTest extends KernelTestCase
         return [
             'With pull request' => [
                 new SigningParameters(
-                    'mock-owner-id',
-                    'mock-repository-name',
-                    Provider::GITHUB,
-                    'some/root/test.xml',
-                    'some/root/',
-                    'mock-tag',
-                    'mock-commit',
-                    ['mock-parent-hash'],
-                    'mock-branch-reference',
-                    '12',
-                    'mock-base-ref',
-                    'mock-base-commit'
+                    owner: 'mock-owner-id',
+                    repository: 'mock-repository-name',
+                    provider: Provider::GITHUB,
+                    fileName: 'some/root/test.xml',
+                    projectRoot: 'some/root/',
+                    tag: 'mock-tag',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent-hash'],
+                    ref: 'mock-branch-reference',
+                    pullRequest: '12',
+                    baseRef: 'mock-base-ref',
+                    baseCommit: 'mock-base-commit'
                 )
             ],
             'Without to pull request' => [
                 new SigningParameters(
-                    'mock-owner-id',
-                    'mock-repository-name',
-                    Provider::GITHUB,
-                    'some/root/test.xml',
-                    'some/root/',
-                    'mock-tag',
-                    'mock-commit',
-                    [],
-                    'mock-branch-reference',
-                    null,
-                    null,
-                    null
+                    owner: 'mock-owner-id',
+                    repository: 'mock-repository-name',
+                    provider: Provider::GITHUB,
+                    fileName: 'some/root/test.xml',
+                    projectRoot: 'some/root/',
+                    tag: 'mock-tag',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-branch-reference',
+                    pullRequest: null,
+                    baseRef: null,
+                    baseCommit: null
                 )
             ]
         ];

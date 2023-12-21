@@ -22,8 +22,8 @@ class JobStateChange implements EventInterface
         private readonly string|int $externalId,
         private readonly JobState $state,
         private readonly string|int|null $pullRequest = null,
-        private readonly string|null $baseCommit = null,
-        private readonly string|null $baseRef = null,
+        private readonly ?string $baseCommit = null,
+        private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
         if ($this->eventTime === null) {

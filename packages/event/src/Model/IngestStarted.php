@@ -66,13 +66,13 @@ class IngestStarted implements EventInterface
     }
 
     #[Ignore]
-    public function getBaseCommit(): string|null
+    public function getBaseCommit(): ?string
     {
         return $this->upload->getBaseCommit();
     }
 
     #[Ignore]
-    public function getBaseRef(): string|null
+    public function getBaseRef(): ?string
     {
         return $this->upload->getBaseRef();
     }

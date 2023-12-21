@@ -11,18 +11,18 @@ class SigningParametersTest extends TestCase
     public function testUsingGettersReturnsProperties(): void
     {
         $parameters = new SigningParameters(
-            'owner',
-            'repository',
-            Provider::GITHUB,
-            'fileName',
-            'projectRoot',
-            'tag',
-            'commit',
-            ['parent'],
-            'ref',
-            'pullRequest',
-            'baseRef',
-            'baseCommit'
+            owner: 'owner',
+            repository: 'repository',
+            provider: Provider::GITHUB,
+            fileName: 'fileName',
+            projectRoot: 'projectRoot',
+            tag: 'tag',
+            commit: 'commit',
+            parent: ['parent'],
+            ref: 'ref',
+            pullRequest: 'pullRequest',
+            baseRef: 'baseRef',
+            baseCommit: 'baseCommit'
         );
 
         $this->assertEquals('owner', $parameters->getOwner());

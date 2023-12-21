@@ -15,8 +15,8 @@ class UploadsStarted implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly string|int|null $pullRequest = null,
-        private readonly string|null $baseRef = null,
-        private readonly string|null $baseCommit = null,
+        private readonly ?string $baseRef = null,
+        private readonly ?string $baseCommit = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
         if ($this->eventTime === null) {

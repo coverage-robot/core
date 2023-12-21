@@ -134,18 +134,18 @@ class UploadServiceTest extends KernelTestCase
 
         $uploadService->buildSignedUploadUrl(
             new SigningParameters(
-                '1',
-                'a',
-                Provider::GITHUB,
-                'some/root/test.xml',
-                'some/root/',
-                'frontend',
-                '2',
-                ['mock-parent-hash'],
-                'mock-branch-reference',
-                '12',
-                'main',
-                'mock-base-commit'
+                owner: '1',
+                repository: 'a',
+                provider: Provider::GITHUB,
+                fileName: 'some/root/test.xml',
+                projectRoot: 'some/root/',
+                tag: 'frontend',
+                commit: '2',
+                parent: ['mock-parent-hash'],
+                ref: 'mock-branch-reference',
+                pullRequest: '12',
+                baseRef: 'main',
+                baseCommit: 'mock-base-commit'
             )
         );
     }
@@ -169,18 +169,18 @@ class UploadServiceTest extends KernelTestCase
                     'tag' => 'frontend'
                 ],
                 new SigningParameters(
-                    'mock-owner-id',
-                    'mock-repository-name',
-                    Provider::GITHUB,
-                    'test.xml',
-                    'some/root/',
-                    'frontend',
-                    '2',
-                    ['mock-parent-hash'],
-                    'mock-branch-reference',
-                    '12',
-                    'main',
-                    'mock-base-commit'
+                    owner: 'mock-owner-id',
+                    repository: 'mock-repository-name',
+                    provider: Provider::GITHUB,
+                    fileName: 'test.xml',
+                    projectRoot: 'some/root/',
+                    tag: 'frontend',
+                    commit: '2',
+                    parent: ['mock-parent-hash'],
+                    ref: 'mock-branch-reference',
+                    pullRequest: '12',
+                    baseRef: 'main',
+                    baseCommit: 'mock-base-commit'
                 )
             ],
             'Without to pull request' => [
@@ -196,18 +196,18 @@ class UploadServiceTest extends KernelTestCase
                     'tag' => 'backend'
                 ],
                 new SigningParameters(
-                    'mock-owner-id',
-                    'mock-repository-name',
-                    Provider::GITHUB,
-                    'test.xml',
-                    'some/root/',
-                    'backend',
-                    '2',
-                    ['mock-parent-hash'],
-                    'mock-branch-reference',
-                    null,
-                    null,
-                    null
+                    owner: 'mock-owner-id',
+                    repository: 'mock-repository-name',
+                    provider: Provider::GITHUB,
+                    fileName: 'test.xml',
+                    projectRoot: 'some/root/',
+                    tag: 'backend',
+                    commit: '2',
+                    parent: ['mock-parent-hash'],
+                    ref: 'mock-branch-reference',
+                    pullRequest: null,
+                    baseRef: null,
+                    baseCommit: null
                 )
             ],
             'Without commit' => [
@@ -278,18 +278,18 @@ class UploadServiceTest extends KernelTestCase
                     'tag' => 'frontend'
                 ],
                 new SigningParameters(
-                    'mock-owner-id',
-                    'mock-repository-name',
-                    Provider::GITHUB,
-                    'test.xml',
-                    'some/root/',
-                    'frontend',
-                    '2',
-                    ['mock-parent-hash', 'e'],
-                    'mock-branch-reference',
-                    '12',
-                    'main',
-                    'mock-base-commit'
+                    owner: 'mock-owner-id',
+                    repository: 'mock-repository-name',
+                    provider: Provider::GITHUB,
+                    fileName: 'test.xml',
+                    projectRoot: 'some/root/',
+                    tag: 'frontend',
+                    commit: '2',
+                    parent: ['mock-parent-hash', 'e'],
+                    ref: 'mock-branch-reference',
+                    pullRequest: '12',
+                    baseRef: 'main',
+                    baseCommit: 'mock-base-commit'
                 )
             ],
         ];
