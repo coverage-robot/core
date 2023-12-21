@@ -23,6 +23,14 @@ class TagAvailabilityQuery implements QueryInterface
     use UploadTableAwareTrait;
     use ScopeAwareTrait;
 
+    /**
+     * The maximum days we'll consider a tag as being available for.
+     *
+     * This influences how long we look back in the commit history when
+     * carrying forward tags from older commits.
+     */
+    private const int MAXIMUM_TAG_AGE_DAYS = 90;
+
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         #[Autowire(service: EnvironmentService::class)]
@@ -33,6 +41,7 @@ class TagAvailabilityQuery implements QueryInterface
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $repositoryScope = self::getRepositoryScope($parameterBag);
+        $maximumTagAge = self::MAXIMUM_TAG_AGE_DAYS;
 
         return <<<SQL
         SELECT
@@ -41,6 +50,9 @@ class TagAvailabilityQuery implements QueryInterface
         FROM
           `{$table}`
         WHERE
+            -- Only include uploads on tags which are recent. That way we can avoid permanently
+            -- looking for tags deep in the commit history which are obsolete/no longer uploaded.
+            ingestTime > CAST(TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL {$maximumTagAge} DAY) as DATETIME) AND
             {$repositoryScope}
         GROUP BY
           tag

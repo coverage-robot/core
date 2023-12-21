@@ -39,9 +39,9 @@ abstract class AbstractQueryTestCase extends KernelTestCase
                     repository: 'mock-repository',
                     ref: 'mock-ref',
                     commit: 'mock-commit',
-                    pullRequest: 12,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 12
                 )
             )
         ];
