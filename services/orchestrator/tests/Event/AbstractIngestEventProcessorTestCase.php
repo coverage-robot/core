@@ -45,18 +45,14 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
         $this->assertFalse(
             $ingestEventProcessor->process(
                 new JobStateChange(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    ['parent-1'],
-                    null,
-                    null,
-                    null,
-                    'external-id',
-                    JobState::COMPLETED,
-                    new DateTimeImmutable()
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    state: JobState::COMPLETED
                 )
             )
         );
@@ -87,19 +83,17 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             $ingestEventProcessor->process(
                 new ($this::getEvent())(
                     new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        'commit-on-main',
-                        'main',
-                        new Tag('mock-tag', 'mock-commit'),
-                        null
+                        uploadId: 'mock-upload',
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        commit: 'mock-commit',
+                        parent: [],
+                        ref: 'mock-ref',
+                        projectRoot: '',
+                        tag: new Tag('mock-tag', 'mock-commit'),
+                        baseCommit: 'commit-on-main',
+                        baseRef: 'main'
                     ),
                     new DateTimeImmutable()
                 )
@@ -146,19 +140,18 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             $ingestEventProcessor->process(
                 new ($this::getEvent())(
                     new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        'commit-on-main',
-                        'main',
-                        new Tag('mock-tag', 'mock-commit'),
-                        $eventTime->sub(new DateInterval('PT30S'))
+                        uploadId: 'mock-upload',
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        commit: 'mock-commit',
+                        parent: [],
+                        ref: 'mock-ref',
+                        projectRoot: '',
+                        tag: new Tag('mock-tag', 'mock-commit'),
+                        baseCommit: 'commit-on-main',
+                        baseRef: 'main',
+                        eventTime: $eventTime->sub(new DateInterval('PT30S'))
                     ),
                     $eventTime->sub(new DateInterval('PT10S'))
                 )

@@ -59,14 +59,14 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         string|int|null $pullRequest = null
     ): ReportWaypoint {
         return new ReportWaypoint(
-            $provider,
-            $owner,
-            $repository,
-            $ref,
-            $commit,
-            $pullRequest,
-            fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
-            fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint)
+            provider: $provider,
+            owner: $owner,
+            repository: $repository,
+            ref: $ref,
+            commit: $commit,
+            pullRequest: $pullRequest,
+            history: fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
+            diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint)
         );
     }
 
@@ -95,16 +95,16 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     {
         try {
             return new Report(
-                $waypoint,
-                fn() => $this->getUploads($waypoint),
-                fn() => $this->getTotalLines($waypoint),
-                fn() => $this->getAtLeastPartiallyCoveredLines($waypoint),
-                fn() => $this->getUncoveredLines($waypoint),
-                fn() => $this->getCoveragePercentage($waypoint),
-                fn() => $this->getTagCoverage($waypoint),
-                fn() => $this->getDiffCoveragePercentage($waypoint),
-                fn() => $this->getLeastCoveredDiffFiles($waypoint),
-                fn() => $this->getDiffLineCoverage($waypoint)
+                waypoint: $waypoint,
+                uploads:  fn() => $this->getUploads($waypoint),
+                totalLines: fn() => $this->getTotalLines($waypoint),
+                atLeastPartiallyCoveredLines: fn() => $this->getAtLeastPartiallyCoveredLines($waypoint),
+                uncoveredLines: fn() => $this->getUncoveredLines($waypoint),
+                coveragePercentage: fn() => $this->getCoveragePercentage($waypoint),
+                tagCoverage: fn() => $this->getTagCoverage($waypoint),
+                diffCoveragePercentage: fn() => $this->getDiffCoveragePercentage($waypoint),
+                leastCoveredDiffFiles: fn() => $this->getLeastCoveredDiffFiles($waypoint),
+                diffLineCoverage: fn() => $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
@@ -128,8 +128,8 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         }
 
         return new ReportComparison(
-            $base,
-            $head
+            baseReport: $base,
+            headReport: $head
         );
     }
 

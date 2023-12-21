@@ -55,13 +55,11 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
     {
         return $this->sqsMessageClient->queuePublishableMessage(
             new PublishableCheckRunMessage(
-                $uploadsStarted,
-                PublishableCheckRunStatus::IN_PROGRESS,
-                [],
-                0,
-                null,
-                0,
-                $uploadsStarted->getEventTime()
+                event: $uploadsStarted,
+                status: PublishableCheckRunStatus::IN_PROGRESS,
+                coveragePercentage: 0,
+                coverageChange: 0,
+                validUntil: $uploadsStarted->getEventTime()
             )
         );
     }

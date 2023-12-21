@@ -5,7 +5,6 @@ namespace App\Tests\Service\Event;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\Event\CoverageFinalisedEventProcessor;
-use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\CoverageFinalised;
 use PHPUnit\Framework\TestCase;
@@ -16,16 +15,15 @@ class CoverageFinalisedEventProcessorTest extends TestCase
     public function testNonMainRefEventProcess(): void
     {
         $coverageFinalised = new CoverageFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'not-main-ref',
-            'mock-commit',
-            12,
-            'main',
-            'mock-main-commit',
-            99.0,
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'not-main-ref',
+            commit: 'mock-commit',
+            coveragePercentage: 99.0,
+            pullRequest: 12,
+            baseRef: 'main',
+            baseCommit: 'mock-main-commit'
         );
 
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
@@ -58,16 +56,15 @@ class CoverageFinalisedEventProcessorTest extends TestCase
         );
 
         $eventProcessor->process(new CoverageFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'main',
-            'mock-commit',
-            12,
-            'main',
-            'mock-main-commit',
-            99.0,
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'main',
+            commit: 'mock-commit',
+            coveragePercentage: 99.0,
+            pullRequest: 12,
+            baseRef: 'main',
+            baseCommit: 'mock-main-commit'
         ));
     }
 
@@ -94,16 +91,15 @@ class CoverageFinalisedEventProcessorTest extends TestCase
 
         $eventProcessor->process(
             new CoverageFinalised(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'main',
-                'mock-commit',
-                12,
-                'main',
-                'mock-main-commit',
-                99.0,
-                new DateTimeImmutable()
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'main',
+                commit: 'mock-commit',
+                coveragePercentage: 99.0,
+                pullRequest: 12,
+                baseRef: 'main',
+                baseCommit: 'mock-main-commit'
             )
         );
     }

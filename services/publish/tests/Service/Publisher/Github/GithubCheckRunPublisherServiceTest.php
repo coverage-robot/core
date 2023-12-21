@@ -43,13 +43,10 @@ class GithubCheckRunPublisherServiceTest extends TestCase
             $expectedSupport,
             $publisher->supports(
                 new PublishableCheckRunMessage(
-                    $upload,
-                    PublishableCheckRunStatus::SUCCESS,
-                    [],
-                    100,
-                    'mock-base-commit',
-                    0,
-                    new DateTimeImmutable()
+                    event: $upload,
+                    status: PublishableCheckRunStatus::SUCCESS,
+                    coveragePercentage: 100,
+                    baseCommit: 'mock-base-commit'
                 )
             )
         );
@@ -126,13 +123,10 @@ class GithubCheckRunPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishableCheckRunMessage(
-                $upload,
-                PublishableCheckRunStatus::SUCCESS,
-                [],
-                100,
-                'mock-base-commit',
-                0,
-                new DateTimeImmutable()
+                event: $upload,
+                status: PublishableCheckRunStatus::SUCCESS,
+                coveragePercentage: 100,
+                baseCommit: 'mock-base-commit',
             )
         );
     }
@@ -238,22 +232,19 @@ class GithubCheckRunPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishableCheckRunMessage(
-                $upload,
-                PublishableCheckRunStatus::SUCCESS,
-                [
+                event: $upload,
+                status: PublishableCheckRunStatus::SUCCESS,
+                coveragePercentage: 100,
+                annotations: [
                     new PublishableMissingCoverageAnnotationMessage(
-                        $upload,
-                        'mock-file.php',
-                        false,
-                        1,
-                        5,
-                        new DateTimeImmutable()
+                        event: $upload,
+                        fileName: 'mock-file.php',
+                        startingOnMethod: false,
+                        startLineNumber: 1,
+                        endLineNumber: 5
                     )
                 ],
-                100,
-                'mock-base-commit',
-                0,
-                new DateTimeImmutable()
+                baseCommit: 'mock-base-commit'
             )
         );
     }
@@ -329,9 +320,10 @@ class GithubCheckRunPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishableCheckRunMessage(
-                $upload,
-                PublishableCheckRunStatus::IN_PROGRESS,
-                array_fill(
+                event: $upload,
+                status: PublishableCheckRunStatus::IN_PROGRESS,
+                coveragePercentage: 100,
+                annotations: array_fill(
                     0,
                     52,
                     new PublishablePartialBranchAnnotationMessage(
@@ -344,10 +336,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                         new DateTimeImmutable()
                     )
                 ),
-                100,
-                'mock-base-commit',
-                0,
-                new DateTimeImmutable()
+                baseCommit: 'mock-base-commit'
             )
         );
     }
@@ -424,13 +413,10 @@ class GithubCheckRunPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishableCheckRunMessage(
-                $upload,
-                PublishableCheckRunStatus::IN_PROGRESS,
-                [],
-                100,
-                'mock-base-commit',
-                0,
-                new DateTimeImmutable()
+                event: $upload,
+                status: PublishableCheckRunStatus::IN_PROGRESS,
+                coveragePercentage: 100,
+                baseCommit: 'mock-base-commit'
             )
         );
     }
@@ -440,35 +426,32 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         return [
             [
                 new Upload(
-                    'mock-uuid',
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-commit',
-                    ['mock-parent'],
-                    'mock-ref',
-                    'mock-project-root',
-                    null,
-                    null,
-                    null,
-                    new Tag('mock-tag', 'mock-commit'),
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag('mock-tag', 'mock-commit'),
                 ),
                 true
             ],
             [
                 new Upload(
-                    'mock-uuid',
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-commit',
-                    ['mock-parent'],
-                    'mock-ref',
-                    'mock-project-root',
-                    '1234',
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', 'mock-commit'),
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag('mock-tag', 'mock-commit'),
+                    pullRequest: '1234',
+                    baseCommit: 'commit-on-main',
+                    baseRef: 'main',
                 ),
                 true
             ]

@@ -11,7 +11,6 @@ use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
-use DateTimeImmutable;
 use Monolog\Test\TestCase;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
@@ -26,16 +25,12 @@ class EventBridgeEventClientTest extends TestCase
     public function testPublishEvent(int $failedEntryCount, bool $expectSuccess): void
     {
         $detail = new CoverageFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            null,
-            null,
-            null,
-            99,
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            coveragePercentage: 99
         );
 
         $mockResult = ResultMockFactory::create(PutEventsResponse::class, [

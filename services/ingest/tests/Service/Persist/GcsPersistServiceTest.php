@@ -97,20 +97,23 @@ class GcsPersistServiceTest extends KernelTestCase
         $this->assertTrue(
             $gcsPersistService->persist(
                 new Upload(
-                    Uuid::uuid4()->toString(),
-                    Provider::GITHUB,
-                    '',
-                    '',
-                    '',
-                    [],
-                    'mock-branch-reference',
-                    'project/root',
-                    1,
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', '')
+                    uploadId: Uuid::uuid4()->toString(),
+                    provider: Provider::GITHUB,
+                    owner: '',
+                    repository: '',
+                    commit: '',
+                    parent: [],
+                    ref: 'mock-branch-reference',
+                    projectRoot: 'project/root',
+                    tag: new Tag('mock-tag', ''),
+                    pullRequest: 1,
+                    baseCommit: 'commit-on-main',
+                    baseRef: 'main'
                 ),
-                new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+                new Coverage(
+                    sourceFormat: CoverageFormat::LCOV,
+                    root: 'mock/project/root'
+                )
             )
         );
     }
@@ -184,20 +187,23 @@ class GcsPersistServiceTest extends KernelTestCase
         $this->assertFalse(
             $gcsPersistService->persist(
                 new Upload(
-                    Uuid::uuid4()->toString(),
-                    Provider::GITHUB,
-                    '',
-                    '',
-                    '',
-                    [],
-                    'mock-branch-reference',
-                    'project/root',
-                    1,
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', '')
+                    uploadId: Uuid::uuid4()->toString(),
+                    provider: Provider::GITHUB,
+                    owner: '',
+                    repository: '',
+                    commit: '',
+                    parent: [],
+                    ref: 'mock-branch-reference',
+                    projectRoot: 'project/root',
+                    tag: new Tag('mock-tag', ''),
+                    pullRequest: 1,
+                    baseCommit: 'commit-on-main',
+                    baseRef: 'main'
                 ),
-                new Coverage(CoverageFormat::LCOV, 'mock/project/root')
+                new Coverage(
+                    sourceFormat: CoverageFormat::LCOV,
+                    root: 'mock/project/root'
+                )
             )
         );
     }

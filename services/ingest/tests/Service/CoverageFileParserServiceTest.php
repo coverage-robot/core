@@ -23,7 +23,10 @@ class CoverageFileParserServiceTest extends TestCase
     #[DataProvider('strategyDataProvider')]
     public function testParsingSupportedFiles(string $expectedStrategy): void
     {
-        $coverage = new Coverage(CoverageFormat::CLOVER, 'mock/project/root');
+        $coverage = new Coverage(
+            sourceFormat: CoverageFormat::CLOVER,
+            root: 'mock/project/root'
+        );
 
         $mockedStrategies = [];
         foreach (self::STRATEGIES as $strategy) {

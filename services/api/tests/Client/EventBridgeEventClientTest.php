@@ -45,18 +45,15 @@ class EventBridgeEventClientTest extends KernelTestCase
         ];
 
         $jobStateChange = new JobStateChange(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            ['mock-parent-1'],
-            null,
-            null,
-            null,
-            'mock-id',
-            JobState::COMPLETED,
-            $eventTime
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            parent: ['mock-parent-1'],
+            externalId: 'mock-id',
+            state: JobState::COMPLETED,
+            eventTime: $eventTime
         );
 
         $mockResult = ResultMockFactory::create(

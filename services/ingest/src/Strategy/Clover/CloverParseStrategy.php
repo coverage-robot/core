@@ -99,7 +99,10 @@ class CloverParseStrategy implements ParseStrategyInterface
         }
 
         $reader = $this->buildXmlReader($content);
-        $coverage = new Coverage(CoverageFormat::CLOVER, $projectRoot);
+        $coverage = new Coverage(
+            sourceFormat: CoverageFormat::CLOVER,
+            root: $projectRoot
+        );
 
         while ($reader->read()) {
             if ($reader->nodeType == XMLReader::END_ELEMENT) {
@@ -158,12 +161,19 @@ class CloverParseStrategy implements ParseStrategyInterface
                 $lineHits = (int)$reader->getAttribute('count');
 
                 $line = match ($type) {
-                    self::METHOD => new Method($lineNumber, $lineHits, $reader->getAttribute('name') ?? ''),
-                    self::STATEMENT => new Statement($lineNumber, $lineHits),
+                    self::METHOD => new Method(
+                        lineNumber: $lineNumber,
+                        lineHits: $lineHits,
+                        name: $reader->getAttribute('name') ?? ''
+                    ),
+                    self::STATEMENT => new Statement(
+                        lineNumber: $lineNumber,
+                        lineHits: $lineHits
+                    ),
                     self::CONDITION => new Branch(
-                        $lineNumber,
-                        $lineHits,
-                        [
+                        lineNumber: $lineNumber,
+                        lineHits: $lineHits,
+                        branchHits: [
                             0 => (int)$reader->getAttribute('falsecount'),
                             1 => (int)$reader->getAttribute('truecount')
                         ]

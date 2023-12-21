@@ -29,18 +29,15 @@ class EventBridgeEventClientTest extends TestCase
     {
         $ingestSuccessEvent = new IngestSuccess(
             new Upload(
-                'mock-upload-id',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-commit',
-                ['mock-parent'],
-                'mock-ref',
-                'mock-project-root',
-                null,
-                null,
-                null,
-                new Tag('mock-tag', 'mock-commit')
+                uploadId: 'mock-upload-id',
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: ['mock-parent'],
+                ref: 'mock-ref',
+                projectRoot: 'mock-project-root',
+                tag: new Tag('mock-tag', 'mock-commit')
             ),
             new DateTimeImmutable()
         );

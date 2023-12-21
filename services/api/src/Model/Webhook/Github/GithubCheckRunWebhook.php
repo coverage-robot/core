@@ -25,8 +25,8 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string $commit,
         protected readonly string $parent,
         protected readonly string|int|null $pullRequest,
-        protected readonly string|null $baseRef,
-        protected readonly string|null $baseCommit,
+        protected readonly ?string $baseRef,
+        protected readonly ?string $baseCommit,
         protected readonly JobState $jobState
     ) {
     }

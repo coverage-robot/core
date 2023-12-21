@@ -75,18 +75,15 @@ class InvokeCommand extends Command
             );
 
             $upload = new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-commit',
-                ['mock-parent'],
-                'mock-ref',
-                'mock-project-root',
-                null,
-                null,
-                null,
-                new Tag('mock-tag', 'mock-commit'),
+                uploadId: 'mock-uuid',
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: ['mock-parent'],
+                ref: 'mock-ref',
+                projectRoot: 'mock-project-root',
+                tag: new Tag('mock-tag', 'mock-commit'),
             );
 
             $sqsEvent = new SqsEvent(
@@ -97,16 +94,14 @@ class InvokeCommand extends Command
                             'messageId' => '1',
                             'body' => $this->serializer->serialize(
                                 new PublishableMessageCollection(
-                                    $upload,
-                                    [
+                                    event: $upload,
+                                    messages: [
                                         new PublishablePullRequestMessage(
-                                            $upload,
-                                            100,
-                                            null,
-                                            100,
-                                            0,
-                                            1,
-                                            [
+                                            event: $upload,
+                                            coveragePercentage: 100,
+                                            diffCoveragePercentage: 0,
+                                            successfulUploads: 1,
+                                            tagCoverage: [
                                                 [
                                                     'tag' => [
                                                         'name' => 'mock-tag',
@@ -119,26 +114,27 @@ class InvokeCommand extends Command
                                                     'coveragePercentage' => 100,
                                                 ],
                                             ],
-                                            [],
-                                            $validUntil
+                                            leastCoveredDiffFiles: [],
+                                            coverageChange: 100,
+                                            validUntil: $validUntil
                                         ),
                                         new PublishableCheckRunMessage(
-                                            $upload,
-                                            PublishableCheckRunStatus::SUCCESS,
-                                            [
+                                            event: $upload,
+                                            status: PublishableCheckRunStatus::SUCCESS,
+                                            coveragePercentage: 100,
+                                            annotations: [
                                                 new PublishableMissingCoverageAnnotationMessage(
-                                                    $upload,
-                                                    '.github/workflows/upload.yml',
-                                                    true,
-                                                    1,
-                                                    100,
-                                                    $validUntil
+                                                    event: $upload,
+                                                    fileName: '.github/workflows/upload.yml',
+                                                    startingOnMethod: true,
+                                                    startLineNumber: 1,
+                                                    endLineNumber: 100,
+                                                    validUntil: $validUntil
                                                 )
                                             ],
-                                            100,
-                                            null,
-                                            0,
-                                            $validUntil
+                                            baseCommit: null,
+                                            coverageChange: 0,
+                                            validUntil: $validUntil
                                         )
                                     ]
                                 ),

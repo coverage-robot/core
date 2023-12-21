@@ -92,19 +92,15 @@ class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessorTestCa
             $ingestEventProcessor->process(
                 new ($this::getEvent())(
                     new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        null,
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
-                        null
+                        uploadId: 'mock-upload',
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        commit: 'mock-commit',
+                        parent: [],
+                        ref: 'mock-ref',
+                        projectRoot: '',
+                        tag: new Tag('mock-tag', 'mock-commit'),
                     ),
                     new DateTimeImmutable()
                 )
@@ -173,19 +169,15 @@ class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessorTestCa
             $ingestEventProcessor->process(
                 new ($this::getEvent())(
                     new Upload(
-                        'mock-upload',
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-commit',
-                        [],
-                        'mock-ref',
-                        '',
-                        null,
-                        null,
-                        null,
-                        new Tag('mock-tag', 'mock-commit'),
-                        null
+                        uploadId: 'mock-upload',
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        commit: 'mock-commit',
+                        parent: [],
+                        ref: 'mock-ref',
+                        projectRoot: '',
+                        tag: new Tag('mock-tag', 'mock-commit')
                     ),
                     new DateTimeImmutable()
                 )

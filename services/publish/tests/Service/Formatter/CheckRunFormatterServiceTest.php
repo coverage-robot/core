@@ -24,13 +24,11 @@ class CheckRunFormatterServiceTest extends TestCase
             $expectedTitle,
             $formatter->formatTitle(
                 new PublishableCheckRunMessage(
-                    $this->createMock(UploadsFinalised::class),
-                    $status,
-                    [],
-                    $coveragePercentage,
-                    'mock-base-commit',
-                    $coverageChange,
-                    new \DateTimeImmutable()
+                    event: $this->createMock(UploadsFinalised::class),
+                    status: $status,
+                    coveragePercentage: $coveragePercentage,
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: $coverageChange
                 )
             )
         );

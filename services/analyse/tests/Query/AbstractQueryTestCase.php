@@ -34,14 +34,14 @@ abstract class AbstractQueryTestCase extends KernelTestCase
         return [
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    12,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    pullRequest: 12,
+                    history: [],
+                    diff: []
                 )
             )
         ];

@@ -16,8 +16,11 @@ class PublishablePartialBranchAnnotationMessage implements PublishableAnnotation
         private readonly int $endLineNumber,
         private readonly int $totalBranches,
         private readonly int $coveredBranches,
-        private readonly DateTimeImmutable $validUntil,
+        private ?DateTimeImmutable $validUntil = null,
     ) {
+        if ($this->validUntil === null) {
+            $this->validUntil = new DateTimeImmutable();
+        }
     }
 
     public function getEvent(): EventInterface

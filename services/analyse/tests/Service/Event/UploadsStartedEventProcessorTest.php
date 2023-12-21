@@ -4,7 +4,6 @@ namespace App\Tests\Service\Event;
 
 use App\Client\SqsMessageClient;
 use App\Service\Event\UploadsStartedEventProcessor;
-use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsStarted;
@@ -26,15 +25,11 @@ class UploadsStartedEventProcessorTest extends TestCase
     public function testProcessingEvent(): void
     {
         $uploadsStarted = new UploadsStarted(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            null,
-            null,
-            null,
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit'
         );
 
         $sqsMessageClient = $this->createMock(SqsMessageClient::class);

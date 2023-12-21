@@ -116,14 +116,13 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
             [
                 QueryParameterBag::fromWaypoint(
                     new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
                     )
                 ),
                 true

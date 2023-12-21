@@ -79,16 +79,15 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $this->eventBridgeEventService->publishEvent(
             new CoverageFinalised(
-                $event->getProvider(),
-                $event->getOwner(),
-                $event->getRepository(),
-                $event->getRef(),
-                $event->getCommit(),
-                $event->getPullRequest(),
-                $event->getBaseRef(),
-                $event->getBaseCommit(),
-                $coverageReport->getCoveragePercentage(),
-                new DateTimeImmutable()
+                provider: $event->getProvider(),
+                owner: $event->getOwner(),
+                repository: $event->getRepository(),
+                ref: $event->getRef(),
+                commit: $event->getCommit(),
+                coveragePercentage: $coverageReport->getCoveragePercentage(),
+                pullRequest: $event->getPullRequest(),
+                baseRef: $event->getBaseCommit(),
+                baseCommit: $event->getBaseRef()
             )
         );
 
@@ -107,7 +106,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
     private function queueFinalCheckRun(
         UploadsFinalised $uploadsFinalised,
         ReportInterface $coverageReport,
-        ReportComparison|null $comparison
+        ?ReportComparison $comparison
     ): bool {
         $lines = $coverageReport->getDiffLineCoverage()
             ->getLines();
@@ -125,34 +124,34 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $uploadsFinalised,
                 [
                     new PublishablePullRequestMessage(
-                        $uploadsFinalised,
-                        $coverageReport->getCoveragePercentage(),
-                        $comparison?->getBaseReport()
-                            ->getWaypoint()
-                            ->getCommit(),
-                        $comparison?->getCoverageChange(),
-                        $coverageReport->getDiffCoveragePercentage(),
-                        count($coverageReport->getUploads()->getSuccessfulUploads()),
-                        (array)$this->serializer->normalize(
+                        event: $uploadsFinalised,
+                        coveragePercentage: $coverageReport->getCoveragePercentage(),
+                        diffCoveragePercentage: $coverageReport->getDiffCoveragePercentage(),
+                        successfulUploads: count($coverageReport->getUploads()->getSuccessfulUploads()),
+                        tagCoverage: (array)$this->serializer->normalize(
                             $coverageReport->getTagCoverage()
                                 ->getTags()
                         ),
-                        (array)$this->serializer->normalize(
+                        leastCoveredDiffFiles: (array)$this->serializer->normalize(
                             $coverageReport->getLeastCoveredDiffFiles()
                                 ->getFiles()
                         ),
-                        $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
-                    ),
-                    new PublishableCheckRunMessage(
-                        $uploadsFinalised,
-                        PublishableCheckRunStatus::SUCCESS,
-                        $annotations,
-                        $coverageReport->getCoveragePercentage(),
-                        $comparison?->getBaseReport()
+                        baseCommit: $comparison?->getBaseReport()
                             ->getWaypoint()
                             ->getCommit(),
-                        $comparison?->getCoverageChange(),
-                        $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
+                        coverageChange: $comparison?->getCoverageChange(),
+                        validUntil: $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
+                    ),
+                    new PublishableCheckRunMessage(
+                        event: $uploadsFinalised,
+                        status: PublishableCheckRunStatus::SUCCESS,
+                        coveragePercentage: $coverageReport->getCoveragePercentage(),
+                        annotations: $annotations,
+                        baseCommit: $comparison?->getBaseReport()
+                            ->getWaypoint()
+                            ->getCommit(),
+                        coverageChange: $comparison?->getCoverageChange(),
+                        validUntil: $coverageReport->getLatestSuccessfulUpload() ?? $uploadsFinalised->getEventTime()
                     )
                 ]
             ),

@@ -755,14 +755,14 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     public static function getQueryParameters(): array
     {
         $waypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            12,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            pullRequest: 12,
+            history: [],
+            diff: []
         );
 
         $lineScope = [
@@ -873,14 +873,13 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             [
                 QueryParameterBag::fromWaypoint(
                     new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
                     )
                 ),
                 true

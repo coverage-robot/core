@@ -73,18 +73,14 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    ['parent-1'],
-                    null,
-                    null,
-                    null,
-                    'external-id',
-                    JobState::COMPLETED,
-                    new DateTimeImmutable()
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    state: JobState::COMPLETED
                 )
             )
         );
@@ -134,18 +130,15 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertFalse(
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    ['parent-1'],
-                    null,
-                    null,
-                    null,
-                    'external-id',
-                    JobState::COMPLETED,
-                    $eventTime->sub(new DateInterval('PT10S'))
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    state: JobState::COMPLETED,
+                    eventTime: $eventTime->sub(new DateInterval('PT10S'))
                 )
             )
         );
@@ -219,18 +212,14 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    ['parent-1'],
-                    null,
-                    null,
-                    null,
-                    'external-id',
-                    JobState::COMPLETED,
-                    new DateTimeImmutable()
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    state: JobState::COMPLETED
                 )
             )
         );
@@ -302,18 +291,14 @@ class JobStateChangeEventProcessorTest extends TestCase
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    ['parent-1'],
-                    null,
-                    null,
-                    null,
-                    'external-id',
-                    JobState::COMPLETED,
-                    new DateTimeImmutable()
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    state: JobState::COMPLETED
                 )
             )
         );
