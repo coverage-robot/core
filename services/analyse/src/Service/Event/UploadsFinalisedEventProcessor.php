@@ -106,7 +106,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
     private function queueFinalCheckRun(
         UploadsFinalised $uploadsFinalised,
         ReportInterface $coverageReport,
-        ReportComparison|null $comparison
+        ?ReportComparison $comparison
     ): bool {
         $lines = $coverageReport->getDiffLineCoverage()
             ->getLines();
@@ -146,6 +146,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         event: $uploadsFinalised,
                         status: PublishableCheckRunStatus::SUCCESS,
                         coveragePercentage: $coverageReport->getCoveragePercentage(),
+                        annotations: $annotations,
                         baseCommit: $comparison?->getBaseReport()
                             ->getWaypoint()
                             ->getCommit(),
