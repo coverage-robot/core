@@ -104,7 +104,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 tagCoverage: fn() => $this->getTagCoverage($waypoint),
                 diffCoveragePercentage: fn() => $this->getDiffCoveragePercentage($waypoint),
                 leastCoveredDiffFiles: fn() => $this->getLeastCoveredDiffFiles($waypoint),
-                diffLineCoverage: fn () => $this->getDiffLineCoverage($waypoint)
+                diffLineCoverage: fn() => $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
