@@ -104,7 +104,7 @@ resource "aws_lambda_function" "analyse" {
 
   function_name = format("coverage-analyse-%s", var.environment)
   role          = aws_iam_role.analyse_role.arn
-  timeout       = 60
+  timeout       = 120
   memory_size   = 1024
   runtime       = "provided.al2"
   handler       = "App\\Handler\\EventHandler"
