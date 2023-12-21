@@ -25,14 +25,14 @@ class QueryBuilderServiceTest extends KernelTestCase
     {
         $queryParameters = QueryParameterBag::fromWaypoint(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-ref',
-                'mock-commit',
-                6,
-                [],
-                []
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                pullRequest: 6,
+                history: [],
+                diff: []
             )
         );
 

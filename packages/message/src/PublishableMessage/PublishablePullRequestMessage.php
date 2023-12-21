@@ -12,14 +12,17 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
     public function __construct(
         private readonly EventInterface $event,
         private readonly float $coveragePercentage,
-        private readonly ?string $baseCommit,
-        private readonly float|null $coverageChange,
         private readonly ?float $diffCoveragePercentage,
         private readonly int $successfulUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
-        private readonly DateTimeImmutable $validUntil,
+        private readonly ?string $baseCommit = null,
+        private readonly ?float $coverageChange = 0,
+        private ?DateTimeImmutable $validUntil = null,
     ) {
+        if ($this->validUntil === null) {
+            $this->validUntil = new DateTimeImmutable();
+        }
     }
 
     public function getEvent(): EventInterface

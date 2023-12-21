@@ -15,6 +15,7 @@ use DateTimeImmutable;
 use JsonException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Event\Builder\JobStateChangeBuilder;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -90,18 +91,17 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
 
         $this->publishEvent(
             new JobStateChange(
-                $webhook->getProvider(),
-                $webhook->getOwner(),
-                $webhook->getRepository(),
-                $webhook->getRef(),
-                $webhook->getCommit(),
-                [$webhook->getParent()],
-                $webhook->getPullRequest(),
-                $webhook->getBaseCommit(),
-                $webhook->getBaseRef(),
-                $webhook->getExternalId(),
-                $webhook->getJobState(),
-                new DateTimeImmutable()
+                provider: $webhook->getProvider(),
+                owner: $webhook->getOwner(),
+                repository: $webhook->getRepository(),
+                ref: $webhook->getRef(),
+                commit: $webhook->getCommit(),
+                parent: [$webhook->getParent()],
+                externalId: $webhook->getExternalId(),
+                state: $webhook->getJobState(),
+                pullRequest: $webhook->getPullRequest(),
+                baseCommit: $webhook->getBaseCommit(),
+                baseRef: $webhook->getBaseRef()
             )
         );
     }

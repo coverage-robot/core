@@ -3,12 +3,9 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
-use Symfony\Component\Serializer\Annotation\Context;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 class JobStateChange implements EventInterface
 {
@@ -22,17 +19,16 @@ class JobStateChange implements EventInterface
         private readonly string $ref,
         private readonly string $commit,
         private readonly array $parent,
-        private readonly string|int|null $pullRequest,
-        private readonly string|null $baseCommit,
-        private readonly string|null $baseRef,
         private readonly string|int $externalId,
         private readonly JobState $state,
-        #[Context(
-            normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-            denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-        )]
-        private readonly DateTimeImmutable $eventTime
+        private readonly string|int|null $pullRequest = null,
+        private readonly string|null $baseCommit = null,
+        private readonly string|null $baseRef = null,
+        private ?DateTimeImmutable $eventTime = null
     ) {
+        if ($this->eventTime === null) {
+            $this->eventTime = new DateTimeImmutable();
+        }
     }
 
     public function getProvider(): Provider

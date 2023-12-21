@@ -380,14 +380,13 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     public static function getQueryParameters(): array
     {
         $waypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+                        history: [],
+            diff: []
         );
 
         $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
@@ -500,14 +499,13 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             [
                 QueryParameterBag::fromWaypoint(
                     new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     )
                 ),
                 true

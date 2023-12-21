@@ -6,7 +6,6 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
-use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
@@ -41,18 +40,14 @@ class InvokeCommand extends Command
     {
         try {
             $jobStateChange = new JobStateChange(
-                Provider::GITHUB,
-                'coverage-robot',
-                'core',
-                'mock-ref',
-                '12db14417f44a5371fe1c95171d6f96e4e210138',
-                [],
-                null,
-                null,
-                null,
-                'mock-job-id',
-                JobState::COMPLETED,
-                new DateTimeImmutable()
+                provider: Provider::GITHUB,
+                owner: 'coverage-robot',
+                repository: 'core',
+                ref: 'mock-ref',
+                commit: '12db14417f44a5371fe1c95171d6f96e4e210138',
+                parent: [],
+                externalId: 'mock-job-id',
+                state: JobState::COMPLETED,
             );
 
             $this->handler->handleEventBridge(

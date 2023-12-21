@@ -7,17 +7,9 @@ use DateTimeInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
-use Symfony\Component\Serializer\Annotation\Context;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 class Upload implements EventInterface
 {
-    #[Context(
-        normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-        denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-    )]
-    private readonly DateTimeImmutable $ingestTime;
-
     /**
      * @param string[] $parent
      */
@@ -30,17 +22,15 @@ class Upload implements EventInterface
         private readonly array $parent,
         private readonly string $ref,
         private readonly string $projectRoot,
-        private readonly string|int|null $pullRequest,
-        private readonly string|null $baseCommit,
-        private readonly string|null $baseRef,
         private readonly Tag $tag,
-        ?DateTimeInterface $eventTime = null
+        private readonly string|int|null $pullRequest = null,
+        private readonly string|null $baseCommit = null,
+        private readonly string|null $baseRef = null,
+        private ?DateTimeInterface $eventTime = null
     ) {
-        if ($eventTime) {
-            $this->ingestTime = DateTimeImmutable::createFromInterface($eventTime);
-            return;
+        if ($this->eventTime === null) {
+            $this->eventTime = new DateTimeImmutable();
         }
-        $this->ingestTime = new DateTimeImmutable();
     }
 
     public function getUploadId(): string
@@ -90,7 +80,7 @@ class Upload implements EventInterface
 
     public function getEventTime(): DateTimeImmutable
     {
-        return $this->ingestTime;
+        return $this->eventTime;
     }
 
     public function getCommit(): string

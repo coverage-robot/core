@@ -29,48 +29,43 @@ class PullRequestCommentFormatterServiceTest extends TestCase
     public static function markdownDataProvider(): array
     {
         $pullRequestUpload = new Upload(
-            'mock-upload-id',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            [],
-            'main',
-            'project-root',
-            12,
-            'commit-on-main',
-            'main',
-            new Tag('mock-tag', 'mock-commit'),
-            new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
+            uploadId: 'mock-upload-id',
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            parent: [],
+            ref: 'main',
+            projectRoot: 'project-root',
+            tag: new Tag('mock-tag', 'mock-commit'),
+            pullRequest: 12,
+            baseCommit: 'commit-on-main',
+            baseRef: 'main',
+            eventTime: new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
         );
 
         $missingPullRequestUpload = new Upload(
-            'mock-upload-id',
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-commit',
-            [],
-            'main',
-            'project-root',
-            null,
-            null,
-            null,
-            new Tag('mock-tag', 'mock-commit'),
-            new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
+            uploadId: 'mock-upload-id',
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            parent: [],
+            ref: 'main',
+            projectRoot: 'project-root',
+            tag: new Tag('mock-tag', 'mock-commit'),
+            eventTime: new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
         );
 
         return [
             [
                 $pullRequestUpload,
                 new PublishablePullRequestMessage(
-                    $pullRequestUpload,
-                    100.0,
-                    'mock-base-commit',
-                    0.1,
-                    100.0,
-                    2,
-                    [
+                    event: $pullRequestUpload,
+                    coveragePercentage: 100.0,
+                    diffCoveragePercentage: 100.0,
+                    successfulUploads: 2,
+                    tagCoverage: [
                         [
                             'tag' => [
                                 'name' => 'mock-tag',
@@ -94,7 +89,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 0,
                         ]
                     ],
-                    [
+                    leastCoveredDiffFiles: [
                         [
                             'fileName' => 'mock-file',
                             'lines' => 100,
@@ -112,19 +107,18 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 100.0,
                         ]
                     ],
-                    new DateTimeImmutable()
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: 0.1,
                 )
             ],
             [
                 $pullRequestUpload,
                 new PublishablePullRequestMessage(
-                    $pullRequestUpload,
-                    100.0,
-                    'mock-base-commit',
-                    -1.2,
-                    100.0,
-                    2,
-                    [
+                    event: $pullRequestUpload,
+                    coveragePercentage: 100.0,
+                    diffCoveragePercentage: 100.0,
+                    successfulUploads: 2,
+                    tagCoverage: [
                         [
                             'tag' => [
                                 'name' => 'mock-tag',
@@ -148,7 +142,7 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 0,
                         ]
                     ],
-                    [
+                    leastCoveredDiffFiles: [
                         [
                             'fileName' => 'mock-file',
                             'lines' => 100,
@@ -166,19 +160,18 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 100.0,
                         ]
                     ],
-                    new DateTimeImmutable()
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: -1.2
                 )
             ],
             [
                 $pullRequestUpload,
                 new PublishablePullRequestMessage(
-                    $pullRequestUpload,
-                    100.0,
-                    'mock-base-commit',
-                    0,
-                    null,
-                    2,
-                    [
+                    event: $pullRequestUpload,
+                    coveragePercentage: 100.0,
+                    diffCoveragePercentage: null,
+                    successfulUploads: 2,
+                    tagCoverage: [
                         [
                             'tag' => [
                                 'name' => 'mock-tag',
@@ -202,8 +195,9 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 0,
                         ]
                     ],
-                    [],
-                    new DateTimeImmutable()
+                    leastCoveredDiffFiles: [],
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: 0
                 )
             ],
             [
@@ -211,13 +205,11 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                 // when the upload wasn't attached to any PRs
                 $missingPullRequestUpload,
                 new PublishablePullRequestMessage(
-                    $missingPullRequestUpload,
-                    100.0,
-                    'mock-base-commit',
-                    0,
-                    null,
-                    2,
-                    [
+                    event: $missingPullRequestUpload,
+                    coveragePercentage: 100.0,
+                    diffCoveragePercentage: null,
+                    successfulUploads: 2,
+                    tagCoverage: [
                         [
                             'tag' => [
                                 'name' => 'mock-tag',
@@ -241,8 +233,9 @@ class PullRequestCommentFormatterServiceTest extends TestCase
                             'coveragePercentage' => 0,
                         ]
                     ],
-                    [],
-                    new DateTimeImmutable()
+                    leastCoveredDiffFiles: [],
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: 0
                 )
             ]
         ];

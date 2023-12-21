@@ -14,14 +14,13 @@ class CommitHistoryServiceTest extends TestCase
     public function testGetPrecedingCommitsUsingValidProvider(): void
     {
         $waypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'owner',
-            'repository',
-            'ref',
-            'commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            ref: 'ref',
+            commit: 'commit',
+                        history: [],
+            diff: []
         );
 
         $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
@@ -61,14 +60,13 @@ class CommitHistoryServiceTest extends TestCase
 
         $historyService->getPrecedingCommits(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'owner',
-                'repository',
-                'ref',
-                'commit',
-                null,
-                [],
-                []
+                provider: Provider::GITHUB,
+                owner: 'owner',
+                repository: 'repository',
+                ref: 'ref',
+                commit: 'commit',
+                                history: [],
+                diff: []
             )
         );
     }

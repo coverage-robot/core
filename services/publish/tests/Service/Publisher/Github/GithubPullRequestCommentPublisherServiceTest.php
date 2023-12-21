@@ -7,7 +7,6 @@ use App\Exception\PublishException;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use DateTimeImmutable;
 use Github\Api\Issue;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Environment\Environment;
@@ -36,15 +35,14 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
 
         $isSupported = $publisher->supports(
             new PublishablePullRequestMessage(
-                $upload,
-                100,
-                'mock-base-commit',
-                0,
-                100,
-                1,
-                [],
-                [],
-                new DateTimeImmutable()
+                event: $upload,
+                coveragePercentage: 100,
+                baseCommit: 'mock-base-commit',
+                coverageChange: 0,
+                diffCoveragePercentage: 100,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: []
             )
         );
 
@@ -113,15 +111,14 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishablePullRequestMessage(
-                $upload,
-                100,
-                'mock-base-commit',
-                0,
-                100,
-                1,
-                [],
-                [],
-                new DateTimeImmutable()
+                event: $upload,
+                coveragePercentage: 100,
+                baseCommit: 'mock-base-commit',
+                coverageChange: 0,
+                diffCoveragePercentage: 100,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: []
             ),
         );
     }
@@ -192,15 +189,14 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
 
         $publisher->publish(
             new PublishablePullRequestMessage(
-                $upload,
-                100,
-                'mock-base-commit',
-                0,
-                100,
-                1,
-                [],
-                [],
-                new DateTimeImmutable()
+                event: $upload,
+                coveragePercentage: 100,
+                diffCoveragePercentage: 100,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                baseCommit: 'mock-base-commit',
+                coverageChange: 0
             ),
         );
     }
@@ -210,35 +206,34 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         return [
             [
                 new Upload(
-                    'mock-uuid',
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-commit',
-                    ['mock-parent'],
-                    'mock-ref',
-                    'mock-project-root',
-                    '1234',
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', 'mock-commit'),
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag('mock-tag', 'mock-commit'),
+                    pullRequest: '1234',
+                    baseCommit: 'commit-on-main',
+                    baseRef: 'main',
                 ),
                 true
             ],
             [
                 new Upload(
-                    'mock-uuid',
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-commit',
-                    ['mock-parent'],
-                    'mock-ref',
-                    'mock-project-root',
-                    null,
-                    'commit-on-main',
-                    'main',
-                    new Tag('mock-tag', 'mock-commit'),
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag('mock-tag', 'mock-commit'),
+                    baseCommit: 'commit-on-main',
+                    baseRef: 'main',
                 ),
                 false
             ]

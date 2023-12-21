@@ -26,116 +26,110 @@ class ReportWaypointTest extends TestCase
         return [
             'Waypoints on same ref' => [
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    1,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    pullRequest: 1,
+                    history: [],
+                    diff: []
                 ),
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit-2',
-                    1,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit-2',
+                    pullRequest: 1,
+                    history: [],
+                    diff: []
                 ),
                 true
             ],
             'Waypoints on different refs' => [
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
                 ),
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref-2',
-                    'mock-commit-2',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref-2',
+                    commit: 'mock-commit-2',
+                    history: [],
+                    diff: []
                 ),
                 true
             ],
             'Waypoints on same commit' => [
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    5,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    pullRequest: 5,
+                    history: [],
+                    diff: []
                 ),
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    5,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    pullRequest: 5,
+                    history: [],
+                    diff: []
                 ),
                 true
             ],
             'Waypoints on different owners' => [
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner-1',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner-1',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
                 ),
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner-2',
-                    'mock-repository',
-                    'mock-ref',
-                    'mock-commit',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner-2',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
                 ),
                 false
             ],
             'Waypoints on different repositories' => [
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository-1',
-                    'mock-ref',
-                    'mock-commit',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository-1',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
                 ),
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository-2',
-                    'mock-ref',
-                    'mock-commit',
-                    null,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository-2',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
                 ),
                 false
             ]

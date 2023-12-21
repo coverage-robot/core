@@ -33,14 +33,14 @@ class CoverageAnalyserServiceTest extends TestCase
     public function testAnalysingWaypoint(): void
     {
         $waypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            12,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            pullRequest: 12,
+            history: [],
+            diff: []
         );
 
         $mockDiffParserService = $this->createMock(DiffParserService::class);

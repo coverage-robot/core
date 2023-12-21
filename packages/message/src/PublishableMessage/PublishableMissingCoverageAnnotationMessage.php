@@ -15,8 +15,11 @@ class PublishableMissingCoverageAnnotationMessage implements PublishableAnnotati
         private readonly bool $startingOnMethod,
         private readonly int $startLineNumber,
         private readonly int $endLineNumber,
-        private readonly DateTimeImmutable $validUntil
+        private ?DateTimeImmutable $validUntil = null,
     ) {
+        if ($this->validUntil === null) {
+            $this->validUntil = new DateTimeImmutable();
+        }
     }
 
     public function getEvent(): EventInterface

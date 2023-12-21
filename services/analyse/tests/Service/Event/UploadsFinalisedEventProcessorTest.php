@@ -36,16 +36,12 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
     public function testProcessingEventSuccessfullyTriggersFinalisedEvent(): void
     {
         $uploadsFinalised = new UploadsFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            [],
-            null,
-            null,
-            null,
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            parent: []
         );
 
         $mockReport = $this->createMock(ReportInterface::class);
@@ -114,26 +110,25 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
     public function testProcessingEventWithBaseComparisonFromHistory(): void
     {
         $uploadsFinalised = new UploadsFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            ['mock-parent-1'],
-            1,
-            'mock-base-commit',
-            'main',
-            new DateTimeImmutable()
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            parent: ['mock-parent-1'],
+            pullRequest: 1,
+            baseCommit: 'mock-base-commit',
+            baseRef: 'main',
+            eventTime: new DateTimeImmutable()
         );
 
         $headWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-base-commit',
-            null,
-            [
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-base-commit',
+                        history: [
                 [
                     'commit' => 'mock-commit',
                     'isOnBaseRef' => false
@@ -143,18 +138,17 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     'isOnBaseRef' => true
                 ],
             ],
-            []
+            diff: []
         );
 
         $baseWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-parent-base-commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-parent-base-commit',
+                        history: [],
+            diff: []
         );
 
         $mockHeadReport = $this->createMock(ReportInterface::class);
@@ -166,8 +160,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->willReturn(90.0);
 
         $reportComparison = new ReportComparison(
-            $mockBaseReport,
-            $mockHeadReport,
+            baseReport: $mockBaseReport,
+            headReport: $mockHeadReport,
         );
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
@@ -270,25 +264,23 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
         );
 
         $headWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-base-commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+                        history: [],
+            diff: []
         );
 
         $baseWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-base-commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+                        history: [],
+            diff: []
         );
 
         $mockHeadReport = $this->createMock(ReportInterface::class);
@@ -404,25 +396,23 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
         );
 
         $headWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-commit',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+                        history: [],
+            diff: []
         );
 
         $baseWaypoint = new ReportWaypoint(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            'mock-ref',
-            'mock-parent-1',
-            null,
-            [],
-            []
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-parent-1',
+                        history: [],
+            diff: []
         );
 
         $mockHeadReport = $this->createMock(ReportInterface::class);

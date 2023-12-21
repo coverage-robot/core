@@ -61,20 +61,20 @@ class InvokeCommand extends Command
     {
         try {
             $upload = new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                $input->getArgument('owner'),
-                $input->getArgument('repository'),
-                $input->getArgument('commit'),
-                [
+                uploadId: 'mock-uuid',
+                provider: Provider::GITHUB,
+                owner: $input->getArgument('owner'),
+                repository: $input->getArgument('repository'),
+                commit: $input->getArgument('commit'),
+                parent: [
                     $input->getArgument('parent')
                 ],
-                $input->getArgument('ref'),
-                'mock-root',
-                'commit-on-main',
-                'main',
-                $input->getArgument('pullRequest'),
-                new Tag($input->getArgument('tag'), $input->getArgument('commit')),
+                ref: $input->getArgument('ref'),
+                projectRoot: 'mock-root',
+                tag: new Tag($input->getArgument('tag'), $input->getArgument('commit')),
+                pullRequest: $input->getArgument('pullRequest'),
+                baseCommit: 'commit-on-main',
+                baseRef: 'main',
             );
 
             $this->handler->handleEventBridge(

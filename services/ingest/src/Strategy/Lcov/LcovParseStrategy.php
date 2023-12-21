@@ -104,7 +104,10 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         $records = preg_split('/\n|\r\n?/', $content);
 
-        $coverage = new Coverage(CoverageFormat::LCOV, $projectRoot);
+        $coverage = new Coverage(
+            sourceFormat: CoverageFormat::LCOV,
+            root: $projectRoot
+        );
 
         foreach ($records as $record) {
             $record = trim($record);
@@ -139,8 +142,8 @@ class LcovParseStrategy implements ParseStrategyInterface
             case self::LINE_DATA:
                 $latestFile->setLine(
                     new Statement(
-                        (int)$extractedData['lineNumber'],
-                        (int)$extractedData['lineHits'],
+                        lineNumber: (int)$extractedData['lineNumber'],
+                        lineHits: (int)$extractedData['lineHits'],
                     )
                 );
                 break;
@@ -151,17 +154,17 @@ class LcovParseStrategy implements ParseStrategyInterface
 
                     $latestFile->setLine(
                         new Method(
-                            $line->getLineNumber(),
-                            (int)$extractedData['lineHits'] ?: $line->getLineHits(),
-                            $extractedData['name']
+                            lineNumber: $line->getLineNumber(),
+                            lineHits: (int)$extractedData['lineHits'] ?: $line->getLineHits(),
+                            name: $extractedData['name']
                         )
                     );
                 } catch (OutOfBoundsException) {
                     $latestFile->setLine(
                         new Method(
-                            (int)$extractedData['lineNumber'],
-                            0,
-                            $extractedData['name']
+                            lineNumber: (int)$extractedData['lineNumber'],
+                            lineHits: 0,
+                            name: $extractedData['name']
                         )
                     );
                 }
@@ -183,9 +186,9 @@ class LcovParseStrategy implements ParseStrategyInterface
                     // type isn't a simple statement
                     $latestFile->setLine(
                         new Branch(
-                            $line->getLineNumber(),
-                            $line->getLineHits(),
-                            [
+                            lineNumber: $line->getLineNumber(),
+                            lineHits: $line->getLineHits(),
+                            branchHits: [
                                 (int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']
                             ]
                         )
@@ -194,9 +197,9 @@ class LcovParseStrategy implements ParseStrategyInterface
                     // No coverage been tracked for this branch yet, meaning we should set it up
                     $latestFile->setLine(
                         new Branch(
-                            (int)$lineNumber,
-                            0,
-                            [(int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']]
+                            lineNumber: (int)$lineNumber,
+                            lineHits: 0,
+                            branchHits: [(int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']]
                         )
                     );
                 }

@@ -34,24 +34,31 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
 
         $row = $bigQueryMetadataBuilderService->buildLineCoverageRow(
             new Upload(
-                'mock-uuid',
-                Provider::GITHUB,
-                'mock-repository',
-                'mock-branch',
-                'mock-commit',
-                [],
-                'main',
-                'project/root',
-                1234,
-                'commit-on-main',
-                'main',
-                new Tag('mock-tag', 'mock-commit'),
-                $ingestTime
+                uploadId: 'mock-uuid',
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: [],
+                ref: 'main',
+                projectRoot: 'project/root',
+                tag: new Tag('mock-tag', 'mock-commit'),
+                pullRequest: 1234,
+                baseCommit: 'commit-on-main',
+                baseRef: 'main',
+                eventTime: $ingestTime
             ),
             1,
-            new Coverage(CoverageFormat::CLOVER, 'path/from/root', $ingestTime),
-            new File('mock-file.ts', []),
-            new Statement(1, 10)
+            new Coverage(
+                sourceFormat: CoverageFormat::CLOVER,
+                root: 'path/from/root',
+                generatedAt: $ingestTime
+            ),
+            new File('mock-file.ts'),
+            new Statement(
+                lineNumber: 1,
+                lineHits: 10
+            )
         );
 
         $this->assertEquals(
@@ -59,8 +66,8 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 'uploadId' => 'mock-uuid',
                 'ingestTime' => $ingestTime->format('Y-m-d H:i:s'),
                 'provider' => Provider::GITHUB,
-                'owner' => 'mock-repository',
-                'repository' => 'mock-branch',
+                'owner' => 'mock-owner',
+                'repository' => 'mock-repository',
                 'commit' => 'mock-commit',
                 'parent' => [],
                 'ref' => 'main',
@@ -107,7 +114,11 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
     {
         return [
             LineType::BRANCH->value => [
-                new Branch(1, 1, [0 => 0, 1 => 1]),
+                new Branch(
+                    lineNumber: 1,
+                    lineHits: 1,
+                    branchHits: [0 => 0, 1 => 1]
+                ),
                 [
                     [
                         'key' => 'branchHits',
@@ -128,7 +139,10 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 ]
             ],
             LineType::STATEMENT->value => [
-                new Statement(1, 10),
+                new Statement(
+                    lineNumber: 1,
+                    lineHits: 10
+                ),
                 [
                     [
                         'key' => 'type',
@@ -145,7 +159,11 @@ class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 ]
             ],
             LineType::METHOD->value => [
-                new Method(1, 10, 'some-method'),
+                new Method(
+                    lineNumber: 1,
+                    lineHits: 10,
+                    name: 'some-method'
+                ),
                 [
                     [
                         'key' => 'name',

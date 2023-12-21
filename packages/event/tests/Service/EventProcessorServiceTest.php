@@ -20,19 +20,15 @@ class EventProcessorServiceTest extends TestCase
     {
         $event = new IngestSuccess(
             new Upload(
-                'mock-upload-id',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-commit',
-                [],
-                'mock-ref',
-                '',
-                null,
-                null,
-                null,
-                new Tag('mock-tag', 'mock-commit'),
-                new DateTimeImmutable()
+                uploadId: 'mock-upload-id',
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: [],
+                ref: 'mock-ref',
+                projectRoot: '',
+                tag: new Tag('mock-tag', 'mock-commit'),
             ),
             new DateTimeImmutable()
         );
@@ -63,19 +59,15 @@ class EventProcessorServiceTest extends TestCase
     {
         $event = new IngestSuccess(
             new Upload(
-                'mock-upload-id',
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-commit',
-                [],
-                'mock-ref',
-                '',
-                null,
-                null,
-                null,
-                new Tag('mock-tag', 'mock-commit'),
-                new DateTimeImmutable()
+                uploadId: 'mock-upload-id',
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: [],
+                ref: 'mock-ref',
+                projectRoot: '',
+                tag: new Tag('mock-tag', 'mock-commit'),
             ),
             new DateTimeImmutable()
         );

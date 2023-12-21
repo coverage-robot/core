@@ -14,12 +14,15 @@ class CoverageFinalised implements EventInterface
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
-        private readonly string|int|null $pullRequest,
-        private readonly string|null $baseRef,
-        private readonly string|null $baseCommit,
         private readonly float $coveragePercentage,
-        private readonly DateTimeImmutable $eventTime
+        private readonly string|int|null $pullRequest = null,
+        private readonly string|null $baseRef = null,
+        private readonly string|null $baseCommit = null,
+        private ?DateTimeImmutable $eventTime = null,
     ) {
+        if ($this->eventTime === null) {
+            $this->eventTime = new DateTimeImmutable();
+        }
     }
 
     public function getProvider(): Provider

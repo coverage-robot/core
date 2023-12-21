@@ -49,14 +49,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-ref',
-                'mock-commit',
-                1,
-                [],
-                []
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                                history: [],
+                diff: []
             ),
             [
                 new Tag('tag-1', 'mock-commit'),
@@ -98,13 +97,12 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-ref',
-                'mock-commit',
-                2,
-                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -121,7 +119,7 @@ class CarryforwardTagServiceTest extends TestCase
                     ],
                     default => [],
                 },
-                []
+                diff: []
             ),
             [
                 new Tag('tag-1', 'mock-current-commit')
@@ -167,13 +165,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-ref',
-                'mock-commit',
-                3,
-                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                pullRequest: 3,
+                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -234,7 +232,7 @@ class CarryforwardTagServiceTest extends TestCase
                     ],
                     default => [],
                 },
-                []
+                diff: []
             ),
             []
         );
@@ -279,13 +277,12 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository',
-                'mock-ref',
-                'mock-commit',
-                null,
-                static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -358,7 +355,7 @@ class CarryforwardTagServiceTest extends TestCase
                     ],
                     default => [],
                 },
-                []
+                diff: []
             ),
             []
         );

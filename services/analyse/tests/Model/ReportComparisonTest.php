@@ -37,183 +37,173 @@ class ReportComparisonTest extends TestCase
         return [
             'No change in total coverage' => [
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    80,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 80,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    80,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
-                    []
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 80,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 0
             ],
             '-10% change in total coverage' => [
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    80,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([])
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 80,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    70,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([])
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 70,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -10
             ],
             '-0.33% change in total coverage' => [
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    56.67,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([])
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 56.67,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    56.34,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([])
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 56.34,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -0.33
             ],
             '+5.3% change in total coverage' => [
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    56.67,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([])
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 56.67,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new Report(
-                    new ReportWaypoint(
-                        Provider::GITHUB,
-                        'mock-owner',
-                        'mock-repository',
-                        'mock-ref',
-                        'mock-commit',
-                        null,
-                        [],
-                        []
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                                                history: [],
+                        diff: []
                     ),
-                    new TotalUploadsQueryResult(['1'], [], null),
-                    1,
-                    2,
-                    3,
-                    61.97,
-                    new TagCoverageCollectionQueryResult([]),
-                    95,
-                    new FileCoverageCollectionQueryResult([]),
-                    new LineCoverageCollectionQueryResult([]),
+                    uploads: new TotalUploadsQueryResult(['1'], [], null),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 3,
+                    coveragePercentage: 61.97,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([]),
                 ),
                 5.3
             ],

@@ -99,22 +99,25 @@ class S3PersistServiceTest extends KernelTestCase
     public static function coverageDataProvider(): iterable
     {
         $upload = new Upload(
-            Uuid::uuid4()->toString(),
-            Provider::GITHUB,
-            '',
-            '',
-            '',
-            [],
-            'mock-branch-reference',
-            'project/root',
-            1,
-            'commit-on-main',
-            'main',
-            new Tag('mock-tag', '')
+            uploadId: Uuid::uuid4()->toString(),
+            provider: Provider::GITHUB,
+            owner: '',
+            repository: '',
+            commit: '',
+            parent: [],
+            ref: 'mock-branch-reference',
+            projectRoot: 'project/root',
+            tag: new Tag('mock-tag', ''),
+            pullRequest: 1,
+            baseCommit: 'commit-on-main',
+            baseRef: 'main'
         );
 
         for ($numberOfLines = 1; $numberOfLines <= 10; ++$numberOfLines) {
-            $coverage = new Coverage(CoverageFormat::LCOV, 'mock/project/root');
+            $coverage = new Coverage(
+                sourceFormat: CoverageFormat::LCOV,
+                root: 'mock/project/root'
+            );
             $expectedWrittenLines = [];
 
             for ($numberOfFiles = 1; $numberOfFiles <= 3; ++$numberOfFiles) {
@@ -140,9 +143,20 @@ class S3PersistServiceTest extends KernelTestCase
 
                 for ($i = 1; $i <= $numberOfLines; ++$i) {
                     $line = match ($i % 3) {
-                        0 => new Branch($i, $i % 2, [0 => 0, 1 => 2, 3 => 0]),
-                        1 => new Statement($i, $i % 2),
-                        2 => new Method($i, $i % 2, 'mock-method-' . $i)
+                        0 => new Branch(
+                            lineNumber: $i,
+                            lineHits: $i % 2,
+                            branchHits: [0 => 0, 1 => 2, 3 => 0]
+                        ),
+                        1 => new Statement(
+                            lineNumber: $i,
+                            lineHits: $i % 2
+                        ),
+                        2 => new Method(
+                            lineNumber: $i,
+                            lineHits: $i % 2,
+                            name: 'mock-method-' . $i
+                        )
                     };
                     $file->setLine($line);
 

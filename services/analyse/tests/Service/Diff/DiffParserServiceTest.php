@@ -33,14 +33,14 @@ class DiffParserServiceTest extends TestCase
             $diff,
             $diffParser->get(
                 new ReportWaypoint(
-                    Provider::GITHUB,
-                    'owner',
-                    'repository',
-                    'ref',
-                    'commit',
-                    12,
-                    [],
-                    []
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    pullRequest: 12,
+                    history: [],
+                    diff: []
                 )
             )
         );
@@ -62,14 +62,14 @@ class DiffParserServiceTest extends TestCase
 
         $diffParser->get(
             new ReportWaypoint(
-                Provider::GITHUB,
-                'owner',
-                'repository',
-                'ref',
-                'commit',
-                12,
-                [],
-                []
+                provider: Provider::GITHUB,
+                owner: 'owner',
+                repository: 'repository',
+                ref: 'ref',
+                commit: 'commit',
+                pullRequest: 12,
+                history: [],
+                diff: []
             )
         );
     }

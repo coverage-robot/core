@@ -24,9 +24,9 @@ class ReportWaypoint implements Stringable
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
-        private readonly string|int|null $pullRequest,
         private readonly Closure|array $history,
-        private Closure|array $diff
+        private Closure|array $diff,
+        private readonly string|int|null $pullRequest = null,
     ) {
     }
 
