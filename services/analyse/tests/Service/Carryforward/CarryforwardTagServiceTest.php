@@ -107,17 +107,17 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ]
                     ],
                     default => [],
@@ -173,23 +173,22 @@ class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                pullRequest: 3,
                 history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         ...array_fill(
                             0,
@@ -197,7 +196,7 @@ class CarryforwardTagServiceTest extends TestCase
                             [
                                 'commit' => 'mock-commit-99',
                                 'ref' => 'non-main-branch',
-'merged' => false
+                                        'merged' => false
                             ]
                         )
                     ],
@@ -205,17 +204,17 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit-4',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-5',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-6',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ],
                         ...array_fill(
                             0,
@@ -223,7 +222,7 @@ class CarryforwardTagServiceTest extends TestCase
                             [
                                 'commit' => 'mock-commit-99',
                                 'ref' => 'non-main-branch',
-'merged' => false
+                                        'merged' => false
                             ]
                         )
                     ],
@@ -231,22 +230,23 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit-7',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-8',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-9',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ]
                     ],
                     default => [],
                 },
-                diff: []
+                diff: [],
+                pullRequest: 3
             ),
             []
         );
@@ -301,85 +301,85 @@ class CarryforwardTagServiceTest extends TestCase
                         [
                             'commit' => 'mock-commit',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ]
                     ],
                     2 => [
                         [
                             'commit' => 'mock-commit-4',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-5',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-6',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ]
                     ],
                     3 => [
                         [
                             'commit' => 'mock-commit-7',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-8',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-9',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ]
                     ],
                     4 => [
                         [
                             'commit' => 'mock-commit-10',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-11',
                             'ref' => 'non-main-branch',
-'merged' => false
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-12',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ]
                     ],
                     5 => [
                         [
                             'commit' => 'mock-commit-13',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-14',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-15',
                             'ref' => 'main-branch',
-'merged' => true
+                            'merged' => true
                         ]
                     ],
                     default => [],
