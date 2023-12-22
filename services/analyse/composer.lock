@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efaba760edfd26cd6e280b93b5d7ecef",
+    "content-hash": "b3620555ebbd272dd4818ade8dab3f69",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -77,16 +77,16 @@
         },
         {
             "name": "async-aws/core",
-            "version": "1.20.0",
+            "version": "1.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "e7a42c5cd0af44c4f3df0c4d228fe574c8ae4b68"
+                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/e7a42c5cd0af44c4f3df0c4d228fe574c8ae4b68",
-                "reference": "e7a42c5cd0af44c4f3df0c4d228fe574c8ae4b68",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/7e079d52ac27b8c5a2036df8daea567c9728ee11",
+                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11",
                 "shasum": ""
             },
             "require": {
@@ -129,7 +129,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.20.0"
+                "source": "https://github.com/async-aws/core/tree/1.20.1"
             },
             "funding": [
                 {
@@ -141,7 +141,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T20:00:50+00:00"
+            "time": "2023-12-13T20:52:19+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
@@ -264,28 +264,28 @@
         },
         {
             "name": "async-aws/sqs",
-            "version": "1.9.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/sqs.git",
-                "reference": "81c4e06ad67892b440c9eb55dff328168da5f984"
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/sqs/zipball/81c4e06ad67892b440c9eb55dff328168da5f984",
-                "reference": "81c4e06ad67892b440c9eb55dff328168da5f984",
+                "url": "https://api.github.com/repos/async-aws/sqs/zipball/0208ec744847020b08da0541b2fb5536875a70c8",
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8",
                 "shasum": ""
             },
             "require": {
                 "async-aws/core": "^1.9",
                 "ext-filter": "*",
-                "ext-simplexml": "*",
+                "ext-json": "*",
                 "php": "^7.2.5 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -306,7 +306,7 @@
                 "sqs"
             ],
             "support": {
-                "source": "https://github.com/async-aws/sqs/tree/1.9.0"
+                "source": "https://github.com/async-aws/sqs/tree/2.0.0"
             },
             "funding": [
                 {
@@ -318,7 +318,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T20:00:50+00:00"
+            "time": "2023-12-13T20:52:19+00:00"
         },
         {
             "name": "bref/bref",
@@ -589,7 +589,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "a1c9cc1406d12b5c40192d2c85f92a43ca9dc2d3"
+                "reference": "57cb5abf7f750055a1ecda5690b767ba658522fd"
             },
             "require": {
                 "knplabs/github-api": "^3.11",
@@ -631,7 +631,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -650,7 +650,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "0315390776e833b4876de83d4385b90f124a8305"
+                "reference": "f3c46aa62f21174687a0105bd7fd7d9196e5690a"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -691,7 +691,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "60232743d0fb616dad0f70cbc02286cd5ffe54f6"
+                "reference": "d65d04218e2549ec8f3fbc7e94c5eae18bcf0c69"
             },
             "require": {
                 "coverage-robot/event": "^1.0"
@@ -713,7 +713,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
+                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
             },
             "type": "library",
             "autoload": {
@@ -732,7 +732,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
+                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -10200,5 +10200,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
