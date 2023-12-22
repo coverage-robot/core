@@ -114,7 +114,7 @@ class CachingCommitHistoryService extends CommitHistoryService
                 ) {
                     // We've populated the page we're looking for, so we can switch to that page
                     // with no additional overhead
-                    $cachedPage = $cachedPage + $pageOffset;
+                    $cachedPage += $pageOffset;
                     $cachedCommits = $this->getPrecedingCommits($cachedWaypoint, $cachedPage);
                 } elseif ($pageOffset > 0) {
                     // The page we want is not yet populated. We could populate it, but that would _increase_
@@ -151,14 +151,14 @@ class CachingCommitHistoryService extends CommitHistoryService
                 if ($this->isPageFullyPopulated($cachedCommits)) {
                     // The page we're looking for is fully populated, meaning there may be
                     // more commits in the history we've not yet seen.
-                    $usableCachedCommits = array_merge(
-                        $usableCachedCommits,
-                        array_slice(
+                    $usableCachedCommits = [
+                        ...$usableCachedCommits,
+                        ...array_slice(
                             $this->getPrecedingCommits($cachedWaypoint, $cachedPage + 1),
                             0,
                             CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - count($usableCachedCommits)
                         )
-                    );
+                    ];
 
                     $this->commitHistoryLogger->info(
                         sprintf(
