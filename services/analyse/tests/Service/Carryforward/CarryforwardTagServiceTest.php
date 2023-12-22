@@ -196,7 +196,7 @@ class CarryforwardTagServiceTest extends TestCase
                             [
                                 'commit' => 'mock-commit-99',
                                 'ref' => 'non-main-branch',
-                                        'merged' => false
+                                'merged' => false
                             ]
                         )
                     ],
