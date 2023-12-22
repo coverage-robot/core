@@ -4,6 +4,7 @@ namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use WeakMap;
 
@@ -22,7 +23,8 @@ class CachingCommitHistoryService extends CommitHistoryService
             'app.commit_history',
             defaultIndexMethod: 'getProvider'
         )]
-        iterable $parsers
+        iterable $parsers,
+        private readonly LoggerInterface $commitHistoryLogger
     ) {
         parent::__construct($parsers);
 
@@ -128,6 +130,18 @@ class CachingCommitHistoryService extends CommitHistoryService
                 );
 
                 if ($this->isPageFullyPopulated($usableCachedCommits)) {
+                    $this->commitHistoryLogger->info(
+                        sprintf(
+                            'Populated cache for %s using %s (no requests required)',
+                            (string)$waypoint,
+                            (string)$cachedWaypoint
+                        ),
+                        [
+                            'cachedCommits' => $usableCachedCommits,
+                            'usableCachedCommits' => $usableCachedCommits,
+                        ]
+                    );
+
                     // Our slice of the existing history is enough to fill the whole
                     // page, so we're okay to populate the cache and move on
                     $this->persistInCache($waypoint, $page, $usableCachedCommits);
@@ -145,8 +159,29 @@ class CachingCommitHistoryService extends CommitHistoryService
                             CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - count($usableCachedCommits)
                         )
                     );
+
+                    $this->commitHistoryLogger->info(
+                        sprintf(
+                            'Populated cache for %s using %s (1 request required)',
+                            (string)$waypoint,
+                            (string)$cachedWaypoint
+                        ),
+                        [
+                            'cachedCommits' => $usableCachedCommits,
+                            'usableCachedCommits' => $usableCachedCommits,
+                        ]
+                    );
+                    $this->persistInCache($waypoint, $page, $usableCachedCommits);
+                    break;
                 }
 
+                $this->commitHistoryLogger->info(
+                    sprintf(
+                        'Populated cache for %s using %s (no requests required)',
+                        (string)$waypoint,
+                        (string)$cachedWaypoint
+                    )
+                );
                 $this->persistInCache($waypoint, $page, $usableCachedCommits);
                 break;
             }

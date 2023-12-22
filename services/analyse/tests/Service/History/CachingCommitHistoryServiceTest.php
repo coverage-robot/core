@@ -9,6 +9,7 @@ use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class CachingCommitHistoryServiceTest extends TestCase
 {
@@ -31,7 +32,8 @@ class CachingCommitHistoryServiceTest extends TestCase
         $cachingCommitHistoryService = new CachingCommitHistoryService(
             [
                 Provider::GITHUB->value => $mockParser
-            ]
+            ],
+            new NullLogger()
         );
 
         $this->assertEquals(
@@ -96,7 +98,8 @@ class CachingCommitHistoryServiceTest extends TestCase
         $cachingCommitHistoryService = new CachingCommitHistoryService(
             [
                 Provider::GITHUB->value => $mockParser
-            ]
+            ],
+            new NullLogger()
         );
 
         $this->assertEquals(
@@ -169,7 +172,8 @@ class CachingCommitHistoryServiceTest extends TestCase
         $cachingCommitHistoryService = new CachingCommitHistoryService(
             [
                 Provider::GITHUB->value => $mockParser
-            ]
+            ],
+            new NullLogger()
         );
 
         $this->assertEquals(
@@ -266,7 +270,8 @@ class CachingCommitHistoryServiceTest extends TestCase
         $cachingCommitHistoryService = new CachingCommitHistoryService(
             [
                 Provider::GITHUB->value => $mockParser
-            ]
+            ],
+            new NullLogger()
         );
 
         $this->assertEquals(
@@ -408,7 +413,8 @@ class CachingCommitHistoryServiceTest extends TestCase
         $cachingCommitHistoryService = new CachingCommitHistoryService(
             [
                 Provider::GITHUB->value => $mockParser
-            ]
+            ],
+            new NullLogger()
         );
 
         $this->assertEquals(
