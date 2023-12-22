@@ -84,8 +84,10 @@ class CachingCommitHistoryService extends CommitHistoryService
      */
     private function tryPopulatingCacheFromComparableWaypoints(ReportWaypoint $waypoint, int $page): void
     {
+        /** @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history */
         foreach ($this->cache as $cachedWaypoint => $history) {
             if (
+                !$cachedWaypoint instanceof ReportWaypoint ||
                 $cachedWaypoint === $waypoint ||
                 !$cachedWaypoint->comparable($waypoint)
             ) {
@@ -209,6 +211,8 @@ class CachingCommitHistoryService extends CommitHistoryService
 
     /**
      * Persist a series of commits in the cache for a waypoints page.
+     *
+     * @param array{commit: string, merged: bool, ref: string|null}[] $commits
      */
     private function persistInCache(ReportWaypoint $waypoint, int $page, array $commits): void
     {
