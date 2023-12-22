@@ -106,15 +106,18 @@ class CarryforwardTagServiceTest extends TestCase
                     1 => [
                         [
                             'commit' => 'mock-commit',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ]
                     ],
                     default => [],
@@ -170,69 +173,80 @@ class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                pullRequest: 3,
                 history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         ...array_fill(
                             0,
                             CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
                             [
                                 'commit' => 'mock-commit-99',
-                                'isOnBaseRef' => false
+                                'ref' => 'non-main-branch',
+                                'merged' => false
                             ]
                         )
                     ],
                     2 => [
                         [
                             'commit' => 'mock-commit-4',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-5',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-6',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ],
                         ...array_fill(
                             0,
                             CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
                             [
                                 'commit' => 'mock-commit-99',
-                                'isOnBaseRef' => false
+                                'ref' => 'non-main-branch',
+                                        'merged' => false
                             ]
                         )
                     ],
                     3 => [
                         [
                             'commit' => 'mock-commit-7',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-8',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-9',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ]
                     ],
                     default => [],
                 },
-                diff: []
+                diff: [],
+                pullRequest: 3
             ),
             []
         );
@@ -286,71 +300,86 @@ class CarryforwardTagServiceTest extends TestCase
                     1 => [
                         [
                             'commit' => 'mock-commit',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-2',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-3',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ]
                     ],
                     2 => [
                         [
                             'commit' => 'mock-commit-4',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-5',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-6',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ]
                     ],
                     3 => [
                         [
                             'commit' => 'mock-commit-7',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-8',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-9',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ]
                     ],
                     4 => [
                         [
                             'commit' => 'mock-commit-10',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-11',
-                            'isOnBaseRef' => false
+                            'ref' => 'non-main-branch',
+                            'merged' => false
                         ],
                         [
                             'commit' => 'mock-commit-12',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ]
                     ],
                     5 => [
                         [
                             'commit' => 'mock-commit-13',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-14',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ],
                         [
                             'commit' => 'mock-commit-15',
-                            'isOnBaseRef' => true
+                            'ref' => 'main-branch',
+                            'merged' => true
                         ]
                     ],
                     default => [],

@@ -131,11 +131,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             history: [
                 [
                     'commit' => 'mock-commit',
-                    'isOnBaseRef' => false
+                    'ref' => 'mock-ref',
+                    'merged' => false
                 ],
                 [
                     'commit' => 'mock-parent-base-commit',
-                    'isOnBaseRef' => true
+                    'ref' => null,
+                    'merged' => true
                 ],
             ],
             diff: []

@@ -120,7 +120,7 @@ class GithubCommitHistoryServiceTest extends TestCase
                                 'nodes' => [
                                     [
                                         'merged' => false,
-                                        'headRefName' => 'mock-ref'
+                                        'headRefName' => 'mock-ref-2'
                                     ]
                                 ]
                             ]
@@ -135,7 +135,7 @@ class GithubCommitHistoryServiceTest extends TestCase
                                 'nodes' => [
                                     [
                                         'merged' => true,
-                                        'headRefName' => 'mock-ref-2'
+                                        'headRefName' => 'mock-ref'
                                     ]
                                 ]
                             ]
@@ -149,7 +149,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                         50,
                         [
                             'commit' => '11111111',
-                            'isOnBaseRef' => false
+                            'merged' => false,
+                            'ref' => 'mock-ref-2'
                         ]
                     ),
                     ...array_fill(
@@ -157,10 +158,11 @@ class GithubCommitHistoryServiceTest extends TestCase
                         50,
                         [
                             'commit' => '11111111',
-                            'isOnBaseRef' => true
+                            'merged' => true,
+                            'ref' => 'mock-ref'
                         ]
                     )
-                ]
+                ],
             ],
             'Second page' => [
                 2,
@@ -198,7 +200,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                         50,
                         [
                             'commit' => '222222222',
-                            'isOnBaseRef' => true
+                            'ref' => 'mock-ref',
+                            'merged' => true
                         ]
                     ),
                     ...array_fill(
@@ -206,7 +209,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                         50,
                         [
                             'commit' => '222222222',
-                            'isOnBaseRef' => true
+                            'ref' => null,
+                            'merged' => true
                         ]
                     )
                 ]
@@ -214,21 +218,6 @@ class GithubCommitHistoryServiceTest extends TestCase
             'Tenth page' => [
                 10,
                 [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '9999999999',
-                            'associatedPullRequests' => [
-                                'nodes' => [
-                                    [
-                                        'merged' => false,
-                                        'headRefName' => 'mock-ref-2'
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ),
                     ...array_fill(
                         0,
                         50,
@@ -247,15 +236,8 @@ class GithubCommitHistoryServiceTest extends TestCase
                         50,
                         [
                             'commit' => '9999999999',
-                            'isOnBaseRef' => true
-                        ]
-                    ),
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '9999999999',
-                            'isOnBaseRef' => true
+                            'ref' => null,
+                            'merged' => true
                         ]
                     )
                 ]

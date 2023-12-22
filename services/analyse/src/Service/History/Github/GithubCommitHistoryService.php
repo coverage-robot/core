@@ -45,7 +45,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     /**
      * @inheritDoc
      *
-     * @return array{commit: string, isOnBaseRef: bool}[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      */
     public function getPrecedingCommits(EventInterface|ReportWaypoint $waypoint, int $page = 1): array
     {
@@ -78,7 +78,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     }
 
     /**
-     * @return array{commit: string, isOnBaseRef: bool}[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      */
     private function getHistoricCommits(
         string $owner,
@@ -126,12 +126,8 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         return array_map(
             static fn(array $commit): array => [
                 'commit' => $commit['oid'],
-
-                // The commit _must_ be on the base ref (i.e. not in a PR) if theres no
-                // unmerged PRs, there was no PR to begin with (a direct push), or the only open
-                // PR is not on the same ref as we started on
-                'isOnBaseRef' => ($commit['associatedPullRequests']['nodes'][0]['merged'] ?? true) ||
-                    ($commit['associatedPullRequests']['nodes'][0]['headRefName'] ?? null) !== $ref
+                'merged' => $commit['associatedPullRequests']['nodes'][0]['merged'] ?? true,
+                'ref' => $commit['associatedPullRequests']['nodes'][0]['headRefName'] ?? null
             ],
             $result
         );

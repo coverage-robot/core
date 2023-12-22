@@ -27,7 +27,7 @@ class CommitHistoryService implements CommitHistoryServiceInterface
     }
 
     /**
-     * @return array{commit: string, isOnBaseRef: bool}[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      *
      * @throws RuntimeException
      */
