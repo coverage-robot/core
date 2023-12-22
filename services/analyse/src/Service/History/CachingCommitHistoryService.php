@@ -193,8 +193,8 @@ class CachingCommitHistoryService extends CommitHistoryService
     /**
      * Check if the page is fully populated with commits.
      *
-     * Or, more specifically, see if the number of commits is greater than or equal to the number
-     * we would've tried to fetch to begin with.
+     * Or, more specifically, see if the number of the commits are greater than or equal to
+     * the number we would've tried to fetch to begin with.
      */
     private function isPageFullyPopulated(array $commits): bool
     {
