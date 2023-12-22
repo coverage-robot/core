@@ -64,9 +64,11 @@ class EventHandlerTest extends KernelTestCase
         $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
 
         $handler = new EventHandler(
-            $this->getContainer()->get(SerializerInterface::class),
+            $this->getContainer()
+                ->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getContainer()->get(CoverageFileParserService::class),
+            $this->getContainer()
+                ->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
             $mockEventBridgeEventService,
             new NullLogger(),

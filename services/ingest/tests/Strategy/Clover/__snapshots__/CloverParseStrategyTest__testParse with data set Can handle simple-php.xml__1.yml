@@ -1,0 +1,9 @@
+sourceFormat:
+    name: CLOVER
+    value: CLOVER
+root: mock/project/root
+generatedAt: '2023-04-16T14:58:29+00:00'
+files:
+    - { fileName: mock-file, lines: [{ name: __construct, uniqueLineIdentifier: __construct, type: { name: METHOD, value: METHOD }, lineNumber: 13, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '17', lineNumber: 17, lineHits: 4 }, { name: sendRequest, uniqueLineIdentifier: sendRequest, type: { name: METHOD, value: METHOD }, lineNumber: 19, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '21', lineNumber: 21, lineHits: 4 }, { name: decorateRequest, uniqueLineIdentifier: decorateRequest, type: { name: METHOD, value: METHOD }, lineNumber: 24, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '26', lineNumber: 26, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '27', lineNumber: 27, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '28', lineNumber: 28, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '29', lineNumber: 29, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '30', lineNumber: 30, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '31', lineNumber: 31, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '32', lineNumber: 32, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '33', lineNumber: 33, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '34', lineNumber: 34, lineHits: 4 }, { type: { name: STATEMENT, value: STATEMENT }, uniqueLineIdentifier: '35', lineNumber: 35, lineHits: 4 }] }
+    - { fileName: untestable-file, lines: {  } }
+    - { fileName: untestable-class-file, lines: {  } }
