@@ -37,6 +37,8 @@ class CachingCommitHistoryService extends CommitHistoryService
     public function getPrecedingCommits(ReportWaypoint $waypoint, int $page = 1): array
     {
         if (!$this->isCacheHit($waypoint, $page)) {
+            // We've not got the fully populated page yet, so see if we can populate
+            // the history from commits in the cache for other similar waypoints.
             $this->tryPopulatingCacheFromComparableWaypoints($waypoint, $page);
         }
 
@@ -81,16 +83,18 @@ class CachingCommitHistoryService extends CommitHistoryService
     private function tryPopulatingCacheFromComparableWaypoints(ReportWaypoint $waypoint, int $page): void
     {
         foreach ($this->cache as $cachedWaypoint => $history) {
-            if (!$cachedWaypoint->comparable($waypoint)) {
-                // This waypoint isn't comparable so definitely doesn't contain
-                // any pre-cached history we can use.
+            if (
+                $cachedWaypoint === $waypoint ||
+                !$cachedWaypoint->comparable($waypoint)
+            ) {
+                // We don't want to compare the waypoint to itself, or if its not comparable
                 continue;
             }
 
-            foreach ($history as $cachedPage => $commits) {
+            foreach ($history as $cachedPage => $cachedCommits) {
                 $commitIndex = array_search(
                     $waypoint->getCommit(),
-                    array_column($commits, 'commit'),
+                    array_column($cachedCommits, 'commit'),
                     true
                 );
 
@@ -100,57 +104,77 @@ class CachingCommitHistoryService extends CommitHistoryService
                     continue;
                 }
 
-                // We've found the commit we're looking for as the head, so from here
-                // we can populate the cache for the current waypoint
-                $perPage = CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
-                $pageOffset = ($page - 1);
+                $pageOffset = $page - 1;
 
-                if ($pageOffset > 0 && !$this->isCacheHit($cachedWaypoint, $cachedPage + $pageOffset)) {
-                    // We've not yet populated the cache for the page we're looking for
-                    // so theres not much we can do here
-                    return;
-                }
-
-                $preCachedCommits = array_slice(
-                    $commits,
-                    $commitIndex,
-                    $perPage
-                );
-
-                if (count($preCachedCommits) >= $perPage) {
-                    // Our slice of the existing history is enough to fill the whole
-                    // page, so we're okay to populate the cache and move on
-                    $this->persistInCache($waypoint, $page, $preCachedCommits);
-
+                if (
+                    $pageOffset > 0 &&
+                    $this->isCacheHit($cachedWaypoint, $cachedPage + $pageOffset)
+                ) {
+                    // We've populated the page we're looking for, so we can switch to that page
+                    // with no additional overhead
+                    $cachedPage = $cachedPage + $pageOffset;
+                    $cachedCommits = $this->getPrecedingCommits($cachedWaypoint, $cachedPage);
+                } elseif ($pageOffset > 0) {
+                    // The page we want is not yet populated. We could populate it, but that would _increase_
+                    // the overhead (because we'd have to make 2 uncached calls to populate the cache). Instead,
+                    // we'll just skip and allow the page to be fetched directly (1 uncached call)
                     break;
                 }
 
-                if (count($commits) >= $perPage) {
-                    // We've not got enough commits to fill the page, so we need to look
-                    // back another page for the cached waypoint and then slice the results
-                    // together
-                    $preCachedCommits = array_merge(
-                        $preCachedCommits,
+                $usableCachedCommits = array_slice(
+                    $cachedCommits,
+                    $commitIndex,
+                    CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE
+                );
+
+                if ($this->isPageFullyPopulated($usableCachedCommits)) {
+                    // Our slice of the existing history is enough to fill the whole
+                    // page, so we're okay to populate the cache and move on
+                    $this->persistInCache($waypoint, $page, $usableCachedCommits);
+                    break;
+                }
+
+                if ($this->isPageFullyPopulated($cachedCommits)) {
+                    // The page we're looking for is fully populated, meaning there may be
+                    // more commits in the history we've not yet seen.
+                    $usableCachedCommits = array_merge(
+                        $usableCachedCommits,
                         array_slice(
                             $this->getPrecedingCommits($cachedWaypoint, $cachedPage + 1),
                             0,
-                            $perPage - count($preCachedCommits)
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - count($usableCachedCommits)
                         )
                     );
                 }
 
-                $this->persistInCache($waypoint, $page, $preCachedCommits);
-
+                $this->persistInCache($waypoint, $page, $usableCachedCommits);
                 break;
             }
         }
     }
 
+    /**
+     * Check if the page is fully populated with commits.
+     *
+     * Or, more specifically, see if the number of commits is greater than or equal to the number
+     * we would've tried to fetch to begin with.
+     */
+    private function isPageFullyPopulated(array $commits): bool
+    {
+        return count($commits) >= CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
+    }
+
+    /**
+     * Check if the cache contains a page for a given waypoint.
+     */
     private function isCacheHit(ReportWaypoint $waypoint, int $page): bool
     {
         return isset($this->cache[$waypoint][$page]);
     }
 
+    /**
+     * Persist a series of commits in the cache for a waypoints page.
+     */
     private function persistInCache(ReportWaypoint $waypoint, int $page, array $commits): void
     {
         $this->cache[$waypoint] = array_replace(
