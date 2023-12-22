@@ -19,40 +19,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalUploadsQueryTest extends AbstractQueryTestCase
 {
-    public static function getExpectedQueries(): array
-    {
-        return [
-            <<<SQL
-            SELECT
-              COALESCE(
-                ARRAY_AGG(uploadId),
-                []
-              ) as successfulUploads,
-              COALESCE(
-                ARRAY_AGG(
-                  STRUCT(
-                    tag as name, "mock-commit" as commit
-                  )
-                ),
-                []
-              ) as successfulTags,
-              COALESCE(
-                STRING(
-                  MAX(ingestTime)
-                ),
-                NULL
-              ) as latestSuccessfulUpload
-            FROM
-              `mock-table`
-            WHERE
-              commit = "mock-commit"
-              AND repository = "mock-repository"
-              AND owner = "mock-owner"
-              AND provider = "github"
-            SQL
-        ];
-    }
-
     public function getQueryClass(): QueryInterface
     {
         return new TotalUploadsQuery(
