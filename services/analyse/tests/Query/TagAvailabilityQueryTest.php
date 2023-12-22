@@ -18,33 +18,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TagAvailabilityQueryTest extends AbstractQueryTestCase
 {
-    public static function getExpectedQueries(): array
-    {
-        return [
-            <<<SQL
-            SELECT
-              tag as tagName,
-              ARRAY_AGG(commit) as availableCommits,
-            FROM
-              `mock-table`
-            WHERE
-              -- Only include uploads on tags which are recent. That way we can avoid permanently
-              -- looking for tags deep in the commit history which are obsolete/no longer uploaded.
-              ingestTime > CAST(
-                TIMESTAMP_SUB(
-                  CURRENT_TIMESTAMP(),
-                  INTERVAL 90 DAY
-                ) as DATETIME
-              )
-              AND repository = "mock-repository"
-              AND owner = "mock-owner"
-              AND provider = "github"
-            GROUP BY
-              tag
-            SQL
-        ];
-    }
-
     public function getQueryClass(): QueryInterface
     {
         return new TagAvailabilityQuery(
