@@ -437,7 +437,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     }
 
     /**
-     * @return array{commit: string, isOnBaseRef: bool}[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      */
     protected function getHistory(ReportWaypoint $waypoint, int $page = 1): array
     {

@@ -10,11 +10,13 @@ class ReportWaypoint implements Stringable
 {
     /**
      *  @param Closure(ReportWaypoint $waypoint, int $page):array{
-     *      commit: string,
-     *      isOnBaseRef: bool
+     *     commit: string,
+     *     merged: bool,
+     *     ref: string|null
      *  }[]|array{
-     *      commit: string,
-     *      isOnBaseRef: bool
+     *     commit: string,
+     *     merged: bool,
+     *     ref: string|null
      *  }[] $history
      *  @param Closure(ReportWaypoint $waypoint):array<string, array<int, int>>|array<string, array<int, int>> $diff
      */
@@ -61,10 +63,7 @@ class ReportWaypoint implements Stringable
     }
 
     /**
-     * @return array{
-     *     commit: string,
-     *     isOnBaseRef: bool
-     * }[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      */
     public function getHistory(int $page = 1): array
     {

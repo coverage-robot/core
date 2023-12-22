@@ -212,7 +212,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $history = $headWaypoint->getHistory($page);
 
                 foreach ($history as $commit) {
-                    if ($commit['isOnBaseRef']) {
+                    if ($commit['ref'] !== $headWaypoint->getRef() || $commit['merged']) {
                         $this->eventProcessorLogger->info(
                             sprintf(
                                 'Extracted %s from history to use as the base commit for comparison to %s',

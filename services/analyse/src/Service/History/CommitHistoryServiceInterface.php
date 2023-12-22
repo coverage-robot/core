@@ -11,7 +11,7 @@ interface CommitHistoryServiceInterface
     /**
      * Get the commits which preceded a given commit in the tree.
      *
-     * @return array{commit: string, isOnBaseRef: bool}[]
+     * @return array{commit: string, merged: bool, ref: string|null}[]
      */
     public function getPrecedingCommits(ReportWaypoint $waypoint, int $page): array;
 }
