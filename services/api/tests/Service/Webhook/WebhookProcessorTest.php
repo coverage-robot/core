@@ -6,8 +6,8 @@ use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
-use App\Service\Webhook\JobStateChangeWebhookProcessor;
 use App\Service\Webhook\WebhookProcessor;
+use App\Service\Webhook\WebhookProcessorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -15,21 +15,25 @@ use Symfony\Component\Serializer\SerializerInterface;
 class WebhookProcessorTest extends KernelTestCase
 {
     #[DataProvider('webhookPayloadDataProvider')]
-    public function testProcessUsingValidEvent(WebhookType $type, array $payload): void
-    {
-        $mockProcessor = $this->createMock(JobStateChangeWebhookProcessor::class);
+    public function testProcessUsingValidEvent(
+        WebhookType $type,
+        WebhookProcessorEvent $event,
+        array $payload
+    ): void {
+        $mockProcessor = $this->createMock(WebhookProcessorInterface::class);
         $mockProcessor->expects($this->once())
             ->method('process');
 
         $webhookProcessor = new WebhookProcessor(
             [
-                WebhookProcessorEvent::JOB_STATE_CHANGE->value => $mockProcessor,
+                $event->value => $mockProcessor,
             ]
         );
 
         $webhookProcessor->process(
             $this->createMock(Project::class),
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()
+                ->get(SerializerInterface::class)
                 ->denormalize(
                     ['type' => $type->value, ...$payload],
                     WebhookInterface::class
@@ -41,7 +45,14 @@ class WebhookProcessorTest extends KernelTestCase
     {
         foreach (glob(__DIR__ . '/../../Fixture/Webhook/*.json') as $payload) {
             yield basename($payload) => [
-                WebhookType::GITHUB_CHECK_RUN,
+                match (basename($payload)) {
+                    'github_push.json' => WebhookType::GITHUB_PUSH,
+                    default => WebhookType::GITHUB_CHECK_RUN
+                },
+                match (basename($payload)) {
+                    'github_push.json' => WebhookProcessorEvent::COMMITS_PUSHED,
+                    default => WebhookProcessorEvent::JOB_STATE_CHANGE
+                },
                 json_decode(
                     file_get_contents($payload),
                     true,

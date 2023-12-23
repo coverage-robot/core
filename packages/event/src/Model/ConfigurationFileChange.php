@@ -14,7 +14,8 @@ class ConfigurationFileChange implements EventInterface
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
-        private readonly string $commit
+        private readonly string $commit,
+        private ?DateTimeImmutable $eventTime = null
     ) {
         if ($this->eventTime === null) {
             $this->eventTime = new DateTimeImmutable();
@@ -85,13 +86,12 @@ class ConfigurationFileChange implements EventInterface
     public function __toString(): string
     {
         return sprintf(
-            'ConfigurationFileChange#%s-%s-%s-%s-%s-%s',
+            'ConfigurationFileChange#%s-%s-%s-%s-%s',
             $this->provider->value,
             $this->owner,
             $this->repository,
             $this->ref,
-            $this->commit,
-            $this->pullRequest ?? ''
+            $this->commit
         );
     }
 }
