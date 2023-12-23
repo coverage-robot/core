@@ -312,11 +312,6 @@ class CachingCommitHistoryServiceTest extends TestCase
         $this->assertEquals(
             [
                 [
-                    'commit' => 'mock-commit-3',
-                    'ref' => 'main-branch',
-                    'merged' => true
-                ],
-                [
                     'commit' => 'mock-commit-4',
                     'ref' => 'main-branch',
                     'merged' => true
