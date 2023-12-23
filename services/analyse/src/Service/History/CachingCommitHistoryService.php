@@ -4,6 +4,7 @@ namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use WeakMap;
@@ -36,6 +37,7 @@ class CachingCommitHistoryService extends CommitHistoryService
         $this->cache = $cache;
     }
 
+    #[Override]
     public function getPrecedingCommits(ReportWaypoint $waypoint, int $page = 1): array
     {
         if (!$this->isCacheHit($waypoint, $page)) {

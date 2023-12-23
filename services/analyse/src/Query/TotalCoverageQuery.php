@@ -10,6 +10,7 @@ use App\Query\Trait\DiffAwareTrait;
 use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -32,6 +33,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         parent::__construct($environmentService);
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
@@ -47,6 +49,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getNamedQueries($table, $parameterBag);
@@ -69,6 +72,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
+    #[Override]
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
@@ -94,6 +98,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
      * @throws QueryException
      * @throws ExceptionInterface
      */
+    #[Override]
     public function parseResults(QueryResults $results): CoverageQueryResult
     {
         if (!$results->isComplete()) {

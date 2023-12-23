@@ -6,10 +6,12 @@ use App\Service\PathFixingService;
 use App\Strategy\Lcov\LcovParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
+use Override;
 use Psr\Log\NullLogger;
 
 class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 {
+    #[Override]
     public static function coverageFilesDataProvider(): iterable
     {
         yield from parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Lcov');
@@ -21,6 +23,7 @@ class LcovParseStrategyTest extends AbstractParseStrategyTestCase
         ];
     }
 
+    #[Override]
     protected function getParserStrategy(): ParseStrategyInterface
     {
         return new LcovParseStrategy(

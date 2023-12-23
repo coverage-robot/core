@@ -9,6 +9,7 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
+use Override;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -25,6 +26,7 @@ class EventHandler extends SqsHandler
      * @throws InvalidLambdaEvent
      * @throws JsonException
      */
+    #[Override]
     public function handleSqs(SqsEvent $event, Context $context): void
     {
         $messages = $this->getLatestPublishableMessages($event->getRecords());

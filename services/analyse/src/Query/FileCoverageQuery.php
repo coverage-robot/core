@@ -11,6 +11,7 @@ use App\Query\Trait\ScopeAwareTrait;
 use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -36,6 +37,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         parent::__construct($environmentService);
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -76,6 +78,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
+    #[Override]
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
@@ -104,6 +107,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
      * @throws QueryException
      * @throws ExceptionInterface
      */
+    #[Override]
     public function parseResults(QueryResults $results): FileCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {

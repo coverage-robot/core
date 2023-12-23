@@ -9,6 +9,7 @@ use App\Service\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
+use Override;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -28,6 +29,7 @@ class WebhookHandler extends SqsHandler
     ) {
     }
 
+    #[Override]
     public function handleSqs(SqsEvent $event, Context $context): void
     {
         TraceContext::setTraceHeaderFromContext($context);

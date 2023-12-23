@@ -12,6 +12,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Override;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
@@ -20,6 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class FileCoverageQueryTest extends AbstractQueryTestCase
 {
+    #[Override]
     public function getQueryClass(): QueryInterface
     {
         return new FileCoverageQuery(
@@ -34,6 +36,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
         );
     }
 
+    #[Override]
     public static function getQueryParameters(): array
     {
         $waypoint = new ReportWaypoint(
@@ -79,6 +82,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     }
 
     #[DataProvider('parametersDataProvider')]
+    #[Override]
     public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
     {
         if (!$valid) {
@@ -91,6 +95,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     }
 
     #[DataProvider('resultsDataProvider')]
+    #[Override]
     public function testParseResults(array $queryResult): void
     {
         $mockBigQueryResult = $this->createMock(QueryResults::class);

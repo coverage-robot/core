@@ -11,6 +11,7 @@ use App\Model\Ingestion;
 use App\Service\CachingEventStoreService;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
@@ -39,6 +40,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
         );
     }
 
+    #[Override]
     public function process(EventInterface $event): bool
     {
         if (

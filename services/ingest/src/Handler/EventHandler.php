@@ -17,6 +17,7 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use DateTimeImmutable;
+use Override;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -46,6 +47,7 @@ class EventHandler extends S3Handler
      * @throws DeletionException
      * @throws InvalidLambdaEvent
      */
+    #[Override]
     public function handleS3(S3Event $event, Context $context): void
     {
         TraceContext::setTraceHeaderFromContext($context);

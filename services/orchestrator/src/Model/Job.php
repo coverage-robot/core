@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 
 class Job extends AbstractOrchestratedEvent
@@ -20,31 +21,37 @@ class Job extends AbstractOrchestratedEvent
         parent::__construct($provider, $owner, $repository);
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getState(): OrchestratedEventState
     {
         return $this->state;
     }
 
+    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
@@ -55,6 +62,7 @@ class Job extends AbstractOrchestratedEvent
         return $this->externalId;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

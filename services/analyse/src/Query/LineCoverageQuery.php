@@ -10,6 +10,7 @@ use App\Query\Trait\DiffAwareTrait;
 use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -31,6 +32,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         parent::__construct($environmentService);
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
@@ -45,6 +47,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
+    #[Override]
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
@@ -70,6 +73,7 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
      * @throws QueryException
      * @throws ExceptionInterface
      */
+    #[Override]
     public function parseResults(QueryResults $results): LineCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {

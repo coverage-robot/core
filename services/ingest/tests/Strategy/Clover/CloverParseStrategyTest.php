@@ -6,10 +6,12 @@ use App\Service\PathFixingService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
+use Override;
 use Psr\Log\NullLogger;
 
 class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 {
+    #[Override]
     public static function coverageFilesDataProvider(): iterable
     {
         yield from parent::parseCoverageFixtures(__DIR__ . '/../../Fixture/Clover');
@@ -32,6 +34,7 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
         ];
     }
 
+    #[Override]
     protected function getParserStrategy(): ParseStrategyInterface
     {
         return new CloverParseStrategy(

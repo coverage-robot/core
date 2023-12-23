@@ -8,6 +8,7 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
@@ -42,6 +43,7 @@ class InvokeCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument('commit', InputArgument::REQUIRED, 'The commit to publish messages to')
@@ -63,6 +65,7 @@ class InvokeCommand extends Command
             );
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

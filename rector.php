@@ -1,7 +1,6 @@
 <?php
 
 use Rector\Config\RectorConfig;
-use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\PHPUnit\Set\PHPUnitLevelSetList;
 use Rector\Set\ValueObject\LevelSetList;
@@ -38,14 +37,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->skip([
-        /**
-         * Ignore as Psalm currently throws up an exception about the Override
-         * attribute.
-         *
-         * @see https://github.com/vimeo/psalm/issues/10404
-         */
-        AddOverrideAttributeToOverriddenMethodsRector::class,
-
         /**
          * Ignore as there are genuine use cases for mock builders over `createMock`,
          * because that method is protected.
