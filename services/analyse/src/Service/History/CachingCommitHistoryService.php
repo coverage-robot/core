@@ -110,21 +110,30 @@ class CachingCommitHistoryService extends CommitHistoryService
                     continue;
                 }
 
+                // We want to offset so that we don't include the waypoint as the first historic
+                // commit
+                ++$commitIndex;
                 $pageOffset = $page - 1;
 
-                if (
-                    $pageOffset > 0 &&
-                    $this->isCacheHit($cachedWaypoint, $cachedPage + $pageOffset)
-                ) {
+                if ($commitIndex >= (count($cachedCommits) - 1)) {
+                    // If the index is past the whole page, we want to move the index
+                    // back to 0 and start from the next page
+                    $commitIndex = 0;
+                    ++$pageOffset;
+                }
+
+                if ($pageOffset > 0) {
+                    if (!$this->isCacheHit($cachedWaypoint, $cachedPage + $pageOffset)) {
+                        // The page we want is not yet populated. We could populate it, but that would _increase_
+                        // the overhead (because we'd have to make 2 uncached calls to populate the cache). Instead,
+                        // we'll just skip and allow the page to be fetched directly (1 uncached call)
+                        break;
+                    }
+
                     // We've populated the page we're looking for, so we can switch to that page
                     // with no additional overhead
                     $cachedPage += $pageOffset;
                     $cachedCommits = $this->getPrecedingCommits($cachedWaypoint, $cachedPage);
-                } elseif ($pageOffset > 0) {
-                    // The page we want is not yet populated. We could populate it, but that would _increase_
-                    // the overhead (because we'd have to make 2 uncached calls to populate the cache). Instead,
-                    // we'll just skip and allow the page to be fetched directly (1 uncached call)
-                    break;
                 }
 
                 $usableCachedCommits = array_slice(
