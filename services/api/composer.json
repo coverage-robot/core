@@ -15,6 +15,7 @@
         "async-aws/sqs": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
+        "coverage-robot/configuration": "^1.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/telemetry": "^1.0",
@@ -106,6 +107,10 @@
         {
             "type": "path",
             "url": "../../packages/contracts"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/configuration"
         }
     ],
     "extra": {

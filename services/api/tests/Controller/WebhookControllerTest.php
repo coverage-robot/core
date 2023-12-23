@@ -6,11 +6,12 @@ use App\Client\SqsMessageClient;
 use App\Controller\WebhookController;
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
+use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Service\WebhookSignatureService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
-use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -100,6 +101,7 @@ class WebhookControllerTest extends KernelTestCase
     public function testHandleWebhookEventWithInvalidSignature(
         Provider $provider,
         string $type,
+        string $webhookInstance,
         string $payload
     ): void {
         $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
@@ -145,6 +147,7 @@ class WebhookControllerTest extends KernelTestCase
     public function testHandleWebhookEventWithValidBody(
         Provider $provider,
         string $type,
+        string $webhookInstance,
         string $payload
     ): void {
         $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
@@ -159,7 +162,7 @@ class WebhookControllerTest extends KernelTestCase
         $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
         $mockSqsMessageClient->expects($this->once())
             ->method('queueIncomingWebhook')
-            ->with($this->isInstanceOf(GithubCheckRunWebhook::class));
+            ->with($this->isInstanceOf($webhookInstance));
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -190,7 +193,18 @@ class WebhookControllerTest extends KernelTestCase
     public static function webhookPayloadDataProvider(): iterable
     {
         foreach (glob(__DIR__ . '/../Fixture/Webhook/*.json') as $payload) {
-            yield basename($payload) => [Provider::GITHUB, 'check_run', file_get_contents($payload)];
+            yield basename($payload) => [
+                Provider::GITHUB,
+                match (basename($payload)) {
+                    'github_push.json' => 'push',
+                    default => 'check_run'
+                },
+                match (basename($payload)) {
+                    'github_push.json' => GithubPushWebhook::class,
+                    default => GithubCheckRunWebhook::class
+                },
+                file_get_contents($payload)
+            ];
         }
     }
 }

@@ -6,6 +6,7 @@ use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
+use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\JobRepository;
@@ -14,8 +15,6 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Contracts\Event\Event;
-use Packages\Event\Builder\JobStateChangeBuilder;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -179,6 +178,6 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
 
     public static function getEvent(): string
     {
-        return Event::JOB_STATE_CHANGE->value;
+        return WebhookProcessorEvent::JOB_STATE_CHANGE->value;
     }
 }
