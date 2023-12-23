@@ -7,11 +7,15 @@ use App\Model\Webhook\WebhookInterface;
 use App\Repository\ProjectRepository;
 use App\Service\Webhook\WebhookProcessor;
 use Bref\Context\Context;
+use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Override;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -25,21 +29,49 @@ class WebhookHandler extends SqsHandler
         private readonly WebhookProcessor $webhookProcessor,
         private readonly LoggerInterface $webhookLogger,
         private readonly ProjectRepository $projectRepository,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly MetricService $metricService
     ) {
     }
 
+    /**
+     * @throws InvalidLambdaEvent
+     */
     #[Override]
     public function handleSqs(SqsEvent $event, Context $context): void
     {
         TraceContext::setTraceHeaderFromContext($context);
 
+        $this->metricService->put(
+            metric: 'ProcessableWebhooks',
+            value: count($event->getRecords()),
+            unit: Unit::COUNT
+        );
+
         foreach ($event->getRecords() as $record) {
-            $webhook = $this->serializer->deserialize(
-                $record->getBody(),
-                WebhookInterface::class,
-                'json'
-            );
+            try {
+                $webhook = $this->serializer->deserialize(
+                    $record->getBody(),
+                    WebhookInterface::class,
+                    'json'
+                );
+            } catch (ExceptionInterface $e) {
+                $this->webhookLogger->error(
+                    'Failed to deserialize webhook payload.',
+                    [
+                        'exception' => $e,
+                        'payload' => $record->getBody()
+                    ]
+                );
+
+                $this->metricService->put(
+                    metric: 'InvalidWebhooks',
+                    value: 1,
+                    unit: Unit::COUNT
+                );
+
+                continue;
+            }
 
             $this->processWebhookEvent($webhook);
         }
@@ -54,10 +86,21 @@ class WebhookHandler extends SqsHandler
         $project = $this->getProject($webhook);
 
         if (!$project instanceof Project) {
+            $this->metricService->put(
+                metric: 'InvalidWebhooks',
+                value: 1,
+                unit: Unit::COUNT
+            );
             return;
         }
 
         $this->webhookProcessor->process($project, $webhook);
+
+        $this->metricService->put(
+            metric: 'ValidWebhooks',
+            value: 1,
+            unit: Unit::COUNT
+        );
     }
 
     /**

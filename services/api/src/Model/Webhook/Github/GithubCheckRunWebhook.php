@@ -12,6 +12,11 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
+/**
+ * A webhook received from GitHub about a check run.
+ *
+ * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#check_run
+ */
 class GithubCheckRunWebhook extends AbstractWebhook implements
     PipelineStateChangeWebhookInterface,
     SignedWebhookInterface
@@ -24,7 +29,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string|int $appId,
         protected readonly string $ref,
         protected readonly string $commit,
-        protected readonly string $parent,
+        protected readonly ?string $parent,
         protected readonly string|int|null $pullRequest,
         protected readonly ?string $baseRef,
         protected readonly ?string $baseCommit,
@@ -94,7 +99,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     }
 
     #[SerializedPath('[check_run][check_suite][before]')]
-    public function getParent(): string
+    public function getParent(): ?string
     {
         return $this->parent;
     }

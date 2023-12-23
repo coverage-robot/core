@@ -96,7 +96,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 repository: $webhook->getRepository(),
                 ref: $webhook->getRef(),
                 commit: $webhook->getCommit(),
-                parent: [$webhook->getParent()],
+                parent: array_filter([$webhook->getParent()]),
                 externalId: $webhook->getExternalId(),
                 state: $webhook->getJobState(),
                 pullRequest: $webhook->getPullRequest(),
