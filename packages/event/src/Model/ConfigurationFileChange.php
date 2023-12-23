@@ -14,7 +14,8 @@ class ConfigurationFileChange implements EventInterface
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
-        private readonly string $commit
+        private readonly string $commit,
+        private readonly ?DateTimeImmutable $eventTime
     ) {
         if ($this->eventTime === null) {
             $this->eventTime = new DateTimeImmutable();
