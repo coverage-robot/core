@@ -85,11 +85,11 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
 
             $this->publishEvent(
                 new ConfigurationFileChange(
-                    $webhook->getProvider(),
-                    $webhook->getOwner(),
-                    $webhook->getRepository(),
-                    $webhook->getRef(),
-                    $webhook->getHeadCommit()
+                    provider: $webhook->getProvider(),
+                    owner: $webhook->getOwner(),
+                    repository: $webhook->getRepository(),
+                    ref: $webhook->getRef(),
+                    commit: $webhook->getHeadCommit()
                 )
             );
         }
