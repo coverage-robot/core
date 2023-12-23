@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de42414e4e43bf56fce921900fb3a077",
+    "content-hash": "d53951cfb01cb9150ae65452b6cc1cbf",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -582,12 +582,31 @@
             "time": "2022-02-21T13:15:14+00:00"
         },
         {
+            "name": "coverage-robot/configuration",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/configuration",
+                "reference": "74b51ddfb90000b420c2d2244ef8d191cb96f159"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Configuration\\": "src/"
+                }
+            },
+            "description": "Tooling to access user-defined configuration settings",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "coverage-robot/contracts",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
             },
             "type": "library",
             "autoload": {
@@ -606,7 +625,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f3c46aa62f21174687a0105bd7fd7d9196e5690a"
+                "reference": "0315390776e833b4876de83d4385b90f124a8305"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -647,7 +666,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
+                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
             },
             "type": "library",
             "autoload": {
@@ -666,7 +685,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
+                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -11130,5 +11149,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

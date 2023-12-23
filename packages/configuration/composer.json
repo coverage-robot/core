@@ -1,0 +1,15 @@
+{
+    "name": "coverage-robot/configuration",
+    "description": "Tooling to access user-defined configuration settings",
+    "type": "library",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Packages\\Configuration\\": "src/"
+        }
+    }
+}

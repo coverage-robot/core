@@ -50,4 +50,9 @@ enum Event: string
      * expected to arrive (i.e. all jobs have also finished).
      */
     case UPLOADS_FINALISED = 'UPLOADS_FINALISED';
+
+    /**
+     * The Coverage Robot configuration file has changed in a push to the repository.
+     */
+    case CONFIGURATION_FILE_CHANGE = 'CONFIGURATION_FILE_CHANGE';
 }
