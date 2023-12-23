@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Exception\AuthenticationException;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -23,6 +24,7 @@ class NewProjectCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument('repository', InputArgument::REQUIRED, 'The repository the token belongs to')
@@ -33,6 +35,7 @@ class NewProjectCommand extends Command
     /**
      * @throws AuthenticationException
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var string $provider */

@@ -6,6 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
@@ -36,6 +37,7 @@ class InvokeCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument('commit', InputArgument::REQUIRED, 'The commit to analyse')
@@ -57,6 +59,7 @@ class InvokeCommand extends Command
             );
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

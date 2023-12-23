@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
@@ -21,16 +22,19 @@ class Finalised extends AbstractOrchestratedEvent
         parent::__construct($provider, $owner, $repository);
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
@@ -41,6 +45,7 @@ class Finalised extends AbstractOrchestratedEvent
         return $this->ref;
     }
 
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
@@ -52,16 +57,19 @@ class Finalised extends AbstractOrchestratedEvent
     }
 
     #[Ignore]
+    #[Override]
     public function getState(): OrchestratedEventState
     {
         return OrchestratedEventState::SUCCESS;
     }
 
+    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

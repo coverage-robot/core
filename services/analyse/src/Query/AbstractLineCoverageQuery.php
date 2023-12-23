@@ -4,12 +4,14 @@ namespace App\Query;
 
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
+use Override;
 use Packages\Models\Enum\LineState;
 
 abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     use ScopeAwareTrait;
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getNamedQueries($table, $parameterBag);

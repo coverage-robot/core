@@ -9,6 +9,7 @@ use App\Query\Trait\CarryforwardAwareTrait;
 use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Models\Enum\LineState;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -30,6 +31,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         parent::__construct($environmentService);
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
@@ -64,6 +66,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         SQL;
     }
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $parent = parent::getNamedQueries($table, $parameterBag);
@@ -134,6 +137,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         SQL;
     }
 
+    #[Override]
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
@@ -155,6 +159,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
      * @throws QueryException
      * @throws ExceptionInterface
      */
+    #[Override]
     public function parseResults(QueryResults $results): TagCoverageCollectionQueryResult
     {
         if (!$results->isComplete()) {

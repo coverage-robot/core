@@ -6,6 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\InvalidLambdaEvent;
+use Override;
 use Packages\Contracts\Event\Event;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,12 +23,14 @@ class InvokeEventCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument('event', InputArgument::REQUIRED, 'The event to invoke')
             ->addArgument('body', InputArgument::REQUIRED, 'The body of the event (JSON)');
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

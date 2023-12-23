@@ -9,6 +9,7 @@ use App\Model\GraphParameters;
 use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
@@ -22,6 +23,7 @@ class AuthTokenServiceTest extends TestCase
 {
     private ProjectRepository|MockObject $projectRepository;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

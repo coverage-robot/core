@@ -3,12 +3,14 @@
 namespace App;
 
 use Bref\SymfonyBridge\BrefKernel;
+use Override;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 
 class Kernel extends BrefKernel
 {
     use MicroKernelTrait;
 
+    #[Override]
     protected function getWritableCacheDirectories(): array
     {
         return [

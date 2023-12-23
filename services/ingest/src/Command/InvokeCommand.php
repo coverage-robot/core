@@ -9,6 +9,7 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -37,11 +38,13 @@ class InvokeCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument('key', InputArgument::REQUIRED, 'The key of the file to retrieve');
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {

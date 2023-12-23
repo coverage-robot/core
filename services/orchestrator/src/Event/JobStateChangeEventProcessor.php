@@ -11,6 +11,7 @@ use App\Model\Job;
 use App\Service\CachingEventStoreService;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Enum\JobState;
@@ -39,6 +40,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
         );
     }
 
+    #[Override]
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof JobStateChange) {
@@ -134,6 +136,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
         return $hasRecordedStateChange;
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return Event::JOB_STATE_CHANGE->value;

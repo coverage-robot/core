@@ -7,6 +7,7 @@ use App\Enum\WebhookType;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\SignedWebhookInterface;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
@@ -31,18 +32,21 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     ) {
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return Provider::GITHUB;
     }
 
     #[SerializedPath('[repository][owner][login]')]
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
     #[SerializedPath('[repository][name]')]
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
@@ -53,6 +57,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         return $this->signature;
     }
 
+    #[Override]
     public function getType(): WebhookType
     {
         return WebhookType::GITHUB_CHECK_RUN;
@@ -117,6 +122,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
      * is able to confidently run through the queue messages knowing the messages
      * are only relevant to the specific commit
      */
+    #[Override]
     public function getMessageGroup(): string
     {
         return md5(
@@ -132,6 +138,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         );
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
@@ -144,6 +151,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         );
     }
 
+    #[Override]
     public function getEvent(): WebhookProcessorEvent
     {
         return WebhookProcessorEvent::JOB_STATE_CHANGE;

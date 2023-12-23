@@ -14,6 +14,7 @@ use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CachingCommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
@@ -130,6 +131,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         $this->leastCoveredDiffFiles = $leastCoveredDiffFilesCache;
     }
 
+    #[Override]
     protected function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
         if (!isset($this->uploads[$waypoint])) {
@@ -139,6 +141,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->uploads[$waypoint];
     }
 
+    #[Override]
     protected function getTotalLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->totalLines[$waypoint])) {
@@ -148,6 +151,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->totalLines[$waypoint];
     }
 
+    #[Override]
     protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->atLeastPartiallyCoveredLines[$waypoint])) {
@@ -157,6 +161,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->atLeastPartiallyCoveredLines[$waypoint];
     }
 
+    #[Override]
     protected function getUncoveredLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->uncoveredLines[$waypoint])) {
@@ -166,6 +171,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->uncoveredLines[$waypoint];
     }
 
+    #[Override]
     protected function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
         if (!isset($this->coveragePercentage[$waypoint])) {
@@ -175,6 +181,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->coveragePercentage[$waypoint];
     }
 
+    #[Override]
     protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
         if (!isset($this->tagCoverage[$waypoint])) {
@@ -184,6 +191,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->tagCoverage[$waypoint];
     }
 
+    #[Override]
     protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         if (!isset($this->diffCoveragePercentage[$waypoint])) {
@@ -197,6 +205,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $diffCoveragePercentage !== false ? $diffCoveragePercentage : null;
     }
 
+    #[Override]
     protected function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = CoverageAnalyserService::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
@@ -216,6 +225,7 @@ class CachingCoverageAnalyserService extends CoverageAnalyserService
         return $this->leastCoveredDiffFiles[$waypoint][$limit];
     }
 
+    #[Override]
     protected function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         if (!isset($this->diffLineCoverage[$waypoint])) {

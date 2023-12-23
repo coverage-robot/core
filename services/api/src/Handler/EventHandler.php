@@ -5,6 +5,7 @@ namespace App\Handler;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Service\EventProcessorService;
@@ -25,6 +26,7 @@ class EventHandler extends EventBridgeHandler
     ) {
     }
 
+    #[Override]
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
         TraceContext::setTraceHeaderFromContext($context);

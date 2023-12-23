@@ -11,6 +11,7 @@ use App\Model\Finalised;
 use App\Model\Ingestion;
 use App\Service\EventStoreService;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\IngestFailure;
@@ -19,11 +20,13 @@ use Packages\Models\Model\Tag;
 
 class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
+    #[Override]
     public static function getEventProcessor(): string
     {
         return IngestFailureEventProcessor::class;
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return IngestFailure::class;

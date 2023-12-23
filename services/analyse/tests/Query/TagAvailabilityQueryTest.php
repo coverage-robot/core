@@ -11,6 +11,7 @@ use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
+use Override;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -18,6 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TagAvailabilityQueryTest extends AbstractQueryTestCase
 {
+    #[Override]
     public function getQueryClass(): QueryInterface
     {
         return new TagAvailabilityQuery(
@@ -33,6 +35,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
     }
 
     #[DataProvider('resultsDataProvider')]
+    #[Override]
     public function testParseResults(array $queryResult): void
     {
         $mockBigQueryResult = $this->createMock(QueryResults::class);
@@ -50,6 +53,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
     }
 
     #[DataProvider('parametersDataProvider')]
+    #[Override]
     public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
     {
         if (!$valid) {

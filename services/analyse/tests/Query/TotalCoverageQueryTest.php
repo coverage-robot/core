@@ -13,6 +13,7 @@ use App\Query\TotalCoverageQuery;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Override;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Models\Model\Tag;
@@ -21,6 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
+    #[Override]
     public static function getQueryParameters(): array
     {
         $waypoint = new ReportWaypoint(
@@ -47,6 +49,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    #[Override]
     public function getQueryClass(): QueryInterface
     {
         return new TotalCoverageQuery(
@@ -62,6 +65,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
     }
 
     #[DataProvider('resultsDataProvider')]
+    #[Override]
     public function testParseResults(array $queryResult): void
     {
         $mockIterator = $this->createMock(ItemIterator::class);
@@ -85,6 +89,7 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
 
     #[DataProvider('parametersDataProvider')]
+    #[Override]
     public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
     {
         if (!$valid) {
