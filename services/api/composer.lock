@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e674d57a7603088f88c383c81049eaf",
+    "content-hash": "de42414e4e43bf56fce921900fb3a077",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -262,28 +262,28 @@
         },
         {
             "name": "async-aws/sqs",
-            "version": "1.9.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/sqs.git",
-                "reference": "81c4e06ad67892b440c9eb55dff328168da5f984"
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/sqs/zipball/81c4e06ad67892b440c9eb55dff328168da5f984",
-                "reference": "81c4e06ad67892b440c9eb55dff328168da5f984",
+                "url": "https://api.github.com/repos/async-aws/sqs/zipball/0208ec744847020b08da0541b2fb5536875a70c8",
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8",
                 "shasum": ""
             },
             "require": {
                 "async-aws/core": "^1.9",
                 "ext-filter": "*",
-                "ext-simplexml": "*",
+                "ext-json": "*",
                 "php": "^7.2.5 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -304,7 +304,7 @@
                 "sqs"
             ],
             "support": {
-                "source": "https://github.com/async-aws/sqs/tree/1.9.0"
+                "source": "https://github.com/async-aws/sqs/tree/2.0.0"
             },
             "funding": [
                 {
@@ -316,7 +316,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T20:00:50+00:00"
+            "time": "2023-12-13T20:52:19+00:00"
         },
         {
             "name": "bref/bref",
