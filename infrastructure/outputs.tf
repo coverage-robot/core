@@ -30,6 +30,10 @@ output "coverage_event_bus" {
   value = module.events.coverage_event_bus
 }
 
+output "configuration_table" {
+  value = module.configuration.configuration_table
+}
+
 output "environment_dataset" {
   value = length(module.warehouse) > 0 ? module.warehouse.environment_dataset : null
 }
