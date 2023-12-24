@@ -13,7 +13,7 @@ resource "aws_dynamodb_table" "configuration_table" {
   }
 
   attribute {
-    name = "settingKey"
+    name = "setting"
     type = "S"
   }
 
