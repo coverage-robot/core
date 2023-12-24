@@ -78,7 +78,9 @@ resource "aws_iam_policy" "orchestrator_policy" {
         ]
         Resource = [
           var.event_store_arn,
-          "${var.event_store_arn}/index/*"
+          "${var.event_store_arn}/index/*",
+          data.terraform_remote_state.core.outputs.configuration_table.arn,
+          "${data.terraform_remote_state.core.outputs.configuration_table.arn}/index/*",
         ]
       }
     ]
@@ -138,7 +140,8 @@ resource "aws_cloudwatch_event_rule" "service" {
       "INGEST_STARTED",
       "INGEST_SUCCESS",
       "INGEST_FAILURE",
-      "JOB_STATE_CHANGE"
+      "JOB_STATE_CHANGE",
+      "CONFIGURATION_FILE_CHANGE",
     ]
   }
   EOF
