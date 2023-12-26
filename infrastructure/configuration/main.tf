@@ -4,7 +4,7 @@ resource "aws_dynamodb_table" "configuration_table" {
   read_capacity               = 3
   write_capacity              = 3
   hash_key                    = "repositoryIdentifier"
-  range_key                   = "setting"
+  range_key                   = "settingKey"
   deletion_protection_enabled = true
 
   attribute {

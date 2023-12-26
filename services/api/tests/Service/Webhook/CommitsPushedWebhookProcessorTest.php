@@ -8,7 +8,7 @@ use App\Model\Webhook\Github\GithubPushedCommit;
 use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Service\Webhook\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
-use Packages\Configuration\Constant\Configuration;
+use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Event\Model\ConfigurationFileChange;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -89,7 +89,7 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                 ),
                 false
             ],
-            'Configuration file push (single commits)' => [
+            'ConfigurationFile file push (single commits)' => [
                 new GithubPushWebhook(
                     signature: 'mock-signature',
                     owner: 'mock-owner',
@@ -100,7 +100,7 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                         new GithubPushedCommit(
                             commit: 'mock-commit-1',
                             addedFiles: [
-                                Configuration::FILE_PATH
+                                ConfigurationFile::PATH
                             ],
                             modifiedFiles: [],
                             deletedFiles: [
@@ -109,7 +109,7 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                             committedAt: new DateTimeImmutable()
                         ),
                         new GithubPushedCommit(
-                            commit: 'mock-commit-2',
+                            commit: 'mock-head-commit',
                             addedFiles: [],
                             modifiedFiles: ['another-file.php'],
                             deletedFiles: [],
@@ -119,7 +119,7 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                 ),
                 true
             ],
-            'Configuration file push (multiple commits)' => [
+            'ConfigurationFile file push (multiple commits)' => [
                 new GithubPushWebhook(
                     signature: 'mock-signature',
                     owner: 'mock-owner',
@@ -131,17 +131,17 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                             commit: 'mock-commit-1',
                             addedFiles: [],
                             modifiedFiles: [
-                                Configuration::FILE_PATH
+                                ConfigurationFile::PATH
                             ],
                             deletedFiles: [],
                             committedAt: new DateTimeImmutable()
                         ),
                         new GithubPushedCommit(
-                            commit: 'mock-commit-2',
+                            commit: 'mock-head-commit',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [
-                                Configuration::FILE_PATH
+                                ConfigurationFile::PATH
                             ],
                             committedAt: new DateTimeImmutable()
                         )
@@ -149,7 +149,7 @@ class CommitsPushedWebhookProcessorTest extends TestCase
                 ),
                 true
             ],
-            'Configuration file push (in tag)' => [
+            'ConfigurationFile file push (in tag)' => [
                 new GithubPushWebhook(
                     signature: 'mock-signature',
                     owner: 'mock-owner',

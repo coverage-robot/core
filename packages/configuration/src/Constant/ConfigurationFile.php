@@ -2,11 +2,11 @@
 
 namespace Packages\Configuration\Constant;
 
-class Configuration
+class ConfigurationFile
 {
     /**
      * The path to the configuration file (from the project root) in
      * Provider's repositories.
      */
-    public const string FILE_PATH = 'coveragerobot.yml';
+    public const string PATH = 'coveragerobot.yml';
 }

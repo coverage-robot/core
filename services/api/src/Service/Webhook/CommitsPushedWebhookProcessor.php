@@ -10,7 +10,7 @@ use App\Model\Webhook\PushedCommitInterface;
 use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
-use Packages\Configuration\Constant\Configuration;
+use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Event\Model\ConfigurationFileChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -75,7 +75,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
         if ($this->isConfigurationFileEffected($effectedFiles)) {
             $this->webhookProcessorLogger->info(
                 sprintf(
-                    'Configuration has been effected by commits in %s',
+                    'Configuration file has been effected by commits in %s',
                     (string)$webhook,
                 ),
                 [
@@ -83,13 +83,30 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
                 ]
             );
 
+            $headCommit = array_filter(
+                $webhook->getCommits(),
+                static fn (PushedCommitInterface $commit) =>
+                    $commit->getCommit() === $webhook->getHeadCommit()
+            );
+
+            if (count($headCommit) !== 1) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Expected to find 1 head commit, found %d for %s',
+                        count($headCommit),
+                        (string)$webhook
+                    )
+                );
+            }
+
             $this->publishEvent(
                 new ConfigurationFileChange(
                     provider: $webhook->getProvider(),
                     owner: $webhook->getOwner(),
                     repository: $webhook->getRepository(),
                     ref: $webhook->getRef(),
-                    commit: $webhook->getHeadCommit()
+                    commit: $webhook->getHeadCommit(),
+                    eventTime: end($headCommit)->getCommittedAt(),
                 )
             );
         }
@@ -101,7 +118,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
     private function isConfigurationFileEffected(array $effectedFiles): bool
     {
         return in_array(
-            Configuration::FILE_PATH,
+            ConfigurationFile::PATH,
             $effectedFiles,
             true
         );

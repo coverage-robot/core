@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        Packages\Configuration\Setting\SettingInterface:
+            tags: [ 'app.settings' ]
+
+    Packages\Configuration\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
