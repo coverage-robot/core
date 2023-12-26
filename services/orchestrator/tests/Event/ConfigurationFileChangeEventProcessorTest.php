@@ -69,7 +69,8 @@ class ConfigurationFileChangeEventProcessorTest extends TestCase
         );
     }
 
-    public function testProcessingEventNotOnMainRef(): void {
+    public function testProcessingEventNotOnMainRef(): void
+    {
         $mockGithubClient = $this->createMock(GithubAppInstallationClient::class);
         $mockGithubClient->expects($this->never())
             ->method('repo');
