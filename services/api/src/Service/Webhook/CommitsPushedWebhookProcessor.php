@@ -60,6 +60,10 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
             return;
         }
 
+        // Remove the prefix to get just the ref name, which we can then
+        // pass around in events.
+        $ref = substr($webhook->getRef(), strlen('refs/heads/'));
+
         /** @var string[] $effectedFiles */
         $effectedFiles = array_reduce(
             $webhook->getCommits(),
@@ -104,7 +108,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
                     provider: $webhook->getProvider(),
                     owner: $webhook->getOwner(),
                     repository: $webhook->getRepository(),
-                    ref: $webhook->getRef(),
+                    ref: $ref,
                     commit: $webhook->getHeadCommit(),
                     eventTime: end($headCommit)->getCommittedAt(),
                 )
