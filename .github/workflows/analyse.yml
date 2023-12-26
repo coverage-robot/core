@@ -314,5 +314,6 @@ jobs:
         steps:
             -   uses: geekyeggo/delete-artifact@v4
                 with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
                     name: |
                         build
