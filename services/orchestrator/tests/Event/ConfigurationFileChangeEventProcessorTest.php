@@ -69,6 +69,37 @@ class ConfigurationFileChangeEventProcessorTest extends TestCase
         );
     }
 
+    public function testProcessingEventNotOnMainRef(): void
+    {
+        $mockGithubClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubClient->expects($this->never())
+            ->method('repo');
+        $mockGithubClient->expects($this->never())
+            ->method('authenticateAsRepositoryOwner');
+
+        $mockConfigurationFileService = $this->createMock(ConfigurationFileService::class);
+        $mockConfigurationFileService->expects($this->never())
+            ->method('parseAndPersistFile');
+
+        $configurationFileChangeEventProcessor = new ConfigurationFileChangeEventProcessor(
+            new NullLogger(),
+            $mockGithubClient,
+            $mockConfigurationFileService
+        );
+
+        $this->assertTrue(
+            $configurationFileChangeEventProcessor->process(
+                new ConfigurationFileChange(
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'not-main-ref',
+                    commit: 'commit',
+                )
+            )
+        );
+    }
+
     public function testGetEvent(): void
     {
         $this->assertEquals(
@@ -85,7 +116,17 @@ class ConfigurationFileChangeEventProcessorTest extends TestCase
                     provider: Provider::GITHUB,
                     owner: 'owner',
                     repository: 'repository',
-                    ref: 'ref',
+                    ref: 'main',
+                    commit: 'commit',
+                ),
+                true
+            ],
+            [
+                new ConfigurationFileChange(
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'master',
                     commit: 'commit',
                 ),
                 true
