@@ -15,6 +15,11 @@ use Psr\Log\LoggerInterface;
 
 class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
 {
+    private const array REFS = [
+        'main',
+        'master'
+    ];
+
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly GithubAppInstallationClient $githubAppInstallationClient,
@@ -57,6 +62,23 @@ class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
                 );
 
                 return false;
+            }
+
+            if (
+                !in_array(
+                    $event->getRef(),
+                    self::REFS,
+                    true
+                )
+            ) {
+                $this->eventProcessorLogger->info(
+                    sprintf(
+                        'Ignoring as configuration file change event (%s) is not for a main ref',
+                        (string)$event
+                    )
+                );
+
+                return true;
             }
 
             return $this->configurationFileService->parseAndPersistFile(
