@@ -78,9 +78,20 @@ resource "aws_iam_policy" "orchestrator_policy" {
         ]
         Resource = [
           var.event_store_arn,
-          "${var.event_store_arn}/index/*",
-          data.terraform_remote_state.core.outputs.configuration_table.arn,
-          "${data.terraform_remote_state.core.outputs.configuration_table.arn}/index/*"
+          "${var.event_store_arn}/index/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:Get*",
+          "dynamodb:Query",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.configuration_table.arn
         ]
       }
     ]
