@@ -48,6 +48,17 @@ class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
                     $event->getCommit()
                 );
 
+            if ($configurationFile === null) {
+                $this->eventProcessorLogger->error(
+                    sprintf(
+                        'Configuration file returned as null for %s.',
+                        (string)$event
+                    )
+                );
+
+                return false;
+            }
+
             return $this->configurationFileService->parseAndPersistFile(
                 $event->getProvider(),
                 $event->getOwner(),
