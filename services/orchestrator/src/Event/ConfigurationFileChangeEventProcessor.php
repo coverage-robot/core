@@ -41,6 +41,23 @@ class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
             return false;
         }
 
+        if (
+            !in_array(
+                $event->getRef(),
+                self::REFS,
+                true
+            )
+        ) {
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Ignoring as configuration file change event (%s) is not for a main ref',
+                    (string)$event
+                )
+            );
+
+            return true;
+        }
+
         $this->githubAppInstallationClient->authenticateAsRepositoryOwner($event->getOwner());
 
         try {
@@ -62,23 +79,6 @@ class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
                 );
 
                 return false;
-            }
-
-            if (
-                !in_array(
-                    $event->getRef(),
-                    self::REFS,
-                    true
-                )
-            ) {
-                $this->eventProcessorLogger->info(
-                    sprintf(
-                        'Ignoring as configuration file change event (%s) is not for a main ref',
-                        (string)$event
-                    )
-                );
-
-                return true;
             }
 
             return $this->configurationFileService->parseAndPersistFile(
