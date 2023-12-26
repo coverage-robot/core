@@ -96,6 +96,36 @@ class SettingServiceTest extends TestCase
         );
     }
 
+    #[DataProvider('trueFalseDataProvider')]
+    public function testDeletingValue($isDeleteSuccessful): void
+    {
+        $mockSetting = $this->createMock(SettingInterface::class);
+        $mockSetting->expects($this->once())
+            ->method('delete')
+            ->with(
+                Provider::GITHUB,
+                'owner',
+                'repository'
+            )
+            ->willReturn($isDeleteSuccessful);
+
+        $settingService = new SettingService(
+            [
+                SettingKey::LINE_ANNOTATION->value => $mockSetting
+            ]
+        );
+
+        $this->assertEquals(
+            $isDeleteSuccessful,
+            $settingService->delete(
+                Provider::GITHUB,
+                'owner',
+                'repository',
+                SettingKey::LINE_ANNOTATION
+            )
+        );
+    }
+
     public static function trueFalseDataProvider(): array
     {
         return [

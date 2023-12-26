@@ -5,8 +5,10 @@ namespace Packages\Configuration\Tests\Client;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\Select;
+use AsyncAws\DynamoDb\Input\DeleteItemInput;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
+use AsyncAws\DynamoDb\Result\DeleteItemOutput;
 use AsyncAws\DynamoDb\Result\PutItemOutput;
 use AsyncAws\DynamoDb\Result\QueryOutput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
@@ -166,6 +168,62 @@ class DynamoDbClientTest extends TestCase
                 'mock-repository',
                 SettingKey::LINE_ANNOTATION,
                 SettingValueType::BOOLEAN
+            )
+        );
+    }
+
+    public function testArgumentsWhenDeletingSettingValue(): void
+    {
+        $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
+
+        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->expects($this->once())
+            ->method('getEnvironment')
+            ->willReturn(Environment::TESTING);
+
+        $client = new DynamoDbClient(
+            $mockEnvironmentService,
+            new NullLogger(),
+            $mockClient
+        );
+
+        $mockClient->expects($this->once())
+            ->method('deleteItem')
+            ->with(
+                self::callback(
+                    function (DeleteItemInput $input) {
+                        $this->assertEquals(
+                            'coverage-configuration-test',
+                            $input->getTableName()
+                        );
+                        $this->assertEquals(
+                            [
+                                DynamoDbClient::REPOSITORY_IDENTIFIER_COLUMN => new AttributeValue(
+                                    [
+                                        'S' => 'github-mock-owner-mock-repository'
+                                    ]
+                                ),
+                                DynamoDbClient::SETTING_KEY_COLUMN => new AttributeValue(
+                                    [
+                                        'S' => SettingKey::LINE_ANNOTATION->value
+                                    ]
+                                ),
+                            ],
+                            $input->getKey()
+                        );
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(ResultMockFactory::create(DeleteItemOutput::class));
+
+        $this->assertEquals(
+            true,
+            $client->deleteSettingFromStore(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                SettingKey::LINE_ANNOTATION
             )
         );
     }

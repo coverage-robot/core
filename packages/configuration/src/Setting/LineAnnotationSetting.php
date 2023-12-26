@@ -66,6 +66,20 @@ class LineAnnotationSetting implements SettingInterface
     }
 
     #[Override]
+    public function delete(
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): bool {
+        return $this->dynamoDbClient->deleteSettingFromStore(
+            $provider,
+            $owner,
+            $repository,
+            SettingKey::LINE_ANNOTATION
+        );
+    }
+
+    #[Override]
     public function validate(mixed $value): bool
     {
         return is_bool($value);

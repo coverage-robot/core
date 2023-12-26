@@ -55,6 +55,20 @@ class SettingService
             );
     }
 
+    public function delete(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        SettingKey $key
+    ): bool {
+        return $this->getSetting($key)
+            ->delete(
+                $provider,
+                $owner,
+                $repository
+            );
+    }
+
     /**
      * Validate the value of a setting.
      */

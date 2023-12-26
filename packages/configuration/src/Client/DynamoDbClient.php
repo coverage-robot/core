@@ -6,6 +6,7 @@ use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\Select;
+use AsyncAws\DynamoDb\Input\DeleteItemInput;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use Packages\Configuration\Enum\SettingKey;
@@ -185,6 +186,59 @@ class DynamoDbClient
             $this->dynamoDbClientLogger->error(
                 sprintf(
                     'Failed to set setting %s',
+                    $key->value
+                ),
+                [
+                    'provider' => $provider,
+                    'owner' => $owner,
+                    'repository' => $repository,
+                    'exception' => $httpException,
+                ]
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deleteSettingFromStore(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        SettingKey $key
+    ): bool {
+        try {
+            $response = $this->dynamoDbClient->deleteItem(
+                new DeleteItemInput(
+                    [
+                        'TableName' => sprintf(
+                            self::TABLE_NAME,
+                            $this->environmentService->getEnvironment()
+                                ->value
+                        ),
+                        'Key' => [
+                            self::REPOSITORY_IDENTIFIER_COLUMN => [
+                                'S' => sprintf(
+                                    '%s-%s-%s',
+                                    $provider->value,
+                                    $owner,
+                                    $repository
+                                ),
+                            ],
+                            self::SETTING_KEY_COLUMN => [
+                                'S' => $key->value,
+                            ],
+                        ],
+                    ]
+                )
+            );
+
+            $response->resolve();
+        } catch (HttpException $httpException) {
+            $this->dynamoDbClientLogger->error(
+                sprintf(
+                    'Failed to delete setting %s',
                     $key->value
                 ),
                 [

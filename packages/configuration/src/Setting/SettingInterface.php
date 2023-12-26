@@ -26,6 +26,15 @@ interface SettingInterface
     ): bool;
 
     /**
+     * Delete the configuration setting from the configuration store.
+     */
+    public function delete(
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): bool;
+
+    /**
      * Validate the configuration setting's value.
      */
     public function validate(mixed $value): bool;

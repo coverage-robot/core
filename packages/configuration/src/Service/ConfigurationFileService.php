@@ -23,7 +23,7 @@ class ConfigurationFileService
     {
         $parsedFile = Yaml::parse($configurationFile);
 
-        $settings = $this->parseDotNotationKey($parsedFile);
+        $settings = $this->parseDotNotationKey($parsedFile ?? []);
 
         /** @var WeakMap<SettingKey, mixed> $parsedSettings */
         $parsedSettings = new WeakMap();
@@ -62,14 +62,22 @@ class ConfigurationFileService
 
         $settings = $this->parseFile($configurationFile);
 
-        foreach ($settings as $settingKey => $value) {
-            $successful = $this->settingService->set(
-                $provider,
-                $owner,
-                $repository,
-                $settingKey,
-                $value
-            ) && $successful;
+        foreach (SettingKey::cases() as $settingKey) {
+            $successful = match (isset($settings[$settingKey])) {
+                true => $this->settingService->set(
+                    $provider,
+                    $owner,
+                    $repository,
+                    $settingKey,
+                    $settings[$settingKey]
+                ),
+                false => $this->settingService->delete(
+                    $provider,
+                    $owner,
+                    $repository,
+                    $settingKey
+                )
+            } && $successful;
         }
 
         return $successful;

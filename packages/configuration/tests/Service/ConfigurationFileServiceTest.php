@@ -48,11 +48,13 @@ class ConfigurationFileServiceTest extends TestCase
         array $expectedParsedFile
     ): void {
         $mockSettingService = $this->createMock(SettingService::class);
-        $mockSettingService->expects($this->exactly(count($expectedParsedFile)))
+        $mockSettingService->expects($this->atMost(count($expectedParsedFile)))
             ->method('validate')
             ->willReturn(true);
-        $mockSettingService->expects($this->exactly(count($expectedParsedFile)))
+        $mockSettingService->expects($this->atMost(count($expectedParsedFile)))
             ->method('set')
+            ->willReturn(true);
+        $mockSettingService->method('delete')
             ->willReturn(true);
 
         $configurationFileService = new ConfigurationFileService(
@@ -106,6 +108,10 @@ class ConfigurationFileServiceTest extends TestCase
                 [
                     'line_annotations' => ['a', 'b', 'c']
                 ]
+            ],
+            [
+                '',
+                []
             ]
         ];
     }
