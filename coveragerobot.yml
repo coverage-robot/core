@@ -1,2 +1,2 @@
-# Publish line annotations as part of coverage report on PRs
+# Publish line annotations as part of coverage reports on PRs
 line_annotations: true
