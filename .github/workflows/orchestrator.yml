@@ -259,6 +259,7 @@ jobs:
                 uses: SpicyPizza/create-envfile@v2.0
                 with:
                     envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                    envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
                     envkey_SENTRY_DSN: ${{ env.sentry-dsn }}
                     directory: ${{ env.working-directory }}
                     file_name: .env.local
@@ -279,6 +280,13 @@ jobs:
 
             -   name: Warm platform cache
                 run: php bin/console cache:warmup --env=${{ env.workspace }}
+
+            -   name: Add Github Private Key
+                uses: DamianReeves/write-file-action@v1.2
+                with:
+                    path: ${{ env.working-directory }}/config/github.pem
+                    write-mode: overwrite
+                    contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
             -   name: Run Apply
                 uses: dflook/terraform-apply@v1

@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
         Event::UPLOAD->value => Upload::class,
         Event::UPLOADS_FINALISED->value => UploadsFinalised::class,
         Event::JOB_STATE_CHANGE->value => JobStateChange::class,
+        Event::CONFIGURATION_FILE_CHANGE->value => ConfigurationFileChange::class,
         Event::COVERAGE_FINALISED->value => CoverageFinalised::class,
         Event::INGEST_STARTED->value => IngestStarted::class,
         Event::INGEST_SUCCESS->value => IngestSuccess::class,
