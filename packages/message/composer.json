@@ -20,10 +20,6 @@
         },
         {
             "type": "path",
-            "url": "../models"
-        },
-        {
-            "type": "path",
             "url": "../contracts"
         }
     ]

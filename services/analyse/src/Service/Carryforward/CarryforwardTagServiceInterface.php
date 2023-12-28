@@ -3,7 +3,7 @@
 namespace App\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 interface CarryforwardTagServiceInterface
 {

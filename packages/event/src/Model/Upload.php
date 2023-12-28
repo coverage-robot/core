@@ -7,7 +7,7 @@ use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {

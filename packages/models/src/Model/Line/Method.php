@@ -2,7 +2,7 @@
 
 namespace Packages\Models\Model\Line;
 
-use Packages\Models\Enum\LineType;
+use Packages\Contracts\Line\LineType;
 
 class Method extends AbstractLine
 {

@@ -94,10 +94,6 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../../packages/models"
-        },
-        {
-            "type": "path",
             "url": "../../packages/event"
         },
         {

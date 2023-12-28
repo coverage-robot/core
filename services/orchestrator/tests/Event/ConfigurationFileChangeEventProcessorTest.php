@@ -14,7 +14,7 @@ use Packages\Event\Model\ConfigurationFileChange;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

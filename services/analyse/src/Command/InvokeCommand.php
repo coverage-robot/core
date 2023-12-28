@@ -10,7 +10,7 @@ use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -8,6 +8,15 @@
             "ref": "073e577186ef96e4f26df1f8a3dc14a48826d364"
         }
     },
+    "coverage-robot/clients": {
+        "version": "1.0.0"
+    },
+    "coverage-robot/event": {
+        "version": "1.0.0"
+    },
+    "coverage-robot/telemetry": {
+        "version": "1.0.0"
+    },
     "knplabs/github-api": {
         "version": "3.11",
         "recipe": {

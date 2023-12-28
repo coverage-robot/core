@@ -8,7 +8,7 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
-use Packages\Models\Enum\LineType;
+use Packages\Contracts\Line\LineType;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {

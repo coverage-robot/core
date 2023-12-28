@@ -13,7 +13,7 @@ use App\Tests\Mock\Factory\MockQueryFactory;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;

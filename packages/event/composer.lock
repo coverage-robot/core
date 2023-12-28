@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b0f3c5fb2698cbddc22ae29d91bd85b",
+    "content-hash": "7817dba7256fbb7090c2df13245d23ae",
     "packages": [
         {
             "name": "coverage-robot/contracts",
@@ -21,25 +21,6 @@
                 }
             },
             "description": "Decoupled contracts usable across the services",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "coverage-robot/models",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "../models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Packages\\Models\\": "src/"
-                }
-            },
-            "description": "Shared models across the services",
             "transport-options": {
                 "relative": true
             }

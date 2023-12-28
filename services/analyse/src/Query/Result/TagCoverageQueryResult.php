@@ -2,7 +2,7 @@
 
 namespace App\Query\Result;
 
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 class TagCoverageQueryResult extends CoverageQueryResult
 {

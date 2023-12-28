@@ -4,7 +4,7 @@ namespace App\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use WeakMap;
 
 class CachingCarryforwardTagService implements CarryforwardTagServiceInterface

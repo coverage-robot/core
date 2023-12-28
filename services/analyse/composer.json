@@ -20,7 +20,6 @@
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/message": "^1.0",
-        "coverage-robot/models": "^1.0",
         "coverage-robot/telemetry": "^1.0",
         "doctrine/sql-formatter": "^1.1",
         "google/cloud-bigquery": "^1.24",
@@ -107,10 +106,6 @@
         {
             "type": "path",
             "url": "../../packages/message"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/models"
         },
         {
             "type": "path",

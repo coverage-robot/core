@@ -22,9 +22,9 @@ use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
+use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Enum\LineState;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

@@ -12,7 +12,7 @@ use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

@@ -3,7 +3,7 @@
 namespace App\Query\Result;
 
 use DateTimeImmutable;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 class TotalUploadsQueryResult implements QueryResultInterface
 {

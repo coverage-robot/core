@@ -4,7 +4,7 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 trait CarryforwardAwareTrait
 {

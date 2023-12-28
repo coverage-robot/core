@@ -4,12 +4,12 @@ namespace App\Service;
 
 use App\Query\Result\LineCoverageQueryResult;
 use DateTimeImmutable;
+use Packages\Contracts\Line\LineState;
+use Packages\Contracts\Line\LineType;
 use Packages\Event\Model\EventInterface;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
-use Packages\Models\Enum\LineState;
-use Packages\Models\Enum\LineType;
 use Psr\Log\LoggerInterface;
 
 class LineGroupingService
