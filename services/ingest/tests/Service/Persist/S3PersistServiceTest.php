@@ -2,23 +2,23 @@
 
 namespace App\Tests\Service\Persist;
 
+use App\Model\Coverage;
+use App\Model\File;
+use App\Model\Line\AbstractLine;
+use App\Model\Line\Branch;
+use App\Model\Line\Method;
+use App\Model\Line\Statement;
 use App\Service\Persist\S3PersistService;
 use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Line\LineType;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
-use Packages\Models\Enum\CoverageFormat;
-use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLine;
-use Packages\Models\Model\Line\Branch;
-use Packages\Models\Model\Line\Method;
-use Packages\Models\Model\Line\Statement;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;

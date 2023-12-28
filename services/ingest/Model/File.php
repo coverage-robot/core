@@ -1,10 +1,10 @@
 <?php
 
-namespace Packages\Models\Model;
+namespace App\Model;
 
+use App\Model\Line\AbstractLine;
 use Countable;
 use OutOfBoundsException;
-use Packages\Models\Model\Line\AbstractLine;
 use Stringable;
 
 class File implements Countable, Stringable

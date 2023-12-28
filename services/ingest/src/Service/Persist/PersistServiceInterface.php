@@ -2,8 +2,8 @@
 
 namespace App\Service\Persist;
 
+use App\Model\Coverage;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Coverage;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.persist_service')]

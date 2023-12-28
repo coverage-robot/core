@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0acb8f7a598c98386bfb1a77450db5e6",
+    "content-hash": "8048693329ba2f4864445f4830611892",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -586,7 +586,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
             },
             "type": "library",
             "autoload": {
@@ -605,11 +605,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f3c46aa62f21174687a0105bd7fd7d9196e5690a"
+                "reference": "9128ecd3bfd1ad24e6ecc43628cbc7321a0a0626"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
-                "coverage-robot/models": "*",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4||^7.0",
                 "symfony/dependency-injection": "^6.4||^7.0",
@@ -641,31 +640,12 @@
             }
         },
         {
-            "name": "coverage-robot/models",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Packages\\Models\\": "src/"
-                }
-            },
-            "description": "Shared models across the services",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "coverage-robot/telemetry",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
+                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -9788,5 +9768,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

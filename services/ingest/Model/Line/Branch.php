@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Models\Model\Line;
+namespace App\Model\Line;
 
 use Packages\Contracts\Line\LineType;
 

@@ -1,15 +1,17 @@
 <?php
 
-namespace Packages\Models\Model;
+namespace App\Model;
 
 use Countable;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use Packages\Models\Enum\CoverageFormat;
+use Packages\Contracts\Format\CoverageFormat;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+use function gettype;
 
 class Coverage implements Countable, Stringable
 {

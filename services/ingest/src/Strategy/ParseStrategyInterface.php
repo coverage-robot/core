@@ -2,7 +2,7 @@
 
 namespace App\Strategy;
 
-use Packages\Models\Model\Coverage;
+use App\Model\Coverage;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.parser_strategy')]

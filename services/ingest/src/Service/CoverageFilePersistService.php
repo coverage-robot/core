@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Exception\PersistException;
+use App\Model\Coverage;
 use App\Service\Persist\PersistServiceInterface;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 

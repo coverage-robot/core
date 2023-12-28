@@ -3,10 +3,10 @@
 namespace App\Tests\Service;
 
 use App\Exception\PersistException;
+use App\Model\Coverage;
 use App\Service\CoverageFilePersistService;
 use App\Service\Persist\GcsPersistService;
 use App\Service\Persist\S3PersistService;
-use Packages\Models\Model\Coverage;
 use Packages\Event\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
