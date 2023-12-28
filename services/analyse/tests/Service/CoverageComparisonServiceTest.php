@@ -16,7 +16,6 @@ use Psr\Log\NullLogger;
 
 class CoverageComparisonServiceTest extends TestCase
 {
-
     public function testGettingBaseWaypointFromWaypointHistory(): void
     {
         $headWaypoint = new ReportWaypoint(
