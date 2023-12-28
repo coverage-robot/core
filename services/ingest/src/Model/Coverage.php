@@ -74,7 +74,7 @@ class Coverage implements Countable, Stringable
                     '.',
                     ''
                 )
-            );
+            ) ?: null;
             return;
         }
 
