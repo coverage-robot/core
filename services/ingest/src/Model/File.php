@@ -12,7 +12,6 @@ class File implements Countable, Stringable
     private int $lineCount;
 
     /**
-     * @param string $fileName
      * @param array<array-key, AbstractLine> $lines
      */
     public function __construct(
@@ -49,7 +48,7 @@ class File implements Countable, Stringable
     public function setLine(AbstractLine $line): void
     {
         if (!array_key_exists($line->getUniqueLineIdentifier(), $this->lines)) {
-            $this->lineCount++;
+            ++$this->lineCount;
         }
 
         $this->lines[$line->getUniqueLineIdentifier()] = $line;

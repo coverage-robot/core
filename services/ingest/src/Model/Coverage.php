@@ -60,7 +60,7 @@ class Coverage implements Countable, Stringable
             if ($generatedAt > $currentTimestamp) {
                 // The timestamp MUST be in microseconds (since the timestamp is larger than
                 // the current timestamp, which is in seconds)
-                $generatedAt = $generatedAt / 1000;
+                $generatedAt /= 1000;
             }
 
             // Format the generated date using Epoch time (in seconds), making sure to clamp the
@@ -92,7 +92,7 @@ class Coverage implements Countable, Stringable
     public function addFile(File $file): void
     {
         $this->files[] = $file;
-        $this->fileCount++;
+        ++$this->fileCount;
     }
 
     public function __toString(): string
