@@ -88,6 +88,15 @@ resource "aws_iam_policy" "analyse_policy" {
         Resource = [
           var.query_cache_arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:Query"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.configuration_table.arn
+        ]
       }
     ]
   })
