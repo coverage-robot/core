@@ -3,10 +3,12 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 
-class UploadsFinalised implements EventInterface
+class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent

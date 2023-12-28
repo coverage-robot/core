@@ -30,7 +30,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
             );
         }
 
-        $successful = $this->queueStartCheckRun($event);
+        $successful = $this->queueAcknowledgmentCheckRun($event);
 
         if (!$successful) {
             $this->eventProcessorLogger->critical(
@@ -51,7 +51,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
      * Right now, this is:
      * 2. An in progress check run
      */
-    private function queueStartCheckRun(UploadsStarted $uploadsStarted): bool
+    private function queueAcknowledgmentCheckRun(UploadsStarted $uploadsStarted): bool
     {
         return $this->sqsMessageClient->queuePublishableMessage(
             new PublishableCheckRunMessage(

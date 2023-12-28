@@ -3,12 +3,13 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
-use DateTimeInterface;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 
-class Upload implements EventInterface
+class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent
@@ -26,7 +27,7 @@ class Upload implements EventInterface
         private readonly string|int|null $pullRequest = null,
         private readonly ?string $baseCommit = null,
         private readonly ?string $baseRef = null,
-        private ?DateTimeInterface $eventTime = null
+        private ?DateTimeImmutable $eventTime = null
     ) {
         if ($this->eventTime === null) {
             $this->eventTime = new DateTimeImmutable();
