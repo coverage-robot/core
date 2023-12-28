@@ -59,18 +59,6 @@ class ConfigurationFileChange implements EventInterface
     }
 
     #[Override]
-    public function getBaseRef(): ?string
-    {
-        return null;
-    }
-
-    #[Override]
-    public function getBaseCommit(): ?string
-    {
-        return null;
-    }
-
-    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;

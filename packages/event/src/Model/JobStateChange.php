@@ -3,11 +3,13 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 
-class JobStateChange implements EventInterface
+class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent

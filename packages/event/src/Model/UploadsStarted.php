@@ -3,10 +3,11 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 
-class UploadsStarted implements EventInterface
+class UploadsStarted implements EventInterface, BaseAwareEventInterface
 {
     public function __construct(
         private readonly Provider $provider,
