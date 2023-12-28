@@ -178,15 +178,6 @@ jobs:
                     tag: api-service
                 continue-on-error: true
 
-            -   name: Upload coverage to artifact storage
-                if: ${{ github.actor != 'dependabot[bot]' }}
-                uses: actions/upload-artifact@v4
-                with:
-                    name: coverage
-                    if-no-files-found: error
-                    path: ${{ env.working-directory }}/coverage.xml
-                    retention-days: 1
-
     plan:
         name: Plan
         runs-on: ubuntu-latest
@@ -293,15 +284,3 @@ jobs:
 
                     # The plan will already have been generated on the PR, so approving here should be fine
                     auto_approve: true
-
-    cleanup:
-        name: "Cleanup"
-        runs-on: ubuntu-latest
-        if: always() && needs.build.result == 'success'
-        needs: [ build, plan ]
-
-        steps:
-            -   uses: geekyeggo/delete-artifact@v2
-                with:
-                    name: |
-                        build
