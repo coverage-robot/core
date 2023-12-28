@@ -8,17 +8,11 @@ use DateTimeInterface;
 use Exception;
 use Packages\Contracts\Format\CoverageFormat;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Context;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 use function gettype;
 
 class Coverage implements Countable, Stringable
 {
-    #[Context(
-        normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-        denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-    )]
     private ?DateTimeImmutable $generatedAt = null;
 
     /**
