@@ -9,7 +9,7 @@ use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Event\Service\EventProcessorService;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use RuntimeException;

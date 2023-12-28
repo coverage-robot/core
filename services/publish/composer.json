@@ -15,7 +15,6 @@
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
         "coverage-robot/message": "^1.0",
-        "coverage-robot/models": "*",
         "coverage-robot/telemetry": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.23",
@@ -98,10 +97,6 @@
         {
             "type": "path",
             "url": "../../packages/message"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/models"
         },
         {
             "type": "path",

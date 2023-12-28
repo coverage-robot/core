@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7729c1804271611f55cff1c7487f570",
+    "content-hash": "b2090778fc9e0fa993f460c67539f68c",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -476,7 +476,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "57cb5abf7f750055a1ecda5690b767ba658522fd"
+                "reference": "a1c9cc1406d12b5c40192d2c85f92a43ca9dc2d3"
             },
             "require": {
                 "knplabs/github-api": "^3.11",
@@ -518,7 +518,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "eac04f8935924641eae79c663abbbecba2d15ad7"
+                "reference": "28bf9d2c8117638beda285a2fcba8904d553f69d"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -559,7 +559,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
+                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
             },
             "type": "library",
             "autoload": {
@@ -578,11 +578,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f3c46aa62f21174687a0105bd7fd7d9196e5690a"
+                "reference": "9128ecd3bfd1ad24e6ecc43628cbc7321a0a0626"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
-                "coverage-robot/models": "*",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4||^7.0",
                 "symfony/dependency-injection": "^6.4||^7.0",
@@ -614,31 +613,12 @@
             }
         },
         {
-            "name": "coverage-robot/models",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "../../packages/models",
-                "reference": "ecfdc283f76abe24b461eab9b377c0161f39e09c"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Packages\\Models\\": "src/"
-                }
-            },
-            "description": "Shared models across the services",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "coverage-robot/telemetry",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
+                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -9227,5 +9207,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

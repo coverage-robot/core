@@ -15,7 +15,7 @@ use Packages\Models\Model\Line\AbstractLine;
 use Packages\Models\Model\Line\Branch;
 use Packages\Models\Model\Line\Method;
 use Packages\Models\Model\Line\Statement;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

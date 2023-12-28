@@ -9,7 +9,7 @@ use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 

@@ -23,6 +23,9 @@
             "./serverless.yml"
         ]
     },
+    "coverage-robot/configuration": {
+        "version": "1.0.0"
+    },
     "coverage-robot/event": {
         "version": "1.0.0"
     },

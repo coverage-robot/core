@@ -7,7 +7,6 @@
     "prefer-stable": true,
     "require": {
         "psr/log": "^3.0",
-        "coverage-robot/models": "*",
         "coverage-robot/contracts": "^1.0",
         "symfony/http-kernel": "^6.4||^7.0",
         "symfony/config": "^6.4||^7.0",
@@ -33,10 +32,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../models"
-        },
         {
             "type": "path",
             "url": "../contracts"

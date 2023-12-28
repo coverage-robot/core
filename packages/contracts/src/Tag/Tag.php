@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Models\Model;
+namespace Packages\Contracts\Tag;
 
 use Stringable;
 

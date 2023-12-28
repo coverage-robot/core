@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 
 class Upload implements EventInterface
 {

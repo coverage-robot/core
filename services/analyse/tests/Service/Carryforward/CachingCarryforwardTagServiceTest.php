@@ -5,7 +5,7 @@ namespace App\Tests\Service\Carryforward;
 use App\Model\ReportWaypoint;
 use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagService;
-use Packages\Models\Model\Tag;
+use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 
 class CachingCarryforwardTagServiceTest extends TestCase
