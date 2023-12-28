@@ -3,11 +3,13 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class AnalyseFailure implements EventInterface
+class AnalyseFailure implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     public function __construct(
         private readonly EventInterface $event,
@@ -44,9 +46,10 @@ class AnalyseFailure implements EventInterface
         return $this->event->getCommit();
     }
 
+    #[Ignore]
     public function getParent(): array
     {
-        return $this->upload->getParent();
+        return $this->event->getParent();
     }
 
     #[Ignore]

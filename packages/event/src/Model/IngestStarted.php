@@ -3,11 +3,13 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class IngestStarted implements EventInterface
+class IngestStarted implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     public function __construct(
         private readonly Upload $upload,

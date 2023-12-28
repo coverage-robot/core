@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class MockSettingServiceFactory
 {
-    public static function getMock(
+    public static function createMock(
         TestCase $test,
         $settings = []
     ): SettingService|MockObject {

@@ -18,6 +18,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
+use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
@@ -119,6 +120,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $validUntil = $coverageReport->getLatestSuccessfulUpload() ??
             $uploadsFinalised->getEventTime();
 
+        /** @var bool $shouldGenerateAnnotations */
         $shouldGenerateAnnotations = $this->settingService->get(
             $uploadsFinalised->getProvider(),
             $uploadsFinalised->getOwner(),
@@ -176,7 +178,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $headReport = $comparison?->getHeadReport();
 
-        if ($headReport === null) {
+        if (!$headReport instanceof ReportInterface) {
             // We weren't able to come up with a suitable comparison, so just generate
             // a report of the current commit (the head), and move on.
             $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
@@ -213,6 +215,9 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         );
     }
 
+    /**
+     * @param array<array-key, PublishableAnnotationInterface> $annotations
+     */
     public function buildCheckRunMessage(
         UploadsFinalised $uploadsFinalised,
         ReportInterface $coverageReport,

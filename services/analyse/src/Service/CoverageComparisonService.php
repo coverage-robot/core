@@ -5,7 +5,9 @@ namespace App\Service;
 use App\Model\ReportComparison;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -60,15 +62,20 @@ class CoverageComparisonService
         ReportWaypoint $headWaypoint,
         EventInterface $event
     ): ?ReportWaypoint {
-        if ($baseWaypoint = $this->getBaseWaypointFromHistory($headWaypoint, $event)) {
-            return $baseWaypoint;
+        if ($event instanceof BaseAwareEventInterface) {
+            if (($baseWaypoint = $this->getBaseWaypointFromHistory($headWaypoint, $event)) instanceof ReportWaypoint) {
+                return $baseWaypoint;
+            }
+
+            if (($baseWaypoint = $this->getBaseWaypointFromEventBase($event)) instanceof ReportWaypoint) {
+                return $baseWaypoint;
+            }
         }
 
-        if ($baseWaypoint = $this->getBaseWaypointFromEventBase($event)) {
-            return $baseWaypoint;
-        }
-
-        if ($baseWaypoint = $this->getBaseWaypointFromEventParent($event)) {
+        if (
+            $event instanceof ParentAwareEventInterface &&
+            ($baseWaypoint = $this->getBaseWaypointFromEventParent($event)) instanceof ReportWaypoint
+        ) {
             return $baseWaypoint;
         }
 
@@ -88,9 +95,11 @@ class CoverageComparisonService
      */
     private function getBaseWaypointFromHistory(
         ReportWaypoint $headWaypoint,
-        EventInterface $event
+        EventInterface&BaseAwareEventInterface $event
     ): ?ReportWaypoint {
-        if (!$event->getBaseRef()) {
+        $baseRef = $event->getBaseRef();
+
+        if (!$baseRef) {
             // We didn't receive sufficient base information on the event (likely because the
             // event was a push - i.e. not a pull request).
             return null;
@@ -116,7 +125,7 @@ class CoverageComparisonService
                         $headWaypoint->getProvider(),
                         $headWaypoint->getOwner(),
                         $headWaypoint->getRepository(),
-                        $event->getBaseRef(),
+                        $baseRef,
                         $commit['commit'],
                     );
                 }
@@ -137,12 +146,14 @@ class CoverageComparisonService
      * PR, but that isn't usually ideal because the base of a PR doesnt have to be
      * a parent commit (i.e. it could be newer, and this include more coverage).
      */
-    private function getBaseWaypointFromEventBase(EventInterface $event): ?ReportWaypoint
+    private function getBaseWaypointFromEventBase(EventInterface&BaseAwareEventInterface $event): ?ReportWaypoint
     {
+        $baseRef = $event->getBaseRef();
+        $baseCommit = $event->getBaseCommit();
         if (
             !$event->getPullRequest() ||
-            !$event->getBaseRef() ||
-            !$event->getBaseCommit()
+            $baseRef === null ||
+            $baseCommit === null
         ) {
             // We didn't receive sufficient base information on the event (likely because the
             // event was a push - i.e. not a pull request).
@@ -152,8 +163,8 @@ class CoverageComparisonService
         $this->coverageComparisonService->info(
             sprintf(
                 'Extracted %s from event base to use as the base commit for comparison for %s',
-                (string)$event->getBaseCommit(),
-                (string)$event
+                $baseCommit,
+                $event
             )
         );
 
@@ -164,8 +175,8 @@ class CoverageComparisonService
             $event->getProvider(),
             $event->getOwner(),
             $event->getRepository(),
-            $event->getBaseRef(),
-            $event->getBaseCommit(),
+            $baseRef,
+            $baseCommit,
         );
     }
 
@@ -174,7 +185,7 @@ class CoverageComparisonService
      * or merge events which won't have a base ref (because theres no independent base).
      */
     private function getBaseWaypointFromEventParent(
-        EventInterface $event
+        EventInterface&ParentAwareEventInterface $event
     ): ?ReportWaypoint {
         if ($event->getParent() === []) {
             // We didn't receive sufficient parent information on the event, so this method isn't
@@ -185,7 +196,7 @@ class CoverageComparisonService
         $this->coverageComparisonService->info(
             sprintf(
                 'Extracted %s from event parents to use as the base commit for comparison for %s',
-                (string)$event->getParent()[0],
+                $event->getParent()[0],
                 (string)$event
             )
         );
@@ -199,7 +210,7 @@ class CoverageComparisonService
             $event->getRef(),
             // Use the first parent commit as the base commit as this will
             // be the commit of the base in the case of a merge commit
-            (string)$event->getParent()[0],
+            $event->getParent()[0],
         );
     }
 }

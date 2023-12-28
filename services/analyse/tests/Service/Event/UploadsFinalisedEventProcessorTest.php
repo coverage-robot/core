@@ -101,7 +101,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,
             new LineGroupingService(new NullLogger()),
-            MockSettingServiceFactory::getMock(
+            MockSettingServiceFactory::createMock(
                 $this,
                 [
                     SettingKey::LINE_ANNOTATION->value => true
@@ -199,7 +199,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,
             new LineGroupingService(new NullLogger()),
-            MockSettingServiceFactory::getMock(
+            MockSettingServiceFactory::createMock(
                 $this,
                 [
                     SettingKey::LINE_ANNOTATION->value => true
@@ -278,7 +278,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,
             new LineGroupingService(new NullLogger()),
-            MockSettingServiceFactory::getMock(
+            MockSettingServiceFactory::createMock(
                 $this,
                 [
                     SettingKey::LINE_ANNOTATION->value => true
