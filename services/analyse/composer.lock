@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4363a9dd30636253a01d7b9bbe16fadf",
+    "content-hash": "08ec80313238861378573096c0ee0400",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -691,11 +691,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "0315390776e833b4876de83d4385b90f124a8305"
+                "reference": "9128ecd3bfd1ad24e6ecc43628cbc7321a0a0626"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
-                "coverage-robot/models": "*",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4||^7.0",
                 "symfony/dependency-injection": "^6.4||^7.0",
@@ -732,7 +731,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "60232743d0fb616dad0f70cbc02286cd5ffe54f6"
+                "reference": "97bec2ab6c973791e64e2dfa6c7c1c7523f6116b"
             },
             "require": {
                 "coverage-robot/event": "^1.0"
@@ -744,25 +743,6 @@
                 }
             },
             "description": "Decoupled queue messages usable across the services",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "coverage-robot/models",
-            "version": "1.0.0",
-            "dist": {
-                "type": "path",
-                "url": "../../packages/models",
-                "reference": "167623721f67acf55171b7d88bf818934dcdd983"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Packages\\Models\\": "src/"
-                }
-            },
-            "description": "Shared models across the services",
             "transport-options": {
                 "relative": true
             }
