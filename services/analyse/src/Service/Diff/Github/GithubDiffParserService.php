@@ -6,7 +6,6 @@ use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
-use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
@@ -57,20 +56,20 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         $addedLines = [];
 
         foreach ($files as $diff) {
-            $file = $this->trimPrefix($diff->getTo());
+            $file = $this->trimPrefix($diff->to());
 
-            foreach ($diff->getChunks() as $chunk) {
+            foreach ($diff->chunks() as $chunk) {
                 $offset = 0;
 
-                foreach ($chunk->getLines() as $line) {
-                    if ($line->getType() === Line::ADDED) {
+                foreach ($chunk->lines() as $line) {
+                    if ($line->type() === Line::ADDED) {
                         $addedLines[$file] = [
                             ...($addedLines[$file] ?? []),
-                            $chunk->getEnd() + $offset
+                            $chunk->end() + $offset
                         ];
                     }
 
-                    if ($line->getType() !== Line::REMOVED) {
+                    if ($line->type() !== Line::REMOVED) {
                         ++$offset;
                     }
                 }
