@@ -21,7 +21,7 @@ use App\Tests\Mock\Factory\MockQueryFactory;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
-use Packages\Models\Enum\LineState;
+use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;

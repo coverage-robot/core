@@ -11,7 +11,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Models\Enum\LineState;
+use Packages\Contracts\Line\LineState;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;

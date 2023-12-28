@@ -2,8 +2,8 @@
 
 namespace App\Query\Result;
 
-use Packages\Models\Enum\LineState;
-use Packages\Models\Enum\LineType;
+use Packages\Contracts\Line\LineState;
+use Packages\Contracts\Line\LineType;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
 class LineCoverageQueryResult implements QueryResultInterface

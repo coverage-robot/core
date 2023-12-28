@@ -5,7 +5,7 @@ namespace App\Query;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\ScopeAwareTrait;
 use Override;
-use Packages\Models\Enum\LineState;
+use Packages\Contracts\Line\LineState;
 
 abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {

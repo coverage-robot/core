@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Models\Enum;
+namespace Packages\Contracts\Line;
 
 enum LineState: string
 {
