@@ -23,6 +23,12 @@
             "./serverless.yml"
         ]
     },
+    "coverage-robot/event": {
+        "version": "1.0.0"
+    },
+    "coverage-robot/telemetry": {
+        "version": "1.0.0"
+    },
     "nyholm/psr7": {
         "version": "1.6",
         "recipe": {

@@ -1,22 +1,18 @@
 <?php
 
-namespace Packages\Models\Model;
+namespace App\Model;
 
 use Countable;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
-use Packages\Models\Enum\CoverageFormat;
+use Packages\Contracts\Format\CoverageFormat;
 use Stringable;
-use Symfony\Component\Serializer\Annotation\Context;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+
+use function gettype;
 
 class Coverage implements Countable, Stringable
 {
-    #[Context(
-        normalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-        denormalizationContext: [DateTimeNormalizer::FORMAT_KEY => DateTimeInterface::ATOM],
-    )]
     private ?DateTimeImmutable $generatedAt = null;
 
     /**
@@ -64,7 +60,7 @@ class Coverage implements Countable, Stringable
             if ($generatedAt > $currentTimestamp) {
                 // The timestamp MUST be in microseconds (since the timestamp is larger than
                 // the current timestamp, which is in seconds)
-                $generatedAt = $generatedAt / 1000;
+                $generatedAt /= 1000;
             }
 
             // Format the generated date using Epoch time (in seconds), making sure to clamp the
@@ -78,7 +74,7 @@ class Coverage implements Countable, Stringable
                     '.',
                     ''
                 )
-            );
+            ) ?: null;
             return;
         }
 
@@ -96,7 +92,7 @@ class Coverage implements Countable, Stringable
     public function addFile(File $file): void
     {
         $this->files[] = $file;
-        $this->fileCount++;
+        ++$this->fileCount;
     }
 
     public function __toString(): string

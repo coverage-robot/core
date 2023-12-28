@@ -3,11 +3,11 @@
 namespace App\Tests\Service;
 
 use App\Exception\ParseException;
+use App\Model\Coverage;
 use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
-use Packages\Models\Enum\CoverageFormat;
-use Packages\Models\Model\Coverage;
+use Packages\Contracts\Format\CoverageFormat;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;

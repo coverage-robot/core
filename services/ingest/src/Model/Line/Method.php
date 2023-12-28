@@ -1,7 +1,8 @@
 <?php
 
-namespace Packages\Models\Model\Line;
+namespace App\Model\Line;
 
+use Override;
 use Packages\Contracts\Line\LineType;
 
 class Method extends AbstractLine
@@ -19,11 +20,13 @@ class Method extends AbstractLine
         return $this->name;
     }
 
+    #[Override]
     public function getUniqueLineIdentifier(): string
     {
         return $this->getName();
     }
 
+    #[Override]
     public function getType(): LineType
     {
         return LineType::METHOD;

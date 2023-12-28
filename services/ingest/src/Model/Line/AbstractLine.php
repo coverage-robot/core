@@ -1,8 +1,9 @@
 <?php
 
-namespace Packages\Models\Model\Line;
+namespace App\Model\Line;
 
 use Packages\Contracts\Line\LineType;
+use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Ignore;
         LineType::METHOD->value => Method::class,
     ]
 )]
-abstract class AbstractLine
+abstract class AbstractLine implements Stringable
 {
     public function __construct(
         private readonly int $lineNumber,
@@ -34,7 +35,6 @@ abstract class AbstractLine
      * that a second method may not also reside on this line. In this particular case,
      * we need to use the method name.
      *
-     * @return string
      *
      * @see Method::getUniqueLineIdentifier()
      */

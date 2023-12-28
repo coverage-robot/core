@@ -3,13 +3,13 @@
 namespace App\Service\Persist;
 
 use App\Exception\PersistException;
+use App\Model\Coverage;
 use App\Service\EnvironmentService;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Coverage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

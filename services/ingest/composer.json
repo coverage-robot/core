@@ -18,7 +18,6 @@
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
-        "coverage-robot/models": "*",
         "coverage-robot/telemetry": "^1.0",
         "google/cloud-bigquery": "^1.24",
         "google/cloud-storage": "^1.33",
@@ -98,10 +97,6 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/models"
-        },
         {
             "type": "path",
             "url": "../../packages/event"

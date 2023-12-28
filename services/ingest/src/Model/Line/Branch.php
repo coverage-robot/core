@@ -1,14 +1,13 @@
 <?php
 
-namespace Packages\Models\Model\Line;
+namespace App\Model\Line;
 
+use Override;
 use Packages\Contracts\Line\LineType;
 
 class Branch extends AbstractLine
 {
     /**
-     * @param int $lineNumber
-     * @param int $lineHits
      * @param array<array-key, int> $branchHits
      */
     public function __construct(
@@ -40,6 +39,7 @@ class Branch extends AbstractLine
         return $this->branchHits;
     }
 
+    #[Override]
     public function getType(): LineType
     {
         return LineType::BRANCH;

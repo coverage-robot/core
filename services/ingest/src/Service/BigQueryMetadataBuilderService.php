@@ -3,12 +3,12 @@
 namespace App\Service;
 
 use App\Exception\PersistException;
+use App\Model\Coverage;
+use App\Model\File;
+use App\Model\Line\AbstractLine;
 use DateTimeImmutable;
 use JsonException;
 use Packages\Event\Model\Upload;
-use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
-use Packages\Models\Model\Line\AbstractLine;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;

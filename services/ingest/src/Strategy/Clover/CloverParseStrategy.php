@@ -3,15 +3,15 @@
 namespace App\Strategy\Clover;
 
 use App\Exception\ParseException;
+use App\Model\Coverage;
+use App\Model\File;
+use App\Model\Line\Branch;
+use App\Model\Line\Method;
+use App\Model\Line\Statement;
 use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
-use Packages\Models\Enum\CoverageFormat;
-use Packages\Models\Model\Coverage;
-use Packages\Models\Model\File;
-use Packages\Models\Model\Line\Branch;
-use Packages\Models\Model\Line\Method;
-use Packages\Models\Model\Line\Statement;
+use Packages\Contracts\Format\CoverageFormat;
 use Psr\Log\LoggerInterface;
 use ValueError;
 use XMLReader;
