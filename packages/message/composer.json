@@ -8,8 +8,8 @@
     "require": {
         "coverage-robot/event": "^1.0",
         "async-aws/sqs": "^2.0",
-        "symfony/http-kernel": "^7.0",
-        "symfony/dependency-injection": "^7.0",
+        "symfony/http-kernel": "^6.4|^7.0",
+        "symfony/dependency-injection": "^6.4|^7.0",
         "coverage-robot/telemetry": "^1.0"
     },
     "autoload": {

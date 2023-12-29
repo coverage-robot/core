@@ -17,28 +17,36 @@ use Symfony\Component\Serializer\SerializerInterface;
 class PublishClient
 {
     /**
-     * The event bus name which has all of the coverage events published to it.
+     * The SQS queue (FIFO) which is used to publish messages to version control providers.
      *
      * This is dynamic based on the environment the application is running in
-     * (i.e. coverage-events-prod, coverage-events-dev, etc).
+     * (i.e. coverage-publish-prod, coverage-publish-dev, etc).
      */
-    private const string QUEUE_NAME = 'coverage-publish-%s';
+    private const string PUBLISH_QUEUE_NAME = 'coverage-publish-%s';
 
     public function __construct(
-        private readonly SqsClient $sqsClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer
+        protected readonly SqsClient $sqsClient,
+        protected readonly EnvironmentServiceInterface $environmentService,
+        protected readonly SerializerInterface $serializer
     ) {
     }
 
     public function publishMessage(PublishableMessageInterface $publishableMessage): bool
     {
         $request = [
-            'QueueUrl' => $this->getPublishQueueUrl(),
+            'QueueUrl' => $this->getQueueUrl($this->getPublishQueueName()),
             'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
             'MessageGroupId' => $publishableMessage->getMessageGroup(),
         ];
 
+        return $this->publishToQueueWithTraceHeader($request);
+    }
+
+    /**
+     * Publish an SQS message onto the queue, with the trace header if it exists.
+     */
+    protected function publishToQueueWithTraceHeader(array $request): bool
+    {
         if ($this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID) !== '') {
             /**
              * The trace header will be propagated to the next service in the chain if provided
@@ -69,14 +77,14 @@ class PublishClient
     }
 
     /**
-     * Get the full SQS Queue URL for the publish queue (using its name).
+     * Get the full SQS Queue URL for a queue (using its name).
      */
-    public function getPublishQueueUrl(): ?string
+    public function getQueueUrl(string $queueName): ?string
     {
         $response = $this->sqsClient->getQueueUrl(
             new GetQueueUrlRequest(
                 [
-                    'QueueName' => $this->getPublishQueueName()
+                    'QueueName' => $queueName
                 ]
             )
         );
@@ -87,7 +95,7 @@ class PublishClient
             throw new RuntimeException(
                 sprintf(
                     'Could not get queue url for %s',
-                    $this->getPublishQueueName()
+                    $queueName
                 )
             );
         }
@@ -101,7 +109,7 @@ class PublishClient
     private function getPublishQueueName(): string
     {
         return sprintf(
-            self::QUEUE_NAME,
+            self::PUBLISH_QUEUE_NAME,
             $this->environmentService->getEnvironment()->value
         );
     }

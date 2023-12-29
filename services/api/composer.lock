@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e190d56577b44323190b2012f971174",
+    "content-hash": "9a52d8e5836ec2b2b87150865aef7f6b",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -709,10 +709,13 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "9128ecd3bfd1ad24e6ecc43628cbc7321a0a0626"
+                "reference": "77f9ec97a8c0902585e87db6b82be54f978ec88d"
             },
             "require": {
+                "async-aws/event-bridge": "^1.5",
+                "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
+                "coverage-robot/telemetry": "^1.0",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4||^7.0",
                 "symfony/dependency-injection": "^6.4||^7.0",
@@ -739,6 +742,32 @@
                 ]
             },
             "description": "Shared event logic across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "coverage-robot/message",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/message",
+                "reference": "6ec1b4623980eed1d752457872871fa7353d1bc0"
+            },
+            "require": {
+                "async-aws/sqs": "^2.0",
+                "coverage-robot/event": "^1.0",
+                "coverage-robot/telemetry": "^1.0",
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/http-kernel": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Message\\": "src/"
+                }
+            },
+            "description": "Decoupled queue messages usable across the services",
             "transport-options": {
                 "relative": true
             }

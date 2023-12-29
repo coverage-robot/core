@@ -2,7 +2,7 @@
 
 namespace App\Tests\Event;
 
-use App\Client\SqsMessageClient;
+use App\Client\WebhookQueueClient;
 use App\Event\UploadsStartedEventProcessor;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
@@ -32,7 +32,7 @@ class UploadsStartedEventProcessorTest extends TestCase
             commit: 'mock-commit'
         );
 
-        $sqsMessageClient = $this->createMock(SqsMessageClient::class);
+        $sqsMessageClient = $this->createMock(WebhookQueueClient::class);
         $sqsMessageClient->expects($this->once())
             ->method('queuePublishableMessage')
             ->with(
