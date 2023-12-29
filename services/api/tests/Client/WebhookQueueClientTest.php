@@ -24,7 +24,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class WebhookQueueClientTest extends TestCase
 {
-
     public function testPublishMessage(): void
     {
         $mockWebhook = $this->createMock(WebhookInterface::class);
