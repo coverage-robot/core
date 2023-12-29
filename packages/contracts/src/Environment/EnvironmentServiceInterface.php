@@ -2,8 +2,6 @@
 
 namespace Packages\Contracts\Environment;
 
-use StringBackedEnum;
-
 interface EnvironmentServiceInterface
 {
     /**
@@ -13,8 +11,6 @@ interface EnvironmentServiceInterface
 
     /**
      * Get the value of an environment variable.
-     *
-     * @param StringBackedEnum $variable
      */
     public function getVariable($variable): string;
 }
