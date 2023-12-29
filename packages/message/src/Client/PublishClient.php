@@ -8,7 +8,7 @@ use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,7 +65,9 @@ class PublishClient
             ];
         }
 
-        $response = $this->sqsClient->sendMessage(new SendMessageRequest($request));
+        $response = $this->sqsClient->sendMessage(
+            new SendMessageRequest($request)
+        );
 
         try {
             $response->resolve();
