@@ -5,6 +5,7 @@ on:
         branches:
             - main
         paths:
+            - '.github/workflows/telemetry.yml'
             - 'packages/telemetry/**'
             - 'packages/contracts/**'
 
@@ -12,6 +13,7 @@ on:
         branches:
             - main
         paths:
+            - '.github/workflows/telemetry.yml'
             - 'packages/telemetry/**'
             - 'packages/contracts/**'
 

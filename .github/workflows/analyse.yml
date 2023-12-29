@@ -5,15 +5,22 @@ on:
         branches:
             - main
         paths:
+            - '.github/workflows/analyse.yml'
             - 'services/analyse/**'
             - '.github/workflows/analyse.yml'
-            - 'packages/**'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/message/**'
+            - 'packages/telemetry/**'
             - 'rector.php'
 
     pull_request:
         branches:
             - main
         paths:
+            - '.github/workflows/analyse.yml'
             - 'services/analyse/**'
             - '.github/workflows/analyse.yml'
             - 'packages/**'

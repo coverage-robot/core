@@ -649,7 +649,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "28bf9d2c8117638beda285a2fcba8904d553f69d"
+                "reference": "eac04f8935924641eae79c663abbbecba2d15ad7"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -690,7 +690,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -709,7 +709,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "77f9ec97a8c0902585e87db6b82be54f978ec88d"
+                "reference": "d4d67757bf7364d4a9a02a176f618fd1ac20bab3"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -752,7 +752,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "6ec1b4623980eed1d752457872871fa7353d1bc0"
+                "reference": "519bf24a09c6f1eb4f87f2647f87ba7fe8d2f93d"
             },
             "require": {
                 "async-aws/sqs": "^2.0",
@@ -761,11 +761,25 @@
                 "symfony/dependency-injection": "^6.4|^7.0",
                 "symfony/http-kernel": "^6.4|^7.0"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Packages\\Message\\": "src/"
                 }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Packages\\Message\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test:unit": [
+                    "@putenv XDEBUG_MODE=coverage",
+                    "phpunit --configuration=./phpunit.xml.dist"
+                ]
             },
             "description": "Decoupled queue messages usable across the services",
             "transport-options": {
@@ -778,7 +792,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
+                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -9705,16 +9719,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.3",
+            "version": "10.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6fce887c71076a73f32fd3e0774a6833fc5c7f19"
+                "reference": "ed21115d505b4b4f7dc7b5651464e19a2c7f7856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6fce887c71076a73f32fd3e0774a6833fc5c7f19",
-                "reference": "6fce887c71076a73f32fd3e0774a6833fc5c7f19",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ed21115d505b4b4f7dc7b5651464e19a2c7f7856",
+                "reference": "ed21115d505b4b4f7dc7b5651464e19a2c7f7856",
                 "shasum": ""
             },
             "require": {
@@ -9786,7 +9800,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.5"
             },
             "funding": [
                 {
@@ -9802,7 +9816,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-13T07:25:23+00:00"
+            "time": "2023-12-27T15:13:52+00:00"
         },
         {
             "name": "psalm/plugin-symfony",
@@ -11324,5 +11338,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
