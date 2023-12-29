@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Service\Event;
+namespace App\Event;
 
 use App\Client\SqsMessageClient;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\UploadsStarted;
+use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;

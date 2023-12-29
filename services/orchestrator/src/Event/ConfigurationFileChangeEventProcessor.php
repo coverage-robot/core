@@ -11,6 +11,7 @@ use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\ConfigurationFileChange;
+use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 
 class ConfigurationFileChangeEventProcessor implements EventProcessorInterface

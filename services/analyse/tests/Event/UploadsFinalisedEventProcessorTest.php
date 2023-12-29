@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\Service\Event;
+namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
+use App\Event\UploadsFinalisedEventProcessor;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoverageComparisonService;
-use App\Service\Event\UploadsFinalisedEventProcessor;
 use App\Service\LineGroupingService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;

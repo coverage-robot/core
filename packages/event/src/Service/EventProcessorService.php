@@ -7,14 +7,16 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class EventProcessorService implements EventProcessorServiceInterface
 {
     /**
-     * @param EventProcessorInterface[] $eventProcessors
+     * @param array<value-of<Event>, EventProcessorInterface> $eventProcessors
      */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
+        #[TaggedIterator('event.processor', defaultIndexMethod: 'getEvent')]
         private readonly iterable $eventProcessors
     ) {
     }
@@ -24,7 +26,7 @@ class EventProcessorService implements EventProcessorServiceInterface
      */
     public function process(Event $eventType, EventInterface $event): bool
     {
-        $processor = (iterator_to_array($this->eventProcessors)[$eventType->value]) ?? null;
+        $processor = ($this->getRegisteredProcessors()[$eventType->value]) ?? null;
 
         if (!$processor instanceof EventProcessorInterface) {
             throw new RuntimeException(
@@ -44,5 +46,15 @@ class EventProcessorService implements EventProcessorServiceInterface
         );
 
         return $processor->process($event);
+    }
+
+    /**
+     * Get a list of all the processors which are registered and available to handle events.
+     *
+     * @return array<value-of<Event>, EventProcessorInterface>
+     */
+    public function getRegisteredProcessors(): array
+    {
+        return iterator_to_array($this->eventProcessors);
     }
 }
