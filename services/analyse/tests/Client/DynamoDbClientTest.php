@@ -6,12 +6,12 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TotalUploadsQueryResult;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Response;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use AsyncAws\DynamoDb\Result\GetItemOutput;
 use AsyncAws\DynamoDb\Result\PutItemOutput;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -58,7 +58,7 @@ class DynamoDbClientTest extends TestCase
 
         $dynamoDbClient = new DynamoDbClient(
             $mockClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -132,7 +132,7 @@ class DynamoDbClientTest extends TestCase
 
         $dynamoDbClient = new DynamoDbClient(
             $mockClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [

@@ -4,7 +4,6 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\EnvironmentService;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
@@ -21,7 +20,6 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -42,7 +40,6 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         private readonly CheckRunFormatterService $checkRunFormatterService,
         private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
         private readonly GithubAppInstallationClient $client,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $checkPublisherLogger
     ) {

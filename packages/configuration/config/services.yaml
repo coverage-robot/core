@@ -11,3 +11,6 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
+
+    Packages\Contracts\Environment\EnvironmentServiceInterface:
+        class: Packages\Configuration\Service\EnvironmentService

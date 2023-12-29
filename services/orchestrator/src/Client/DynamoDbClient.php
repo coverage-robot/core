@@ -4,7 +4,6 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Model\OrchestratedEventInterface;
-use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -14,7 +13,6 @@ use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class DynamoDbClient
@@ -38,7 +36,6 @@ class DynamoDbClient
 
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {

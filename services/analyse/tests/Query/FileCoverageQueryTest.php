@@ -10,9 +10,9 @@ use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Override;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -26,7 +26,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     {
         return new FileCoverageQuery(
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [

@@ -112,6 +112,10 @@
         {
             "type": "path",
             "url": "../../packages/configuration"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/configuration"
         }
     ],
     "extra": {

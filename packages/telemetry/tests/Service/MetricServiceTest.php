@@ -4,12 +4,11 @@ namespace Packages\Telemetry\Tests\Service;
 
 use DateTimeImmutable;
 use EnricoStahn\JsonAssert\Assert;
-use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Enum\Resolution;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
-use Packages\Telemetry\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -52,17 +51,25 @@ class MetricServiceTest extends TestCase
         $mockClock->method('now')
             ->willReturn(new DateTimeImmutable('2023-11-20 09:00:00'));
 
+        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->method('getVariable')
+            ->willReturnMap(
+                [
+                    [
+                        EnvironmentVariable::AWS_LAMBDA_FUNCTION_NAME,
+                        'mock-function-name'
+                    ],
+                    [
+                        EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION,
+                        '$LATEST'
+                    ]
+                ]
+            );
+
         $metricService = new MetricService(
             $mockMetricsLogger,
             $mockClock,
-            MockEnvironmentServiceFactory::getMock(
-                $this,
-                Environment::DEVELOPMENT,
-                [
-                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_NAME->value => 'mock-function-name',
-                    EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION->value => '$LATEST'
-                ]
-            ),
+            $mockEnvironmentService,
             new Serializer(
                 [
                     new ArrayDenormalizer(),

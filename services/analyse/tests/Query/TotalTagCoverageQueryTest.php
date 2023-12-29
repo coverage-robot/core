@@ -10,9 +10,9 @@ use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Override;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -26,7 +26,7 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     {
         return new TotalTagCoverageQuery(
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [

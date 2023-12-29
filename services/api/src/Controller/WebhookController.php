@@ -7,7 +7,6 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
-use App\Service\EnvironmentService;
 use App\Service\WebhookSignatureService;
 use Exception;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -15,7 +14,6 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +27,6 @@ class WebhookController extends AbstractController
         private readonly LoggerInterface $webhookLogger,
         private readonly WebhookSignatureService $webhookSignatureService,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SqsMessageClient $sqsMessageClient
     ) {

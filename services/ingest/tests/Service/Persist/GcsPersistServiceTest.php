@@ -8,7 +8,6 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Coverage;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\Persist\GcsPersistService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
 use Google\Cloud\BigQuery\Job;
@@ -16,6 +15,7 @@ use Google\Cloud\BigQuery\LoadJobConfiguration;
 use Google\Cloud\BigQuery\Table;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
@@ -82,7 +82,7 @@ class GcsPersistServiceTest extends KernelTestCase
             $mockGcsClient,
             $mockBigQueryClient,
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::DEVELOPMENT,
                 [
@@ -173,7 +173,7 @@ class GcsPersistServiceTest extends KernelTestCase
             $mockGcsClient,
             $mockBigQueryClient,
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::DEVELOPMENT,
                 [

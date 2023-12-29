@@ -3,17 +3,14 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use App\Service\EnvironmentService;
 use Google\Cloud\BigQuery\Dataset;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient
 {
     private const SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
 
     public function __construct(
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         array $config = []
     ) {

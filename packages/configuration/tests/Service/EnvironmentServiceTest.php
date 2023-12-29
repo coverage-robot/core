@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Service;
+namespace Packages\Configuration\Tests\Service;
 
-use App\Kernel;
-use App\Service\EnvironmentService;
+use Packages\Configuration\Service\EnvironmentService;
 use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class EnvironmentServiceTest extends TestCase
 {
@@ -15,7 +15,7 @@ class EnvironmentServiceTest extends TestCase
         string $environmentValue,
         Environment $expectedEnvironment
     ): void {
-        $mockKernel = $this->createMock(Kernel::class);
+        $mockKernel = $this->createMock(KernelInterface::class);
         $mockKernel->expects($this->once())
             ->method('getEnvironment')
             ->willReturn($environmentValue);

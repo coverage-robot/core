@@ -6,14 +6,14 @@ use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Github\Api\Issue;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -26,7 +26,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
             new PullRequestCommentFormatterService(),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING
             ),
@@ -56,7 +56,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -130,7 +130,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [

@@ -4,17 +4,17 @@ namespace App\Tests\Client;
 
 use App\Client\SqsMessageClient;
 use App\Enum\EnvironmentVariable;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Response;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Contracts\Tag\Tag;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -78,10 +78,11 @@ class SqsMessageClientTest extends KernelTestCase
 
         $sqsMessageClient = new SqsMessageClient(
             $mockSqsClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
+                    EnvironmentVariable::TRACE_ID->value => 'mock-trace-id',
                     EnvironmentVariable::PUBLISH_QUEUE->value => 'publish-queue-url',
                 ]
             ),
