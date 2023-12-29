@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<issueHandlers xmlns="https://getpsalm.org/schema/config">
+    <!--
+        This error creates a lot of noise when implementing ServiceSubscriberInterface
+        across the platform
+    -->
+    <PropertyNotSetInConstructor errorLevel="suppress"/>
+</issueHandlers>

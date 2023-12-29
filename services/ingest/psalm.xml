@@ -4,23 +4,11 @@
     errorLevel="1"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
     findUnusedBaselineEntry="true"
     findUnusedCode="false"
 >
-    <projectFiles>
-        <directory name="src"/>
-        <ignoreFiles>
-            <directory name="vendor"/>
-        </ignoreFiles>
-    </projectFiles>
-    <plugins>
-        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-            <containerXml>./var/cache/dev/App_KernelDevDebugContainer.xml</containerXml>
-            <containerXml>./var/cache/test/App_KernelTestDebugContainer.xml</containerXml>
-        </pluginClass>
-    </plugins>
-    <issueHandlers>
-        <!-- This error creates a lot of noise when implementing ServiceSubscriberInterface across the platform -->
-        <PropertyNotSetInConstructor errorLevel="suppress"/>
-    </issueHandlers>
+    <xi:include href="../../psalm-files.xml"/>
+    <xi:include href="../../psalm-symfony-plugin.xml"/>
+    <xi:include href="../../psalm-issue-handlers.xml"/>
 </psalm>
