@@ -6,6 +6,7 @@ use App\Repository\ProjectRepository;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\CoverageFinalised;
+use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

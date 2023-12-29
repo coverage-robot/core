@@ -8,6 +8,7 @@ use App\Model\OrchestratedEventInterface;
 use App\Service\EventStoreServiceInterface;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use Exception;
+use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractOrchestratorEventRecorderProcessor implements EventProcessorInterface

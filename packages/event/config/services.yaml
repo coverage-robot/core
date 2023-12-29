@@ -3,6 +3,10 @@ services:
         autowire: true
         autoconfigure: true
 
+    _instanceof:
+        Packages\Event\Processor\EventProcessorInterface:
+            tags: [ 'app.event_processor' ]
+
     Packages\Event\:
         resource: '../src/'
         exclude:

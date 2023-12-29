@@ -7,6 +7,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class EventProcessorService implements EventProcessorServiceInterface
 {
@@ -15,6 +16,7 @@ class EventProcessorService implements EventProcessorServiceInterface
      */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
+        #[TaggedIterator('app.event_processor', defaultIndexMethod: 'getEvent')]
         private readonly iterable $eventProcessors
     ) {
     }

@@ -2,39 +2,13 @@
 
 namespace App\Handler;
 
-use Bref\Context\Context;
-use Bref\Event\EventBridge\EventBridgeEvent;
-use Bref\Event\EventBridge\EventBridgeHandler;
-use Override;
-use Packages\Contracts\Event\Event;
-use Packages\Event\Model\EventInterface;
-use Packages\Event\Service\EventProcessorService;
-use Packages\Event\Service\EventProcessorServiceInterface;
-use Packages\Telemetry\Service\TraceContext;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
-
-class EventHandler extends EventBridgeHandler
+class EventHandler extends \Packages\Event\Handler\EventHandler
 {
-    public function __construct(
-        #[Autowire(service: EventProcessorService::class)]
-        private readonly EventProcessorServiceInterface $eventProcessorService,
-        private readonly SerializerInterface&DenormalizerInterface $serializer
-    ) {
-    }
-
-    #[Override]
-    public function handleEventBridge(EventBridgeEvent $event, Context $context): void
-    {
-        TraceContext::setTraceHeaderFromContext($context);
-
-        $this->eventProcessorService->process(
-            Event::from($event->getDetailType()),
-            $this->serializer->denormalize(
-                $event->getDetail(),
-                EventInterface::class
-            )
-        );
-    }
+    /**
+     * We're not doing anything specific here outside of processing events
+     * in the normal fashion.
+     *
+     * This means we can just use the pre-provided event handler from the
+     * events package.
+     */
 }

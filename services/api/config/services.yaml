@@ -23,7 +23,3 @@ services:
         # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
         public: true
-
-    Packages\Event\Service\EventProcessorService:
-        arguments:
-            $eventProcessors: !tagged_iterator { tag: 'app.event_processor', default_index_method: 'getEvent'}
