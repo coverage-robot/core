@@ -8,4 +8,5 @@ return [
     Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
     Packages\Event\EventBundle::class => ['all' => true],
     Packages\Telemetry\TelemetryBundle::class => ['all' => true],
+    Packages\Configuration\ConfigurationBundle::class => ['all' => true],
 ];

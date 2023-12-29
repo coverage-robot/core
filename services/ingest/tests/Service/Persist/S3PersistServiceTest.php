@@ -9,9 +9,9 @@ use App\Model\Line\Branch;
 use App\Model\Line\Method;
 use App\Model\Line\Statement;
 use App\Service\Persist\S3PersistService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Format\CoverageFormat;
@@ -86,7 +86,7 @@ class S3PersistServiceTest extends KernelTestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::getMock($this, Environment::DEVELOPMENT),
+            MockEnvironmentServiceFactory::createMock($this, Environment::DEVELOPMENT),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );

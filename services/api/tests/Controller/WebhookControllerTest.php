@@ -9,7 +9,7 @@ use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Service\WebhookSignatureService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -37,7 +37,7 @@ class WebhookControllerTest extends KernelTestCase
             new NullLogger(),
             $mockWebhookSignatureService,
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -75,7 +75,7 @@ class WebhookControllerTest extends KernelTestCase
             new NullLogger(),
             $mockWebhookSignatureService,
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -121,7 +121,7 @@ class WebhookControllerTest extends KernelTestCase
             new NullLogger(),
             $mockWebhookSignatureService,
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -168,7 +168,7 @@ class WebhookControllerTest extends KernelTestCase
             new NullLogger(),
             $mockWebhookSignatureService,
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [

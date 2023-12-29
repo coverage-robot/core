@@ -9,7 +9,7 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Service\Webhook\JobStateChangeWebhookProcessor;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
@@ -47,7 +47,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
             new NullLogger(),
             $mockJobRepository,
             $mockEventBridgeEventClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [
@@ -104,7 +104,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
             new NullLogger(),
             $mockJobRepository,
             $mockEventBridgeEventClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [
@@ -150,7 +150,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
             new NullLogger(),
             $mockJobRepository,
             $mockEventBridgeEventClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [

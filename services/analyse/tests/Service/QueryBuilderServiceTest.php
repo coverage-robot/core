@@ -15,12 +15,15 @@ use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class QueryBuilderServiceTest extends KernelTestCase
 {
+    use MatchesSnapshots;
+
     public function testBuildFormatsQuery(): void
     {
         $queryParameters = QueryParameterBag::fromWaypoint(
@@ -30,9 +33,9 @@ class QueryBuilderServiceTest extends KernelTestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                pullRequest: 6,
                 history: [],
-                diff: []
+                diff: [],
+                pullRequest: 6
             )
         );
 
@@ -43,16 +46,7 @@ class QueryBuilderServiceTest extends KernelTestCase
             $this->createMock(Serializer::class)
         );
 
-        $this->assertEquals(
-            <<<SQL
-            SELECT
-              *
-            FROM
-              `mock-table`
-            WHERE
-              commit = "mock-commit"
-              AND provider = "github"
-            SQL,
+        $this->assertMatchesTextSnapshot(
             $queryBuilder->build(
                 MockQueryFactory::createMock(
                     $this,

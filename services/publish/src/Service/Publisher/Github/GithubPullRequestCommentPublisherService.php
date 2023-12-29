@@ -4,7 +4,6 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\EnvironmentService;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
@@ -13,7 +12,6 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
@@ -21,7 +19,6 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
     public function __construct(
         private readonly GithubAppInstallationClient $client,
         private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $pullRequestPublisherLogger
     ) {

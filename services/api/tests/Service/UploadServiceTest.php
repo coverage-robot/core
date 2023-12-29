@@ -9,9 +9,9 @@ use App\Service\EnvironmentService;
 use App\Service\UniqueIdGeneratorService;
 use App\Service\UploadService;
 use App\Service\UploadSignerService;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -126,7 +126,7 @@ class UploadServiceTest extends KernelTestCase
 
         $uploadService = new UploadService(
             $mockUploadSignerService,
-            MockEnvironmentServiceFactory::getMock($this, Environment::PRODUCTION),
+            MockEnvironmentServiceFactory::createMock($this, Environment::PRODUCTION),
             $mockUniqueIdGeneratorService,
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()

@@ -1,0 +1,7 @@
+SELECT
+  *
+FROM
+  `mock-table`
+WHERE
+  commit = "mock-commit"
+  AND provider = "github"

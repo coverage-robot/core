@@ -4,7 +4,7 @@ namespace App\Tests\Client;
 
 use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class BigQueryClientTest extends TestCase
     public function testTableIsCorrectlyConstructed(): void
     {
         $client = new BigQueryClient(
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
@@ -30,7 +30,7 @@ class BigQueryClientTest extends TestCase
     public function testDatasetIsCorrectlyConstructed(): void
     {
         $client = new BigQueryClient(
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [

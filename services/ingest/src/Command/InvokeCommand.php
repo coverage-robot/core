@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Handler\EventHandler;
-use App\Service\EnvironmentService;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
@@ -16,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * This command is a helper for manually invoking the ingest handler locally, using the Localstack environment.
@@ -32,7 +30,6 @@ class InvokeCommand extends Command
 
     public function __construct(
         private readonly EventHandler $handler,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct();

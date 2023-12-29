@@ -6,7 +6,6 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Model\Job;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -17,6 +16,7 @@ use AsyncAws\DynamoDb\Result\QueryOutput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use AsyncAws\DynamoDb\ValueObject\Condition;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\NullLogger;
@@ -41,7 +41,7 @@ class DynamoDbClientTest extends KernelTestCase
 
         $client = new DynamoDbClient(
             $mockClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [
@@ -132,7 +132,7 @@ class DynamoDbClientTest extends KernelTestCase
 
         $client = new DynamoDbClient(
             $mockClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [
@@ -248,7 +248,7 @@ class DynamoDbClientTest extends KernelTestCase
 
         $client = new DynamoDbClient(
             $mockClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [

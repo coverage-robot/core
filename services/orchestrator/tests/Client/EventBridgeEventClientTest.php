@@ -4,7 +4,6 @@ namespace App\Tests\Client;
 
 use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
@@ -13,6 +12,7 @@ use AsyncAws\EventBridge\Result\PutEventsResponse;
 use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use DateTimeImmutable;
 use Monolog\Test\TestCase;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventSource;
@@ -63,10 +63,11 @@ class EventBridgeEventClientTest extends TestCase
 
         $eventBridgeEventService = new EventBridgeEventClient(
             $mockEventBridgeClient,
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
+                    EnvironmentVariable::TRACE_ID->value => 'mock-trace-id',
                     EnvironmentVariable::EVENT_BUS->value => 'mock-event-bus'
                 ]
             ),

@@ -3,7 +3,6 @@
 namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
-use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\SendMessageRequest;
@@ -11,7 +10,6 @@ use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Service\TraceContext;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -19,7 +17,6 @@ class SqsMessageClient
 {
     public function __construct(
         private readonly SqsClient $sqsClient,
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer
     ) {

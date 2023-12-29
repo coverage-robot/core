@@ -10,9 +10,9 @@ use App\Model\ReportWaypoint;
 use App\Query\LineCoverageQuery;
 use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Override;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
@@ -27,7 +27,7 @@ class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         return new LineCoverageQuery(
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [

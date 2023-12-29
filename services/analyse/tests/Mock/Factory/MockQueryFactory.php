@@ -5,6 +5,7 @@ namespace App\Tests\Mock\Factory;
 use App\Enum\EnvironmentVariable;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +34,7 @@ class MockQueryFactory
             ->setConstructorArgs(
                 [
                     $container->get(SerializerInterface::class),
-                    MockEnvironmentServiceFactory::getMock(
+                    MockEnvironmentServiceFactory::createMock(
                         $testCase,
                         Environment::TESTING,
                         [

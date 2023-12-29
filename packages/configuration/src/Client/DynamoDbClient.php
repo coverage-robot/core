@@ -2,7 +2,6 @@
 
 namespace Packages\Configuration\Client;
 
-use App\Service\EnvironmentService;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\Select;
@@ -16,7 +15,6 @@ use Packages\Configuration\Exception\SettingRetrievalFailed;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class DynamoDbClient
 {
@@ -50,7 +48,6 @@ class DynamoDbClient
     public const string VALUE_COLUMN = 'value';
 
     public function __construct(
-        #[Autowire(service: EnvironmentService::class)]
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $dynamoDbClientLogger,
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient

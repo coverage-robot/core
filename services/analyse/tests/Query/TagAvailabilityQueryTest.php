@@ -9,9 +9,9 @@ use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
-use App\Tests\Mock\Factory\MockEnvironmentServiceFactory;
 use Google\Cloud\BigQuery\QueryResults;
 use Override;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -24,7 +24,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
     {
         return new TagAvailabilityQuery(
             $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::PRODUCTION,
                 [
