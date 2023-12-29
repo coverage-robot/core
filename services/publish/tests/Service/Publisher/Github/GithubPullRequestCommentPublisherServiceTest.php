@@ -130,7 +130,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
-            MockEnvironmentServiceFactory::getMock(
+            MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
                 [
