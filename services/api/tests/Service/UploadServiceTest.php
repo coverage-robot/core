@@ -5,7 +5,6 @@ namespace App\Tests\Service;
 use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
-use App\Service\EnvironmentService;
 use App\Service\UniqueIdGeneratorService;
 use App\Service\UploadService;
 use App\Service\UploadSignerService;
@@ -13,6 +12,7 @@ use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
@@ -28,7 +28,7 @@ class UploadServiceTest extends KernelTestCase
     {
         $uploadService = new UploadService(
             $this->createMock(UploadSignerService::class),
-            $this->createMock(EnvironmentService::class),
+            $this->createMock(EnvironmentServiceInterface::class),
             $this->createMock(UniqueIdGeneratorService::class),
             $this->createMock(Serializer::class),
             new NullLogger(),
@@ -46,7 +46,7 @@ class UploadServiceTest extends KernelTestCase
     {
         $uploadService = new UploadService(
             $this->createMock(UploadSignerService::class),
-            $this->createMock(EnvironmentService::class),
+            $this->createMock(EnvironmentServiceInterface::class),
             $this->createMock(UniqueIdGeneratorService::class),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
@@ -68,7 +68,7 @@ class UploadServiceTest extends KernelTestCase
     {
         $uploadService = new UploadService(
             $this->createMock(UploadSignerService::class),
-            $this->createMock(EnvironmentService::class),
+            $this->createMock(EnvironmentServiceInterface::class),
             $this->createMock(UniqueIdGeneratorService::class),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
