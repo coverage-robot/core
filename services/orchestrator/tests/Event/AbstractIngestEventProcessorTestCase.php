@@ -13,13 +13,14 @@ use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -39,7 +40,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     {
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $this->createMock(EventStoreService::class),
-            $this->createMock(EventBridgeEventClient::class)
+            $this->createMock(EventBusClient::class)
         );
 
         $this->assertFalse(
@@ -76,7 +77,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBridgeEventClient::class)
+            $this->createMock(EventBusClient::class)
         );
 
         $this->assertTrue(
@@ -133,7 +134,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBridgeEventClient::class)
+            $this->createMock(EventBusClient::class)
         );
 
         $this->assertFalse(
@@ -161,11 +162,11 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     protected function getIngestEventProcessor(
         EventStoreService $mockEventStoreService,
-        EventBridgeEventClient $eventBridgeEventClient
+        EventBusClient $eventBusClient
     ): AbstractIngestEventProcessor {
         $ingestEventProcessor = new ($this::getEventProcessor())(
             $mockEventStoreService,
-            $eventBridgeEventClient,
+            $eventBusClient,
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );

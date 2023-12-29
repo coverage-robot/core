@@ -2,7 +2,6 @@
 
 namespace App\Tests\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Client\SqsMessageClient;
 use App\Event\UploadsFinalisedEventProcessor;
 use App\Model\ReportComparison;
@@ -14,7 +13,9 @@ use App\Service\LineGroupingService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
@@ -57,10 +58,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn(null);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(CoverageFinalised::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(CoverageFinalised::class)
+            )
             ->willReturn(true);
 
         $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
@@ -107,7 +111,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             $mockSqsMessageClient
         );
 
@@ -154,10 +158,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn($reportComparison);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(CoverageFinalised::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(CoverageFinalised::class)
+            )
             ->willReturn(true);
 
         $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
@@ -205,7 +212,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             $mockSqsMessageClient
         );
 
@@ -238,10 +245,13 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn(null);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(AnalyseFailure::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(AnalyseFailure::class)
+            )
             ->willReturn(true);
 
         $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
@@ -284,7 +294,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             $mockSqsMessageClient
         );
 

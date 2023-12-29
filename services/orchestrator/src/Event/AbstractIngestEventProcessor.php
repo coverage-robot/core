@@ -2,7 +2,6 @@
 
 namespace App\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\BackoffStrategyInterface;
 use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
@@ -13,6 +12,8 @@ use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -28,7 +29,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
     public function __construct(
         #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly EventBridgeEventClient $eventBridgeEventClient,
+        private readonly EventBusClient $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
@@ -80,7 +81,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                 ]
             );
 
-            $this->eventBridgeEventClient->publishEvent(
+            $this->eventBusClient->fireEvent(
+                EventSource::ORCHESTRATOR,
                 new UploadsStarted(
                     $currentState->getProvider(),
                     $currentState->getOwner(),
@@ -121,7 +123,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             );
 
             if ($this->recordFinalisedEvent($finalisedEvent)) {
-                $this->eventBridgeEventClient->publishEvent(
+                $this->eventBusClient->fireEvent(
+                    EventSource::ORCHESTRATOR,
                     new UploadsFinalised(
                         $finalisedEvent->getProvider(),
                         $finalisedEvent->getOwner(),

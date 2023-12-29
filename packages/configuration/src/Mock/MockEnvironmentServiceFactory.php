@@ -2,7 +2,6 @@
 
 namespace Packages\Configuration\Mock;
 
-use App\Enum\EnvironmentVariable;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,16 +22,7 @@ class MockEnvironmentServiceFactory
             ->willReturn($environment);
 
         $mockEnvironmentService->method('getVariable')
-            ->willReturnMap(
-                array_map(
-                    static fn (string $variableName, string $value) => [
-                        EnvironmentVariable::from($variableName),
-                        $value
-                    ],
-                    array_keys($variables),
-                    array_values($variables)
-                )
-            );
+            ->willReturnCallback(static fn ($variableName) => $variables[$variableName->value] ?? null);
 
         return $mockEnvironmentService;
     }

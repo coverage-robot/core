@@ -2,7 +2,6 @@
 
 namespace App\Handler;
 
-use App\Client\EventBridgeEventClient;
 use App\Exception\DeletionException;
 use App\Exception\ParseException;
 use App\Exception\PersistException;
@@ -19,6 +18,8 @@ use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use DateTimeImmutable;
 use Override;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -37,7 +38,7 @@ class EventHandler extends S3Handler
         private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
         private readonly CoverageFileParserService $coverageFileParserService,
         private readonly CoverageFilePersistService $coverageFilePersistService,
-        private readonly EventBridgeEventClient $eventBridgeEventService,
+        private readonly EventBusClient $eventBusClient,
         private readonly LoggerInterface $handlerLogger,
         private readonly MetricService $metricService
     ) {
@@ -136,7 +137,8 @@ class EventHandler extends S3Handler
                     ]
                 );
 
-                $this->eventBridgeEventService->publishEvent(
+                $this->eventBusClient->fireEvent(
+                    EventSource::INGEST,
                     new IngestFailure(
                         $upload,
                         new DateTimeImmutable()
@@ -173,7 +175,8 @@ class EventHandler extends S3Handler
      */
     private function triggerIngestionStartedEvent(Upload $upload): bool
     {
-        return $this->eventBridgeEventService->publishEvent(
+        return $this->eventBusClient->fireEvent(
+            EventSource::INGEST,
             new IngestStarted(
                 $upload,
                 new DateTimeImmutable()
@@ -200,7 +203,8 @@ class EventHandler extends S3Handler
             ]
         );
 
-        return $this->eventBridgeEventService->publishEvent(
+        return $this->eventBusClient->fireEvent(
+            EventSource::INGEST,
             new IngestSuccess(
                 $upload,
                 new DateTimeImmutable()

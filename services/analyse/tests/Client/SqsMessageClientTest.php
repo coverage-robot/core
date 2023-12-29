@@ -82,7 +82,7 @@ class SqsMessageClientTest extends KernelTestCase
                 $this,
                 Environment::TESTING,
                 [
-                    EnvironmentVariable::TRACE_ID->value => 'mock-trace-id',
+                    \Packages\Telemetry\Enum\EnvironmentVariable::X_AMZN_TRACE_ID->value => 'mock-trace-id',
                     EnvironmentVariable::PUBLISH_QUEUE->value => 'publish-queue-url',
                 ]
             ),

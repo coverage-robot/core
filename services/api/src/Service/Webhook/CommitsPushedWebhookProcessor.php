@@ -2,7 +2,6 @@
 
 namespace App\Service\Webhook;
 
-use App\Client\EventBridgeEventClient;
 use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\CommitsPushedWebhookInterface;
@@ -11,6 +10,8 @@ use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
 use Packages\Configuration\Constant\ConfigurationFile;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\ConfigurationFileChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -19,7 +20,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
-        private readonly EventBridgeEventClient $eventBridgeEventClient
+        private readonly EventBusClient $eventBusClient
     ) {
     }
 
@@ -131,7 +132,10 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
     private function publishEvent(ConfigurationFileChange $configurationFileChange): void
     {
         try {
-            $this->eventBridgeEventClient->publishEvent($configurationFileChange);
+            $this->eventBusClient->fireEvent(
+                EventSource::API,
+                $configurationFileChange
+            );
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(
