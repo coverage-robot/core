@@ -8,6 +8,7 @@ on:
             - 'services/publish/**'
             - '.github/workflows/publish.yml'
             - 'packages/**'
+            - 'rector.php'
 
     pull_request:
         branches:
@@ -16,6 +17,7 @@ on:
             - 'services/publish/**'
             - '.github/workflows/publish.yml'
             - 'packages/**'
+            - 'rector.php'
 
     workflow_dispatch:
 
