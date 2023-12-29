@@ -9,6 +9,6 @@
     findUnusedCode="false"
 >
     <xi:include href="../../psalm-files.xml"/>
-    <xi:include href="../../psalm-symfony-plugin.xml"/>
+    <xi:include href="../../psalm-plugins.xml"/>
     <xi:include href="../../psalm-issue-handlers.xml"/>
 </psalm>
