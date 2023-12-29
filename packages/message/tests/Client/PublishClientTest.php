@@ -63,7 +63,7 @@ class PublishClientTest extends TestCase
             ->with(
                 self::callback(function (GetQueueUrlRequest $request) {
                     $this->assertEquals(
-                        'coverage-publish-test',
+                        'coverage-publish-test.fifo',
                         $request->getQueueName()
                     );
 
@@ -136,7 +136,7 @@ class PublishClientTest extends TestCase
             ->with(
                 self::callback(function (GetQueueUrlRequest $request) {
                     $this->assertEquals(
-                        'coverage-publish-test',
+                        'coverage-publish-test.fifo',
                         $request->getQueueName()
                     );
 
@@ -154,7 +154,7 @@ class PublishClientTest extends TestCase
 
         $this->assertEquals(
             'mock-url',
-            $publishClient->getQueueUrl('coverage-publish-test')
+            $publishClient->getQueueUrl('coverage-publish-test.fifo')
         );
     }
 }
