@@ -2,7 +2,6 @@
 
 namespace App\Event;
 
-use App\Client\SqsMessageClient;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
 use App\Service\CachingCoverageAnalyserService;
@@ -20,6 +19,7 @@ use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -42,7 +42,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly LineGroupingService $annotationGrouperService,
         private readonly SettingService $settingService,
         private readonly EventBusClient $eventBusClient,
-        private readonly SqsMessageClient $sqsMessageClient
+        private readonly PublishClient $publishClient
     ) {
     }
 
@@ -143,7 +143,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        return $this->sqsMessageClient->queuePublishableMessage(
+        return $this->publishClient->publishMessage(
             new PublishableMessageCollection(
                 $uploadsFinalised,
                 [

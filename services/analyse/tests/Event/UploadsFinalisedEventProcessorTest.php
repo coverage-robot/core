@@ -2,7 +2,6 @@
 
 namespace App\Tests\Event;
 
-use App\Client\SqsMessageClient;
 use App\Event\UploadsFinalisedEventProcessor;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
@@ -19,6 +18,7 @@ use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -67,9 +67,9 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -112,7 +112,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 ]
             ),
             $mockEventBusClient,
-            $mockSqsMessageClient
+            $mockPublishClient
         );
 
         $this->assertTrue(
@@ -167,9 +167,9 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -213,7 +213,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 ]
             ),
             $mockEventBusClient,
-            $mockSqsMessageClient
+            $mockPublishClient
         );
 
         $this->assertTrue(
@@ -254,9 +254,9 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -295,7 +295,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 ]
             ),
             $mockEventBusClient,
-            $mockSqsMessageClient
+            $mockPublishClient
         );
 
         $this->assertFalse(
