@@ -2,11 +2,11 @@
 
 namespace App\Tests\Event;
 
-use App\Client\WebhookQueueClient;
 use App\Event\UploadsStartedEventProcessor;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsStarted;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\TestCase;
@@ -32,9 +32,9 @@ class UploadsStartedEventProcessorTest extends TestCase
             commit: 'mock-commit'
         );
 
-        $sqsMessageClient = $this->createMock(WebhookQueueClient::class);
-        $sqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableCheckRunMessage $message) use ($uploadsStarted) {
@@ -54,7 +54,7 @@ class UploadsStartedEventProcessorTest extends TestCase
 
         $uploadsStartedEventProcessor = new UploadsStartedEventProcessor(
             new NullLogger(),
-            $sqsMessageClient
+            $mockPublishClient
         );
 
         $this->assertTrue(
