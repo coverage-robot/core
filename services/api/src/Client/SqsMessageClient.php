@@ -30,7 +30,7 @@ class SqsMessageClient
             'MessageGroupId' => $webhook->getMessageGroup(),
         ];
 
-        if ($this->environmentService->getVariable(EnvironmentVariable::TRACE_ID) !== '') {
+        if ($this->environmentService->getVariable(\Packages\Telemetry\Enum\EnvironmentVariable::X_AMZN_TRACE_ID) !== '') {
             /**
              * The trace header will be propagated to the next service in the chain if provided
              * from a previous request.
@@ -42,7 +42,7 @@ class SqsMessageClient
              */
             $request['MessageSystemAttributes'] = [
                 MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [
-                    'StringValue' => $this->environmentService->getVariable(EnvironmentVariable::TRACE_ID),
+                    'StringValue' => $this->environmentService->getVariable(\Packages\Telemetry\Enum\EnvironmentVariable::X_AMZN_TRACE_ID),
                     'DataType' => 'String',
                 ],
             ];
