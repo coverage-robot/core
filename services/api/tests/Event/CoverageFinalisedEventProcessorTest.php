@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Service\Event;
+namespace App\Tests\Event;
 
 use App\Entity\Project;
+use App\Event\CoverageFinalisedEventProcessor;
 use App\Repository\ProjectRepository;
-use App\Service\Event\CoverageFinalisedEventProcessor;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\CoverageFinalised;
 use PHPUnit\Framework\TestCase;

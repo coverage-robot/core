@@ -2,6 +2,7 @@
 
 namespace Packages\Event\Processor;
 
+use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 
 interface EventProcessorInterface
@@ -13,6 +14,8 @@ interface EventProcessorInterface
 
     /**
      * The event type that this processor handles.
+     *
+     * @return value-of<Event>
      */
     public static function getEvent(): string;
 }

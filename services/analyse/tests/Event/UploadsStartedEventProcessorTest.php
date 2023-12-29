@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Service\Event;
+namespace App\Tests\Event;
 
 use App\Client\SqsMessageClient;
-use App\Service\Event\UploadsStartedEventProcessor;
+use App\Event\UploadsStartedEventProcessor;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsStarted;

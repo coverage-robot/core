@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Event;
+namespace App\Event;
 
 use App\Client\SqsMessageClient;
 use Packages\Contracts\Event\Event;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Event;
+namespace App\Event;
 
 use App\Repository\ProjectRepository;
 use Packages\Contracts\Event\Event;
