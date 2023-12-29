@@ -163,6 +163,32 @@ updates:
             - "chore"
             - "bump-patch"
 
+    ## Message package dependencies
+    -   package-ecosystem: "composer"
+        directory: "packages/message"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
+
+    ## Configuration package dependencies
+    -   package-ecosystem: "composer"
+        directory: "packages/configuration"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
+
     ## Event package dependencies
     -   package-ecosystem: "composer"
         directory: "packages/event"
