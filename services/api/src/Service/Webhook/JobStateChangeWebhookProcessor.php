@@ -2,7 +2,6 @@
 
 namespace App\Service\Webhook;
 
-use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
@@ -14,6 +13,8 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -23,7 +24,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
-        private readonly EventBridgeEventClient $eventBridgeEventClient,
+        private readonly EventBusClient $eventBusClient,
         private readonly EnvironmentServiceInterface $environmentService
     ) {
     }
@@ -85,7 +86,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             ]
         );
 
-        $this->publishEvent(
+        $this->fireEvent(
             new JobStateChange(
                 provider: $webhook->getProvider(),
                 owner: $webhook->getOwner(),
@@ -156,10 +157,13 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         );
     }
 
-    private function publishEvent(JobStateChange $jobStateChange): void
+    private function fireEvent(JobStateChange $jobStateChange): void
     {
         try {
-            $this->eventBridgeEventClient->publishEvent($jobStateChange);
+            $this->eventBusClient->fireEvent(
+                EventSource::API,
+                $jobStateChange
+            );
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(

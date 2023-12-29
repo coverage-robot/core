@@ -2,11 +2,11 @@
 
 namespace App\Event;
 
-use App\Client\SqsMessageClient;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\UploadsStarted;
 use Packages\Event\Processor\EventProcessorInterface;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;
@@ -16,7 +16,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
-        private readonly SqsMessageClient $sqsMessageClient
+        private readonly PublishClient $publishClient
     ) {
     }
 
@@ -54,7 +54,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
      */
     private function queueAcknowledgmentCheckRun(UploadsStarted $uploadsStarted): bool
     {
-        return $this->sqsMessageClient->queuePublishableMessage(
+        return $this->publishClient->publishMessage(
             new PublishableCheckRunMessage(
                 event: $uploadsStarted,
                 status: PublishableCheckRunStatus::IN_PROGRESS,

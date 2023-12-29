@@ -18,6 +18,7 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
 use Packages\Contracts\Provider\Provider;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -61,7 +62,7 @@ class EventHandlerTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
 
         $handler = new EventHandler(
             $this->getContainer()
@@ -70,7 +71,7 @@ class EventHandlerTest extends KernelTestCase
             $this->getContainer()
                 ->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             new NullLogger(),
             $this->createMock(MetricService::class)
         );
@@ -92,16 +93,16 @@ class EventHandlerTest extends KernelTestCase
         $mockCoverageFilePersistService->expects($this->never())
             ->method('persist');
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->never())
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->never())
+            ->method('fireEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
             $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             new NullLogger(),
             $this->createMock(MetricService::class)
         );
@@ -133,16 +134,16 @@ class EventHandlerTest extends KernelTestCase
         $mockCoverageFilePersistService->method('persist')
             ->willThrowException(PersistException::from(new Exception('Failed to persist')));
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->exactly(2))
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->exactly(2))
+            ->method('fireEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
             $mockCoverageFileParserService,
             $mockCoverageFilePersistService,
-            $mockEventBridgeEventService,
+            $mockEventBusClient,
             new NullLogger(),
             $this->createMock(MetricService::class)
         );
@@ -198,14 +199,12 @@ class EventHandlerTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
             $this->getContainer()->get(CoverageFileParserService::class),
             $mockCoverageFilePersistService,
-            $mockEventBridgeEventService,
+            $this->createMock(EventBusClient::class),
             new NullLogger(),
             $this->createMock(MetricService::class)
         );

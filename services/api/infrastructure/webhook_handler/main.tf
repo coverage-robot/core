@@ -115,7 +115,6 @@ resource "aws_lambda_function" "webhooks" {
   environment {
     variables = {
       "BREF_PING_DISABLE" = "1"
-      "EVENT_BUS"         = data.terraform_remote_state.core.outputs.coverage_event_bus.name,
     }
   }
 }

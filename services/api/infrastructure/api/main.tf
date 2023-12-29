@@ -113,8 +113,7 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = {
-      "BREF_PING_DISABLE" = "1",
-      "WEBHOOK_QUEUE"     = data.terraform_remote_state.core.outputs.webhooks_queue.url,
+      "BREF_PING_DISABLE" = "1"
     }
   }
 }

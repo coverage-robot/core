@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Client\SqsMessageClient;
+use App\Client\WebhookQueueClient;
 use App\Controller\WebhookController;
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
@@ -29,9 +29,9 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookSignatureService->expects($this->never())
             ->method('validatePayloadSignature');
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->never())
-            ->method('queueIncomingWebhook');
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient->expects($this->never())
+            ->method('publishWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -44,7 +44,7 @@ class WebhookControllerTest extends KernelTestCase
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
             ),
-            $mockSqsMessageClient
+            $mockWebhookQueueClient
         );
 
         $webhookController->setContainer($this->getContainer());
@@ -67,9 +67,9 @@ class WebhookControllerTest extends KernelTestCase
         $mockWebhookSignatureService->expects($this->never())
             ->method('validatePayloadSignature');
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->never())
-            ->method('queueIncomingWebhook');
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient->expects($this->never())
+            ->method('publishWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -82,7 +82,7 @@ class WebhookControllerTest extends KernelTestCase
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
             ),
-            $mockSqsMessageClient
+            $mockWebhookQueueClient
         );
 
         $webhookController->setContainer($this->getContainer());
@@ -113,9 +113,9 @@ class WebhookControllerTest extends KernelTestCase
             ->with('invalid-signature', $payload, 'mock-webhook-secret')
             ->willReturn(false);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->never())
-            ->method('queueIncomingWebhook');
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient->expects($this->never())
+            ->method('publishWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -128,7 +128,7 @@ class WebhookControllerTest extends KernelTestCase
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
             ),
-            $mockSqsMessageClient
+            $mockWebhookQueueClient
         );
 
         $webhookController->setContainer($this->getContainer());
@@ -159,9 +159,9 @@ class WebhookControllerTest extends KernelTestCase
             ->with('valid-signature', $payload, 'mock-webhook-secret')
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queueIncomingWebhook')
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient->expects($this->once())
+            ->method('publishWebhook')
             ->with($this->isInstanceOf($webhookInstance));
 
         $webhookController = new WebhookController(
@@ -175,7 +175,7 @@ class WebhookControllerTest extends KernelTestCase
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
             ),
-            $mockSqsMessageClient
+            $mockWebhookQueueClient
         );
 
         $webhookController->setContainer($this->getContainer());

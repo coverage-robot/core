@@ -6,17 +6,39 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "coverage-robot/event": "^1.0"
+        "coverage-robot/event": "^1.0",
+        "async-aws/sqs": "^2.0",
+        "symfony/http-kernel": "^6.4|^7.0",
+        "symfony/dependency-injection": "^6.4|^7.0",
+        "coverage-robot/telemetry": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "scripts": {
+        "test:unit": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration=./phpunit.xml.dist"
+        ]
     },
     "autoload": {
         "psr-4": {
             "Packages\\Message\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Packages\\Message\\Tests\\": "tests/"
+        }
+    },
     "repositories": [
         {
             "type": "path",
             "url": "../event"
+        },
+        {
+            "type": "path",
+            "url": "../telemetry"
         },
         {
             "type": "path",

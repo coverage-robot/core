@@ -9,6 +9,8 @@ use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Service\Webhook\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
 use Packages\Configuration\Constant\ConfigurationFile;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\ConfigurationFileChange;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -21,14 +23,17 @@ class CommitsPushedWebhookProcessorTest extends TestCase
         GithubPushWebhook $webhook,
         bool $shouldSendConfigurationFileChangeEvent
     ): void {
-        $mockEventBridgeClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeClient->expects($this->exactly((int)$shouldSendConfigurationFileChangeEvent))
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(ConfigurationFileChange::class));
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->exactly((int)$shouldSendConfigurationFileChangeEvent))
+            ->method('fireEvent')
+            ->with(
+                EventSource::API,
+                $this->isInstanceOf(ConfigurationFileChange::class)
+            );
 
         $processor = new CommitsPushedWebhookProcessor(
             new NullLogger(),
-            $mockEventBridgeClient
+            $mockEventBusClient
         );
 
         $processor->process(

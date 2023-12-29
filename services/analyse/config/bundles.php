@@ -10,4 +10,5 @@ return [
     Packages\Event\EventBundle::class => ['all' => true],
     Packages\Clients\ClientsBundle::class => ['all' => true],
     Packages\Configuration\ConfigurationBundle::class => ['all' => true],
+    Packages\Message\MessageBundle::class => ['all' => true],
 ];

@@ -2,7 +2,6 @@
 
 namespace App\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\BackoffStrategyInterface;
 use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
@@ -14,6 +13,8 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\UploadsFinalised;
@@ -28,7 +29,7 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
     public function __construct(
         #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly EventBridgeEventClient $eventBridgeEventClient,
+        private readonly EventBusClient $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
@@ -75,7 +76,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
                 ]
             );
 
-            $this->eventBridgeEventClient->publishEvent(
+            $this->eventBusClient->fireEvent(
+                EventSource::ORCHESTRATOR,
                 new UploadsStarted(
                     $newState->getProvider(),
                     $newState->getOwner(),
@@ -116,7 +118,8 @@ class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProc
             );
 
             if ($this->recordFinalisedEvent($finalisedEvent)) {
-                $this->eventBridgeEventClient->publishEvent(
+                $this->eventBusClient->fireEvent(
+                    EventSource::ORCHESTRATOR,
                     new UploadsFinalised(
                         $finalisedEvent->getProvider(),
                         $finalisedEvent->getOwner(),

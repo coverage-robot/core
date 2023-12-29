@@ -14,9 +14,10 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Tag\Tag;
 
 class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
@@ -82,13 +83,13 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
             ->method('storeStateChange')
             ->willReturn($this->createMock(EventStateChange::class));
 
-        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->never())
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->never())
+            ->method('fireEvent');
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockEventBridgeEventClient
+            $mockEventBusClient
         );
 
         $this->assertTrue(
@@ -159,13 +160,13 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
             ->method('storeStateChange')
             ->willReturn($this->createMock(EventStateChange::class));
 
-        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->never())
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->never())
+            ->method('fireEvent');
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockEventBridgeEventClient
+            $mockEventBusClient
         );
 
         $this->assertTrue(

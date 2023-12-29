@@ -18,6 +18,7 @@
         "coverage-robot/configuration": "^1.0",
         "coverage-robot/contracts": "^1.0",
         "coverage-robot/event": "*",
+        "coverage-robot/message": "^1.0",
         "coverage-robot/telemetry": "^1.0",
         "cybercog/php-svg-font": "*",
         "doctrine/doctrine-bundle": "^2.10",
@@ -107,6 +108,10 @@
         {
             "type": "path",
             "url": "../../packages/configuration"
+        },
+        {
+            "type": "path",
+            "url": "../../packages/message"
         }
     ],
     "extra": {

@@ -2,8 +2,6 @@
 
 namespace App\Event;
 
-use App\Client\EventBridgeEventClient;
-use App\Client\SqsMessageClient;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
 use App\Service\CachingCoverageAnalyserService;
@@ -15,10 +13,13 @@ use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Event\EventSource;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -40,8 +41,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly CoverageComparisonService $coverageComparisonService,
         private readonly LineGroupingService $annotationGrouperService,
         private readonly SettingService $settingService,
-        private readonly EventBridgeEventClient $eventBridgeEventService,
-        private readonly SqsMessageClient $sqsMessageClient
+        private readonly EventBusClient $eventBusClient,
+        private readonly PublishClient $publishClient
     ) {
     }
 
@@ -72,7 +73,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 )
             );
 
-            $this->eventBridgeEventService->publishEvent(
+            $this->eventBusClient->fireEvent(
+                EventSource::ANALYSE,
                 new AnalyseFailure(
                     $event,
                     new DateTimeImmutable()
@@ -82,7 +84,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             return false;
         }
 
-        $this->eventBridgeEventService->publishEvent(
+        $this->eventBusClient->fireEvent(
+            EventSource::ANALYSE,
             new CoverageFinalised(
                 provider: $event->getProvider(),
                 owner: $event->getOwner(),
@@ -140,7 +143,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        return $this->sqsMessageClient->queuePublishableMessage(
+        return $this->publishClient->publishMessage(
             new PublishableMessageCollection(
                 $uploadsFinalised,
                 [

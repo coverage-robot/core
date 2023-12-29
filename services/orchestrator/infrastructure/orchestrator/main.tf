@@ -129,7 +129,6 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
-      "EVENT_BUS"   = data.terraform_remote_state.core.outputs.coverage_event_bus.name,
       "EVENT_STORE" = var.event_store_name
     }
   }

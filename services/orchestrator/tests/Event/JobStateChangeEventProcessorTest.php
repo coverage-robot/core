@@ -17,6 +17,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
@@ -30,7 +31,7 @@ class JobStateChangeEventProcessorTest extends TestCase
     {
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $this->createMock(EventStoreService::class),
-            $this->createMock(EventBridgeEventClient::class),
+            $this->createMock(EventBusClient::class),
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );
@@ -61,7 +62,7 @@ class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBridgeEventClient::class),
+            $this->createMock(EventBusClient::class),
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );
@@ -118,7 +119,7 @@ class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBridgeEventClient::class),
+            $this->createMock(EventBusClient::class),
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );
@@ -194,13 +195,13 @@ class JobStateChangeEventProcessorTest extends TestCase
             ->method('storeStateChange')
             ->willReturn($this->createMock(EventStateChange::class));
 
-        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->never())
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->never())
+            ->method('fireEvent');
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $mockEventBridgeEventClient,
+            $mockEventBusClient,
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );
@@ -273,13 +274,13 @@ class JobStateChangeEventProcessorTest extends TestCase
             ->method('storeStateChange')
             ->willReturn($this->createMock(EventStateChange::class));
 
-        $mockEventBridgeEventClient = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventClient->expects($this->never())
-            ->method('publishEvent');
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->never())
+            ->method('fireEvent');
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $mockEventBridgeEventClient,
+            $mockEventBusClient,
             new NullLogger(),
             new FakeEventStoreRecorderBackoffStrategy()
         );

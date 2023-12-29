@@ -12,4 +12,5 @@ return [
     Packages\Telemetry\TelemetryBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Packages\Configuration\ConfigurationBundle::class => ['all' => true],
+    Packages\Message\MessageBundle::class => ['all' => true],
 ];

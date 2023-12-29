@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Client\SqsMessageClient;
+use App\Client\WebhookQueueClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
@@ -28,7 +28,7 @@ class WebhookController extends AbstractController
         private readonly WebhookSignatureService $webhookSignatureService,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SqsMessageClient $sqsMessageClient
+        private readonly WebhookQueueClient $webhookQueueClient
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }
@@ -87,7 +87,7 @@ class WebhookController extends AbstractController
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
-        $this->sqsMessageClient->queueIncomingWebhook($webhook);
+        $this->webhookQueueClient->publishWebhook($webhook);
 
         $this->webhookLogger->info(
             sprintf(

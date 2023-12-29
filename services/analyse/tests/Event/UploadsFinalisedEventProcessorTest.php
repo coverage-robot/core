@@ -2,8 +2,6 @@
 
 namespace App\Tests\Event;
 
-use App\Client\EventBridgeEventClient;
-use App\Client\SqsMessageClient;
 use App\Event\UploadsFinalisedEventProcessor;
 use App\Model\ReportComparison;
 use App\Model\ReportInterface;
@@ -14,10 +12,13 @@ use App\Service\LineGroupingService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Contracts\Event\Event;
+use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
+use Packages\Message\Client\PublishClient;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -57,15 +58,18 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn(null);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(CoverageFinalised::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(CoverageFinalised::class)
+            )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -107,8 +111,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
-            $mockSqsMessageClient
+            $mockEventBusClient,
+            $mockPublishClient
         );
 
         $this->assertTrue(
@@ -154,15 +158,18 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn($reportComparison);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(CoverageFinalised::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(CoverageFinalised::class)
+            )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -205,8 +212,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
-            $mockSqsMessageClient
+            $mockEventBusClient,
+            $mockPublishClient
         );
 
         $this->assertTrue(
@@ -238,15 +245,18 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getSuitableComparisonForWaypoint')
             ->willReturn(null);
 
-        $mockEventBridgeEventService = $this->createMock(EventBridgeEventClient::class);
-        $mockEventBridgeEventService->expects($this->once())
-            ->method('publishEvent')
-            ->with($this->isInstanceOf(AnalyseFailure::class))
+        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient->expects($this->once())
+            ->method('fireEvent')
+            ->with(
+                EventSource::ANALYSE,
+                $this->isInstanceOf(AnalyseFailure::class)
+            )
             ->willReturn(true);
 
-        $mockSqsMessageClient = $this->createMock(SqsMessageClient::class);
-        $mockSqsMessageClient->expects($this->once())
-            ->method('queuePublishableMessage')
+        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient->expects($this->once())
+            ->method('publishMessage')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -284,8 +294,8 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
                     SettingKey::LINE_ANNOTATION->value => true
                 ]
             ),
-            $mockEventBridgeEventService,
-            $mockSqsMessageClient
+            $mockEventBusClient,
+            $mockPublishClient
         );
 
         $this->assertFalse(
