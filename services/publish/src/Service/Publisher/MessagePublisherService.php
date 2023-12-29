@@ -2,7 +2,7 @@
 
 namespace App\Service\Publisher;
 
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;

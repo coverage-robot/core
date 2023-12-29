@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<projectFiles xmlns="https://getpsalm.org/schema/config">
+    <directory name="src"/>
+    <ignoreFiles>
+        <directory name="vendor"/>
+    </ignoreFiles>
+</projectFiles>

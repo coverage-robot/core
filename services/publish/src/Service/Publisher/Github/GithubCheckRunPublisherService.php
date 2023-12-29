@@ -14,10 +14,10 @@ use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,7 +97,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         $this->client->authenticateAsRepositoryOwner($owner);
 
         try {
-            [$checkRunId, $currentAnnotations, $currentStatus] = $this->getCheckRun(
+            [$checkRunId, $currentAnnotations] = $this->getCheckRun(
                 $owner,
                 $repository,
                 $commit
@@ -120,7 +120,6 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $publishableMessage,
                 []
             );
-            $currentStatus = $publishableMessage->getStatus();
         }
 
         $chunkedAnnotations = $this->getFormattedAnnotations(

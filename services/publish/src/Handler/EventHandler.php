@@ -12,13 +12,15 @@ use JsonException;
 use Override;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventHandler extends SqsHandler
 {
     public function __construct(
         private readonly MessagePublisherService $messagePublisherService,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly LoggerInterface $eventHandlerLogger,
     ) {
     }
 
@@ -48,7 +50,19 @@ class EventHandler extends SqsHandler
         );
 
         foreach ($messages as $message) {
-            $this->messagePublisherService->publish($message);
+            $successful = $this->messagePublisherService->publish($message);
+
+            if (!$successful) {
+                $this->eventHandlerLogger->error(
+                    sprintf(
+                        'Failed to publish %s',
+                        (string)$message
+                    ),
+                    [
+                        'message' => $message
+                    ]
+                );
+            }
         }
     }
 

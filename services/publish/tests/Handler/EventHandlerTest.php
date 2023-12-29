@@ -11,6 +11,7 @@ use Monolog\DateTimeImmutable;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -119,7 +120,8 @@ class EventHandlerTest extends KernelTestCase
 
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            new NullLogger()
         );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());
@@ -333,7 +335,8 @@ class EventHandlerTest extends KernelTestCase
 
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            new NullLogger()
         );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());
@@ -641,7 +644,8 @@ class EventHandlerTest extends KernelTestCase
 
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            new NullLogger()
         );
 
         $eventHandler->handleSqs($sqsEvent, Context::fake());

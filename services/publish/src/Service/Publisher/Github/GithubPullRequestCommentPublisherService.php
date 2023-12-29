@@ -9,7 +9,7 @@ use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;

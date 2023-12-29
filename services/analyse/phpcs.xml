@@ -1,29 +1,8 @@
 <?xml version="1.0"?>
 <ruleset name="PHP_CodeSniffer">
-    <description>PHPCS configuration file.</description>
     <file>src</file>
     <file>tests</file>
     <exclude-pattern>vendor/*</exclude-pattern>
-    <rule ref="PSR12"/>
-    <rule ref="Squiz.Strings.DoubleQuoteUsage">
-        <type>warning</type>
-    </rule>
-    <rule ref="Generic.NamingConventions.UpperCaseConstantName">
-        <!--
-        PHP 8.3 added typed constants, and PHP_CS is yet to catch
-        up, so will throw false positives about upper case constants.
 
-        See: https://github.com/squizlabs/PHP_CodeSniffer/issues/3927
-        -->
-        <severity>0</severity>
-    </rule>
-    <rule ref="Generic.PHP.LowerCaseKeyword">
-        <!--
-        PHP 8.3 added typed constants, and PHP_CS is yet to catch
-        up, so will throw false positives about keywords.
-
-        See: https://github.com/squizlabs/PHP_CodeSniffer/issues/3927
-        -->
-        <severity>0</severity>
-    </rule>
+    <rule ref="../../phpcs.xml"/>
 </ruleset>

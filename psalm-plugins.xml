@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<plugins xmlns="https://getpsalm.org/schema/config">
+    <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+        <containerXml>./var/cache/dev/App_KernelDevDebugContainer.xml</containerXml>
+        <containerXml>./var/cache/test/App_KernelTestDebugContainer.xml</containerXml>
+    </pluginClass>
+</plugins>

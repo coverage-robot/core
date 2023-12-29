@@ -79,6 +79,10 @@ jobs:
                 run: |
                     cp -r ${{ github.workspace }}/.git ./
                     cp -r ${{ github.workspace }}/rector.php ./rector-base.php
+                    cp -r ${{ github.workspace }}/phpcs.xml ./phpcs-base.xml
+                    cp -r ${{ github.workspace }}/psalm-files.xml ./psalm-files.xml
+                    cp -r ${{ github.workspace }}/psalm-issue-handlers.xml ./psalm-issue-handlers.xml
+                    cp -r ${{ github.workspace }}/psalm-plugins.xml ./psalm-plugins.xml
                     zip -q -r build.zip ./
 
             -   name: Upload build package to artifact storage
@@ -110,6 +114,10 @@ jobs:
                     umask 644
                     unzip -q build.zip -d ./
                     mv ./rector-base.php ${{ github.workspace }}/rector.php
+                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
@@ -161,6 +169,10 @@ jobs:
                     umask 644
                     unzip -q build.zip -d ./
                     mv ./rector-base.php ${{ github.workspace }}/rector.php
+                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: shivammathur/setup-php@v2
@@ -207,6 +219,10 @@ jobs:
                     umask 644
                     unzip -q build.zip -d ./
                     mv ./rector-base.php ${{ github.workspace }}/rector.php
+                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
                     mv ./.git ${{ github.workspace }}/.git
 
             -   uses: aws-actions/configure-aws-credentials@v4

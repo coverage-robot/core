@@ -3,7 +3,7 @@
 namespace App\Service\Publisher;
 
 use App\Exception\PublishException;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.publisher_service')]
