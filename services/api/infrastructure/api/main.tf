@@ -71,6 +71,7 @@ resource "aws_iam_policy" "api_policy" {
       {
         Effect = "Allow"
         Action = [
+          "sqs:GetQueueUrl",
           "sqs:SendMessage"
         ]
         Resource = [

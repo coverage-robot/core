@@ -70,6 +70,7 @@ resource "aws_iam_policy" "analyse_policy" {
       {
         Effect = "Allow"
         Action = [
+          "sqs:GetQueueUrl",
           "sqs:SendMessage"
         ]
         Resource = [
