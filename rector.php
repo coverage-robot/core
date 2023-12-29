@@ -33,7 +33,7 @@ return static function (RectorConfig $rectorConfig): void {
          * All services are already on Symfony 6.4+, so this is safe to promote
          * across services (no Symfony 7 rules are available yet).
          */
-        SymfonyLevelSetList::UP_TO_SYMFONY_63
+        SymfonyLevelSetList::UP_TO_SYMFONY_64
     ]);
 
     $rectorConfig->skip([
