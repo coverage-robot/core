@@ -7,7 +7,12 @@ on:
         paths:
             - 'services/publish/**'
             - '.github/workflows/publish.yml'
-            - 'packages/**'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/message/**'
+            - 'packages/telemetry/**'
             - 'rector.php'
 
     pull_request:
@@ -16,7 +21,12 @@ on:
         paths:
             - 'services/publish/**'
             - '.github/workflows/publish.yml'
-            - 'packages/**'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/message/**'
+            - 'packages/telemetry/**'
             - 'rector.php'
 
     workflow_dispatch:

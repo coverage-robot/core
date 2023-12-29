@@ -5,14 +5,18 @@ on:
         branches:
             - main
         paths:
+            - '.github/workflows/configuration.yml'
             - 'packages/configuration/**'
+            - 'packages/contracts/**'
             - '.github/workflows/configuration.yml'
 
     pull_request:
         branches:
             - main
         paths:
+            - '.github/workflows/configuration.yml'
             - 'packages/configuration/**'
+            - 'packages/contracts/**'
             - '.github/workflows/configuration.yml'
 
     workflow_dispatch:
