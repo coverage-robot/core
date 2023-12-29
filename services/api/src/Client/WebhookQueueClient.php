@@ -13,7 +13,7 @@ class WebhookQueueClient extends PublishClient
      * This is dynamic based on the environment the application is running in
      * (i.e. coverage-webhooks-prod, coverage-webhooks-dev, etc).
      */
-    private const string WEBHOOKS_QUEUE_NAME = 'coverage-webhooks-%s';
+    private const string WEBHOOKS_QUEUE_NAME = 'coverage-webhooks-%s.fifo';
 
     public function publishWebhook(WebhookInterface $webhook): bool
     {

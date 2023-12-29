@@ -61,7 +61,7 @@ class WebhookQueueClientTest extends TestCase
             ->with(
                 self::callback(function (GetQueueUrlRequest $request) {
                     $this->assertEquals(
-                        'coverage-webhooks-test',
+                        'coverage-webhooks-test.fifo',
                         $request->getQueueName()
                     );
 

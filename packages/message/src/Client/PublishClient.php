@@ -22,7 +22,7 @@ class PublishClient
      * This is dynamic based on the environment the application is running in
      * (i.e. coverage-publish-prod, coverage-publish-dev, etc).
      */
-    private const string PUBLISH_QUEUE_NAME = 'coverage-publish-%s';
+    private const string PUBLISH_QUEUE_NAME = 'coverage-publish-%s.fifo';
 
     public function __construct(
         protected readonly SqsClient $sqsClient,
