@@ -648,7 +648,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "28bf9d2c8117638beda285a2fcba8904d553f69d"
+                "reference": "eac04f8935924641eae79c663abbbecba2d15ad7"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -689,7 +689,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "d4c2591fb1ed90f54acd012fae7be4a0dc4093c3"
+                "reference": "66390ebb76fc4ca9bcb338ebf967a2f7cefd46d7"
             },
             "type": "library",
             "autoload": {
@@ -708,10 +708,13 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "9128ecd3bfd1ad24e6ecc43628cbc7321a0a0626"
+                "reference": "d4d67757bf7364d4a9a02a176f618fd1ac20bab3"
             },
             "require": {
+                "async-aws/event-bridge": "^1.5",
+                "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
+                "coverage-robot/telemetry": "^1.0",
                 "psr/log": "^3.0",
                 "symfony/config": "^6.4||^7.0",
                 "symfony/dependency-injection": "^6.4||^7.0",
@@ -748,7 +751,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "09ee43916b8db54227e3c11ba1be4f8006e5357a"
+                "reference": "8c07513ee0c234163991906a6c36a927d0bd8609"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -3709,16 +3712,16 @@
         },
         {
             "name": "symfony/clock",
-            "version": "v7.0.0",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/clock.git",
-                "reference": "c696b075befdd4bcffe5ef2eab9a32a1a9c0d29d"
+                "reference": "67c5ae749ebabe7d8c84c3cab2544331eee7d2cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/clock/zipball/c696b075befdd4bcffe5ef2eab9a32a1a9c0d29d",
-                "reference": "c696b075befdd4bcffe5ef2eab9a32a1a9c0d29d",
+                "url": "https://api.github.com/repos/symfony/clock/zipball/67c5ae749ebabe7d8c84c3cab2544331eee7d2cf",
+                "reference": "67c5ae749ebabe7d8c84c3cab2544331eee7d2cf",
                 "shasum": ""
             },
             "require": {
@@ -3763,7 +3766,7 @@
                 "time"
             ],
             "support": {
-                "source": "https://github.com/symfony/clock/tree/v7.0.0"
+                "source": "https://github.com/symfony/clock/tree/v7.0.2"
             },
             "funding": [
                 {
@@ -3779,7 +3782,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-25T20:15:12+00:00"
+            "time": "2023-12-27T08:42:13+00:00"
         },
         {
             "name": "symfony/config",
@@ -9953,5 +9956,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
