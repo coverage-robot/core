@@ -15,7 +15,7 @@ class UploadSignerServiceTest extends TestCase
     {
         $mockClient = $this->createMock(PresignableClientInterface::class);
 
-        $expiry = new DateTimeImmutable();
+        $expiry = new DateTimeImmutable('+1 hour');
         $input = new PutObjectRequest();
 
         $mockClient->expects($this->once())
@@ -24,7 +24,7 @@ class UploadSignerServiceTest extends TestCase
                 $input,
                 $expiry
             )
-            ->willReturn('mock-signed-url');
+            ->willReturn('https://mock-signed-url.com');
 
         $uploadSignerService = new UploadSignerService($mockClient);
 
@@ -38,6 +38,6 @@ class UploadSignerServiceTest extends TestCase
 
         $this->assertEquals('mock-upload-id', $signedUpload->getUploadId());
         $this->assertEquals($expiry, $signedUpload->getExpiration());
-        $this->assertEquals('mock-signed-url', $signedUpload->getSignedUrl());
+        $this->assertEquals('https://mock-signed-url.com', $signedUpload->getSignedUrl());
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Handler;
 
 use App\Entity\Project;
+use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\ProjectRepository;
-use App\Service\Webhook\WebhookProcessor;
+use App\Service\WebhookValidationService;
+use App\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
@@ -30,6 +32,7 @@ class WebhookHandler extends SqsHandler
         private readonly LoggerInterface $webhookLogger,
         private readonly ProjectRepository $projectRepository,
         private readonly SerializerInterface $serializer,
+        private readonly WebhookValidationService $webhookValidationService,
         private readonly MetricService $metricService
     ) {
     }
@@ -55,7 +58,9 @@ class WebhookHandler extends SqsHandler
                     WebhookInterface::class,
                     'json'
                 );
-            } catch (ExceptionInterface $e) {
+
+                $this->webhookValidationService->validate($webhook);
+            } catch (ExceptionInterface|InvalidWebhookException $e) {
                 $this->webhookLogger->error(
                     'Failed to deserialize webhook payload.',
                     [

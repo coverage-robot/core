@@ -87,7 +87,7 @@ class WebhookController extends AbstractController
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
-        $this->webhookQueueClient->publishWebhook($webhook);
+        $this->webhookQueueClient->dispatchWebhook($webhook);
 
         $this->webhookLogger->info(
             sprintf(

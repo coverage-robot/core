@@ -4,18 +4,15 @@ namespace Packages\Message\Service;
 
 use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
-use Symfony\Component\Validator\Validation;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MessageValidationService
 {
-    private ValidatorInterface $validator;
-
-    public function __construct()
-    {
-        $this->validator = Validation::createValidatorBuilder()
-            ->enableAttributeMapping()
-            ->getValidator();
+    public function __construct(
+        private readonly LoggerInterface $messageValidationLogger,
+        private readonly ?ValidatorInterface $validator = null
+    ) {
     }
 
     /**
@@ -23,6 +20,17 @@ class MessageValidationService
      */
     public function validate(PublishableMessageInterface $message): true
     {
+        if (!$this->validator) {
+            $this->messageValidationLogger->warning(
+                'Validation of message %s was skipped because no validator was provided.',
+                [
+                    'message' => $message,
+                ]
+            );
+
+            return true;
+        }
+
         $errors = $this->validator->validate($message);
 
         if ($errors->count() === 0) {

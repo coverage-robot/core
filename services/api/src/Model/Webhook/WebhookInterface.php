@@ -9,6 +9,7 @@ use App\Model\Webhook\Github\GithubPushWebhook;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[DiscriminatorMap(
     'type',
@@ -21,13 +22,16 @@ interface WebhookInterface extends Stringable
 {
     public function getProvider(): Provider;
 
+    #[Assert\NotBlank]
     public function getOwner(): string;
 
+    #[Assert\NotBlank]
     public function getRepository(): string;
 
     public function getType(): WebhookType;
 
     public function getEvent(): WebhookProcessorEvent;
 
+    #[Assert\NotBlank]
     public function getMessageGroup(): string;
 }

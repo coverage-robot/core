@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Webhook;
+namespace App\Webhook;
 
 use App\Entity\Job;
 use App\Entity\Project;

@@ -3,7 +3,14 @@
 namespace App\Client;
 
 use App\Model\Webhook\WebhookInterface;
+use App\Service\WebhookValidationService;
+use AsyncAws\Sqs\SqsClient;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Message\Client\PublishClient;
+use Packages\Message\Service\MessageValidationService;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class WebhookQueueClient extends PublishClient
 {
@@ -15,15 +22,49 @@ class WebhookQueueClient extends PublishClient
      */
     private const string WEBHOOKS_QUEUE_NAME = 'coverage-webhooks-%s.fifo';
 
-    public function publishWebhook(WebhookInterface $webhook): bool
+    public function __construct(
+        private readonly WebhookValidationService $webhookValidationService,
+        SqsClient $sqsClient,
+        EnvironmentServiceInterface $environmentService,
+        SerializerInterface $serializer,
+        MessageValidationService $messageValidationService,
+        LoggerInterface $publishClientLogger
+    ) {
+        parent::__construct(
+            $sqsClient,
+            $environmentService,
+            $serializer,
+            $messageValidationService,
+            $publishClientLogger
+        );
+    }
+
+    public function dispatchWebhook(WebhookInterface $webhook): bool
     {
+        try {
+            $this->webhookValidationService->validate($webhook);
+        } catch (InvalidMessageException $e) {
+            $this->publishClientLogger->error(
+                sprintf(
+                    'Unable to dispatch %s as it failed validation.',
+                    (string)$webhook
+                ),
+                [
+                    'exception' => $e,
+                    'webhook' => $webhook
+                ]
+            );
+
+            return false;
+        }
+
         $request = [
             'QueueUrl' => $this->getQueueUrl($this->getWebhooksQueueName()),
             'MessageBody' => $this->serializer->serialize($webhook, 'json'),
             'MessageGroupId' => $webhook->getMessageGroup(),
         ];
 
-        return $this->publishToQueueWithTraceHeader($request);
+        return $this->dispatchWithTraceHeader($request);
     }
 
     /**

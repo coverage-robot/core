@@ -22,6 +22,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly int $successfulUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
         #[Assert\GreaterThanOrEqual(-100)]
         #[Assert\LessThanOrEqual(100)]

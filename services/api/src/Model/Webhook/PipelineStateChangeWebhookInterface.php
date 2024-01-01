@@ -3,22 +3,26 @@
 namespace App\Model\Webhook;
 
 use Packages\Event\Enum\JobState;
+use Symfony\Component\Validator\Constraints as Assert;
 
 interface PipelineStateChangeWebhookInterface
 {
     /**
      * The ref the job is running on.
      */
+    #[Assert\NotBlank]
     public function getRef(): string;
 
     /**
      * The commit the job is running on.
      */
+    #[Assert\NotBlank]
     public function getCommit(): string;
 
     /**
      * The parent commit of the commit the job is running on.
      */
+    #[Assert\NotBlank(allowNull: true)]
     public function getParent(): ?string;
 
     /**
@@ -26,6 +30,7 @@ interface PipelineStateChangeWebhookInterface
      *
      * For example, the check run id for GitHub.
      */
+    #[Assert\NotBlank]
     public function getExternalId(): string|int;
 
     /**
@@ -34,6 +39,7 @@ interface PipelineStateChangeWebhookInterface
      * Mainly relevant for identifying if the state change is from
      * _us_ (and thus can be ignored).
      */
+    #[Assert\NotBlank]
     public function getAppId(): int|string;
 
     /**
@@ -44,15 +50,18 @@ interface PipelineStateChangeWebhookInterface
     /**
      * The pull request the job is running on (if applicable)
      */
+    #[Assert\NotBlank(allowNull: true)]
     public function getPullRequest(): string|int|null;
 
     /**
      * The ref the pull request is based on (if applicable)
      */
+    #[Assert\NotBlank(allowNull: true)]
     public function getBaseRef(): ?string;
 
     /**
      * The commit the pull request is based on (if applicable)
      */
+    #[Assert\NotBlank(allowNull: true)]
     public function getBaseCommit(): ?string;
 }

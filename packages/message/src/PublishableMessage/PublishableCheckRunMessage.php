@@ -23,6 +23,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
             new Assert\Type(type: PublishableAnnotationInterface::class)
         ])]
         private readonly array $annotations = [],
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
         #[Assert\LessThanOrEqual(100)]
         #[Assert\GreaterThanOrEqual(-100)]
