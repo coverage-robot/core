@@ -23,7 +23,6 @@ interface CommitsPushedWebhookInterface
      *
      * @return PushedCommitInterface[]
      */
-    #[Assert\NotBlank]
     #[Assert\All([
         new Assert\Type(PushedCommitInterface::class),
     ])]
