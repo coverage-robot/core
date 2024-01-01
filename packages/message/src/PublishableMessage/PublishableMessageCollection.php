@@ -6,6 +6,7 @@ use Countable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {
@@ -19,6 +20,10 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
      */
     public function __construct(
         private readonly EventInterface $event,
+        #[Assert\NotBlank]
+        #[Assert\All([
+            new Assert\Type(type: PublishableMessageInterface::class)
+        ])]
         array $messages,
     ) {
         $this->messages = array_filter(

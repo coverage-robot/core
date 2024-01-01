@@ -9,8 +9,11 @@ use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
+use Packages\Contracts\Event\InvalidEventException;
+use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Service\TraceContext;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBusClient
@@ -26,7 +29,9 @@ class EventBusClient
     public function __construct(
         private readonly EventBridgeClient $eventBridgeClient,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly EventValidationService $eventValidationService,
+        private readonly LoggerInterface $eventBusClientLogger
     ) {
     }
 
@@ -35,6 +40,23 @@ class EventBusClient
      */
     public function fireEvent(EventSource $source, EventInterface $event): bool
     {
+        try {
+            $this->eventValidationService->validate($event);
+        } catch (InvalidEventException $e) {
+            $this->eventBusClientLogger->error(
+                sprintf(
+                    'Unable to dispatch %s as it failed validation.',
+                    (string)$event
+                ),
+                [
+                    'exception' => $e,
+                    'event' => $event
+                ]
+            );
+            
+            return false;
+        }
+
         $request = [
             'EventBusName' => sprintf(
                 self::EVENT_BUS_NAME,
