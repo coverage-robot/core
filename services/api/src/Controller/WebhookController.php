@@ -50,6 +50,8 @@ class WebhookController extends AbstractController
              * Attach the provider and webhook type so that the serializer can
              * discriminate against the payload body uniformly and decode the
              * webhook event correctly.
+             *
+             * @var WebhookInterface $webhook
              */
             $webhook = $this->serializer->denormalize(
                 [

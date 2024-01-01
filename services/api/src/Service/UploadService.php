@@ -61,10 +61,13 @@ class UploadService
         );
 
         try {
-            return $this->serializer->denormalize(
+            /** @var SigningParameters $parameters */
+            $parameters = $this->serializer->denormalize(
                 $parameters,
                 SigningParameters::class
             );
+
+            return $parameters;
         } catch (SigningException $signingException) {
             $this->uploadLogger->error(
                 $signingException->getMessage(),
