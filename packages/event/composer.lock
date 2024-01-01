@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a95c749b6ae890c7bf441f7b15d81a65",
+    "content-hash": "0d1eb3b1307d6d7764d59a0c85f3990c",
     "packages": [
         {
             "name": "async-aws/core",
@@ -216,10 +216,10 @@
             "dist": {
                 "type": "path",
                 "url": "../contracts",
-                "reference": "b126f39e658b07796cda33b6f37c87844419a443"
+                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
             },
             "require": {
-                "symfony/validator": "^6.4||^7.0"
+                "symfony/validator": "^7.0"
             },
             "type": "library",
             "autoload": {
@@ -238,17 +238,17 @@
             "dist": {
                 "type": "path",
                 "url": "../telemetry",
-                "reference": "1d235827543961331a4d5c2374f40331345a341b"
+                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
                 "monolog/monolog": "^3.5",
                 "psr/log": "^3.0",
                 "symfony/clock": "^7.0",
-                "symfony/config": "^6.4||^7.0",
-                "symfony/dependency-injection": "^6.4||^7.0",
-                "symfony/http-kernel": "^6.4||^7.0",
-                "symfony/serializer": "^6.4||^7.0"
+                "symfony/config": "^7.0",
+                "symfony/dependency-injection": "^7.0",
+                "symfony/http-kernel": "^7.0",
+                "symfony/serializer": "^7.0"
             },
             "require-dev": {
                 "bref/bref": "^2.1",

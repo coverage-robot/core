@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "708f91b4ad3fcab7ab0606b389884332",
+    "content-hash": "ecbee5d6f3fc4a6682f521d78def0646",
     "packages": [
         {
             "name": "coverage-robot/contracts",
@@ -12,10 +12,10 @@
             "dist": {
                 "type": "path",
                 "url": "../contracts",
-                "reference": "b126f39e658b07796cda33b6f37c87844419a443"
+                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
             },
             "require": {
-                "symfony/validator": "^6.4||^7.0"
+                "symfony/validator": "^7.0"
             },
             "type": "library",
             "autoload": {
