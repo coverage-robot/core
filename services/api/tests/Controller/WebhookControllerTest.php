@@ -31,7 +31,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
         $mockWebhookQueueClient->expects($this->never())
-            ->method('publishWebhook');
+            ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -69,7 +69,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
         $mockWebhookQueueClient->expects($this->never())
-            ->method('publishWebhook');
+            ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -115,7 +115,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
         $mockWebhookQueueClient->expects($this->never())
-            ->method('publishWebhook');
+            ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
@@ -161,7 +161,7 @@ class WebhookControllerTest extends KernelTestCase
 
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
         $mockWebhookQueueClient->expects($this->once())
-            ->method('publishWebhook')
+            ->method('dispatchWebhook')
             ->with($this->isInstanceOf($webhookInstance));
 
         $webhookController = new WebhookController(

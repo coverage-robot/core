@@ -6,17 +6,26 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PublishablePullRequestMessage implements PublishableMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
+        #[Assert\PositiveOrZero]
+        #[Assert\LessThanOrEqual(100)]
         private readonly float $coveragePercentage,
+        #[Assert\PositiveOrZero]
+        #[Assert\LessThanOrEqual(100)]
         private readonly ?float $diffCoveragePercentage,
+        #[Assert\PositiveOrZero]
         private readonly int $successfulUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
+        #[Assert\GreaterThanOrEqual(-100)]
+        #[Assert\LessThanOrEqual(100)]
         private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {

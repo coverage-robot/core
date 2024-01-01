@@ -5,6 +5,7 @@ namespace App\Tests\Client;
 use App\Client\WebhookQueueClient;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
+use App\Service\WebhookValidationService;
 use AsyncAws\Core\Response;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
@@ -15,6 +16,7 @@ use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Message\Service\MessageValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -50,10 +52,18 @@ class WebhookQueueClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
+        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
+        $mockWebhookValidationService->expects($this->once())
+            ->method('validate')
+            ->with($mockWebhook);
+
         $webhookQueueClient = new WebhookQueueClient(
+            $mockWebhookValidationService,
             $mockSqsClient,
             $mockEnvironmentService,
-            $mockSerializer
+            $mockSerializer,
+            $this->createMock(MessageValidationService::class),
+            new NullLogger()
         );
 
         $mockSqsClient->expects($this->once())
@@ -113,7 +123,7 @@ class WebhookQueueClientTest extends TestCase
             ->willReturn($result);
 
         $this->assertTrue(
-            $webhookQueueClient->publishWebhook(
+            $webhookQueueClient->dispatchWebhook(
                 $mockWebhook
             )
         );

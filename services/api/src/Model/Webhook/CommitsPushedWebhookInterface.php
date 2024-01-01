@@ -2,16 +2,20 @@
 
 namespace App\Model\Webhook;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 interface CommitsPushedWebhookInterface
 {
     /**
      * The ref the push occurred on.
      */
+    #[Assert\NotBlank]
     public function getRef(): string;
 
     /**
      * The commit hash at the head of the push.
      */
+    #[Assert\NotBlank]
     public function getHeadCommit(): string;
 
     /**
@@ -19,5 +23,9 @@ interface CommitsPushedWebhookInterface
      *
      * @return PushedCommitInterface[]
      */
+    #[Assert\NotBlank]
+    #[Assert\All([
+        new Assert\Type(PushedCommitInterface::class),
+    ])]
     public function getCommits(): array;
 }

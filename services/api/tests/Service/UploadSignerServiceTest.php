@@ -8,6 +8,7 @@ use App\Service\UploadSignerService;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UploadSignerServiceTest extends TestCase
 {
@@ -15,7 +16,7 @@ class UploadSignerServiceTest extends TestCase
     {
         $mockClient = $this->createMock(PresignableClientInterface::class);
 
-        $expiry = new DateTimeImmutable();
+        $expiry = new DateTimeImmutable('+1 hour');
         $input = new PutObjectRequest();
 
         $mockClient->expects($this->once())
@@ -24,9 +25,12 @@ class UploadSignerServiceTest extends TestCase
                 $input,
                 $expiry
             )
-            ->willReturn('mock-signed-url');
+            ->willReturn('https://mock-signed-url.com');
 
-        $uploadSignerService = new UploadSignerService($mockClient);
+        $uploadSignerService = new UploadSignerService(
+            $mockClient,
+            $this->createMock(ValidatorInterface::class)
+        );
 
         $signedUpload = $uploadSignerService->sign(
             'mock-upload-id',
@@ -38,6 +42,6 @@ class UploadSignerServiceTest extends TestCase
 
         $this->assertEquals('mock-upload-id', $signedUpload->getUploadId());
         $this->assertEquals($expiry, $signedUpload->getExpiration());
-        $this->assertEquals('mock-signed-url', $signedUpload->getSignedUrl());
+        $this->assertEquals('https://mock-signed-url.com', $signedUpload->getSignedUrl());
     }
 }

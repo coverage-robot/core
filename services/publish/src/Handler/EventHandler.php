@@ -10,8 +10,10 @@ use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
 use Override;
+use Packages\Contracts\PublishableMessage\InvalidMessageException;
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\Service\MessageValidationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -20,6 +22,7 @@ class EventHandler extends SqsHandler
     public function __construct(
         private readonly MessagePublisherService $messagePublisherService,
         private readonly SerializerInterface $serializer,
+        private readonly MessageValidationService $messageValidationService,
         private readonly LoggerInterface $eventHandlerLogger,
     ) {
     }
@@ -94,9 +97,15 @@ class EventHandler extends SqsHandler
 
             $newMessage = $this->serializer->deserialize(
                 $record->getBody(),
-                PublishableMessageInterface::class,
+                \Packages\Message\PublishableMessage\PublishableMessageInterface::class,
                 'json'
             );
+
+            if (!$this->isValid($newMessage)) {
+                // The message failed validation, so lets filter it out and log the exception
+                continue;
+            }
+
             $currentNewestMessage = $messages[$attributes['MessageGroupId']] ?? null;
 
             if ($currentNewestMessage === null) {
@@ -112,5 +121,27 @@ class EventHandler extends SqsHandler
         }
 
         return $messages;
+    }
+
+    private function isValid(PublishableMessageInterface $message): bool
+    {
+        try {
+            $this->messageValidationService->validate($message);
+
+            return true;
+        } catch (InvalidMessageException $invalidMessageException) {
+            $this->eventHandlerLogger->error(
+                sprintf(
+                    'Failed to validate message %s',
+                    (string)$message
+                ),
+                [
+                    'message' => $message,
+                    'exception' => $invalidMessageException
+                ]
+            );
+        }
+
+        return false;
     }
 }

@@ -15,6 +15,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\Client\PublishClient;
+use Packages\Message\Service\MessageValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -51,10 +52,17 @@ class PublishClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
+        $mockMessageValidationService = $this->createMock(MessageValidationService::class);
+        $mockMessageValidationService->expects($this->once())
+            ->method('validate')
+            ->with($mockMessage);
+
         $publishClient = new PublishClient(
             $mockSqsClient,
             $mockEnvironmentService,
-            $mockSerializer
+            $mockSerializer,
+            $mockMessageValidationService,
+            new NullLogger()
         );
 
 
@@ -115,7 +123,7 @@ class PublishClientTest extends TestCase
             ->willReturn($result);
 
         $this->assertTrue(
-            $publishClient->publishMessage(
+            $publishClient->dispatch(
                 $mockMessage
             )
         );
@@ -128,7 +136,9 @@ class PublishClientTest extends TestCase
         $publishClient = new PublishClient(
             $mockSqsClient,
             $this->createMock(EnvironmentServiceInterface::class),
-            $this->createMock(SerializerInterface::class)
+            $this->createMock(SerializerInterface::class),
+            $this->createMock(MessageValidationService::class),
+            new NullLogger()
         );
 
         $mockSqsClient->expects($this->once())

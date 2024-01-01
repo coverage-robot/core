@@ -6,14 +6,18 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PublishableMissingCoverageAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
+        #[Assert\NotBlank]
         private readonly string $fileName,
         private readonly bool $startingOnMethod,
+        #[Assert\GreaterThanOrEqual(1)]
         private readonly int $startLineNumber,
+        #[Assert\GreaterThanOrEqual(1)]
         private readonly int $endLineNumber,
         private ?DateTimeImmutable $validUntil = null,
     ) {

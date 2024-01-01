@@ -8,8 +8,11 @@ use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\Service\MessageValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -27,25 +30,44 @@ class PublishClient
     public function __construct(
         protected readonly SqsClient $sqsClient,
         protected readonly EnvironmentServiceInterface $environmentService,
-        protected readonly SerializerInterface $serializer
+        protected readonly SerializerInterface $serializer,
+        protected readonly MessageValidationService $messageValidationService,
+        protected readonly LoggerInterface $publishClientLogger
     ) {
     }
 
-    public function publishMessage(PublishableMessageInterface $publishableMessage): bool
+    public function dispatch(PublishableMessageInterface $publishableMessage): bool
     {
+        try {
+            $this->messageValidationService->validate($publishableMessage);
+        } catch (InvalidMessageException $e) {
+            $this->publishClientLogger->error(
+                sprintf(
+                    'Unable to dispatch %s as it failed validation.',
+                    (string)$publishableMessage
+                ),
+                [
+                    'exception' => $e,
+                    'message' => $publishableMessage
+                ]
+            );
+
+            return false;
+        }
+
         $request = [
             'QueueUrl' => $this->getQueueUrl($this->getPublishQueueName()),
             'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
             'MessageGroupId' => $publishableMessage->getMessageGroup(),
         ];
 
-        return $this->publishToQueueWithTraceHeader($request);
+        return $this->dispatchWithTraceHeader($request);
     }
 
     /**
      * Publish an SQS message onto the queue, with the trace header if it exists.
      */
-    protected function publishToQueueWithTraceHeader(array $request): bool
+    protected function dispatchWithTraceHeader(array $request): bool
     {
         if ($this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID) !== '') {
             /**

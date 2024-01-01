@@ -6,8 +6,8 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "symfony/http-kernel": "^6.4||^7.0",
-        "symfony/dependency-injection": "^6.4||^7.0",
+        "symfony/http-kernel": "^7.0",
+        "symfony/dependency-injection": "^7.0",
         "async-aws/dynamo-db": "^3.0",
         "coverage-robot/contracts": "^1.0",
         "psr/log": "^3.0",

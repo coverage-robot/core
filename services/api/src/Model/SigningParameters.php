@@ -3,21 +3,35 @@
 namespace App\Model;
 
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class SigningParameters implements ParametersInterface
 {
     public function __construct(
+        #[Assert\NotBlank]
         private readonly string $owner,
+        #[Assert\NotBlank]
         private readonly string $repository,
         private readonly Provider $provider,
+        #[Assert\NotBlank]
         private readonly string $fileName,
         private readonly string $projectRoot,
+        #[Assert\NotBlank]
         private readonly string $tag,
+        #[Assert\NotBlank]
         private readonly string $commit,
+        #[Assert\All([
+            new Assert\NotBlank(),
+            new Assert\Type('string'),
+        ])]
         private readonly array $parent,
+        #[Assert\NotBlank]
         private readonly string $ref,
+        #[Assert\NotBlank(allowNull: true)]
         private readonly string|int|null $pullRequest,
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseRef,
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit
     ) {
     }

@@ -69,7 +69,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $mockPublishClient = $this->createMock(PublishClient::class);
         $mockPublishClient->expects($this->once())
-            ->method('publishMessage')
+            ->method('dispatch')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -169,7 +169,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $mockPublishClient = $this->createMock(PublishClient::class);
         $mockPublishClient->expects($this->once())
-            ->method('publishMessage')
+            ->method('dispatch')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {
@@ -256,7 +256,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $mockPublishClient = $this->createMock(PublishClient::class);
         $mockPublishClient->expects($this->once())
-            ->method('publishMessage')
+            ->method('dispatch')
             ->with(
                 self::callback(
                     function (PublishableMessageCollection $message) use ($uploadsFinalised) {

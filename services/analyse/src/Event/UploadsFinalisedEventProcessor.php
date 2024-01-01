@@ -143,7 +143,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        return $this->publishClient->publishMessage(
+        return $this->publishClient->dispatch(
             new PublishableMessageCollection(
                 $uploadsFinalised,
                 [

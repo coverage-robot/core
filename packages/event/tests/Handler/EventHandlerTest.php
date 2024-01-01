@@ -10,12 +10,12 @@ use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\Upload;
 use Packages\Event\Service\EventProcessorServiceInterface;
+use Packages\Event\Service\EventValidationService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Serializer;
 
 class EventHandlerTest extends TestCase
 {
-
     public function testHandlingEvent(): void
     {
         $serializedEvent = json_encode([
@@ -51,9 +51,15 @@ class EventHandlerTest extends TestCase
             ->with($serializedEvent, EventInterface::class)
             ->willReturn($mockUpload);
 
+        $mockEventValidationService = $this->createMock(EventValidationService::class);
+        $mockEventValidationService->expects($this->once())
+            ->method('validate')
+            ->with($mockUpload);
+
         $eventHandler = new EventHandler(
             $mockEventProcessor,
-            $mockSerializer
+            $mockSerializer,
+            $mockEventValidationService
         );
 
         $eventHandler->handleEventBridge(

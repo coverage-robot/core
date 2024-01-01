@@ -79,6 +79,7 @@ class EventHandler extends S3Handler
                     )
                 ];
 
+                /** @var Upload $upload */
                 $upload = $this->serializer->denormalize(
                     $metadata,
                     Upload::class

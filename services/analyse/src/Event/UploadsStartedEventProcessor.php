@@ -54,7 +54,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
      */
     private function queueAcknowledgmentCheckRun(UploadsStarted $uploadsStarted): bool
     {
-        return $this->publishClient->publishMessage(
+        return $this->publishClient->dispatch(
             new PublishableCheckRunMessage(
                 event: $uploadsStarted,
                 status: PublishableCheckRunStatus::IN_PROGRESS,

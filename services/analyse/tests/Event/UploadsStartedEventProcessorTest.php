@@ -34,7 +34,7 @@ class UploadsStartedEventProcessorTest extends TestCase
 
         $mockPublishClient = $this->createMock(PublishClient::class);
         $mockPublishClient->expects($this->once())
-            ->method('publishMessage')
+            ->method('dispatch')
             ->with(
                 self::callback(
                     function (PublishableCheckRunMessage $message) use ($uploadsStarted) {

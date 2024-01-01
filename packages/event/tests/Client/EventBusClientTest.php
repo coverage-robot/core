@@ -12,8 +12,10 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class EventBusClientTest extends TestCase
@@ -32,7 +34,6 @@ class EventBusClientTest extends TestCase
             ->with($mockEvent, 'json')
             ->willReturn('mock-serialized-json');
 
-
         $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
         $mockEnvironmentService->expects($this->once())
             ->method('getEnvironment')
@@ -42,10 +43,17 @@ class EventBusClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
+        $mockEventValidationService = $this->createMock(EventValidationService::class);
+        $mockEventValidationService->expects($this->once())
+            ->method('validate')
+            ->with($mockEvent);
+
         $eventBusClient = new EventBusClient(
             $mockEventBridgeEventClient,
             $mockEnvironmentService,
-            $mockSerializer
+            $mockSerializer,
+            $mockEventValidationService,
+            new NullLogger()
         );
 
         $mockEventBridgeEventClient->expects($this->once())

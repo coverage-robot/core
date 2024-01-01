@@ -32,6 +32,9 @@
     "coverage-robot/event": {
         "version": "1.0.0"
     },
+    "coverage-robot/message": {
+        "version": "1.0.0"
+    },
     "coverage-robot/telemetry": {
         "version": "1.0.0"
     },
@@ -190,6 +193,18 @@
         "files": [
             "./config/packages/routing.yaml",
             "./config/routes.yaml"
+        ]
+    },
+    "symfony/validator": {
+        "version": "7.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.3",
+            "ref": "c32cfd98f714894c4f128bb99aa2530c1227603c"
+        },
+        "files": [
+            "./config/packages/validator.yaml"
         ]
     }
 }

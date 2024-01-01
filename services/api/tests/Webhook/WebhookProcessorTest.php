@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Service\Webhook;
+namespace App\Tests\Webhook;
 
 use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
-use App\Service\Webhook\WebhookProcessor;
-use App\Service\Webhook\WebhookProcessorInterface;
+use App\Webhook\WebhookProcessor;
+use App\Webhook\WebhookProcessorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -43,7 +43,7 @@ class WebhookProcessorTest extends KernelTestCase
 
     public static function webhookPayloadDataProvider(): iterable
     {
-        foreach (glob(__DIR__ . '/../../Fixture/Webhook/*.json') as $payload) {
+        foreach (glob(__DIR__ . '/../Fixture/Webhook/*.json') as $payload) {
             yield basename($payload) => [
                 match (basename($payload)) {
                     'github_push.json' => WebhookType::GITHUB_PUSH,

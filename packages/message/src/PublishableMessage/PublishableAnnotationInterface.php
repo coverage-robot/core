@@ -4,6 +4,7 @@ namespace Packages\Message\PublishableMessage;
 
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[DiscriminatorMap(
     'type',
@@ -14,9 +15,12 @@ use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 )]
 interface PublishableAnnotationInterface
 {
+    #[Assert\NotBlank]
     public function getFileName(): string;
 
+    #[Assert\GreaterThanOrEqual(1)]
     public function getStartLineNumber(): int;
 
+    #[Assert\GreaterThanOrEqual(1)]
     public function getEndLineNumber(): int;
 }

@@ -7,8 +7,9 @@ use App\Handler\WebhookHandler;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\ProjectRepository;
-use App\Service\Webhook\WebhookProcessor;
+use App\Service\WebhookValidationService;
 use App\Tests\Mock\Factory\MockSerializerFactory;
+use App\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Packages\Event\Enum\JobState;
@@ -43,6 +44,11 @@ class WebhookHandlerTest extends KernelTestCase
             )
             ->willReturn($mockProject);
 
+        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
+        $mockWebhookValidationService->expects($this->once())
+            ->method('validate')
+            ->with($webhook);
+
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
@@ -59,6 +65,7 @@ class WebhookHandlerTest extends KernelTestCase
                     ]
                 ]
             ),
+            $mockWebhookValidationService,
             $this->createMock(MetricService::class)
         );
 
@@ -116,6 +123,11 @@ class WebhookHandlerTest extends KernelTestCase
             )
             ->willReturn($mockProject);
 
+        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
+        $mockWebhookValidationService->expects($this->once())
+            ->method('validate')
+            ->with($webhook);
+
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
@@ -132,6 +144,7 @@ class WebhookHandlerTest extends KernelTestCase
                     ]
                 ]
             ),
+            $mockWebhookValidationService,
             $this->createMock(MetricService::class)
         );
 

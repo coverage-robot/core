@@ -5,6 +5,7 @@ namespace Packages\Contracts\PublishableMessage;
 use DateTimeInterface;
 use Packages\Contracts\Event\EventInterface;
 use Stringable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 interface PublishableMessageInterface extends Stringable
 {
@@ -27,6 +28,7 @@ interface PublishableMessageInterface extends Stringable
      * the same destination (e.g. Github Pull Request). This allows us to keep the messages atomic and ensure
      * any messages are fanned in when landing on a destination which needs atomicity.
      */
+    #[Assert\NotBlank]
     public function getMessageGroup(): string;
 
     /**

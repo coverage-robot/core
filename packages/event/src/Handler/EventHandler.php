@@ -10,6 +10,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Service\EventProcessorService;
 use Packages\Event\Service\EventProcessorServiceInterface;
+use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Service\TraceContext;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -20,7 +21,8 @@ class EventHandler extends EventBridgeHandler
     public function __construct(
         #[Autowire(service: EventProcessorService::class)]
         private readonly EventProcessorServiceInterface $eventProcessorService,
-        private readonly SerializerInterface&DenormalizerInterface $serializer
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        private readonly EventValidationService $eventValidationService
     ) {
     }
 
@@ -31,12 +33,16 @@ class EventHandler extends EventBridgeHandler
 
         $eventType = Event::from($event->getDetailType());
 
+        $event = $this->serializer->denormalize(
+            $event->getDetail(),
+            EventInterface::class
+        );
+
+        $this->eventValidationService->validate($event);
+
         $this->eventProcessorService->process(
             $eventType,
-            $this->serializer->denormalize(
-                $event->getDetail(),
-                EventInterface::class
-            )
+            $event
         );
     }
 }

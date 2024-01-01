@@ -16,7 +16,7 @@ use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -78,11 +78,11 @@ class MetricServiceTest extends TestCase
                     new DateTimeNormalizer(),
                     new ObjectNormalizer(
                         classMetadataFactory: new ClassMetadataFactory(
-                            new AnnotationLoader()
+                            new AttributeLoader()
                         ),
                         nameConverter: new MetadataAwareNameConverter(
                             new ClassMetadataFactory(
-                                new AnnotationLoader()
+                                new AttributeLoader()
                             ),
                             new CamelCaseToSnakeCaseNameConverter()
                         ),

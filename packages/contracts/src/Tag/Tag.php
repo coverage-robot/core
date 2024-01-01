@@ -3,11 +3,14 @@
 namespace Packages\Contracts\Tag;
 
 use Stringable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class Tag implements Stringable
 {
     public function __construct(
+        #[Assert\NotBlank]
         private readonly string $name,
+        #[Assert\NotBlank]
         private readonly string $commit
     ) {
     }

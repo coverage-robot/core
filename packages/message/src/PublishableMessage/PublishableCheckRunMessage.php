@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class PublishableCheckRunMessage implements PublishableMessageInterface
 {
@@ -15,9 +16,17 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
     public function __construct(
         private readonly EventInterface $event,
         private readonly PublishableCheckRunStatus $status,
+        #[Assert\PositiveOrZero]
+        #[Assert\LessThanOrEqual(100)]
         private readonly float $coveragePercentage,
+        #[Assert\All([
+            new Assert\Type(type: PublishableAnnotationInterface::class)
+        ])]
         private readonly array $annotations = [],
+        #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
+        #[Assert\LessThanOrEqual(100)]
+        #[Assert\GreaterThanOrEqual(-100)]
         private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {
