@@ -235,7 +235,7 @@ class QueryServiceTest extends KernelTestCase
 
         $this->expectException(QueryException::class);
 
-        $result = $queryService->runQuery($query, new QueryParameterBag());
+        $queryService->runQuery($query, new QueryParameterBag());
     }
 
     public function testRunQueryWithExternalException(): void
