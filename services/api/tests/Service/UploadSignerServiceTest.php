@@ -8,6 +8,7 @@ use App\Service\UploadSignerService;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UploadSignerServiceTest extends TestCase
 {
@@ -26,7 +27,10 @@ class UploadSignerServiceTest extends TestCase
             )
             ->willReturn('https://mock-signed-url.com');
 
-        $uploadSignerService = new UploadSignerService($mockClient);
+        $uploadSignerService = new UploadSignerService(
+            $mockClient,
+            $this->createMock(ValidatorInterface::class)
+        );
 
         $signedUpload = $uploadSignerService->sign(
             'mock-upload-id',

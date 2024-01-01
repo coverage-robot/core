@@ -9,29 +9,26 @@ use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UploadSignerService
 {
     public function __construct(
         #[Autowire(service: S3Client::class)]
-        private readonly S3Client|PresignableClientInterface $client
+        private readonly S3Client|PresignableClientInterface $client,
+        private readonly ValidatorInterface $validator
     ) {
     }
 
     public function sign(string $uploadId, PutObjectRequest $input, DateTimeImmutable $expiry): SignedUrl
     {
-        $validator = Validation::createValidatorBuilder()
-            ->enableAttributeMapping()
-            ->getValidator();
-
         $signedUrl = new SignedUrl(
             $uploadId,
             $this->signRequest($input, $expiry),
             $expiry
         );
 
-        $errors = $validator->validate($signedUrl);
+        $errors = $this->validator->validate($signedUrl);
 
         if ($errors->count() === 0) {
             return $signedUrl;
