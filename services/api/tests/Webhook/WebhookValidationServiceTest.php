@@ -110,7 +110,9 @@ class WebhookValidationServiceTest extends TestCase
                     headCommit: 'mock-commit-2',
                     commits: []
                 ),
-                false
+                // Webhooks for when refs are deleted (i.e. PRs merged)
+                // wont have any commits associated with them
+                true
             ],
             [
                 new GithubPushWebhook(
