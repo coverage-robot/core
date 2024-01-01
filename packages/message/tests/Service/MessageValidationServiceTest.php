@@ -11,7 +11,6 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Message\Service\MessageValidationService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Symfony\Component\Validator\Validation;
 
 class MessageValidationServiceTest extends TestCase
@@ -20,7 +19,6 @@ class MessageValidationServiceTest extends TestCase
     public function testValidatingMessages(PublishableMessageInterface $message, bool $isValid): void
     {
         $messageValidatorService = new MessageValidationService(
-            new NullLogger(),
             Validation::createValidatorBuilder()
                 ->enableAttributeMapping()
                 ->getValidator()
