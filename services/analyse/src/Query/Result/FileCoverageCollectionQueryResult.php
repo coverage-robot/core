@@ -2,12 +2,17 @@
 
 namespace App\Query\Result;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class FileCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param FileCoverageQueryResult[] $files
      */
     public function __construct(
+        #[Assert\All([
+            new Assert\Type(type: FileCoverageQueryResult::class)
+        ])]
         private readonly array $files,
     ) {
     }

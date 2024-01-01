@@ -3,6 +3,7 @@
 namespace App\Query\Result;
 
 use OutOfBoundsException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class TagAvailabilityCollectionQueryResult implements QueryResultInterface
 {
@@ -10,6 +11,9 @@ class TagAvailabilityCollectionQueryResult implements QueryResultInterface
      * @param TagAvailabilityQueryResult[] $tagAvailability
      */
     public function __construct(
+        #[Assert\All([
+            new Assert\Type(type: TagAvailabilityQueryResult::class)
+        ])]
         private readonly array $tagAvailability
     ) {
     }

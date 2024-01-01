@@ -26,6 +26,9 @@ use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class QueryServiceTest extends KernelTestCase
 {
@@ -73,6 +76,7 @@ class QueryServiceTest extends KernelTestCase
                 )
             ],
             $mockQueryBuilderService,
+            $this->createMock(ValidatorInterface::class),
             new NullLogger()
         );
 
@@ -130,6 +134,7 @@ class QueryServiceTest extends KernelTestCase
                 ),
             ],
             $mockQueryBuilder,
+            $this->createMock(ValidatorInterface::class),
             new NullLogger()
         );
 
@@ -145,6 +150,92 @@ class QueryServiceTest extends KernelTestCase
         $this->expectException(QueryException::class);
 
         $queryService->runQuery('invalid-query');
+    }
+
+    #[DataProvider('queryDataProvider')]
+    public function testRunQueryWithInvalidResults(
+        string $query,
+        QueryResultInterface $queryResult
+    ): void {
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
+
+        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+
+        $mockValidator = $this->createMock(ValidatorInterface::class);
+        $mockValidator->expects($this->once())
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList([
+                new ConstraintViolation(
+                    'mock-message',
+                    'mock-template',
+                    [],
+                    'mock-root',
+                    'mock-property-path',
+                    'mock-invalid-value'
+                )
+            ]));
+
+        $queryService = new QueryService(
+            $mockBigQueryService,
+            [
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalCoverageQuery::class,
+                    '',
+                    TotalCoverageQuery::class === $query ? $queryResult :
+                        $this->createMock(CoverageQueryResult::class)
+                ),
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalUploadsQuery::class,
+                    '',
+                    TotalUploadsQuery::class === $query ? $queryResult :
+                        $this->createMock(TotalUploadsQueryResult::class)
+                ),
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    TotalTagCoverageQuery::class,
+                    '',
+                    TotalTagCoverageQuery::class === $query ? $queryResult :
+                        $this->createMock(TagCoverageCollectionQueryResult::class)
+                ),
+                MockQueryFactory::createMock(
+                    $this,
+                    $this->getContainer(),
+                    LineCoverageQuery::class,
+                    '',
+                    LineCoverageQuery::class === $query ? $queryResult :
+                        $this->createMock(LineCoverageCollectionQueryResult::class)
+                )
+            ],
+            $mockQueryBuilderService,
+            $mockValidator,
+            new NullLogger()
+        );
+
+        $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
+
+        $mockQueryBuilderService->expects($this->once())
+            ->method('build')
+            ->with($this->isInstanceOf($query))
+            ->willReturn('formatted-query');
+
+        $mockBigQueryService->expects($this->once())
+            ->method('query')
+            ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockBigQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with($mockQueryJobConfiguration)
+            ->willReturn($this->createMock(QueryResults::class));
+
+        $this->expectException(QueryException::class);
+
+        $result = $queryService->runQuery($query, new QueryParameterBag());
     }
 
     public function testRunQueryWithExternalException(): void
@@ -165,6 +256,7 @@ class QueryServiceTest extends KernelTestCase
                 )
             ],
             $mockQueryBuilderService,
+            $this->createMock(ValidatorInterface::class),
             new NullLogger()
         );
 
@@ -207,6 +299,7 @@ class QueryServiceTest extends KernelTestCase
                 )
             ],
             $mockQueryBuilderService,
+            $this->createMock(ValidatorInterface::class),
             new NullLogger()
         );
 

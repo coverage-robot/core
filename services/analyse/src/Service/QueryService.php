@@ -7,9 +7,11 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class QueryService implements QueryServiceInterface
 {
@@ -21,6 +23,7 @@ class QueryService implements QueryServiceInterface
         #[TaggedIterator('app.coverage_query')]
         private readonly iterable $queries,
         private readonly QueryBuilderService $queryBuilderService,
+        private readonly ValidatorInterface $validator,
         private readonly LoggerInterface $queryServiceLogger
     ) {
     }
@@ -80,7 +83,10 @@ class QueryService implements QueryServiceInterface
 
             $results->waitUntilComplete();
 
-            return $query->parseResults($results);
+            return $this->parseAndValidateResults(
+                $query,
+                $results
+            );
         } catch (QueryException $e) {
             $this->queryServiceLogger->critical(
                 sprintf(
@@ -111,5 +117,42 @@ class QueryService implements QueryServiceInterface
 
             throw $e;
         }
+    }
+
+    /**
+     * Parse the Query results from BigQuery into a model, and validate it.
+     *
+     * @throws QueryException
+     */
+    private function parseAndValidateResults(
+        QueryInterface $query,
+        QueryResults $results
+    ): QueryResultInterface {
+        $results = $query->parseResults($results);
+
+        $errors = $this->validator->validate($results);
+
+        if ($errors->count() > 0) {
+            $this->queryServiceLogger->critical(
+                sprintf(
+                    'Query %s produced invalid results.',
+                    $query::class
+                ),
+                [
+                    'query' => $query,
+                    'errors' => $errors,
+                    'results' => $results
+                ]
+            );
+
+            throw new QueryException(
+                sprintf(
+                    'Query results for %s was invalid.',
+                    $query::class
+                )
+            );
+        }
+
+        return $results;
     }
 }
