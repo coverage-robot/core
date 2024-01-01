@@ -5,6 +5,7 @@ namespace App\Query\Result;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
 use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class LineCoverageQueryResult implements QueryResultInterface
 {
@@ -12,13 +13,17 @@ class LineCoverageQueryResult implements QueryResultInterface
      * @param LineType[] $types
      */
     public function __construct(
+        #[Assert\NotBlank]
         private readonly string $fileName,
+        #[Assert\GreaterThanOrEqual(1)]
         private readonly int $lineNumber,
         private readonly LineState $state,
         private readonly bool $containsMethod,
         private readonly bool $containsBranch,
         private readonly bool $containsStatement,
+        #[Assert\GreaterThanOrEqual(0)]
         private readonly int $totalBranches,
+        #[Assert\GreaterThanOrEqual(0)]
         private readonly int $coveredBranches,
     ) {
     }
@@ -48,6 +53,7 @@ class LineCoverageQueryResult implements QueryResultInterface
      */
 
     #[Ignore]
+    #[Assert\NotBlank]
     public function getTypes(): array
     {
         return [

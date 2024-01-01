@@ -2,12 +2,17 @@
 
 namespace App\Query\Result;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class TagCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param TagCoverageQueryResult[] $tags
      */
     public function __construct(
+        #[Assert\All([
+            new Assert\Type(type: TagCoverageQueryResult::class)
+        ])]
         private readonly array $tags,
     ) {
     }

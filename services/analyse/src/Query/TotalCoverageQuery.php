@@ -106,10 +106,13 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
         $coverageValues = $results->rows()
             ->current();
 
-        return $this->serializer->denormalize(
+        /** @var CoverageQueryResult $results */
+        $results = $this->serializer->denormalize(
             $coverageValues,
             CoverageQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 }

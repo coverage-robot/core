@@ -165,10 +165,13 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 
         $tags = $results->rows();
 
-        return $this->serializer->denormalize(
+        /** @var TagCoverageCollectionQueryResult $results */
+        $results = $this->serializer->denormalize(
             ['tags' => iterator_to_array($tags)],
             TagCoverageCollectionQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 }

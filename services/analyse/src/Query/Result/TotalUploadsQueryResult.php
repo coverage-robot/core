@@ -4,6 +4,7 @@ namespace App\Query\Result;
 
 use DateTimeImmutable;
 use Packages\Contracts\Tag\Tag;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class TotalUploadsQueryResult implements QueryResultInterface
 {
@@ -13,8 +14,16 @@ class TotalUploadsQueryResult implements QueryResultInterface
      * @param DateTimeImmutable|null $latestSuccessfulUpload
      */
     public function __construct(
+        #[Assert\All([
+            new Assert\Type(type: 'string'),
+            new Assert\NotBlank()
+        ])]
         private readonly array $successfulUploads,
+        #[Assert\All([
+            new Assert\Type(type: Tag::class)
+        ])]
         private readonly array $successfulTags,
+        #[Assert\LessThanOrEqual(value: 'now')]
         private readonly ?DateTimeImmutable $latestSuccessfulUpload
     ) {
     }

@@ -73,11 +73,14 @@ class TotalUploadsQuery implements QueryInterface
         $row = $results->rows()
             ->current();
 
-        return $this->serializer->denormalize(
+        /** @var TotalUploadsQueryResult $results */
+        $results = $this->serializer->denormalize(
             $row,
             TotalUploadsQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
