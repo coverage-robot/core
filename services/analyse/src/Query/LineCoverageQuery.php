@@ -79,10 +79,13 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
 
         $lines = $results->rows();
 
-        return $this->serializer->denormalize(
+        /** @var LineCoverageCollectionQueryResult $results */
+        $results = $this->serializer->denormalize(
             ['lines' => iterator_to_array($lines)],
             LineCoverageCollectionQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 }

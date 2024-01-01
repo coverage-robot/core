@@ -113,10 +113,13 @@ class TagAvailabilityQuery implements QueryInterface
 
         $row = $results->rows();
 
-        return $this->serializer->denormalize(
+        /** @var TagAvailabilityCollectionQueryResult $results */
+        $results = $this->serializer->denormalize(
             ['tagAvailability' => iterator_to_array($row)],
             TagAvailabilityCollectionQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 }

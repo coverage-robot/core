@@ -113,10 +113,13 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
 
         $files = $results->rows();
 
-        return $this->serializer->denormalize(
+        /** @var FileCoverageCollectionQueryResult $results */
+        $results = $this->serializer->denormalize(
             ['files' => iterator_to_array($files)],
             FileCoverageCollectionQueryResult::class,
             'array'
         );
+
+        return $results;
     }
 }
