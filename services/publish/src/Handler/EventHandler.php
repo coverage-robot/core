@@ -97,7 +97,7 @@ class EventHandler extends SqsHandler
 
             $newMessage = $this->serializer->deserialize(
                 $record->getBody(),
-                PublishableMessageInterface::class,
+                \Packages\Message\PublishableMessage\PublishableMessageInterface::class,
                 'json'
             );
 
