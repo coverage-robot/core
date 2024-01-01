@@ -11,18 +11,13 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Message\Service\MessageValidationService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
 
 class MessageValidationServiceTest extends TestCase
 {
     #[DataProvider('messageDataProvider')]
     public function testValidatingMessages(PublishableMessageInterface $message, bool $isValid): void
     {
-        $messageValidatorService = new MessageValidationService(
-            Validation::createValidatorBuilder()
-                ->enableAttributeMapping()
-                ->getValidator()
-        );
+        $messageValidatorService = new MessageValidationService();
 
         if (!$isValid) {
             $this->expectException(InvalidMessageException::class);

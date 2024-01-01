@@ -10,18 +10,13 @@ use Packages\Event\Model\Upload;
 use Packages\Event\Service\EventValidationService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
 
 class EventValidationServiceTest extends TestCase
 {
     #[DataProvider('eventDataProvider')]
     public function testValidatingEvents(EventInterface $event, bool $isValid): void
     {
-        $eventValidatorService = new EventValidationService(
-            Validation::createValidatorBuilder()
-                ->enableAttributeMapping()
-                ->getValidator()
-        );
+        $eventValidatorService = new EventValidationService();
 
         if (!$isValid) {
             $this->expectException(InvalidEventException::class);

@@ -4,13 +4,18 @@ namespace Packages\Message\Service;
 
 use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MessageValidationService
 {
-    public function __construct(
-        private readonly ValidatorInterface $validator
-    ) {
+    private ValidatorInterface $validator;
+
+    public function __construct()
+    {
+        $this->validator = Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
     }
 
     /**

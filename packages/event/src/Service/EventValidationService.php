@@ -4,13 +4,18 @@ namespace Packages\Event\Service;
 
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\InvalidEventException;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EventValidationService
 {
-    public function __construct(
-        private readonly ValidatorInterface $validator
-    ) {
+    private ValidatorInterface $validator;
+
+    public function __construct()
+    {
+        $this->validator = Validation::createValidatorBuilder()
+            ->enableAttributeMapping()
+            ->getValidator();
     }
 
     /**
