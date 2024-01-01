@@ -14,7 +14,7 @@ class TagAvailabilityQueryResult implements QueryResultInterface
         private readonly string $tagName,
         #[Assert\All([
             new Assert\Type(type: 'string'),
-            new Assert\NotBlank
+            new Assert\NotBlank()
         ])]
         private readonly array $availableCommits,
     ) {
