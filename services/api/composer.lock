@@ -7924,16 +7924,16 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "v7.0.0",
+            "version": "v7.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "883b7b035670b02e06f1dd6cbe71fa1dabcdec7d"
+                "reference": "d6236c6e75ee70317a27f0fd4c3f9bb956f22366"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/883b7b035670b02e06f1dd6cbe71fa1dabcdec7d",
-                "reference": "883b7b035670b02e06f1dd6cbe71fa1dabcdec7d",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/d6236c6e75ee70317a27f0fd4c3f9bb956f22366",
+                "reference": "d6236c6e75ee70317a27f0fd4c3f9bb956f22366",
                 "shasum": ""
             },
             "require": {
@@ -8012,7 +8012,7 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/twig-bridge/tree/v7.0.0"
+                "source": "https://github.com/symfony/twig-bridge/tree/v7.0.2"
             },
             "funding": [
                 {
@@ -8028,7 +8028,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-26T15:16:53+00:00"
+            "time": "2023-12-15T12:36:57+00:00"
         },
         {
             "name": "symfony/twig-bundle",
