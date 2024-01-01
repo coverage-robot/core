@@ -5,18 +5,13 @@ namespace App\Service;
 use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
 use Packages\Contracts\PublishableMessage\InvalidMessageException;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class WebhookValidationService
 {
-    private ValidatorInterface $validator;
-
-    public function __construct()
-    {
-        $this->validator = Validation::createValidatorBuilder()
-            ->enableAttributeMapping()
-            ->getValidator();
+    public function __construct(
+        private readonly ValidatorInterface $validator
+    ) {
     }
 
     /**

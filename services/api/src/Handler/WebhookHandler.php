@@ -60,7 +60,7 @@ class WebhookHandler extends SqsHandler
                 );
 
                 $this->webhookValidationService->validate($webhook);
-            } catch (ExceptionInterface|InvalidWebhookException $e) {
+            } catch (ExceptionInterface | InvalidWebhookException $e) {
                 $this->webhookLogger->error(
                     'Failed to deserialize webhook payload.',
                     [

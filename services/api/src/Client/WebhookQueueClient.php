@@ -43,14 +43,14 @@ class WebhookQueueClient extends PublishClient
     {
         try {
             $this->webhookValidationService->validate($webhook);
-        } catch (InvalidMessageException $e) {
+        } catch (InvalidMessageException $invalidMessageException) {
             $this->publishClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
                     (string)$webhook
                 ),
                 [
-                    'exception' => $e,
+                    'exception' => $invalidMessageException,
                     'webhook' => $webhook
                 ]
             );

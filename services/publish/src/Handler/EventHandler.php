@@ -129,7 +129,7 @@ class EventHandler extends SqsHandler
             $this->messageValidationService->validate($message);
 
             return true;
-        } catch (InvalidMessageException $exception) {
+        } catch (InvalidMessageException $invalidMessageException) {
             $this->eventHandlerLogger->error(
                 sprintf(
                     'Failed to validate message %s',
@@ -137,7 +137,7 @@ class EventHandler extends SqsHandler
                 ),
                 [
                     'message' => $message,
-                    'exception' => $exception
+                    'exception' => $invalidMessageException
                 ]
             );
         }
