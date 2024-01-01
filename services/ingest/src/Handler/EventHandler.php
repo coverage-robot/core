@@ -56,28 +56,8 @@ class EventHandler extends S3Handler
         foreach ($event->getRecords() as $coverageFile) {
             try {
                 $source = $this->retrieveFile($coverageFile);
-                $metadata = [
-                    ...$source->getMetadata(),
-                    'uploadId' => $source->getMetadata()['uploadid'] ??
-                        $source->getMetadata()['uploadId'] ?? null,
-                    'projectRoot' => $source->getMetadata()['projectroot'] ??
-                        $source->getMetadata()['projectRoot'] ?? null,
-                    'pullRequest' => $source->getMetadata()['pullrequest'] ??
-                        $source->getMetadata()['pullRequest'] ?? null,
-                    'baseRef' => $source->getMetadata()['baseref'] ??
-                            $source->getMetadata()['baseRef'] ?? null,
-                    'baseCommit' => $source->getMetadata()['basecommit'] ??
-                            $source->getMetadata()['baseCommit'] ?? null,
-                    'tag' => [
-                        'name' => $source->getMetadata()['tag'],
-                        'commit' => $source->getMetadata()['commit']
-                    ],
-                    'parent' => $this->serializer->deserialize(
-                        $source->getMetadata()['parent'],
-                        'string[]',
-                        'json'
-                    )
-                ];
+
+                $metadata = $this->retrieveFileMetadata($source);
 
                 /** @var Upload $upload */
                 $upload = $this->serializer->denormalize(
@@ -168,6 +148,54 @@ class EventHandler extends S3Handler
             $coverageFile->getBucket(),
             $coverageFile->getObject()
         );
+    }
+
+    /**
+     * Retrieve the metadata from the coverage file, and convert it into a format
+     * which should be able to be used as an upload event.
+     *
+     * The metadata from S3 will be all lower case, so we need to support the non-camel case
+     * naming (hence the need to do this before deserialzation)
+     */
+    private function retrieveFileMetadata(GetObjectOutput $output): array
+    {
+        return [
+            ...$output->getMetadata(),
+            'uploadId' => match (true) {
+                ($output->getMetadata()['uploadId'] ?? '') !== '' => $output->getMetadata()['uploadId'],
+                ($output->getMetadata()['uploadid'] ?? '') !== '' => $output->getMetadata()['uploadid'],
+                default => null
+            },
+            'projectRoot' => match (true) {
+                ($output->getMetadata()['projectRoot'] ?? '') !== '' => $output->getMetadata()['projectRoot'],
+                ($output->getMetadata()['projectroot'] ?? '') !== '' => $output->getMetadata()['projectroot'],
+                default => null
+            },
+            'pullRequest' => match (true) {
+                ($output->getMetadata()['pullRequest'] ?? '') !== '' => $output->getMetadata()['pullRequest'],
+                ($output->getMetadata()['pullrequest'] ?? '') !== '' => $output->getMetadata()['pullrequest'],
+                default => null
+            },
+            'baseRef' => match (true) {
+                ($output->getMetadata()['baseRef'] ?? '') !== '' => $output->getMetadata()['baseRef'],
+                ($output->getMetadata()['baseref'] ?? '') !== '' => $output->getMetadata()['baseref'],
+                default => null
+            },
+            'baseCommit' => match (true) {
+                ($output->getMetadata()['baseCommit'] ?? '') !== '' => $output->getMetadata()['baseCommit'],
+                ($output->getMetadata()['basecommit'] ?? '') !== '' => $output->getMetadata()['basecommit'],
+                default => null
+            },
+            'tag' => [
+                'name' => $output->getMetadata()['tag'],
+                'commit' => $output->getMetadata()['commit']
+            ],
+            'parent' => $this->serializer->deserialize(
+                $output->getMetadata()['parent'],
+                'string[]',
+                'json'
+            )
+        ];
     }
 
     /**
