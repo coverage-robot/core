@@ -192,6 +192,7 @@ jobs:
                 shell: bash
 
             -   uses: coverage-robot/action@v1.0.4
+                if: always()
                 with:
                     token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
