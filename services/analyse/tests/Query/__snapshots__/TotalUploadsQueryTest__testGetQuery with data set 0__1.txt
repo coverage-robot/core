@@ -4,7 +4,9 @@ SELECT
     []
   ) as successfulUploads,
   COALESCE(
-    ARRAY_AGG(ingestTime),
+    ARRAY_AGG(
+      STRING(ingestTime)
+    ),
     []
   ) as successfulIngestTimes,
   COALESCE(

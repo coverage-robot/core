@@ -36,7 +36,7 @@ class TagAvailabilityQuery implements QueryInterface
             SELECT
                 commit,
                 tag,
-                ARRAY_AGG(ingestTime) as ingestTimes
+                ARRAY_AGG(STRING(ingestTime)) as ingestTimes
             FROM
                 `{$table}`
             WHERE
