@@ -8,15 +8,16 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
+use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
+use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
-use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -37,10 +38,10 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
         $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
         $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
-            new Tag('1', 'mock-commit'),
-            new Tag('2', 'mock-commit'),
-            new Tag('3', 'mock-commit-2'),
-            new Tag('4', 'mock-commit-2')
+            new AvailableTagQueryResult('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+            new AvailableTagQueryResult('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+            new AvailableTagQueryResult('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
+            new AvailableTagQueryResult('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
         ]);
 
         return [

@@ -4,6 +4,10 @@ SELECT
     []
   ) as successfulUploads,
   COALESCE(
+    ARRAY_AGG(ingestTime),
+    []
+  ) as successfulIngestTimes,
+  COALESCE(
     ARRAY_AGG(
       STRUCT(
         tag as name, "mock-commit" as commit

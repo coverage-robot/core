@@ -4,6 +4,7 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 
 trait ScopeAwareTrait
@@ -130,6 +131,48 @@ trait ScopeAwareTrait
 
             return <<<SQL
             {$tableAlias}uploadId IN ("{$uploads}")
+            SQL;
+        }
+
+        return '';
+    }
+
+    /**
+     * Build a BQ query filter to scope particular queries to only specific ingest time partitions(s).
+     *
+     * This can be either a single ingest time, or an array of ingest times.
+     *
+     * For example, convert this:
+     * ```php
+     * [
+     *       new DateTimeImmutable("2024-01-03 12:00:00"),
+     *       new DateTimeImmutable("2024-01-04 12:00:00"),
+     *       new DateTimeImmutable("2024-01-05 12:00:00"),
+     *  ]
+     * ```
+     * into:
+     * ```sql
+     * ingestTime IN ('2024-01-03 12:00:00', '2024-01-04 12:00:00', '2024-01-05 12:00:00')
+     * ```
+     */
+    public function getIngestTimeScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
+    {
+        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
+
+        if ($parameterBag && $parameterBag->has(QueryParameter::INGEST_TIME_SCOPE)) {
+            /** @var DateTimeImmutable|DateTimeImmutable[] $uploads */
+            $ingestTimes = $parameterBag->get(QueryParameter::INGEST_TIME_SCOPE);
+
+            if (is_string($ingestTimes)) {
+                return <<<SQL
+                {$tableAlias}ingestTime = "{$ingestTimes}"
+                SQL;
+            }
+
+            $ingestTimes = implode('","', $ingestTimes);
+
+            return <<<SQL
+            {$tableAlias}ingestTime IN ("{$ingestTimes}")
             SQL;
         }
 

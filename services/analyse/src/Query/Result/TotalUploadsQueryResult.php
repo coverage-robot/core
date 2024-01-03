@@ -10,6 +10,7 @@ class TotalUploadsQueryResult implements QueryResultInterface
 {
     /**
      * @param string[] $successfulUploads
+     * @param DateTimeImmutable[] $successfulIngestTimes
      * @param Tag[] $successfulTags
      * @param DateTimeImmutable|null $latestSuccessfulUpload
      */
@@ -19,6 +20,11 @@ class TotalUploadsQueryResult implements QueryResultInterface
             new Assert\NotBlank()
         ])]
         private readonly array $successfulUploads,
+        #[Assert\All([
+            new Assert\Type(type: DateTimeImmutable::class),
+            new Assert\LessThanOrEqual(value: 'now')
+        ])]
+        private readonly array $successfulIngestTimes,
         #[Assert\All([
             new Assert\Type(type: Tag::class)
         ])]
@@ -44,5 +50,10 @@ class TotalUploadsQueryResult implements QueryResultInterface
     public function getLatestSuccessfulUpload(): DateTimeImmutable|null
     {
         return $this->latestSuccessfulUpload;
+    }
+
+    public function getSuccessfulIngestTimes(): array
+    {
+        return $this->successfulIngestTimes;
     }
 }

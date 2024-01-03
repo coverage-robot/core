@@ -7,16 +7,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TagAvailabilityQueryResult implements QueryResultInterface
 {
     /**
-     * @param string[] $availableCommits
+     * @param AvailableTagQueryResult[] $availableTags
      */
     public function __construct(
         #[Assert\NotBlank]
         private readonly string $tagName,
         #[Assert\All([
-            new Assert\Type(type: 'string'),
-            new Assert\NotBlank()
+            new Assert\Type(type: AvailableTagQueryResult::class)
         ])]
-        private readonly array $availableCommits,
+        private readonly array $availableTags,
     ) {
     }
 
@@ -25,8 +24,11 @@ class TagAvailabilityQueryResult implements QueryResultInterface
         return $this->tagName;
     }
 
-    public function getAvailableCommits(): array
+    /**
+     * @return AvailableTagQueryResult[]
+     */
+    public function getAvailableTags(): array
     {
-        return $this->availableCommits;
+        return $this->availableTags;
     }
 }

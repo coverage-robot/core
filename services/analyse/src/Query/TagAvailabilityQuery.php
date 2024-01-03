@@ -32,15 +32,32 @@ class TagAvailabilityQuery implements QueryInterface
         $repositoryScope = self::getRepositoryScope($parameterBag);
 
         return <<<SQL
+        WITH availability AS (
+            SELECT
+                commit,
+                tag,
+                ARRAY_AGG(ingestTime) as ingestTimes
+            FROM
+                `{$table}`
+            WHERE
+                {$repositoryScope}
+            GROUP BY
+                commit,
+                tag
+        )
         SELECT
-          tag as tagName,
-          ARRAY_AGG(commit) as availableCommits,
+            availability.tag as tagName,
+            ARRAY_AGG(
+                STRUCT(
+                    commit as commit,
+                    tag as name,
+                    ingestTimes as ingestTimes
+                )
+            ) as availableTags,
         FROM
-          `{$table}`
-        WHERE
-            {$repositoryScope}
+            availability
         GROUP BY
-          tag
+            availability.tag
         SQL;
     }
 

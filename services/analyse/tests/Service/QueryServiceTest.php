@@ -18,6 +18,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\QueryBuilderService;
 use App\Service\QueryService;
 use App\Tests\Mock\Factory\MockQueryFactory;
+use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -341,6 +342,7 @@ class QueryServiceTest extends KernelTestCase
                 TotalUploadsQuery::class,
                 new TotalUploadsQueryResult(
                     [1, 2],
+                    [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
                     [
                         new Tag('tag-1', 'mock-commit'),
                         new Tag('tag-2', 'mock-commit')

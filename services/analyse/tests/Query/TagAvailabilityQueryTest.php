@@ -72,7 +72,23 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'tagName' => 'mock-tag',
-                        'availableCommits' => ['mock-commit-1', 'mock-commit-2']
+                        'availableTags' => [
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit-1',
+                                'ingestTimes' => [
+                                    '2023-09-09T12:00:00+0000'
+                                ]
+                            ],
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit-2',
+                                'ingestTimes' => [
+                                    '2023-09-11T12:00:00+0000',
+                                    '2023-09-11T12:00:00+0000'
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ],
@@ -80,11 +96,43 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'tagName' => 'mock-tag',
-                        'availableCommits' => ['mock-commit-1', 'mock-commit-2']
+                        'availableTags' => [
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit-1',
+                                'ingestTimes' => [
+                                    '2023-09-09T12:00:00+0000'
+                                ]
+                            ],
+                            [
+                                'name' => 'mock-tag',
+                                'commit' => 'mock-commit-2',
+                                'ingestTimes' => [
+                                    '2023-09-11T12:00:00+0000',
+                                    '2023-09-11T12:00:00+0000'
+                                ]
+                            ]
+                        ]
                     ],
                     [
                         'tagName' => 'mock-tag-2',
-                        'availableCommits' => ['mock-commit-3', 'mock-commit-4']
+                        'availableTags' => [
+                            [
+                                'name' => 'mock-tag-2',
+                                'commit' => 'mock-commit-3',
+                                'ingestTimes' => [
+                                    '2023-09-09T12:00:00+0000'
+                                ]
+                            ],
+                            [
+                                'name' => 'mock-tag-2',
+                                'commit' => 'mock-commit-4',
+                                'ingestTimes' => [
+                                    '2023-09-11T12:00:00+0000',
+                                    '2023-09-11T12:00:00+0000'
+                                ]
+                            ]
+                        ]
                     ]
                 ]
             ]

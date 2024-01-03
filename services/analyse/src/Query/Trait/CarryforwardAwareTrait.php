@@ -4,7 +4,8 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
-use Packages\Contracts\Tag\Tag;
+use App\Query\Result\AvailableTagQueryResult;
+use DateTimeImmutable;
 
 trait CarryforwardAwareTrait
 {
@@ -17,10 +18,10 @@ trait CarryforwardAwareTrait
      * In essence, convert this:
      * ```php
      * [
-     *      new Tag('tag-1', 'commit-sha-1'),
-     *      new Tag('tag-2', 'commit-sha-1'),
-     *      new Tag('tag-3', 'commit-sha-1'),
-     *      new Tag('tag-4', 'commit-sha-2')
+     *      new Tag('tag-1', 'commit-sha-1', <DateTime>, <DateTime>),
+     *      new Tag('tag-2', 'commit-sha-1', <DateTime>, <DateTime>),
+     *      new Tag('tag-3', 'commit-sha-1', <DateTime>, <DateTime>),
+     *      new Tag('tag-4', 'commit-sha-2', <DateTime>, <DateTime>)
      * ]
      * ```
      * into this:
@@ -41,14 +42,16 @@ trait CarryforwardAwareTrait
      */
     private static function getCarryforwardTagsScope(
         ?QueryParameterBag $parameterBag,
-        ?string $tableAlias = null
+        ?string $uploadsTableAlias = null,
+        ?string $linesTableAlias = null
     ): string {
-        $repositoryScope = self::getRepositoryScope($parameterBag, $tableAlias);
+        $repositoryScope = self::getRepositoryScope($parameterBag, $uploadsTableAlias);
 
-        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
+        $uploadsTableAlias = $uploadsTableAlias ? $uploadsTableAlias . '.' : '';
+        $linesTableAlias = $linesTableAlias ? $linesTableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var Tag[] $carryforwardTags */
+            /** @var AvailableTagQueryResult[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
             if (empty($carryforwardTags)) {
@@ -56,12 +59,24 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static fn(Tag $tag) => <<<SQL
-                (
-                    {$tableAlias}commit = "{$tag->getCommit()}"
-                    AND {$tableAlias}tag = "{$tag->getName()}"
-                )
-                SQL,
+                static function (AvailableTagQueryResult $tag) use ($uploadsTableAlias, $linesTableAlias) {
+                    $ingestTimes = implode(
+                        ",",
+                        array_map(
+                            static fn (DateTimeImmutable $ingestTime) =>
+                                "'{$ingestTime->format(DateTimeImmutable::ATOM)}'",
+                            $tag->getIngestTimes()
+                        )
+                    );
+
+                    return <<<SQL
+                    (
+                        {$uploadsTableAlias}commit = "{$tag->getCommit()}"
+                        AND {$uploadsTableAlias}tag = "{$tag->getName()}"
+                        AND {$linesTableAlias}ingestTime IN ($ingestTimes)
+                    )
+                    SQL;
+                },
                 $carryforwardTags
             );
 

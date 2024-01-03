@@ -1,11 +1,27 @@
+WITH
+  availability AS (
+    SELECT
+      commit,
+      tag,
+      ARRAY_AGG(ingestTime) as ingestTimes
+    FROM
+      `mock-table`
+    WHERE
+      repository = "mock-repository"
+      AND owner = "mock-owner"
+      AND provider = "github"
+    GROUP BY
+      commit,
+      tag
+  )
 SELECT
-  tag as tagName,
-  ARRAY_AGG(commit) as availableCommits,
+  availability.tag as tagName,
+  ARRAY_AGG(
+    STRUCT(
+      commit as commit, tag as name, ingestTimes as ingestTimes
+    )
+  ) as availableTags,
 FROM
-  `mock-table`
-WHERE
-  repository = "mock-repository"
-  AND owner = "mock-owner"
-  AND provider = "github"
+  availability
 GROUP BY
-  tag
+  availability.tag

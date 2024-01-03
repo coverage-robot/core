@@ -20,8 +20,6 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
     use DiffAwareTrait;
     use CarryforwardAwareTrait;
 
-    private const string UPLOAD_TABLE_ALIAS = 'upload';
-
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly EnvironmentServiceInterface $environmentService
@@ -50,7 +48,8 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
         $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
         $carryforwardScope = ($scope = self::getCarryforwardTagsScope(
             $parameterBag,
-            self::UPLOAD_TABLE_ALIAS
+            self::UPLOAD_TABLE_ALIAS,
+            self::LINES_TABLE_ALIAS
         )) === '' ? '' : 'OR ' . $scope;
         $lineScope = ($scope = self::getLineScope($parameterBag)) === '' ? '' : 'AND ' . $scope;
 

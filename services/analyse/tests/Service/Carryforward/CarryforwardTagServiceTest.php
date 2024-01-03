@@ -5,12 +5,14 @@ namespace App\Tests\Service\Carryforward;
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
+use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
@@ -84,8 +86,31 @@ class CarryforwardTagServiceTest extends TestCase
             ->willReturn(
                 new TagAvailabilityCollectionQueryResult(
                     [
-                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
-                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-3', 'mock-commit-2']),
+                        new TagAvailabilityQueryResult(
+                            'tag-1',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-1',
+                                    'mock-commit',
+                                    [new DateTimeImmutable('2024-01-03 00:00:00')]
+                                )
+                            ]
+                        ),
+                        new TagAvailabilityQueryResult(
+                            'tag-2',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-3',
+                                    [new DateTimeImmutable('2024-01-02 00:00:00')]
+                                ),
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-2',
+                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                                )
+                            ]
+                        ),
                     ]
                 )
             );
@@ -131,7 +156,11 @@ class CarryforwardTagServiceTest extends TestCase
 
         $this->assertEquals(
             [
-                new Tag('tag-2', 'mock-commit-2')
+                new AvailableTagQueryResult(
+                    'tag-2',
+                    'mock-commit-2',
+                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                )
             ],
             $carryforwardTags
         );
@@ -155,8 +184,31 @@ class CarryforwardTagServiceTest extends TestCase
             ->willReturn(
                 new TagAvailabilityCollectionQueryResult(
                     [
-                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
-                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-8', 'mock-commit-11']),
+                        new TagAvailabilityQueryResult(
+                            'tag-1',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-1',
+                                    'mock-commit',
+                                    [new DateTimeImmutable('2024-01-05 00:00:00')]
+                                ),
+                            ]
+                        ),
+                        new TagAvailabilityQueryResult(
+                            'tag-2',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-8',
+                                    [new DateTimeImmutable('2024-01-04 00:00:00')]
+                                ),
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-11',
+                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                                ),
+                            ]
+                        ),
                     ]
                 )
             );
@@ -253,8 +305,16 @@ class CarryforwardTagServiceTest extends TestCase
 
         $this->assertEquals(
             [
-                new Tag('tag-1', 'mock-commit'),
-                new Tag('tag-2', 'mock-commit-8')
+                new AvailableTagQueryResult(
+                    'tag-1',
+                    'mock-commit',
+                    [new DateTimeImmutable('2024-01-05 00:00:00')]
+                ),
+                new AvailableTagQueryResult(
+                    'tag-2',
+                    'mock-commit-8',
+                    [new DateTimeImmutable('2024-01-04 00:00:00')]
+                )
             ],
             $carryforwardTags
         );
@@ -278,8 +338,31 @@ class CarryforwardTagServiceTest extends TestCase
             ->willReturn(
                 new TagAvailabilityCollectionQueryResult(
                     [
-                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
-                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-1010', 'mock-commit-999']),
+                        new TagAvailabilityQueryResult(
+                            'tag-1',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-1',
+                                    'mock-commit',
+                                    [new DateTimeImmutable('2024-01-05 00:00:00')]
+                                )
+                            ]
+                        ),
+                        new TagAvailabilityQueryResult(
+                            'tag-2',
+                            [
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-1010',
+                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                                ),
+                                new AvailableTagQueryResult(
+                                    'tag-2',
+                                    'mock-commit-999',
+                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                                ),
+                            ]
+                        ),
                     ]
                 )
             );
@@ -391,7 +474,11 @@ class CarryforwardTagServiceTest extends TestCase
 
         $this->assertEquals(
             [
-                new Tag('tag-1', 'mock-commit')
+                new AvailableTagQueryResult(
+                    'tag-1',
+                    'mock-commit',
+                    [new DateTimeImmutable('2024-01-05 00:00:00')]
+                )
             ],
             $carryforwardTags
         );

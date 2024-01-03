@@ -22,6 +22,7 @@ use App\Service\CoverageAnalyserService;
 use App\Service\Diff\DiffParserService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
+use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -123,6 +124,7 @@ class CoverageAnalyserServiceTest extends TestCase
                 static fn(string $queryClass) => match ($queryClass) {
                     TotalUploadsQuery::class => new TotalUploadsQueryResult(
                         ['1'],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')],
                         [new Tag('mock-tag', 'mock-commit')],
                         null
                     ),
