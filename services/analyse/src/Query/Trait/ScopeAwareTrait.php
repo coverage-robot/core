@@ -165,14 +165,14 @@ trait ScopeAwareTrait
 
             if (!is_array($ingestTimes)) {
                 return <<<SQL
-                {$tableAlias}ingestTime = "{$ingestTimes->format(DateTimeImmutable::ATOM)}"
+                {$tableAlias}ingestTime = "{$ingestTimes->format('Y-m-d H:i:s')}"
                 SQL;
             }
 
             $ingestTimes = implode(
                 '","',
                 array_map(
-                    static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format(DateTimeImmutable::ATOM),
+                    static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format('Y-m-d H:i:s'),
                     $ingestTimes
                 )
             );
