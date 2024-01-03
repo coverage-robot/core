@@ -18,10 +18,10 @@ trait CarryforwardAwareTrait
      * In essence, convert this:
      * ```php
      * [
-     *      new Tag('tag-1', 'commit-sha-1', <DateTime>, <DateTime>),
-     *      new Tag('tag-2', 'commit-sha-1', <DateTime>, <DateTime>),
-     *      new Tag('tag-3', 'commit-sha-1', <DateTime>, <DateTime>),
-     *      new Tag('tag-4', 'commit-sha-2', <DateTime>, <DateTime>)
+     *      new Tag('tag-1', 'commit-sha-1'),
+     *      new Tag('tag-2', 'commit-sha-1'),
+     *      new Tag('tag-3', 'commit-sha-1'),
+     *      new Tag('tag-4', 'commit-sha-2')
      * ]
      * ```
      * into this:
@@ -61,10 +61,10 @@ trait CarryforwardAwareTrait
             $filtering = array_map(
                 static function (AvailableTagQueryResult $tag) use ($uploadsTableAlias, $linesTableAlias) {
                     $ingestTimes = implode(
-                        ",",
+                        ',',
                         array_map(
                             static fn (DateTimeImmutable $ingestTime) =>
-                                "'{$ingestTime->format(DateTimeImmutable::ATOM)}'",
+                                '\'{$ingestTime->format(DateTimeImmutable::ATOM)}\'',
                             $tag->getIngestTimes()
                         )
                     );
