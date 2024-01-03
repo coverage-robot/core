@@ -5,7 +5,6 @@ namespace App\Query\Trait;
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
 use App\Query\Result\AvailableTagQueryResult;
-use DateTimeImmutable;
 
 trait CarryforwardAwareTrait
 {
@@ -48,7 +47,6 @@ trait CarryforwardAwareTrait
         $repositoryScope = self::getRepositoryScope($parameterBag, $uploadsTableAlias);
 
         $uploadsTableAlias = $uploadsTableAlias ? $uploadsTableAlias . '.' : '';
-        $linesTableAlias = $linesTableAlias ? $linesTableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
             /** @var AvailableTagQueryResult[] $carryforwardTags */
@@ -59,21 +57,16 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static function (AvailableTagQueryResult $tag) use ($uploadsTableAlias, $linesTableAlias) {
-                    $ingestTimes = implode(
-                        ',',
-                        array_map(
-                            static fn (DateTimeImmutable $ingestTime) =>
-                                '\'{$ingestTime->format(DateTimeImmutable::ATOM)}\'',
-                            $tag->getIngestTimes()
-                        )
-                    );
+                static function (AvailableTagQueryResult $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
+                    $queryParameterBag = new QueryParameterBag();
+                    $queryParameterBag->set(QueryParameter::INGEST_TIME_SCOPE, $availableTag->getIngestTimes());
+                    $ingestScope = self::getIngestTimeScope($queryParameterBag, $linesTableAlias);
 
                     return <<<SQL
                     (
-                        {$uploadsTableAlias}commit = "{$tag->getCommit()}"
-                        AND {$uploadsTableAlias}tag = "{$tag->getName()}"
-                        AND {$linesTableAlias}ingestTime IN ({$ingestTimes})
+                        {$uploadsTableAlias}commit = "{$availableTag->getCommit()}"
+                        AND {$uploadsTableAlias}tag = "{$availableTag->getName()}"
+                        AND {$ingestScope}
                     )
                     SQL;
                 },

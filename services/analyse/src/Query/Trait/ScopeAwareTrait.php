@@ -155,7 +155,7 @@ trait ScopeAwareTrait
      * ingestTime IN ('2024-01-03 12:00:00', '2024-01-04 12:00:00', '2024-01-05 12:00:00')
      * ```
      */
-    public function getIngestTimeScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
+    public static function getIngestTimeScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
         $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
