@@ -60,6 +60,7 @@ trait CarryforwardAwareTrait
                 static function (AvailableTagQueryResult $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
                     $queryParameterBag = new QueryParameterBag();
                     $queryParameterBag->set(QueryParameter::INGEST_TIME_SCOPE, $availableTag->getIngestTimes());
+
                     $ingestScope = self::getIngestTimeScope($queryParameterBag, $linesTableAlias);
 
                     return <<<SQL
