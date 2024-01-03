@@ -73,7 +73,7 @@ trait CarryforwardAwareTrait
                     (
                         {$uploadsTableAlias}commit = "{$tag->getCommit()}"
                         AND {$uploadsTableAlias}tag = "{$tag->getName()}"
-                        AND {$linesTableAlias}ingestTime IN ($ingestTimes)
+                        AND {$linesTableAlias}ingestTime IN ({$ingestTimes})
                     )
                     SQL;
                 },

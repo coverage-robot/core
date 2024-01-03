@@ -160,16 +160,22 @@ trait ScopeAwareTrait
         $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::INGEST_TIME_SCOPE)) {
-            /** @var DateTimeImmutable|DateTimeImmutable[] $uploads */
+            /** @var DateTimeImmutable|DateTimeImmutable[] $ingestTimes */
             $ingestTimes = $parameterBag->get(QueryParameter::INGEST_TIME_SCOPE);
 
-            if (is_string($ingestTimes)) {
+            if (!is_array($ingestTimes)) {
                 return <<<SQL
-                {$tableAlias}ingestTime = "{$ingestTimes}"
+                {$tableAlias}ingestTime = "{$ingestTimes->format(DateTimeImmutable::ATOM)}"
                 SQL;
             }
 
-            $ingestTimes = implode('","', $ingestTimes);
+            $ingestTimes = implode(
+                '","',
+                array_map(
+                    static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format(DateTimeImmutable::ATOM),
+                    $ingestTimes
+                )
+            );
 
             return <<<SQL
             {$tableAlias}ingestTime IN ("{$ingestTimes}")
