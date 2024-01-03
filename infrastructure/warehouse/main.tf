@@ -12,7 +12,7 @@ resource "google_bigquery_dataset" "environment_dataset" {
 resource "google_bigquery_table" "coverage" {
   dataset_id          = google_bigquery_dataset.environment_dataset.dataset_id
   table_id            = "line_coverage"
-  deletion_protection = false
+  deletion_protection = true
   clustering = [
     "uploadId",
     "fileName"
