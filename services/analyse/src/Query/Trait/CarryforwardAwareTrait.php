@@ -4,7 +4,7 @@ namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
-use Packages\Contracts\Tag\Tag;
+use App\Query\Result\AvailableTagQueryResult;
 
 trait CarryforwardAwareTrait
 {
@@ -41,14 +41,15 @@ trait CarryforwardAwareTrait
      */
     private static function getCarryforwardTagsScope(
         ?QueryParameterBag $parameterBag,
-        ?string $tableAlias = null
+        ?string $uploadsTableAlias = null,
+        ?string $linesTableAlias = null
     ): string {
-        $repositoryScope = self::getRepositoryScope($parameterBag, $tableAlias);
+        $repositoryScope = self::getRepositoryScope($parameterBag, $uploadsTableAlias);
 
-        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
+        $uploadsTableAlias = $uploadsTableAlias ? $uploadsTableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var Tag[] $carryforwardTags */
+            /** @var AvailableTagQueryResult[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
             if (empty($carryforwardTags)) {
@@ -56,12 +57,20 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static fn(Tag $tag) => <<<SQL
-                (
-                    {$tableAlias}commit = "{$tag->getCommit()}"
-                    AND {$tableAlias}tag = "{$tag->getName()}"
-                )
-                SQL,
+                static function (AvailableTagQueryResult $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
+                    $queryParameterBag = new QueryParameterBag();
+                    $queryParameterBag->set(QueryParameter::INGEST_TIME_SCOPE, $availableTag->getIngestTimes());
+
+                    $ingestScope = self::getIngestTimeScope($queryParameterBag, $linesTableAlias);
+
+                    return <<<SQL
+                    (
+                        {$uploadsTableAlias}commit = "{$availableTag->getCommit()}"
+                        AND {$uploadsTableAlias}tag = "{$availableTag->getName()}"
+                        AND {$ingestScope}
+                    )
+                    SQL;
+                },
                 $carryforwardTags
             );
 

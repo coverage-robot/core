@@ -60,18 +60,22 @@ WITH
             (
               upload.commit = "mock-commit"
               AND upload.tag = "1"
+              AND lines.ingestTime IN ("2024-01-03T00:00:00+00:00")
             )
             OR (
               upload.commit = "mock-commit"
               AND upload.tag = "2"
+              AND lines.ingestTime IN ("2024-01-03T00:00:00+00:00")
             )
             OR (
               upload.commit = "mock-commit-2"
               AND upload.tag = "3"
+              AND lines.ingestTime IN ("2024-01-01T02:00:00+00:00")
             )
             OR (
               upload.commit = "mock-commit-2"
               AND upload.tag = "4"
+              AND lines.ingestTime IN ("2024-01-01T02:00:00+00:00")
             )
           )
           AND upload.repository = "mock-repository"

@@ -64,9 +64,9 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             repository: $repository,
             ref: $ref,
             commit: $commit,
-            pullRequest: $pullRequest,
             history: fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
-            diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint)
+            diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint),
+            pullRequest: $pullRequest
         );
     }
 
@@ -159,6 +159,15 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
+    protected function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
+    {
+        return $this->getUploads($waypoint)
+            ->getSuccessfulIngestTimes();
+    }
+
+    /**
+     * @throws QueryException
+     */
     protected function getTotalLines(ReportWaypoint $waypoint): int
     {
         $params = QueryParameterBag::fromWaypoint($waypoint);
@@ -169,6 +178,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $this->getUploads($waypoint)
                     ->getSuccessfulTags()
             )
+        );
+        $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -196,6 +209,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
         );
         $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
+        );
+        $params->set(
             QueryParameter::UPLOADS_SCOPE,
             $this->getSuccessfulUploads($waypoint)
         );
@@ -219,6 +236,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $this->getUploads($waypoint)
                     ->getSuccessfulTags()
             )
+        );
+        $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -245,6 +266,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
         );
         $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
+        );
+        $params->set(
             QueryParameter::UPLOADS_SCOPE,
             $this->getSuccessfulUploads($waypoint)
         );
@@ -268,6 +293,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $this->getUploads($waypoint)
                     ->getSuccessfulTags()
             )
+        );
+        $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -311,6 +340,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         $params->set(
             QueryParameter::LINE_SCOPE,
             $diff
+        );
+        $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,
@@ -371,6 +404,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             $limit
         );
         $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
+        );
+        $params->set(
             QueryParameter::UPLOADS_SCOPE,
             $this->getSuccessfulUploads($waypoint)
         );
@@ -414,6 +451,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         $params->set(
             QueryParameter::LINE_SCOPE,
             $diff
+        );
+        $params->set(
+            QueryParameter::INGEST_TIME_SCOPE,
+            $this->getSuccessfulIngestTimes($waypoint)
         );
         $params->set(
             QueryParameter::UPLOADS_SCOPE,

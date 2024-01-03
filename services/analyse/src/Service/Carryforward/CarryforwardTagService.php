@@ -4,6 +4,7 @@ namespace App\Service\Carryforward;
 
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
@@ -113,7 +114,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * available tagged coverage for a commit.
      *
      * @param string[] $tagsNotSeen
-     * @return array{0: string[], 1: Tag[], 2: bool}
+     * @return array{0: string[], 1: AvailableTagQueryResult[], 2: bool}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
         ReportWaypoint $waypoint,
@@ -138,32 +139,36 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
             // The commits in the tree will be in descending order, and the intersection will
             // tell us which of the tag's available commits is the newest in the tree
-            $tagCommitsInTree = array_intersect(
-                array_column($commitsFromTree, 'commit'),
-                $availability->getAvailableCommits(),
-            );
 
-            if ($tagCommitsInTree === []) {
+            $carryforwardTag = null;
+            foreach ($commitsFromTree as $commitFromTree) {
+                foreach ($availability->getAvailableTags() as $availableTag) {
+                    if ($commitFromTree['commit'] !== $availableTag->getCommit()) {
+                        continue;
+                    }
+
+                    $carryforwardTag = $availableTag;
+                    break 2;
+                }
+            }
+
+            if ($carryforwardTag === null) {
                 // This tag's commits isn't in the latest tree, so we can't carry it forward
                 // yet.
                 continue;
             }
 
-            $newestCommit = reset($tagCommitsInTree);
-
             $this->carryforwardLogger->info(
                 sprintf(
                     'Carrying forward tag %s from commit %s for %s',
-                    $tagName,
-                    $newestCommit,
+                    $carryforwardTag->getName(),
+                    $carryforwardTag->getCommit(),
                     (string)$waypoint
                 )
             );
 
-            $carryforwardTags[] = new Tag(
-                $tagName,
-                $newestCommit
-            );
+            $carryforwardTags[] = $carryforwardTag;
+
             unset($tagsNotSeen[$index]);
         }
 

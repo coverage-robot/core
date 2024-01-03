@@ -16,7 +16,7 @@ class ReportTest extends TestCase
     {
         $mockWaypoint = $this->createMock(ReportWaypoint::class);
 
-        $totalUploads = new TotalUploadsQueryResult(['1'], [], null);
+        $totalUploads = new TotalUploadsQueryResult(['1'], [], [], null);
         $tagCoverage = new TagCoverageCollectionQueryResult([]);
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);

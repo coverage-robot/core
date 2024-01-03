@@ -30,6 +30,19 @@ enum QueryParameter: string
     case UPLOADS_SCOPE = 'UPLOADS_SCOPE';
 
     /**
+     * The ingest time partitions to scope the queries to.
+     *
+     * ```php
+     * [
+     *      new DateTimeImmutable("2024-01-03 12:00:00"),
+     *      new DateTimeImmutable("2024-01-04 12:00:00"),
+     *      new DateTimeImmutable("2024-01-05 12:00:00"),
+     * ]
+     * ```
+     */
+    case INGEST_TIME_SCOPE = 'INGEST_TIME_SCOPE';
+
+    /**
      * The tags to carry forward from previous commits (parents to the current upload)
      * ```
      * [

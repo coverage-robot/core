@@ -35,6 +35,7 @@ class TotalUploadsQuery implements QueryInterface
         return <<<SQL
         SELECT
             COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
+            COALESCE(ARRAY_AGG(ingestTime), []) as successfulIngestTimes,
             COALESCE(
                 ARRAY_AGG(
                     STRUCT(

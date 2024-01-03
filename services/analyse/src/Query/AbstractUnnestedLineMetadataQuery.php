@@ -15,11 +15,17 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     use ScopeAwareTrait;
     use UploadTableAwareTrait;
 
-    private const UPLOAD_TABLE_ALIAS = 'upload';
+    protected const UPLOAD_TABLE_ALIAS = 'upload';
+
+    protected const LINES_TABLE_ALIAS = 'lines';
 
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
         $commitScope = ($scope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) === '' ? '' : $scope;
+        $ingestTimeScope = ($scope = self::getIngestTimeScope(
+            $parameterBag,
+            self::LINES_TABLE_ALIAS
+        )) === '' ? '' : 'AND ' . $scope;
         $repositoryScope = ($scope = self::getRepositoryScope(
             $parameterBag,
             self::UPLOAD_TABLE_ALIAS
@@ -31,6 +37,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
         return <<<SQL
         {$commitScope}
+        {$ingestTimeScope}
         {$repositoryScope}
         {$uploadScope}
         SQL;
@@ -43,6 +50,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         // TODO(RM): We should do this better. We need to get line coverage table in the same
         //  dataset as the upload table.
         $uploadTableAlias = self::UPLOAD_TABLE_ALIAS;
+        $linesTableAlias = self::LINES_TABLE_ALIAS;
         $lineCoverageTable = implode(
             '.',
             [
@@ -99,7 +107,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                 ) as branchHits
             FROM
                 `{$table}` as upload
-            INNER JOIN `{$lineCoverageTable}` as lines ON lines.uploadId = upload.uploadId
+            INNER JOIN `{$lineCoverageTable}` as {$linesTableAlias} ON lines.uploadId = upload.uploadId
             WHERE
                 {$this->getUnnestQueryFiltering($table, $parameterBag)}
         )
