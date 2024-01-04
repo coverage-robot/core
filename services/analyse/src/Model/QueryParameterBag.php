@@ -39,22 +39,20 @@ class QueryParameterBag implements JsonSerializable
         return isset($this->parameters[$key]);
     }
 
-    public function set(QueryParameter $key, array|int|string|Provider $value): void
+    public function set(QueryParameter $key, array|int|string|Provider $value): self
     {
         $this->parameters[$key] = $value;
+
+        return $this;
     }
 
     public static function fromWaypoint(ReportWaypoint $waypoint): self
     {
-        $parameters = new self();
-
-        // Extract core parameters from reporting waypoint for ease of use
-        $parameters->set(QueryParameter::COMMIT, $waypoint->getCommit());
-        $parameters->set(QueryParameter::OWNER, $waypoint->getOwner());
-        $parameters->set(QueryParameter::REPOSITORY, $waypoint->getRepository());
-        $parameters->set(QueryParameter::PROVIDER, $waypoint->getProvider());
-
-        return $parameters;
+        return (new self())
+            ->set(QueryParameter::COMMIT, $waypoint->getCommit())
+            ->set(QueryParameter::OWNER, $waypoint->getOwner())
+            ->set(QueryParameter::REPOSITORY, $waypoint->getRepository())
+            ->set(QueryParameter::PROVIDER, $waypoint->getProvider());
     }
 
     public function jsonSerialize(): array

@@ -170,23 +170,23 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getTotalLines(ReportWaypoint $waypoint): int
     {
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $waypoint,
-                $this->getUploads($waypoint)
-                    ->getSuccessfulTags()
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $this->carryforwardTagService->getTagsToCarryforward(
+                    $waypoint,
+                    $this->getUploads($waypoint)
+                        ->getSuccessfulTags()
+                )
             )
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -199,23 +199,23 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $waypoint,
-                $this->getUploads($waypoint)
-                    ->getSuccessfulTags()
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $this->carryforwardTagService->getTagsToCarryforward(
+                    $waypoint,
+                    $this->getUploads($waypoint)
+                        ->getSuccessfulTags()
+                )
             )
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -228,23 +228,23 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getUncoveredLines(ReportWaypoint $waypoint): int
     {
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $waypoint,
-                $this->getUploads($waypoint)
-                    ->getSuccessfulTags()
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $this->carryforwardTagService->getTagsToCarryforward(
+                    $waypoint,
+                    $this->getUploads($waypoint)
+                        ->getSuccessfulTags()
+                )
             )
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -257,22 +257,22 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $waypoint,
-                $this->getUploads($waypoint)->getSuccessfulTags()
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $this->carryforwardTagService->getTagsToCarryforward(
+                    $waypoint,
+                    $this->getUploads($waypoint)->getSuccessfulTags()
+                )
             )
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /** @var CoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
@@ -285,23 +285,23 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::CARRYFORWARD_TAGS,
-            $this->carryforwardTagService->getTagsToCarryforward(
-                $waypoint,
-                $this->getUploads($waypoint)
-                    ->getSuccessfulTags()
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $this->carryforwardTagService->getTagsToCarryforward(
+                    $waypoint,
+                    $this->getUploads($waypoint)
+                        ->getSuccessfulTags()
+                )
             )
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /** @var TagCoverageCollectionQueryResult $tags */
         $tags = $this->queryService->runQuery(TotalTagCoverageQuery::class, $params);
@@ -336,19 +336,19 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             return 0;
         }
 
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::LINE_SCOPE,
-            $diff
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::LINE_SCOPE,
+                $diff
+            )
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /**
          * @var CoverageQueryResult $diffCoverage
@@ -394,23 +394,23 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             return new FileCoverageCollectionQueryResult([]);
         }
 
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::LINE_SCOPE,
-            $diff
-        );
-        $params->set(
-            QueryParameter::LIMIT,
-            $limit
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::LINE_SCOPE,
+                $diff
+            )
+            ->set(
+                QueryParameter::LIMIT,
+                $limit
+            )
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /**
          * @var FileCoverageCollectionQueryResult $files
@@ -447,19 +447,19 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             return new LineCoverageCollectionQueryResult([]);
         }
 
-        $params = QueryParameterBag::fromWaypoint($waypoint);
-        $params->set(
-            QueryParameter::LINE_SCOPE,
-            $diff
-        );
-        $params->set(
-            QueryParameter::INGEST_TIME_SCOPE,
-            $this->getSuccessfulIngestTimes($waypoint)
-        );
-        $params->set(
-            QueryParameter::UPLOADS_SCOPE,
-            $this->getSuccessfulUploads($waypoint)
-        );
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::LINE_SCOPE,
+                $diff
+            )
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                $this->getSuccessfulIngestTimes($waypoint)
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                $this->getSuccessfulUploads($waypoint)
+            );
 
         /**
          * @var LineCoverageCollectionQueryResult $lines

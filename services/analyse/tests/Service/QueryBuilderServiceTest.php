@@ -6,10 +6,12 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Service\QueryBuilderService;
 use App\Tests\Mock\Factory\MockQueryFactory;
+use DateTimeImmutable;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Packages\Contracts\Provider\Provider;
@@ -37,7 +39,17 @@ class QueryBuilderServiceTest extends KernelTestCase
                 diff: [],
                 pullRequest: 6
             )
-        );
+        )
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                [
+                    new AvailableTagQueryResult(
+                        'mock-tag',
+                        'mock-commit',
+                        [new DateTimeImmutable()]
+                    )
+                ]
+            );
 
         $queryBuilder = new QueryBuilderService(
             new SqlFormatter(

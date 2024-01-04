@@ -50,15 +50,36 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             diff: []
         );
 
-        $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint);
-        $carryforwardParameters->set(QueryParameter::CARRYFORWARD_TAGS, [
-            new AvailableTagQueryResult('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-            new AvailableTagQueryResult('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-            new AvailableTagQueryResult('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-            new AvailableTagQueryResult('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
-        ]);
+        $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+            ->set(
+                QueryParameter::INGEST_TIME_SCOPE,
+                [
+                    new DateTimeImmutable('2024-01-03 00:00:00'),
+                    new DateTimeImmutable('2024-01-03 00:00:00')
+                ]
+            )
+            ->set(
+                QueryParameter::LINE_SCOPE,
+                [
+                    '1' => [1, 2, 3],
+                    '2' => [1, 2, 3],
+                ]
+            );
+
+        $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                [
+                    new AvailableTagQueryResult('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new AvailableTagQueryResult('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new AvailableTagQueryResult('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new AvailableTagQueryResult('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                ]
+            );
+
         return [
-            ...parent::getQueryParameters(),
+            $lineScopedParameters,
             $carryforwardParameters
         ];
     }
@@ -154,23 +175,55 @@ class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 
     public static function parametersDataProvider(): array
     {
+        $waypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: []
+        );
+
         return [
             [
                 new QueryParameterBag(),
                 false
             ],
             [
-                QueryParameterBag::fromWaypoint(
-                    new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    )
-                ),
+                QueryParameterBag::fromWaypoint($waypoint)
+                    ->set(QueryParameter::UPLOADS_SCOPE, ['1','2']),
+                false
+            ],
+            [
+                QueryParameterBag::fromWaypoint($waypoint)
+                    ->set(QueryParameter::INGEST_TIME_SCOPE, ['1','2']),
+                false
+            ],
+            [
+                QueryParameterBag::fromWaypoint($waypoint)
+                    ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+                    ->set(
+                        QueryParameter::INGEST_TIME_SCOPE,
+                        [
+                            new DateTimeImmutable('2024-01-03 00:00:00'),
+                            new DateTimeImmutable('2024-01-03 00:00:00')
+                        ]
+                    ),
+                true
+            ],
+            [
+                QueryParameterBag::fromWaypoint($waypoint)
+                    ->set(
+                        QueryParameter::CARRYFORWARD_TAGS,
+                        [
+                            new AvailableTagQueryResult(
+                                '1',
+                                'mock-commit',
+                                [new DateTimeImmutable('2024-01-03 00:00:00')]
+                            )
+                        ]
+                    ),
                 true
             ],
         ];
