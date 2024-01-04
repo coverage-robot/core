@@ -49,7 +49,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
         if (
             !$parameterBag?->get(QueryParameter::INGEST_TIME_SCOPE) ||
-            !$parameterBag?->get(QueryParameter::UPLOADS_SCOPE)
+            !$parameterBag->get(QueryParameter::UPLOADS_SCOPE)
         ) {
             return <<<SQL
             {$carryforwardScope}
@@ -57,7 +57,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             SQL;
         }
 
-        if (!$parameterBag?->get(QueryParameter::CARRYFORWARD_TAGS)) {
+        if (!$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
             return <<<SQL
             1=1
             AND {$repositoryScope}
