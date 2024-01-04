@@ -57,12 +57,12 @@ WITH
       AND DATE(lines.ingestTime) IN ("2024-01-03")
       AND (
         (
-          fileName = "1"
-          AND lineNumber IN (1, 2, 3)
+          lines.fileName = "1"
+          AND lines.lineNumber IN (1, 2, 3)
         )
         OR(
-          fileName = "2"
-          AND lineNumber IN (1, 2, 3)
+          lines.fileName = "2"
+          AND lines.lineNumber IN (1, 2, 3)
         )
       )
   ),
