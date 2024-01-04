@@ -6,6 +6,8 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
+use App\Query\Trait\CarryforwardAwareTrait;
+use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ScopeAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Packages\Contracts\Line\LineType;
@@ -13,7 +15,9 @@ use Packages\Contracts\Line\LineType;
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
     use ScopeAwareTrait;
+    use CarryforwardAwareTrait;
     use UploadTableAwareTrait;
+    use DiffAwareTrait;
 
     protected const UPLOAD_TABLE_ALIAS = 'upload';
 
@@ -21,25 +25,61 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
     {
-        $commitScope = ($scope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS)) === '' ? '' : $scope;
-        $ingestTimeScope = ($scope = self::getIngestTimeScope(
+        $commitScope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS);
+        $ingestTimeScope = self::getIngestTimeScope(
             $parameterBag,
             self::LINES_TABLE_ALIAS
-        )) === '' ? '' : 'AND ' . $scope;
-        $repositoryScope = ($scope = self::getRepositoryScope(
+        );
+        $repositoryScope = self::getRepositoryScope(
             $parameterBag,
             self::UPLOAD_TABLE_ALIAS
-        )) === '' ? '' : 'AND ' . $scope;
-        $uploadScope = ($scope = self::getUploadsScope(
+        );
+        $uploadScope = self::getUploadsScope(
             $parameterBag,
             self::UPLOAD_TABLE_ALIAS
-        )) === '' ? '' : 'AND ' . $scope;
+        );
+        $lineScope = ($scope = self::getLineScope($parameterBag, self::LINES_TABLE_ALIAS)) !== ''
+                ? 'AND ' . $scope
+                : '';
+        $carryforwardScope = self::getCarryforwardTagsScope(
+            $parameterBag,
+            self::UPLOAD_TABLE_ALIAS,
+            self::LINES_TABLE_ALIAS
+        );
+
+        if (
+            !$parameterBag?->get(QueryParameter::INGEST_TIME_SCOPE) ||
+            !$parameterBag->get(QueryParameter::UPLOADS_SCOPE)
+        ) {
+            return <<<SQL
+            {$carryforwardScope}
+            {$lineScope}
+            SQL;
+        }
+
+        if (!$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
+            return <<<SQL
+            1=1
+            AND {$repositoryScope}
+            AND {$commitScope}
+            AND {$uploadScope}
+            AND {$ingestTimeScope}
+            {$lineScope}
+            SQL;
+        }
 
         return <<<SQL
-        {$commitScope}
-        {$ingestTimeScope}
-        {$repositoryScope}
-        {$uploadScope}
+        (
+            (
+                1=1
+                AND {$repositoryScope}
+                AND {$commitScope}
+                AND {$uploadScope}
+                AND {$ingestTimeScope}
+            )
+            OR {$carryforwardScope}
+        )
+        {$lineScope}
         SQL;
     }
 
@@ -51,6 +91,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         //  dataset as the upload table.
         $uploadTableAlias = self::UPLOAD_TABLE_ALIAS;
         $linesTableAlias = self::LINES_TABLE_ALIAS;
+
         $lineCoverageTable = implode(
             '.',
             [
@@ -125,6 +166,18 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
         if (!$parameterBag->has(QueryParameter::REPOSITORY)) {
             throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
+        }
+
+        if (
+            (
+                !$parameterBag->get(QueryParameter::INGEST_TIME_SCOPE) ||
+                !$parameterBag->get(QueryParameter::UPLOADS_SCOPE)
+            ) &&
+            !$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)
+        ) {
+            throw new QueryException(
+                'You must provide either an ingest time scope and uploads scope, or carryforward tags.'
+            );
         }
     }
 

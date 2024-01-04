@@ -174,4 +174,22 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
             ],
         ];
     }
+
+    #[Override]
+    public static function getQueryParameters(): array
+    {
+        return [
+            QueryParameterBag::fromWaypoint(
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                )
+            )
+        ];
+    }
 }
