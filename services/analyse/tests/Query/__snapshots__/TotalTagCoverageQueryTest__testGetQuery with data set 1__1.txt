@@ -49,12 +49,6 @@ WITH
       INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       (
-        upload.commit = "mock-commit"
-        AND upload.repository = "mock-repository"
-        AND upload.owner = "mock-owner"
-        AND upload.provider = "github"
-      )
-      OR (
         (
           (
             upload.commit = "mock-commit"

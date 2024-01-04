@@ -5,8 +5,6 @@ namespace App\Query;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\CoverageQueryResult;
-use App\Query\Trait\CarryforwardAwareTrait;
-use App\Query\Trait\DiffAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
@@ -18,9 +16,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class TotalCoverageQuery extends AbstractLineCoverageQuery
 {
-    use DiffAwareTrait;
-    use CarryforwardAwareTrait;
-
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly EnvironmentServiceInterface $environmentService
@@ -64,28 +59,6 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
             FROM
                 lines
         )
-        SQL;
-    }
-
-    #[Override]
-    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag = null): string
-    {
-        $parent = parent::getUnnestQueryFiltering($table, $parameterBag);
-        $carryforwardScope = ($scope = self::getCarryforwardTagsScope(
-            $parameterBag,
-            self::UPLOAD_TABLE_ALIAS,
-            self::LINES_TABLE_ALIAS
-        )) === '' ? '' : 'OR ' . $scope;
-        $lineScope = ($scope = self::getLineScope($parameterBag)) === '' ? '' : 'AND ' . $scope;
-
-        return <<<SQL
-        (
-            (
-                {$parent}
-            )
-            {$carryforwardScope}
-        )
-        {$lineScope}
         SQL;
     }
 

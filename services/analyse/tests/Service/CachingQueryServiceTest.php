@@ -23,8 +23,8 @@ class CachingQueryServiceTest extends KernelTestCase
     {
         $queryResult = new TotalUploadsQueryResult([], [], [], null);
 
-        $parameters = new QueryParameterBag();
-        $parameters->set(QueryParameter::COMMIT, 'mock-commit');
+        $parameters = (new QueryParameterBag())
+            ->set(QueryParameter::COMMIT, 'mock-commit');
 
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
@@ -79,8 +79,8 @@ class CachingQueryServiceTest extends KernelTestCase
             0
         );
 
-        $parameters = new QueryParameterBag();
-        $parameters->set(QueryParameter::COMMIT, 'mock-commit');
+        $parameters = (new QueryParameterBag())
+            ->set(QueryParameter::COMMIT, 'mock-commit');
 
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())
@@ -131,8 +131,8 @@ class CachingQueryServiceTest extends KernelTestCase
 
     public function testRunCacheableQueryWithCachedValue(): void
     {
-        $parameters = new QueryParameterBag();
-        $parameters->set(QueryParameter::COMMIT, 'mock-commit');
+        $parameters = (new QueryParameterBag())
+            ->set(QueryParameter::COMMIT, 'mock-commit');
 
         $mockQueryService = $this->createMock(QueryService::class);
         $mockQueryService->expects($this->once())

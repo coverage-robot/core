@@ -11,19 +11,19 @@ class QueryParameterBagTest extends TestCase
 {
     public function testSerialize(): void
     {
-        $queryParameterBag = new QueryParameterBag();
-        $queryParameterBag->set(
-            QueryParameter::PROVIDER,
-            Provider::GITHUB
-        );
-        $queryParameterBag->set(
-            QueryParameter::LINE_SCOPE,
-            []
-        );
-        $queryParameterBag->set(
-            QueryParameter::UPLOADS_SCOPE,
-            ''
-        );
+        $queryParameterBag = (new QueryParameterBag())
+            ->set(
+                QueryParameter::PROVIDER,
+                Provider::GITHUB
+            )
+            ->set(
+                QueryParameter::LINE_SCOPE,
+                []
+            )
+            ->set(
+                QueryParameter::UPLOADS_SCOPE,
+                ''
+            );
 
         $this->assertSame(
             [

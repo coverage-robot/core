@@ -171,9 +171,11 @@ trait ScopeAwareTrait
 
             $ingestTimes = implode(
                 '","',
-                array_map(
-                    static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format('Y-m-d'),
-                    $ingestTimes
+                array_unique(
+                    array_map(
+                        static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format('Y-m-d'),
+                        $ingestTimes
+                    )
                 )
             );
 

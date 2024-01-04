@@ -3,12 +3,10 @@
 namespace App\Tests\Query;
 
 use App\Model\QueryParameterBag;
-use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Service\QueryBuilderService;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
-use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -28,23 +26,7 @@ abstract class AbstractQueryTestCase extends KernelTestCase
      *
      * @return QueryParameterBag[]
      */
-    public static function getQueryParameters(): array
-    {
-        return [
-            QueryParameterBag::fromWaypoint(
-                new ReportWaypoint(
-                    provider: Provider::GITHUB,
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'mock-ref',
-                    commit: 'mock-commit',
-                    history: [],
-                    diff: [],
-                    pullRequest: 12
-                )
-            )
-        ];
-    }
+    abstract public static function getQueryParameters(): array;
 
     /**
      * Test parsing the results of the query into a result object.
