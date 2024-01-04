@@ -38,7 +38,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             $parameterBag,
             self::UPLOAD_TABLE_ALIAS
         );
-        $lineScope = ($scope = self::getLineScope($parameterBag, self::LINES_TABLE_ALIAS)) ? 'AND ' . $scope : '';
+        $lineScope = ($scope = self::getLineScope($parameterBag, self::LINES_TABLE_ALIAS)) !== ''
+                ? 'AND ' . $scope
+                : '';
         $carryforwardScope = self::getCarryforwardTagsScope(
             $parameterBag,
             self::UPLOAD_TABLE_ALIAS,

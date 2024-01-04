@@ -18,7 +18,7 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService
+        EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);
     }
