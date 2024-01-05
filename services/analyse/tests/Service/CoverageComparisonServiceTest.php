@@ -72,8 +72,8 @@ class CoverageComparisonServiceTest extends TestCase
         );
 
         $comparison = $coverageComparisonService->getComparisonForCoverageReport(
-           $mockCoverageReport,
-           $event
+            $mockCoverageReport,
+            $event
         );
 
         $this->assertEquals(
