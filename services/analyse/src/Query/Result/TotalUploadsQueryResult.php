@@ -31,6 +31,9 @@ class TotalUploadsQueryResult implements QueryResultInterface
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function getSuccessfulUploads(): array
     {
         return $this->successfulUploads;
@@ -44,6 +47,9 @@ class TotalUploadsQueryResult implements QueryResultInterface
         return $this->successfulTags;
     }
 
+    /**
+     * @return DateTimeImmutable[]
+     */
     public function getSuccessfulIngestTimes(): array
     {
         return $this->successfulIngestTimes;
