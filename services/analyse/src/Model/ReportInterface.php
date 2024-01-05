@@ -48,7 +48,7 @@ interface ReportInterface extends Stringable
      *
      * This is calculated as: `(hits + partials) / (hits + partials + misses)`
      */
-    public function getCoveragePercentage(): float;
+    public function getCoveragePercentage(bool $rounded = true): float;
 
     /**
      * The list of tags associated to uploads made, and their coverage.
