@@ -7,8 +7,8 @@ use Stringable;
 class ReportComparison implements Stringable
 {
     public function __construct(
-        private readonly ReportInterface $baseReport,
-        private readonly ReportInterface $headReport
+        private readonly CoverageReportInterface $baseReport,
+        private readonly CoverageReportInterface $headReport
     ) {
     }
 
@@ -18,7 +18,7 @@ class ReportComparison implements Stringable
      * This is generally the report on the BASE of a PR using the parent commit
      * history.
      */
-    public function getBaseReport(): ReportInterface
+    public function getBaseReport(): CoverageReportInterface
     {
         return $this->baseReport;
     }
@@ -28,7 +28,7 @@ class ReportComparison implements Stringable
      *
      * This is usually the head of a PR.
      */
-    public function getHeadReport(): ReportInterface
+    public function getHeadReport(): CoverageReportInterface
     {
         return $this->headReport;
     }

@@ -16,7 +16,7 @@ use DateTimeImmutable;
  * this is entirely opt-in. If the metric has already been calculated, it can
  * be passed in directly.
  */
-class Report implements ReportInterface
+class CoverageReport implements CoverageReportInterface
 {
     /**
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads

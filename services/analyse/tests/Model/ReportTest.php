@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model;
 
-use App\Model\Report;
+use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
@@ -22,7 +22,7 @@ class ReportTest extends TestCase
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
 
-        $report = new Report(
+        $report = new CoverageReport(
             $mockWaypoint,
             static fn() => $totalUploads,
             static fn() => 1,

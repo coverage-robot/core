@@ -2,8 +2,8 @@
 
 namespace App\Event;
 
+use App\Model\CoverageReportInterface;
 use App\Model\ReportComparison;
-use App\Model\ReportInterface;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\CoverageComparisonService;
@@ -117,7 +117,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     private function queueCoverageReport(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
+        CoverageReportInterface $coverageReport,
         ?ReportComparison $comparison
     ): bool {
         $annotations = [];
@@ -169,7 +169,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      * Generate a coverage coverage report for the current commit, and optionally (if
      * the event has the required data) a comparison report against the base commit.
      *
-     * @return array{0: ReportInterface, 1: ReportComparison|null}
+     * @return array{0: CoverageReportInterface, 1: ReportComparison|null}
      */
     private function generateCoverageReport(UploadsFinalised $event): array
     {
@@ -182,7 +182,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
         $headReport = $comparison?->getHeadReport();
 
-        if (!$headReport instanceof ReportInterface) {
+        if (!$headReport instanceof CoverageReportInterface) {
             // We weren't able to come up with a suitable comparison, so just generate
             // a report of the current commit (the head), and move on.
             $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
@@ -193,7 +193,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
 
     private function buildPullRequestMessage(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
+        CoverageReportInterface $coverageReport,
         ?ReportComparison $comparison,
         DateTimeImmutable $validUntil
     ): PublishablePullRequestMessage {
@@ -224,7 +224,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     public function buildCheckRunMessage(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
+        CoverageReportInterface $coverageReport,
         ?ReportComparison $comparison,
         DateTimeImmutable $validUntil,
         array $annotations

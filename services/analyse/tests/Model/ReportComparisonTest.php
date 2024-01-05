@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model;
 
-use App\Model\Report;
+use App\Model\CoverageReport;
 use App\Model\ReportComparison;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
@@ -17,8 +17,8 @@ class ReportComparisonTest extends TestCase
 {
     #[DataProvider('coverageReportDataProvider')]
     public function testComparingCoveragePercentageChanges(
-        Report $baseReport,
-        Report $headReport,
+        CoverageReport $baseReport,
+        CoverageReport $headReport,
         float $expectedPercentageChange
     ): void {
         $comparison = new ReportComparison(
@@ -36,7 +36,7 @@ class ReportComparisonTest extends TestCase
     {
         return [
             'No change in total coverage' => [
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -56,7 +56,7 @@ class ReportComparisonTest extends TestCase
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -79,7 +79,7 @@ class ReportComparisonTest extends TestCase
                 0
             ],
             '-10% change in total coverage' => [
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -99,7 +99,7 @@ class ReportComparisonTest extends TestCase
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -122,7 +122,7 @@ class ReportComparisonTest extends TestCase
                 -10
             ],
             '-0.33% change in total coverage' => [
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -142,7 +142,7 @@ class ReportComparisonTest extends TestCase
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -165,7 +165,7 @@ class ReportComparisonTest extends TestCase
                 -0.33
             ],
             '+5.3% change in total coverage' => [
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',
@@ -185,7 +185,7 @@ class ReportComparisonTest extends TestCase
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
-                new Report(
+                new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
                         owner: 'mock-owner',

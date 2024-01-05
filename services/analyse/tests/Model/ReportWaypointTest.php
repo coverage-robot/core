@@ -18,8 +18,7 @@ class ReportWaypointTest extends TestCase
             ref: 'mock-ref',
             commit: 'mock-commit',
             history: static fn () => [],
-            diff: static fn () => [],
-            ingestTimes: static fn () => []
+            diff: static fn () => []
         );
 
         $this->assertEquals(Provider::GITHUB, $waypoint->getProvider());
@@ -29,7 +28,6 @@ class ReportWaypointTest extends TestCase
         $this->assertEquals('mock-commit', $waypoint->getCommit());
         $this->assertEquals([], $waypoint->getHistory());
         $this->assertEquals([], $waypoint->getDiff());
-        $this->assertEquals([], $waypoint->getIngestTimes());
     }
 
     #[DataProvider('waypointProvider')]

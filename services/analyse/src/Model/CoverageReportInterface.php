@@ -9,7 +9,7 @@ use App\Query\Result\TotalUploadsQueryResult;
 use DateTimeImmutable;
 use Stringable;
 
-interface ReportInterface extends Stringable
+interface CoverageReportInterface extends Stringable
 {
     /**
      * The point in time (or, more specifically the git tree) that this report
