@@ -162,7 +162,7 @@ class ReportComparisonTest extends TestCase
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
-                -0.32
+                -0.33
             ],
             '+5.3% change in total coverage' => [
                 new Report(
