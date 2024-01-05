@@ -27,8 +27,7 @@ class TotalUploadsQueryResult implements QueryResultInterface
         #[Assert\All([
             new Assert\Type(type: Tag::class)
         ])]
-        private readonly array $successfulTags,
-        private readonly ?DateTimeImmutable $latestSuccessfulUpload
+        private readonly array $successfulTags
     ) {
     }
 
@@ -54,10 +53,5 @@ class TotalUploadsQueryResult implements QueryResultInterface
     public function getSuccessfulIngestTimes(): array
     {
         return $this->successfulIngestTimes;
-    }
-
-    public function getLatestSuccessfulUpload(): DateTimeImmutable|null
-    {
-        return $this->latestSuccessfulUpload;
     }
 }

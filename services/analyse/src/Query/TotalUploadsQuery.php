@@ -44,8 +44,7 @@ class TotalUploadsQuery implements QueryInterface
                     )
                 ),
                 []
-            ) as successfulTags,
-            COALESCE(STRING(MAX(ingestTime)), NULL) as latestSuccessfulUpload
+            ) as successfulTags
         FROM
             `{$table}`
         WHERE
