@@ -8,6 +8,7 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class ReportTest extends TestCase
@@ -16,7 +17,7 @@ class ReportTest extends TestCase
     {
         $mockWaypoint = $this->createMock(ReportWaypoint::class);
 
-        $totalUploads = new TotalUploadsQueryResult(['1'], [], [], null);
+        $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], []);
         $tagCoverage = new TagCoverageCollectionQueryResult([]);
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
@@ -38,7 +39,10 @@ class ReportTest extends TestCase
             $totalUploads,
             $report->getUploads()
         );
-        $this->assertNull($report->getLatestSuccessfulUpload());
+        $this->assertEquals(
+            new DateTimeImmutable('2024-01-05 00:00:00'),
+            $report->getLatestSuccessfulUpload()
+        );
         $this->assertEquals(
             1,
             $report->getTotalLines()
