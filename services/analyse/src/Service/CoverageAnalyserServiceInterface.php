@@ -2,9 +2,7 @@
 
 namespace App\Service;
 
-use App\Exception\ComparisonException;
 use App\Model\CoverageReportInterface;
-use App\Model\ReportComparison;
 use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
@@ -32,11 +30,4 @@ interface CoverageAnalyserServiceInterface
      * Build a coverage report for a particular waypoint.
      */
     public function analyse(ReportWaypoint $waypoint): CoverageReportInterface;
-
-    /**
-     * Compare two (comparable) reports against each other.
-     *
-     * @throws ComparisonException
-     */
-    public function compare(CoverageReportInterface $base, CoverageReportInterface $head): ReportComparison;
 }

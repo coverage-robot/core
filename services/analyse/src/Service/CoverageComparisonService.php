@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
-use App\Model\ReportComparison;
+use App\Exception\ComparisonException;
+use App\Model\CoverageReportComparison;
+use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use Packages\Contracts\Event\BaseAwareEventInterface;
@@ -14,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class CoverageComparisonService
 {
     public function __construct(
-        private readonly LoggerInterface $coverageComparisonService,
+        private readonly LoggerInterface $coverageComparisonServiceLogger,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
     ) {
@@ -26,22 +28,47 @@ class CoverageComparisonService
      * This works out (using the head waypoint) which is the most suitable base waypoint
      * to compare against, and then generates a comparison report using the analyser.
      */
-    public function getSuitableComparisonForWaypoint(
-        ReportWaypoint $headWaypoint,
+    public function getComparisonForCoverageReport(
+        CoverageReportInterface $headReport,
         EventInterface $event
-    ): ?ReportComparison {
-        $baseWaypoint = $this->getBaseWaypointForComparison($headWaypoint, $event);
+    ): ?CoverageReportComparison {
+        $baseWaypoint = $this->getBaseWaypointForComparison($headReport, $event);
 
         if ($baseWaypoint instanceof ReportWaypoint) {
+            $baseReport = $this->coverageAnalyserService->analyse($baseWaypoint);
+
+            $this->coverageComparisonServiceLogger->info(
+                sprintf(
+                    'Generating comparison report for %s using %s',
+                    (string)$headReport,
+                    (string)$baseReport
+                )
+            );
+
             // We've been able to generate base waypoint to compare to, so we'll generate
             // a comparison report.
-            return $this->coverageAnalyserService->compare(
-                $this->coverageAnalyserService->analyse($baseWaypoint),
-                $this->coverageAnalyserService->analyse($headWaypoint)
+            return $this->compare(
+                $baseReport,
+                $headReport
             );
         }
 
         return null;
+    }
+
+    private function compare(CoverageReportInterface $base, CoverageReportInterface $head): CoverageReportComparison
+    {
+        if (!$base->getWaypoint()->comparable($head->getWaypoint())) {
+            throw ComparisonException::notComparable(
+                $base->getWaypoint(),
+                $head->getWaypoint()
+            );
+        }
+
+        return new CoverageReportComparison(
+            baseReport: $base,
+            headReport: $head
+        );
     }
 
     /**
@@ -59,11 +86,11 @@ class CoverageComparisonService
      *    or merge events which won't have a base ref (because theres no independent base).
      */
     private function getBaseWaypointForComparison(
-        ReportWaypoint $headWaypoint,
+        CoverageReportInterface $headReport,
         EventInterface $event
     ): ?ReportWaypoint {
         if ($event instanceof BaseAwareEventInterface) {
-            if (($baseWaypoint = $this->getBaseWaypointFromHistory($headWaypoint, $event)) instanceof ReportWaypoint) {
+            if (($baseWaypoint = $this->getBaseWaypointFromHistory($headReport, $event)) instanceof ReportWaypoint) {
                 return $baseWaypoint;
             }
 
@@ -79,10 +106,10 @@ class CoverageComparisonService
             return $baseWaypoint;
         }
 
-        $this->coverageComparisonService->warning(
+        $this->coverageComparisonServiceLogger->warning(
             sprintf(
                 'Unable to find base commit for comparison to %s',
-                (string)$headWaypoint
+                (string)$headReport
             )
         );
 
@@ -94,7 +121,7 @@ class CoverageComparisonService
      * ref of the event.
      */
     private function getBaseWaypointFromHistory(
-        ReportWaypoint $headWaypoint,
+        CoverageReportInterface $headReport,
         EventInterface&BaseAwareEventInterface $event
     ): ?ReportWaypoint {
         $baseRef = $event->getBaseRef();
@@ -105,6 +132,8 @@ class CoverageComparisonService
             return null;
         }
 
+        $headWaypoint = $headReport->getWaypoint();
+
         for ($page = 1; $page <= 5; ++$page) {
             $history = $headWaypoint->getHistory($page);
 
@@ -113,7 +142,7 @@ class CoverageComparisonService
                     $commit['ref'] !== $headWaypoint->getRef() ||
                     $commit['merged']
                 ) {
-                    $this->coverageComparisonService->info(
+                    $this->coverageComparisonServiceLogger->info(
                         sprintf(
                             'Extracted %s from history to use as the base commit for comparison to %s',
                             $commit['commit'],
@@ -160,7 +189,7 @@ class CoverageComparisonService
             return null;
         }
 
-        $this->coverageComparisonService->info(
+        $this->coverageComparisonServiceLogger->info(
             sprintf(
                 'Extracted %s from event base to use as the base commit for comparison for %s',
                 $baseCommit,
@@ -193,7 +222,7 @@ class CoverageComparisonService
             return null;
         }
 
-        $this->coverageComparisonService->info(
+        $this->coverageComparisonServiceLogger->info(
             sprintf(
                 'Extracted %s from event parents to use as the base commit for comparison for %s',
                 $event->getParent()[0],

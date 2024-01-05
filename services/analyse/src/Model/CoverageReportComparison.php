@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Stringable;
 
-class ReportComparison implements Stringable
+class CoverageReportComparison implements Stringable
 {
     public function __construct(
         private readonly CoverageReportInterface $baseReport,

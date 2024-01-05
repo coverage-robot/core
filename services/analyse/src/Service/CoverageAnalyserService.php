@@ -4,12 +4,10 @@ namespace App\Service;
 
 use App\Enum\QueryParameter;
 use App\Exception\AnalysisException;
-use App\Exception\ComparisonException;
 use App\Exception\QueryException;
 use App\Model\CoverageReport;
 use App\Model\CoverageReportInterface;
 use App\Model\QueryParameterBag;
-use App\Model\ReportComparison;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
@@ -114,24 +112,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $queryException
             );
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function compare(CoverageReportInterface $base, CoverageReportInterface $head): ReportComparison
-    {
-        if (!$base->getWaypoint()->comparable($head->getWaypoint())) {
-            throw ComparisonException::notComparable(
-                $base->getWaypoint(),
-                $head->getWaypoint()
-            );
-        }
-
-        return new ReportComparison(
-            baseReport: $base,
-            headReport: $head
-        );
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Tests\Model;
 
 use App\Model\CoverageReport;
-use App\Model\ReportComparison;
+use App\Model\CoverageReportComparison;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
@@ -13,7 +13,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ReportComparisonTest extends TestCase
+class CoverageReportComparisonTest extends TestCase
 {
     #[DataProvider('coverageReportDataProvider')]
     public function testComparingCoveragePercentageChanges(
@@ -21,7 +21,7 @@ class ReportComparisonTest extends TestCase
         CoverageReport $headReport,
         float $expectedPercentageChange
     ): void {
-        $comparison = new ReportComparison(
+        $comparison = new CoverageReportComparison(
             $baseReport,
             $headReport
         );

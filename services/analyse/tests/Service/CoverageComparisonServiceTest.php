@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\CoverageAnalyserService;
@@ -44,6 +45,11 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: null
         );
+        $mockCoverageReport = $this->createMock(CoverageReport::class);
+        $mockCoverageReport->expects($this->atLeastOnce())
+            ->method('getWaypoint')
+            ->willReturn($headWaypoint);
+
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
             owner: 'mock-owner',
@@ -65,9 +71,9 @@ class CoverageComparisonServiceTest extends TestCase
             )
         );
 
-        $comparison = $coverageComparisonService->getSuitableComparisonForWaypoint(
-            $headWaypoint,
-            $event
+        $comparison = $coverageComparisonService->getComparisonForCoverageReport(
+           $mockCoverageReport,
+           $event
         );
 
         $this->assertEquals(
@@ -96,6 +102,11 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: 1
         );
+        $mockCoverageReport = $this->createMock(CoverageReport::class);
+        $mockCoverageReport->expects($this->atLeastOnce())
+            ->method('getWaypoint')
+            ->willReturn($headWaypoint);
+
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
             owner: 'mock-owner',
@@ -118,8 +129,8 @@ class CoverageComparisonServiceTest extends TestCase
             )
         );
 
-        $comparison = $coverageComparisonService->getSuitableComparisonForWaypoint(
-            $headWaypoint,
+        $comparison = $coverageComparisonService->getComparisonForCoverageReport(
+            $mockCoverageReport,
             $event
         );
 
@@ -149,6 +160,11 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: 1
         );
+        $mockCoverageReport = $this->createMock(CoverageReport::class);
+        $mockCoverageReport->expects($this->atLeastOnce())
+            ->method('getWaypoint')
+            ->willReturn($headWaypoint);
+
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
             owner: 'mock-owner',
@@ -168,8 +184,8 @@ class CoverageComparisonServiceTest extends TestCase
             )
         );
 
-        $comparison = $coverageComparisonService->getSuitableComparisonForWaypoint(
-            $headWaypoint,
+        $comparison = $coverageComparisonService->getComparisonForCoverageReport(
+            $mockCoverageReport,
             $event
         );
 
@@ -198,6 +214,11 @@ class CoverageComparisonServiceTest extends TestCase
             history: [],
             diff: [],
         );
+        $mockCoverageReport = $this->createMock(CoverageReport::class);
+        $mockCoverageReport->expects($this->never())
+            ->method('getWaypoint')
+            ->willReturn($headWaypoint);
+
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
             owner: 'mock-owner',
@@ -217,8 +238,8 @@ class CoverageComparisonServiceTest extends TestCase
             )
         );
 
-        $comparison = $coverageComparisonService->getSuitableComparisonForWaypoint(
-            $headWaypoint,
+        $comparison = $coverageComparisonService->getComparisonForCoverageReport(
+            $mockCoverageReport,
             $event
         );
 
