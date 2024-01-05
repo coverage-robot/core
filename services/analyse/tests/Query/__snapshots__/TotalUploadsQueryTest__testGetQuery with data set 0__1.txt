@@ -16,13 +16,7 @@ SELECT
       )
     ),
     []
-  ) as successfulTags,
-  COALESCE(
-    STRING(
-      MAX(ingestTime)
-    ),
-    NULL
-  ) as latestSuccessfulUpload
+  ) as successfulTags
 FROM
   `mock-table`
 WHERE

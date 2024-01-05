@@ -4,9 +4,9 @@ namespace App\Tests\Service;
 
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Service\QueryBuilderService;
@@ -43,7 +43,7 @@ class QueryBuilderServiceTest extends KernelTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new AvailableTagQueryResult(
+                    new CarryforwardTag(
                         'mock-tag',
                         'mock-commit',
                         [new DateTimeImmutable()]

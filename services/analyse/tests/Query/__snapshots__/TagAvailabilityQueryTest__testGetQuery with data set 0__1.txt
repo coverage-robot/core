@@ -22,7 +22,7 @@ SELECT
     STRUCT(
       commit as commit, tag as name, ingestTimes as ingestTimes
     )
-  ) as availableTags,
+  ) as carryforwardTags,
 FROM
   availability
 GROUP BY

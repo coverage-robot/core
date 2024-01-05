@@ -90,7 +90,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'tagName' => 'mock-tag',
-                        'availableTags' => [
+                        'carryforwardTags' => [
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-1',
@@ -114,7 +114,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 [
                     [
                         'tagName' => 'mock-tag',
-                        'availableTags' => [
+                        'carryforwardTags' => [
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-1',
@@ -134,7 +134,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
                     ],
                     [
                         'tagName' => 'mock-tag-2',
-                        'availableTags' => [
+                        'carryforwardTags' => [
                             [
                                 'name' => 'mock-tag-2',
                                 'commit' => 'mock-commit-3',

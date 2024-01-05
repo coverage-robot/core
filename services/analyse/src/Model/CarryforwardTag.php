@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Query\Result;
+namespace App\Model;
 
 use DateTimeImmutable;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AvailableTagQueryResult extends Tag
+class CarryforwardTag extends Tag
 {
     /**
      * @param DateTimeImmutable[] $ingestTimes

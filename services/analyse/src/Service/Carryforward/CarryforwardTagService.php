@@ -2,9 +2,9 @@
 
 namespace App\Service\Carryforward;
 
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
@@ -85,9 +85,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             ];
 
             if ($hasReachedEndOfHistory) {
-                // We've reached the end of the commit history, so we can
-                // safely break out now and use whatever tags we've found
-                // as carryforward
+                // We've reached the end of the commit history, so we can safely break out now
+                // and use whatever tags we've found as carryforward
                 break;
             }
         }
@@ -114,7 +113,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      * available tagged coverage for a commit.
      *
      * @param string[] $tagsNotSeen
-     * @return array{0: string[], 1: AvailableTagQueryResult[], 2: bool}
+     * @return array{0: string[], 1: CarryforwardTag[], 2: bool}
      */
     private function lookForCarryforwardTagsInPaginatedTree(
         ReportWaypoint $waypoint,
@@ -142,7 +141,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
             $carryforwardTag = null;
             foreach ($commitsFromTree as $commitFromTree) {
-                foreach ($availability->getAvailableTags() as $availableTag) {
+                foreach ($availability->getCarryforwardTags() as $availableTag) {
                     if ($commitFromTree['commit'] !== $availableTag->getCommit()) {
                         continue;
                     }

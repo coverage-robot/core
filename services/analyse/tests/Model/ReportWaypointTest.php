@@ -9,6 +9,29 @@ use PHPUnit\Framework\TestCase;
 
 class ReportWaypointTest extends TestCase
 {
+    public function testWaypointLazyLoading(): void
+    {
+        $waypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: static fn () => [],
+            diff: static fn () => [],
+            ingestTimes: static fn () => []
+        );
+
+        $this->assertEquals(Provider::GITHUB, $waypoint->getProvider());
+        $this->assertEquals('mock-owner', $waypoint->getOwner());
+        $this->assertEquals('mock-repository', $waypoint->getRepository());
+        $this->assertEquals('mock-ref', $waypoint->getRef());
+        $this->assertEquals('mock-commit', $waypoint->getCommit());
+        $this->assertEquals([], $waypoint->getHistory());
+        $this->assertEquals([], $waypoint->getDiff());
+        $this->assertEquals([], $waypoint->getIngestTimes());
+    }
+
     #[DataProvider('waypointProvider')]
     public function testComparable(
         ReportWaypoint $waypoint1,
@@ -31,9 +54,9 @@ class ReportWaypointTest extends TestCase
                     repository: 'mock-repository',
                     ref: 'mock-ref',
                     commit: 'mock-commit',
-                    pullRequest: 1,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 1
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
@@ -41,9 +64,9 @@ class ReportWaypointTest extends TestCase
                     repository: 'mock-repository',
                     ref: 'mock-ref',
                     commit: 'mock-commit-2',
-                    pullRequest: 1,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 1
                 ),
                 true
             ],
@@ -75,9 +98,9 @@ class ReportWaypointTest extends TestCase
                     repository: 'mock-repository',
                     ref: 'mock-ref',
                     commit: 'mock-commit',
-                    pullRequest: 5,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 5
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
@@ -85,9 +108,9 @@ class ReportWaypointTest extends TestCase
                     repository: 'mock-repository',
                     ref: 'mock-ref',
                     commit: 'mock-commit',
-                    pullRequest: 5,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 5
                 ),
                 true
             ],

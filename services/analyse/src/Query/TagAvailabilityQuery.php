@@ -53,7 +53,7 @@ class TagAvailabilityQuery implements QueryInterface
                     tag as name,
                     ingestTimes as ingestTimes
                 )
-            ) as availableTags,
+            ) as carryforwardTags,
         FROM
             availability
         GROUP BY

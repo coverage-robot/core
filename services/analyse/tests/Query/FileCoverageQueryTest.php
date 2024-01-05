@@ -5,11 +5,11 @@ namespace App\Tests\Query;
 use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\QueryInterface;
-use App\Query\Result\AvailableTagQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
@@ -74,10 +74,10 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new AvailableTagQueryResult('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new AvailableTagQueryResult('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new AvailableTagQueryResult('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new AvailableTagQueryResult('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
                 ]
             );
 
@@ -207,7 +207,7 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                     ->set(
                         QueryParameter::CARRYFORWARD_TAGS,
                         [
-                            new AvailableTagQueryResult(
+                            new CarryforwardTag(
                                 '1',
                                 'mock-commit',
                                 [new DateTimeImmutable('2024-01-03 00:00:00')]

@@ -85,8 +85,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     ],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
-                    ],
-                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
+                    ]
                 ]
             ],
             [
@@ -105,8 +104,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000',
                         '2024-01-03T12:19:30'
-                    ],
-                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
+                    ]
                 ]
             ],
             [
@@ -120,8 +118,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     ],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
-                    ],
-                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
+                    ]
                 ],
             ],
             [
@@ -135,8 +132,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     ],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
-                    ],
-                    'latestSuccessfulUpload' => '2023-09-09T12:00:00+0000'
+                    ]
                 ]
             ],
             [
@@ -144,8 +140,7 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'commit' => 'mock-commit',
                     'successfulUploads' => [],
                     'successfulIngestTimes' => [],
-                    'successfulTags' => [],
-                    'latestSuccessfulUpload' => null
+                    'successfulTags' => []
                 ]
             ],
         ];

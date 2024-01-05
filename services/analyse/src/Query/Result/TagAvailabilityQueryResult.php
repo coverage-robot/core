@@ -2,20 +2,21 @@
 
 namespace App\Query\Result;
 
+use App\Model\CarryforwardTag;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class TagAvailabilityQueryResult implements QueryResultInterface
 {
     /**
-     * @param AvailableTagQueryResult[] $availableTags
+     * @param CarryforwardTag[] $carryforwardTags
      */
     public function __construct(
         #[Assert\NotBlank]
         private readonly string $tagName,
         #[Assert\All([
-            new Assert\Type(type: AvailableTagQueryResult::class)
+            new Assert\Type(type: CarryforwardTag::class)
         ])]
-        private readonly array $availableTags,
+        private readonly array $carryforwardTags,
     ) {
     }
 
@@ -25,10 +26,10 @@ class TagAvailabilityQueryResult implements QueryResultInterface
     }
 
     /**
-     * @return AvailableTagQueryResult[]
+     * @return CarryforwardTag[]
      */
-    public function getAvailableTags(): array
+    public function getCarryforwardTags(): array
     {
-        return $this->availableTags;
+        return $this->carryforwardTags;
     }
 }
