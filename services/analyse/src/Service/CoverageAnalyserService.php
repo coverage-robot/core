@@ -27,6 +27,7 @@ use App\Service\Diff\DiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
+use DateTimeImmutable;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -66,6 +67,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             commit: $commit,
             history: fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
             diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint),
+            ingestTimes: fn(ReportWaypoint $waypoint) => $this->getSuccessfulIngestTimes($waypoint),
             pullRequest: $pullRequest
         );
     }
@@ -157,6 +159,8 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     }
 
     /**
+     * @return DateTimeImmutable[]
+     *
      * @throws QueryException
      */
     protected function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
@@ -178,10 +182,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     $this->getUploads($waypoint)
                         ->getSuccessfulTags()
                 )
-            )
-            ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
@@ -209,10 +209,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 )
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
-            )
-            ->set(
                 QueryParameter::UPLOADS_SCOPE,
                 $this->getSuccessfulUploads($waypoint)
             );
@@ -236,10 +232,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     $this->getUploads($waypoint)
                         ->getSuccessfulTags()
                 )
-            )
-            ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
@@ -266,10 +258,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 )
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
-            )
-            ->set(
                 QueryParameter::UPLOADS_SCOPE,
                 $this->getSuccessfulUploads($waypoint)
             );
@@ -293,10 +281,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     $this->getUploads($waypoint)
                         ->getSuccessfulTags()
                 )
-            )
-            ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
@@ -340,10 +324,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             ->set(
                 QueryParameter::LINE_SCOPE,
                 $diff
-            )
-            ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
@@ -404,10 +384,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $limit
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
-            )
-            ->set(
                 QueryParameter::UPLOADS_SCOPE,
                 $this->getSuccessfulUploads($waypoint)
             );
@@ -451,10 +427,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             ->set(
                 QueryParameter::LINE_SCOPE,
                 $diff
-            )
-            ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,

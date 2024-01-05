@@ -52,7 +52,8 @@ class QueryParameterBag implements JsonSerializable
             ->set(QueryParameter::COMMIT, $waypoint->getCommit())
             ->set(QueryParameter::OWNER, $waypoint->getOwner())
             ->set(QueryParameter::REPOSITORY, $waypoint->getRepository())
-            ->set(QueryParameter::PROVIDER, $waypoint->getProvider());
+            ->set(QueryParameter::PROVIDER, $waypoint->getProvider())
+            ->set(QueryParameter::INGEST_TIME_SCOPE, $waypoint->getIngestTimes());
     }
 
     public function jsonSerialize(): array

@@ -3,8 +3,8 @@
 namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
-use App\Query\Result\AvailableTagQueryResult;
 
 trait CarryforwardAwareTrait
 {
@@ -17,10 +17,10 @@ trait CarryforwardAwareTrait
      * In essence, convert this:
      * ```php
      * [
-     *      new Tag('tag-1', 'commit-sha-1'),
-     *      new Tag('tag-2', 'commit-sha-1'),
-     *      new Tag('tag-3', 'commit-sha-1'),
-     *      new Tag('tag-4', 'commit-sha-2')
+     *      new CarryfowardTag('tag-1', 'commit-sha-1', [new DateTimeImmutable('2021-01-01')]),
+     *      new CarryfowardTag('tag-2', 'commit-sha-1', [new DateTimeImmutable('2021-01-01')]),
+     *      new CarryfowardTag('tag-3', 'commit-sha-1', [new DateTimeImmutable('2021-01-01')]),
+     *      new CarryfowardTag('tag-4', 'commit-sha-2', [new DateTimeImmutable('2021-01-01')])
      * ]
      * ```
      * into this:
@@ -31,10 +31,10 @@ trait CarryforwardAwareTrait
      *      repository = "repository" AND
      *      provider = "provider" AND
      *      (
-     *           (commit = "commit-sha-1" AND tag = "tag-1") OR
-     *           (commit = "commit-sha-1" AND tag = "tag-2") OR
-     *           (commit = "commit-sha-1" AND tag = "tag-3") OR
-     *           (commit = "commit-sha-2" AND tag = "tag-4") OR
+     *           (commit = "commit-sha-1" AND tag = "tag-1" AND DATE(ingestTime) = '2021-01-01') OR
+     *           (commit = "commit-sha-1" AND tag = "tag-2" AND DATE(ingestTime) = '2021-01-01') OR
+     *           (commit = "commit-sha-1" AND tag = "tag-3" AND DATE(ingestTime) = '2021-01-01') OR
+     *           (commit = "commit-sha-2" AND tag = "tag-4" AND DATE(ingestTime) = '2021-01-01') OR
      *      )
      * )
      * ```
@@ -49,7 +49,7 @@ trait CarryforwardAwareTrait
         $uploadsTableAlias = $uploadsTableAlias ? $uploadsTableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var AvailableTagQueryResult[] $carryforwardTags */
+            /** @var CarryforwardTag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
             if (empty($carryforwardTags)) {
@@ -57,7 +57,7 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static function (AvailableTagQueryResult $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
+                static function (CarryforwardTag $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
                     $ingestScope = self::getIngestTimeScope(
                         (new QueryParameterBag())
                             ->set(QueryParameter::INGEST_TIME_SCOPE, $availableTag->getIngestTimes()),
