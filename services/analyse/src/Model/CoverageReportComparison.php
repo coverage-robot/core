@@ -38,10 +38,12 @@ class CoverageReportComparison implements Stringable
      */
     public function getCoverageChange(): float
     {
-        return round(
-            $this->headReport->getCoveragePercentage() - $this->baseReport->getCoveragePercentage(),
-            2
-        );
+        // Use the unrounded percentage to calculate the change so that its closest
+        // to the actual change before rounding.
+        $coverageChange = $this->headReport->getCoveragePercentage(false) -
+            $this->baseReport->getCoveragePercentage(false);
+
+        return round($coverageChange, 2);
     }
 
     public function __toString(): string

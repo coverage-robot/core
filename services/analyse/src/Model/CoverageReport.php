@@ -97,13 +97,13 @@ class CoverageReport implements CoverageReportInterface
         return $this->uncoveredLines;
     }
 
-    public function getCoveragePercentage(): float
+    public function getCoveragePercentage(bool $rounded = true): float
     {
         if (is_callable($this->coveragePercentage)) {
             $this->coveragePercentage = ($this->coveragePercentage)();
         }
 
-        return $this->coveragePercentage;
+        return $rounded ? round($this->coveragePercentage, 2) : $this->coveragePercentage;
     }
 
     public function getTagCoverage(): TagCoverageCollectionQueryResult
