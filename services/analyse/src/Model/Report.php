@@ -59,15 +59,8 @@ class Report implements ReportInterface
 
     public function getLatestSuccessfulUpload(): ?DateTimeImmutable
     {
-        $ingestTimes = $this->getUploads()
-            ->getSuccessfulIngestTimes();
-
-        if ($ingestTimes === []) {
-            return null;
-        }
-
-        /** @var non-empty-array<DateTimeImmutable> $ingestTimes */
-        return max($ingestTimes);
+        return $this->getUploads()
+            ->getLatestSuccessfulUpload();
     }
 
     public function getTotalLines(): int

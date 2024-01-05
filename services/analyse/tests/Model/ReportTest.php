@@ -17,7 +17,7 @@ class ReportTest extends TestCase
     {
         $mockWaypoint = $this->createMock(ReportWaypoint::class);
 
-        $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], []);
+        $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], [], null);
         $tagCoverage = new TagCoverageCollectionQueryResult([]);
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
@@ -40,7 +40,7 @@ class ReportTest extends TestCase
             $report->getUploads()
         );
         $this->assertEquals(
-            new DateTimeImmutable('2024-01-05 00:00:00'),
+            null,
             $report->getLatestSuccessfulUpload()
         );
         $this->assertEquals(
