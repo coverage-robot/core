@@ -11,7 +11,7 @@ use App\Query\Result\TotalUploadsQueryResult;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-class ReportTest extends TestCase
+class CoverageReportTest extends TestCase
 {
     public function testReportLazyLoading(): void
     {
