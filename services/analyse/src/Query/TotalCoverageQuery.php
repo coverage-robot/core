@@ -33,7 +33,7 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
             SUM(covered) as covered,
             SUM(partial) as partial,
             SUM(uncovered) as uncovered,
-            ROUND((SUM(covered) + SUM(partial)) / IF(SUM(lines) = 0, 1, SUM(lines)) * 100, 2) as coveragePercentage
+            (SUM(covered) + SUM(partial)) / IF(SUM(lines) = 0, 1, SUM(lines)) * 100 as coveragePercentage
         FROM
             summedCoverage
         SQL;
