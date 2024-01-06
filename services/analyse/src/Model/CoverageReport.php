@@ -121,7 +121,9 @@ class CoverageReport implements CoverageReportInterface
             $this->diffCoveragePercentage = ($this->diffCoveragePercentage)();
         }
 
-        return $rounded ? round($this->diffCoveragePercentage, 2) : $this->diffCoveragePercentage;
+        return $this->diffCoveragePercentage !== null && $rounded ?
+            round($this->diffCoveragePercentage, 2) :
+            $this->diffCoveragePercentage;
     }
 
     public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult
