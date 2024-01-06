@@ -7,4 +7,6 @@ enum SettingValueType: string
     case STRING = 'S';
 
     case BOOLEAN = 'BOOL';
+
+    case LIST = 'L';
 }

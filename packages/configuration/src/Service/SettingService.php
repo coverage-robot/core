@@ -3,6 +3,7 @@
 namespace Packages\Configuration\Service;
 
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Setting\SettingInterface;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
@@ -46,13 +47,16 @@ class SettingService
         SettingKey $key,
         mixed $value
     ): bool {
-        return $this->getSetting($key)
-            ->set(
-                $provider,
-                $owner,
-                $repository,
-                $value
-            );
+        $setting = $this->getSetting($key);
+
+        $setting->validate($value);
+
+        return $setting->set(
+            $provider,
+            $owner,
+            $repository,
+            $value
+        );
     }
 
     public function delete(
@@ -71,13 +75,20 @@ class SettingService
 
     /**
      * Validate the value of a setting.
+     *
+     * @throws InvalidSettingValueException
      */
-    public function validate(
+    public function deserialize(
         SettingKey $key,
         mixed $value
-    ): bool {
-        return $this->getSetting($key)
-            ->validate($value);
+    ): mixed {
+        $setting = $this->getSetting($key);
+
+        $value = $setting->deserialize($value);
+
+        $setting->validate($value);
+
+        return $value;
     }
 
     /**

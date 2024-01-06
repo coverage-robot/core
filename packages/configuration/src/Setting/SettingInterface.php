@@ -2,6 +2,7 @@
 
 namespace Packages\Configuration\Setting;
 
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Contracts\Provider\Provider;
 
 interface SettingInterface
@@ -22,7 +23,7 @@ interface SettingInterface
         Provider $provider,
         string $owner,
         string $repository,
-        mixed $value
+        $value
     ): bool;
 
     /**
@@ -35,9 +36,17 @@ interface SettingInterface
     ): bool;
 
     /**
-     * Validate the configuration setting's value.
+     * Deserialize the configuration setting's value from the a configuration file,
+     * or the configuration store, into a manipulate format (i.e. model, primitive, etc)
      */
-    public function validate(mixed $value): bool;
+    public function deserialize(mixed $value): mixed;
+
+    /**
+     * Validate the configuration setting's value.
+     *
+     * @throws InvalidSettingValueException
+     */
+    public function validate(mixed $value): void;
 
     /**
      * The key of the configuration value.

@@ -2,12 +2,22 @@
 
 namespace Packages\Configuration\Tests\Service;
 
+use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Setting\LineAnnotationSetting;
+use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\BackedEnumNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\UidNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validation;
 
 class ConfigurationFileServiceTest extends TestCase
 {
@@ -16,15 +26,29 @@ class ConfigurationFileServiceTest extends TestCase
         string $yaml,
         array $expectedParsedFile
     ): void {
-        $mockSettingService = $this->createMock(SettingService::class);
-        $mockSettingService->expects($this->atLeast(count($expectedParsedFile)))
-            ->method('validate')
-            ->willReturn(true);
-        $mockSettingService->expects($this->never())
-            ->method('set');
-
         $configurationFileService = new ConfigurationFileService(
-            $mockSettingService
+            new SettingService(
+                [
+                    SettingKey::LINE_ANNOTATION->value => new LineAnnotationSetting(
+                        $this->createMock(DynamoDbClient::class)
+                    ),
+                    SettingKey::PATH_REPLACEMENTS->value => new PathReplacementsSetting(
+                        $this->createMock(DynamoDbClient::class),
+                        new Serializer(
+                            [
+                                new ArrayDenormalizer(),
+                                new UidNormalizer(),
+                                new BackedEnumNormalizer(),
+                                new DateTimeNormalizer(),
+                            ],
+                            [new JsonEncoder()]
+                        ),
+                        Validation::createValidatorBuilder()
+                            ->enableAttributeMapping()
+                            ->getValidator()
+                    )
+                ]
+            )
         );
 
         $parsedFile = $configurationFileService->parseFile($yaml);
@@ -42,19 +66,17 @@ class ConfigurationFileServiceTest extends TestCase
         }
     }
 
-    #[DataProvider('configurationFileDataProvider')]
-    public function testParseAndPersistFile(
-        string $yaml,
-        array $expectedParsedFile
-    ): void {
+    public function testParseAndPersistFile(): void
+    {
         $mockSettingService = $this->createMock(SettingService::class);
-        $mockSettingService->expects($this->atMost(count($expectedParsedFile)))
-            ->method('validate')
-            ->willReturn(true);
-        $mockSettingService->expects($this->atMost(count($expectedParsedFile)))
+        $mockSettingService->expects($this->exactly(2))
+            ->method('deserialize')
+            ->willReturn('');
+        $mockSettingService->expects($this->exactly(2))
             ->method('set')
             ->willReturn(true);
-        $mockSettingService->method('delete')
+        $mockSettingService->expects($this->never())
+            ->method('delete')
             ->willReturn(true);
 
         $configurationFileService = new ConfigurationFileService(
@@ -66,7 +88,15 @@ class ConfigurationFileServiceTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                $yaml
+                <<<YAML
+                line_annotations: false
+
+                path_replacements:
+                    - before: a
+                      after: b
+                    - before: c
+                      after: d
+                YAML
             )
         );
     }
@@ -94,9 +124,7 @@ class ConfigurationFileServiceTest extends TestCase
                 <<<YAML
                 line_annotations: some-other-value
                 YAML,
-                [
-                    'line_annotations' => 'some-other-value'
-                ]
+                []
             ],
             [
                 <<<YAML
@@ -105,9 +133,7 @@ class ConfigurationFileServiceTest extends TestCase
                     - b
                     - c
                 YAML,
-                [
-                    'line_annotations' => ['a', 'b', 'c']
-                ]
+                []
             ],
             [
                 '',
