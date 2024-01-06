@@ -53,29 +53,29 @@ class GithubCommitHistoryServiceTest extends TestCase
                     $this->assertEquals(
                         <<<GQL
                         {
-                          repository(owner: "mock-owner", name: "mock-repository") {
-                            ref(qualifiedName: "mock-ref") {
-                              name
-                              target {
-                                ... on Commit {
-                                  history(
-                                    before: "uploaded-commit {$expectedOffset}",
-                                    last: 100
-                                  ) {
-                                    nodes {
-                                      oid
-                                      associatedPullRequests(last: 1) {
-                                        nodes {
-                                          merged,
-                                          headRefName
+                            repository(owner: "mock-owner", name: "mock-repository") {
+                                ref(qualifiedName: "mock-ref") {
+                                    name
+                                    target {
+                                        ... on Commit {
+                                            history(
+                                                before: "uploaded-commit {$expectedOffset}",
+                                                last: 100
+                                            ) {
+                                                nodes {
+                                                    oid
+                                                    associatedPullRequests(last: 1) {
+                                                        nodes {
+                                                            merged,
+                                                            headRefName
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
-                                      }
                                     }
-                                  }
                                 }
-                              }
                             }
-                          }
                         }
                         GQL,
                         $query
@@ -96,6 +96,115 @@ class GithubCommitHistoryServiceTest extends TestCase
                     ]
                 ]
             ]);
+
+        $service = new GithubCommitHistoryService($githubClient, new NullLogger());
+
+        $this->assertEquals(
+            $expectedCommits,
+            $service->getPrecedingCommits($mockUpload, $page)
+        );
+    }
+
+
+    #[DataProvider('commitDataProvider')]
+    public function testSubsitutingBaseRefWhenGettingPrecedingCommits(
+        int $page,
+        array $response,
+        int $expectedOffset,
+        array $expectedCommits
+    ): void {
+        $githubClient = $this->createMock(GithubAppInstallationClient::class);
+        $gqlClient = $this->createMock(GraphQL::class);
+
+        $mockUpload = $this->createMock(Upload::class);
+        $mockUpload->method('getOwner')
+            ->willReturn('mock-owner');
+        $mockUpload->method('getRepository')
+            ->willReturn('mock-repository');
+        $mockUpload->method('getRef')
+            ->willReturn('mock-ref');
+        $mockUpload->method('getBaseRef')
+            ->willReturn('mock-base-ref');
+        $mockUpload->method('getCommit')
+            ->willReturn('uploaded-commit');
+
+        $githubClient->method('graphql')
+            ->willReturn($gqlClient);
+
+        $gqlClient->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnMap(
+                [
+                    [
+                        <<<GQL
+                        {
+                            repository(owner: "mock-owner", name: "mock-repository") {
+                                refs(refPrefix: "refs/heads/", query: "mock-ref", last: 10) {
+                                    nodes {
+                                        name
+                                    }
+                                }
+                            }
+                        }
+                        GQL,
+                        [
+                            'data' => [
+                                'repository' => [
+                                    'refs' => [
+                                        'nodes' => [
+                                            // No exact match on ref name
+                                            ['name' => ''],
+                                            ['name' => 'other-ref'],
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                    ],
+                    [
+                        <<<GQL
+                        {
+                            repository(owner: "mock-owner", name: "mock-repository") {
+                                ref(qualifiedName: "mock-base-ref") {
+                                    name
+                                    target {
+                                        ... on Commit {
+                                            history(
+                                                before: "uploaded-commit {$expectedOffset}",
+                                                last: 100
+                                            ) {
+                                                nodes {
+                                                    oid
+                                                    associatedPullRequests(last: 1) {
+                                                        nodes {
+                                                            merged,
+                                                            headRefName
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        GQL,
+                        [
+                            'data' => [
+                                'repository' => [
+                                    'ref' => [
+                                        'target' => [
+                                            'history' => [
+                                                'nodes' => $response
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            );
 
         $service = new GithubCommitHistoryService($githubClient, new NullLogger());
 

@@ -12,7 +12,7 @@ use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
 /**
- * @psalm-type Result = array{
+ * @psalm-type History = array{
  *     data: array{
  *          repository: array{
  *                  ref: array{
@@ -33,6 +33,18 @@ use Psr\Log\LoggerInterface;
  *              }
  *          }
  *     }
+ *
+ *  @psalm-type Refs = array{
+ *      data: array{
+ *           repository: array{
+ *                   refs: array{
+ *                       nodes: array{
+ *                           name: string
+ *                       }
+ *                   }
+ *               }
+ *           }
+ *      }
  */
 class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
@@ -53,10 +65,21 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
 
         $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
 
+        // Check if the current ref exists, or whether we can (and should) substitute
+        // the base ref in for lookup
+        $baseRef = $waypoint->getBaseRef();
+        $shouldUseCurrentRef = !$baseRef || $this->doesRefExist(
+            $waypoint->getOwner(),
+            $waypoint->getRepository(),
+            $waypoint->getRef()
+        );
+
         $commits = $this->getHistoricCommits(
             $waypoint->getOwner(),
             $waypoint->getRepository(),
-            $waypoint->getRef(),
+            $shouldUseCurrentRef ?
+                $waypoint->getRef() :
+                $baseRef,
             $waypoint->getCommit(),
             $offset
         );
@@ -89,34 +112,34 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     ): array {
         $commitsPerPage = CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
 
-        /** @var Result $result */
+        /** @var History $result */
         $result = $this->githubClient->graphql()
             ->execute(
                 <<<GQL
                 {
-                  repository(owner: "{$owner}", name: "{$repository}") {
-                    ref(qualifiedName: "{$ref}") {
-                      name
-                      target {
-                        ... on Commit {
-                          history(
-                            before: "{$this->makeCursor($beforeCommit, $offset)}",
-                            last: {$commitsPerPage}
-                          ) {
-                            nodes {
-                              oid
-                              associatedPullRequests(last: 1) {
-                                nodes {
-                                  merged,
-                                  headRefName
+                    repository(owner: "{$owner}", name: "{$repository}") {
+                        ref(qualifiedName: "{$ref}") {
+                            name
+                            target {
+                                ... on Commit {
+                                    history(
+                                        before: "{$this->makeCursor($beforeCommit, $offset)}",
+                                        last: {$commitsPerPage}
+                                    ) {
+                                        nodes {
+                                            oid
+                                            associatedPullRequests(last: 1) {
+                                                nodes {
+                                                    merged,
+                                                    headRefName
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                              }
                             }
-                          }
                         }
-                      }
                     }
-                  }
                 }
                 GQL
             );
@@ -131,6 +154,48 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
             ],
             $result
         );
+    }
+
+    /**
+     * Github won't return any commits if the ref doesn't exist in the repository anymore.
+     *
+     * Generally this would be if a branch (ref) was merged into another branch (the base
+     * ref), so to account for that, a simple lookup is done to see if the ref exists.
+     */
+    private function doesRefExist(
+        string $owner,
+        string $repository,
+        string $ref
+    ): bool {
+        /** @var Refs $result */
+        $result = $this->githubClient->graphql()
+            ->execute(
+                <<<GQL
+                {
+                    repository(owner: "{$owner}", name: "{$repository}") {
+                        refs(refPrefix: "refs/heads/", query: "{$ref}", last: 10) {
+                            nodes {
+                                name
+                            }
+                        }
+                    }
+                }
+                GQL
+            );
+
+        $refs = ($result['data']['repository']['refs']['nodes'] ?? []);
+
+        foreach ($refs as $ref) {
+            if ($ref['name'] === $ref) {
+                // The ref has been found, so we can assume it exists and will
+                // contain the commits we're looking for
+                return true;
+            }
+        }
+
+        // The ref doesnt exist anymore (i.e. deleted), meaning we wont be able to do a
+        // lookup on it directly
+        return false;
     }
 
     /**
