@@ -3,8 +3,8 @@
 namespace App\Tests\Event;
 
 use App\Event\UploadsFinalisedEventProcessor;
-use App\Model\ReportComparison;
-use App\Model\ReportInterface;
+use App\Model\CoverageReportComparison;
+use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoverageComparisonService;
@@ -51,11 +51,11 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
             ->with($this->isInstanceOf(ReportWaypoint::class))
-            ->willReturn($this->createMock(ReportInterface::class));
+            ->willReturn($this->createMock(CoverageReportInterface::class));
 
         $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
         $mockCoverageComparisonService->expects($this->once())
-            ->method('getSuitableComparisonForWaypoint')
+            ->method('getComparisonForCoverageReport')
             ->willReturn(null);
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);
@@ -134,28 +134,28 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             baseRef: 'main'
         );
 
-        $mockHeadReport = $this->createMock(ReportInterface::class);
+        $mockHeadReport = $this->createMock(CoverageReportInterface::class);
         $mockHeadReport->method('getCoveragePercentage')
             ->willReturn(91.0);
 
-        $mockBaseReport = $this->createMock(ReportInterface::class);
+        $mockBaseReport = $this->createMock(CoverageReportInterface::class);
         $mockBaseReport->method('getCoveragePercentage')
             ->willReturn(90.0);
 
-        $reportComparison = new ReportComparison(
+        $reportComparison = new CoverageReportComparison(
             baseReport: $mockBaseReport,
             headReport: $mockHeadReport,
         );
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
-        // The head report should be extracted from the comparison rather than analysed
-        // directly
-        $mockCoverageAnalyserService->expects($this->never())
-            ->method('analyse');
+        $mockCoverageAnalyserService->expects($this->once())
+            ->method('analyse')
+            ->willReturn($mockHeadReport);
 
         $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
         $mockCoverageComparisonService->expects($this->once())
-            ->method('getSuitableComparisonForWaypoint')
+            ->method('getComparisonForCoverageReport')
+            ->with($mockHeadReport, $uploadsFinalised)
             ->willReturn($reportComparison);
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);
@@ -232,7 +232,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             parent: []
         );
 
-        $mockReport = $this->createMock(ReportInterface::class);
+        $mockReport = $this->createMock(CoverageReportInterface::class);
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
         $mockCoverageAnalyserService->expects($this->once())
@@ -242,7 +242,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
         $mockCoverageComparisonService->expects($this->once())
-            ->method('getSuitableComparisonForWaypoint')
+            ->method('getComparisonForCoverageReport')
             ->willReturn(null);
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);

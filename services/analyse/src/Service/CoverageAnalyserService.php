@@ -4,12 +4,10 @@ namespace App\Service;
 
 use App\Enum\QueryParameter;
 use App\Exception\AnalysisException;
-use App\Exception\ComparisonException;
 use App\Exception\QueryException;
+use App\Model\CoverageReport;
+use App\Model\CoverageReportInterface;
 use App\Model\QueryParameterBag;
-use App\Model\Report;
-use App\Model\ReportComparison;
-use App\Model\ReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
@@ -67,7 +65,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             commit: $commit,
             history: fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
             diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint),
-            ingestTimes: fn(ReportWaypoint $waypoint) => $this->getSuccessfulIngestTimes($waypoint),
             pullRequest: $pullRequest
         );
     }
@@ -93,10 +90,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws AnalysisException
      */
-    public function analyse(ReportWaypoint $waypoint): ReportInterface
+    public function analyse(ReportWaypoint $waypoint): CoverageReportInterface
     {
         try {
-            return new Report(
+            return new CoverageReport(
                 waypoint: $waypoint,
                 uploads:  fn() => $this->getUploads($waypoint),
                 totalLines: fn() => $this->getTotalLines($waypoint),
@@ -115,24 +112,6 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $queryException
             );
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function compare(ReportInterface $base, ReportInterface $head): ReportComparison
-    {
-        if (!$base->getWaypoint()->comparable($head->getWaypoint())) {
-            throw ComparisonException::notComparable(
-                $base->getWaypoint(),
-                $head->getWaypoint()
-            );
-        }
-
-        return new ReportComparison(
-            baseReport: $base,
-            headReport: $head
-        );
     }
 
     /**

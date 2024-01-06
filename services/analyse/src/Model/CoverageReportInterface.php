@@ -9,7 +9,7 @@ use App\Query\Result\TotalUploadsQueryResult;
 use DateTimeImmutable;
 use Stringable;
 
-interface ReportInterface extends Stringable
+interface CoverageReportInterface extends Stringable
 {
     /**
      * The point in time (or, more specifically the git tree) that this report
@@ -61,7 +61,7 @@ interface ReportInterface extends Stringable
      *
      * This is calculated as: `(hits + partials) / (hits + partials + misses)`
      */
-    public function getDiffCoveragePercentage(): float|null;
+    public function getDiffCoveragePercentage(bool $rounded = true): float|null;
 
     /**
      * The list of the least covered files which were added to by the diff.

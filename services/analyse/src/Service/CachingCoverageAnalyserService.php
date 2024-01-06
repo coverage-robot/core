@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Model\Report;
+use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
@@ -21,7 +21,7 @@ use WeakMap;
 /**
  * An in-memory caching implementation for caching queries on reports.
  *
- * This sits on top of the lazy report ({@see Report}) and stops us from
+ * This sits on top of the lazy report ({@see CoverageReport}) and stops us from
  * repeatedly fetching the same metrics when building parameters for
  * each of the report's metrics.
  */

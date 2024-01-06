@@ -16,7 +16,7 @@ use DateTimeImmutable;
  * this is entirely opt-in. If the metric has already been calculated, it can
  * be passed in directly.
  */
-class Report implements ReportInterface
+class CoverageReport implements CoverageReportInterface
 {
     /**
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
@@ -115,13 +115,15 @@ class Report implements ReportInterface
         return $this->tagCoverage;
     }
 
-    public function getDiffCoveragePercentage(): float|null
+    public function getDiffCoveragePercentage(bool $rounded = true): float|null
     {
         if (is_callable($this->diffCoveragePercentage)) {
             $this->diffCoveragePercentage = ($this->diffCoveragePercentage)();
         }
 
-        return $this->diffCoveragePercentage;
+        return $this->diffCoveragePercentage !== null && $rounded ?
+            round($this->diffCoveragePercentage, 2) :
+            $this->diffCoveragePercentage;
     }
 
     public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult

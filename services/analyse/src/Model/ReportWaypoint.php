@@ -30,7 +30,6 @@ class ReportWaypoint implements Stringable
         private readonly string $commit,
         private readonly Closure|array $history,
         private Closure|array $diff,
-        private Closure|array $ingestTimes = [],
         private readonly string|int|null $pullRequest = null,
     ) {
     }
@@ -89,18 +88,6 @@ class ReportWaypoint implements Stringable
         }
 
         return $this->diff;
-    }
-
-    /**
-     * @return DateTimeImmutable[]
-     */
-    public function getIngestTimes(): array
-    {
-        if (is_callable($this->ingestTimes)) {
-            $this->ingestTimes = ($this->ingestTimes)($this);
-        }
-
-        return $this->ingestTimes;
     }
 
     public function comparable(ReportWaypoint $other): bool

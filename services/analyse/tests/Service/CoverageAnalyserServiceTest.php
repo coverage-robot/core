@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service;
 
-use App\Model\ReportInterface;
+use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
@@ -66,7 +66,7 @@ class CoverageAnalyserServiceTest extends TestCase
         $coverageReport = $coverageAnalyserService->analyse($waypoint);
 
         $this->assertInstanceOf(
-            ReportInterface::class,
+            CoverageReportInterface::class,
             $coverageReport
         );
         $this->assertEquals(

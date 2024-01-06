@@ -2,8 +2,8 @@
 
 namespace App\Event;
 
-use App\Model\ReportComparison;
-use App\Model\ReportInterface;
+use App\Model\CoverageReportComparison;
+use App\Model\CoverageReportInterface;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\CoverageComparisonService;
@@ -117,8 +117,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     private function queueCoverageReport(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
-        ?ReportComparison $comparison
+        CoverageReportInterface $coverageReport,
+        ?CoverageReportComparison $comparison
     ): bool {
         $annotations = [];
         $validUntil = $coverageReport->getLatestSuccessfulUpload() ??
@@ -169,32 +169,26 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      * Generate a coverage coverage report for the current commit, and optionally (if
      * the event has the required data) a comparison report against the base commit.
      *
-     * @return array{0: ReportInterface, 1: ReportComparison|null}
+     * @return array{0: CoverageReportInterface, 1: CoverageReportComparison|null}
      */
     private function generateCoverageReport(UploadsFinalised $event): array
     {
         $headWaypoint = $this->coverageAnalyserService->getWaypointFromEvent($event);
 
-        $comparison = $this->coverageComparisonService->getSuitableComparisonForWaypoint(
-            $headWaypoint,
+        $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
+
+        $comparison = $this->coverageComparisonService->getComparisonForCoverageReport(
+            $headReport,
             $event
         );
-
-        $headReport = $comparison?->getHeadReport();
-
-        if (!$headReport instanceof ReportInterface) {
-            // We weren't able to come up with a suitable comparison, so just generate
-            // a report of the current commit (the head), and move on.
-            $headReport = $this->coverageAnalyserService->analyse($headWaypoint);
-        }
 
         return [$headReport, $comparison];
     }
 
     private function buildPullRequestMessage(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
-        ?ReportComparison $comparison,
+        CoverageReportInterface $coverageReport,
+        ?CoverageReportComparison $comparison,
         DateTimeImmutable $validUntil
     ): PublishablePullRequestMessage {
         return new PublishablePullRequestMessage(
@@ -224,8 +218,8 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
      */
     public function buildCheckRunMessage(
         UploadsFinalised $uploadsFinalised,
-        ReportInterface $coverageReport,
-        ?ReportComparison $comparison,
+        CoverageReportInterface $coverageReport,
+        ?CoverageReportComparison $comparison,
         DateTimeImmutable $validUntil,
         array $annotations
     ): PublishableCheckRunMessage {
