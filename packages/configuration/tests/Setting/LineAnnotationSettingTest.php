@@ -5,6 +5,7 @@ namespace Packages\Configuration\Tests\Setting;
 use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Setting\LineAnnotationSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -79,10 +80,13 @@ class LineAnnotationSettingTest extends TestCase
             $this->createMock(DynamoDbClient::class)
         );
 
-        $this->assertEquals(
-            $expectedValid,
-            $lineAnnotationSetting->validate($settingValue)
-        );
+        if (!$expectedValid) {
+            $this->expectException(InvalidSettingValueException::class);
+        } else {
+            $this->expectNotToPerformAssertions();
+        }
+
+        $lineAnnotationSetting->validate($settingValue);
     }
 
     public function testSettingKey(): void

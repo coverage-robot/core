@@ -86,9 +86,16 @@ class LineAnnotationSetting implements SettingInterface
      * @throws InvalidSettingValueException
      */
     #[Override]
-    public function deserialize(mixed $value): bool
+    public function deserialize(mixed $value): mixed
     {
-        return (bool)$value;
+        /**
+         * Theres no particular deserialization required for line annotations. At
+         * this point, its not yet confirmed if the value is a boolean, but that will
+         * be handled at the validation step.
+         *
+         * @see self::validate()
+         */
+        return $value;
     }
 
     #[Override]

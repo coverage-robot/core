@@ -79,8 +79,13 @@ class SettingService
         SettingKey $key,
         mixed $value
     ): mixed {
-        return $this->getSetting($key)
-            ->deserialize($value);
+        $setting = $this->getSetting($key);
+
+        $value = $setting->deserialize($value);
+
+        $setting->validate($value);
+
+        return $value;
     }
 
     /**

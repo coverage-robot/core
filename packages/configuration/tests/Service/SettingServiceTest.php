@@ -3,6 +3,7 @@
 namespace Packages\Configuration\Tests\Service;
 
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Setting\SettingInterface;
 use Packages\Contracts\Provider\Provider;
@@ -44,12 +45,24 @@ class SettingServiceTest extends TestCase
     }
 
     #[DataProvider('trueFalseDataProvider')]
-    public function testValidatingValue(bool $isValidateSuccessful): void
+    public function testDeserializingValue(bool $isValidateSuccessful): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
         $mockSetting->expects($this->once())
-            ->method('validate')
-            ->willReturn($isValidateSuccessful);
+            ->method('deserialize')
+            ->with('value')
+            ->willReturn('value');
+
+        if (!$isValidateSuccessful) {
+            $mockSetting->expects($this->once())
+                ->method('validate')
+                ->willThrowException(new InvalidSettingValueException());
+
+            $this->expectException(InvalidSettingValueException::class);
+        } else {
+            $mockSetting->expects($this->once())
+                ->method('validate');
+        }
 
         $settingService = new SettingService(
             [
@@ -57,13 +70,17 @@ class SettingServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            $isValidateSuccessful,
-            $settingService->validate(
-                SettingKey::LINE_ANNOTATION,
-                'value'
-            )
+        $value = $settingService->deserialize(
+            SettingKey::LINE_ANNOTATION,
+            'value'
         );
+
+        if ($isValidateSuccessful) {
+            $this->assertEquals(
+                'value',
+                $value
+            );
+        }
     }
 
     #[DataProvider('settingValueDataProvider')]
