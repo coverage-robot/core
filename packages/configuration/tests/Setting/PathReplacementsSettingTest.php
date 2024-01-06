@@ -2,23 +2,122 @@
 
 namespace Packages\Configuration\Tests\Setting;
 
+use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Setting\PathReplacementsSetting;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PathReplacementsSettingTest extends TestCase
 {
+    /**
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function testSettingPathReplacements(): void
+    {
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('setSettingInStore')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                SettingKey::PATH_REPLACEMENTS,
+                SettingValueType::LIST,
+                [
+                    new AttributeValue([
+                        'S' => '{"before":"path","after":"replacement"}'
+                    ])
+                ]
+            )
+            ->willReturn(true);
+        $pathReplacementsSetting = new PathReplacementsSetting(
+            $mockDynamoDbClient,
+            new Serializer(
+                [
+                    new ArrayDenormalizer(),
+                    new ObjectNormalizer(
+                        classMetadataFactory: new ClassMetadataFactory(
+                            new AttributeLoader()
+                        ),
+                        nameConverter: new MetadataAwareNameConverter(
+                            new ClassMetadataFactory(
+                                new AttributeLoader()
+                            ),
+                            new CamelCaseToSnakeCaseNameConverter()
+                        ),
+                    ),
+                ],
+                [new JsonEncoder()]
+            ),
+            $this->createMock(ValidatorInterface::class)
+        );
+
+        $this->assertTrue(
+            $pathReplacementsSetting->set(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                [
+                    new PathReplacement(
+                        'path',
+                        'replacement'
+                    )
+                ]
+            )
+        );
+    }
+
+    public function testDeletingPathReplacements(): void
+    {
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('deleteSettingFromStore')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                SettingKey::PATH_REPLACEMENTS
+            )
+            ->willReturn(true);
+        $pathReplacementsSetting = new PathReplacementsSetting(
+            $mockDynamoDbClient,
+            $this->createMock(Serializer::class),
+            $this->createMock(ValidatorInterface::class)
+        );
+
+        $this->assertTrue(
+            $pathReplacementsSetting->delete(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository'
+            )
+        );
+    }
+
     #[DataProvider('validatingValuesDataProvider')]
     public function testValidatingPathReplacementsValue(mixed $settingValue, bool $expectedValid): void
     {
-        $lineAnnotationSetting = new PathReplacementsSetting(
+        $pathReplacementsSetting = new PathReplacementsSetting(
             $this->createMock(DynamoDbClient::class),
             $this->createMock(Serializer::class),
             Validation::createValidatorBuilder()
@@ -32,7 +131,83 @@ class PathReplacementsSettingTest extends TestCase
             $this->expectNotToPerformAssertions();
         }
 
-        $lineAnnotationSetting->validate($settingValue);
+        $pathReplacementsSetting->validate($settingValue);
+    }
+
+    public function testDeserializingPathReplacements(): void
+    {
+        $pathReplacementsSetting = new PathReplacementsSetting(
+            $this->createMock(DynamoDbClient::class),
+            new Serializer(
+                [
+                    new ArrayDenormalizer(),
+                    new ObjectNormalizer(
+                        classMetadataFactory: new ClassMetadataFactory(
+                            new AttributeLoader()
+                        ),
+                        nameConverter: new MetadataAwareNameConverter(
+                            new ClassMetadataFactory(
+                                new AttributeLoader()
+                            ),
+                            new CamelCaseToSnakeCaseNameConverter()
+                        ),
+                    ),
+                ],
+                [new JsonEncoder()]
+            ),
+            Validation::createValidatorBuilder()
+                ->enableAttributeMapping()
+                ->getValidator()
+        );
+
+        $this->assertEquals(
+            [
+                new PathReplacement(
+                    'path-1',
+                    'replacement-1'
+                ),
+                new PathReplacement(
+                    'path-2',
+                    'replacement-2'
+                ),
+                new PathReplacement(
+                    'path-3',
+                    'replacement-3'
+                ),
+                new PathReplacement(
+                    'path-4',
+                    'replacement-4'
+                )
+            ],
+            $pathReplacementsSetting->deserialize(
+                [
+                    new AttributeValue([
+                        'S' => json_encode(
+                            [
+                                'before' => 'path-1',
+                                'after' => 'replacement-1'
+                            ]
+                        )
+                    ]),
+                    new AttributeValue([
+                        'S' => json_encode(
+                            [
+                                'before' => 'path-2',
+                                'after' => 'replacement-2'
+                            ]
+                        )
+                    ]),
+                    [
+                        'before' => 'path-3',
+                        'after' => 'replacement-3'
+                    ],
+                    new PathReplacement(
+                        'path-4',
+                        'replacement-4'
+                    )
+                ]
+            )
+        );
     }
 
     public function testSettingKey(): void

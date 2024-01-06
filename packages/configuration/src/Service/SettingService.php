@@ -47,13 +47,16 @@ class SettingService
         SettingKey $key,
         mixed $value
     ): bool {
-        return $this->getSetting($key)
-            ->set(
-                $provider,
-                $owner,
-                $repository,
-                $value
-            );
+        $setting = $this->getSetting($key);
+
+        $setting->validate($value);
+
+        return $setting->set(
+            $provider,
+            $owner,
+            $repository,
+            $value
+        );
     }
 
     public function delete(

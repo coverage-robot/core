@@ -56,8 +56,6 @@ class LineAnnotationSetting implements SettingInterface
         string $repository,
         mixed $value
     ): bool {
-        $this->validate($value);
-
         return $this->dynamoDbClient->setSettingInStore(
             $provider,
             $owner,
