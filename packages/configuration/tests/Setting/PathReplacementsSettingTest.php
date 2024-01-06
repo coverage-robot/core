@@ -45,30 +45,21 @@ class PathReplacementsSettingTest extends TestCase
                 SettingValueType::LIST,
                 [
                     new AttributeValue([
-                        'S' => '{"before":"path","after":"replacement"}'
+                        'M' => [
+                            'before' => new AttributeValue([
+                                'S' => 'path'
+                            ]),
+                            'after' => new AttributeValue([
+                                'S' => 'replacement'
+                            ])
+                        ]
                     ])
                 ]
             )
             ->willReturn(true);
         $pathReplacementsSetting = new PathReplacementsSetting(
             $mockDynamoDbClient,
-            new Serializer(
-                [
-                    new ArrayDenormalizer(),
-                    new ObjectNormalizer(
-                        classMetadataFactory: new ClassMetadataFactory(
-                            new AttributeLoader()
-                        ),
-                        nameConverter: new MetadataAwareNameConverter(
-                            new ClassMetadataFactory(
-                                new AttributeLoader()
-                            ),
-                            new CamelCaseToSnakeCaseNameConverter()
-                        ),
-                    ),
-                ],
-                [new JsonEncoder()]
-            ),
+            $this->createMock(Serializer::class),
             $this->createMock(ValidatorInterface::class)
         );
 
@@ -106,32 +97,30 @@ class PathReplacementsSettingTest extends TestCase
             ->willReturn(
                 [
                     new AttributeValue([
-                        'S' => '{"before":"path","after":"replacement"}'
+                        'M' => [
+                            'before' => new AttributeValue([
+                                'S' => 'path'
+                            ]),
+                            'after' => new AttributeValue([
+                                'S' => 'replacement'
+                            ])
+                        ]
                     ]),
                     new AttributeValue([
-                        'S' => '{"before":"path","after":"replacement"}'
+                        'M' => [
+                            'before' => new AttributeValue([
+                                'S' => 'path'
+                            ]),
+                            'after' => new AttributeValue([
+                                'S' => 'replacement'
+                            ])
+                        ]
                     ])
                 ]
             );
         $pathReplacementsSetting = new PathReplacementsSetting(
             $mockDynamoDbClient,
-            new Serializer(
-                [
-                    new ArrayDenormalizer(),
-                    new ObjectNormalizer(
-                        classMetadataFactory: new ClassMetadataFactory(
-                            new AttributeLoader()
-                        ),
-                        nameConverter: new MetadataAwareNameConverter(
-                            new ClassMetadataFactory(
-                                new AttributeLoader()
-                            ),
-                            new CamelCaseToSnakeCaseNameConverter()
-                        ),
-                    ),
-                ],
-                [new JsonEncoder()]
-            ),
+            $this->createMock(Serializer::class),
             $this->createMock(ValidatorInterface::class)
         );
 
@@ -249,20 +238,24 @@ class PathReplacementsSettingTest extends TestCase
             $pathReplacementsSetting->deserialize(
                 [
                     new AttributeValue([
-                        'S' => json_encode(
-                            [
-                                'before' => 'path-1',
-                                'after' => 'replacement-1'
-                            ]
-                        )
+                        'M' => [
+                            'before' => new AttributeValue([
+                                'S' => 'path-1'
+                            ]),
+                            'after' => new AttributeValue([
+                                'S' => 'replacement-1'
+                            ])
+                        ]
                     ]),
                     new AttributeValue([
-                        'S' => json_encode(
-                            [
-                                'before' => 'path-2',
-                                'after' => 'replacement-2'
-                            ]
-                        )
+                        'M' => [
+                            'before' => new AttributeValue([
+                                'S' => 'path-2'
+                            ]),
+                            'after' => new AttributeValue([
+                                'S' => 'replacement-2'
+                            ])
+                        ]
                     ]),
                     [
                         'before' => 'path-3',

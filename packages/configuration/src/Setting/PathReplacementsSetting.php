@@ -114,10 +114,11 @@ class PathReplacementsSetting implements SettingInterface
             }
 
             if ($item instanceof AttributeValue) {
-                $pathReplacements[] = $this->serializer->deserialize(
-                    $item->getS(),
-                    PathReplacement::class,
-                    'json'
+                $map = $item->getM();
+
+                $pathReplacements[] = new PathReplacement(
+                    $map['before']->getS(),
+                    $map['after']->getS()
                 );
             } elseif (is_array($item)) {
                 $pathReplacements[] = $this->serializer->denormalize(
@@ -181,7 +182,18 @@ class PathReplacementsSetting implements SettingInterface
         foreach ($pathReplacements as $pathReplacement) {
             $attributeValues[] = new AttributeValue(
                 [
-                    'S' => $this->serializer->serialize($pathReplacement, 'json'),
+                    'M' => [
+                        'before' => new AttributeValue(
+                            [
+                                'S' => $pathReplacement->getBefore(),
+                            ]
+                        ),
+                        'after' => new AttributeValue(
+                            [
+                                'S' => $pathReplacement->getAfter(),
+                            ]
+                        ),
+                    ],
                 ]
             );
         }
