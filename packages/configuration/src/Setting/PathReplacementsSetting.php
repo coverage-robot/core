@@ -48,9 +48,6 @@ class PathReplacementsSetting implements SettingInterface
 
             $this->validate($value);
 
-            /**
-             * @var PathReplacement[] $value
-             */
             return $value;
         } catch (
             ExceptionInterface |
@@ -143,6 +140,12 @@ class PathReplacementsSetting implements SettingInterface
     #[Override]
     public function validate(mixed $value): void
     {
+        if (!is_array($value)) {
+            throw new InvalidSettingValueException(
+                "Path replacements must be an array."
+            );
+        }
+
         $violations = $this->validator->validate(
             $value,
             [
@@ -153,7 +156,17 @@ class PathReplacementsSetting implements SettingInterface
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException("Invalid value for setting: {$violations}");
+            throw new InvalidSettingValueException(
+                "Invalid value for setting: {$violations}"
+            );
+        }
+
+        $violations = $this->validator->validate($value);
+
+        if ($violations->count() > 0) {
+            throw new InvalidSettingValueException(
+                "Invalid path replacement value for setting: {$violations}"
+            );
         }
     }
 
