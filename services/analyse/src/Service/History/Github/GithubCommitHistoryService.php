@@ -183,10 +183,10 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
                 GQL
             );
 
-        $refs = ($result['data']['repository']['refs']['nodes'] ?? []);
+        $matchedRefs = ($result['data']['repository']['refs']['nodes'] ?? []);
 
-        foreach ($refs as $ref) {
-            if ($ref['name'] === $ref) {
+        foreach ($matchedRefs as $matchedRef) {
+            if ($matchedRef['name'] === $ref) {
                 // The ref has been found, so we can assume it exists and will
                 // contain the commits we're looking for
                 return true;
