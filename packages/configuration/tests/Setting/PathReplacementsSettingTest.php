@@ -299,6 +299,10 @@ class PathReplacementsSettingTest extends TestCase
                     new PathReplacement(
                         'path',
                         ''
+                    ),
+                    new PathReplacement(
+                        'path',
+                        null
                     )
                 ],
                 true
