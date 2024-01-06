@@ -180,19 +180,16 @@ class PathReplacementsSetting implements SettingInterface
         $attributeValues = [];
 
         foreach ($pathReplacements as $pathReplacement) {
+            $before = ['S' => $pathReplacement->getBefore()];
+            $after = $pathReplacement->getAfter() === null ?
+                ['NULL' => true] :
+                ['S' => $pathReplacement->getAfter()];
+
             $attributeValues[] = new AttributeValue(
                 [
                     'M' => [
-                        'before' => new AttributeValue(
-                            [
-                                'S' => $pathReplacement->getBefore(),
-                            ]
-                        ),
-                        'after' => new AttributeValue(
-                            [
-                                'S' => $pathReplacement->getAfter(),
-                            ]
-                        ),
+                        'before' => new AttributeValue($before),
+                        'after' => new AttributeValue($after),
                     ],
                 ]
             );

@@ -9,7 +9,7 @@ class PathReplacement
     public function __construct(
         #[Assert\NotBlank]
         private string $before,
-        private string $after,
+        private ?string $after,
     ) {
     }
 
@@ -18,7 +18,7 @@ class PathReplacement
         return $this->before;
     }
 
-    public function getAfter(): string
+    public function getAfter(): ?string
     {
         return $this->after;
     }
