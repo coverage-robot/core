@@ -11,7 +11,8 @@
         "async-aws/dynamo-db": "^3.0",
         "coverage-robot/contracts": "^1.0",
         "psr/log": "^3.0",
-        "symfony/yaml": "^7.0"
+        "symfony/yaml": "^7.0",
+        "symfony/validator": "^7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5"

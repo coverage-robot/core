@@ -11,7 +11,7 @@ use AsyncAws\DynamoDb\Input\QueryInput;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\SettingNotFoundException;
-use Packages\Configuration\Exception\SettingRetrievalFailed;
+use Packages\Configuration\Exception\SettingRetrievalFailedException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -129,9 +129,9 @@ class DynamoDbClient
                 ]
             );
 
-            throw new SettingRetrievalFailed(
+            throw new SettingRetrievalFailedException(
                 sprintf(
-                    'Failed to retrieve setting falue for %s',
+                    'Failed to retrieve setting value for %s',
                     $key->value
                 ),
                 0,

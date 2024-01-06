@@ -3,6 +3,7 @@
 namespace Packages\Configuration\Service;
 
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Yaml\Yaml;
 use WeakMap;
@@ -33,16 +34,16 @@ class ConfigurationFileService
                 continue;
             }
 
-            $isValid = $this->settingService->validate(
-                $settingKey,
-                $settings[$settingKey->value]
-            );
+            try {
+                $settingValue = $this->settingService->deserialize(
+                    $settingKey,
+                    $settings[$settingKey->value]
+                );
 
-            if (!$isValid) {
+                $parsedSettings[$settingKey] = $settingValue;
+            } catch (InvalidSettingValueException) {
                 continue;
             }
-
-            $parsedSettings[$settingKey] = $settings[$settingKey->value];
         }
 
         return $parsedSettings;

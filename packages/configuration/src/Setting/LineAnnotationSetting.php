@@ -6,8 +6,9 @@ use Override;
 use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
+use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Exception\SettingNotFoundException;
-use Packages\Configuration\Exception\SettingRetrievalFailed;
+use Packages\Configuration\Exception\SettingRetrievalFailedException;
 use Packages\Contracts\Provider\Provider;
 
 class LineAnnotationSetting implements SettingInterface
@@ -31,19 +32,23 @@ class LineAnnotationSetting implements SettingInterface
                 SettingValueType::BOOLEAN
             );
 
-            if (!$this->validate($value)) {
-                // The store has an invalid value, so return the default.
-                return self::DEFAULT_VALUE;
-            }
+            $this->validate($value);
 
             return $value;
-        } catch (SettingNotFoundException | SettingRetrievalFailed) {
+        } catch (
+            SettingNotFoundException |
+            SettingRetrievalFailedException |
+            InvalidSettingValueException
+        ) {
             // Either the setting was not set (entirely possible) or the retrieval failed,
             // in either case, fail safe and return the default value.
             return self::DEFAULT_VALUE;
         }
     }
 
+    /**
+     * @param bool $value
+     */
     #[Override]
     public function set(
         Provider $provider,
@@ -51,9 +56,7 @@ class LineAnnotationSetting implements SettingInterface
         string $repository,
         mixed $value
     ): bool {
-        if (!$this->validate($value)) {
-            return false;
-        }
+        $this->validate($value);
 
         return $this->dynamoDbClient->setSettingInStore(
             $provider,
@@ -79,10 +82,23 @@ class LineAnnotationSetting implements SettingInterface
         );
     }
 
+    /**
+     * @throws InvalidSettingValueException
+     */
     #[Override]
-    public function validate(mixed $value): bool
+    public function deserialize(mixed $value): bool
     {
-        return is_bool($value);
+        return (bool)$value;
+    }
+
+    #[Override]
+    public function validate(mixed $value): void
+    {
+        if (!is_bool($value)) {
+            throw new InvalidSettingValueException(
+                'The value for the line annotation setting must be a boolean.'
+            );
+        }
     }
 
     #[Override]
