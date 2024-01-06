@@ -115,13 +115,13 @@ class CoverageReport implements CoverageReportInterface
         return $this->tagCoverage;
     }
 
-    public function getDiffCoveragePercentage(): float|null
+    public function getDiffCoveragePercentage(bool $rounded = true): float|null
     {
         if (is_callable($this->diffCoveragePercentage)) {
             $this->diffCoveragePercentage = ($this->diffCoveragePercentage)();
         }
 
-        return $this->diffCoveragePercentage;
+        return $rounded ? round($this->diffCoveragePercentage, 2) : $this->diffCoveragePercentage;
     }
 
     public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult
