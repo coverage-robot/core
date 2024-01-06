@@ -138,10 +138,7 @@ class CoverageComparisonService
             $history = $headWaypoint->getHistory($page);
 
             foreach ($history as $commit) {
-                if (
-                    $commit['ref'] !== $headWaypoint->getRef() ||
-                    $commit['merged']
-                ) {
+                if ($commit['ref'] !== $headWaypoint->getRef()) {
                     $this->coverageComparisonServiceLogger->info(
                         sprintf(
                             'Extracted %s from history to use as the base commit for comparison to %s',
@@ -154,7 +151,7 @@ class CoverageComparisonService
                         $headWaypoint->getProvider(),
                         $headWaypoint->getOwner(),
                         $headWaypoint->getRepository(),
-                        $baseRef,
+                        $commit['ref'] ?? $baseRef,
                         $commit['commit'],
                     );
                 }
