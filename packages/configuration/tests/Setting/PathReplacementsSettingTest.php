@@ -87,6 +87,73 @@ class PathReplacementsSettingTest extends TestCase
         );
     }
 
+    /**
+     * @throws ExceptionInterface
+     * @throws Exception
+     */
+    public function testGettingPathReplacements(): void
+    {
+        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getSettingFromStore')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                SettingKey::PATH_REPLACEMENTS,
+                SettingValueType::LIST
+            )
+            ->willReturn(
+                [
+                    new AttributeValue([
+                        'S' => '{"before":"path","after":"replacement"}'
+                    ]),
+                    new AttributeValue([
+                        'S' => '{"before":"path","after":"replacement"}'
+                    ])
+                ]
+            );
+        $pathReplacementsSetting = new PathReplacementsSetting(
+            $mockDynamoDbClient,
+            new Serializer(
+                [
+                    new ArrayDenormalizer(),
+                    new ObjectNormalizer(
+                        classMetadataFactory: new ClassMetadataFactory(
+                            new AttributeLoader()
+                        ),
+                        nameConverter: new MetadataAwareNameConverter(
+                            new ClassMetadataFactory(
+                                new AttributeLoader()
+                            ),
+                            new CamelCaseToSnakeCaseNameConverter()
+                        ),
+                    ),
+                ],
+                [new JsonEncoder()]
+            ),
+            $this->createMock(ValidatorInterface::class)
+        );
+
+        $this->assertEquals(
+            [
+                new PathReplacement(
+                    'path',
+                    'replacement'
+                ),
+                new PathReplacement(
+                    'path',
+                    'replacement'
+                )
+            ],
+            $pathReplacementsSetting->get(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository'
+            )
+        );
+    }
+
     public function testDeletingPathReplacements(): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
