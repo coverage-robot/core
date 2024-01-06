@@ -61,7 +61,7 @@ interface CoverageReportInterface extends Stringable
      *
      * This is calculated as: `(hits + partials) / (hits + partials + misses)`
      */
-    public function getDiffCoveragePercentage(): float|null;
+    public function getDiffCoveragePercentage(bool $rounded = true): float|null;
 
     /**
      * The list of the least covered files which were added to by the diff.
