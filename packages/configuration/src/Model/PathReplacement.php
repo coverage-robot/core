@@ -9,7 +9,7 @@ class PathReplacement
     public function __construct(
         #[Assert\NotBlank]
         private string $before,
-        private ?string $after,
+        private string $after,
     ) {
     }
 
