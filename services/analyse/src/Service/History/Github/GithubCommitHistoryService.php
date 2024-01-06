@@ -102,7 +102,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
             ->execute(
                 <<<GQL
                 {
-                    repository(owner: "{$owner}", name: "$repository") {
+                    repository(owner: "{$owner}", name: "{$repository}") {
                         object(oid: "{$beforeCommit}") {
                             ... on Commit {
                                 history(
