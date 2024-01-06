@@ -53,29 +53,26 @@ class GithubCommitHistoryServiceTest extends TestCase
                     $this->assertEquals(
                         <<<GQL
                         {
-                          repository(owner: "mock-owner", name: "mock-repository") {
-                            ref(qualifiedName: "mock-ref") {
-                              name
-                              target {
-                                ... on Commit {
-                                  history(
-                                    before: "uploaded-commit {$expectedOffset}",
-                                    last: 100
-                                  ) {
-                                    nodes {
-                                      oid
-                                      associatedPullRequests(last: 1) {
-                                        nodes {
-                                          merged,
-                                          headRefName
+                            repository(owner: "mock-owner", name: "mock-repository") {
+                                object(oid: "uploaded-commit") {
+                                    ... on Commit {
+                                        history(
+                                            before: "uploaded-commit {$expectedOffset}",
+                                            last: 100
+                                        ) {
+                                            nodes {
+                                                oid
+                                                associatedPullRequests(last: 1) {
+                                                    nodes {
+                                                        merged,
+                                                        headRefName
+                                                    }
+                                                }
+                                            }
                                         }
-                                      }
                                     }
-                                  }
                                 }
-                              }
                             }
-                          }
                         }
                         GQL,
                         $query
@@ -86,11 +83,9 @@ class GithubCommitHistoryServiceTest extends TestCase
             ->willReturn([
                 'data' => [
                     'repository' => [
-                        'ref' => [
-                            'target' => [
-                                'history' => [
-                                    'nodes' => $response
-                                ]
+                        'object' => [
+                            'history' => [
+                                'nodes' => $response
                             ]
                         ]
                     ]

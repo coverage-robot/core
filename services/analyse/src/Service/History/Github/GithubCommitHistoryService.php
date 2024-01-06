@@ -12,27 +12,37 @@ use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
 /**
- * @psalm-type Result = array{
+ * @psalm-type History = array{
  *     data: array{
  *          repository: array{
- *                  ref: array{
- *                      target: array{
- *                          history: array{
- *                              nodes: array{
- *                                  oid: string,
- *                                  associatedPullRequests: array{
- *                                      nodes: array{
- *                                          merged: bool,
- *                                          headRefName: string
- *                                      }[]
- *                                  }
- *                              }[]
- *                          }
- *                      }
- *                  }
+*                  object: array{
+*                       history: array{
+*                           nodes: array{
+*                               oid: string,
+*                               associatedPullRequests: array{
+*                                   nodes: array{
+*                                       merged: bool,
+*                                       headRefName: string
+*                                   }[]
+*                               }
+*                           }[]
+*                       }
+*                   }
  *              }
  *          }
  *     }
+ *
+ *  @psalm-type Refs = array{
+ *      data: array{
+ *           repository: array{
+ *                   refs: array{
+ *                       nodes: array{
+ *                           name: string
+ *                       }
+ *                   }
+ *               }
+ *           }
+ *      }
  */
 class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
@@ -56,7 +66,6 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         $commits = $this->getHistoricCommits(
             $waypoint->getOwner(),
             $waypoint->getRepository(),
-            $waypoint->getRef(),
             $waypoint->getCommit(),
             $offset
         );
@@ -83,45 +92,41 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
     private function getHistoricCommits(
         string $owner,
         string $repository,
-        string $ref,
         string $beforeCommit,
         int $offset
     ): array {
         $commitsPerPage = CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
 
-        /** @var Result $result */
+        /** @var History $result */
         $result = $this->githubClient->graphql()
             ->execute(
                 <<<GQL
                 {
-                  repository(owner: "{$owner}", name: "{$repository}") {
-                    ref(qualifiedName: "{$ref}") {
-                      name
-                      target {
-                        ... on Commit {
-                          history(
-                            before: "{$this->makeCursor($beforeCommit, $offset)}",
-                            last: {$commitsPerPage}
-                          ) {
-                            nodes {
-                              oid
-                              associatedPullRequests(last: 1) {
-                                nodes {
-                                  merged,
-                                  headRefName
+                    repository(owner: "{$owner}", name: "{$repository}") {
+                        object(oid: "{$beforeCommit}") {
+                            ... on Commit {
+                                history(
+                                    before: "{$this->makeCursor($beforeCommit, $offset)}",
+                                    last: {$commitsPerPage}
+                                ) {
+                                    nodes {
+                                        oid
+                                        associatedPullRequests(last: 1) {
+                                            nodes {
+                                                merged,
+                                                headRefName
+                                            }
+                                        }
+                                    }
                                 }
-                              }
                             }
-                          }
                         }
-                      }
                     }
-                  }
                 }
                 GQL
             );
 
-        $result = $result['data']['repository']['ref']['target']['history']['nodes'] ?? [];
+        $result = $result['data']['repository']['object']['history']['nodes'] ?? [];
 
         return array_map(
             static fn(array $commit): array => [

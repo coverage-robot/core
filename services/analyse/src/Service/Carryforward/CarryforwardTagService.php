@@ -94,7 +94,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
         if ($tagsNotSeen !== []) {
             $this->carryforwardLogger->warning(
                 sprintf(
-                    'Could not find any commits to carry forward tags %s from for %s',
+                    'Could not find any commits to carry forward %s tags from for %s',
                     count($tagsNotSeen),
                     (string)$waypoint
                 ),
