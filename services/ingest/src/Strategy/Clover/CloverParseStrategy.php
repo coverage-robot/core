@@ -12,6 +12,7 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
 use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use ValueError;
 use XMLReader;
@@ -89,8 +90,13 @@ class CloverParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Coverage
-    {
+    public function parse(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $projectRoot,
+        string $content
+    ): Coverage {
         libxml_use_internal_errors(true);
 
         if (!$this->supports($content)) {
@@ -112,7 +118,13 @@ class CloverParseStrategy implements ParseStrategyInterface
                 continue;
             }
 
-            $coverage = $this->handleNode($coverage, $reader);
+            $coverage = $this->handleNode(
+                $provider,
+                $owner,
+                $repository,
+                $coverage,
+                $reader
+            );
         }
 
         return $coverage;
@@ -131,8 +143,13 @@ class CloverParseStrategy implements ParseStrategyInterface
         throw new ParseException('Unable to build XML reader.');
     }
 
-    private function handleNode(Coverage $coverage, XMLReader $reader): Coverage
-    {
+    private function handleNode(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        Coverage $coverage,
+        XMLReader $reader
+    ): Coverage {
         switch ($reader->name) {
             case self::PROJECT:
                 $timestamp = $reader->getAttribute('timestamp');
@@ -149,7 +166,13 @@ class CloverParseStrategy implements ParseStrategyInterface
                     break;
                 }
 
-                $path = $this->pathFixingService->removePathRoot($path, $coverage->getRoot());
+                $path = $this->pathFixingService->fixPath(
+                    $provider,
+                    $owner,
+                    $repository,
+                    $path,
+                    $coverage->getRoot()
+                );
 
                 $coverage->addFile(new File($path));
                 break;

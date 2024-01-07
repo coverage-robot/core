@@ -19,6 +19,7 @@ use Bref\Event\S3\S3Record;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventSource;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
@@ -74,8 +75,12 @@ class EventHandler extends S3Handler
                 );
 
                 $coverage = $this->parseFile(
+                    $upload->getProvider(),
+                    $upload->getOwner(),
+                    $upload->getRepository(),
                     $upload->getProjectRoot(),
-                    $source->getBody()->getContentAsString()
+                    $source->getBody()
+                        ->getContentAsString()
                 );
 
                 if (count($coverage) > 0) {
@@ -247,9 +252,17 @@ class EventHandler extends S3Handler
      *
      * @throws ParseException
      */
-    private function parseFile(string $projectRoot, string $content): Coverage
-    {
+    private function parseFile(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $projectRoot,
+        string $content
+    ): Coverage {
         return $this->coverageFileParserService->parse(
+            $provider,
+            $owner,
+            $repository,
             $projectRoot,
             $content
         );

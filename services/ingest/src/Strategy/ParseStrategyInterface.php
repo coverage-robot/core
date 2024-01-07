@@ -3,6 +3,7 @@
 namespace App\Strategy;
 
 use App\Model\Coverage;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.parser_strategy')]
@@ -25,5 +26,11 @@ interface ParseStrategyInterface
      * strategy.
      *
      */
-    public function parse(string $projectRoot, string $content): Coverage;
+    public function parse(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $projectRoot,
+        string $content
+    ): Coverage;
 }

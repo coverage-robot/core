@@ -80,7 +80,7 @@ BRF:2
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/config/routes.tsx
+SF:mock/path/to/replace/src/config/routes.tsx
 FN:5,(anonymous_7)
 FN:5,(anonymous_8)
 FN:6,(anonymous_9)
@@ -114,7 +114,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:mock/project/root/src/config/storyblok.d.ts
+SF:mock/path/to/replace/src/config/storyblok.d.ts
 FNF:0
 FNH:0
 LF:0
@@ -123,7 +123,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/AboutPage.tsx
+SF:mock/path/to/replace/src/features/about/AboutPage.tsx
 FN:8,(anonymous_1)
 FNF:1
 FNH:0
@@ -143,7 +143,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/ContactSection.tsx
+SF:mock/path/to/replace/src/features/about/components/ContactSection.tsx
 FN:8,(anonymous_1)
 FNF:1
 FNH:0
@@ -161,7 +161,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/HeadingSection.tsx
+SF:mock/path/to/replace/src/features/about/components/HeadingSection.tsx
 FN:5,(anonymous_1)
 FNF:1
 FNH:0
@@ -177,7 +177,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/LiveStatsSection.tsx
+SF:mock/path/to/replace/src/features/about/components/LiveStatsSection.tsx
 FN:8,(anonymous_1)
 FNF:1
 FNH:0
@@ -196,7 +196,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/MapSection.tsx
+SF:mock/path/to/replace/src/features/about/components/MapSection.tsx
 FN:10,(anonymous_1)
 FNF:1
 FNH:0
@@ -217,7 +217,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/Tile/ErrorCountTile.tsx
+SF:mock/path/to/replace/src/features/about/components/Tile/ErrorCountTile.tsx
 FN:5,(anonymous_1)
 FNF:1
 FNH:1
@@ -246,7 +246,7 @@ BRF:7
 BRH:6
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/Tile/LastReleaseTile.tsx
+SF:mock/path/to/replace/src/features/about/components/Tile/LastReleaseTile.tsx
 FN:6,(anonymous_1)
 FNF:1
 FNH:1
@@ -279,7 +279,7 @@ BRF:8
 BRH:7
 end_of_record
 TN:
-SF:mock/project/root/src/features/about/components/Tile/ReleasesCountTile.tsx
+SF:mock/path/to/replace/src/features/about/components/Tile/ReleasesCountTile.tsx
 FN:5,(anonymous_1)
 FNF:1
 FNH:1
@@ -308,7 +308,7 @@ BRF:7
 BRH:6
 end_of_record
 TN:
-SF:mock/project/root/src/features/articles/library/ArticlesPage.tsx
+SF:mock/path/to/replace/src/features/articles/library/ArticlesPage.tsx
 FN:6,(anonymous_1)
 FNF:1
 FNH:0
@@ -326,7 +326,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/articles/library/components/ArticlesSection.tsx
+SF:mock/path/to/replace/src/features/articles/library/components/ArticlesSection.tsx
 FN:8,(anonymous_1)
 FN:27,(anonymous_2)
 FNF:2
@@ -542,7 +542,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/home/components/CoverSection.tsx
+SF:mock/path/to/replace/src/features/home/components/CoverSection.tsx
 FN:7,(anonymous_1)
 FNF:1
 FNH:0
@@ -560,7 +560,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/home/components/ExperienceSection.tsx
+SF:mock/path/to/replace/src/features/home/components/ExperienceSection.tsx
 FN:6,(anonymous_1)
 FNF:1
 FNH:0
@@ -577,7 +577,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/home/components/HeadingSection.tsx
+SF:mock/path/to/replace/src/features/home/components/HeadingSection.tsx
 FN:11,(anonymous_1)
 FNF:1
 FNH:0
@@ -595,7 +595,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/home/components/SkillsSection.tsx
+SF:mock/path/to/replace/src/features/home/components/SkillsSection.tsx
 FN:11,(anonymous_1)
 FNF:1
 FNH:0
@@ -617,7 +617,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/features/projects/library/ProjectsPage.tsx
+SF:mock/path/to/replace/src/features/projects/library/ProjectsPage.tsx
 FN:6,(anonymous_1)
 FNF:1
 FNH:0
@@ -860,7 +860,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/ContactForm/ContactForm.tsx
+SF:mock/path/to/replace/src/shared/components/ContactForm/ContactForm.tsx
 FN:15,(anonymous_14)
 FN:24,(anonymous_15)
 FN:42,(anonymous_16)
@@ -939,7 +939,7 @@ BRF:34
 BRH:28
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Figure/Figure.tsx
+SF:mock/path/to/replace/src/shared/components/Figure/Figure.tsx
 FN:12,(anonymous_1)
 FNF:1
 FNH:1
@@ -958,7 +958,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Footer/Footer.tsx
+SF:mock/path/to/replace/src/shared/components/Footer/Footer.tsx
 FN:6,(anonymous_1)
 FNF:1
 FNH:1
@@ -977,7 +977,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Footer/index.ts
+SF:mock/path/to/replace/src/shared/components/Footer/index.ts
 FN:1,(anonymous_1)
 FNF:1
 FNH:1
@@ -989,7 +989,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Header/Header.tsx
+SF:mock/path/to/replace/src/shared/components/Header/Header.tsx
 FN:25,(anonymous_7)
 FN:30,(anonymous_8)
 FN:31,(anonymous_9)
@@ -1039,7 +1039,7 @@ BRF:6
 BRH:6
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Header/index.ts
+SF:mock/path/to/replace/src/shared/components/Header/index.ts
 FN:1,(anonymous_1)
 FNF:1
 FNH:0
@@ -1051,7 +1051,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Input/Input.tsx
+SF:mock/path/to/replace/src/shared/components/Input/Input.tsx
 FN:11,(anonymous_2)
 FNF:1
 FNH:1
@@ -1255,7 +1255,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/RecentArticlesContainer/RecentArticlesContainer.tsx
+SF:mock/path/to/replace/src/shared/components/RecentArticlesContainer/RecentArticlesContainer.tsx
 FN:8,(anonymous_1)
 FN:26,(anonymous_2)
 FNF:2
@@ -1302,7 +1302,7 @@ BRF:20
 BRH:16
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/ScrollReset/ScrollReset.ts
+SF:mock/path/to/replace/src/shared/components/ScrollReset/ScrollReset.ts
 FN:4,(anonymous_0)
 FN:7,(anonymous_1)
 FNF:2
@@ -1323,7 +1323,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/ScrollReset/index.ts
+SF:mock/path/to/replace/src/shared/components/ScrollReset/index.ts
 FN:1,(anonymous_1)
 FNF:1
 FNH:0
@@ -1335,7 +1335,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Section/Container.tsx
+SF:mock/path/to/replace/src/shared/components/Section/Container.tsx
 FN:12,(anonymous_2)
 FNF:1
 FNH:1
@@ -1357,7 +1357,7 @@ BRF:4
 BRH:4
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Section/Heading.tsx
+SF:mock/path/to/replace/src/shared/components/Section/Heading.tsx
 FN:13,(anonymous_2)
 FNF:1
 FNH:1
@@ -1377,7 +1377,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Section/Section.tsx
+SF:mock/path/to/replace/src/shared/components/Section/Section.tsx
 FN:17,(anonymous_2)
 FNF:1
 FNH:1
@@ -1402,7 +1402,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Section/index.ts
+SF:mock/path/to/replace/src/shared/components/Section/index.ts
 FN:1,(anonymous_1)
 FNF:1
 FNH:1
@@ -1718,7 +1718,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Textarea/Textarea.tsx
+SF:mock/path/to/replace/src/shared/components/Textarea/Textarea.tsx
 FN:10,(anonymous_2)
 FNF:1
 FNH:1
@@ -1738,7 +1738,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Textarea/index.ts
+SF:mock/path/to/replace/src/shared/components/Textarea/index.ts
 FN:1,(anonymous_0)
 FNF:1
 FNH:1
@@ -1750,7 +1750,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Timeline/Marker.tsx
+SF:mock/path/to/replace/src/shared/components/Timeline/Marker.tsx
 FN:16,(anonymous_8)
 FN:89,(anonymous_9)
 FNF:2
@@ -1815,7 +1815,7 @@ BRF:39
 BRH:14
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Timeline/Timeline.tsx
+SF:mock/path/to/replace/src/shared/components/Timeline/Timeline.tsx
 FN:14,(anonymous_1)
 FNF:1
 FNH:1
@@ -1834,7 +1834,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Timeline/index.ts
+SF:mock/path/to/replace/src/shared/components/Timeline/index.ts
 FN:1,(anonymous_1)
 FNF:1
 FNH:1
@@ -1846,7 +1846,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Tooltip/Tooltip.tsx
+SF:mock/path/to/replace/src/shared/components/Tooltip/Tooltip.tsx
 FN:11,(anonymous_1)
 FNF:1
 FNH:1
@@ -1864,7 +1864,7 @@ BRF:1
 BRH:1
 end_of_record
 TN:
-SF:mock/project/root/src/shared/components/Tooltip/index.ts
+SF:mock/path/to/replace/src/shared/components/Tooltip/index.ts
 FN:1,(anonymous_0)
 FNF:1
 FNH:1

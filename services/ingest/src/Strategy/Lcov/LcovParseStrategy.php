@@ -12,6 +12,7 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
 use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
 class LcovParseStrategy implements ParseStrategyInterface
@@ -96,8 +97,13 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
-    public function parse(string $projectRoot, string $content): Coverage
-    {
+    public function parse(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $projectRoot,
+        string $content
+    ): Coverage {
         if (!$this->supports($content)) {
             throw ParseException::notSupportedException();
         }
@@ -119,14 +125,27 @@ class LcovParseStrategy implements ParseStrategyInterface
 
             preg_match(self::LINE_STRUCTURE, $record, $matches);
 
-            $coverage = $this->handleLine($coverage, $matches['type'], $matches['data']);
+            $coverage = $this->handleLine(
+                $provider,
+                $owner,
+                $repository,
+                $coverage,
+                $matches['type'],
+                $matches['data']
+            );
         }
 
         return $coverage;
     }
 
-    private function handleLine(Coverage $coverage, string $type, string $data): Coverage
-    {
+    private function handleLine(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        Coverage $coverage,
+        string $type,
+        string $data
+    ): Coverage {
         $files = $coverage->getFiles();
 
         /** @var File $latestFile */
@@ -135,7 +154,13 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         switch ($type) {
             case self::FILE:
-                $path = $this->pathFixingService->removePathRoot($data, $coverage->getRoot());
+                $path = $this->pathFixingService->fixPath(
+                    $provider,
+                    $owner,
+                    $repository,
+                    $data,
+                    $coverage->getRoot()
+                );
 
                 $coverage->addFile(new File($path));
                 break;
