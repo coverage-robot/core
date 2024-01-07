@@ -7,6 +7,8 @@ use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
 use Override;
+use Packages\Configuration\Model\PathReplacement;
+use Packages\Configuration\Service\SettingService;
 use Psr\Log\NullLogger;
 
 class CloverParseStrategyTest extends AbstractParseStrategyTestCase
@@ -37,9 +39,18 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
     #[Override]
     protected function getParserStrategy(): ParseStrategyInterface
     {
+        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService->method('get')
+            ->willReturn([
+                new PathReplacement(
+                    'mock/path/to/replace',
+                    ''
+                )
+            ]);
+
         return new CloverParseStrategy(
             new NullLogger(),
-            new PathFixingService()
+            new PathFixingService($mockSettingService)
         );
     }
 }

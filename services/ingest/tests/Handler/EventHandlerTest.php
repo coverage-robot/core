@@ -2,7 +2,6 @@
 
 namespace App\Tests\Handler;
 
-use App\Client\EventBridgeEventClient;
 use App\Exception\DeletionException;
 use App\Exception\PersistException;
 use App\Exception\RetrievalException;
@@ -17,6 +16,8 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
+use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Service\SettingService;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Model\Upload;
@@ -36,6 +37,8 @@ class EventHandlerTest extends KernelTestCase
     #[DataProvider('validS3EventDataProvider')]
     public function testSuccessfullyHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
+        $this->setSettingsServiceAsMock();
+
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
@@ -112,6 +115,8 @@ class EventHandlerTest extends KernelTestCase
 
     public function testHandleS3FailsToPersist(): void
     {
+        $this->setSettingsServiceAsMock();
+
         $mockCoverage = $this->createMock(Coverage::class);
         $mockCoverage->expects($this->once())
             ->method('count')
@@ -173,6 +178,8 @@ class EventHandlerTest extends KernelTestCase
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3FailsToDelete(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
+        $this->setSettingsServiceAsMock();
+
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
@@ -239,6 +246,19 @@ class EventHandlerTest extends KernelTestCase
             ]);
 
         return $mockResponse;
+    }
+
+    private function setSettingsServiceAsMock(): void
+    {
+        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService->method('get')
+            ->willReturn([]);
+
+        $this->getContainer()
+            ->set(
+                SettingService::class,
+                $mockSettingService
+            );
     }
 
     /**

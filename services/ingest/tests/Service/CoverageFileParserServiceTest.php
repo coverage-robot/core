@@ -8,6 +8,7 @@ use App\Service\CoverageFileParserService;
 use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\Lcov\LcovParseStrategy;
 use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -38,14 +39,29 @@ class CoverageFileParserServiceTest extends TestCase
 
             $mockStrategy->expects($this->exactly($expectedStrategy === $strategy ? 1 : 0))
                 ->method('parse')
-                ->with('mock-path', 'mock-file')
+                ->with(
+                    Provider::GITHUB,
+                    'mock-owner',
+                    'mock-repository',
+                    'mock-path',
+                    'mock-file'
+                )
                 ->willReturn($coverage);
 
             $mockedStrategies[] = $mockStrategy;
         }
 
         $coverageFileParserService = new CoverageFileParserService($mockedStrategies, new NullLogger());
-        $this->assertEquals($coverage, $coverageFileParserService->parse('mock-path', 'mock-file'));
+        $this->assertEquals(
+            $coverage,
+            $coverageFileParserService->parse(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-path',
+                'mock-file'
+            )
+        );
     }
 
     public function testInvalidParser(): void
@@ -68,7 +84,13 @@ class CoverageFileParserServiceTest extends TestCase
 
         $this->expectException(ParseException::class);
 
-        $coverageFileParserService->parse('mock-path', 'mock-file');
+        $coverageFileParserService->parse(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            'mock-path',
+            'mock-file'
+        );
     }
 
     public static function strategyDataProvider(): array

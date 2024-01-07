@@ -4,6 +4,7 @@ namespace App\Tests\Strategy;
 
 use App\Exception\ParseException;
 use App\Strategy\ParseStrategyInterface;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -30,7 +31,13 @@ abstract class AbstractParseStrategyTestCase extends TestCase
             $this->expectException(ParseException::class);
         }
 
-        $coverage = $parser->parse($projectRoot, $contents);
+        $coverage = $parser->parse(
+            Provider::GITHUB,
+            'mock-owner',
+            'mock-repository',
+            $projectRoot,
+            $contents
+        );
 
         if ($expectedSupport) {
             $this->assertMatchesObjectSnapshot($coverage);

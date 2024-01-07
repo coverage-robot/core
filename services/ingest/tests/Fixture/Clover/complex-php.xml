@@ -198,43 +198,43 @@
     <file name="mock/project/root/services/backend/src/Constant/ApiExceptionEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/ApiResolver.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/ApiResolver.php">
       <class name="App/Constant/ApiResolver" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="41" ncloc="32" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/ApiType.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/ApiType.php">
       <class name="App/Constant/ApiType" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="76" ncloc="53" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/ContactForm.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/ContactForm.php">
       <class name="App/Constant/ContactForm" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/EnvironmentTypeEnum.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/EnvironmentTypeEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/SentryConfiguration.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/SentryConfiguration.php">
       <class name="App/Constant/SentryConfiguration" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/StatisticEnum.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/StatisticEnum.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/StoryblokConfiguration.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/StoryblokConfiguration.php">
       <class name="App/Constant/StoryblokConfiguration" namespace="global">
         <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </class>
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Constant/StoryblokContentTypeEnum.php">
+    <file name="mock/path/to/replace/services/backend/src/Constant/StoryblokContentTypeEnum.php">
       <class name="App/Constant/StoryblokContentTypeEnum" namespace="global">
         <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="8" elements="13" coveredelements="10"/>
       </class>
@@ -253,7 +253,7 @@
       <line num="60" type="stmt" count="0"/>
       <metrics loc="64" ncloc="37" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="8" elements="13" coveredelements="10"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Controller/ApiController.php">
+    <file name="mock/path/to/replace/services/backend/src/Controller/ApiController.php">
       <class name="App/Controller/ApiController" namespace="global">
         <metrics complexity="3" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="10" elements="19" coveredelements="11"/>
       </class>
@@ -278,7 +278,7 @@
       <line num="45" type="stmt" count="8"/>
       <metrics loc="48" ncloc="48" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="10" elements="19" coveredelements="11"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Controller/DefaultController.php">
+    <file name="mock/path/to/replace/services/backend/src/Controller/DefaultController.php">
       <class name="App/Controller/DefaultController" namespace="global">
         <metrics complexity="4" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
       </class>
@@ -303,7 +303,7 @@
       <line num="46" type="stmt" count="3"/>
       <metrics loc="49" ncloc="49" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Exception/AbstractApiException.php">
+    <file name="mock/path/to/replace/services/backend/src/Exception/AbstractApiException.php">
       <class name="App/Exception/AbstractApiException" namespace="global">
         <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="2" elements="7" coveredelements="3"/>
       </class>
@@ -316,7 +316,7 @@
       <line num="26" type="stmt" count="0"/>
       <metrics loc="29" ncloc="25" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="2" elements="7" coveredelements="3"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Exception/ModelException.php">
+    <file name="mock/path/to/replace/services/backend/src/Exception/ModelException.php">
       <class name="App/Exception/ModelException" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
       </class>
@@ -324,7 +324,7 @@
       <line num="12" type="stmt" count="0"/>
       <metrics loc="15" ncloc="15" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
     </file>
-    <file name="mock/project/root/services/backend/src/Exception/NotFoundException.php">
+    <file name="mock/path/to/replace/services/backend/src/Exception/NotFoundException.php">
       <class name="App/Exception/NotFoundException" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
       </class>

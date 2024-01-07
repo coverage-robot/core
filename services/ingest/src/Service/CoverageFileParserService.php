@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Exception\ParseException;
 use App\Model\Coverage;
 use App\Strategy\ParseStrategyInterface;
+use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -23,8 +24,13 @@ class CoverageFileParserService
      *
      * @throws ParseException
      */
-    public function parse(string $projectRoot, string $coverageFile): Coverage
-    {
+    public function parse(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $projectRoot,
+        string $coverageFile
+    ): Coverage {
         foreach ($this->parserStrategies as $strategy) {
             if (!$strategy instanceof ParseStrategyInterface) {
                 $this->parseStrategyLogger->critical(
@@ -47,7 +53,13 @@ class CoverageFileParserService
                 continue;
             }
 
-            return $strategy->parse($projectRoot, $coverageFile);
+            return $strategy->parse(
+                $provider,
+                $owner,
+                $repository,
+                $projectRoot,
+                $coverageFile
+            );
         }
 
         throw new ParseException('No strategy found which supports coverage file content.');

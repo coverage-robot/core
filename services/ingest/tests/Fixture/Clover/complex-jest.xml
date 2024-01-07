@@ -4,7 +4,7 @@
     <metrics statements="817" coveredstatements="546" conditionals="335" coveredconditionals="192" methods="183" coveredmethods="119" elements="1335" coveredelements="857" complexity="0" loc="817" ncloc="817" packages="45" files="99" classes="99"/>
     <package name="src">
       <metrics statements="25" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="App.tsx" path="mock/project/root/services/frontend/src/App.tsx">
+      <file name="App.tsx" path="mock/path/to/replace/services/frontend/src/App.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -147,7 +147,7 @@
         <line num="19" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
       </file>
-      <file name="LastReleaseTile.tsx" path="mock/project/root/services/frontend/src/features/about/components/Tile/LastReleaseTile.tsx">
+      <file name="LastReleaseTile.tsx" path="mock/path/to/replace/services/frontend/src/features/about/components/Tile/LastReleaseTile.tsx">
         <metrics statements="14" coveredstatements="14" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -164,7 +164,7 @@
         <line num="23" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
       </file>
-      <file name="ReleasesCountTile.tsx" path="mock/project/root/services/frontend/src/features/about/components/Tile/ReleasesCountTile.tsx">
+      <file name="ReleasesCountTile.tsx" path="mock/path/to/replace/services/frontend/src/features/about/components/Tile/ReleasesCountTile.tsx">
         <metrics statements="11" coveredstatements="11" conditionals="7" coveredconditionals="6" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -181,7 +181,7 @@
     </package>
     <package name="src.features.articles.library">
       <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="ArticlesPage.tsx" path="mock/project/root/services/frontend/src/features/articles/library/ArticlesPage.tsx">
+      <file name="ArticlesPage.tsx" path="mock/path/to/replace/services/frontend/src/features/articles/library/ArticlesPage.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -194,7 +194,7 @@
     </package>
     <package name="src.features.articles.library.components">
       <metrics statements="17" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="3" coveredmethods="0"/>
-      <file name="ArticlesSection.tsx" path="mock/project/root/services/frontend/src/features/articles/library/components/ArticlesSection.tsx">
+      <file name="ArticlesSection.tsx" path="mock/path/to/replace/services/frontend/src/features/articles/library/components/ArticlesSection.tsx">
         <metrics statements="12" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -209,7 +209,7 @@
         <line num="21" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
       </file>
-      <file name="HeadingSection.tsx" path="mock/project/root/services/frontend/src/features/articles/library/components/HeadingSection.tsx">
+      <file name="HeadingSection.tsx" path="mock/path/to/replace/services/frontend/src/features/articles/library/components/HeadingSection.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -220,7 +220,7 @@
     </package>
     <package name="src.features.articles.viewer">
       <metrics statements="29" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="ArticlePage.tsx" path="mock/project/root/services/frontend/src/features/articles/viewer/ArticlePage.tsx">
+      <file name="ArticlePage.tsx" path="mock/path/to/replace/services/frontend/src/features/articles/viewer/ArticlePage.tsx">
         <metrics statements="29" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -255,7 +255,7 @@
     </package>
     <package name="src.features.error">
       <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <file name="GenericErrorPage.tsx" path="mock/project/root/services/frontend/src/features/error/GenericErrorPage.tsx">
+      <file name="GenericErrorPage.tsx" path="mock/path/to/replace/services/frontend/src/features/error/GenericErrorPage.tsx">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
@@ -324,7 +324,7 @@
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
       </file>
-      <file name="ExperienceSection.tsx" path="mock/project/root/services/frontend/src/features/home/components/ExperienceSection.tsx">
+      <file name="ExperienceSection.tsx" path="mock/path/to/replace/services/frontend/src/features/home/components/ExperienceSection.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -333,7 +333,7 @@
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
-      <file name="HeadingSection.tsx" path="mock/project/root/services/frontend/src/features/home/components/HeadingSection.tsx">
+      <file name="HeadingSection.tsx" path="mock/path/to/replace/services/frontend/src/features/home/components/HeadingSection.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -343,7 +343,7 @@
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
       </file>
-      <file name="SkillsSection.tsx" path="mock/project/root/services/frontend/src/features/home/components/SkillsSection.tsx">
+      <file name="SkillsSection.tsx" path="mock/path/to/replace/services/frontend/src/features/home/components/SkillsSection.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -360,7 +360,7 @@
     </package>
     <package name="src.features.projects.library">
       <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="ProjectsPage.tsx" path="mock/project/root/services/frontend/src/features/projects/library/ProjectsPage.tsx">
+      <file name="ProjectsPage.tsx" path="mock/path/to/replace/services/frontend/src/features/projects/library/ProjectsPage.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -373,7 +373,7 @@
     </package>
     <package name="src.features.projects.library.components">
       <metrics statements="17" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="3" coveredmethods="0"/>
-      <file name="HeadingSection.tsx" path="mock/project/root/services/frontend/src/features/projects/library/components/HeadingSection.tsx">
+      <file name="HeadingSection.tsx" path="mock/path/to/replace/services/frontend/src/features/projects/library/components/HeadingSection.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="0" type="stmt"/>
         <line num="2" count="0" type="stmt"/>
@@ -470,7 +470,7 @@
     </package>
     <package name="src.shared.components.Card">
       <metrics statements="9" coveredstatements="9" conditionals="5" coveredconditionals="4" methods="2" coveredmethods="2"/>
-      <file name="Card.tsx" path="mock/project/root/services/frontend/src/shared/components/Card/Card.tsx">
+      <file name="Card.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Card/Card.tsx">
         <metrics statements="8" coveredstatements="8" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
         <line num="1" count="15" type="stmt"/>
         <line num="2" count="15" type="stmt"/>
@@ -481,14 +481,14 @@
         <line num="22" count="38" type="stmt"/>
         <line num="42" count="15" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/Card/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/Card/index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="53" type="stmt"/>
       </file>
     </package>
     <package name="src.shared.components.ContactForm">
       <metrics statements="26" coveredstatements="24" conditionals="34" coveredconditionals="28" methods="5" coveredmethods="5"/>
-      <file name="ContactForm.tsx" path="mock/project/root/services/frontend/src/shared/components/ContactForm/ContactForm.tsx">
+      <file name="ContactForm.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/ContactForm/ContactForm.tsx">
         <metrics statements="26" coveredstatements="24" conditionals="34" coveredconditionals="28" methods="5" coveredmethods="5"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -520,7 +520,7 @@
     </package>
     <package name="src.shared.components.Figure">
       <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
-      <file name="Figure.tsx" path="mock/project/root/services/frontend/src/shared/components/Figure/Figure.tsx">
+      <file name="Figure.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Figure/Figure.tsx">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
         <line num="3" count="5" type="stmt"/>
@@ -532,7 +532,7 @@
     </package>
     <package name="src.shared.components.Footer">
       <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <file name="Footer.tsx" path="mock/project/root/services/frontend/src/shared/components/Footer/Footer.tsx">
+      <file name="Footer.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Footer/Footer.tsx">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -810,7 +810,7 @@
     </package>
     <package name="src.shared.components.SocialIcons">
       <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <file name="ShareIcons.tsx" path="mock/project/root/services/frontend/src/shared/components/SocialIcons/ShareIcons.tsx">
+      <file name="ShareIcons.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/SocialIcons/ShareIcons.tsx">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
@@ -820,7 +820,7 @@
         <line num="8" count="3" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/SocialIcons/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/SocialIcons/index.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
@@ -828,7 +828,7 @@
     </package>
     <package name="src.shared.components.StatTile">
       <metrics statements="15" coveredstatements="15" conditionals="5" coveredconditionals="5" methods="3" coveredmethods="3"/>
-      <file name="StatTile.tsx" path="mock/project/root/services/frontend/src/shared/components/StatTile/StatTile.tsx">
+      <file name="StatTile.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/StatTile/StatTile.tsx">
         <metrics statements="14" coveredstatements="14" conditionals="5" coveredconditionals="5" methods="2" coveredmethods="2"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
@@ -845,20 +845,20 @@
         <line num="47" count="4" type="stmt"/>
         <line num="62" count="4" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/StatTile/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/StatTile/index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="14" type="stmt"/>
       </file>
     </package>
     <package name="src.shared.components.StoryblokContent">
       <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
-      <file name="StoryblokContent.tsx" path="mock/project/root/services/frontend/src/shared/components/StoryblokContent/StoryblokContent.tsx">
+      <file name="StoryblokContent.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/StoryblokContent/StoryblokContent.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="3" type="stmt"/>
         <line num="8" count="3" type="stmt"/>
         <line num="10" count="3" type="stmt"/>
       </file>
-      <file name="index.tsx" path="mock/project/root/services/frontend/src/shared/components/StoryblokContent/index.tsx">
+      <file name="index.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/StoryblokContent/index.tsx">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="6" type="stmt"/>
       </file>
@@ -934,7 +934,7 @@
     </package>
     <package name="src.shared.components.Timeline">
       <metrics statements="22" coveredstatements="22" conditionals="39" coveredconditionals="14" methods="4" coveredmethods="4"/>
-      <file name="Marker.tsx" path="mock/project/root/services/frontend/src/shared/components/Timeline/Marker.tsx">
+      <file name="Marker.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Timeline/Marker.tsx">
         <metrics statements="13" coveredstatements="13" conditionals="39" coveredconditionals="14" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -950,7 +950,7 @@
         <line num="26" count="8" type="stmt"/>
         <line num="89" count="2" type="stmt"/>
       </file>
-      <file name="Timeline.tsx" path="mock/project/root/services/frontend/src/shared/components/Timeline/Timeline.tsx">
+      <file name="Timeline.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Timeline/Timeline.tsx">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -961,14 +961,14 @@
         <line num="18" count="2" type="stmt"/>
         <line num="20" count="2" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/Timeline/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/Timeline/index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="12" type="stmt"/>
       </file>
     </package>
     <package name="src.shared.components.Tooltip">
       <metrics statements="7" coveredstatements="7" conditionals="1" coveredconditionals="1" methods="2" coveredmethods="2"/>
-      <file name="Tooltip.tsx" path="mock/project/root/services/frontend/src/shared/components/Tooltip/Tooltip.tsx">
+      <file name="Tooltip.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/Tooltip/Tooltip.tsx">
         <metrics statements="6" coveredstatements="6" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="1" count="5" type="stmt"/>
         <line num="2" count="5" type="stmt"/>
@@ -977,21 +977,21 @@
         <line num="11" count="5" type="cond" truecount="1" falsecount="0"/>
         <line num="12" count="10" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/Tooltip/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/Tooltip/index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="15" type="stmt"/>
       </file>
     </package>
     <package name="src.shared.components.ValidationError">
       <metrics statements="5" coveredstatements="5" conditionals="3" coveredconditionals="3" methods="2" coveredmethods="2"/>
-      <file name="ValidationError.tsx" path="mock/project/root/services/frontend/src/shared/components/ValidationError/ValidationError.tsx">
+      <file name="ValidationError.tsx" path="mock/path/to/replace/services/frontend/src/shared/components/ValidationError/ValidationError.tsx">
         <metrics statements="4" coveredstatements="4" conditionals="3" coveredconditionals="3" methods="1" coveredmethods="1"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="8" count="4" type="cond" truecount="1" falsecount="0"/>
         <line num="9" count="15" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/components/ValidationError/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/components/ValidationError/index.ts">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="19" type="stmt"/>
       </file>
@@ -1086,7 +1086,7 @@
     </package>
     <package name="src.shared.utilities.identity">
       <metrics statements="14" coveredstatements="14" conditionals="1" coveredconditionals="1" methods="4" coveredmethods="4"/>
-      <file name="generateIdentity.ts" path="mock/project/root/services/frontend/src/shared/utilities/identity/generateIdentity.ts">
+      <file name="generateIdentity.ts" path="mock/path/to/replace/services/frontend/src/shared/utilities/identity/generateIdentity.ts">
         <metrics statements="8" coveredstatements="8" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -1097,13 +1097,13 @@
         <line num="8" count="1" type="stmt"/>
         <line num="11" count="1" type="stmt"/>
       </file>
-      <file name="getIdentity.ts" path="mock/project/root/services/frontend/src/shared/utilities/identity/getIdentity.ts">
+      <file name="getIdentity.ts" path="mock/path/to/replace/services/frontend/src/shared/utilities/identity/getIdentity.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
       </file>
-      <file name="index.ts" path="mock/project/root/services/frontend/src/shared/utilities/identity/index.ts">
+      <file name="index.ts" path="mock/path/to/replace/services/frontend/src/shared/utilities/identity/index.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
@@ -1112,12 +1112,12 @@
     </package>
     <package name="src.shared.utilities.renderStoryblokContent">
       <metrics statements="29" coveredstatements="24" conditionals="7" coveredconditionals="6" methods="4" coveredmethods="4"/>
-      <file name="index.tsx" path="mock/project/root/services/frontend/src/shared/utilities/renderStoryblokContent/index.tsx">
+      <file name="index.tsx" path="mock/path/to/replace/services/frontend/src/shared/utilities/renderStoryblokContent/index.tsx">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="4" type="stmt"/>
         <line num="20" count="4" type="stmt"/>
       </file>
-      <file name="renderStoryblokContent.tsx" path="mock/project/root/services/frontend/src/shared/utilities/renderStoryblokContent/renderStoryblokContent.tsx">
+      <file name="renderStoryblokContent.tsx" path="mock/path/to/replace/services/frontend/src/shared/utilities/renderStoryblokContent/renderStoryblokContent.tsx">
         <metrics statements="27" coveredstatements="22" conditionals="7" coveredconditionals="6" methods="4" coveredmethods="4"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
@@ -1150,7 +1150,7 @@
     </package>
     <package name="src.shared.utilities.renderStoryblokContent.renderers">
       <metrics statements="52" coveredstatements="34" conditionals="9" coveredconditionals="0" methods="30" coveredmethods="15"/>
-      <file name="blocks.tsx" path="mock/project/root/services/frontend/src/shared/utilities/renderStoryblokContent/renderers/blocks.tsx">
+      <file name="blocks.tsx" path="mock/path/to/replace/services/frontend/src/shared/utilities/renderStoryblokContent/renderers/blocks.tsx">
         <metrics statements="18" coveredstatements="15" conditionals="1" coveredconditionals="0" methods="8" coveredmethods="6"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
@@ -1171,7 +1171,7 @@
         <line num="56" count="0" type="stmt"/>
         <line num="59" count="7" type="stmt"/>
       </file>
-      <file name="marks.tsx" path="mock/project/root/services/frontend/src/shared/utilities/renderStoryblokContent/renderers/marks.tsx">
+      <file name="marks.tsx" path="mock/path/to/replace/services/frontend/src/shared/utilities/renderStoryblokContent/renderers/marks.tsx">
         <metrics statements="14" coveredstatements="7" conditionals="5" coveredconditionals="0" methods="9" coveredmethods="3"/>
         <line num="2" count="4" type="stmt"/>
         <line num="28" count="4" type="stmt"/>
