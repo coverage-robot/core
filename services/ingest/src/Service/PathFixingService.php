@@ -58,7 +58,7 @@ class PathFixingService
         );
 
         foreach ($pathReplacements as $pathReplacement) {
-            $regex = preg_quote($pathReplacement->getBefore(), '/');
+            $regex = str_replace('/', '\/', $pathReplacement->getBefore());
 
             $replacement = preg_replace(
                 '/' . $regex . '/is',
