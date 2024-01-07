@@ -85,6 +85,15 @@ resource "aws_iam_policy" "ingest_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:Query"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.configuration_table.arn
+        ]
       }
     ]
   })
