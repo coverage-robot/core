@@ -11,6 +11,14 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class SettingService
 {
+    /**
+     * A simple in-memory cache for settings which get called
+     * repeatedly in quick succession.
+     *
+     * @var array<string, mixed>
+     */
+    private array $cache = [];
+
     public function __construct(
         #[TaggedIterator(
             'app.settings',
@@ -29,12 +37,18 @@ class SettingService
         string $repository,
         SettingKey $key
     ): mixed {
-        return $this->getSetting($key)
-            ->get(
-                $provider,
-                $owner,
-                $repository
-            );
+        $cacheKey = $this->getCacheKey($key, $provider, $owner, $repository);
+
+        if (!isset($this->cache[$cacheKey])) {
+            $this->cache[$cacheKey] = $this->getSetting($key)
+                ->get(
+                    $provider,
+                    $owner,
+                    $repository
+                );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     /**
@@ -109,5 +123,28 @@ class SettingService
         }
 
         return $resolver;
+    }
+
+    /**
+     * Generate a unique cache key for a setting, so that it can be stored in memory
+     * so repeated setting requests do not all call out to DynamoDb
+     */
+    private function getCacheKey(
+        SettingKey $key,
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): string {
+        return md5(
+            implode(
+                "",
+                [
+                    $key->value,
+                    $provider->value,
+                    $owner,
+                    $repository
+                ]
+            )
+        );
     }
 }
