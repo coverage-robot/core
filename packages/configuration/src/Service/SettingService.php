@@ -53,6 +53,7 @@ class SettingService
 
     /**
      * Set the state of a setting for a particular repository in the configuration store.
+     * @throws InvalidSettingValueException
      */
     public function set(
         Provider $provider,
@@ -61,16 +62,32 @@ class SettingService
         SettingKey $key,
         mixed $value
     ): bool {
-        $setting = $this->getSetting($key);
+        $cacheKey = $this->getCacheKey($key, $provider, $owner, $repository);
 
+        $setting = $this->getSetting($key);
         $setting->validate($value);
 
-        return $setting->set(
+        if (
+            isset($this->cache[$cacheKey]) &&
+            $this->cache[$cacheKey] === $value
+        ) {
+            // The cache already reflects the value we're trying to store, so we
+            // can be confident that the value is already stored in DynamoDB
+            return true;
+        }
+
+        $isSuccessful = $setting->set(
             $provider,
             $owner,
             $repository,
             $value
         );
+
+        if ($isSuccessful) {
+            $this->cache[$cacheKey] = $value;
+        }
+
+        return $isSuccessful;
     }
 
     public function delete(
