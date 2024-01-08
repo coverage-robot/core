@@ -24,7 +24,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     /**
      * In GitHub webhooks, a null commit has is occasionally represented by a series of 0's.
      */
-    private const NULL_COMMIT = '0000000000000000000000000000000000000000';
+    private const string NULL_COMMIT = '0000000000000000000000000000000000000000';
 
     public function __construct(
         private readonly ?string $signature,
