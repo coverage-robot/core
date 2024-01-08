@@ -11,6 +11,14 @@ use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 class SettingService
 {
+    /**
+     * A simple in-memory cache for settings which get called
+     * repeatedly in quick succession.
+     *
+     * @var array<string, mixed>
+     */
+    private array $cache = [];
+
     public function __construct(
         #[TaggedIterator(
             'app.settings',
@@ -29,16 +37,23 @@ class SettingService
         string $repository,
         SettingKey $key
     ): mixed {
-        return $this->getSetting($key)
-            ->get(
-                $provider,
-                $owner,
-                $repository
-            );
+        $cacheKey = $this->getCacheKey($key, $provider, $owner, $repository);
+
+        if (!isset($this->cache[$cacheKey])) {
+            $this->cache[$cacheKey] = $this->getSetting($key)
+                ->get(
+                    $provider,
+                    $owner,
+                    $repository
+                );
+        }
+
+        return $this->cache[$cacheKey];
     }
 
     /**
      * Set the state of a setting for a particular repository in the configuration store.
+     * @throws InvalidSettingValueException
      */
     public function set(
         Provider $provider,
@@ -47,16 +62,32 @@ class SettingService
         SettingKey $key,
         mixed $value
     ): bool {
-        $setting = $this->getSetting($key);
+        $cacheKey = $this->getCacheKey($key, $provider, $owner, $repository);
 
+        $setting = $this->getSetting($key);
         $setting->validate($value);
 
-        return $setting->set(
+        if (
+            isset($this->cache[$cacheKey]) &&
+            $this->cache[$cacheKey] === $value
+        ) {
+            // The cache already reflects the value we're trying to store, so we
+            // can be confident that the value is already stored in DynamoDB
+            return true;
+        }
+
+        $isSuccessful = $setting->set(
             $provider,
             $owner,
             $repository,
             $value
         );
+
+        if ($isSuccessful) {
+            $this->cache[$cacheKey] = $value;
+        }
+
+        return $isSuccessful;
     }
 
     public function delete(
@@ -109,5 +140,28 @@ class SettingService
         }
 
         return $resolver;
+    }
+
+    /**
+     * Generate a unique cache key for a setting, so that it can be stored in memory
+     * so repeated setting requests do not all call out to DynamoDb
+     */
+    private function getCacheKey(
+        SettingKey $key,
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): string {
+        return md5(
+            implode(
+                "",
+                [
+                    $key->value,
+                    $provider->value,
+                    $owner,
+                    $repository
+                ]
+            )
+        );
     }
 }

@@ -314,8 +314,16 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         $diff = $this->getDiff($waypoint);
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
-        if ($diff == []) {
+        if (
+            $diff == [] ||
+            $uploads === [] ||
+            $ingestTimes === []
+        ) {
+            // Theres no point in checking diff coverage if theirs no diff or no
+            // uploads from coverage with the up to date diff
             return 0;
         }
 
@@ -326,11 +334,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /**
@@ -372,8 +380,16 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
         $diff = $this->getDiff($waypoint);
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
-        if ($diff == []) {
+        if (
+            $diff == [] ||
+            $uploads === [] ||
+            $ingestTimes === []
+        ) {
+            // Theres no point in checking diff coverage if theirs no diff or no
+            // uploads from coverage with the up to date diff
             return new FileCoverageCollectionQueryResult([]);
         }
 
@@ -388,11 +404,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /**
@@ -425,8 +441,16 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     protected function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         $diff = $this->getDiff($waypoint);
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
-        if ($diff == []) {
+        if (
+            $diff == [] ||
+            $uploads === [] ||
+            $ingestTimes === []
+        ) {
+            // Theres no point in checking diff coverage if theirs no diff or no
+            // uploads from coverage with the up to date diff
             return new LineCoverageCollectionQueryResult([]);
         }
 
@@ -437,11 +461,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /**

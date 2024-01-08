@@ -13,10 +13,10 @@ use PHPUnit\Framework\TestCase;
 class SettingServiceTest extends TestCase
 {
     #[DataProvider('trueFalseDataProvider')]
-    public function testSettingValue($isSetSuccessful): void
+    public function testSettingValueOnlySetsWhenCacheIsNotIdentical(bool $isSetSuccessful): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
-        $mockSetting->expects($this->once())
+        $mockSetting->expects($this->exactly($isSetSuccessful ? 1 : 2))
             ->method('set')
             ->with(
                 Provider::GITHUB,
@@ -30,6 +30,17 @@ class SettingServiceTest extends TestCase
             [
                 SettingKey::LINE_ANNOTATION->value => $mockSetting
             ]
+        );
+
+        $this->assertEquals(
+            $isSetSuccessful,
+            $settingService->set(
+                Provider::GITHUB,
+                'owner',
+                'repository',
+                SettingKey::LINE_ANNOTATION,
+                'value'
+            )
         );
 
         $this->assertEquals(
@@ -84,7 +95,7 @@ class SettingServiceTest extends TestCase
     }
 
     #[DataProvider('settingValueDataProvider')]
-    public function testGettingValue(mixed $settingValue): void
+    public function testGettingValueUsesCacheForSubsequentCalls(mixed $settingValue): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
         $mockSetting->expects($this->once())
@@ -102,15 +113,17 @@ class SettingServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
-            $settingValue,
-            $settingService->get(
-                Provider::GITHUB,
-                'owner',
-                'repository',
-                SettingKey::LINE_ANNOTATION
-            )
+        $retrievedValue = $settingService->get(
+            Provider::GITHUB,
+            'owner',
+            'repository',
+            SettingKey::LINE_ANNOTATION
         );
+        $this->assertEquals($settingValue, $retrievedValue);
+
+        $mockSetting->expects($this->never())
+            ->method('get');
+        $this->assertEquals($settingValue, $retrievedValue);
     }
 
     #[DataProvider('trueFalseDataProvider')]

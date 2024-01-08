@@ -21,6 +21,11 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     PipelineStateChangeWebhookInterface,
     SignedWebhookInterface
 {
+    /**
+     * In GitHub webhooks, a null commit has is occasionally represented by a series of 0's.
+     */
+    private const string NULL_COMMIT = '0000000000000000000000000000000000000000';
+
     public function __construct(
         private readonly ?string $signature,
         protected readonly string $owner,
@@ -101,6 +106,11 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     #[SerializedPath('[check_run][check_suite][before]')]
     public function getParent(): ?string
     {
+        if ($this->parent === self::NULL_COMMIT) {
+            // Generally this happens when the event occurs on a merged pull request.
+            return null;
+        }
+
         return $this->parent;
     }
 
