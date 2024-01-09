@@ -47,7 +47,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             self::LINES_TABLE_ALIAS
         );
 
-        if (!$parameterBag->get(QueryParameter::UPLOADS_SCOPE)) {
+        if (!$parameterBag?->get(QueryParameter::UPLOADS_SCOPE)) {
             return <<<SQL
             {$carryforwardScope}
             AND {$ingestTimeScope}
