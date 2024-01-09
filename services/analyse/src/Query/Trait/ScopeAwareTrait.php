@@ -176,14 +176,11 @@ trait ScopeAwareTrait
             /** @var CarryforwardTag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
-            $ingestTimes = array_merge(
-                $ingestTimes,
-                array_reduce(
-                    $carryforwardTags,
-                    static fn(array $times, CarryforwardTag $carryforwardTag) =>
-                        [...$times, ...$carryforwardTag->getIngestTimes()],
-                    []
-                )
+            $ingestTimes = array_reduce(
+                $carryforwardTags,
+                static fn(array $times, CarryforwardTag $carryforwardTag) =>
+                [...$times, ...$carryforwardTag->getIngestTimes()],
+                $ingestTimes
             );
         }
 
