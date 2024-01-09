@@ -50,26 +50,36 @@ WITH
     WHERE
       (
         (
-          (
-            upload.commit = "mock-commit"
-            AND upload.tag = "1"
-          )
-          OR (
-            upload.commit = "mock-commit"
-            AND upload.tag = "2"
-          )
-          OR (
-            upload.commit = "mock-commit-2"
-            AND upload.tag = "3"
-          )
-          OR (
-            upload.commit = "mock-commit-2"
-            AND upload.tag = "4"
-          )
+          1 = 1
+          AND upload.repository = "mock-repository"
+          AND upload.owner = "mock-owner"
+          AND upload.provider = "github"
+          AND upload.commit = "mock-commit"
+          AND upload.uploadId IN ("1", "2")
         )
-        AND upload.repository = "mock-repository"
-        AND upload.owner = "mock-owner"
-        AND upload.provider = "github"
+        OR (
+          (
+            (
+              upload.commit = "mock-commit"
+              AND upload.tag = "1"
+            )
+            OR (
+              upload.commit = "mock-commit"
+              AND upload.tag = "2"
+            )
+            OR (
+              upload.commit = "mock-commit-2"
+              AND upload.tag = "3"
+            )
+            OR (
+              upload.commit = "mock-commit-2"
+              AND upload.tag = "4"
+            )
+          )
+          AND upload.repository = "mock-repository"
+          AND upload.owner = "mock-owner"
+          AND upload.provider = "github"
+        )
       )
       AND DATE(lines.ingestTime) IN ("2024-01-03", "2024-01-01")
   ),
@@ -131,42 +141,52 @@ WITH
     GROUP BY
       fileName,
       lineNumber
-  ),
-  summedCoverage AS (
-    SELECT
-      COUNT(*) as lines,
-      COALESCE(
-        SUM(
-          IF(state = "covered", 1, 0)
-        ),
-        0
-      ) as covered,
-      COALESCE(
-        SUM(
-          IF(state = "partial", 1, 0)
-        ),
-        0
-      ) as partial,
-      COALESCE(
-        SUM(
-          IF(state = "uncovered", 1, 0)
-        ),
-        0
-      ) as uncovered,
-    FROM
-      lines
   )
 SELECT
-  SUM(lines) as lines,
-  SUM(covered) as covered,
-  SUM(partial) as partial,
-  SUM(uncovered) as uncovered,
-  (
-    SUM(covered) + SUM(partial)
-  ) / IF(
-    SUM(lines) = 0,
-    1,
-    SUM(lines)
-  ) * 100 as coveragePercentage
+  fileName,
+  COUNT(*) as lines,
+  COALESCE(
+    SUM(
+      IF(state = "covered", 1, 0)
+    ),
+    0
+  ) as covered,
+  COALESCE(
+    SUM(
+      IF(state = "partial", 1, 0)
+    ),
+    0
+  ) as partial,
+  COALESCE(
+    SUM(
+      IF(state = "uncovered", 1, 0)
+    ),
+    0
+  ) as uncovered,
+  ROUND(
+    (
+      SUM(
+        IF(state = "covered", 1, 0)
+      ) + SUM(
+        IF(state = "partial", 1, 0)
+      )
+    ) / COUNT(*) * 100,
+    2
+  ) as coveragePercentage
 FROM
-  summedCoverage
+  lines
+GROUP BY
+  fileName
+ORDER BY
+  ROUND(
+    (
+      SUM(
+        IF(state = "covered", 1, 0)
+      ) + SUM(
+        IF(state = "partial", 1, 0)
+      )
+    ) / COUNT(*) * 100,
+    2
+  ) ASC
+LIMIT
+  50

@@ -3,6 +3,7 @@
 namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
@@ -159,32 +160,56 @@ trait ScopeAwareTrait
     {
         $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
+        $ingestTimes = [];
+
         if ($parameterBag && $parameterBag->has(QueryParameter::INGEST_TIME_SCOPE)) {
             /** @var DateTimeImmutable|DateTimeImmutable[] $ingestTimes */
-            $ingestTimes = $parameterBag->get(QueryParameter::INGEST_TIME_SCOPE);
+            $scopes = $parameterBag->get(QueryParameter::INGEST_TIME_SCOPE);
 
-            if (!is_array($ingestTimes)) {
-                return <<<SQL
-                DATE({$tableAlias}ingestTime) = "{$ingestTimes->format('Y-m-d')}"
-                SQL;
-            }
-
-            $ingestTimes = implode(
-                '","',
-                array_unique(
-                    array_map(
-                        static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format('Y-m-d'),
-                        $ingestTimes
-                    )
-                )
+            $ingestTimes = array_merge(
+                $ingestTimes,
+                $scopes
             );
-
-            return <<<SQL
-            DATE({$tableAlias}ingestTime) IN ("{$ingestTimes}")
-            SQL;
         }
 
-        return '';
+        if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
+            /** @var DateTimeImmutable|DateTimeImmutable[] $ingestTimes */
+            $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
+
+            $ingestTimes = array_merge(
+                $ingestTimes,
+                array_reduce(
+                    $carryforwardTags,
+                    static fn(array $times, CarryforwardTag $carryforwardTag) =>
+                        [...$times, ...$carryforwardTag->getIngestTimes()],
+                    []
+                )
+            );
+        }
+
+        if (count($ingestTimes) === 0) {
+            return '';
+        }
+
+        if (count($ingestTimes) == 1) {
+            return <<<SQL
+                DATE({$tableAlias}ingestTime) = "{$ingestTimes->format('Y-m-d')}"
+                SQL;
+        }
+
+        $ingestTimes = implode(
+            '","',
+            array_unique(
+                array_map(
+                    static fn (DateTimeImmutable $ingestTime): string => $ingestTime->format('Y-m-d'),
+                    $ingestTimes
+                )
+            )
+        );
+
+        return <<<SQL
+            DATE({$tableAlias}ingestTime) IN ("{$ingestTimes}")
+            SQL;
     }
 
     /**
