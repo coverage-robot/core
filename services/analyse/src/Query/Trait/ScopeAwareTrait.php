@@ -168,7 +168,7 @@ trait ScopeAwareTrait
 
             $ingestTimes = array_merge(
                 $ingestTimes,
-                $scopes
+                (array)$scopes
             );
         }
 
