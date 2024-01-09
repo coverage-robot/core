@@ -53,28 +53,25 @@ WITH
           (
             upload.commit = "mock-commit"
             AND upload.tag = "1"
-            AND DATE(lines.ingestTime) IN ("2024-01-03")
           )
           OR (
             upload.commit = "mock-commit"
             AND upload.tag = "2"
-            AND DATE(lines.ingestTime) IN ("2024-01-03")
           )
           OR (
             upload.commit = "mock-commit-2"
             AND upload.tag = "3"
-            AND DATE(lines.ingestTime) IN ("2024-01-01")
           )
           OR (
             upload.commit = "mock-commit-2"
             AND upload.tag = "4"
-            AND DATE(lines.ingestTime) IN ("2024-01-01")
           )
         )
         AND upload.repository = "mock-repository"
         AND upload.owner = "mock-owner"
         AND upload.provider = "github"
       )
+      AND DATE(lines.ingestTime) IN ("2024-01-03", "2024-01-01")
   ),
   branchingLines AS (
     SELECT

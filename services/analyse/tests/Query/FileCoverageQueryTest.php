@@ -81,10 +81,28 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
                 ]
             );
 
+        $carryforwardAndUploadsParameters = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+            ->set(QueryParameter::INGEST_TIME_SCOPE, [
+                new DateTimeImmutable('2024-01-03 00:00:00'),
+                new DateTimeImmutable('2024-01-03 00:00:00')
+            ])
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                [
+                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                ]
+            )
+            ->set(QueryParameter::LIMIT, 50);
+
         return [
             $lineScopedParameters,
             $limitedParameters,
-            $carryforwardParameters
+            $carryforwardParameters,
+            $carryforwardAndUploadsParameters
         ];
     }
 

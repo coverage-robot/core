@@ -47,12 +47,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             self::LINES_TABLE_ALIAS
         );
 
-        if (
-            !$parameterBag?->get(QueryParameter::INGEST_TIME_SCOPE) ||
-            !$parameterBag->get(QueryParameter::UPLOADS_SCOPE)
-        ) {
+        if (!$parameterBag?->get(QueryParameter::UPLOADS_SCOPE)) {
             return <<<SQL
             {$carryforwardScope}
+            AND {$ingestTimeScope}
             {$lineScope}
             SQL;
         }
@@ -75,10 +73,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                 AND {$repositoryScope}
                 AND {$commitScope}
                 AND {$uploadScope}
-                AND {$ingestTimeScope}
             )
             OR {$carryforwardScope}
         )
+        AND {$ingestTimeScope}
         {$lineScope}
         SQL;
     }
