@@ -163,7 +163,7 @@ trait ScopeAwareTrait
         $ingestTimes = [];
 
         if ($parameterBag && $parameterBag->has(QueryParameter::INGEST_TIME_SCOPE)) {
-            /** @var DateTimeImmutable|DateTimeImmutable[] $ingestTimes */
+            /** @var DateTimeImmutable|DateTimeImmutable[] $scopes */
             $scopes = $parameterBag->get(QueryParameter::INGEST_TIME_SCOPE);
 
             $ingestTimes = array_merge(
@@ -173,7 +173,7 @@ trait ScopeAwareTrait
         }
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
-            /** @var DateTimeImmutable|DateTimeImmutable[] $ingestTimes */
+            /** @var CarryforwardTag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
             $ingestTimes = array_merge(
