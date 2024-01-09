@@ -57,14 +57,12 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static function (CarryforwardTag $availableTag) use ($uploadsTableAlias, $linesTableAlias) {
-                    return <<<SQL
+                static fn(CarryforwardTag $availableTag) => <<<SQL
                     (
                         {$uploadsTableAlias}commit = "{$availableTag->getCommit()}"
                         AND {$uploadsTableAlias}tag = "{$availableTag->getName()}"
                     )
-                    SQL;
-                },
+                    SQL,
                 $carryforwardTags
             );
 

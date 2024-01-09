@@ -187,14 +187,8 @@ trait ScopeAwareTrait
             );
         }
 
-        if (count($ingestTimes) === 0) {
+        if ($ingestTimes === []) {
             return '';
-        }
-
-        if (count($ingestTimes) == 1) {
-            return <<<SQL
-                DATE({$tableAlias}ingestTime) = "{$ingestTimes->format('Y-m-d')}"
-                SQL;
         }
 
         $ingestTimes = implode(
