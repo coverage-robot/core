@@ -69,10 +69,10 @@ class ConfigurationFileServiceTest extends TestCase
     public function testParseAndPersistFile(): void
     {
         $mockSettingService = $this->createMock(SettingService::class);
-        $mockSettingService->expects($this->exactly(2))
+        $mockSettingService->expects($this->exactly(4))
             ->method('deserialize')
             ->willReturn('');
-        $mockSettingService->expects($this->exactly(2))
+        $mockSettingService->expects($this->exactly(4))
             ->method('set')
             ->willReturn(true);
         $mockSettingService->expects($this->never())
@@ -96,6 +96,16 @@ class ConfigurationFileServiceTest extends TestCase
                       after: b
                     - before: c
                       after: d
+
+                tag_behaviour:
+                    default:
+                        carryforward: true
+
+                    tags:
+                        - name: a
+                          carryforward: false
+                        - name: b
+                          carryforward: true
                 YAML
             )
         );

@@ -7,7 +7,9 @@ use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
+use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Configuration\Model\PathReplacement;
+use Packages\Configuration\Setting\IndividualTagBehavioursSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -26,13 +28,13 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class PathReplacementsSettingTest extends TestCase
+class IndividualTagBehavioursSettingTest extends TestCase
 {
     /**
      * @throws ExceptionInterface
      * @throws Exception
      */
-    public function testSettingPathReplacements(): void
+    public function testSettingIndvidualTagBehaviours(): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
@@ -41,37 +43,37 @@ class PathReplacementsSettingTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::PATH_REPLACEMENTS,
+                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
                 SettingValueType::LIST,
                 [
                     new AttributeValue([
                         SettingValueType::MAP->value => [
-                            'before' => new AttributeValue([
-                                SettingValueType::STRING->value => 'path'
+                            'name' => new AttributeValue([
+                                SettingValueType::STRING->value => 'mock-tag'
                             ]),
-                            'after' => new AttributeValue([
-                                SettingValueType::STRING->value => 'replacement'
+                            'carryforward' => new AttributeValue([
+                                SettingValueType::BOOLEAN->value => true
                             ])
                         ]
                     ])
                 ]
             )
             ->willReturn(true);
-        $pathReplacementsSetting = new PathReplacementsSetting(
+        $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
             $this->createMock(Serializer::class),
             $this->createMock(ValidatorInterface::class)
         );
 
         $this->assertTrue(
-            $pathReplacementsSetting->set(
+            $individualTagBehavioursSetting->set(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
                 [
-                    new PathReplacement(
-                        'path',
-                        'replacement'
+                    new IndividualTagBehaviour(
+                        'mock-tag',
+                        true
                     )
                 ]
             )
@@ -82,7 +84,7 @@ class PathReplacementsSettingTest extends TestCase
      * @throws ExceptionInterface
      * @throws Exception
      */
-    public function testGettingPathReplacements(): void
+    public function testGettingIndividualTagBehaviours(): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
@@ -91,34 +93,34 @@ class PathReplacementsSettingTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::PATH_REPLACEMENTS,
+                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
                 SettingValueType::LIST
             )
             ->willReturn(
                 [
                     new AttributeValue([
                         SettingValueType::MAP->value => [
-                            'before' => new AttributeValue([
-                                SettingValueType::STRING->value => 'path'
+                            'name' => new AttributeValue([
+                                SettingValueType::STRING->value => 'mock-tag'
                             ]),
-                            'after' => new AttributeValue([
-                                SettingValueType::STRING->value => 'replacement'
+                            'carryforward' => new AttributeValue([
+                                SettingValueType::BOOLEAN->value => true
                             ])
                         ]
                     ]),
                     new AttributeValue([
                         SettingValueType::MAP->value => [
-                            'before' => new AttributeValue([
-                                SettingValueType::STRING->value => 'path'
+                            'name' => new AttributeValue([
+                                SettingValueType::STRING->value => 'mock-tag-2'
                             ]),
-                            'after' => new AttributeValue([
-                                SettingValueType::STRING->value => 'replacement'
+                            'carryforward' => new AttributeValue([
+                                SettingValueType::BOOLEAN->value => false
                             ])
                         ]
                     ])
                 ]
             );
-        $pathReplacementsSetting = new PathReplacementsSetting(
+        $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
             $this->createMock(Serializer::class),
             $this->createMock(ValidatorInterface::class)
@@ -126,16 +128,16 @@ class PathReplacementsSettingTest extends TestCase
 
         $this->assertEquals(
             [
-                new PathReplacement(
-                    'path',
-                    'replacement'
+                new IndividualTagBehaviour(
+                    'mock-tag',
+                    true
                 ),
-                new PathReplacement(
-                    'path',
-                    'replacement'
+                new IndividualTagBehaviour(
+                    'mock-tag-2',
+                    false
                 )
             ],
-            $pathReplacementsSetting->get(
+            $individualTagBehavioursSetting->get(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository'
@@ -143,7 +145,7 @@ class PathReplacementsSettingTest extends TestCase
         );
     }
 
-    public function testDeletingPathReplacements(): void
+    public function testDeletingIndividualTagBehaviours(): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
         $mockDynamoDbClient->expects($this->once())
@@ -152,17 +154,17 @@ class PathReplacementsSettingTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::PATH_REPLACEMENTS
+                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS
             )
             ->willReturn(true);
-        $pathReplacementsSetting = new PathReplacementsSetting(
+        $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
             $this->createMock(Serializer::class),
             $this->createMock(ValidatorInterface::class)
         );
 
         $this->assertTrue(
-            $pathReplacementsSetting->delete(
+            $individualTagBehavioursSetting->delete(
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository'
@@ -171,9 +173,9 @@ class PathReplacementsSettingTest extends TestCase
     }
 
     #[DataProvider('validatingValuesDataProvider')]
-    public function testValidatingPathReplacementsValue(mixed $settingValue, bool $expectedValid): void
+    public function testValidatingIndividualTagBehavioursValue(mixed $settingValue, bool $expectedValid): void
     {
-        $pathReplacementsSetting = new PathReplacementsSetting(
+        $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $this->createMock(DynamoDbClient::class),
             $this->createMock(Serializer::class),
             Validation::createValidatorBuilder()
@@ -187,7 +189,7 @@ class PathReplacementsSettingTest extends TestCase
             $this->expectNotToPerformAssertions();
         }
 
-        $pathReplacementsSetting->validate($settingValue);
+        $individualTagBehavioursSetting->validate($settingValue);
     }
 
     public function testDeserializingPathReplacements(): void
@@ -283,39 +285,39 @@ class PathReplacementsSettingTest extends TestCase
         return [
             'Valid path replacement' => [
                 [
-                    new PathReplacement(
-                        'path',
-                        'replacement'
+                    new IndividualTagBehaviour(
+                        'mock-tag',
+                        true
                     )
                 ],
                 true
             ],
             'Multiple valid path replacements' => [
                 [
-                    new PathReplacement(
-                        'path',
-                        'replacement'
+                    new IndividualTagBehaviour(
+                        'mock-tag',
+                        true
                     ),
-                    new PathReplacement(
-                        'path',
-                        ''
+                    new IndividualTagBehaviour(
+                        'mock-tag',
+                        false
                     ),
-                    new PathReplacement(
-                        'path',
-                        null
+                    new IndividualTagBehaviour(
+                        'mock-tag-2',
+                        false
                     )
                 ],
                 true
             ],
-            'Multiple invalid path replacements' => [
+            'Multiple invalid behaviours' => [
                 [
-                    new PathReplacement(
+                    new IndividualTagBehaviour(
                         '',
-                        'replacement'
+                        false
                     ),
-                    new PathReplacement(
+                    new IndividualTagBehaviour(
                         '',
-                        ''
+                        true
                     )
                 ],
                 false

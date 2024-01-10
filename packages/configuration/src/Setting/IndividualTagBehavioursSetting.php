@@ -10,7 +10,7 @@ use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Exception\SettingNotFoundException;
 use Packages\Configuration\Exception\SettingRetrievalFailedException;
-use Packages\Configuration\Model\PathReplacement;
+use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class PathReplacementsSetting implements SettingInterface
+class IndividualTagBehavioursSetting implements SettingInterface
 {
     private const array DEFAULT_VALUE = [];
 
@@ -30,7 +30,7 @@ class PathReplacementsSetting implements SettingInterface
     }
 
     /**
-     * @return PathReplacement[]
+     * @return IndividualTagBehaviour[]
      */
     #[Override]
     public function get(Provider $provider, string $owner, string $repository): array
@@ -40,7 +40,7 @@ class PathReplacementsSetting implements SettingInterface
                 $provider,
                 $owner,
                 $repository,
-                SettingKey::PATH_REPLACEMENTS,
+                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
                 SettingValueType::LIST
             );
 
@@ -62,7 +62,7 @@ class PathReplacementsSetting implements SettingInterface
     }
 
     /**
-     * @param PathReplacement[] $value
+     * @param IndividualTagBehaviour[] $value
      *
      * @throws ExceptionInterface
      */
@@ -77,7 +77,7 @@ class PathReplacementsSetting implements SettingInterface
             $provider,
             $owner,
             $repository,
-            SettingKey::PATH_REPLACEMENTS,
+            SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
             SettingValueType::LIST,
             $this->serialize($value)
         );
@@ -93,22 +93,22 @@ class PathReplacementsSetting implements SettingInterface
             $provider,
             $owner,
             $repository,
-            SettingKey::PATH_REPLACEMENTS
+            SettingKey::INDIVIDUAL_TAG_BEHAVIOURS
         );
     }
 
     /**
-     * @return PathReplacement[]
+     * @return IndividualTagBehaviour[]
      * @throws ExceptionInterface
      */
     #[Override]
     public function deserialize(mixed $value): array
     {
-        $pathReplacements = [];
+        $behaviours = [];
 
         foreach ($value as $item) {
-            if ($item instanceof PathReplacement) {
-                $pathReplacements[] = $item;
+            if ($item instanceof IndividualTagBehaviour) {
+                $behaviours[] = $item;
 
                 continue;
             }
@@ -116,26 +116,26 @@ class PathReplacementsSetting implements SettingInterface
             if ($item instanceof AttributeValue) {
                 $map = $item->getM();
 
-                $pathReplacements[] = new PathReplacement(
-                    $map['before']->getS(),
-                    $map['after']->getS()
+                $behaviours[] = new IndividualTagBehaviour(
+                    $map['name']->getS(),
+                    $map['carryforward']->getBool()
                 );
             } elseif (is_array($item)) {
-                $pathReplacements[] = $this->serializer->denormalize(
+                $behaviours[] = $this->serializer->denormalize(
                     $item,
-                    PathReplacement::class,
+                    IndividualTagBehaviour::class,
                     'json'
                 );
             }
         }
 
-        return $pathReplacements;
+        return $behaviours;
     }
 
     #[Override]
     public static function getSettingKey(): string
     {
-        return SettingKey::PATH_REPLACEMENTS->value;
+        return SettingKey::INDIVIDUAL_TAG_BEHAVIOURS->value;
     }
 
     #[Override]
@@ -143,7 +143,7 @@ class PathReplacementsSetting implements SettingInterface
     {
         if (!is_array($value)) {
             throw new InvalidSettingValueException(
-                "Path replacements must be an array."
+                "Individual tag behaviours must be an array."
             );
         }
 
@@ -151,7 +151,7 @@ class PathReplacementsSetting implements SettingInterface
             $value,
             [
                 new Assert\All([
-                    new Assert\Type(PathReplacement::class),
+                    new Assert\Type(IndividualTagBehaviour::class),
                 ]),
             ]
         );
@@ -166,30 +166,33 @@ class PathReplacementsSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid path replacement value for setting: {$violations}"
+                "Invalid individual path behaviours value for setting: {$violations}"
             );
         }
     }
 
     /**
-     * @param PathReplacement[] $pathReplacements
+     * @param IndividualTagBehaviour[] $behaviours
      * @return AttributeValue[]
      */
-    private function serialize(array $pathReplacements): array
+    private function serialize(array $behaviours): array
     {
         $attributeValues = [];
 
-        foreach ($pathReplacements as $pathReplacement) {
-            $before = [SettingValueType::STRING->value => $pathReplacement->getBefore()];
-            $after = $pathReplacement->getAfter() === null ?
-                [SettingValueType::NULL->value => true] :
-                [SettingValueType::STRING->value => $pathReplacement->getAfter()];
-
+        foreach ($behaviours as $behaviour) {
             $attributeValues[] = new AttributeValue(
                 [
                     SettingValueType::MAP->value => [
-                        'before' => new AttributeValue($before),
-                        'after' => new AttributeValue($after),
+                        'name' => new AttributeValue(
+                            [
+                                SettingValueType::STRING->value => $behaviour->getName()
+                            ]
+                        ),
+                        'carryforward' => new AttributeValue(
+                            [
+                                SettingValueType::BOOLEAN->value => $behaviour->shouldCarryforward()
+                            ]
+                        ),
                     ],
                 ]
             );
