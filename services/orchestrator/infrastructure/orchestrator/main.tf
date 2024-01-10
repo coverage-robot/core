@@ -151,7 +151,8 @@ resource "aws_cloudwatch_event_rule" "service" {
       "INGEST_SUCCESS",
       "INGEST_FAILURE",
       "JOB_STATE_CHANGE",
-      "CONFIGURATION_FILE_CHANGE"
+      "CONFIGURATION_FILE_CHANGE",
+      "COVERAGE_FINALISED"
     ]
   }
   EOF

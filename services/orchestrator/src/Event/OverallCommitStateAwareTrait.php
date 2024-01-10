@@ -244,7 +244,7 @@ trait OverallCommitStateAwareTrait
 
         $cutOff = new DateTimeImmutable(sprintf('-%s minutes', self::MAX_FINALISE_AGE_MINUTES));
         if (
-            $finalisedEvent === null ||
+            !$finalisedEvent instanceof Finalised ||
             (
                 $finalisedEvent->getState() === OrchestratedEventState::ONGOING &&
                 $finalisedEvent->getEventTime() < $cutOff
