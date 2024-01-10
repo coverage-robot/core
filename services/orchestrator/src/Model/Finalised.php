@@ -16,6 +16,7 @@ class Finalised extends AbstractOrchestratedEvent
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
+        private readonly OrchestratedEventState $state,
         private readonly int|string|null $pullRequest,
         private readonly DateTimeImmutable $eventTime,
     ) {

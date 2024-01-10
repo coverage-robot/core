@@ -118,6 +118,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                 $currentState->getRepository(),
                 $event->getRef(),
                 $currentState->getCommit(),
+                OrchestratedEventState::ONGOING,
                 $event->getPullRequest(),
                 new DateTimeImmutable()
             );
