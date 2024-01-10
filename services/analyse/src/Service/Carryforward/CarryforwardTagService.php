@@ -177,6 +177,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
      *
      * This looks at the existing tags as well as the tag behaviour configuration to decide
      * if a tag should be carried forward.
+     *
+     * @param Tag[] $existingTags
      */
     private function shouldTagBeCarriedForward(
         ReportWaypoint $waypoint,
