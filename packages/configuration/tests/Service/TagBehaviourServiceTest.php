@@ -2,11 +2,11 @@
 
 namespace Packages\Configuration\Tests\Service;
 
+use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Model\DefaultTagBehaviour;
 use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Configuration\Service\TagBehaviourService;
-use Packages\Configuration\Setting\DefaultTagBehaviourSetting;
-use Packages\Configuration\Setting\IndividualTagBehavioursSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -19,30 +19,15 @@ class TagBehaviourServiceTest extends TestCase
         array $individualTagBehaviours,
         bool $expectedCarryforwardBehaviour
     ): void {
-        $mockDefaultTagBehaviourSetting = $this->createMock(DefaultTagBehaviourSetting::class);
-        $mockDefaultTagBehaviourSetting->expects($this->atMost(1))
-            ->method('get')
-            ->with(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository'
-            )
-            ->willReturn($defaultTagBehaviour);
-
-        $mockIndividualTagBehavioursSetting = $this->createMock(IndividualTagBehavioursSetting::class);
-        $mockIndividualTagBehavioursSetting->expects($this->atMost(1))
-            ->method('get')
-            ->with(
-                Provider::GITHUB,
-                'mock-owner',
-                'mock-repository'
-            )
-            ->willReturn($individualTagBehaviours);
-
-        $tagBehaviourService = new TagBehaviourService(
-            $mockDefaultTagBehaviourSetting,
-            $mockIndividualTagBehavioursSetting
+        $mockSettingService = MockSettingServiceFactory::createMock(
+            $this,
+            [
+                SettingKey::DEFAULT_TAG_BEHAVIOUR->value => $defaultTagBehaviour,
+                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS->value => $individualTagBehaviours
+            ]
         );
+
+        $tagBehaviourService = new TagBehaviourService($mockSettingService);
 
         $this->assertEquals(
             $expectedCarryforwardBehaviour,

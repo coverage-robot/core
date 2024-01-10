@@ -2,8 +2,7 @@
 
 namespace Packages\Configuration\Service;
 
-use Packages\Configuration\Setting\DefaultTagBehaviourSetting;
-use Packages\Configuration\Setting\IndividualTagBehavioursSetting;
+use Packages\Configuration\Enum\SettingKey;
 use Packages\Contracts\Provider\Provider;
 
 /**
@@ -13,8 +12,7 @@ use Packages\Contracts\Provider\Provider;
 class TagBehaviourService
 {
     public function __construct(
-        private readonly DefaultTagBehaviourSetting $defaultBehaviourSetting,
-        private readonly IndividualTagBehavioursSetting $individualTagBehavioursSetting
+        private readonly SettingService $settingService
     ) {
     }
 
@@ -24,10 +22,11 @@ class TagBehaviourService
         string $repository,
         string $tag
     ): bool {
-        $individualBehaviours = $this->individualTagBehavioursSetting->get(
+        $individualBehaviours = $this->settingService->get(
             $provider,
             $owner,
-            $repository
+            $repository,
+            SettingKey::INDIVIDUAL_TAG_BEHAVIOURS
         );
 
         foreach ($individualBehaviours as $behaviour) {
@@ -42,10 +41,11 @@ class TagBehaviourService
 
         // No individual setting has been defined, so fallback to the default
         // behaviour
-        $defaultBehaviour = $this->defaultBehaviourSetting->get(
+        $defaultBehaviour = $this->settingService->get(
             $provider,
             $owner,
-            $repository
+            $repository,
+            SettingKey::DEFAULT_TAG_BEHAVIOUR
         );
 
         return $defaultBehaviour->getCarryforward();
