@@ -57,7 +57,7 @@ class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRecorderP
             $event->getRef(),
             $event->getCommit(),
             OrchestratedEventState::SUCCESS,
-            null,
+            $event->getPullRequest(),
             $event->getEventTime()
         );
 
