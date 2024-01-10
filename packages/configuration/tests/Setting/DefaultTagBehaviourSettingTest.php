@@ -30,13 +30,11 @@ class DefaultTagBehaviourSettingTest extends TestCase
                 'repository',
                 SettingKey::DEFAULT_TAG_BEHAVIOUR,
                 SettingValueType::MAP,
-                new AttributeValue([
-                    SettingValueType::MAP->value => [
-                        'carryforward' => [
-                            SettingValueType::BOOLEAN->value => false
-                        ]
-                    ]
-                ])
+                [
+                    'carryforward' => new AttributeValue([
+                        SettingValueType::BOOLEAN->value => false
+                    ])
+                ]
             )
             ->willReturn(true);
 

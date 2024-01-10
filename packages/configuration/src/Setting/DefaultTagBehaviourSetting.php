@@ -162,20 +162,14 @@ class DefaultTagBehaviourSetting implements SettingInterface
         }
     }
 
-    private function serialize(DefaultTagBehaviour $defaultTagBehaviour): AttributeValue
+    private function serialize(DefaultTagBehaviour $defaultTagBehaviour): array
     {
-        $attributeValue = new AttributeValue(
-            [
-                SettingValueType::MAP->value => [
-                    'carryforward' => new AttributeValue(
-                        [
-                            SettingValueType::BOOLEAN->value => $defaultTagBehaviour->getCarryforward()
-                        ]
-                    ),
-                ],
-            ]
-        );
-
-        return $attributeValue;
+        return [
+            'carryforward' => new AttributeValue(
+                [
+                    SettingValueType::BOOLEAN->value => $defaultTagBehaviour->getCarryforward()
+                ]
+            ),
+        ];
     }
 }
