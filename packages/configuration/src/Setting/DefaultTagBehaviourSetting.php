@@ -169,7 +169,7 @@ class DefaultTagBehaviourSetting implements SettingInterface
                 SettingValueType::MAP->value => [
                     'carryforward' => new AttributeValue(
                         [
-                            SettingValueType::BOOLEAN->value => $defaultTagBehaviour->shouldCarryforward()
+                            SettingValueType::BOOLEAN->value => $defaultTagBehaviour->getCarryforward()
                         ]
                     ),
                 ],

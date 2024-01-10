@@ -2,8 +2,6 @@
 
 namespace Packages\Configuration\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
 class DefaultTagBehaviour
 {
     public function __construct(
@@ -11,8 +9,7 @@ class DefaultTagBehaviour
     ) {
     }
 
-    #[SerializedName('carryforward')]
-    public function shouldCarryforward(): bool
+    public function getCarryforward(): bool
     {
         return $this->carryforward;
     }

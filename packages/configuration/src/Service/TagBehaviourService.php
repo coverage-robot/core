@@ -37,7 +37,7 @@ class TagBehaviourService
 
             // The tag has a tag-specific behaviour setting, so we should conform
             // to that
-            return $behaviour->shouldCarryforward();
+            return $behaviour->getCarryforward();
         }
 
         // No individual setting has been defined, so fallback to the default
@@ -48,6 +48,6 @@ class TagBehaviourService
             $repository
         );
 
-        return $defaultBehaviour->shouldCarryforward();
+        return $defaultBehaviour->getCarryforward();
     }
 }
