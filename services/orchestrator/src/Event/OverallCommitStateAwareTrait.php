@@ -230,7 +230,7 @@ trait OverallCommitStateAwareTrait
                     !$lastIngestionEvent ||
                     $previousState->getEventTime() > $lastIngestionEvent->getEventTime()
                 ) {
-                    $lastIngestionEvent = $lastIngestionEvent->getEventTime();
+                    $lastIngestionEvent = $previousState;
                 }
             }
 
