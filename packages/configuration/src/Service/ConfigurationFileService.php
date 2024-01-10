@@ -114,9 +114,12 @@ class ConfigurationFileService
         $results = [];
 
         foreach ($yaml as $key => $value) {
+            $key = sprintf('%s%s', $prefix, $key);
+
             if (
                 is_array($value) &&
-                !array_is_list($value)
+                !array_is_list($value) &&
+                SettingKey::tryFrom($key) === null
             ) {
                 $results = array_merge(
                     $results,
@@ -125,7 +128,7 @@ class ConfigurationFileService
                 continue;
             }
 
-            $results[$prefix . $key] = $value;
+            $results[$key] = $value;
         }
 
         return $results;

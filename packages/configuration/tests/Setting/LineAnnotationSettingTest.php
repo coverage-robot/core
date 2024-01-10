@@ -116,7 +116,7 @@ class LineAnnotationSettingTest extends TestCase
                 false,
                 true
             ],
-            'Null' => [
+            SettingValueType::NULL->value => [
                 null,
                 false
             ],
