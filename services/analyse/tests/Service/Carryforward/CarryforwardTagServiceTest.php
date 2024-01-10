@@ -13,6 +13,7 @@ use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryService;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockTagBehaviourServiceFactory;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
@@ -46,6 +47,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
+            MockTagBehaviourServiceFactory::createMock(
+                $this,
+                [
+                    'tag-1' => true,
+                    'tag-2' => true
+                ]
+            ),
             new NullLogger()
         );
 
@@ -117,6 +125,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
+            MockTagBehaviourServiceFactory::createMock(
+                $this,
+                [
+                    'tag-1' => true,
+                    'tag-2' => true
+                ]
+            ),
             new NullLogger()
         );
 
@@ -162,6 +177,105 @@ class CarryforwardTagServiceTest extends TestCase
                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                 )
             ],
+            $carryforwardTags
+        );
+    }
+
+    public function testTagToCarryforwardWithIgnoreBehaviour(): void
+    {
+        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService->expects($this->once())
+            ->method('runQuery')
+            ->with(
+                TagAvailabilityQuery::class,
+                self::callback(
+                    function (QueryParameterBag $queryParameterBag) {
+                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        return true;
+                    }
+                )
+            )
+            ->willReturn(
+                new TagAvailabilityCollectionQueryResult(
+                    [
+                        new TagAvailabilityQueryResult(
+                            'tag-1',
+                            [
+                                new CarryforwardTag(
+                                    'tag-1',
+                                    'mock-commit',
+                                    [new DateTimeImmutable('2024-01-03 00:00:00')]
+                                )
+                            ]
+                        ),
+                        new TagAvailabilityQueryResult(
+                            'tag-2',
+                            [
+                                new CarryforwardTag(
+                                    'tag-2',
+                                    'mock-commit-3',
+                                    [new DateTimeImmutable('2024-01-02 00:00:00')]
+                                ),
+                                new CarryforwardTag(
+                                    'tag-2',
+                                    'mock-commit-2',
+                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
+                                )
+                            ]
+                        ),
+                    ]
+                )
+            );
+
+        $carryforwardTagService = new CarryforwardTagService(
+            $mockQueryService,
+            MockTagBehaviourServiceFactory::createMock(
+                $this,
+                [
+                    'tag-1' => true,
+                    'tag-2' => false
+                ]
+            ),
+            new NullLogger()
+        );
+
+        $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
+            new ReportWaypoint(
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                    1 => [
+                        [
+                            'commit' => 'mock-commit',
+                            'ref' => 'non-main-branch',
+                            'merged' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-2',
+                            'ref' => 'non-main-branch',
+                            'merged' => false
+                        ],
+                        [
+                            'commit' => 'mock-commit-3',
+                            'ref' => 'non-main-branch',
+                            'merged' => false
+                        ]
+                    ],
+                    default => [],
+                },
+                diff: []
+            ),
+            [
+                new Tag('tag-1', 'mock-current-commit')
+            ]
+        );
+
+        $this->assertEquals(
+            [],
             $carryforwardTags
         );
     }
@@ -215,6 +329,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
+            MockTagBehaviourServiceFactory::createMock(
+                $this,
+                [
+                    'tag-1' => true,
+                    'tag-2' => true
+                ]
+            ),
             new NullLogger()
         );
 
@@ -369,6 +490,13 @@ class CarryforwardTagServiceTest extends TestCase
 
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
+            MockTagBehaviourServiceFactory::createMock(
+                $this,
+                [
+                    'tag-1' => true,
+                    'tag-2' => true
+                ]
+            ),
             new NullLogger()
         );
 

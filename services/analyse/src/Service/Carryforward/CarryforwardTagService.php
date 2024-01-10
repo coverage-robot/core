@@ -10,6 +10,7 @@ use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
+use Packages\Configuration\Service\TagBehaviourService;
 use Packages\Contracts\Tag\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -27,6 +28,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     public function __construct(
         #[Autowire(service: CachingQueryService::class)]
         private readonly QueryServiceInterface $queryService,
+        private readonly TagBehaviourService $tagBehaviourService,
         private readonly LoggerInterface $carryforwardLogger
     ) {
     }
@@ -50,15 +52,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tagsNotSeen = array_filter(
             $tagAvailability->getAvailableTagNames(),
-            static function (string $tagName) use ($existingTags) {
-                foreach ($existingTags as $tag) {
-                    if ($tag->getName() === $tagName) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
+            fn(string $tagName) => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
         );
 
         for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
@@ -176,5 +170,41 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             $carryforwardTags,
             count($commitsFromTree) < CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE
         ];
+    }
+
+    /**
+     * Decide if a tag should be considered as being able to be carried forward.
+     *
+     * This looks at the existing tags as well as the tag behaviour configuration to decide
+     * if a tag should be carried forward.
+     */
+    private function shouldTagBeCarriedForward(
+        ReportWaypoint $waypoint,
+        array $existingTags,
+        string $tagName
+    ): bool {
+        if (
+            !$this->tagBehaviourService->shouldCarryforwardTag(
+                $waypoint->getProvider(),
+                $waypoint->getOwner(),
+                $waypoint->getRepository(),
+                $tagName
+            )
+        ) {
+            // This tag shouldn't be carried forward as its excluded in configuration, so
+            // we can skip it
+            return false;
+        }
+
+        foreach ($existingTags as $tag) {
+            if ($tag->getName() !== $tagName) {
+                continue;
+            }
+
+            // The tags already been seen, so should be skipped
+            return false;
+        }
+
+        return true;
     }
 }
