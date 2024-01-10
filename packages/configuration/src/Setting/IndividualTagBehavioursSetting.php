@@ -190,7 +190,7 @@ class IndividualTagBehavioursSetting implements SettingInterface
                         ),
                         'carryforward' => new AttributeValue(
                             [
-                                SettingValueType::BOOLEAN->value => $behaviour->shouldCarryforward()
+                                SettingValueType::BOOLEAN->value => $behaviour->getCarryforward()
                             ]
                         ),
                     ],
