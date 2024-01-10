@@ -6,7 +6,6 @@ use App\Enum\OrchestratedEventState;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
-use Symfony\Component\Serializer\Annotation\Ignore;
 
 class Finalised extends AbstractOrchestratedEvent
 {
@@ -16,6 +15,7 @@ class Finalised extends AbstractOrchestratedEvent
         private readonly string $repository,
         private readonly string $ref,
         private readonly string $commit,
+        private readonly OrchestratedEventState $state,
         private readonly int|string|null $pullRequest,
         private readonly DateTimeImmutable $eventTime,
     ) {
@@ -51,16 +51,15 @@ class Finalised extends AbstractOrchestratedEvent
         return $this->commit;
     }
 
-    public function getPullRequest(): int|string|null
-    {
-        return $this->pullRequest;
-    }
-
-    #[Ignore]
     #[Override]
     public function getState(): OrchestratedEventState
     {
-        return OrchestratedEventState::SUCCESS;
+        return $this->state;
+    }
+
+    public function getPullRequest(): int|string|null
+    {
+        return $this->pullRequest;
     }
 
     #[Override]

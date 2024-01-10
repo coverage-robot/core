@@ -20,6 +20,14 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 trait OverallCommitStateAwareTrait
 {
+    /**
+     * The maximum amount of minutes that the orchestrator will consider a finalise event as still
+     * ongoing (if the state is recorded as such).
+     *
+     * After this time, the event will be ignored and considered dropped (because of some kind of failure).
+     */
+    public const string MAX_FINALISE_AGE_MINUTES = '3';
+
     private BackoffStrategyInterface $backoffStrategy;
 
     public function __construct(
@@ -196,8 +204,8 @@ trait OverallCommitStateAwareTrait
         OrchestratedEventInterface $newState,
         array $collections
     ): bool {
-        $lastIngestionTime = null;
-        $finalisedTime = null;
+        $lastIngestionEvent = null;
+        $finalisedEvent = null;
 
         foreach ($collections as $stateChanges) {
             $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
@@ -219,27 +227,35 @@ trait OverallCommitStateAwareTrait
                 }
 
                 if (
-                    !$lastIngestionTime ||
-                    $previousState->getEventTime() > $lastIngestionTime
+                    !$lastIngestionEvent ||
+                    $previousState->getEventTime() > $lastIngestionEvent->getEventTime()
                 ) {
-                    $lastIngestionTime = $previousState->getEventTime();
+                    $lastIngestionEvent = $previousState;
                 }
             }
 
             if (
                 $previousState instanceof Finalised &&
-                (!$finalisedTime || $previousState->getEventTime() > $finalisedTime)
+                (!$finalisedEvent || $previousState->getEventTime() > $finalisedEvent->getEventTime())
             ) {
-                $finalisedTime = $previousState->getEventTime();
+                $finalisedEvent = $previousState;
             }
         }
 
-        if (!$finalisedTime instanceof DateTimeImmutable) {
-            // The results have never been finalised before - we're good to finalise the coverage now!
+        $cutOff = new DateTimeImmutable(sprintf('-%s minutes', self::MAX_FINALISE_AGE_MINUTES));
+        if (
+            !$finalisedEvent instanceof Finalised ||
+            (
+                $finalisedEvent->getState() === OrchestratedEventState::ONGOING &&
+                $finalisedEvent->getEventTime() < $cutOff
+            )
+        ) {
+            // The results have never been finalised before, or the ongoing finalise event is so old it must have
+            // been dropped - we're good to finalise the coverage now!
             return false;
         }
 
-        if ($lastIngestionTime && $lastIngestionTime > $finalisedTime) {
+        if ($lastIngestionEvent && $lastIngestionEvent->getEventTime() > $finalisedEvent->getEventTime()) {
             /**
              * This indicates that at some point we've indirectly finalised the coverage results on a commit
              * **before** all of the coverage files were ingested. This is potentially an error, because it
@@ -255,12 +271,13 @@ trait OverallCommitStateAwareTrait
              * finished a while ago but someone came back along and re-ran an old job much later which provided
              * us coverage we may or may not have had the first time.
              */
-            $this->eventProcessorLogger->error(
+            $this->eventProcessorLogger->warning(
                 sprintf(
-                    'New coverage has been ingested (%s) on a commit AFTER the results for the commit have ' .
-                    'already been finalised (%s).',
-                    $lastIngestionTime->format(DateTimeInterface::ATOM),
-                    $finalisedTime->format(DateTimeInterface::ATOM)
+                    'New coverage ingested (%s) after the results have already been finalised (%s).',
+                    $lastIngestionEvent->getEventTime()
+                        ->format(DateTimeInterface::ATOM),
+                    $finalisedEvent->getEventTime()
+                        ->format(DateTimeInterface::ATOM)
                 ),
                 [
                     'owner' => $newState->getOwner(),
