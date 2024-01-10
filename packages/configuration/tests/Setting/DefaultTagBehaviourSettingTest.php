@@ -122,14 +122,6 @@ class DefaultTagBehaviourSettingTest extends TestCase
         );
     }
 
-    public static function trueFalseDataProvider(): array
-    {
-        return [
-            'True' => [true],
-            'False' => [false]
-        ];
-    }
-
     public static function validatingValuesDataProvider(): array
     {
         return [
@@ -153,7 +145,7 @@ class DefaultTagBehaviourSettingTest extends TestCase
                 false,
                 false
             ],
-            SettingValueType::NULL->value => [
+            'Null' => [
                 null,
                 false
             ],
