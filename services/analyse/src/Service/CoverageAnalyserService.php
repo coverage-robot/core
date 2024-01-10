@@ -153,22 +153,35 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getTotalLines(ReportWaypoint $waypoint): int
     {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
+
+        if (
+            $ingestTimes === [] &&
+            $uploads === [] &&
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking coverage as theres no files to check against
+            return 0;
+        }
+
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
-                $this->carryforwardTagService->getTagsToCarryforward(
-                    $waypoint,
-                    $this->getUploads($waypoint)
-                        ->getSuccessfulTags()
-                )
+                $carryforwardTags
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /** @var CoverageQueryResult $totalCoverage */
@@ -182,22 +195,35 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
+
+        if (
+            $ingestTimes === [] &&
+            $uploads === [] &&
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking for file coverage as theres no files to check against
+            return 0;
+        }
+
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
-                $this->carryforwardTagService->getTagsToCarryforward(
-                    $waypoint,
-                    $this->getUploads($waypoint)
-                        ->getSuccessfulTags()
-                )
+                $carryforwardTags
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /** @var CoverageQueryResult $totalCoverage */
@@ -211,22 +237,35 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getUncoveredLines(ReportWaypoint $waypoint): int
     {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
+
+        if (
+            $ingestTimes === [] &&
+            $uploads === [] &&
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking for uncovered coverage as theres no files to check against
+            return 0;
+        }
+
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
-                $this->carryforwardTagService->getTagsToCarryforward(
-                    $waypoint,
-                    $this->getUploads($waypoint)
-                        ->getSuccessfulTags()
-                )
+                $carryforwardTags
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /** @var CoverageQueryResult $totalCoverage */
@@ -240,21 +279,35 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
+
+        if (
+            $ingestTimes === [] &&
+            $uploads === [] &&
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking for coverage as theres no files to check against
+            return 0;
+        }
+
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
-                $this->carryforwardTagService->getTagsToCarryforward(
-                    $waypoint,
-                    $this->getUploads($waypoint)->getSuccessfulTags()
-                )
+                $carryforwardTags
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /** @var CoverageQueryResult $totalCoverage */
@@ -268,22 +321,35 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      */
     protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
+
+        if (
+            $ingestTimes === [] &&
+            $uploads === [] &&
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking for tag coverage as theres no files to check against
+            return new TagCoverageCollectionQueryResult([]);
+        }
+
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
-                $this->carryforwardTagService->getTagsToCarryforward(
-                    $waypoint,
-                    $this->getUploads($waypoint)
-                        ->getSuccessfulTags()
-                )
+                $carryforwardTags
             )
             ->set(
                 QueryParameter::INGEST_TIME_SCOPE,
-                $this->getSuccessfulIngestTimes($waypoint)
+                $ingestTimes
             )
             ->set(
                 QueryParameter::UPLOADS_SCOPE,
-                $this->getSuccessfulUploads($waypoint)
+                $uploads
             );
 
         /** @var TagCoverageCollectionQueryResult $tags */
