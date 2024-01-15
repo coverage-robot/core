@@ -7,6 +7,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 interface PushedCommitInterface
 {
+    #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getCommit(): string;
 
     /**

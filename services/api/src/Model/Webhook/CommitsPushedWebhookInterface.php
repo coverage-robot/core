@@ -16,6 +16,7 @@ interface CommitsPushedWebhookInterface
      * The commit hash at the head of the push.
      */
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getHeadCommit(): string;
 
     /**

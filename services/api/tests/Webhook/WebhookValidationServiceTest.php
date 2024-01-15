@@ -43,10 +43,10 @@ class WebhookValidationServiceTest extends TestCase
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
-                    headCommit: 'mock-commit-1',
+                    headCommit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                     commits: [
                         new GithubPushedCommit(
-                            commit: 'mock-commit-1',
+                            commit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
@@ -62,17 +62,17 @@ class WebhookValidationServiceTest extends TestCase
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
-                    headCommit: 'mock-commit-2',
+                    headCommit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                     commits: [
                         new GithubPushedCommit(
-                            commit: 'mock-commit-1',
+                            commit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
                             committedAt: new DateTimeImmutable()
                         ),
                         new GithubPushedCommit(
-                            commit: 'mock-commit-2',
+                            commit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
@@ -88,10 +88,10 @@ class WebhookValidationServiceTest extends TestCase
                     owner: '',
                     repository: 'mock-repository',
                     ref: '',
-                    headCommit: 'mock-commit-2',
+                    headCommit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                     commits: [
                         new GithubPushedCommit(
-                            commit: 'mock-commit-2',
+                            commit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
@@ -107,7 +107,7 @@ class WebhookValidationServiceTest extends TestCase
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
-                    headCommit: 'mock-commit-2',
+                    headCommit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                     commits: []
                 ),
                 // Webhooks for when refs are deleted (i.e. PRs merged)
@@ -123,14 +123,14 @@ class WebhookValidationServiceTest extends TestCase
                     headCommit: '',
                     commits: [
                         new GithubPushedCommit(
-                            commit: 'mock-commit-1',
+                            commit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
                             committedAt: new DateTimeImmutable()
                         ),
                         new GithubPushedCommit(
-                            commit: 'mock-commit-2',
+                            commit: 'abf2bc5ab608a72a1577379f1d51d28cc494ccf1',
                             addedFiles: [],
                             modifiedFiles: [],
                             deletedFiles: [],
