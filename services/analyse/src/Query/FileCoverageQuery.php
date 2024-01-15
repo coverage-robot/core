@@ -19,7 +19,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService
+        EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);
     }
@@ -63,6 +63,7 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         SQL;
     }
 
+    #[Override]
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
         parent::validateParameters($parameterBag);
