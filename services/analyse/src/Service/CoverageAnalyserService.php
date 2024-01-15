@@ -176,11 +176,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $carryforwardTags
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -218,11 +218,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $carryforwardTags
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -260,11 +260,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $carryforwardTags
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -302,11 +302,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $carryforwardTags
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -344,11 +344,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $carryforwardTags
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -395,15 +395,15 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
-                QueryParameter::LINE_SCOPE,
+                QueryParameter::LINES,
                 $diff
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -461,7 +461,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
-                QueryParameter::LINE_SCOPE,
+                QueryParameter::LINES,
                 $diff
             )
             ->set(
@@ -469,11 +469,11 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $limit
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 
@@ -522,15 +522,15 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
             ->set(
-                QueryParameter::LINE_SCOPE,
+                QueryParameter::LINES,
                 $diff
             )
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 $ingestTimes
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 $uploads
             );
 

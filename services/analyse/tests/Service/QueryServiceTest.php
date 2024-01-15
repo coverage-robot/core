@@ -24,6 +24,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Tag\Tag;
+use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -78,7 +79,8 @@ class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             $this->createMock(ValidatorInterface::class),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -91,6 +93,11 @@ class QueryServiceTest extends KernelTestCase
         $mockBigQueryService->expects($this->once())
             ->method('query')
             ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('parameters')
+            ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
         $mockBigQueryService->expects($this->once())
@@ -136,7 +143,8 @@ class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilder,
             $this->createMock(ValidatorInterface::class),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $mockBigQueryService->expects($this->never())
@@ -214,7 +222,8 @@ class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             $mockValidator,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -227,6 +236,11 @@ class QueryServiceTest extends KernelTestCase
         $mockBigQueryService->expects($this->once())
             ->method('query')
             ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('parameters')
+            ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
         $mockBigQueryService->expects($this->once())
@@ -258,7 +272,8 @@ class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             $this->createMock(ValidatorInterface::class),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -270,6 +285,11 @@ class QueryServiceTest extends KernelTestCase
         $mockBigQueryService->expects($this->once())
             ->method('query')
             ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('parameters')
+            ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
         $mockBigQueryService->expects($this->once())
@@ -301,7 +321,8 @@ class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             $this->createMock(ValidatorInterface::class),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricService::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -313,6 +334,11 @@ class QueryServiceTest extends KernelTestCase
         $mockBigQueryService->expects($this->once())
             ->method('query')
             ->with('formatted-query')
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('parameters')
+            ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
         $mockBigQueryService->expects($this->once())

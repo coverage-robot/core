@@ -9,8 +9,10 @@ class Tag implements Stringable
 {
     public function __construct(
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[a-zA-Z0-9\.\-_]+$/')]
         private readonly string $name,
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
         private readonly string $commit
     ) {
     }

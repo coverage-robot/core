@@ -6,7 +6,7 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
-use App\Query\Trait\ScopeAwareTrait;
+use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class TotalUploadsQuery implements QueryInterface
 {
     use UploadTableAwareTrait;
-    use ScopeAwareTrait;
+    use ParameterAwareTrait;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -29,9 +29,6 @@ class TotalUploadsQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $commitScope = self::getCommitScope($parameterBag);
-        $repositoryScope = self::getRepositoryScope($parameterBag);
-
         return <<<SQL
         SELECT
             COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
@@ -40,7 +37,7 @@ class TotalUploadsQuery implements QueryInterface
                 ARRAY_AGG(
                     STRUCT(
                         tag as name,
-                        "{$parameterBag?->get(QueryParameter::COMMIT)}" as commit
+                        @COMMIT as commit
                     )
                 ),
                 []
@@ -48,8 +45,10 @@ class TotalUploadsQuery implements QueryInterface
         FROM
             `{$table}`
         WHERE
-            {$commitScope} AND
-            {$repositoryScope}
+            provider = {$this->getAlias(QueryParameter::PROVIDER)}
+            AND owner = {$this->getAlias(QueryParameter::OWNER)}
+            AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+            AND commit = {$this->getAlias(QueryParameter::COMMIT)}
         SQL;
     }
 

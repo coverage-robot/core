@@ -11,7 +11,8 @@ interface ParentAwareEventInterface extends Stringable
      * @return string[]
      */
     #[Assert\All([
-        new Assert\Type('string')
+        new Assert\Type('string'),
+        new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
     ])]
     public function getParent(): array;
 }
