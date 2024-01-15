@@ -53,7 +53,7 @@ interface PipelineStateChangeWebhookInterface
      * The pull request the job is running on (if applicable)
      */
     #[Assert\NotBlank(allowNull: true)]
-    #[Assert\Regex(pattern: '/^[0-9]+$/')]
+    #[Assert\Regex(pattern: '/^\d+$/')]
     public function getPullRequest(): string|int|null;
 
     /**

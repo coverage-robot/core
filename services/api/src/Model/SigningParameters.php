@@ -33,7 +33,7 @@ class SigningParameters implements ParametersInterface
         #[Assert\NotBlank]
         private readonly string $ref,
         #[Assert\NotBlank(allowNull: true)]
-        #[Assert\Regex(pattern: '/^[0-9]+$/')]
+        #[Assert\Regex(pattern: '/^\d+$/')]
         private readonly string|int|null $pullRequest,
         #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseRef,
