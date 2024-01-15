@@ -3,6 +3,9 @@
 namespace App\Model;
 
 use App\Enum\QueryParameter;
+use BackedEnum;
+use DateTimeImmutable;
+use Google\Cloud\BigQuery\Date;
 use JsonSerializable;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -65,6 +68,37 @@ class QueryParameterBag implements JsonSerializable
          */
         foreach ($this->getAll() as $key => $value) {
             $parameters[$key->value] = $value;
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Convert the parameter bag into an array of parameters which can be passed to BigQuery
+     * and used as direct substitutions in a query.
+     *
+     * @see QueryParameter::getSupportedBigQueryParameters()
+     */
+    public function toBigQueryParameters(): array
+    {
+        $parameters = [];
+
+        /**
+         * @psalm-suppress all
+         */
+        foreach ($this->getAll() as $key => $value) {
+            if (!in_array($key, QueryParameter::getSupportedBigQueryParameters(), true)) {
+                continue;
+            }
+
+            $parameters[$key->value] = match (true) {
+                $value instanceof BackedEnum => $value->value,
+                $key === QueryParameter::INGEST_PARTITIONS => array_map(
+                    static fn(DateTimeImmutable $dateTime) => new Date($dateTime),
+                    $value
+                ),
+                default => $value
+            };
         }
 
         return $parameters;

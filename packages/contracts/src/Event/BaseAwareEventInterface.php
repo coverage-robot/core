@@ -11,5 +11,6 @@ interface BaseAwareEventInterface extends Stringable
     public function getBaseRef(): ?string;
 
     #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getBaseCommit(): ?string;
 }

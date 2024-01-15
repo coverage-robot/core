@@ -49,12 +49,12 @@ WITH
       INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       1 = 1
-      AND upload.repository = "mock-repository"
-      AND upload.owner = "mock-owner"
-      AND upload.provider = "github"
-      AND upload.commit = "mock-commit"
-      AND upload.uploadId IN ("1", "2")
-      AND DATE(lines.ingestTime) IN ("2024-01-03")
+      AND upload.provider = @PROVIDER
+      AND upload.owner = @OWNER
+      AND upload.repository = @REPOSITORY
+      AND upload.commit = @COMMIT
+      AND upload.uploadId IN UNNEST(@UPLOADS)
+      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
       AND (
         (
           lines.fileName = "1"

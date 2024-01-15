@@ -34,13 +34,13 @@ trait DiffAwareTrait
      * )
      * ```
      */
-    private static function getLineScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
+    private function getLineScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
         $tableAlias = $tableAlias ? $tableAlias . '.' : '';
 
-        if ($parameterBag && $parameterBag->has(QueryParameter::LINE_SCOPE)) {
+        if ($parameterBag && $parameterBag->has(QueryParameter::LINES)) {
             /** @var array<array-key, list{int}> $fileLineNumbers */
-            $fileLineNumbers = $parameterBag->get(QueryParameter::LINE_SCOPE);
+            $fileLineNumbers = $parameterBag->get(QueryParameter::LINES);
 
             $filtering = '';
             foreach (array_keys($fileLineNumbers) as $fileName) {

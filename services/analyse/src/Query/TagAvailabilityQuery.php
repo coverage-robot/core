@@ -6,7 +6,7 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
-use App\Query\Trait\ScopeAwareTrait;
+use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class TagAvailabilityQuery implements QueryInterface
 {
     use UploadTableAwareTrait;
-    use ScopeAwareTrait;
+    use ParameterAwareTrait;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -29,8 +29,6 @@ class TagAvailabilityQuery implements QueryInterface
 
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
-        $repositoryScope = self::getRepositoryScope($parameterBag);
-
         return <<<SQL
         WITH availability AS (
             SELECT
@@ -40,7 +38,9 @@ class TagAvailabilityQuery implements QueryInterface
             FROM
                 `{$table}`
             WHERE
-                {$repositoryScope}
+                provider = {$this->getAlias(QueryParameter::PROVIDER)}
+                AND owner = {$this->getAlias(QueryParameter::OWNER)}
+                AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
             GROUP BY
                 commit,
                 tag

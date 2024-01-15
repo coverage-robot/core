@@ -48,23 +48,30 @@ WITH
       `mock-table` as upload
       INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
-      1 = 1
-      AND upload.repository = "mock-repository"
-      AND upload.owner = "mock-owner"
-      AND upload.provider = "github"
-      AND upload.commit = "mock-commit"
-      AND upload.uploadId IN ("1", "2")
-      AND DATE(lines.ingestTime) IN ("2024-01-03")
-      AND (
+      (
         (
-          lines.fileName = "mock-file"
-          AND lines.lineNumber IN (1, 2, 3)
+          (
+            upload.commit = "mock-commit"
+            AND upload.tag = "1"
+          )
+          OR (
+            upload.commit = "mock-commit"
+            AND upload.tag = "2"
+          )
+          OR (
+            upload.commit = "mock-commit-2"
+            AND upload.tag = "3"
+          )
+          OR (
+            upload.commit = "mock-commit-2"
+            AND upload.tag = "4"
+          )
         )
-        OR(
-          lines.fileName = "mock-file-2"
-          AND lines.lineNumber IN (10, 11, 12)
-        )
+        AND upload.provider = @PROVIDER
+        AND upload.owner = @OWNER
+        AND upload.repository = @REPOSITORY
       )
+      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_TIME_SCOPE)
   ),
   branchingLines AS (
     SELECT
@@ -172,4 +179,4 @@ ORDER BY
     2
   ) ASC
 LIMIT
-  50
+  @LIMIT

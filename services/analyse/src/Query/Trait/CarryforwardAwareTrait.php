@@ -8,7 +8,7 @@ use App\Model\QueryParameterBag;
 
 trait CarryforwardAwareTrait
 {
-    use ScopeAwareTrait;
+    use ParameterAwareTrait;
 
     /**
      * Build a BQ query filter to scope particular queries to include a particular set of tagged coverage
@@ -27,9 +27,9 @@ trait CarryforwardAwareTrait
      * ```sql
      * WHERE
      * (
-     *      owner = "owner" AND
-     *      repository = "repository" AND
-     *      provider = "provider" AND
+     *      owner = @OWNER AND
+     *      repository = @REPOSITORY AND
+     *      provider = @PROVIDER AND
      *      (
      *           (commit = "commit-sha-1" AND tag = "tag-1" AND DATE(ingestTime) = '2021-01-01') OR
      *           (commit = "commit-sha-1" AND tag = "tag-2" AND DATE(ingestTime) = '2021-01-01') OR
@@ -39,13 +39,10 @@ trait CarryforwardAwareTrait
      * )
      * ```
      */
-    private static function getCarryforwardTagsScope(
+    private function getCarryforwardTagsScope(
         ?QueryParameterBag $parameterBag,
-        ?string $uploadsTableAlias = null,
-        ?string $linesTableAlias = null
+        ?string $uploadsTableAlias = null
     ): string {
-        $repositoryScope = self::getRepositoryScope($parameterBag, $uploadsTableAlias);
-
         $uploadsTableAlias = $uploadsTableAlias ? $uploadsTableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
@@ -68,14 +65,14 @@ trait CarryforwardAwareTrait
 
             $filtering = implode(' OR ', $filtering);
 
-            $repositoryScope = $repositoryScope === '' ? '' : 'AND ' . $repositoryScope;
-
             return <<<SQL
             (
                 (
                     {$filtering}
                 )
-                {$repositoryScope}
+                AND {$uploadsTableAlias}provider = {$this->getAlias(QueryParameter::PROVIDER)}
+                AND {$uploadsTableAlias}owner = {$this->getAlias(QueryParameter::OWNER)}
+                AND {$uploadsTableAlias}repository = {$this->getAlias(QueryParameter::REPOSITORY)}
             )
             SQL;
         }
