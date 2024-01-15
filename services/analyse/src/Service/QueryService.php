@@ -88,7 +88,7 @@ class QueryService implements QueryServiceInterface
             $results->waitUntilComplete();
 
             $this->metricService->put(
-                metric: 'QueryBytesBilled',
+                metric: 'QueryBytesProcessed',
                 value: (int)($results->info()['totalBytesProcessed'] ?? 0),
                 unit: Unit::BYTES,
                 dimensions: [

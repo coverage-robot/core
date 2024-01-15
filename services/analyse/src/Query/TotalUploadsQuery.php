@@ -37,7 +37,7 @@ class TotalUploadsQuery implements QueryInterface
                 ARRAY_AGG(
                     STRUCT(
                         tag as name,
-                        @COMMIT as commit
+                        {$this->getAlias(QueryParameter::COMMIT)} as commit
                     )
                 ),
                 []
