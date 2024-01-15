@@ -204,6 +204,18 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
+                    ->set(QueryParameter::UPLOADS, ['1','2'])
+                    ->set(
+                        QueryParameter::INGEST_PARTITIONS,
+                        [
+                            new DateTimeImmutable('2024-01-03 00:00:00'),
+                            new DateTimeImmutable('2024-01-03 00:00:00')
+                        ]
+                    ),
+                false
+            ],
+            [
+                QueryParameterBag::fromWaypoint($waypoint)
                     ->set(QueryParameter::LIMIT, 50)
                     ->set(QueryParameter::UPLOADS, ['1','2'])
                     ->set(
