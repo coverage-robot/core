@@ -112,7 +112,7 @@ class QueryParameterBag implements JsonSerializable
     {
         $types = [];
 
-        foreach ($this->toBigQueryParameters() as $key => $value) {
+        foreach (array_keys($this->toBigQueryParameters()) as $key) {
             $type = QueryParameter::getBigQueryParameterType(QueryParameter::from($key));
 
             if ($type === null) {
