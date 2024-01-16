@@ -8,78 +8,20 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
-use App\Query\Trait\ScopeAwareTrait;
+use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Packages\Contracts\Line\LineType;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
-    use ScopeAwareTrait;
     use CarryforwardAwareTrait;
     use UploadTableAwareTrait;
     use DiffAwareTrait;
+    use ParameterAwareTrait;
 
     protected const UPLOAD_TABLE_ALIAS = 'upload';
 
     protected const LINES_TABLE_ALIAS = 'lines';
-
-    public function getUnnestQueryFiltering(string $table, ?QueryParameterBag $parameterBag): string
-    {
-        $commitScope = self::getCommitScope($parameterBag, self::UPLOAD_TABLE_ALIAS);
-        $ingestTimeScope = self::getIngestTimeScope(
-            $parameterBag,
-            self::LINES_TABLE_ALIAS
-        );
-        $repositoryScope = self::getRepositoryScope(
-            $parameterBag,
-            self::UPLOAD_TABLE_ALIAS
-        );
-        $uploadScope = self::getUploadsScope(
-            $parameterBag,
-            self::UPLOAD_TABLE_ALIAS
-        );
-        $lineScope = ($scope = self::getLineScope($parameterBag, self::LINES_TABLE_ALIAS)) !== ''
-                ? 'AND ' . $scope
-                : '';
-        $carryforwardScope = self::getCarryforwardTagsScope(
-            $parameterBag,
-            self::UPLOAD_TABLE_ALIAS,
-            self::LINES_TABLE_ALIAS
-        );
-
-        if (!$parameterBag?->get(QueryParameter::UPLOADS_SCOPE)) {
-            return <<<SQL
-            {$carryforwardScope}
-            AND {$ingestTimeScope}
-            {$lineScope}
-            SQL;
-        }
-
-        if (!$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
-            return <<<SQL
-            1=1
-            AND {$repositoryScope}
-            AND {$commitScope}
-            AND {$uploadScope}
-            AND {$ingestTimeScope}
-            {$lineScope}
-            SQL;
-        }
-
-        return <<<SQL
-        (
-            (
-                1=1
-                AND {$repositoryScope}
-                AND {$commitScope}
-                AND {$uploadScope}
-            )
-            OR {$carryforwardScope}
-        )
-        AND {$ingestTimeScope}
-        {$lineScope}
-        SQL;
-    }
 
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
@@ -148,8 +90,55 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                 `{$table}` as upload
             INNER JOIN `{$lineCoverageTable}` as {$linesTableAlias} ON lines.uploadId = upload.uploadId
             WHERE
-                {$this->getUnnestQueryFiltering($table, $parameterBag)}
+                {$this->getUnnestQueryFiltering($parameterBag)}
         )
+        SQL;
+    }
+
+    private function getUnnestQueryFiltering(?QueryParameterBag $parameterBag): string
+    {
+        $uploadsTableAlias = self::UPLOAD_TABLE_ALIAS;
+        $linesTableAlias = self::LINES_TABLE_ALIAS;
+
+        $lineScope = ($scope = $this->getLineScope($parameterBag, self::LINES_TABLE_ALIAS)) !== ''
+            ? 'AND ' . $scope
+            : '';
+
+        if (!$parameterBag?->get(QueryParameter::UPLOADS)) {
+            return <<<SQL
+            {$this->getCarryforwardTagsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)}
+            AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
+            {$lineScope}
+            SQL;
+        }
+
+        if (!$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
+            return <<<SQL
+            1=1
+            AND {$uploadsTableAlias}.provider = {$this->getAlias(QueryParameter::PROVIDER)}
+            AND {$uploadsTableAlias}.owner = {$this->getAlias(QueryParameter::OWNER)}
+            AND {$uploadsTableAlias}.repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+            AND {$uploadsTableAlias}.commit = {$this->getAlias(QueryParameter::COMMIT)}
+            AND {$uploadsTableAlias}.uploadId IN UNNEST({$this->getAlias(QueryParameter::UPLOADS)})
+            AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
+            {$lineScope}
+            SQL;
+        }
+
+        return <<<SQL
+        (
+            (
+                1=1
+                AND {$uploadsTableAlias}.provider = {$this->getAlias(QueryParameter::PROVIDER)}
+                AND {$uploadsTableAlias}.owner = {$this->getAlias(QueryParameter::OWNER)}
+                AND {$uploadsTableAlias}.repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+                AND {$uploadsTableAlias}.commit = {$this->getAlias(QueryParameter::COMMIT)}
+                AND {$uploadsTableAlias}.uploadId IN UNNEST({$this->getAlias(QueryParameter::UPLOADS)})
+            )
+            OR {$this->getCarryforwardTagsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)}
+        )
+        AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
+        {$lineScope}
         SQL;
     }
 
@@ -168,8 +157,8 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
         if (
             (
-                !$parameterBag->get(QueryParameter::INGEST_TIME_SCOPE) ||
-                !$parameterBag->get(QueryParameter::UPLOADS_SCOPE)
+                !$parameterBag->get(QueryParameter::INGEST_PARTITIONS) ||
+                !$parameterBag->get(QueryParameter::UPLOADS)
             ) &&
             !$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)
         ) {

@@ -37,16 +37,16 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
         );
 
         $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1','2'])
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 [
                     new DateTimeImmutable('2024-01-03 00:00:00'),
                     new DateTimeImmutable('2024-01-03 00:00:00')
                 ]
             )
             ->set(
-                QueryParameter::LINE_SCOPE,
+                QueryParameter::LINES,
                 [
                     '1' => [1, 2, 3],
                     '2' => [1, 2, 3],
@@ -54,8 +54,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             );
 
         $carryforwardParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS_SCOPE, [])
-            ->set(QueryParameter::INGEST_TIME_SCOPE, [])
+            ->set(QueryParameter::UPLOADS, [])
+            ->set(QueryParameter::INGEST_PARTITIONS, [])
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
@@ -67,9 +67,9 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             );
 
         $carryforwardAndUploadParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1','2'])
             ->set(
-                QueryParameter::INGEST_TIME_SCOPE,
+                QueryParameter::INGEST_PARTITIONS,
                 [
                     new DateTimeImmutable('2024-01-03 00:00:00'),
                     new DateTimeImmutable('2024-01-03 00:00:00')
@@ -178,19 +178,19 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS_SCOPE, ['1','2']),
+                    ->set(QueryParameter::UPLOADS, ['1','2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_TIME_SCOPE, ['1','2']),
+                    ->set(QueryParameter::INGEST_PARTITIONS, ['1','2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS_SCOPE, ['1','2'])
+                    ->set(QueryParameter::UPLOADS, ['1','2'])
                     ->set(
-                        QueryParameter::INGEST_TIME_SCOPE,
+                        QueryParameter::INGEST_PARTITIONS,
                         [
                             new DateTimeImmutable('2024-01-03 00:00:00'),
                             new DateTimeImmutable('2024-01-03 00:00:00')
@@ -200,8 +200,8 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS_SCOPE, [])
-                    ->set(QueryParameter::INGEST_TIME_SCOPE, []),
+                    ->set(QueryParameter::UPLOADS, [])
+                    ->set(QueryParameter::INGEST_PARTITIONS, []),
                 false
             ],
             [

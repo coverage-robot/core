@@ -50,28 +50,38 @@ WITH
     WHERE
       (
         (
-          (
-            upload.commit = "mock-commit"
-            AND upload.tag = "1"
-          )
-          OR (
-            upload.commit = "mock-commit"
-            AND upload.tag = "2"
-          )
-          OR (
-            upload.commit = "mock-commit-2"
-            AND upload.tag = "3"
-          )
-          OR (
-            upload.commit = "mock-commit-2"
-            AND upload.tag = "4"
-          )
+          1 = 1
+          AND upload.provider = @PROVIDER
+          AND upload.owner = @OWNER
+          AND upload.repository = @REPOSITORY
+          AND upload.commit = @COMMIT
+          AND upload.uploadId IN UNNEST(@UPLOADS)
         )
-        AND upload.repository = "mock-repository"
-        AND upload.owner = "mock-owner"
-        AND upload.provider = "github"
+        OR (
+          (
+            (
+              upload.commit = "mock-commit"
+              AND upload.tag = "1"
+            )
+            OR (
+              upload.commit = "mock-commit"
+              AND upload.tag = "2"
+            )
+            OR (
+              upload.commit = "mock-commit-2"
+              AND upload.tag = "3"
+            )
+            OR (
+              upload.commit = "mock-commit-2"
+              AND upload.tag = "4"
+            )
+          )
+          AND upload.provider = @PROVIDER
+          AND upload.owner = @OWNER
+          AND upload.repository = @REPOSITORY
+        )
       )
-      AND DATE(lines.ingestTime) IN ("2024-01-03", "2024-01-01")
+      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
   ),
   branchingLines AS (
     SELECT
@@ -178,3 +188,5 @@ ORDER BY
     ) / COUNT(*) * 100,
     2
   ) ASC
+LIMIT
+  @LIMIT

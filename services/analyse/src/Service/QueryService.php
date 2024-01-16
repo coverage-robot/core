@@ -9,6 +9,8 @@ use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Packages\Telemetry\Enum\Unit;
+use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -24,7 +26,8 @@ class QueryService implements QueryServiceInterface
         private readonly iterable $queries,
         private readonly QueryBuilderService $queryBuilderService,
         private readonly ValidatorInterface $validator,
-        private readonly LoggerInterface $queryServiceLogger
+        private readonly LoggerInterface $queryServiceLogger,
+        private readonly MetricService $metricService
     ) {
     }
 
@@ -79,9 +82,23 @@ class QueryService implements QueryServiceInterface
         try {
             $results = $this->bigQueryClient->runQuery(
                 $this->bigQueryClient->query($sql)
+                    ->parameters($parameterBag?->toBigQueryParameters() ?? [])
+                    ->setParamTypes($parameterBag?->toBigQueryParameterTypes() ?? [])
             );
 
             $results->waitUntilComplete();
+
+            $this->metricService->put(
+                metric: 'QueryBytesProcessed',
+                value: (int)($results->info()['totalBytesProcessed'] ?? 0),
+                unit: Unit::BYTES,
+                dimensions: [
+                    ['query']
+                ],
+                properties: [
+                    'query' => $query::class
+                ]
+            );
 
             return $this->parseAndValidateResults(
                 $query,

@@ -17,21 +17,50 @@ class QueryParameterBagTest extends TestCase
                 Provider::GITHUB
             )
             ->set(
-                QueryParameter::LINE_SCOPE,
+                QueryParameter::LINES,
                 []
             )
             ->set(
-                QueryParameter::UPLOADS_SCOPE,
+                QueryParameter::UPLOADS,
                 ''
             );
 
         $this->assertSame(
             [
                 QueryParameter::PROVIDER->value => Provider::GITHUB,
-                QueryParameter::LINE_SCOPE->value => [],
-                QueryParameter::UPLOADS_SCOPE->value => '',
+                QueryParameter::LINES->value => [],
+                QueryParameter::UPLOADS->value => '',
             ],
             $queryParameterBag->jsonSerialize()
+        );
+    }
+
+    public function testBigQueryParameterSerialization(): void
+    {
+        $queryParameterBag = (new QueryParameterBag())
+            ->set(
+                QueryParameter::PROVIDER,
+                Provider::GITHUB
+            )
+            ->set(
+                QueryParameter::LINES,
+                []
+            )
+            ->set(
+                QueryParameter::UPLOADS,
+                ''
+            )
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                []
+            );
+
+        $this->assertSame(
+            [
+                QueryParameter::PROVIDER->value => Provider::GITHUB->value,
+                QueryParameter::UPLOADS->value => '',
+            ],
+            $queryParameterBag->toBigQueryParameters()
         );
     }
 }

@@ -23,9 +23,11 @@ interface WebhookInterface extends Stringable
     public function getProvider(): Provider;
 
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getOwner(): string;
 
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getRepository(): string;
 
     public function getType(): WebhookType;

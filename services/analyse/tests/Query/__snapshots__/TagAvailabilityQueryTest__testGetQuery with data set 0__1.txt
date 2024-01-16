@@ -9,9 +9,9 @@ WITH
     FROM
       `mock-table`
     WHERE
-      repository = "mock-repository"
-      AND owner = "mock-owner"
-      AND provider = "github"
+      provider = @PROVIDER
+      AND owner = @OWNER
+      AND repository = @REPOSITORY
     GROUP BY
       commit,
       tag
