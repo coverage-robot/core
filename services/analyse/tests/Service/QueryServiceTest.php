@@ -100,6 +100,11 @@ class QueryServiceTest extends KernelTestCase
             ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('setParamTypes')
+            ->with([])
+            ->willReturn($mockQueryJobConfiguration);
+
         $mockBigQueryService->expects($this->once())
             ->method('runQuery')
             ->with($mockQueryJobConfiguration)
@@ -243,6 +248,11 @@ class QueryServiceTest extends KernelTestCase
             ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('setParamTypes')
+            ->with([])
+            ->willReturn($mockQueryJobConfiguration);
+
         $mockBigQueryService->expects($this->once())
             ->method('runQuery')
             ->with($mockQueryJobConfiguration)
@@ -292,6 +302,11 @@ class QueryServiceTest extends KernelTestCase
             ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('setParamTypes')
+            ->with([])
+            ->willReturn($mockQueryJobConfiguration);
+
         $mockBigQueryService->expects($this->once())
             ->method('runQuery')
             ->with($mockQueryJobConfiguration)
@@ -338,6 +353,11 @@ class QueryServiceTest extends KernelTestCase
 
         $mockQueryJobConfiguration->expects($this->once())
             ->method('parameters')
+            ->with([])
+            ->willReturn($mockQueryJobConfiguration);
+
+        $mockQueryJobConfiguration->expects($this->once())
+            ->method('setParamTypes')
             ->with([])
             ->willReturn($mockQueryJobConfiguration);
 
