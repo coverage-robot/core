@@ -83,6 +83,7 @@ class QueryService implements QueryServiceInterface
             $results = $this->bigQueryClient->runQuery(
                 $this->bigQueryClient->query($sql)
                     ->parameters($parameterBag?->toBigQueryParameters() ?? [])
+                    ->setParamTypes($parameterBag?->toBigQueryParameterTypes() ?? [])
             );
 
             $results->waitUntilComplete();
