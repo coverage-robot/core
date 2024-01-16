@@ -2,6 +2,7 @@
 
 namespace App\Service\Carryforward;
 
+use App\Model\CarryforwardTag;
 use App\Model\ReportWaypoint;
 use Packages\Contracts\Tag\Tag;
 
@@ -12,7 +13,7 @@ interface CarryforwardTagServiceInterface
      * because they have not (yet) been uploaded to the current commit.
      *
      * @param Tag[] $existingTags
-     * @return Tag[]
+     * @return CarryforwardTag[]
      */
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array;
 }
