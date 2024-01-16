@@ -17,12 +17,14 @@ interface PipelineStateChangeWebhookInterface
      * The commit the job is running on.
      */
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getCommit(): string;
 
     /**
      * The parent commit of the commit the job is running on.
      */
     #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getParent(): ?string;
 
     /**
@@ -51,6 +53,7 @@ interface PipelineStateChangeWebhookInterface
      * The pull request the job is running on (if applicable)
      */
     #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Regex(pattern: '/^\d+$/')]
     public function getPullRequest(): string|int|null;
 
     /**
@@ -63,5 +66,6 @@ interface PipelineStateChangeWebhookInterface
      * The commit the pull request is based on (if applicable)
      */
     #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getBaseCommit(): ?string;
 }

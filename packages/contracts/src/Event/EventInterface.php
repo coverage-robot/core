@@ -24,7 +24,7 @@ interface EventInterface extends Stringable
     public function getCommit(): string;
 
     #[Assert\NotBlank(allowNull: true)]
-    #[Assert\Regex(pattern: '/^[0-9]+$/')]
+    #[Assert\Regex(pattern: '/^\d+$/')]
     public function getPullRequest(): int|string|null;
 
     #[Assert\NotBlank]
