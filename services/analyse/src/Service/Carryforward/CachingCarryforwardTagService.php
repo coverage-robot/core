@@ -2,6 +2,7 @@
 
 namespace App\Service\Carryforward;
 
+use App\Model\CarryforwardTag;
 use App\Model\ReportWaypoint;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Tag\Tag;
@@ -31,7 +32,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
 
     /**
      * @param Tag[] $existingTags
-     * @return Tag[]
+     * @return CarryforwardTag[]
      */
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
