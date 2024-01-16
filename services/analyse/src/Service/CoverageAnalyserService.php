@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Enum\QueryParameter;
 use App\Exception\AnalysisException;
 use App\Exception\QueryException;
+use App\Model\CarryforwardTag;
 use App\Model\CoverageReport;
 use App\Model\CoverageReportInterface;
 use App\Model\QueryParameterBag;
@@ -177,7 +178,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
-                $ingestTimes
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
             )
             ->set(
                 QueryParameter::UPLOADS,
@@ -219,7 +230,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
-                $ingestTimes
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
             )
             ->set(
                 QueryParameter::UPLOADS,
@@ -261,7 +282,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
-                $ingestTimes
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
             )
             ->set(
                 QueryParameter::UPLOADS,
@@ -303,7 +334,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
-                $ingestTimes
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
             )
             ->set(
                 QueryParameter::UPLOADS,
@@ -345,7 +386,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
-                $ingestTimes
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
             )
             ->set(
                 QueryParameter::UPLOADS,
