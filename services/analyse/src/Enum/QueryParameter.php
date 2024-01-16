@@ -107,4 +107,26 @@ enum QueryParameter: string
             QueryParameter::LIMIT
         ];
     }
+
+    /**
+     * The parameter types that can be directly substituted into a BigQuery query.
+     *
+     * These parameters **must** be ones that BigQuery can parse and convert into values.
+     */
+    public static function getBigQueryParameterType(QueryParameter $parameter): string
+    {
+        return match ($parameter) {
+            QueryParameter::COMMIT,
+            QueryParameter::OWNER,
+            QueryParameter::REPOSITORY,
+            QueryParameter::PROVIDER,
+            QueryParameter::UPLOADS => 'STRING',
+
+            QueryParameter::INGEST_PARTITIONS => 'DATE',
+
+            QueryParameter::LIMIT => 'INT64',
+
+            default => null
+        };
+    }
 }

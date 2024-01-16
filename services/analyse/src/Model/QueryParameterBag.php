@@ -103,4 +103,27 @@ class QueryParameterBag implements JsonSerializable
 
         return $parameters;
     }
+
+    /**
+     * Convert the parameter bag into an array of parameter types which can be passed to BigQuery
+     * to tell it what the types of the substitutable parameters are.
+     */
+    public function toBigQueryParameterTypes(): array
+    {
+        $types = [];
+
+        foreach ($this->toBigQueryParameters() as $key => $value) {
+            $type = QueryParameter::getBigQueryParameterType(QueryParameter::from($key));
+
+            if ($type === null) {
+                // No mapped type for this parameter, so we'll let BigQuery infer it from the
+                // content.
+                continue;
+            }
+
+            $types[$key] = $type;
+        }
+
+        return $types;
+    }
 }
