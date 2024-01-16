@@ -35,7 +35,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
     /**
      * @param Tag[] $existingTags
-     * @return Tag[]
+     * @return CarryforwardTag[]
      */
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
