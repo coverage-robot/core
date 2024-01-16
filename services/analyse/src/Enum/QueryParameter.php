@@ -113,7 +113,7 @@ enum QueryParameter: string
      *
      * These parameters **must** be ones that BigQuery can parse and convert into values.
      */
-    public static function getBigQueryParameterType(QueryParameter $parameter): string
+    public static function getBigQueryParameterType(QueryParameter $parameter): ?string
     {
         return match ($parameter) {
             QueryParameter::COMMIT,
