@@ -71,7 +71,7 @@ WITH
         AND upload.owner = @OWNER
         AND upload.repository = @REPOSITORY
       )
-      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_TIME_SCOPE)
+      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
   ),
   branchingLines AS (
     SELECT

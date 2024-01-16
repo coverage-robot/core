@@ -107,7 +107,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         if (!$parameterBag?->get(QueryParameter::UPLOADS)) {
             return <<<SQL
             {$this->getCarryforwardTagsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)}
-            AND DATE({$linesTableAlias}.ingestTime) IN UNNEST(@INGEST_TIME_SCOPE)
+            AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
             {$lineScope}
             SQL;
         }
