@@ -182,10 +182,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => array_merge(
-                            $ingestTimes,
-                            $carryforwardTag->getIngestTimes()
-                        ),
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
                         []
                     )
                 ]
@@ -234,10 +234,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => array_merge(
-                            $ingestTimes,
-                            $carryforwardTag->getIngestTimes()
-                        ),
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
                         []
                     )
                 ]
@@ -286,10 +286,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => array_merge(
-                            $ingestTimes,
-                            $carryforwardTag->getIngestTimes()
-                        ),
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
                         []
                     )
                 ]
@@ -338,10 +338,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => array_merge(
-                            $ingestTimes,
-                            $carryforwardTag->getIngestTimes()
-                        ),
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
                         []
                     )
                 ]
@@ -390,10 +390,10 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => array_merge(
-                            $ingestTimes,
-                            $carryforwardTag->getIngestTimes()
-                        ),
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
                         []
                     )
                 ]
