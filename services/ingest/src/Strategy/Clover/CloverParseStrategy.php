@@ -11,6 +11,7 @@ use App\Model\Line\Statement;
 use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use LibXMLError;
+use Override;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,7 @@ class CloverParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function supports(string $content): bool
     {
         libxml_use_internal_errors(true);
@@ -90,6 +92,7 @@ class CloverParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function parse(
         Provider $provider,
         string $owner,

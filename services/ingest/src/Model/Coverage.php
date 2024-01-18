@@ -6,6 +6,7 @@ use Countable;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use Override;
 use Packages\Contracts\Format\CoverageFormat;
 use Stringable;
 
@@ -95,11 +96,13 @@ class Coverage implements Countable, Stringable
         ++$this->fileCount;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
     }
 
+    #[Override]
     public function count(): int
     {
         return $this->fileCount;

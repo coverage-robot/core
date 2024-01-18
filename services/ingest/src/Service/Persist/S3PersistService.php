@@ -7,6 +7,7 @@ use App\Model\Coverage;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeInterface;
 use JsonException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
@@ -30,6 +31,7 @@ class S3PersistService implements PersistServiceInterface
     /**
      * @throws JsonException
      */
+    #[Override]
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         /** @var array<string, string> $metadata */
@@ -167,6 +169,7 @@ class S3PersistService implements PersistServiceInterface
         return fstat($buffer)['size'] ?? 0;
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return 0;
