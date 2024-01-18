@@ -5,6 +5,7 @@ namespace App\Model;
 use App\Model\Line\AbstractLine;
 use Countable;
 use OutOfBoundsException;
+use Override;
 use Stringable;
 
 class File implements Countable, Stringable
@@ -54,11 +55,13 @@ class File implements Countable, Stringable
         $this->lines[$line->getUniqueLineIdentifier()] = $line;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return 'File#' . $this->getFileName();
     }
 
+    #[Override]
     public function count(): int
     {
         return $this->lineCount;

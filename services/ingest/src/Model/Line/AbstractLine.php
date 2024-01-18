@@ -2,6 +2,7 @@
 
 namespace App\Model\Line;
 
+use Override;
 use Packages\Contracts\Line\LineType;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
@@ -54,6 +55,7 @@ abstract class AbstractLine implements Stringable
         return $this->lineHits;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
