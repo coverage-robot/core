@@ -3,6 +3,7 @@
 namespace App\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
+use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Tag\Tag;
 use WeakMap;
@@ -33,6 +34,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
      * @param Tag[] $existingTags
      * @return Tag[]
      */
+    #[Override]
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
         if ($carryforwardTags = $this->lookupExistingValueInCache($waypoint, $existingTags)) {

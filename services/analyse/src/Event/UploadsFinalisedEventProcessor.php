@@ -9,6 +9,7 @@ use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\CoverageComparisonService;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
+use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
 use Packages\Contracts\Event\Event;
@@ -46,6 +47,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
     ) {
     }
 
+    #[Override]
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof UploadsFinalised) {
@@ -236,6 +238,7 @@ class UploadsFinalisedEventProcessor implements EventProcessorInterface
         );
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return Event::UPLOADS_FINALISED->value;

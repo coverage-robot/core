@@ -4,6 +4,7 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use JsonSerializable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use WeakMap;
@@ -56,6 +57,7 @@ class QueryParameterBag implements JsonSerializable
             ->set(QueryParameter::PROVIDER, $waypoint->getProvider());
     }
 
+    #[Override]
     public function jsonSerialize(): array
     {
         $parameters = [];

@@ -8,6 +8,7 @@ use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,7 @@ class CachingQueryService implements QueryServiceInterface
      *
      * @param class-string<QueryInterface> $queryClass
      */
+    #[Override]
     public function runQuery(string $queryClass, ?QueryParameterBag $parameterBag = null): QueryResultInterface
     {
         if (!$this->queryService->getQueryClass($queryClass)->isCachable()) {

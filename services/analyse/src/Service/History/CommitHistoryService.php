@@ -4,6 +4,7 @@ namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -31,6 +32,7 @@ class CommitHistoryService implements CommitHistoryServiceInterface
      *
      * @throws RuntimeException
      */
+    #[Override]
     public function getPrecedingCommits(ReportWaypoint $waypoint, int $page = 1): array
     {
         $service = (iterator_to_array($this->parsers)[$waypoint->getProvider()->value]) ?? null;

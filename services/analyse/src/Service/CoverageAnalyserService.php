@@ -26,6 +26,7 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -49,6 +50,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * Get a waypoint for a particular point in time (or, a commit) for a provider.
      */
+    #[Override]
     public function getWaypoint(
         Provider $provider,
         string $owner,
@@ -73,6 +75,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      * Convert a real-time event into a reporting waypoint that represents a comparable
      * point in time (or, a commit) for a provider.
      */
+    #[Override]
     public function getWaypointFromEvent(EventInterface $event): ReportWaypoint
     {
         return $this->getWaypoint(
@@ -90,6 +93,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws AnalysisException
      */
+    #[Override]
     public function analyse(ReportWaypoint $waypoint): CoverageReportInterface
     {
         try {

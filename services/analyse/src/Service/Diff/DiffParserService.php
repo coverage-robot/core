@@ -4,7 +4,7 @@ namespace App\Service\Diff;
 
 use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
-use Packages\Contracts\Event\EventInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -26,6 +26,7 @@ class DiffParserService implements DiffParserServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function get(ReportWaypoint $waypoint): array
     {
         $parser = (iterator_to_array($this->parsers)[$waypoint->getProvider()->value]) ?? null;

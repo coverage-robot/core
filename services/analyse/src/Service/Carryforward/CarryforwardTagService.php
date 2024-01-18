@@ -2,6 +2,7 @@
 
 namespace App\Service\Carryforward;
 
+use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
@@ -10,6 +11,7 @@ use App\Query\TagAvailabilityQuery;
 use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
+use Override;
 use Packages\Configuration\Service\TagBehaviourService;
 use Packages\Contracts\Tag\Tag;
 use Psr\Log\LoggerInterface;
@@ -36,7 +38,9 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
     /**
      * @param Tag[] $existingTags
      * @return Tag[]
+     * @throws QueryException
      */
+    #[Override]
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
         $carryforwardTags = [];

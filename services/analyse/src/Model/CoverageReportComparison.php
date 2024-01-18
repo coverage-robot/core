@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Override;
 use Stringable;
 
 class CoverageReportComparison implements Stringable
@@ -46,6 +47,7 @@ class CoverageReportComparison implements Stringable
         return round($coverageChange, 2);
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
