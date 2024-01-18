@@ -54,18 +54,21 @@ class GithubPushWebhook extends AbstractWebhook implements
     }
 
     #[SerializedPath('[ref]')]
+    #[Override]
     public function getRef(): string
     {
         return $this->ref;
     }
 
     #[SerializedPath('[after]')]
+    #[Override]
     public function getHeadCommit(): string
     {
         return $this->headCommit;
     }
 
     #[SerializedPath('[commits]')]
+    #[Override]
     public function getCommits(): array
     {
         return $this->commits;

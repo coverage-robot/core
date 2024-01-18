@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\JobRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Packages\Event\Enum\JobState;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
@@ -117,6 +118,7 @@ class Job implements \Stringable
         return $this;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

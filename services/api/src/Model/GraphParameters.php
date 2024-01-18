@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Override;
 use Packages\Contracts\Provider\Provider;
 
 class GraphParameters implements ParametersInterface
@@ -13,16 +14,19 @@ class GraphParameters implements ParametersInterface
     ) {
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;

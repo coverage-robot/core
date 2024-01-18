@@ -4,6 +4,7 @@ namespace App\Model\Webhook\Github;
 
 use App\Model\Webhook\PushedCommitInterface;
 use DateTimeImmutable;
+use Override;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
 
 /**
@@ -28,18 +29,21 @@ class GithubPushedCommit implements PushedCommitInterface
     }
 
     #[SerializedPath('[id]')]
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
     }
 
     #[SerializedPath('[added]')]
+    #[Override]
     public function getAddedFiles(): array
     {
         return $this->addedFiles;
     }
 
     #[SerializedPath('[modified]')]
+    #[Override]
     public function getModifiedFiles(): array
     {
         return $this->modifiedFiles;
@@ -47,12 +51,14 @@ class GithubPushedCommit implements PushedCommitInterface
 
 
     #[SerializedPath('[removed]')]
+    #[Override]
     public function getDeletedFiles(): array
     {
         return $this->deletedFiles;
     }
 
     #[SerializedPath('[timestamp]')]
+    #[Override]
     public function getCommittedAt(): DateTimeImmutable
     {
         return $this->committedAt;

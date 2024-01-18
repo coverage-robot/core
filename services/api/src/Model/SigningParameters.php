@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,16 +37,19 @@ class SigningParameters implements ParametersInterface
     ) {
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
