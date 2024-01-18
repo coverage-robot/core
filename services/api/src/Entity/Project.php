@@ -6,6 +6,7 @@ use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
 
@@ -179,6 +180,7 @@ class Project implements Stringable
         return $this;
     }
 
+    #[Override]
     public function __toString(): string
     {
         $projectId = $this->getId();

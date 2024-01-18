@@ -62,6 +62,7 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         return $this->repository;
     }
 
+    #[Override]
     public function getSignature(): ?string
     {
         return $this->signature;
@@ -74,36 +75,42 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     }
 
     #[SerializedPath('[check_run][id]')]
+    #[Override]
     public function getExternalId(): string|int
     {
         return $this->externalId;
     }
 
     #[SerializedPath('[check_run][app][id]')]
+    #[Override]
     public function getAppId(): int|string
     {
         return (string)$this->appId;
     }
 
     #[SerializedPath('[check_run][status]')]
+    #[Override]
     public function getJobState(): JobState
     {
         return $this->jobState;
     }
 
     #[SerializedPath('[check_run][check_suite][head_branch]')]
+    #[Override]
     public function getRef(): string
     {
         return $this->ref;
     }
 
     #[SerializedPath('[check_run][check_suite][head_sha]')]
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
     }
 
     #[SerializedPath('[check_run][check_suite][before]')]
+    #[Override]
     public function getParent(): ?string
     {
         if ($this->parent === self::NULL_COMMIT) {
@@ -115,18 +122,21 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
     }
 
     #[SerializedPath('[check_run][pull_requests][0][number]')]
+    #[Override]
     public function getPullRequest(): string|int|null
     {
         return $this->pullRequest;
     }
 
     #[SerializedPath('[check_run][pull_requests][0][base][ref]')]
+    #[Override]
     public function getBaseRef(): ?string
     {
         return $this->baseRef;
     }
 
     #[SerializedPath('[check_run][pull_requests][0][base][sha]')]
+    #[Override]
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;

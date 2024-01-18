@@ -3,6 +3,7 @@
 namespace App\Event;
 
 use App\Repository\ProjectRepository;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\CoverageFinalised;
@@ -28,6 +29,7 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
     ) {
     }
 
+    #[Override]
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof CoverageFinalised) {
@@ -89,6 +91,7 @@ class CoverageFinalisedEventProcessor implements EventProcessorInterface
         return true;
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return Event::COVERAGE_FINALISED->value;
