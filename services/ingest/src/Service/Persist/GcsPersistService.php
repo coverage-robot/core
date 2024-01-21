@@ -67,7 +67,7 @@ class GcsPersistService implements PersistServiceInterface
             return false;
         }
 
-        $hasAddedUpload = $this->streamUploadRow($upload, $totalLines);
+        $hasAddedUpload = $this->streamUploadRow($upload, $coverage, $totalLines);
 
         if (!$hasAddedUpload) {
             $this->gcsPersistServiceLogger->error(
@@ -197,13 +197,13 @@ class GcsPersistService implements PersistServiceInterface
         return $buffer;
     }
 
-    private function streamUploadRow(Upload $upload, int $totalLines): bool
+    private function streamUploadRow(Upload $upload, Coverage $coverage, int $totalLines): bool
     {
         $response = $this->bigQueryClient->getEnvironmentDataset()
             ->table(
                 $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
             )
-            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload, $totalLines));
+            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload, $coverage, $totalLines));
 
         return $response->isSuccessful();
     }
