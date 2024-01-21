@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Closure;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
 
@@ -97,6 +98,7 @@ class ReportWaypoint implements Stringable
             && $this->repository === $other->repository;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

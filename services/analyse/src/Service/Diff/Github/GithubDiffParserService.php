@@ -5,6 +5,7 @@ namespace App\Service\Diff\Github;
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\ProviderAwareInterface;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -23,6 +24,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
     /**
      * @inheritDoc
      */
+    #[Override]
     public function get(ReportWaypoint $waypoint): array
     {
         $this->client->authenticateAsRepositoryOwner($waypoint->getOwner());
@@ -90,6 +92,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
         return $addedLines;
     }
 
+    #[Override]
     public static function getProvider(): string
     {
         return Provider::GITHUB->value;

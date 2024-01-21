@@ -65,7 +65,7 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    #[\Override]
+    #[Override]
     public static function getQueryParameters(): array
     {
         return [

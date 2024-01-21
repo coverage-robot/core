@@ -10,6 +10,7 @@ use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
+use Override;
 use Packages\Contracts\Line\LineType;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
@@ -23,8 +24,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     protected const LINES_TABLE_ALIAS = 'lines';
 
+    #[Override]
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         // TODO(RM): We should do this better. We need to get line coverage table in the same
@@ -145,6 +148,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     /**
      * @throws QueryException
      */
+    #[Override]
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
         if (!$parameterBag?->has(QueryParameter::COMMIT)) {
@@ -176,6 +180,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
      * These are also **by far** the most expensive queries we run, simply by way of the
      * amount of data they're querying over (potentially multiple GBs).
      */
+    #[Override]
     public function isCachable(): bool
     {
         return true;

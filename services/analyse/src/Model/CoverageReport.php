@@ -8,6 +8,7 @@ use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use Closure;
 use DateTimeImmutable;
+use Override;
 
 /**
  * A coverage report for a particular waypoint.
@@ -43,11 +44,13 @@ class CoverageReport implements CoverageReportInterface
     ) {
     }
 
+    #[Override]
     public function getWaypoint(): ReportWaypoint
     {
         return $this->waypoint;
     }
 
+    #[Override]
     public function getUploads(): TotalUploadsQueryResult
     {
         if (is_callable($this->uploads)) {
@@ -57,6 +60,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->uploads;
     }
 
+    #[Override]
     public function getLatestSuccessfulUpload(): ?DateTimeImmutable
     {
         $ingestTimes = $this->getUploads()
@@ -70,6 +74,7 @@ class CoverageReport implements CoverageReportInterface
         return max($ingestTimes);
     }
 
+    #[Override]
     public function getTotalLines(): int
     {
         if (is_callable($this->totalLines)) {
@@ -79,6 +84,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->totalLines;
     }
 
+    #[Override]
     public function getAtLeastPartiallyCoveredLines(): int
     {
         if (is_callable($this->atLeastPartiallyCoveredLines)) {
@@ -88,6 +94,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->atLeastPartiallyCoveredLines;
     }
 
+    #[Override]
     public function getUncoveredLines(): int
     {
         if (is_callable($this->uncoveredLines)) {
@@ -97,6 +104,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->uncoveredLines;
     }
 
+    #[Override]
     public function getCoveragePercentage(bool $rounded = true): float
     {
         if (is_callable($this->coveragePercentage)) {
@@ -106,6 +114,7 @@ class CoverageReport implements CoverageReportInterface
         return $rounded ? round($this->coveragePercentage, 2) : $this->coveragePercentage;
     }
 
+    #[Override]
     public function getTagCoverage(): TagCoverageCollectionQueryResult
     {
         if (is_callable($this->tagCoverage)) {
@@ -115,6 +124,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->tagCoverage;
     }
 
+    #[Override]
     public function getDiffCoveragePercentage(bool $rounded = true): float|null
     {
         if (is_callable($this->diffCoveragePercentage)) {
@@ -126,6 +136,7 @@ class CoverageReport implements CoverageReportInterface
             $this->diffCoveragePercentage;
     }
 
+    #[Override]
     public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult
     {
         if (is_callable($this->leastCoveredDiffFiles)) {
@@ -135,6 +146,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->leastCoveredDiffFiles;
     }
 
+    #[Override]
     public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
     {
         if (is_callable($this->diffLineCoverage)) {
@@ -144,6 +156,7 @@ class CoverageReport implements CoverageReportInterface
         return $this->diffLineCoverage;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

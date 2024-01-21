@@ -10,6 +10,7 @@ use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -27,6 +28,7 @@ class TotalUploadsQuery implements QueryInterface
     ) {
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
@@ -52,6 +54,7 @@ class TotalUploadsQuery implements QueryInterface
         SQL;
     }
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return '';
@@ -62,6 +65,7 @@ class TotalUploadsQuery implements QueryInterface
      * @throws QueryException
      * @throws ExceptionInterface
      */
+    #[Override]
     public function parseResults(QueryResults $results): TotalUploadsQueryResult
     {
         if (!$results->isComplete()) {
@@ -82,6 +86,7 @@ class TotalUploadsQuery implements QueryInterface
         return $results;
     }
 
+    #[Override]
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
         if (!$parameterBag instanceof QueryParameterBag) {
@@ -128,6 +133,7 @@ class TotalUploadsQuery implements QueryInterface
      * uploads on a particular commit will change over time, and we need to be able to respond
      * to that.
      */
+    #[Override]
     public function isCachable(): bool
     {
         return false;

@@ -2,6 +2,7 @@
 
 namespace App\Event;
 
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\UploadsStarted;
@@ -20,6 +21,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
     ) {
     }
 
+    #[Override]
     public function process(EventInterface $event): bool
     {
         if (!$event instanceof UploadsStarted) {
@@ -65,6 +67,7 @@ class UploadsStartedEventProcessor implements EventProcessorInterface
         );
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return Event::UPLOADS_STARTED->value;

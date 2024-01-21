@@ -10,6 +10,7 @@ use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -27,6 +28,7 @@ class TagAvailabilityQuery implements QueryInterface
     ) {
     }
 
+    #[Override]
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
@@ -61,11 +63,13 @@ class TagAvailabilityQuery implements QueryInterface
         SQL;
     }
 
+    #[Override]
     public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return '';
     }
 
+    #[Override]
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
         if (!$parameterBag instanceof QueryParameterBag) {
@@ -100,6 +104,7 @@ class TagAvailabilityQuery implements QueryInterface
      * This query can't be cached, as it doesnt use any discernible parameters which will
      * ensure the cached query is still up to date.
      */
+    #[Override]
     public function isCachable(): bool
     {
         return false;
@@ -110,6 +115,7 @@ class TagAvailabilityQuery implements QueryInterface
      * @throws GoogleException
      * @throws QueryException
      */
+    #[Override]
     public function parseResults(QueryResults $results): TagAvailabilityCollectionQueryResult
     {
         if (!$results->isComplete()) {

@@ -6,6 +6,7 @@ use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\ProviderAwareInterface;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
@@ -57,6 +58,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
      *
      * @return array{commit: string, merged: bool, ref: string|null}[]
      */
+    #[Override]
     public function getPrecedingCommits(EventInterface|ReportWaypoint $waypoint, int $page = 1): array
     {
         $this->githubClient->authenticateAsRepositoryOwner($waypoint->getOwner());
@@ -158,6 +160,7 @@ class GithubCommitHistoryService implements CommitHistoryServiceInterface, Provi
         );
     }
 
+    #[Override]
     public static function getProvider(): string
     {
         return Provider::GITHUB->value;

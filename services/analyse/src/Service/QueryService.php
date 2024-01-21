@@ -11,6 +11,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -35,6 +36,7 @@ class QueryService implements QueryServiceInterface
      * @throws GoogleException
      * @throws QueryException
      */
+    #[Override]
     public function runQuery(
         string $queryClass,
         ?QueryParameterBag $parameterBag = null
