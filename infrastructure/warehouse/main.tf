@@ -209,7 +209,7 @@ resource "google_bigquery_table" "upload" {
     "type": "INTEGER",
     "mode": "NULLABLE",
     "description": "The total number of lines ingested from the coverage file."
-  },
+  }
 ]
 EOF
 }
