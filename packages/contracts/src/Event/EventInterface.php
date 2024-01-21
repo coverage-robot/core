@@ -12,15 +12,19 @@ interface EventInterface extends Stringable
     public function getProvider(): Provider;
 
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getOwner(): string;
 
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getRepository(): string;
 
     #[Assert\NotBlank]
+    #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
     public function getCommit(): string;
 
     #[Assert\NotBlank(allowNull: true)]
+    #[Assert\Regex(pattern: '/^\d+$/')]
     public function getPullRequest(): int|string|null;
 
     #[Assert\NotBlank]

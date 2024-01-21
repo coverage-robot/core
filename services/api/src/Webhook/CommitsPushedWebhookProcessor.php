@@ -9,6 +9,7 @@ use App\Model\Webhook\PushedCommitInterface;
 use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
+use Override;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
@@ -30,6 +31,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
      * This is so we can track changes to the version controlled configuration file, and distribute
      * it amongst the services.
      */
+    #[Override]
     public function process(Project $project, WebhookInterface $webhook): void
     {
         if (!$webhook instanceof CommitsPushedWebhookInterface) {
@@ -149,6 +151,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
         }
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return WebhookProcessorEvent::COMMITS_PUSHED->value;

@@ -14,7 +14,7 @@ enum QueryParameter: string
      * ]
      * ```
      */
-    case LINE_SCOPE = 'LINE_SCOPE';
+    case LINES = 'LINES';
 
     /**
      * The uploads to scope the queries to.
@@ -27,7 +27,7 @@ enum QueryParameter: string
      * ]
      * ```
      */
-    case UPLOADS_SCOPE = 'UPLOADS_SCOPE';
+    case UPLOADS = 'UPLOADS';
 
     /**
      * The ingest time partitions to scope the queries to.
@@ -40,7 +40,7 @@ enum QueryParameter: string
      * ]
      * ```
      */
-    case INGEST_TIME_SCOPE = 'INGEST_TIME_SCOPE';
+    case INGEST_PARTITIONS = 'INGEST_PARTITIONS';
 
     /**
      * The tags to carry forward from previous commits (parents to the current upload)
@@ -88,4 +88,45 @@ enum QueryParameter: string
      * @see \Packages\Contracts\Provider\Provider
      */
     case PROVIDER = 'PROVIDER';
+
+    /**
+     * The parameters that can be directly substituted into a BigQuery query.
+     *
+     * These parameters **must** be ones that BigQuery can parse and convert into values (i.e.
+     * when an object, it must implement `ValueInterface` or be a `DateTimeInterface`).
+     */
+    public static function getSupportedBigQueryParameters(): array
+    {
+        return [
+            QueryParameter::COMMIT,
+            QueryParameter::OWNER,
+            QueryParameter::REPOSITORY,
+            QueryParameter::PROVIDER,
+            QueryParameter::INGEST_PARTITIONS,
+            QueryParameter::UPLOADS,
+            QueryParameter::LIMIT
+        ];
+    }
+
+    /**
+     * The parameter types that can be directly substituted into a BigQuery query.
+     *
+     * These parameters **must** be ones that BigQuery can parse and convert into values.
+     */
+    public static function getBigQueryParameterType(QueryParameter $parameter): ?string
+    {
+        return match ($parameter) {
+            QueryParameter::COMMIT,
+            QueryParameter::OWNER,
+            QueryParameter::REPOSITORY,
+            QueryParameter::PROVIDER,
+            QueryParameter::UPLOADS => 'STRING',
+
+            QueryParameter::INGEST_PARTITIONS => 'DATE',
+
+            QueryParameter::LIMIT => 'INT64',
+
+            default => null
+        };
+    }
 }

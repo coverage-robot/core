@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,43 +10,53 @@ class SigningParameters implements ParametersInterface
 {
     public function __construct(
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
         private readonly string $owner,
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
         private readonly string $repository,
         private readonly Provider $provider,
         #[Assert\NotBlank]
         private readonly string $fileName,
         private readonly string $projectRoot,
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[a-zA-Z0-9\.\-_]+$/')]
         private readonly string $tag,
         #[Assert\NotBlank]
+        #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
         private readonly string $commit,
         #[Assert\All([
             new Assert\NotBlank(),
             new Assert\Type('string'),
+            new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
         ])]
         private readonly array $parent,
         #[Assert\NotBlank]
         private readonly string $ref,
         #[Assert\NotBlank(allowNull: true)]
+        #[Assert\Regex(pattern: '/^\d+$/')]
         private readonly string|int|null $pullRequest,
         #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseRef,
         #[Assert\NotBlank(allowNull: true)]
+        #[Assert\Regex(pattern: '/^[a-f0-9]{40}$/')]
         private readonly ?string $baseCommit
     ) {
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;

@@ -12,6 +12,7 @@ use App\Service\BigQueryMetadataBuilderService;
 use Exception;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
@@ -34,6 +35,7 @@ class GcsPersistService implements PersistServiceInterface
     ) {
     }
 
+    #[Override]
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         $body = $this->getLineCoverageFileBody($upload, $coverage);
@@ -214,6 +216,7 @@ class GcsPersistService implements PersistServiceInterface
         );
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return 0;

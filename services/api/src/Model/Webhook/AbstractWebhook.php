@@ -2,8 +2,11 @@
 
 namespace App\Model\Webhook;
 
+use Override;
+
 abstract class AbstractWebhook implements WebhookInterface
 {
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
@@ -14,6 +17,7 @@ abstract class AbstractWebhook implements WebhookInterface
         );
     }
 
+    #[Override]
     public function getMessageGroup(): string
     {
         return md5(

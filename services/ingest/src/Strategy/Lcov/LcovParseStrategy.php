@@ -11,6 +11,7 @@ use App\Model\Line\Statement;
 use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use OutOfBoundsException;
+use Override;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -55,6 +56,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function supports(string $content): bool
     {
         $records = preg_split('/\n|\r\n?/', $content);
@@ -97,6 +99,7 @@ class LcovParseStrategy implements ParseStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function parse(
         Provider $provider,
         string $owner,

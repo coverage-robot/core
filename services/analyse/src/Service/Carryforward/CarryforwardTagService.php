@@ -37,7 +37,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
 
     /**
      * @param Tag[] $existingTags
-     * @return Tag[]
+     * @return CarryforwardTag[]
      * @throws QueryException
      */
     #[Override]

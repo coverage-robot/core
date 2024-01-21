@@ -2,10 +2,10 @@
 
 namespace App\Query;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Trait\ScopeAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
@@ -17,11 +17,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class FileCoverageQuery extends AbstractLineCoverageQuery
 {
-    use ScopeAwareTrait;
-
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService
+        EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct($environmentService);
     }
@@ -32,8 +30,6 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
-
-        $limit = self::getLimit($parameterBag);
 
         return <<<SQL
         {$this->getNamedQueries($table, $parameterBag)}
@@ -63,8 +59,18 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
                 2
             )
             ASC
-        {$limit}
+        LIMIT {$this->getAlias(QueryParameter::LIMIT)}
         SQL;
+    }
+
+    #[Override]
+    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    {
+        parent::validateParameters($parameterBag);
+
+        if (!$parameterBag?->has(QueryParameter::LIMIT)) {
+            throw QueryException::invalidParameters(QueryParameter::LIMIT);
+        }
     }
 
     /**

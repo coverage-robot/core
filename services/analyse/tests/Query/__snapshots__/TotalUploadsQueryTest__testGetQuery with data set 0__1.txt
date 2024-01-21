@@ -11,16 +11,14 @@ SELECT
   ) as successfulIngestTimes,
   COALESCE(
     ARRAY_AGG(
-      STRUCT(
-        tag as name, "mock-commit" as commit
-      )
+      STRUCT(tag as name, @COMMIT as commit)
     ),
     []
   ) as successfulTags
 FROM
   `mock-table`
 WHERE
-  commit = "mock-commit"
-  AND repository = "mock-repository"
-  AND owner = "mock-owner"
-  AND provider = "github"
+  provider = @PROVIDER
+  AND owner = @OWNER
+  AND repository = @REPOSITORY
+  AND commit = @COMMIT

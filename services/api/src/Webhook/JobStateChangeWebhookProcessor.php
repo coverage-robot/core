@@ -12,6 +12,7 @@ use App\Repository\JobRepository;
 use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
@@ -37,6 +38,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
      * the associated job in the database. If theres no job associated with the ID from the webhook
      * one will be created.
      */
+    #[Override]
     public function process(Project $project, WebhookInterface $webhook): void
     {
         if (!$webhook instanceof PipelineStateChangeWebhookInterface) {
@@ -177,6 +179,7 @@ class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         }
     }
 
+    #[Override]
     public static function getEvent(): string
     {
         return WebhookProcessorEvent::JOB_STATE_CHANGE->value;
