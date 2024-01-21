@@ -38,6 +38,7 @@ class GcsPersistService implements PersistServiceInterface
     #[Override]
     public function persist(Upload $upload, Coverage $coverage): bool
     {
+        $totalLines = $this->totalLines($coverage);
         $body = $this->getLineCoverageFileBody($upload, $coverage);
 
         $bucket = $this->googleCloudStorageClient->bucket(
@@ -66,7 +67,7 @@ class GcsPersistService implements PersistServiceInterface
             return false;
         }
 
-        $hasAddedUpload = $this->streamUploadRow($upload);
+        $hasAddedUpload = $this->streamUploadRow($upload, $totalLines);
 
         if (!$hasAddedUpload) {
             $this->gcsPersistServiceLogger->error(
@@ -81,7 +82,7 @@ class GcsPersistService implements PersistServiceInterface
 
         $this->metricService->put(
             metric: 'IngestedLines',
-            value: $this->totalLines($coverage),
+            value: $totalLines,
             unit: Unit::COUNT,
             dimensions: [
                 ['owner']
@@ -196,13 +197,13 @@ class GcsPersistService implements PersistServiceInterface
         return $buffer;
     }
 
-    private function streamUploadRow(Upload $upload): bool
+    private function streamUploadRow(Upload $upload, int $totalLines): bool
     {
         $response = $this->bigQueryClient->getEnvironmentDataset()
             ->table(
                 $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
             )
-            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload));
+            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload, $totalLines));
 
         return $response->isSuccessful();
     }
