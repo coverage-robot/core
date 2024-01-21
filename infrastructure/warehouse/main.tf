@@ -160,13 +160,13 @@ resource "google_bigquery_table" "upload" {
     "name": "commit",
     "type": "STRING",
     "mode": "REQUIRED",
-    "description": "The commit hash which the upload occured on."
+    "description": "The commit hash which the upload occurred on."
   },
   {
     "name": "parent",
     "type": "STRING",
     "mode": "REPEATED",
-    "description": "The parent commit hash(es) of the commit upload occured on."
+    "description": "The parent commit hash(es) of the commit upload occurred on."
   },
   {
     "name": "ref",
@@ -203,6 +203,12 @@ resource "google_bigquery_table" "upload" {
     "type": "DATETIME",
     "mode": "NULLABLE",
     "description": "The time the upload occurred."
+  },
+  {
+    "name": "totalLines",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "The total number of lines ingested from the coverage file."
   }
 ]
 EOF
