@@ -24,6 +24,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     protected const LINES_TABLE_ALIAS = 'lines';
 
+    #[Override]
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
 
     #[Override]
