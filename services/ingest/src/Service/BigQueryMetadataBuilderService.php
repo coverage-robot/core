@@ -53,7 +53,7 @@ class BigQueryMetadataBuilderService
         ];
     }
 
-    public function buildUploadRow(Upload $upload): array
+    public function buildUploadRow(Upload $upload, int $totalLines): array
     {
         return [
             'uploadId' => $upload->getUploadId(),
@@ -64,7 +64,8 @@ class BigQueryMetadataBuilderService
             'commit' => $upload->getCommit(),
             'parent' => $upload->getParent(),
             'ref' => $upload->getRef(),
-            'tag' => $upload->getTag()->getName()
+            'tag' => $upload->getTag()->getName(),
+            'totalLines' => $totalLines
         ];
     }
 
