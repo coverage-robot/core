@@ -209,6 +209,18 @@ resource "google_bigquery_table" "upload" {
     "type": "INTEGER",
     "mode": "NULLABLE",
     "description": "The total number of lines ingested from the coverage file."
+  },
+  {
+    "name": "sourceFormat",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "The original format of the coverage file ingested."
+  },
+  {
+    "name": "generatedAt",
+    "type": "DATETIME",
+    "mode": "NULLABLE",
+    "description": "The time the coverage was generated."
   }
 ]
 EOF

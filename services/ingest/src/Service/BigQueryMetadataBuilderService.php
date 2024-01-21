@@ -53,7 +53,7 @@ class BigQueryMetadataBuilderService
         ];
     }
 
-    public function buildUploadRow(Upload $upload, int $totalLines): array
+    public function buildUploadRow(Upload $upload, Coverage $coverage, int $totalLines): array
     {
         return [
             'uploadId' => $upload->getUploadId(),
@@ -65,7 +65,11 @@ class BigQueryMetadataBuilderService
             'parent' => $upload->getParent(),
             'ref' => $upload->getRef(),
             'tag' => $upload->getTag()->getName(),
-            'totalLines' => $totalLines
+            'totalLines' => $totalLines,
+            'sourceFormat' => $coverage->getSourceFormat(),
+            'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
+                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                null,
         ];
     }
 
