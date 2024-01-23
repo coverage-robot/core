@@ -41,7 +41,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
             ]
         );
 
-        $diff = $pullRequest ?
+        $diff = $pullRequest !== null ?
             $this->getPullRequestDiff(
                 $waypoint->getOwner(),
                 $waypoint->getRepository(),
