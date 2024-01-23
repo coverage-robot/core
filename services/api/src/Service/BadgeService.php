@@ -36,7 +36,7 @@ class BadgeService
         $font = FontList::ofFile($this->twigDefaultPath . '/' . self::FONT_FILE)
             ->getById($this->getFontFamily(self::FONT_FILE_NAME));
 
-        $value = $coveragePercentage ?
+        $value = $coveragePercentage !== null ?
             sprintf(
                 '%s%%',
                 floor($coveragePercentage) !== $coveragePercentage ?

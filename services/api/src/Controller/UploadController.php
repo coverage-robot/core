@@ -36,7 +36,7 @@ class UploadController extends AbstractController
 
             $token = $this->authTokenService->getUploadTokenFromRequest($request);
 
-            if (!$token || !$this->authTokenService->validateParametersWithUploadToken($parameters, $token)) {
+            if ($token === null || !$this->authTokenService->validateParametersWithUploadToken($parameters, $token)) {
                 throw AuthenticationException::invalidUploadToken();
             }
 
