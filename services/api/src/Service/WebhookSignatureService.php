@@ -20,7 +20,7 @@ class WebhookSignatureService
     {
         $signature = $request->headers->get(SignedWebhookInterface::SIGNATURE_HEADER);
 
-        if (!$signature) {
+        if ($signature === null) {
             $this->webhookSignatureLogger->info(
                 'Payload signature not provided in request.',
                 [

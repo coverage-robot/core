@@ -185,7 +185,7 @@ class Project implements Stringable
     {
         $projectId = $this->getId();
 
-        if (!$projectId) {
+        if ($projectId === null) {
             return sprintf(
                 'Project#%s-%s-%s',
                 (string)$this->getProvider()?->value,

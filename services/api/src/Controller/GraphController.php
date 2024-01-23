@@ -42,7 +42,7 @@ class GraphController extends AbstractController
 
             $token = $this->authTokenService->getGraphTokenFromRequest($request);
 
-            if (!$token || !$this->authTokenService->validateParametersWithGraphToken($parameters, $token)) {
+            if ($token === null || !$this->authTokenService->validateParametersWithGraphToken($parameters, $token)) {
                 throw AuthenticationException::invalidGraphToken();
             }
 

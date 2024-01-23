@@ -122,7 +122,7 @@ class WebhookController extends AbstractController
         $signature = $webhook->getSignature();
 
         if (
-            !$signature ||
+            $signature === null ||
             !$this->webhookSignatureService->validatePayloadSignature(
                 $signature,
                 $originalPayload,
