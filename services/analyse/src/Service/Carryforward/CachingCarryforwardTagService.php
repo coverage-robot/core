@@ -38,7 +38,9 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     #[Override]
     public function getTagsToCarryforward(ReportWaypoint $waypoint, array $existingTags): array
     {
-        if ($carryforwardTags = $this->lookupExistingValueInCache($waypoint, $existingTags)) {
+        $carryforwardTags = $this->lookupExistingValueInCache($waypoint, $existingTags);
+
+        if ($carryforwardTags !== null) {
             return $carryforwardTags;
         }
 

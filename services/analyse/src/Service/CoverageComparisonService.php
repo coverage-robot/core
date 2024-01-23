@@ -126,7 +126,7 @@ class CoverageComparisonService
     ): ?ReportWaypoint {
         $baseRef = $event->getBaseRef();
 
-        if (!$baseRef) {
+        if ($baseRef === null) {
             // We didn't receive sufficient base information on the event (likely because the
             // event was a push - i.e. not a pull request).
             return null;
@@ -177,7 +177,7 @@ class CoverageComparisonService
         $baseRef = $event->getBaseRef();
         $baseCommit = $event->getBaseCommit();
         if (
-            !$event->getPullRequest() ||
+            $event->getPullRequest() === null ||
             $baseRef === null ||
             $baseCommit === null
         ) {

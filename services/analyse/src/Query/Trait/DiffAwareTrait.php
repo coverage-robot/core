@@ -36,7 +36,7 @@ trait DiffAwareTrait
      */
     private function getLineScope(?QueryParameterBag $parameterBag, ?string $tableAlias = null): string
     {
-        $tableAlias = $tableAlias ? $tableAlias . '.' : '';
+        $tableAlias = $tableAlias !== null ? $tableAlias . '.' : '';
 
         if ($parameterBag && $parameterBag->has(QueryParameter::LINES)) {
             /** @var array<array-key, list{int}> $fileLineNumbers */

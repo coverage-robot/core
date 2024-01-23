@@ -107,7 +107,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             ? 'AND ' . $scope
             : '';
 
-        if (!$parameterBag?->get(QueryParameter::UPLOADS)) {
+        if ($parameterBag?->get(QueryParameter::UPLOADS) === null) {
             return <<<SQL
             {$this->getCarryforwardTagsScope($parameterBag, self::UPLOAD_TABLE_ALIAS)}
             AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
@@ -115,7 +115,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             SQL;
         }
 
-        if (!$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
+        if ($parameterBag?->get(QueryParameter::CARRYFORWARD_TAGS) === null) {
             return <<<SQL
             1=1
             AND {$uploadsTableAlias}.provider = {$this->getAlias(QueryParameter::PROVIDER)}
