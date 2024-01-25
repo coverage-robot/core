@@ -1,0 +1,35 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Packages\Local\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+
+    Packages\Local\Command\InvokeEventCommand:
+        tags:
+            - { name: 'console.command', command: 'event:invoke' }
+
+    Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor: ~
+
+    Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor: ~
+
+    Symfony\Component\PropertyInfo\PropertyInfoExtractor:
+        arguments:
+            $listExtractors: [ '@Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor' ],
+            $typeExtractors: [ '@Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor', '@Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor' ],
+            $descriptionExtractors: [ '@Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor' ],
+            $accessExtractors:  [ '@Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor' ],
+            $initializableExtractors: [ '@Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor' ]
+
+    Symfony\Component\Serializer\Mapping\Loader\AttributeLoader: ~
+
+    Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory:
+        arguments:
+            $loader: '@Symfony\Component\Serializer\Mapping\Loader\AttributeLoader'
+
+    Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata:
+        arguments:
+            $classMetadataFactory: '@Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory'

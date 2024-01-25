@@ -64,7 +64,7 @@ class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRecorderP
         return $this->recordStateChangeInStore($currentState);
     }
 
-    #[\Override]
+    #[Override]
     public static function getEvent(): string
     {
         return Event::COVERAGE_FINALISED->value;

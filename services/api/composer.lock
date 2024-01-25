@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7730c4088663c79f2e396c2b5bc19aed",
+    "content-hash": "e91bee62a359efa66053ae6c939f7278",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -649,7 +649,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
+                "reference": "be799c4a3198b10fb397fad3cace70a7b4261660"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -693,7 +693,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
+                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -715,7 +715,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
+                "reference": "71af3274de0447811999039b179572f82ddf5be6"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -759,7 +759,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "0f7b07d9e3010c80e67bc74ae710f9dd06478d08"
+                "reference": "d8f7e4ba89f57fcb1186ff48652510acad828564"
             },
             "require": {
                 "async-aws/sqs": "^2.0",
@@ -800,7 +800,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
+                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -8951,6 +8951,50 @@
             "time": "2022-02-25T21:32:43+00:00"
         },
         {
+            "name": "coverage-robot/local",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/local",
+                "reference": "bca343d31a87f94301d4859d5f098b4a8b054699"
+            },
+            "require": {
+                "coverage-robot/event": "^1.0",
+                "psr/log": "^3.0",
+                "symfony/config": "^7.0",
+                "symfony/console": "^7.0",
+                "symfony/dependency-injection": "^7.0",
+                "symfony/http-kernel": "^7.0",
+                "symfony/property-info": "^7.0",
+                "symfony/serializer": "^7.0"
+            },
+            "require-dev": {
+                "bref/bref": "^2.1",
+                "phpunit/phpunit": "^10.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Local\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Packages\\Local\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test:unit": [
+                    "@putenv XDEBUG_MODE=coverage",
+                    "phpunit --configuration=./phpunit.xml.dist"
+                ]
+            },
+            "description": "Shared local tooling across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "v0.1.1",
             "source": {
@@ -11430,5 +11474,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
