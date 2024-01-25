@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Countable;
+use Override;
 
 class EventStateChangeCollection implements Countable
 {
@@ -37,6 +38,7 @@ class EventStateChangeCollection implements Countable
         return $this->events;
     }
 
+    #[Override]
     public function count(): int
     {
         return count($this->events);

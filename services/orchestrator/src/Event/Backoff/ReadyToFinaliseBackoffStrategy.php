@@ -2,6 +2,7 @@
 
 namespace App\Event\Backoff;
 
+use Override;
 use STS\Backoff\Backoff;
 use STS\Backoff\Strategies\PolynomialStrategy;
 
@@ -35,6 +36,7 @@ class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function run(callable $callback): mixed
     {
         return $this->backoff->run($callback);

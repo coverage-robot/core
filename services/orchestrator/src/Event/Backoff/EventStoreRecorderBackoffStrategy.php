@@ -4,6 +4,7 @@ namespace App\Event\Backoff;
 
 use App\Exception\OutOfOrderEventException;
 use Exception;
+use Override;
 use STS\Backoff\Backoff;
 use STS\Backoff\Strategies\LinearStrategy;
 
@@ -41,6 +42,7 @@ class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function run(callable $callback): mixed
     {
         return $this->backoff->run($callback);

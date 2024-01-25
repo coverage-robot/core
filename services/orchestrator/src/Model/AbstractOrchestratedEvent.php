@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
@@ -18,6 +19,7 @@ abstract class AbstractOrchestratedEvent implements OrchestratedEventInterface
      * @inheritDoc
      */
     #[Ignore]
+    #[Override]
     public function getUniqueIdentifier(): string
     {
         return $this->__toString();
@@ -27,6 +29,7 @@ abstract class AbstractOrchestratedEvent implements OrchestratedEventInterface
      * @inheritDoc
      */
     #[Ignore]
+    #[Override]
     public function getUniqueRepositoryIdentifier(): string
     {
         return sprintf(
