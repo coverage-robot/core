@@ -17,6 +17,7 @@ class ExistingFixtureEventBuilder implements EventBuilderInterface
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
+        private readonly string $fixtureDirectory = __DIR__ . '/../Fixture/'
     ) {
     }
 
@@ -39,7 +40,8 @@ class ExistingFixtureEventBuilder implements EventBuilderInterface
         HelperSet $helperSet,
         Event $event
     ): EventInterface {
-        $availableFixtures = glob(__DIR__ . '/../Fixture/' . $event->value . '/*.json') ?? [];
+        $availableFixtures = glob($this->fixtureDirectory . $event->value . '/*.json') ?? [];
+
         if ($availableFixtures === []) {
             throw new InvalidArgumentException(
                 sprintf(
