@@ -83,10 +83,13 @@ class EventStoreService implements EventStoreServiceInterface
         }
 
         try {
-            return $this->serializer->denormalize(
+            /** @var OrchestratedEventInterface $event */
+            $event = $this->serializer->denormalize(
                 $latestKnownState,
                 OrchestratedEventInterface::class
             );
+
+            return $event;
         } catch (ExceptionInterface $exception) {
             $this->eventStoreLogger->error(
                 'Failed to denormalize event from state changes, returning null instead.',
