@@ -21,7 +21,7 @@ class CustomPayloadEventBuilder implements EventBuilderInterface
     #[Override]
     public static function supports(InputInterface $input, Event $event): bool
     {
-        return $input->getOption('file') !== null;
+        return (bool)$input->getOption('file') === true;
     }
 
     #[Override]
@@ -34,7 +34,7 @@ class CustomPayloadEventBuilder implements EventBuilderInterface
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        HelperSet $helperSet,
+        ?HelperSet $helperSet,
         Event $event
     ): EventInterface {
         $filePath = $input->getOption('file');

@@ -37,7 +37,7 @@ class ExistingFixtureEventBuilder implements EventBuilderInterface
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        HelperSet $helperSet,
+        ?HelperSet $helperSet,
         Event $event
     ): EventInterface {
         $availableFixtures = glob($this->fixtureDirectory . $event->value . '/*.json') ?? [];

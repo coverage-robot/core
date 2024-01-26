@@ -30,7 +30,7 @@ interface EventBuilderInterface
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        HelperSet $helperSet,
+        ?HelperSet $helperSet,
         Event $event
     ): EventInterface;
 }

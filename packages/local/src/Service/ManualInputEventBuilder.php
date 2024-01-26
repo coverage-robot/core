@@ -39,6 +39,10 @@ class ManualInputEventBuilder implements EventBuilderInterface
     #[Override]
     public static function getPriority(): int
     {
+        /**
+         * Set a low priority so that all other builders are evaluated first, as this builder
+         * will act as a 'catch all' fallback, which can handle any event, regardless of inputs.
+         */
         return -1000;
     }
 
@@ -46,7 +50,7 @@ class ManualInputEventBuilder implements EventBuilderInterface
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        HelperSet $helperSet,
+        ?HelperSet $helperSet,
         Event $event
     ): EventInterface {
         $payload = [];
@@ -99,14 +103,13 @@ class ManualInputEventBuilder implements EventBuilderInterface
      */
     private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, array $types): void
     {
-        $type = $types[0]->getClassName() ?? $types[0]->getBuiltinType();
-
-        switch ($type) {
+        switch ($types[0]->getClassName() ?? $types[0]->getBuiltinType()) {
             case 'array':
-                $question->setNormalizer(
-                    static fn(?string $value) =>
-                    $value !== null ? explode(',', $value) : $value
-                );
+                $question->setNormalizer(static fn(?string $value) => $value !== null ? explode(',', $value) : $value);
+                break;
+            case Provider::class:
+                $question->setValidator($this->getEnumValidatorCallback(Provider::class));
+                $question->setAutocompleterValues($this->getEnumAutocompleteValues(Provider::class));
                 break;
             case DateTimeInterface::class:
             case DateTime::class:
@@ -127,30 +130,38 @@ class ManualInputEventBuilder implements EventBuilderInterface
                     }
                 );
                 break;
-            case Provider::class:
-                $question->setValidator(
-                    static function (string $value) {
-                        if (!Provider::tryFrom($value)) {
-                            throw new InvalidArgumentException(
-                                sprintf(
-                                    'Invalid provider "%s", please try again',
-                                    $value
-                                )
-                            );
-                        }
-
-                        return $value;
-                    }
-                );
-                $question->setAutocompleterValues(
-                    array_map(
-                        fn (Provider $provider) => $provider->value,
-                        Provider::cases()
-                    )
-                );
-                break;
             default:
                 break;
         }
+    }
+
+    /**
+     * Get a validator callback, for use in the console, to validate inputs against an enum.
+     */
+    private function getEnumValidatorCallback(string $enumClass): callable
+    {
+        return static function (string $value) use ($enumClass) {
+            if (!call_user_func([$enumClass, 'tryFrom'], $value)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Invalid enum value "%s", please try again',
+                        $value
+                    )
+                );
+            }
+
+            return $value;
+        };
+    }
+
+    /**
+     * Get the values for an enum class to be used for autocompletion in the console.
+     */
+    private function getEnumAutocompleteValues(string $enumClass): array
+    {
+        return array_map(
+            fn (Provider $provider) => $provider->value,
+            call_user_func([$enumClass, 'cases'])
+        );
     }
 }

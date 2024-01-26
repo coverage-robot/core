@@ -4,13 +4,7 @@ namespace Packages\Local\Command;
 
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
-use Exception;
-use InvalidArgumentException;
 use Packages\Contracts\Event\Event;
-use Packages\Contracts\Provider\Provider;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
 use Packages\Local\Service\EventBuilderInterface;
@@ -18,14 +12,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
-use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -76,7 +64,6 @@ class InvokeEventCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = Event::tryFrom(strtoupper($input->getArgument('event')));
-        $useFixture = $input->getOption('fixture');
 
         if ($event === null) {
             $output->writeln(
@@ -92,19 +79,11 @@ class InvokeEventCommand extends Command
         }
 
         try {
-            $builtEvent = null;
-            foreach ($this->eventBuilders as $eventBuilder) {
-                if ($eventBuilder->supports($input, $event)) {
-                    $builtEvent = $eventBuilder->build(
-                        $input,
-                        $output,
-                        $this->getHelperSet(),
-                        $event
-                    );
-
-                    break;
-                }
-            }
+            $builtEvent = $this->buildEvent(
+                $input,
+                $output,
+                $event
+            );
 
             if ($builtEvent === null) {
                 $output->writeln('<error>No builder available to build event.</error>');
@@ -141,5 +120,31 @@ class InvokeEventCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Select the highest priority event builder and use it
+     * to build a valid event which should be invoked against
+     * the event handler.
+     */
+    private function buildEvent(
+        InputInterface $input,
+        OutputInterface $output,
+        Event $event
+    ): ?EventInterface {
+        foreach ($this->eventBuilders as $eventBuilder) {
+            if (!$eventBuilder->supports($input, $event)) {
+                continue;
+            }
+
+            return $eventBuilder->build(
+                $input,
+                $output,
+                $this->getHelperSet(),
+                $event
+            );
+        }
+
+        return null;
     }
 }
