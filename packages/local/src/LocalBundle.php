@@ -14,8 +14,5 @@ class LocalBundle extends AbstractBundle
         ContainerBuilder $builder
     ): void {
         $container->import(__DIR__ . '/../config/services.yaml');
-
-//        $builder->register(EventHandlerInvocationCommand::class)
-//            ->addTag('console.command', ['command' => 'event_handler:invoke']);
     }
 }
