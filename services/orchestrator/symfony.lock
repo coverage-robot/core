@@ -29,6 +29,9 @@
     "coverage-robot/event": {
         "version": "1.0.0"
     },
+    "coverage-robot/local": {
+        "version": "1.0.0"
+    },
     "coverage-robot/telemetry": {
         "version": "1.0.0"
     },

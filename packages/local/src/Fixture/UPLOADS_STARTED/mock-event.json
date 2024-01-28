@@ -1,0 +1,11 @@
+{
+    "provider": "github",
+    "owner": "mock-owner",
+    "repository": "mock-repository",
+    "ref": "mock-ref",
+    "commit": "3c26ed6e77521edd912d431a5974d8c06d43682a",
+    "pullRequest":  null,
+    "baseCommit": null,
+    "baseRef": null,
+    "eventTime": "2019-01-01T00:00:00Z"
+}

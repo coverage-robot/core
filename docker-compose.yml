@@ -48,21 +48,21 @@ services:
 
     localstack:
         container_name: "localstack"
-        image: localstack/localstack
+        image: localstack/localstack:3.0.2
         ports:
             - "4566:4566"
             - "4510-4559:4510-4559"
         environment:
             - DEBUG=1
             - DOCKER_HOST=unix:///var/run/docker.sock
-            - SERVICES=s3,iam,events,sqs
+            - SERVICES=s3,iam,events,sqs,sts,dynamodb
             - DISABLE_EVENTS=0
             - HOSTNAME_EXTERNAL=localstack
             - DEFAULT_REGION=eu-west-2
         volumes:
             # Mount volumes for Localstack provisioning
             - "./infrastructure:/tmp/infrastructure"
-            - "./infrastructure/localstack/provision.sh:/docker-entrypoint-initaws.d/init-aws.sh"
+            - "./infrastructure/localstack/provision.sh:/etc/localstack/init/ready.d/init-aws.sh"
 
             # Mount the default volumes for cache and sockets
             - "./infrastructure/.localstack/var:/var/lib/localstack"

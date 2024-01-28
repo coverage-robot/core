@@ -12,6 +12,7 @@ use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
@@ -32,6 +33,7 @@ class EventStoreService implements EventStoreServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getStateChangesBetweenEvent(
         ?OrchestratedEventInterface $currentState,
         OrchestratedEventInterface $newState
@@ -62,6 +64,7 @@ class EventStoreService implements EventStoreServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function reduceStateChangesToEvent(EventStateChangeCollection $stateChanges): OrchestratedEventInterface|null
     {
         $latestKnownState = array_reduce(
@@ -80,10 +83,13 @@ class EventStoreService implements EventStoreServiceInterface
         }
 
         try {
-            return $this->serializer->denormalize(
+            /** @var OrchestratedEventInterface $event */
+            $event = $this->serializer->denormalize(
                 $latestKnownState,
                 OrchestratedEventInterface::class
             );
+
+            return $event;
         } catch (ExceptionInterface $exception) {
             $this->eventStoreLogger->error(
                 'Failed to denormalize event from state changes, returning null instead.',
@@ -101,6 +107,7 @@ class EventStoreService implements EventStoreServiceInterface
      * Store any state changes which have occurred between the current state, and whatever the event store believed
      * the state of the event to be in prior to this call.
      */
+    #[Override]
     public function storeStateChange(OrchestratedEventInterface $event): EventStateChange|false
     {
         $existingStateChanges = $this->getAllStateChangesForEvent($event);
@@ -179,6 +186,7 @@ class EventStoreService implements EventStoreServiceInterface
      *
      * @return EventStateChangeCollection[]
      */
+    #[Override]
     public function getAllStateChangesForCommit(string $repositoryIdentifier, string $commit): array
     {
         try {
@@ -216,6 +224,7 @@ class EventStoreService implements EventStoreServiceInterface
      * This effectively returns a history of all the changes which have occurred for a given event, which can be used
      * to reconstruct an event at any point in time.
      */
+    #[Override]
     public function getAllStateChangesForEvent(OrchestratedEventInterface $event): EventStateChangeCollection
     {
         try {

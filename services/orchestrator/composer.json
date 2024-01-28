@@ -36,9 +36,10 @@
         "symfony/yaml": "7.0.*"
     },
     "require-dev": {
+        "coverage-robot/local": "^1.0",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-symfony": "^5.0",
-        "rector/rector": "^0.18.10",
+        "rector/rector": "0.19.0",
         "squizlabs/php_codesniffer": "^3.7",
         "vimeo/psalm": "^5.15"
     },
@@ -115,7 +116,7 @@
         },
         {
             "type": "path",
-            "url": "../../packages/configuration"
+            "url": "../../packages/local"
         }
     ],
     "extra": {
