@@ -4,12 +4,12 @@ namespace App\Tests\Service\History;
 
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
-use App\Service\History\Github\GithubCommitHistoryService;
+use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class CommitHistoryServiceTest extends TestCase
+final class CommitHistoryServiceTest extends TestCase
 {
     public function testGetPrecedingCommitsUsingValidProvider(): void
     {
@@ -23,7 +23,7 @@ class CommitHistoryServiceTest extends TestCase
             diff: []
         );
 
-        $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
+        $mockGithubHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
         $mockGithubHistoryService->expects($this->once())
             ->method('getPrecedingCommits')
             ->with($waypoint, 2)
@@ -46,7 +46,7 @@ class CommitHistoryServiceTest extends TestCase
 
     public function testGetPrecedingCommitsUsingInvalidProvider(): void
     {
-        $mockGithubHistoryService = $this->createMock(GithubCommitHistoryService::class);
+        $mockGithubHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
         $mockGithubHistoryService->expects($this->never())
             ->method('getPrecedingCommits');
 

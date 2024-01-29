@@ -21,4 +21,11 @@ interface QueryServiceInterface
         string $queryClass,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface;
+
+    /**
+     *  Get a fully instantiated query class from the query class string.
+     *
+     *  @param class-string<QueryInterface> $queryClass
+     */
+    public function getQueryClass(string $queryClass): QueryInterface;
 }

@@ -2,19 +2,15 @@
 
 namespace App\Tests\Mock\Factory;
 
-use App\Enum\EnvironmentVariable;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
-class MockQueryFactory
+final class MockQueryFactory
 {
     /**
      * @param string|null $queryString
@@ -28,23 +24,11 @@ class MockQueryFactory
         ContainerInterface $container,
         string $queryClass,
         ?string $queryString,
-        QueryResultInterface $parsedResults
+        QueryResultInterface $parsedResults,
+        bool $isCacheable = false
     ): QueryInterface|MockObject {
         $mockQuery = $testCase->getMockBuilder($queryClass)
-            ->setConstructorArgs(
-                [
-                    $container->get(SerializerInterface::class),
-                    MockEnvironmentServiceFactory::createMock(
-                        $testCase,
-                        Environment::TESTING,
-                        [
-                            EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
-                            EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-upload-table',
-                        ]
-                    )
-                ]
-            )
-            ->onlyMethods(['getQuery', 'parseResults'])
+            ->disableOriginalConstructor()
             ->getMock();
 
         $mockQuery->expects($queryString !== null ? $testCase::any() : $testCase::never())
@@ -53,6 +37,9 @@ class MockQueryFactory
 
         $mockQuery->method('parseResults')
             ->willReturn($parsedResults);
+
+        $mockQuery->method('isCachable')
+            ->willReturn($isCacheable);
 
         return $mockQuery;
     }

@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
 
-class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
+final class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
@@ -158,7 +158,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
 
         return array_reduce(
             $files,
-            static fn(string $diff, array $file) => <<<DIFF
+            static fn(string $diff, array $file): string => <<<DIFF
                 $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}

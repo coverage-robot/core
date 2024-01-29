@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TotalUploadsQueryResult implements QueryResultInterface
+final class TotalUploadsQueryResult implements QueryResultInterface
 {
     /**
      * @param string[] $successfulUploads

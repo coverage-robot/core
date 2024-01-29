@@ -4,17 +4,18 @@ namespace App\Tests\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
 use App\Service\Carryforward\CachingCarryforwardTagService;
-use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\Carryforward\CarryforwardTagServiceInterface;
+use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 
-class CachingCarryforwardTagServiceTest extends TestCase
+final class CachingCarryforwardTagServiceTest extends TestCase
 {
     public function testCachesRepeatedRequests(): void
     {
         $carryforwardTags = [new Tag('tag', 'commit')];
 
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
         $mockCarryforwardTagService->expects($this->once())
             ->method('getTagsToCarryforward')
@@ -22,7 +23,16 @@ class CachingCarryforwardTagServiceTest extends TestCase
 
         $cachingCarryforwardTagService = new CachingCarryforwardTagService($mockCarryforwardTagService);
 
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
+        $mockWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: [],
+            pullRequest: 1
+        );
 
         $this->assertEquals(
             $carryforwardTags,
@@ -48,7 +58,7 @@ class CachingCarryforwardTagServiceTest extends TestCase
     {
         $tags = [new Tag('tag', 'commit')];
 
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
         $mockCarryforwardTagService->expects($this->exactly(2))
             ->method('getTagsToCarryforward')
@@ -59,14 +69,32 @@ class CachingCarryforwardTagServiceTest extends TestCase
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(ReportWaypoint::class),
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: [],
+                    pullRequest: 1
+                ),
                 [new Tag('tag', 'commit')]
             )
         );
         $this->assertEquals(
             $tags,
             $cachingCarryforwardTagService->getTagsToCarryforward(
-                $this->createMock(ReportWaypoint::class),
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: [],
+                    pullRequest: 1
+                ),
                 [new Tag('tag', 'commit')]
             )
         );

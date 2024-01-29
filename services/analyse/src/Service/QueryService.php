@@ -3,29 +3,33 @@
 namespace App\Service;
 
 use App\Client\BigQueryClient;
+use App\Client\BigQueryClientInterface;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
+use Override;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
-use Override;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class QueryService implements QueryServiceInterface
+final class QueryService implements QueryServiceInterface
 {
     /**
      * @param QueryInterface[] $queries
      */
     public function __construct(
-        private readonly BigQueryClient $bigQueryClient,
+        #[Autowire(service: BigQueryClient::class)]
+        private readonly BigQueryClientInterface $bigQueryClient,
         #[TaggedIterator('app.coverage_query')]
         private readonly iterable $queries,
-        private readonly QueryBuilderService $queryBuilderService,
+        #[Autowire(service: QueryBuilderServiceInterface::class)]
+        private readonly QueryBuilderServiceInterface $queryBuilderService,
         private readonly ValidatorInterface $validator,
         private readonly LoggerInterface $queryServiceLogger,
         private readonly MetricService $metricService
@@ -48,9 +52,8 @@ class QueryService implements QueryServiceInterface
     }
 
     /**
-     * Get a fully instantiated query class from the query class string.
+     * @inheritDoc
      *
-     * @param class-string<QueryInterface> $queryClass
      * @throws QueryException
      */
     public function getQueryClass(string $queryClass): QueryInterface

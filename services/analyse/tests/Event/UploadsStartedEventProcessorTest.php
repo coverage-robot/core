@@ -12,7 +12,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class UploadsStartedEventProcessorTest extends TestCase
+final class UploadsStartedEventProcessorTest extends TestCase
 {
     public function testGetEvent(): void
     {
@@ -37,7 +37,7 @@ class UploadsStartedEventProcessorTest extends TestCase
             ->method('dispatch')
             ->with(
                 self::callback(
-                    function (PublishableCheckRunMessage $message) use ($uploadsStarted) {
+                    function (PublishableCheckRunMessage $message) use ($uploadsStarted): bool {
                         $this->assertEquals(
                             PublishableCheckRunStatus::IN_PROGRESS,
                             $message->getStatus()

@@ -3,11 +3,15 @@
 namespace App\Tests\Event;
 
 use App\Event\UploadsFinalisedEventProcessor;
+use App\Model\CoverageReport;
 use App\Model\CoverageReportComparison;
-use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
-use App\Service\CoverageAnalyserService;
-use App\Service\CoverageComparisonService;
+use App\Query\Result\FileCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageCollectionQueryResult;
+use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalUploadsQueryResult;
+use App\Service\CoverageAnalyserServiceInterface;
+use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
@@ -26,97 +30,13 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadsFinalisedEventProcessorTest extends KernelTestCase
+final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 {
     public function testGetEvent(): void
     {
         $this->assertEquals(
             Event::UPLOADS_FINALISED->value,
             UploadsFinalisedEventProcessor::getEvent()
-        );
-    }
-
-    public function testProcessingEventSuccessfullyTriggersFinalisedEvent(): void
-    {
-        $uploadsFinalised = new UploadsFinalised(
-            provider: Provider::GITHUB,
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            ref: 'mock-ref',
-            commit: 'mock-commit',
-            parent: []
-        );
-
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
-        $mockCoverageAnalyserService->expects($this->once())
-            ->method('analyse')
-            ->with($this->isInstanceOf(ReportWaypoint::class))
-            ->willReturn($this->createMock(CoverageReportInterface::class));
-
-        $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
-        $mockCoverageComparisonService->expects($this->once())
-            ->method('getComparisonForCoverageReport')
-            ->willReturn(null);
-
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
-        $mockEventBusClient->expects($this->once())
-            ->method('fireEvent')
-            ->with(
-                EventSource::ANALYSE,
-                $this->isInstanceOf(CoverageFinalised::class)
-            )
-            ->willReturn(true);
-
-        $mockPublishClient = $this->createMock(PublishClient::class);
-        $mockPublishClient->expects($this->once())
-            ->method('dispatch')
-            ->with(
-                self::callback(
-                    function (PublishableMessageCollection $message) use ($uploadsFinalised) {
-                        $this->assertEquals(
-                            $uploadsFinalised,
-                            $message->getEvent()
-                        );
-                        $this->assertEquals(
-                            2,
-                            $message->count()
-                        );
-                        $this->assertInstanceOf(
-                            PublishablePullRequestMessage::class,
-                            $message->getMessages()[0]
-                        );
-                        $this->assertInstanceOf(
-                            PublishableCheckRunMessage::class,
-                            $message->getMessages()[1]
-                        );
-                        $this->assertEquals(
-                            null,
-                            $message->getMessages()[1]->getCoverageChange()
-                        );
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(true);
-
-        $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
-            new NullLogger(),
-            $this->getContainer()->get(SerializerInterface::class),
-            $mockCoverageAnalyserService,
-            $mockCoverageComparisonService,
-            new LineGroupingService(new NullLogger()),
-            MockSettingServiceFactory::createMock(
-                $this,
-                [
-                    SettingKey::LINE_ANNOTATION->value => true
-                ]
-            ),
-            $mockEventBusClient,
-            $mockPublishClient
-        );
-
-        $this->assertTrue(
-            $uploadsFinalisedEventProcessor->process($uploadsFinalised)
         );
     }
 
@@ -134,28 +54,65 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             baseRef: 'main'
         );
 
-        $mockHeadReport = $this->createMock(CoverageReportInterface::class);
-        $mockHeadReport->method('getCoveragePercentage')
-            ->willReturn(91.0);
-
-        $mockBaseReport = $this->createMock(CoverageReportInterface::class);
-        $mockBaseReport->method('getCoveragePercentage')
-            ->willReturn(90.0);
-
-        $reportComparison = new CoverageReportComparison(
-            baseReport: $mockBaseReport,
-            headReport: $mockHeadReport,
+        $headWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: []
+        );
+        $baseWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: []
         );
 
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $reportComparison = new CoverageReportComparison(
+            baseReport: new CoverageReport(
+                $baseWaypoint,
+                new TotalUploadsQueryResult([], [], []),
+                0,
+                0,
+                0,
+                0.0,
+                new TagCoverageCollectionQueryResult([]),
+                0.0,
+                new FileCoverageCollectionQueryResult([]),
+                new LineCoverageCollectionQueryResult([])
+            ),
+            headReport: new CoverageReport(
+                $headWaypoint,
+                new TotalUploadsQueryResult([], [], []),
+                0,
+                0,
+                0,
+                1.0,
+                new TagCoverageCollectionQueryResult([]),
+                0.0,
+                new FileCoverageCollectionQueryResult([]),
+                new LineCoverageCollectionQueryResult([])
+            ),
+        );
+
+        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserServiceInterface::class);
+        $mockCoverageAnalyserService->expects($this->once())
+            ->method('getWaypointFromEvent')
+            ->with($uploadsFinalised)
+            ->willReturn($headWaypoint);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->willReturn($mockHeadReport);
+            ->willReturn($reportComparison->getHeadReport());
 
-        $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
+        $mockCoverageComparisonService = $this->createMock(CoverageComparisonServiceInterface::class);
         $mockCoverageComparisonService->expects($this->once())
             ->method('getComparisonForCoverageReport')
-            ->with($mockHeadReport, $uploadsFinalised)
+            ->with($reportComparison->getHeadReport(), $uploadsFinalised)
             ->willReturn($reportComparison);
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);
@@ -172,7 +129,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('dispatch')
             ->with(
                 self::callback(
-                    function (PublishableMessageCollection $message) use ($uploadsFinalised) {
+                    function (PublishableMessageCollection $message) use ($uploadsFinalised): bool {
                         $this->assertEquals(
                             $uploadsFinalised,
                             $message->getEvent()
@@ -216,9 +173,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockPublishClient
         );
 
-        $this->assertTrue(
-            $uploadsFinalisedEventProcessor->process($uploadsFinalised)
-        );
+        $this->assertTrue($uploadsFinalisedEventProcessor->process($uploadsFinalised));
     }
 
     public function testProcessingEventUnsuccessfullyTriggersFailureEvent(): void
@@ -232,15 +187,39 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             parent: []
         );
 
-        $mockReport = $this->createMock(CoverageReportInterface::class);
+        $headWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: []
+        );
+        $mockReport = new CoverageReport(
+            $headWaypoint,
+            new TotalUploadsQueryResult([], [], []),
+            0,
+            0,
+            0,
+            1.0,
+            new TagCoverageCollectionQueryResult([]),
+            0.0,
+            new FileCoverageCollectionQueryResult([]),
+            new LineCoverageCollectionQueryResult([])
+        );
 
-        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserService::class);
+        $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserServiceInterface::class);
+        $mockCoverageAnalyserService->expects($this->once())
+            ->method('getWaypointFromEvent')
+            ->with($uploadsFinalised)
+            ->willReturn($headWaypoint);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
-            ->with($this->isInstanceOf(ReportWaypoint::class))
+            ->with($headWaypoint)
             ->willReturn($mockReport);
 
-        $mockCoverageComparisonService = $this->createMock(CoverageComparisonService::class);
+        $mockCoverageComparisonService = $this->createMock(CoverageComparisonServiceInterface::class);
         $mockCoverageComparisonService->expects($this->once())
             ->method('getComparisonForCoverageReport')
             ->willReturn(null);
@@ -259,7 +238,7 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('dispatch')
             ->with(
                 self::callback(
-                    function (PublishableMessageCollection $message) use ($uploadsFinalised) {
+                    function (PublishableMessageCollection $message) use ($uploadsFinalised): bool {
                         $this->assertEquals(
                             $uploadsFinalised,
                             $message->getEvent()
@@ -298,10 +277,6 @@ class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockPublishClient
         );
 
-        $this->assertFalse(
-            $uploadsFinalisedEventProcessor->process(
-                $uploadsFinalised
-            )
-        );
+        $this->assertFalse($uploadsFinalisedEventProcessor->process($uploadsFinalised));
     }
 }

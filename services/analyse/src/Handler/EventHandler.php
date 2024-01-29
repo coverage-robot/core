@@ -2,7 +2,7 @@
 
 namespace App\Handler;
 
-class EventHandler extends \Packages\Event\Handler\EventHandler
+final class EventHandler extends \Packages\Event\Handler\EventHandler
 {
     /**
      * We're not doing anything specific here outside of processing events

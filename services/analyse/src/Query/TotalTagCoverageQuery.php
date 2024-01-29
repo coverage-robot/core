@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
+final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -137,10 +137,6 @@ class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
     #[Override]
     public function parseResults(QueryResults $results): TagCoverageCollectionQueryResult
     {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
         $tags = $results->rows();
 
         /** @var TagCoverageCollectionQueryResult $results */

@@ -45,7 +45,7 @@ use Psr\Log\LoggerInterface;
  *           }
  *      }
  */
-class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
+final class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $githubClient,

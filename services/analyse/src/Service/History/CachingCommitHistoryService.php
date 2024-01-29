@@ -6,10 +6,10 @@ use App\Model\ReportWaypoint;
 use App\Service\ProviderAwareInterface;
 use Override;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
-class CachingCommitHistoryService extends CommitHistoryService
+final class CachingCommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>>
@@ -20,15 +20,10 @@ class CachingCommitHistoryService extends CommitHistoryService
      * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
-        #[TaggedIterator(
-            'app.commit_history',
-            defaultIndexMethod: 'getProvider'
-        )]
-        iterable $parsers,
+        #[Autowire(service: CommitHistoryService::class)]
+        private readonly CommitHistoryServiceInterface $commitHistoryService,
         private readonly LoggerInterface $commitHistoryLogger
     ) {
-        parent::__construct($parsers);
-
         /**
          * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>> $cache
          */
@@ -50,7 +45,7 @@ class CachingCommitHistoryService extends CommitHistoryService
             $this->persistInCache(
                 $waypoint,
                 $page,
-                parent::getPrecedingCommits($waypoint, $page)
+                $this->commitHistoryService->getPrecedingCommits($waypoint, $page)
             );
         }
 
@@ -88,12 +83,13 @@ class CachingCommitHistoryService extends CommitHistoryService
     {
         /** @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history */
         foreach ($this->cache as $cachedWaypoint => $history) {
-            if (
-                !$cachedWaypoint instanceof ReportWaypoint ||
-                $cachedWaypoint === $waypoint ||
-                !$cachedWaypoint->comparable($waypoint)
-            ) {
-                // We don't want to compare the waypoint to itself, or if its not comparable
+            if ($cachedWaypoint === $waypoint) {
+                // We don't want to compare the waypoint to itself
+                continue;
+            }
+
+            if (!$cachedWaypoint->comparable($waypoint)) {
+                // We don't want to compare the waypoint if its not comparable
                 continue;
             }
 

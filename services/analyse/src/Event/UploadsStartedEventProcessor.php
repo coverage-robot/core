@@ -13,7 +13,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-class UploadsStartedEventProcessor implements EventProcessorInterface
+final class UploadsStartedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,

@@ -5,7 +5,7 @@ namespace App\Exception;
 use App\Model\ReportWaypoint;
 use RuntimeException;
 
-class ComparisonException extends RuntimeException
+final class ComparisonException extends RuntimeException
 {
     public static function notComparable(
         ReportWaypoint $base,

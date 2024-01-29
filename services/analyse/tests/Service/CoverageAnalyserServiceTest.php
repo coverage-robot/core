@@ -6,22 +6,24 @@ use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageQueryResult;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
-use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\CoverageAnalyserService;
-use App\Service\Diff\DiffParserService;
+use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
+use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
@@ -29,7 +31,7 @@ use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class CoverageAnalyserServiceTest extends TestCase
+final class CoverageAnalyserServiceTest extends TestCase
 {
     public function testAnalysingWaypoint(): void
     {
@@ -44,7 +46,7 @@ class CoverageAnalyserServiceTest extends TestCase
             pullRequest: 12
         );
 
-        $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
         $mockDiffParserService->expects($this->atLeastOnce())
             ->method('get')
             ->with($waypoint)
@@ -54,7 +56,7 @@ class CoverageAnalyserServiceTest extends TestCase
 
         $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
 
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
         $coverageAnalyserService = new CoverageAnalyserService(
             $this->getMockedQueryService(),
@@ -116,19 +118,19 @@ class CoverageAnalyserServiceTest extends TestCase
 
     private function getMockedQueryService(): MockObject|QueryService
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
 
         $mockQueryService->expects($this->atLeastOnce())
             ->method('runQuery')
             ->willReturnCallback(
-                static fn(string $queryClass) => match ($queryClass) {
+                static fn(string $queryClass): QueryResultInterface => match ($queryClass) {
                     TotalUploadsQuery::class => new TotalUploadsQueryResult(
                         ['1'],
                         [new DateTimeImmutable('2024-01-03 00:00:00')],
                         [new Tag('mock-tag', 'mock-commit')],
                         null
                     ),
-                    TotalCoverageQuery::class => new CoverageQueryResult(
+                    TotalCoverageQuery::class => new TotalCoverageQueryResult(
                         100,
                         1,
                         1,

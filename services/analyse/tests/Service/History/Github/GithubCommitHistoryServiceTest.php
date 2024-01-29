@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class GithubCommitHistoryServiceTest extends TestCase
+final class GithubCommitHistoryServiceTest extends TestCase
 {
     public function testGetProvider(): void
     {
@@ -49,7 +49,7 @@ class GithubCommitHistoryServiceTest extends TestCase
         $gqlClient->expects($this->once())
             ->method('execute')
             ->with(
-                self::callback(function (string $query) use ($expectedOffset) {
+                self::callback(function (string $query) use ($expectedOffset): bool {
                     $this->assertEquals(
                         <<<GQL
                         {

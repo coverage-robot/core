@@ -6,7 +6,7 @@ use App\Model\CoverageReportComparison;
 use App\Model\CoverageReportInterface;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
-use App\Service\CoverageComparisonService;
+use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Override;
@@ -32,14 +32,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadsFinalisedEventProcessor implements EventProcessorInterface
+final class UploadsFinalisedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface&NormalizerInterface $serializer,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
-        private readonly CoverageComparisonService $coverageComparisonService,
+        private readonly CoverageComparisonServiceInterface $coverageComparisonService,
         private readonly LineGroupingService $annotationGrouperService,
         private readonly SettingService $settingService,
         private readonly EventBusClient $eventBusClient,

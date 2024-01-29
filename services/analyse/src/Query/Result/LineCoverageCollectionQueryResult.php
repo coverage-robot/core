@@ -4,7 +4,7 @@ namespace App\Query\Result;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class LineCoverageCollectionQueryResult implements QueryResultInterface
+final class LineCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param LineCoverageQueryResult[] $lines

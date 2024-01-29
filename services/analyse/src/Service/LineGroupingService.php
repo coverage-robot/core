@@ -12,7 +12,7 @@ use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMess
 use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 use Psr\Log\LoggerInterface;
 
-class LineGroupingService
+final class LineGroupingService
 {
     public function __construct(
         private readonly LoggerInterface $lineGroupingLogger
@@ -73,10 +73,11 @@ class LineGroupingService
         $annotations = [];
 
         foreach ($lineCoverage as $line) {
-            if (
-                !in_array(LineType::BRANCH, $line->getTypes()) ||
-                $line->getState() === LineState::COVERED
-            ) {
+            if (!in_array(LineType::BRANCH, $line->getTypes())) {
+                continue;
+            }
+
+            if ($line->getState() === LineState::COVERED) {
                 continue;
             }
 
@@ -164,17 +165,20 @@ class LineGroupingService
                 $missingEndLine = $missingStartLine !== null ? $line : null;
             }
 
-            if (
-                $missingStartLine !== null &&
-                $missingEndLine !== null
-            ) {
-                $annotations[] = $this->generateMissingCoverageAnnotation(
-                    $event,
-                    $missingStartLine,
-                    $missingEndLine,
-                    $validUntil
-                );
+            if ($missingStartLine === null) {
+                continue;
             }
+
+            if ($missingEndLine === null) {
+                continue;
+            }
+
+            $annotations[] = $this->generateMissingCoverageAnnotation(
+                $event,
+                $missingStartLine,
+                $missingEndLine,
+                $validUntil
+            );
         }
 
         return $annotations;

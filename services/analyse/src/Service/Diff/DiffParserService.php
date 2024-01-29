@@ -8,7 +8,7 @@ use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class DiffParserService implements DiffParserServiceInterface
+final class DiffParserService implements DiffParserServiceInterface
 {
     /**
      * @param (DiffParserServiceInterface&ProviderAwareInterface)[] $parsers

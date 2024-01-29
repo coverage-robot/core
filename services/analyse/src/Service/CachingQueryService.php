@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
@@ -12,15 +13,19 @@ use Override;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CachingQueryService implements QueryServiceInterface
+final class CachingQueryService implements QueryServiceInterface
 {
     public function __construct(
         public readonly LoggerInterface $queryServiceLogger,
-        public readonly QueryService $queryService,
-        public readonly QueryBuilderService $queryBuilderService,
-        public readonly DynamoDbClient $dynamoDbClient,
-        private readonly MetricService $mertricService
+        #[Autowire(service: QueryService::class)]
+        public readonly QueryServiceInterface $queryService,
+        #[Autowire(service: QueryBuilderService::class)]
+        public readonly QueryBuilderServiceInterface $queryBuilderService,
+        #[Autowire(service: DynamoDbClient::class)]
+        public readonly DynamoDbClientInterface $dynamoDbClient,
+        private readonly MetricService $metricService
     ) {
     }
 
@@ -70,7 +75,7 @@ class CachingQueryService implements QueryServiceInterface
 
             $result = $this->runUncachedQuery($queryClass, $parameterBag);
 
-            $this->mertricService->put(
+            $this->metricService->put(
                 metric: 'QueryCacheMiss',
                 value: 1,
                 unit: Unit::COUNT,
@@ -97,7 +102,7 @@ class CachingQueryService implements QueryServiceInterface
             ]
         );
 
-        $this->mertricService->put(
+        $this->metricService->put(
             metric: 'QueryCacheHit',
             value: 1,
             unit: Unit::COUNT,
@@ -125,5 +130,11 @@ class CachingQueryService implements QueryServiceInterface
         ?QueryParameterBag $parameterBag
     ): QueryResultInterface {
         return $this->queryService->runQuery($queryClass, $parameterBag);
+    }
+
+    #[\Override]
+    public function getQueryClass(string $queryClass): QueryInterface
+    {
+        return $this->queryService->getQueryClass($queryClass);
     }
 }
