@@ -10,7 +10,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class PathFixingServiceTest extends TestCase
+final class PathFixingServiceTest extends TestCase
 {
     #[DataProvider('configurationDataProvider')]
     public function testFixingPathsWithDifferentSettings(

@@ -12,7 +12,7 @@ use Stringable;
 
 use function gettype;
 
-class Coverage implements Countable, Stringable
+final class Coverage implements Countable, Stringable
 {
     private ?DateTimeImmutable $generatedAt = null;
 
@@ -99,7 +99,7 @@ class Coverage implements Countable, Stringable
     #[Override]
     public function __toString(): string
     {
-        return 'Coverage#' . ($this->getGeneratedAt()?->format(DateTimeInterface::ATOM) ?? 'null');
+        return 'Coverage#' . ($this->generatedAt?->format(DateTimeInterface::ATOM) ?? 'null');
     }
 
     #[Override]

@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class BigQueryMetadataBuilderService
+final class BigQueryMetadataBuilderService
 {
     public function __construct(
         private readonly LoggerInterface $metadataBuilderServiceLogger,

@@ -11,7 +11,7 @@ use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingService;
 use Psr\Log\NullLogger;
 
-class LcovParseStrategyTest extends AbstractParseStrategyTestCase
+final class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 {
     #[Override]
     public static function coverageFilesDataProvider(): iterable

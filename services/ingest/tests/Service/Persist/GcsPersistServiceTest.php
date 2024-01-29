@@ -2,8 +2,8 @@
 
 namespace App\Tests\Service\Persist;
 
-use App\Client\BigQueryClient;
-use App\Client\GoogleCloudStorageClient;
+use App\Client\BigQueryClientInterface;
+use App\Client\GoogleCloudStorageClientInterface;
 use App\Enum\EnvironmentVariable;
 use App\Model\Coverage;
 use App\Service\BigQueryMetadataBuilderService;
@@ -26,14 +26,14 @@ use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class GcsPersistServiceTest extends KernelTestCase
+final class GcsPersistServiceTest extends KernelTestCase
 {
     public function testPersistSuccessfully(): void
     {
         $mockBucket = $this->createMock(Bucket::class);
         $mockStorageObject = $this->createMock(StorageObject::class);
 
-        $mockGcsClient = $this->createMock(GoogleCloudStorageClient::class);
+        $mockGcsClient = $this->createMock(GoogleCloudStorageClientInterface::class);
         $mockGcsClient->expects($this->once())
             ->method('bucket')
             ->with(
@@ -62,7 +62,7 @@ class GcsPersistServiceTest extends KernelTestCase
             ->method('insertRow')
             ->willReturn(new InsertResponse([], []));
 
-        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
+        $mockBigQueryClient = $this->createMock(BigQueryClientInterface::class);
         $mockBigQueryClient->expects($this->exactly(2))
             ->method('getEnvironmentDataset')
             ->willReturn($mockDataset);
@@ -123,7 +123,7 @@ class GcsPersistServiceTest extends KernelTestCase
         $mockBucket = $this->createMock(Bucket::class);
         $mockStorageObject = $this->createMock(StorageObject::class);
 
-        $mockGcsClient = $this->createMock(GoogleCloudStorageClient::class);
+        $mockGcsClient = $this->createMock(GoogleCloudStorageClientInterface::class);
         $mockGcsClient->expects($this->once())
             ->method('bucket')
             ->with(
@@ -151,7 +151,7 @@ class GcsPersistServiceTest extends KernelTestCase
         $mockTable->expects($this->never())
             ->method('insertRow');
 
-        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
+        $mockBigQueryClient = $this->createMock(BigQueryClientInterface::class);
         $mockBigQueryClient->expects($this->once())
             ->method('getEnvironmentDataset')
             ->willReturn($mockDataset);

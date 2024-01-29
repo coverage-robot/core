@@ -7,7 +7,7 @@ use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingService;
 use Packages\Contracts\Provider\Provider;
 
-class PathFixingService
+final class PathFixingService
 {
     public function __construct(
         private readonly SettingService $settingService
@@ -80,12 +80,12 @@ class PathFixingService
     /**
      * Remove the project root from a path, if present.
      */
-    protected function removeUsingProjectRoot(
+    private function removeUsingProjectRoot(
         string $path,
         string $projectRoot
     ): string {
         if (str_starts_with($path, $projectRoot)) {
-            $path = substr($path, strlen($projectRoot));
+            return substr($path, strlen($projectRoot));
         }
 
         return $path;

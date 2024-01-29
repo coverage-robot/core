@@ -20,7 +20,7 @@ use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class CoverageFileRetrievalServiceTest extends TestCase
+final class CoverageFileRetrievalServiceTest extends TestCase
 {
     public function testIngestFromS3(): void
     {

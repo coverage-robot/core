@@ -11,7 +11,7 @@ use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingService;
 use Psr\Log\NullLogger;
 
-class CloverParseStrategyTest extends AbstractParseStrategyTestCase
+final class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 {
     #[Override]
     public static function coverageFilesDataProvider(): iterable

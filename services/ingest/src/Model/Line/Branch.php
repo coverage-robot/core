@@ -5,7 +5,7 @@ namespace App\Model\Line;
 use Override;
 use Packages\Contracts\Line\LineType;
 
-class Branch extends AbstractLine
+final class Branch extends AbstractLine
 {
     /**
      * @param array<array-key, int> $branchHits

@@ -14,7 +14,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class S3PersistService implements PersistServiceInterface
+final class S3PersistService implements PersistServiceInterface
 {
     private const string OUTPUT_BUCKET = 'coverage-output-%s';
 
