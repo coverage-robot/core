@@ -5,7 +5,7 @@ namespace App\Model;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 
-class EventStateChange
+final class EventStateChange
 {
     public function __construct(
         private readonly Provider $provider,

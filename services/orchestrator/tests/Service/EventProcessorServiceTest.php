@@ -7,7 +7,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Event\Service\EventProcessorService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class EventProcessorServiceTest extends KernelTestCase
+final class EventProcessorServiceTest extends KernelTestCase
 {
     public function testAllProcessorsAvailableToHandleEvents(): void
     {

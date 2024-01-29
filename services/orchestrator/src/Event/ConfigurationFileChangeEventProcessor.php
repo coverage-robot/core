@@ -14,7 +14,7 @@ use Packages\Event\Model\ConfigurationFileChange;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 
-class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
+final class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
 {
     private const array REFS = [
         'main',

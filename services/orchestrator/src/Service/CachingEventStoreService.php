@@ -6,9 +6,10 @@ use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use Override;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
-class CachingEventStoreService implements EventStoreServiceInterface
+final class CachingEventStoreService implements EventStoreServiceInterface
 {
     /**
      * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface>
@@ -16,7 +17,8 @@ class CachingEventStoreService implements EventStoreServiceInterface
     private WeakMap $reducerCache;
 
     public function __construct(
-        private readonly EventStoreService $eventStoreService
+        #[Autowire(service: EventStoreService::class)]
+        private readonly EventStoreServiceInterface $eventStoreService
     ) {
         /**
          * @var WeakMap<EventStateChangeCollection, OrchestratedEventInterface> $cache

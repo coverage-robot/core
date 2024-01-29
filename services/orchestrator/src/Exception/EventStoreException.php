@@ -4,6 +4,6 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class EventStoreException extends RuntimeException
+final class EventStoreException extends RuntimeException
 {
 }

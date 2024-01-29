@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
 use App\Model\EventStateChange;
@@ -21,7 +22,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventStoreServiceTest extends KernelTestCase
+final class EventStoreServiceTest extends KernelTestCase
 {
     #[DataProvider('orchestratedEventsDataProvider')]
     public function testCalculatingStateChangeBetweenEvents(
@@ -31,7 +32,7 @@ class EventStoreServiceTest extends KernelTestCase
     ): void {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -50,7 +51,7 @@ class EventStoreServiceTest extends KernelTestCase
     {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -85,7 +86,7 @@ class EventStoreServiceTest extends KernelTestCase
     ): void {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -103,7 +104,7 @@ class EventStoreServiceTest extends KernelTestCase
     {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -160,7 +161,7 @@ class EventStoreServiceTest extends KernelTestCase
             $eventTime
         );
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getStateChangesForEvent')
             ->willReturn([
@@ -216,7 +217,7 @@ class EventStoreServiceTest extends KernelTestCase
             $eventTime
         );
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getStateChangesForEvent')
             ->willReturn([
@@ -265,7 +266,7 @@ class EventStoreServiceTest extends KernelTestCase
          */
         $serializer = $this->getContainer()->get(SerializerInterface::class);
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getEventStateChangesForCommit')
             ->willReturn([

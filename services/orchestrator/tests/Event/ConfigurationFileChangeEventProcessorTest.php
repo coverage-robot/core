@@ -19,7 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class ConfigurationFileChangeEventProcessorTest extends TestCase
+final class ConfigurationFileChangeEventProcessorTest extends TestCase
 {
     #[DataProvider('eventDataProvider')]
     public function testProcessEvent(

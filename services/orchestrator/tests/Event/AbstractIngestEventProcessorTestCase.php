@@ -3,12 +3,14 @@
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
+use App\Enum\OrchestratedEventState;
 use App\Event\AbstractIngestEventProcessor;
+use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Ingestion;
-use App\Service\EventStoreService;
-use App\Tests\Mock\FakeEventStoreRecorderBackoffStrategy;
+use App\Service\EventStoreServiceInterface;
+use App\Tests\Mock\FakeBackoffStrategy;
 use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
@@ -39,7 +41,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     public function testHandlingInvalidEvent(): void
     {
         $ingestEventProcessor = $this->getIngestEventProcessor(
-            $this->createMock(EventStoreService::class),
+            $this->createMock(EventStoreServiceInterface::class),
             $this->createMock(EventBusClient::class)
         );
 
@@ -61,7 +63,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     public function testHandlingEventWithNoExistingStateChanges(): void
     {
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
             ->willReturn(null);
@@ -73,7 +75,14 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             ->willReturn(new EventStateChangeCollection([]));
         $mockEventStoreService->expects($this->atMost(2))
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: []
+            ));
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
@@ -106,11 +115,17 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
 
-        $mockIngestion = $this->createMock(Ingestion::class);
-        $mockIngestion->method('getEventTime')
-            ->willReturn($eventTime);
+        $mockIngestion = new Ingestion(
+            uploadId: 'mock-upload-id',
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            state: OrchestratedEventState::SUCCESS,
+            eventTime: $eventTime
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
             ->willReturn($mockIngestion);
@@ -161,19 +176,21 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     }
 
     protected function getIngestEventProcessor(
-        EventStoreService $mockEventStoreService,
+        EventStoreServiceInterface $mockEventStoreService,
         EventBusClient $eventBusClient
     ): AbstractIngestEventProcessor {
         $ingestEventProcessor = new ($this::getEventProcessor())(
             $mockEventStoreService,
             $eventBusClient,
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $ingestEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $ingestEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         return $ingestEventProcessor;
     }

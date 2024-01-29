@@ -5,7 +5,7 @@ namespace App\Event;
 use Override;
 use Packages\Contracts\Event\Event;
 
-class IngestStartedEventProcessor extends AbstractIngestEventProcessor
+final class IngestStartedEventProcessor extends AbstractIngestEventProcessor
 {
     #[Override]
     public static function getEvent(): string

@@ -22,7 +22,7 @@ use Packages\Event\Model\UploadsStarted;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProcessor
+final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecorderProcessor
 {
     use OverallCommitStateAwareTrait;
 

@@ -4,14 +4,14 @@ namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
+use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
 use App\Event\JobStateChangeEventProcessor;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Finalised;
-use App\Model\Ingestion;
 use App\Model\Job;
-use App\Service\EventStoreService;
-use App\Tests\Mock\FakeEventStoreRecorderBackoffStrategy;
+use App\Service\EventStoreServiceInterface;
+use App\Tests\Mock\FakeBackoffStrategy;
 use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
@@ -25,20 +25,22 @@ use Packages\Event\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class JobStateChangeEventProcessorTest extends TestCase
+final class JobStateChangeEventProcessorTest extends TestCase
 {
     public function testHandlingInvalidEvent(): void
     {
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
-            $this->createMock(EventStoreService::class),
+            $this->createMock(EventStoreServiceInterface::class),
             $this->createMock(EventBusClient::class),
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         $this->assertFalse(
             $jobStateChangeEventProcessor->process(
@@ -52,24 +54,34 @@ class JobStateChangeEventProcessorTest extends TestCase
 
     public function testHandlingEventWithNoExistingStateChanges(): void
     {
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->once())
             ->method('getAllStateChangesForEvent')
             ->willReturn(new EventStateChangeCollection([]));
         $mockEventStoreService->expects($this->exactly(2))
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                Provider::GITHUB,
+                'mock-identifier',
+                'mock-owner',
+                'mock-repository',
+                1,
+                ['mock' => 'change'],
+                null
+            ));
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
             $this->createMock(EventBusClient::class),
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(
@@ -91,14 +103,18 @@ class JobStateChangeEventProcessorTest extends TestCase
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
 
-        $mockJob = $this->createMock(Job::class);
-        $mockJob->method('getEventTime')
-            ->willReturn($eventTime);
-
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
-            ->willReturn($mockJob);
+            ->willReturn(new Job(
+                provider: Provider::GITHUB,
+                owner: 'owner',
+                repository: 'repository',
+                commit: 'commit',
+                state: OrchestratedEventState::ONGOING,
+                eventTime: $eventTime,
+                externalId: 'external-id'
+            ));
         $mockEventStoreService->expects($this->once())
             ->method('getAllStateChangesForEvent')
             ->willReturn(
@@ -121,12 +137,14 @@ class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $this->createMock(EventBusClient::class),
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         $this->assertFalse(
             $jobStateChangeEventProcessor->process(
@@ -155,14 +173,17 @@ class JobStateChangeEventProcessorTest extends TestCase
 
     public function testHandlingEventWhenOthersOngoing(): void
     {
-        $mockJob = $this->createMock(Ingestion::class);
-        $mockJob->method('getState')
-            ->willReturn(OrchestratedEventState::ONGOING);
-        $mockJob->expects($this->once())
-            ->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
+        $mockJob = new Job(
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            commit: 'commit',
+            state: OrchestratedEventState::ONGOING,
+            eventTime: new DateTimeImmutable(),
+            externalId: 'external-id'
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
@@ -193,7 +214,14 @@ class JobStateChangeEventProcessorTest extends TestCase
             );
         $mockEventStoreService->expects($this->once())
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: ['mock' => 'change'],
+            ));
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);
         $mockEventBusClient->expects($this->never())
@@ -203,12 +231,14 @@ class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $mockEventBusClient,
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(
@@ -228,18 +258,27 @@ class JobStateChangeEventProcessorTest extends TestCase
 
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
-        $mockJob = $this->createMock(Job::class);
-        $mockJob->method('getState')
-            ->willReturn(OrchestratedEventState::SUCCESS);
-        $mockJob->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
-        $mockFinalised = $this->createMock(Finalised::class);
-        $mockFinalised->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
-        $mockFinalised->method('getState')
-            ->willReturn(OrchestratedEventState::SUCCESS);
+        $mockJob = new Job(
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            commit: 'commit',
+            state: OrchestratedEventState::SUCCESS,
+            eventTime: new DateTimeImmutable(),
+            externalId: 'external-id'
+        );
+        $mockFinalised = new Finalised(
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            ref: 'ref',
+            commit: 'commit',
+            state: OrchestratedEventState::SUCCESS,
+            pullRequest: null,
+            eventTime: new DateTimeImmutable()
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
                 $mockJob,
@@ -272,7 +311,14 @@ class JobStateChangeEventProcessorTest extends TestCase
             );
         $mockEventStoreService->expects($this->once())
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: ['mock' => 'change'],
+            ));
 
         $mockEventBusClient = $this->createMock(EventBusClient::class);
         $mockEventBusClient->expects($this->never())
@@ -282,12 +328,14 @@ class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $mockEventBusClient,
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
         // is skipped.
-        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(new FakeReadyToFinaliseBackoffStrategy());
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
 
         $this->assertTrue(
             $jobStateChangeEventProcessor->process(

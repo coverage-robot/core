@@ -7,7 +7,7 @@ use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\IngestStarted;
 
-class IngestStartedEventProcessorTest extends AbstractIngestEventProcessorTestCase
+final class IngestStartedEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
     #[Override]
     public static function getEventProcessor(): string
