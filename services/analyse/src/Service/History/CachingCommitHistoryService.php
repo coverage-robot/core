@@ -3,8 +3,8 @@
 namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
-use App\Service\ProviderAwareInterface;
 use Override;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;

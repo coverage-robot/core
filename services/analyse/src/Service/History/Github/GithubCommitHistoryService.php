@@ -5,11 +5,11 @@ namespace App\Service\History\Github;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
-use App\Service\ProviderAwareInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 
 /**

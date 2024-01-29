@@ -4,10 +4,10 @@ namespace App\Service\Diff\Github;
 
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
-use App\Service\ProviderAwareInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
