@@ -14,7 +14,7 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
+final class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
         private readonly GithubAppInstallationClient $client,
@@ -132,7 +132,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            static fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
+            static fn(array $comment): bool => isset($comment['id'], $comment['user']['node_id']) &&
                 $comment['user']['node_id'] === $botId
         );
 

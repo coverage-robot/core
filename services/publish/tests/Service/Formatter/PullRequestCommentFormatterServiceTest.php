@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
-class PullRequestCommentFormatterServiceTest extends TestCase
+final class PullRequestCommentFormatterServiceTest extends TestCase
 {
     use MatchesSnapshots;
 

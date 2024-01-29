@@ -8,7 +8,7 @@ use Packages\Telemetry\Service\MetricService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class MessagePublisherService
+final class MessagePublisherService
 {
     public function __construct(
         #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]

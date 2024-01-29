@@ -18,10 +18,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class GithubPullRequestCommentPublisherServiceTest extends TestCase
+final class GithubPullRequestCommentPublisherServiceTest extends TestCase
 {
     #[DataProvider('supportsDataProvider')]
-    public function testSupports(Upload $upload, bool $expectedSupport)
+    public function testSupports(Upload $upload, bool $expectedSupport): void
     {
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClient::class),
@@ -50,7 +50,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
     }
 
     #[DataProvider('supportsDataProvider')]
-    public function testPublishToNewComment($upload, $expectedSupport): void
+    public function testPublishToNewComment(\Packages\Event\Model\Upload $upload, bool $expectedSupport): void
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
         $publisher = new GithubPullRequestCommentPublisherService(

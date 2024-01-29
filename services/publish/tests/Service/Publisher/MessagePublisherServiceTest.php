@@ -10,7 +10,7 @@ use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class MessagePublisherServiceTest extends TestCase
+final class MessagePublisherServiceTest extends TestCase
 {
     public function testPublishingMessagesToOnlySupportedPublishers(): void
     {

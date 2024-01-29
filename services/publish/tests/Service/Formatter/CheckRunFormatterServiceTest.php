@@ -9,7 +9,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class CheckRunFormatterServiceTest extends TestCase
+final class CheckRunFormatterServiceTest extends TestCase
 {
     #[DataProvider('statusDataProvider')]
     public function testFormatTitle(

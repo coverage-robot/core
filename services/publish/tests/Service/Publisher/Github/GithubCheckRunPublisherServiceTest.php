@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubCheckRunPublisherServiceTest extends TestCase
+final class GithubCheckRunPublisherServiceTest extends TestCase
 {
     #[DataProvider('uploadsDataProvider')]
     public function testSupports(Upload $upload, bool $expectedSupport): void
@@ -203,7 +203,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 $upload->getRepository(),
                 3,
                 self::callback(
-                    function (array $checkRun) {
+                    function (array $checkRun): bool {
                         $this->assertEquals('Coverage Robot', $checkRun['name']);
                         $this->assertEquals('completed', $checkRun['status']);
                         $this->assertEquals('success', $checkRun['conclusion']);

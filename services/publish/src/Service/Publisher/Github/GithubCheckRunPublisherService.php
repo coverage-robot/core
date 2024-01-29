@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
  *      title: string
  *  }
  */
-class GithubCheckRunPublisherService implements PublisherServiceInterface
+final class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     private const int MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
@@ -129,7 +129,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
         $successful = true;
 
-        foreach ($chunkedAnnotations as $chunk) {
+        foreach ($chunkedAnnotations as $chunkedAnnotation) {
             // Progressively update the check run with each new set of annotations. The API
             // is additive (i.e. non-idempotent) meaning by streaming new sets of annotations
             // they will be appended to the existing set.
@@ -138,7 +138,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $repository,
                 $checkRunId,
                 $publishableMessage,
-                $chunk
+                $chunkedAnnotation
             ) && $successful;
         }
 
@@ -276,23 +276,23 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
         /** @var Annotation[] $annotations */
         $annotations = [];
 
-        foreach ($this->filterAnnotations($publishableMessage, $currentAnnotations) as $annotation) {
+        foreach ($this->filterAnnotations($publishableMessage, $currentAnnotations) as $publishableAnnotation) {
             if (count($annotations) === self::MAX_ANNOTATIONS_PER_CHECK_RUN) {
                 yield $annotations;
                 $annotations = [];
             }
 
             $annotations[] = [
-                'path' => $annotation->getFileName(),
+                'path' => $publishableAnnotation->getFileName(),
                 'annotation_level' => 'warning',
                 'title' => $this->checkAnnotationFormatterService->formatTitle(),
-                'message' => $this->checkAnnotationFormatterService->format($annotation),
-                'start_line' => $annotation->getStartLineNumber(),
+                'message' => $this->checkAnnotationFormatterService->format($publishableAnnotation),
+                'start_line' => $publishableAnnotation->getStartLineNumber(),
 
                 // We want to place the annotation on the starting line, as opposed to spreading
                 // across the start and end. If this was the end line number (i.e. 14, the annotation
                 // would end up on line 14, as opposed to where the annotation actually started).
-                'end_line' => $annotation->getStartLineNumber()
+                'end_line' => $publishableAnnotation->getStartLineNumber()
             ];
         }
 
@@ -311,14 +311,17 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
     ): array {
         return array_filter(
             $publishableMessage->getAnnotations(),
-            static function (PublishableAnnotationInterface $annotation) use ($currentAnnotations) {
+            static function (PublishableAnnotationInterface $annotation) use ($currentAnnotations): bool {
                 foreach ($currentAnnotations as $currentAnnotation) {
-                    if (
-                        $annotation->getFileName() === $currentAnnotation['path'] &&
-                        $annotation->getStartLineNumber() === $currentAnnotation['start_line']
-                    ) {
-                        return false;
+                    if ($annotation->getFileName() !== $currentAnnotation['path']) {
+                        continue;
                     }
+
+                    if ($annotation->getStartLineNumber() !== $currentAnnotation['start_line']) {
+                        continue;
+                    }
+
+                    return false;
                 }
 
                 return true;
@@ -345,7 +348,7 @@ class GithubCheckRunPublisherService implements PublisherServiceInterface
 
         $checkRuns = array_filter(
             $checkRuns,
-            fn(array $checkRun) => isset($checkRun['id'], $checkRun['app']['id']) &&
+            fn(array $checkRun): bool => isset($checkRun['id'], $checkRun['app']['id']) &&
                 (string)$checkRun['app']['id'] === $this->environmentService->getVariable(
                     EnvironmentVariable::GITHUB_APP_ID
                 )

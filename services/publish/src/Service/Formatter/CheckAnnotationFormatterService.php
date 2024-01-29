@@ -6,7 +6,7 @@ use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 
-class CheckAnnotationFormatterService
+final class CheckAnnotationFormatterService
 {
     public function formatTitle(): string
     {
