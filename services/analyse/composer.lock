@@ -322,16 +322,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.1.11",
+            "version": "2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "65b318a0f0e400a3353c88ad2c8f4a67bb9df813"
+                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/65b318a0f0e400a3353c88ad2c8f4a67bb9df813",
-                "reference": "65b318a0f0e400a3353c88ad2c8f4a67bb9df813",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/99eb6766d20df0c3cbacc14d7de29ac9b3616788",
+                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.11"
+                "source": "https://github.com/brefphp/bref/tree/2.1.12"
             },
             "funding": [
                 {
@@ -397,7 +397,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-01T19:43:25+00:00"
+            "time": "2024-01-23T13:51:26+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -589,7 +589,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "5a2d2254248259ec5d2d6deb8b21d3ae7a4ed59c"
+                "reference": "68c5c1a0b6eceffd4ee508fe720a20d80eb7404d"
             },
             "require": {
                 "knplabs/github-api": "^3.13",
@@ -631,7 +631,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "be799c4a3198b10fb397fad3cace70a7b4261660"
+                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -675,7 +675,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -697,7 +697,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "71af3274de0447811999039b179572f82ddf5be6"
+                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -741,7 +741,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "d8f7e4ba89f57fcb1186ff48652510acad828564"
+                "reference": "0f7b07d9e3010c80e67bc74ae710f9dd06478d08"
             },
             "require": {
                 "async-aws/sqs": "^2.0",
@@ -782,7 +782,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
+                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -7920,7 +7920,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "bca343d31a87f94301d4859d5f098b4a8b054699"
+                "reference": "6eaf120ad505526199826a6acccb43cfdfd1069d"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -10462,5 +10462,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
