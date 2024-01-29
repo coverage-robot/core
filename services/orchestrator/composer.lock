@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a6c61528a016fa479b113dccef369ef",
+    "content-hash": "807dc61ecd0d90238749f4fd24709e06",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -476,7 +476,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "5a2d2254248259ec5d2d6deb8b21d3ae7a4ed59c"
+                "reference": "68c5c1a0b6eceffd4ee508fe720a20d80eb7404d"
             },
             "require": {
                 "knplabs/github-api": "^3.13",
@@ -518,7 +518,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "be799c4a3198b10fb397fad3cace70a7b4261660"
+                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -562,7 +562,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -584,7 +584,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "71af3274de0447811999039b179572f82ddf5be6"
+                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -628,7 +628,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
+                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -7080,7 +7080,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "bca343d31a87f94301d4859d5f098b4a8b054699"
+                "reference": "6eaf120ad505526199826a6acccb43cfdfd1069d"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -8145,21 +8145,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.19.0",
+            "version": "0.19.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "503f4ead06b3892bd106f67f3c86d4e36c94423d"
+                "reference": "bc96a99895bf47c6bfe70ea1b799f0081ed5a903"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/503f4ead06b3892bd106f67f3c86d4e36c94423d",
-                "reference": "503f4ead06b3892bd106f67f3c86d4e36c94423d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/bc96a99895bf47c6bfe70ea1b799f0081ed5a903",
+                "reference": "bc96a99895bf47c6bfe70ea1b799f0081ed5a903",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.52"
+                "phpstan/phpstan": "^1.10.56"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -8189,7 +8189,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.19.0"
+                "source": "https://github.com/rectorphp/rector/tree/0.19.2"
             },
             "funding": [
                 {
@@ -8197,7 +8197,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-09T00:49:06+00:00"
+            "time": "2024-01-19T10:58:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9429,5 +9429,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
