@@ -381,16 +381,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.1.11",
+            "version": "2.1.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "65b318a0f0e400a3353c88ad2c8f4a67bb9df813"
+                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/65b318a0f0e400a3353c88ad2c8f4a67bb9df813",
-                "reference": "65b318a0f0e400a3353c88ad2c8f4a67bb9df813",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/99eb6766d20df0c3cbacc14d7de29ac9b3616788",
+                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788",
                 "shasum": ""
             },
             "require": {
@@ -444,7 +444,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.11"
+                "source": "https://github.com/brefphp/bref/tree/2.1.12"
             },
             "funding": [
                 {
@@ -456,7 +456,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-01T19:43:25+00:00"
+            "time": "2024-01-23T13:51:26+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -648,7 +648,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
+                "reference": "2a8eeba2ae5037f0bfcf9c20da98265c859b3687"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -662,7 +662,8 @@
                 "symfony/yaml": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -676,6 +677,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -714,7 +718,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
+                "reference": "4137558ae4ae4f6e591f90c4f72e2dea23d834eb"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -728,7 +732,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.4"
             },
             "type": "library",
             "autoload": {
@@ -742,6 +747,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -758,7 +766,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -774,6 +782,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
             "type": "library",
@@ -788,6 +797,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
