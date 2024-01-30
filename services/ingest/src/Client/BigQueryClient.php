@@ -6,7 +6,7 @@ use App\Enum\EnvironmentVariable;
 use Google\Cloud\BigQuery\Dataset;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
-final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient
+final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient implements BigQueryClientInterface
 {
     private const SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
 
