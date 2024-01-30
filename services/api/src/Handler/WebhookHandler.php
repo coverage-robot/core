@@ -6,8 +6,9 @@ use App\Entity\Project;
 use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\ProjectRepository;
+use App\Service\WebhookProcessorService;
+use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
-use App\Webhook\WebhookProcessor;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
@@ -17,18 +18,20 @@ use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookHandler extends SqsHandler
+final class WebhookHandler extends SqsHandler
 {
     /**
      * @param SerializerInterface&DenormalizerInterface&NormalizerInterface $serializer
      */
     public function __construct(
-        private readonly WebhookProcessor $webhookProcessor,
+        #[Autowire(service: WebhookProcessorService::class)]
+        private readonly WebhookProcessorServiceInterface $webhookProcessor,
         private readonly LoggerInterface $webhookLogger,
         private readonly ProjectRepository $projectRepository,
         private readonly SerializerInterface $serializer,
@@ -51,10 +54,10 @@ class WebhookHandler extends SqsHandler
             unit: Unit::COUNT
         );
 
-        foreach ($event->getRecords() as $record) {
+        foreach ($event->getRecords() as $sqsRecord) {
             try {
                 $webhook = $this->serializer->deserialize(
-                    $record->getBody(),
+                    $sqsRecord->getBody(),
                     WebhookInterface::class,
                     'json'
                 );
@@ -65,7 +68,7 @@ class WebhookHandler extends SqsHandler
                     'Failed to deserialize webhook payload.',
                     [
                         'exception' => $e,
-                        'payload' => $record->getBody()
+                        'payload' => $sqsRecord->getBody()
                     ]
                 );
 

@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
  *
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
  */
-class GithubPushedCommit implements PushedCommitInterface
+final class GithubPushedCommit implements PushedCommitInterface
 {
     /**
      * @param string[] $addedFiles

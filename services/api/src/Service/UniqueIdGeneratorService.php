@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Ramsey\Uuid\Uuid;
 
-class UniqueIdGeneratorService
+final class UniqueIdGeneratorService implements UniqueIdGeneratorServiceInterface
 {
     /**
      * Generate a simple Uuid v4 for coverage file identifiers.

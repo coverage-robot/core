@@ -25,6 +25,7 @@ use Packages\Configuration\Service\SettingService;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -70,8 +71,6 @@ final class EventHandlerTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
-
         $handler = new EventHandler(
             $this->getContainer()
                 ->get(SerializerInterface::class),
@@ -79,7 +78,7 @@ final class EventHandlerTest extends KernelTestCase
             $this->getContainer()
                 ->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $mockEventBusClient,
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
             $this->createMock(MetricService::class)
         );
@@ -101,7 +100,7 @@ final class EventHandlerTest extends KernelTestCase
         $mockCoverageFilePersistService->expects($this->never())
             ->method('persist');
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 
@@ -145,7 +144,7 @@ final class EventHandlerTest extends KernelTestCase
         $mockCoverageFilePersistService->method('persist')
             ->willThrowException(PersistException::from(new Exception('Failed to persist')));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->exactly(2))
             ->method('fireEvent');
 
@@ -217,7 +216,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFileRetrievalService,
             $this->getContainer()->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $this->createMock(EventBusClient::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
             $this->createMock(MetricService::class)
         );

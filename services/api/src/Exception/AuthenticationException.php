@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use Exception;
 
-class AuthenticationException extends Exception
+final class AuthenticationException extends Exception
 {
     public static function invalidProvider(): self
     {

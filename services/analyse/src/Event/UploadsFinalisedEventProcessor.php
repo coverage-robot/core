@@ -16,6 +16,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
@@ -42,7 +43,8 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly CoverageComparisonServiceInterface $coverageComparisonService,
         private readonly LineGroupingService $annotationGrouperService,
         private readonly SettingService $settingService,
-        private readonly EventBusClient $eventBusClient,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly PublishClient $publishClient
     ) {
     }

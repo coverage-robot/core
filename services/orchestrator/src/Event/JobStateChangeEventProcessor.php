@@ -15,6 +15,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\UploadsFinalised;
@@ -29,7 +30,8 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
     public function __construct(
         #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly EventBusClient $eventBusClient,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy

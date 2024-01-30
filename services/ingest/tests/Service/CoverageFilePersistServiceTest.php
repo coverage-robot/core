@@ -7,6 +7,8 @@ use App\Model\Coverage;
 use App\Service\CoverageFilePersistService;
 use App\Service\Persist\PersistServiceInterface;
 use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -35,7 +37,20 @@ final class CoverageFilePersistServiceTest extends TestCase
 
         $this->assertTrue(
             $coverageFilePersistService->persist(
-                $this->createMock(Upload::class),
+                new Upload(
+                    uploadId: 'mock-upload-id',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag(
+                        name: 'mock-tag-name',
+                        commit: 'mock-tag-commit'
+                    )
+                ),
                 new Coverage(
                     sourceFormat: CoverageFormat::CLOVER,
                     root: 'mock-root'
@@ -66,7 +81,20 @@ final class CoverageFilePersistServiceTest extends TestCase
 
         $this->assertFalse(
             $coverageFilePersistService->persist(
-                $this->createMock(Upload::class),
+                new Upload(
+                    uploadId: 'mock-upload-id',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag(
+                        name: 'mock-tag-name',
+                        commit: 'mock-tag-commit'
+                    )
+                ),
                 new Coverage(
                     sourceFormat: CoverageFormat::CLOVER,
                     root: 'mock-root'

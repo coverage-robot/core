@@ -63,7 +63,7 @@ final class LcovParseStrategy implements ParseStrategyInterface
 
         foreach ($records as $record) {
             $record = trim($record);
-            // Skip empty lines and end-of-record markers
+// Skip empty lines and end-of-record markers
             if ($record === '') {
                 continue;
             }
@@ -123,7 +123,7 @@ final class LcovParseStrategy implements ParseStrategyInterface
 
         foreach ($records as $record) {
             $record = trim($record);
-            // Skip empty lines and end-of-record markers
+// Skip empty lines and end-of-record markers
             if ($record === '') {
                 continue;
             }

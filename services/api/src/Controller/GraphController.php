@@ -7,7 +7,9 @@ use App\Exception\AuthenticationException;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
+use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeService;
+use App\Service\BadgeServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,11 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GraphController extends AbstractController
+final class GraphController extends AbstractController
 {
     public function __construct(
-        private readonly BadgeService $badgeService,
-        private readonly AuthTokenService $authTokenService,
+        private readonly BadgeServiceInterface $badgeService,
+        private readonly AuthTokenServiceInterface $authTokenService,
         private readonly ProjectRepository $projectRepository
     ) {
         TraceContext::setTraceHeaderFromEnvironment();

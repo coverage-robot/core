@@ -7,18 +7,8 @@ use Cog\Unicode\UnicodeString;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 
-class BadgeService
+final class BadgeService implements BadgeServiceInterface
 {
-    final public const BADGE_LABEL = 'coverage';
-
-    final public const NO_COVERGAGE_PERCENTAGE_VALUE = 'unknown';
-
-    final public const FONT_FILE_NAME = 'dejavu-sans';
-
-    final public const FONT_FILE = 'badges/' . self::FONT_FILE_NAME . '.svg';
-
-    final public const FONT_SIZE = 11;
-
     public function __construct(
         private readonly Environment $twig,
         #[Autowire(value: '%twig.default_path%')]
@@ -72,7 +62,7 @@ class BadgeService
      *
      * So, 0% is fully red, and 100% is fully green, anything in between is a mix of both.
      */
-    public function getHexForCoveragePercentage(float $percentage): string
+    private function getHexForCoveragePercentage(float $percentage): string
     {
         $b = 0;
         if ($percentage < 50) {

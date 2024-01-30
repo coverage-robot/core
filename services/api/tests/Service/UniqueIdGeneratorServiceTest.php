@@ -5,7 +5,7 @@ namespace App\Tests\Service;
 use App\Service\UniqueIdGeneratorService;
 use PHPUnit\Framework\TestCase;
 
-class UniqueIdGeneratorServiceTest extends TestCase
+final class UniqueIdGeneratorServiceTest extends TestCase
 {
     public function testGenerateDoesNotRepeat(): void
     {

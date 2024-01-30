@@ -19,6 +19,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
@@ -115,7 +116,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->with($reportComparison->getHeadReport(), $uploadsFinalised)
             ->willReturn($reportComparison);
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent')
             ->with(
@@ -224,7 +225,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getComparisonForCoverageReport')
             ->willReturn(null);
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent')
             ->with(

@@ -12,15 +12,8 @@ use Psr\Log\LoggerInterface;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
-class AuthTokenService
+final class AuthTokenService implements AuthTokenServiceInterface
 {
-    /**
-     * Produces a token with a length of 50 (`TOKEN_LENGTH * 2`)
-     */
-    final public const TOKEN_LENGTH = 25;
-
-    final public const MAX_TOKEN_RETRIES = 3;
-
     public function __construct(
         private readonly ProjectRepository $projectRepository,
         private readonly Randomizer $randomizer,

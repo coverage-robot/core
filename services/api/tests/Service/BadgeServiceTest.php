@@ -8,7 +8,7 @@ use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
 
-class BadgeServiceTest extends KernelTestCase
+final class BadgeServiceTest extends KernelTestCase
 {
     use MatchesSnapshots;
 

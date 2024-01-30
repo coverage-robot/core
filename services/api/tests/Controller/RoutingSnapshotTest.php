@@ -6,7 +6,7 @@ use Exception;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class RoutingSnapshotTest extends KernelTestCase
+final class RoutingSnapshotTest extends KernelTestCase
 {
     public function testCurrentRoutingConfigurationMatchesSnapshot(): void
     {

@@ -45,7 +45,10 @@ trait CarryforwardAwareTrait
     ): string {
         $uploadsTableAlias = $uploadsTableAlias !== null ? $uploadsTableAlias . '.' : '';
 
-        if ($parameterBag instanceof \App\Model\QueryParameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
+        if (
+            $parameterBag instanceof QueryParameterBag &&
+            $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)
+        ) {
             /** @var CarryforwardTag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 

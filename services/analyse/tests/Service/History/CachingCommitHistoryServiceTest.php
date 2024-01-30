@@ -196,8 +196,8 @@ final class CachingCommitHistoryServiceTest extends TestCase
 
     public function testGetPrecedingCommitsCanUseComparableCommitsAsOverlappingCache(): void
     {
-        $mockWaypointOne = $this->getMockWaypoint("mock-commit-1");
-        $mockWaypointTwo = $this->getMockWaypoint("mock-commit-3");
+        $mockWaypointOne = $this->getMockWaypoint('mock-commit-1');
+        $mockWaypointTwo = $this->getMockWaypoint('mock-commit-3');
 
         $mockParser = $this->createMock(CommitHistoryServiceInterface::class);
         $mockParser->expects($this->exactly(2))
@@ -440,7 +440,7 @@ final class CachingCommitHistoryServiceTest extends TestCase
         );
     }
 
-    private function getMockWaypoint(string $commit = "mock-commit"): ReportWaypoint|MockObject
+    private function getMockWaypoint(string $commit = 'mock-commit'): ReportWaypoint|MockObject
     {
         return new ReportWaypoint(
             provider: Provider::GITHUB,

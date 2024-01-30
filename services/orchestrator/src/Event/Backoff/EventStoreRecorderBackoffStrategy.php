@@ -27,7 +27,12 @@ final class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterfac
             maxAttempts: 2,
             strategy: new LinearStrategy(500),
             useJitter: true,
-            decider: static function (int $attempt, int $maxAttempts, ?bool $result, ?Exception $exception = null): bool {
+            decider: static function (
+                int $attempt,
+                int $maxAttempts,
+                ?bool $result,
+                ?Exception $exception = null
+            ): bool {
                 if ($exception instanceof OutOfOrderEventException) {
                     // Theres no point in re-trying this, as the event is out of order (i.e.
                     // a newer event has already been recorded)

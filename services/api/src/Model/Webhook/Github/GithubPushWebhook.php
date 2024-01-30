@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
  *
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
  */
-class GithubPushWebhook extends AbstractWebhook implements
+final class GithubPushWebhook extends AbstractWebhook implements
     CommitsPushedWebhookInterface,
     SignedWebhookInterface
 {
@@ -87,9 +87,9 @@ class GithubPushWebhook extends AbstractWebhook implements
                 '',
                 [
                     $this->getProvider()->value,
-                    $this->getOwner(),
-                    $this->getRepository(),
-                    $this->getRef()
+                    $this->owner,
+                    $this->repository,
+                    $this->ref
                 ]
             )
         );
@@ -101,9 +101,9 @@ class GithubPushWebhook extends AbstractWebhook implements
         return sprintf(
             'GithubPushWebhook#%s-%s-%s-%s',
             $this->getProvider()->value,
-            $this->getOwner(),
-            $this->getRepository(),
-            $this->getRef()
+            $this->owner,
+            $this->repository,
+            $this->ref
         );
     }
 

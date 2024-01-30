@@ -12,7 +12,7 @@ use Packages\Message\Service\MessageValidationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookQueueClient extends PublishClient
+final class WebhookQueueClient extends PublishClient
 {
     /**
      * The SQS queue (FIFO) which is used to process Webhooks from version control providers.

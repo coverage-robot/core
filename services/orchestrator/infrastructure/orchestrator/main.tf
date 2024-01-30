@@ -109,7 +109,7 @@ resource "aws_lambda_function" "service" {
   function_name    = format("coverage-orchestrator-%s", var.environment)
   role             = aws_iam_role.orchestrator_role.arn
   runtime          = "provided.al2"
-  handler          = "App\\Handler\\EventHandler"
+  handler          = "Packages\\Event\\Handler\\EventHandler"
   timeout          = 30
   architectures    = ["arm64"]
   layers = [

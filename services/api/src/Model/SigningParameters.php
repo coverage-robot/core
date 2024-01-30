@@ -6,7 +6,7 @@ use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class SigningParameters implements ParametersInterface
+final class SigningParameters implements ParametersInterface
 {
     public function __construct(
         #[Assert\NotBlank]

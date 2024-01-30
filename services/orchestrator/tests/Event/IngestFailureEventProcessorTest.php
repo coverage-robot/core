@@ -15,7 +15,7 @@ use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
-use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
 
@@ -93,7 +93,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                 event: ['mock' => 'change'],
             ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 
@@ -186,7 +186,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                 event: ['mock' => 'change'],
             ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 

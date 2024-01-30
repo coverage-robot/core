@@ -12,11 +12,12 @@ use App\Webhook\JobStateChangeWebhookProcessor;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class JobStateChangeWebhookProcessorTest extends TestCase
+final class JobStateChangeWebhookProcessorTest extends TestCase
 {
     public function testProcessingWebhookCreatingNewJobForProject(): void
     {
@@ -40,7 +41,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
         $mockJobRepository->expects($this->once())
             ->method('save');
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
 
@@ -97,7 +98,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
         $mockJobRepository->expects($this->once())
             ->method('save');
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
 
@@ -143,7 +144,7 @@ class JobStateChangeWebhookProcessorTest extends TestCase
         $mockJobRepository->expects($this->never())
             ->method('save');
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 

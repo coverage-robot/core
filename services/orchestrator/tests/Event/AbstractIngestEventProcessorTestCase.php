@@ -17,6 +17,7 @@ use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
@@ -42,7 +43,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     {
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $this->createMock(EventStoreServiceInterface::class),
-            $this->createMock(EventBusClient::class)
+            $this->createMock(EventBusClientInterface::class)
         );
 
         $this->assertFalse(
@@ -86,7 +87,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClient::class)
+            $this->createMock(EventBusClientInterface::class)
         );
 
         $this->assertTrue(
@@ -149,7 +150,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClient::class)
+            $this->createMock(EventBusClientInterface::class)
         );
 
         $this->assertFalse(
@@ -177,7 +178,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     protected function getIngestEventProcessor(
         EventStoreServiceInterface $mockEventStoreService,
-        EventBusClient $eventBusClient
+        EventBusClientInterface $eventBusClient
     ): AbstractIngestEventProcessor {
         $ingestEventProcessor = new ($this::getEventProcessor())(
             $mockEventStoreService,

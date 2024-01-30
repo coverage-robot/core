@@ -6,7 +6,6 @@ use App\Model\OrchestratedEventInterface;
 
 interface DynamoDbClientInterface
 {
-
     /**
      * Store an event's state change as a new item in the event store.
      */

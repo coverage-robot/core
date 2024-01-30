@@ -17,7 +17,8 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Client\EventBusClient;
+use Packages\Contracts\Tag\Tag;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
@@ -31,7 +32,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
     {
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $this->createMock(EventStoreServiceInterface::class),
-            $this->createMock(EventBusClient::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy()
         );
@@ -45,7 +46,17 @@ final class JobStateChangeEventProcessorTest extends TestCase
         $this->assertFalse(
             $jobStateChangeEventProcessor->process(
                 new IngestSuccess(
-                    $this->createMock(Upload::class),
+                    new Upload(
+                        uploadId: 'mock-upload-id',
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        commit: 'mock-commit',
+                        parent: [],
+                        ref: 'mock-ref',
+                        projectRoot: '',
+                        tag: new Tag('mock-tag', 'mock-commit'),
+                    ),
                     new DateTimeImmutable()
                 )
             )
@@ -72,7 +83,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClient::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy()
         );
@@ -135,7 +146,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClient::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy()
         );
@@ -223,7 +234,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 event: ['mock' => 'change'],
             ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 
@@ -320,7 +331,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 event: ['mock' => 'change'],
             ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 

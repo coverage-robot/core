@@ -227,7 +227,7 @@ trait OverallCommitStateAwareTrait
                 }
 
                 if (
-                    !$lastIngestionEvent instanceof \App\Model\Ingestion ||
+                    !$lastIngestionEvent instanceof Ingestion ||
                     $previousState->getEventTime() > $lastIngestionEvent->getEventTime()
                 ) {
                     $lastIngestionEvent = $previousState;
@@ -236,7 +236,10 @@ trait OverallCommitStateAwareTrait
 
             if (
                 $previousState instanceof Finalised &&
-                (!$finalisedEvent instanceof \App\Model\Finalised || $previousState->getEventTime() > $finalisedEvent->getEventTime())
+                (
+                    !$finalisedEvent instanceof Finalised ||
+                    $previousState->getEventTime() > $finalisedEvent->getEventTime()
+                )
             ) {
                 $finalisedEvent = $previousState;
             }
@@ -255,7 +258,10 @@ trait OverallCommitStateAwareTrait
             return false;
         }
 
-        if ($lastIngestionEvent instanceof \App\Model\Ingestion && $lastIngestionEvent->getEventTime() > $finalisedEvent->getEventTime()) {
+        if (
+            $lastIngestionEvent instanceof Ingestion &&
+            $lastIngestionEvent->getEventTime() > $finalisedEvent->getEventTime()
+        ) {
             /**
              * This indicates that at some point we've indirectly finalised the coverage results on a commit
              * **before** all of the coverage files were ingested. This is potentially an error, because it

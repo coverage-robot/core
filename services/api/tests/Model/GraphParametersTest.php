@@ -6,7 +6,7 @@ use App\Model\GraphParameters;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
-class GraphParametersTest extends TestCase
+final class GraphParametersTest extends TestCase
 {
     public function testUsingGettersReturnsProperties(): void
     {

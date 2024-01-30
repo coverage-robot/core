@@ -7,11 +7,8 @@ use App\Exception\ParseException;
 use App\Exception\PersistException;
 use App\Exception\RetrievalException;
 use App\Model\Coverage;
-use App\Service\CoverageFileParserService;
 use App\Service\CoverageFileParserServiceInterface;
-use App\Service\CoverageFilePersistService;
 use App\Service\CoverageFilePersistServiceInterface;
-use App\Service\CoverageFileRetrievalService;
 use App\Service\CoverageFileRetrievalServiceInterface;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
@@ -24,6 +21,7 @@ use Override;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -32,6 +30,7 @@ use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -42,7 +41,8 @@ final class EventHandler extends S3Handler
         private readonly CoverageFileRetrievalServiceInterface $coverageFileRetrievalService,
         private readonly CoverageFileParserServiceInterface $coverageFileParserService,
         private readonly CoverageFilePersistServiceInterface $coverageFilePersistService,
-        private readonly EventBusClient $eventBusClient,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $handlerLogger,
         private readonly MetricService $metricService
     ) {

@@ -34,8 +34,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
-    final public const int DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
-
     public function __construct(
         #[Autowire(service: QueryService::class)]
         private readonly QueryServiceInterface $queryService,
@@ -105,10 +103,12 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
                 uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),
                 coveragePercentage: fn(): float => $this->getCoveragePercentage($waypoint),
-                tagCoverage: fn(): \App\Query\Result\TagCoverageCollectionQueryResult => $this->getTagCoverage($waypoint),
+                tagCoverage: fn(): TagCoverageCollectionQueryResult => $this->getTagCoverage($waypoint),
                 diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
-                leastCoveredDiffFiles: fn(): \App\Query\Result\FileCoverageCollectionQueryResult => $this->getLeastCoveredDiffFiles($waypoint),
-                diffLineCoverage: fn(): \App\Query\Result\LineCoverageCollectionQueryResult => $this->getDiffLineCoverage($waypoint)
+                leastCoveredDiffFiles: fn(): FileCoverageCollectionQueryResult =>
+                    $this->getLeastCoveredDiffFiles($waypoint),
+                diffLineCoverage: fn(): LineCoverageCollectionQueryResult =>
+                    $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(

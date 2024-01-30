@@ -7,9 +7,11 @@ use App\Handler\WebhookHandler;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\WebhookInterface;
 use App\Repository\ProjectRepository;
+use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
 use App\Tests\Mock\Factory\MockSerializerFactory;
-use App\Webhook\WebhookProcessor;
+use App\Service\WebhookProcessorService;
+use App\Webhook\WebhookProcessorInterface;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Packages\Event\Enum\JobState;
@@ -17,8 +19,9 @@ use Packages\Telemetry\Service\MetricService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Validation;
 
-class WebhookHandlerTest extends KernelTestCase
+final class WebhookHandlerTest extends KernelTestCase
 {
     #[DataProvider('webhookDataProvider')]
     public function testHandleSqsDisabledProject(WebhookInterface $webhook): void
@@ -28,7 +31,7 @@ class WebhookHandlerTest extends KernelTestCase
             ->method('isEnabled')
             ->willReturn(false);
 
-        $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
+        $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
         $mockWebhookProcessor->expects($this->never())
             ->method('process');
 
@@ -43,11 +46,6 @@ class WebhookHandlerTest extends KernelTestCase
                 ]
             )
             ->willReturn($mockProject);
-
-        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
-        $mockWebhookValidationService->expects($this->once())
-            ->method('validate')
-            ->with($webhook);
 
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
@@ -65,7 +63,10 @@ class WebhookHandlerTest extends KernelTestCase
                     ]
                 ]
             ),
-            $mockWebhookValidationService,
+            new WebhookValidationService(
+                Validation::createValidatorBuilder()
+                    ->getValidator()
+            ),
             $this->createMock(MetricService::class)
         );
 
@@ -104,7 +105,7 @@ class WebhookHandlerTest extends KernelTestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $mockWebhookProcessor = $this->createMock(WebhookProcessor::class);
+        $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
         $mockWebhookProcessor->expects($this->once())
             ->method('process')
             ->with(
@@ -123,11 +124,6 @@ class WebhookHandlerTest extends KernelTestCase
             )
             ->willReturn($mockProject);
 
-        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
-        $mockWebhookValidationService->expects($this->once())
-            ->method('validate')
-            ->with($webhook);
-
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
@@ -144,7 +140,10 @@ class WebhookHandlerTest extends KernelTestCase
                     ]
                 ]
             ),
-            $mockWebhookValidationService,
+            new WebhookValidationService(
+                Validation::createValidatorBuilder()
+                    ->getValidator()
+            ),
             $this->createMock(MetricService::class)
         );
 
