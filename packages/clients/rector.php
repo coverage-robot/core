@@ -19,7 +19,7 @@ return static function (RectorConfig $rectorConfig) use ($defaultConfig): void {
                 /**
                  * Ignoring for the time being as the GitHub clients could do with a bit of a refactor
                  */
-                __DIR__ . '/src/Client/GithubAppClient.php',
+                __DIR__ . '/src/Client/Github/GithubAppClient.php',
                 __DIR__ . '/src/Generator/JwtGenerator.php',
             ],
         ]
