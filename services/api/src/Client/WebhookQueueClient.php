@@ -66,6 +66,8 @@ final class WebhookQueueClient
 
     /**
      * Publish an SQS message onto the queue, with the trace header if it exists.
+     *
+     * @param array{QueueUrl: string, MessageBody: string, MessageGroupId: string} $request
      */
     private function dispatchWithTraceHeader(array $request): bool
     {
@@ -87,9 +89,7 @@ final class WebhookQueueClient
             ];
         }
 
-        $response = $this->sqsClient->sendMessage(
-            new SendMessageRequest($request)
-        );
+        $response = $this->sqsClient->sendMessage(new SendMessageRequest($request));
 
         try {
             $response->resolve();
@@ -103,7 +103,7 @@ final class WebhookQueueClient
     /**
      * Get the full SQS Queue URL for a queue (using its name).
      */
-    public function getQueueUrl(string $queueName): ?string
+    public function getQueueUrl(string $queueName): string
     {
         $response = $this->sqsClient->getQueueUrl(
             new GetQueueUrlRequest(
@@ -115,7 +115,7 @@ final class WebhookQueueClient
 
         $queueUrl = $response->getQueueUrl();
 
-        if (!$queueUrl) {
+        if ($queueUrl === null) {
             throw new RuntimeException(
                 sprintf(
                     'Could not get queue url for %s',

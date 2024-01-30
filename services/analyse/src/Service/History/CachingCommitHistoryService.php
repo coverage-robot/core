@@ -4,7 +4,6 @@ namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
 use Override;
-use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
@@ -16,9 +15,6 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
      */
     private WeakMap $cache;
 
-    /**
-     * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
-     */
     public function __construct(
         #[Autowire(service: CommitHistoryService::class)]
         private readonly CommitHistoryServiceInterface $commitHistoryService,
@@ -42,10 +38,13 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
         }
 
         if (!$this->isCacheHit($waypoint, $page)) {
+            /** @var array{commit: string, merged: bool, ref: string|null}[] $results */
+            $results = $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
+
             $this->persistInCache(
                 $waypoint,
                 $page,
-                $this->commitHistoryService->getPrecedingCommits($waypoint, $page)
+                $results
             );
         }
 
@@ -85,6 +84,11 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
         foreach ($this->cache as $cachedWaypoint => $history) {
             if ($cachedWaypoint === $waypoint) {
                 // We don't want to compare the waypoint to itself
+                continue;
+            }
+
+            if (!$cachedWaypoint instanceof ReportWaypoint) {
+                // We don't want to include anything which isn't a waypoint
                 continue;
             }
 

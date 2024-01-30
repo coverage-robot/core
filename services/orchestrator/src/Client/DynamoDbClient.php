@@ -99,8 +99,6 @@ final class DynamoDbClient implements DynamoDbClientInterface
     /**
      * @inheritDoc
      *
-     * @return iterable<AttributeValue[]>
-     *
      * @throws HttpException
      */
     public function getStateChangesForEvent(OrchestratedEventInterface $event): iterable
@@ -142,8 +140,6 @@ final class DynamoDbClient implements DynamoDbClientInterface
 
     /**
      * @inheritDoc
-     *
-     * @return iterable<AttributeValue[]>
      *
      * @throws HttpException
      */

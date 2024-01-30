@@ -3,6 +3,7 @@
 namespace App\Client;
 
 use App\Model\OrchestratedEventInterface;
+use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 
 interface DynamoDbClientInterface
 {
@@ -13,11 +14,15 @@ interface DynamoDbClientInterface
 
     /**
      * Get all of the state changes for a particular event.
+     *
+     * @return iterable<AttributeValue[]>
      */
     public function getStateChangesForEvent(OrchestratedEventInterface $event): iterable;
 
     /**
      * Get all of the state changes for all events in a particular repository and commit.
+     *
+     * @return iterable<AttributeValue[]>
      */
     public function getEventStateChangesForCommit(string $repositoryIdentifier, string $commit): iterable;
 }

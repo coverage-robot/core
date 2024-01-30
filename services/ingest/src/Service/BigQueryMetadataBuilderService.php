@@ -44,7 +44,7 @@ final class BigQueryMetadataBuilderService
             'sourceFormat' => $coverage->getSourceFormat(),
             'fileName' => $file->getFileName(),
             'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
-                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                $coverage->getGeneratedAt()->format('Y-m-d H:i:s') :
                 null,
             'type' => $line->getType(),
             'lineNumber' => $line->getLineNumber(),
@@ -68,7 +68,7 @@ final class BigQueryMetadataBuilderService
             'totalLines' => $totalLines,
             'sourceFormat' => $coverage->getSourceFormat(),
             'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
-                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                $coverage->getGeneratedAt()->format('Y-m-d H:i:s') :
                 null,
         ];
     }

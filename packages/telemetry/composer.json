@@ -33,6 +33,7 @@
         }
     },
     "scripts": {
+        "lint:rector": "rector process --dry-run",
         "test:unit": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --configuration=./phpunit.xml.dist"
