@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Service\Publisher;
+namespace App\Service;
 
+use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class MessagePublisherService
+final class MessagePublisherService implements MessagePublisherServiceInterface
 {
     public function __construct(
         #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
         private readonly LoggerInterface $publisherServiceLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

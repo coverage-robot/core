@@ -8,7 +8,7 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PublishableMessageCollection implements PublishableMessageInterface, Countable
+final class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {
     /**
      * @var PublishableMessageInterface[] $messages
@@ -28,7 +28,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
     ) {
         $this->messages = array_filter(
             $messages,
-            static fn(mixed $message) => $message instanceof PublishableMessageInterface
+            static fn(mixed $message): true => $message instanceof PublishableMessageInterface
         );
     }
 
@@ -46,7 +46,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
     {
         return max(
             array_map(
-                static fn(PublishableMessageInterface $message) => $message->getValidUntil(),
+                static fn(PublishableMessageInterface $message): \DateTimeInterface => $message->getValidUntil(),
                 $this->messages
             )
         );
@@ -71,7 +71,7 @@ class PublishableMessageCollection implements PublishableMessageInterface, Count
 
     public function __toString(): string
     {
-        return "PublishableMessageCollection#{$this->getValidUntil()->format(DateTimeInterface::ATOM)}";
+        return 'PublishableMessageCollection#' . $this->getValidUntil()->format(DateTimeInterface::ATOM);
     }
 
     public function count(): int

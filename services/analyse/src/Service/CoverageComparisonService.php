@@ -13,7 +13,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CoverageComparisonService
+final class CoverageComparisonService implements CoverageComparisonServiceInterface
 {
     public function __construct(
         private readonly LoggerInterface $coverageComparisonServiceLogger,
@@ -22,12 +22,6 @@ class CoverageComparisonService
     ) {
     }
 
-    /**
-     * Generate a comparison report for the given head waypoint and event.
-     *
-     * This works out (using the head waypoint) which is the most suitable base waypoint
-     * to compare against, and then generates a comparison report using the analyser.
-     */
     public function getComparisonForCoverageReport(
         CoverageReportInterface $headReport,
         EventInterface $event

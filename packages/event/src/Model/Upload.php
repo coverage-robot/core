@@ -9,7 +9,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 
-class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent
@@ -29,7 +29,7 @@ class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEven
         private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if ($this->eventTime === null) {
+        if (!$this->eventTime instanceof \DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

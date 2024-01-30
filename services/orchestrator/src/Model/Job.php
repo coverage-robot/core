@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
-class Job extends AbstractOrchestratedEvent
+final class Job extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,

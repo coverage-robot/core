@@ -4,18 +4,18 @@ namespace App\Tests\Service;
 
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
-use App\Service\Carryforward\CarryforwardTagService;
+use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\CoverageAnalyserService;
 use App\Service\CoverageComparisonService;
-use App\Service\Diff\DiffParserService;
-use App\Service\History\CommitHistoryService;
-use App\Service\QueryService;
+use App\Service\Diff\DiffParserServiceInterface;
+use App\Service\History\CommitHistoryServiceInterface;
+use App\Service\QueryServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsFinalised;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CoverageComparisonServiceTest extends TestCase
+final class CoverageComparisonServiceTest extends TestCase
 {
     public function testGettingBaseWaypointFromWaypointHistory(): void
     {
@@ -45,10 +45,18 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: null
         );
-        $mockCoverageReport = $this->createMock(CoverageReport::class);
-        $mockCoverageReport->expects($this->atLeastOnce())
-            ->method('getWaypoint')
-            ->willReturn($headWaypoint);
+        $mockCoverageReport = new CoverageReport(
+            waypoint: $headWaypoint,
+            uploads: static fn(): null => null,
+            totalLines: 100,
+            atLeastPartiallyCoveredLines: 50,
+            uncoveredLines: 50,
+            coveragePercentage: 50.0,
+            tagCoverage: static fn(): null => null,
+            diffCoveragePercentage: 50.0,
+            leastCoveredDiffFiles: static fn(): null => null,
+            diffLineCoverage: static fn(): null => null,
+        );
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
@@ -64,10 +72,10 @@ class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CoverageAnalyserService(
-                $this->createMock(QueryService::class),
-                $this->createMock(DiffParserService::class),
-                $this->createMock(CommitHistoryService::class),
-                $this->createMock(CarryforwardTagService::class)
+                $this->createMock(QueryServiceInterface::class),
+                $this->createMock(DiffParserServiceInterface::class),
+                $this->createMock(CommitHistoryServiceInterface::class),
+                $this->createMock(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -102,10 +110,18 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: 1
         );
-        $mockCoverageReport = $this->createMock(CoverageReport::class);
-        $mockCoverageReport->expects($this->atLeastOnce())
-            ->method('getWaypoint')
-            ->willReturn($headWaypoint);
+        $mockCoverageReport = new CoverageReport(
+            waypoint: $headWaypoint,
+            uploads: static fn(): null => null,
+            totalLines: 100,
+            atLeastPartiallyCoveredLines: 50,
+            uncoveredLines: 50,
+            coveragePercentage: 50.0,
+            tagCoverage: static fn(): null => null,
+            diffCoveragePercentage: 50.0,
+            leastCoveredDiffFiles: static fn(): null => null,
+            diffLineCoverage: static fn(): null => null,
+        );
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
@@ -122,10 +138,10 @@ class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CoverageAnalyserService(
-                $this->createMock(QueryService::class),
-                $this->createMock(DiffParserService::class),
-                $this->createMock(CommitHistoryService::class),
-                $this->createMock(CarryforwardTagService::class)
+                $this->createMock(QueryServiceInterface::class),
+                $this->createMock(DiffParserServiceInterface::class),
+                $this->createMock(CommitHistoryServiceInterface::class),
+                $this->createMock(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -160,10 +176,18 @@ class CoverageComparisonServiceTest extends TestCase
             diff: [],
             pullRequest: 1
         );
-        $mockCoverageReport = $this->createMock(CoverageReport::class);
-        $mockCoverageReport->expects($this->atLeastOnce())
-            ->method('getWaypoint')
-            ->willReturn($headWaypoint);
+        $mockCoverageReport = new CoverageReport(
+            waypoint: $headWaypoint,
+            uploads: static fn(): null => null,
+            totalLines: 100,
+            atLeastPartiallyCoveredLines: 50,
+            uncoveredLines: 50,
+            coveragePercentage: 50.0,
+            tagCoverage: static fn(): null => null,
+            diffCoveragePercentage: 50.0,
+            leastCoveredDiffFiles: static fn(): null => null,
+            diffLineCoverage: static fn(): null => null,
+        );
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
@@ -177,10 +201,10 @@ class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CoverageAnalyserService(
-                $this->createMock(QueryService::class),
-                $this->createMock(DiffParserService::class),
-                $this->createMock(CommitHistoryService::class),
-                $this->createMock(CarryforwardTagService::class)
+                $this->createMock(QueryServiceInterface::class),
+                $this->createMock(DiffParserServiceInterface::class),
+                $this->createMock(CommitHistoryServiceInterface::class),
+                $this->createMock(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -214,10 +238,18 @@ class CoverageComparisonServiceTest extends TestCase
             history: [],
             diff: [],
         );
-        $mockCoverageReport = $this->createMock(CoverageReport::class);
-        $mockCoverageReport->expects($this->never())
-            ->method('getWaypoint')
-            ->willReturn($headWaypoint);
+        $mockCoverageReport = new CoverageReport(
+            waypoint: $headWaypoint,
+            uploads: static fn(): null => null,
+            totalLines: 100,
+            atLeastPartiallyCoveredLines: 50,
+            uncoveredLines: 50,
+            coveragePercentage: 50.0,
+            tagCoverage: static fn(): null => null,
+            diffCoveragePercentage: 50.0,
+            leastCoveredDiffFiles: static fn(): null => null,
+            diffLineCoverage: static fn(): null => null,
+        );
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
@@ -231,10 +263,10 @@ class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CoverageAnalyserService(
-                $this->createMock(QueryService::class),
-                $this->createMock(DiffParserService::class),
-                $this->createMock(CommitHistoryService::class),
-                $this->createMock(CarryforwardTagService::class)
+                $this->createMock(QueryServiceInterface::class),
+                $this->createMock(DiffParserServiceInterface::class),
+                $this->createMock(CommitHistoryServiceInterface::class),
+                $this->createMock(CarryforwardTagServiceInterface::class)
             )
         );
 

@@ -6,7 +6,7 @@ use App\Model\Webhook\WebhookInterface;
 use RuntimeException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class InvalidWebhookException extends RuntimeException
+final class InvalidWebhookException extends RuntimeException
 {
     public static function constraintViolations(
         WebhookInterface $webhook,

@@ -3,6 +3,7 @@
 namespace Packages\Local\Tests\Command;
 
 use Bref\Event\EventBridge\EventBridgeEvent;
+use Bref\Event\EventBridge\EventBridgeHandler;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\Event;
@@ -22,7 +23,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class InvokeEventCommandTest extends TestCase
+final class InvokeEventCommandTest extends TestCase
 {
     public function testInvokingEventUsingBuilders(): void
     {
@@ -42,7 +43,7 @@ class InvokeEventCommandTest extends TestCase
             )
             ->willReturn(['mock-serialized-event']);
 
-        $mockEventHandler = $this->createMock(EventHandler::class);
+        $mockEventHandler = $this->createMock(EventBridgeHandler::class);
         $mockEventHandler->expects($this->once())
             ->method('handleEventBridge')
             ->with(

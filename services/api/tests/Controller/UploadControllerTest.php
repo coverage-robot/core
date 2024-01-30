@@ -7,22 +7,24 @@ use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use App\Service\AuthTokenService;
-use App\Service\UploadService;
+use App\Service\AuthTokenServiceInterface;
+use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class UploadControllerTest extends KernelTestCase
+final class UploadControllerTest extends KernelTestCase
 {
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleSuccessfulUpload(SigningParameters $parameters): void
     {
-        $uploadService = $this->createMock(UploadService::class);
+        $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
@@ -38,7 +40,7 @@ class UploadControllerTest extends KernelTestCase
                 )
             );
 
-        $authTokenService = $this->createMock(AuthTokenService::class);
+        $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
             ->method('getUploadTokenFromRequest')
             ->willReturn('mock-project-token');
@@ -51,7 +53,7 @@ class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -67,7 +69,7 @@ class UploadControllerTest extends KernelTestCase
 
     public function testHandleUploadWithInvalidBody(): void
     {
-        $uploadService = $this->createMock(UploadService::class);
+        $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willThrowException(SigningException::invalidParameters());
@@ -75,7 +77,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
 
-        $authTokenService = $this->createMock(AuthTokenService::class);
+        $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->never())
             ->method('getUploadTokenFromRequest');
         $authTokenService->expects($this->never())
@@ -85,7 +87,7 @@ class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -102,7 +104,7 @@ class UploadControllerTest extends KernelTestCase
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleUploadWithMissingToken(SigningParameters $parameters): void
     {
-        $uploadService = $this->createMock(UploadService::class);
+        $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
@@ -110,7 +112,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
 
-        $authTokenService = $this->createMock(AuthTokenService::class);
+        $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
             ->method('getUploadTokenFromRequest')
             ->willReturn(null);
@@ -121,7 +123,7 @@ class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -138,7 +140,7 @@ class UploadControllerTest extends KernelTestCase
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleUploadWithInvalidToken(SigningParameters $parameters): void
     {
-        $uploadService = $this->createMock(UploadService::class);
+        $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
@@ -146,7 +148,7 @@ class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
 
-        $authTokenService = $this->createMock(AuthTokenService::class);
+        $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
             ->method('getUploadTokenFromRequest')
             ->willReturn('mock-token');
@@ -158,7 +160,7 @@ class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());

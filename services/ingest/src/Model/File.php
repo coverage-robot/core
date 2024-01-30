@@ -8,7 +8,7 @@ use OutOfBoundsException;
 use Override;
 use Stringable;
 
-class File implements Countable, Stringable
+final class File implements Countable, Stringable
 {
     private int $lineCount;
 
@@ -58,7 +58,7 @@ class File implements Countable, Stringable
     #[Override]
     public function __toString(): string
     {
-        return 'File#' . $this->getFileName();
+        return 'File#' . $this->fileName;
     }
 
     #[Override]

@@ -4,7 +4,7 @@ namespace App\Query;
 
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\TotalCoverageQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TotalCoverageQuery extends AbstractLineCoverageQuery
+final class TotalCoverageQuery extends AbstractLineCoverageQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -68,20 +68,16 @@ class TotalCoverageQuery extends AbstractLineCoverageQuery
      * @throws ExceptionInterface
      */
     #[Override]
-    public function parseResults(QueryResults $results): CoverageQueryResult
+    public function parseResults(QueryResults $results): TotalCoverageQueryResult
     {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
         /** @var array $coverageValues */
         $coverageValues = $results->rows()
             ->current();
 
-        /** @var CoverageQueryResult $results */
+        /** @var TotalCoverageQueryResult $results */
         $results = $this->serializer->denormalize(
             $coverageValues,
-            CoverageQueryResult::class,
+            TotalCoverageQueryResult::class,
             'array'
         );
 

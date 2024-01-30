@@ -16,7 +16,7 @@ use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventBusClient
+final class EventBusClient implements EventBusClientInterface
 {
     /**
      * The event bus name which has all of the coverage events published to it.
@@ -42,18 +42,18 @@ class EventBusClient
     {
         try {
             $this->eventValidationService->validate($event);
-        } catch (InvalidEventException $e) {
+        } catch (InvalidEventException $invalidEventException) {
             $this->eventBusClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
                     (string)$event
                 ),
                 [
-                    'exception' => $e,
+                    'exception' => $invalidEventException,
                     'event' => $event
                 ]
             );
-            
+
             return false;
         }
 

@@ -5,7 +5,7 @@ namespace Packages\Telemetry\Service;
 use Bref\Context\Context;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 
-class TraceContext
+final class TraceContext
 {
     private const LAMBDA_INVOCATION_CONTEXT = 'LAMBDA_INVOCATION_CONTEXT';
 
@@ -18,7 +18,7 @@ class TraceContext
      */
     public static function setTraceHeaderFromContext(Context $context): void
     {
-        if (empty($context->getTraceId())) {
+        if ($context->getTraceId() === '' || $context->getTraceId() === '0') {
             return;
         }
 
@@ -43,6 +43,6 @@ class TraceContext
             return;
         }
 
-        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . (string)$context['traceId']);
+        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $context['traceId']);
     }
 }

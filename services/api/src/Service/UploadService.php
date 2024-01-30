@@ -10,21 +10,24 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadService
+final class UploadService implements UploadServiceInterface
 {
     private const string TARGET_BUCKET = 'coverage-ingest-%s';
 
     private const int EXPIRY_MINUTES = 5;
 
     public function __construct(
-        private readonly UploadSignerService $uploadSignerService,
+        #[Autowire(service: UploadSignerService::class)]
+        private readonly UploadSignerServiceInterface $uploadSignerService,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly UniqueIdGeneratorService $uniqueIdGeneratorService,
+        #[Autowire(service: UniqueIdGeneratorService::class)]
+        private readonly UniqueIdGeneratorServiceInterface $uniqueIdGeneratorService,
         private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
         private readonly LoggerInterface $uploadLogger
     ) {

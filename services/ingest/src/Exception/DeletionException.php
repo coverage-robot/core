@@ -5,7 +5,7 @@ namespace App\Exception;
 use Exception;
 use Throwable;
 
-class DeletionException extends Exception
+final class DeletionException extends Exception
 {
     public static function from(Throwable $exception): DeletionException
     {

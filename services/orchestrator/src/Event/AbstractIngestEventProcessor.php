@@ -14,6 +14,7 @@ use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
@@ -29,7 +30,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
     public function __construct(
         #[Autowire(service: CachingEventStoreService::class)]
         private readonly EventStoreServiceInterface $eventStoreService,
-        private readonly EventBusClient $eventBusClient,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy

@@ -45,7 +45,10 @@ trait CarryforwardAwareTrait
     ): string {
         $uploadsTableAlias = $uploadsTableAlias !== null ? $uploadsTableAlias . '.' : '';
 
-        if ($parameterBag && $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)) {
+        if (
+            $parameterBag instanceof QueryParameterBag &&
+            $parameterBag->has(QueryParameter::CARRYFORWARD_TAGS)
+        ) {
             /** @var CarryforwardTag[] $carryforwardTags */
             $carryforwardTags = $parameterBag->get(QueryParameter::CARRYFORWARD_TAGS);
 
@@ -54,7 +57,7 @@ trait CarryforwardAwareTrait
             }
 
             $filtering = array_map(
-                static fn(CarryforwardTag $availableTag) => <<<SQL
+                static fn(CarryforwardTag $availableTag): string => <<<SQL
                     (
                         {$uploadsTableAlias}commit = "{$availableTag->getCommit()}"
                         AND {$uploadsTableAlias}tag = "{$availableTag->getName()}"

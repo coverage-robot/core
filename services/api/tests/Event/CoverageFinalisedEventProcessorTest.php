@@ -10,7 +10,7 @@ use Packages\Event\Model\CoverageFinalised;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CoverageFinalisedEventProcessorTest extends TestCase
+final class CoverageFinalisedEventProcessorTest extends TestCase
 {
     public function testNonMainRefEventProcess(): void
     {

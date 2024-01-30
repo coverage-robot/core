@@ -6,19 +6,19 @@ use App\Controller\GraphController;
 use App\Entity\Project;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
-use App\Service\AuthTokenService;
-use App\Service\BadgeService;
+use App\Service\AuthTokenServiceInterface;
+use App\Service\BadgeServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class GraphControllerTest extends KernelTestCase
+final class GraphControllerTest extends KernelTestCase
 {
     public function testBadgeWithValidParameters(): void
     {
-        $mockBadgeService = $this->createMock(BadgeService::class);
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
+        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())
@@ -30,7 +30,7 @@ class GraphControllerTest extends KernelTestCase
             ->method('validateParametersWithGraphToken')
             ->with(
                 self::callback(
-                    static fn(GraphParameters $parameters) => $parameters->getOwner() === 'owner' &&
+                    static fn(GraphParameters $parameters): bool => $parameters->getOwner() === 'owner' &&
                         $parameters->getRepository() === 'repository' &&
                         $parameters->getProvider() === Provider::GITHUB
                 ),
@@ -64,8 +64,8 @@ class GraphControllerTest extends KernelTestCase
 
     public function testBadgeWithInvalidToken(): void
     {
-        $mockBadgeService = $this->createMock(BadgeService::class);
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
+        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())
@@ -98,8 +98,8 @@ class GraphControllerTest extends KernelTestCase
 
     public function testBadgeWithMissingToken(): void
     {
-        $mockBadgeService = $this->createMock(BadgeService::class);
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
+        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
 
         $mockAuthTokenService->expects($this->once())

@@ -7,9 +7,13 @@ use App\Exception\PersistException;
 use App\Exception\RetrievalException;
 use App\Handler\EventHandler;
 use App\Model\Coverage;
+use App\Model\File;
 use App\Service\CoverageFileParserService;
+use App\Service\CoverageFileParserServiceInterface;
 use App\Service\CoverageFilePersistService;
+use App\Service\CoverageFilePersistServiceInterface;
 use App\Service\CoverageFileRetrievalService;
+use App\Service\CoverageFileRetrievalServiceInterface;
 use AsyncAws\Core\Stream\ResultStream;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
@@ -18,17 +22,21 @@ use Bref\Event\S3\S3Event;
 use Exception;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
+use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandlerTest extends KernelTestCase
+final class EventHandlerTest extends KernelTestCase
 {
     /**
      * @throws Exception
@@ -39,7 +47,7 @@ class EventHandlerTest extends KernelTestCase
     {
         $this->setSettingsServiceAsMock();
 
-        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalServiceInterface::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(
@@ -53,30 +61,28 @@ class EventHandlerTest extends KernelTestCase
             ->method('deleteFromS3')
             ->willReturn(true);
 
-        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistServiceInterface::class);
         $mockCoverageFilePersistService->expects($this->atMost(count($expectedOutputKeys)))
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload): bool => $upload->getUploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
                         $upload->getParent() === ['2']
                 ),
             )
             ->willReturn(true);
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
-
         $handler = new EventHandler(
             $this->getContainer()
                 ->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
             $this->getContainer()
-                ->get(CoverageFileParserService::class),
+                ->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $mockEventBusClient,
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -85,29 +91,29 @@ class EventHandlerTest extends KernelTestCase
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3FailsToRetrieve(S3Event $event): void
     {
-        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalServiceInterface::class);
         $mockCoverageFileRetrievalService->method('ingestFromS3')
             ->willThrowException(RetrievalException::from(new Exception('Failed to retrieve')));
 
         $mockCoverageFileRetrievalService->expects($this->never())
             ->method('deleteFromS3');
 
-        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistServiceInterface::class);
         $mockCoverageFilePersistService->expects($this->never())
             ->method('persist');
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getContainer()->get(CoverageFileParserService::class),
+            $this->getContainer()->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -117,16 +123,17 @@ class EventHandlerTest extends KernelTestCase
     {
         $this->setSettingsServiceAsMock();
 
-        $mockCoverage = $this->createMock(Coverage::class);
-        $mockCoverage->expects($this->once())
-            ->method('count')
-            ->willReturn(1);
+        $mockCoverage = new Coverage(
+            sourceFormat: CoverageFormat::CLOVER,
+            root: 'mock-root'
+        );
+        $mockCoverage->addFile(new File('mock-file', []));
 
-        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalServiceInterface::class);
         $mockCoverageFileRetrievalService->method('ingestFromS3')
             ->willReturn($this->getMockS3ObjectResponse(''));
 
-        $mockCoverageFileParserService = $this->createMock(CoverageFileParserService::class);
+        $mockCoverageFileParserService = $this->createMock(CoverageFileParserServiceInterface::class);
         $mockCoverageFileParserService->method('parse')
             ->willReturn($mockCoverage);
 
@@ -135,11 +142,11 @@ class EventHandlerTest extends KernelTestCase
         $mockCoverageFileRetrievalService->expects($this->never())
             ->method('deleteFromS3');
 
-        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistServiceInterface::class);
         $mockCoverageFilePersistService->method('persist')
             ->willThrowException(PersistException::from(new Exception('Failed to persist')));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->exactly(2))
             ->method('fireEvent');
 
@@ -150,7 +157,7 @@ class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3(
@@ -180,7 +187,7 @@ class EventHandlerTest extends KernelTestCase
     {
         $this->setSettingsServiceAsMock();
 
-        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalService::class);
+        $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalServiceInterface::class);
         $mockCoverageFileRetrievalService->expects($this->exactly(count($event->getRecords())))
             ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(
@@ -194,12 +201,12 @@ class EventHandlerTest extends KernelTestCase
             ->method('deleteFromS3')
             ->willThrowException(DeletionException::from(new Exception('Failed to delete')));
 
-        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistService::class);
+        $mockCoverageFilePersistService = $this->createMock(CoverageFilePersistServiceInterface::class);
         $mockCoverageFilePersistService->expects($this->atMost(count($expectedOutputKeys)))
             ->method('persist')
             ->with(
                 self::callback(
-                    static fn(Upload $upload) => $upload->getUploadId() === 'mock-uuid' &&
+                    static fn(Upload $upload): bool => $upload->getUploadId() === 'mock-uuid' &&
                         $upload->getCommit() === '1' &&
                         $upload->getParent() === ['2']
                 ),
@@ -209,11 +216,11 @@ class EventHandlerTest extends KernelTestCase
         $handler = new EventHandler(
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageFileRetrievalService,
-            $this->getContainer()->get(CoverageFileParserService::class),
+            $this->getContainer()->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $this->createMock(EventBusClient::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -250,13 +257,13 @@ class EventHandlerTest extends KernelTestCase
 
     private function setSettingsServiceAsMock(): void
     {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->method('get')
             ->willReturn([]);
 
         $this->getContainer()
             ->set(
-                SettingService::class,
+                SettingServiceInterface::class,
                 $mockSettingService
             );
     }

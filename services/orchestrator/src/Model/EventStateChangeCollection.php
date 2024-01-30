@@ -5,7 +5,7 @@ namespace App\Model;
 use Countable;
 use Override;
 
-class EventStateChangeCollection implements Countable
+final class EventStateChangeCollection implements Countable
 {
     /**
      * @var EventStateChange[] $events

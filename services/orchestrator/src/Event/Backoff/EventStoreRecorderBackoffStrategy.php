@@ -17,9 +17,9 @@ use STS\Backoff\Strategies\LinearStrategy;
  *
  * The retry interval is: 0ms, 500ms, 500ms
  */
-class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
+final class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
 {
-    protected Backoff $backoff;
+    private Backoff $backoff;
 
     public function __construct()
     {
@@ -27,14 +27,19 @@ class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
             maxAttempts: 2,
             strategy: new LinearStrategy(500),
             useJitter: true,
-            decider: static function (int $attempt, int $maxAttempts, ?bool $result, ?Exception $exception = null) {
+            decider: static function (
+                int $attempt,
+                int $maxAttempts,
+                ?bool $result,
+                ?Exception $exception = null
+            ): bool {
                 if ($exception instanceof OutOfOrderEventException) {
                     // Theres no point in re-trying this, as the event is out of order (i.e.
                     // a newer event has already been recorded)
                     return false;
                 }
 
-                return ($attempt <= $maxAttempts) && (!$result || $exception);
+                return ($attempt <= $maxAttempts) && (!$result || $exception instanceof \Exception);
             }
         );
     }
@@ -46,5 +51,11 @@ class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
     public function run(callable $callback): mixed
     {
         return $this->backoff->run($callback);
+    }
+
+    #[Override]
+    public function getBackoffStrategy(): Backoff
+    {
+        return $this->backoff;
     }
 }

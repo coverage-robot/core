@@ -10,7 +10,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DynamoDbClient
+final class DynamoDbClient implements DynamoDbClientInterface
 {
     /**
      * The default TTL for a query cache item, in seconds - currently 6 hours.

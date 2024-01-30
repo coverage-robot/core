@@ -2,19 +2,20 @@
 
 namespace App\Tests\Service;
 
+use Github\Client;
 use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Service\EventProcessorService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class EventProcessorServiceTest extends KernelTestCase
+final class EventProcessorServiceTest extends KernelTestCase
 {
     public function testAllProcessorsAvailableToHandleEvents(): void
     {
         // Mock out the GitHub client so that we don't need to worry about private key
         // authentication files
         $this->getContainer()
-            ->set(GithubAppClient::class, $this->createMock(GithubAppClient::class));
+            ->set(GithubAppClient::class, $this->createMock(Client::class));
 
         /** @var EventProcessorService $eventProcessorService */
         $eventProcessorService = $this->getContainer()

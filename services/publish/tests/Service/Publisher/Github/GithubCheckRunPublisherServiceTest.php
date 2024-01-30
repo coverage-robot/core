@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
@@ -25,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubCheckRunPublisherServiceTest extends TestCase
+final class GithubCheckRunPublisherServiceTest extends TestCase
 {
     #[DataProvider('uploadsDataProvider')]
     public function testSupports(Upload $upload, bool $expectedSupport): void
@@ -33,7 +34,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock($this, Environment::TESTING),
             new NullLogger()
         );
@@ -54,7 +55,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishToNewCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -133,7 +134,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishAnnotationsToCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -203,7 +204,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
                 $upload->getRepository(),
                 3,
                 self::callback(
-                    function (array $checkRun) {
+                    function (array $checkRun): bool {
                         $this->assertEquals('Coverage Robot', $checkRun['name']);
                         $this->assertEquals('completed', $checkRun['status']);
                         $this->assertEquals('success', $checkRun['conclusion']);
@@ -251,7 +252,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishMultipleChunksOfAnnotationsToCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -343,7 +344,7 @@ class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishToExistingCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),

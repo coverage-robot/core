@@ -16,7 +16,7 @@ use WeakMap;
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  */
-class QueryParameterBag implements JsonSerializable
+final class QueryParameterBag implements JsonSerializable
 {
     #[Ignore]
     private WeakMap $parameters;
@@ -68,8 +68,8 @@ class QueryParameterBag implements JsonSerializable
         /**
          * @psalm-suppress all
          */
-        foreach ($this->getAll() as $key => $value) {
-            $parameters[$key->value] = $value;
+        foreach ($this->getAll() as $key => $weakMap) {
+            $parameters[$key->value] = $weakMap;
         }
 
         return $parameters;
@@ -88,18 +88,18 @@ class QueryParameterBag implements JsonSerializable
         /**
          * @psalm-suppress all
          */
-        foreach ($this->getAll() as $key => $value) {
+        foreach ($this->getAll() as $key => $weakMap) {
             if (!in_array($key, QueryParameter::getSupportedBigQueryParameters(), true)) {
                 continue;
             }
 
             $parameters[$key->value] = match (true) {
-                $value instanceof BackedEnum => $value->value,
+                $weakMap instanceof BackedEnum => $weakMap->value,
                 $key === QueryParameter::INGEST_PARTITIONS => array_map(
-                    static fn(DateTimeImmutable $dateTime) => new Date($dateTime),
-                    $value
+                    static fn(DateTimeImmutable $dateTime): Date => new Date($dateTime),
+                    $weakMap
                 ),
-                default => $value
+                default => $weakMap
             };
         }
 

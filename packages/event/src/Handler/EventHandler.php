@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandler extends EventBridgeHandler
+final class EventHandler extends EventBridgeHandler
 {
     public function __construct(
         #[Autowire(service: EventProcessorService::class)]

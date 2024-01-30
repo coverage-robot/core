@@ -13,15 +13,18 @@ use Override;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\ConfigurationFileChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
+final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
-        private readonly EventBusClient $eventBusClient
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient
     ) {
     }
 
@@ -70,7 +73,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
         /** @var string[] $effectedFiles */
         $effectedFiles = array_reduce(
             $webhook->getCommits(),
-            static fn (array $files, PushedCommitInterface $commit) => [
+            static fn (array $files, PushedCommitInterface $commit): array => [
                 ...$files,
                 ...$commit->getAddedFiles(),
                 ...$commit->getModifiedFiles(),
@@ -92,7 +95,7 @@ class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
 
             $headCommit = array_filter(
                 $webhook->getCommits(),
-                static fn (PushedCommitInterface $commit) =>
+                static fn (PushedCommitInterface $commit): bool =>
                     $commit->getCommit() === $webhook->getHeadCommit()
             );
 

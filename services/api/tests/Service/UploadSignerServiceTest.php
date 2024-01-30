@@ -10,7 +10,7 @@ use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UploadSignerServiceTest extends TestCase
+final class UploadSignerServiceTest extends TestCase
 {
     public function testSignRequest(): void
     {

@@ -3,32 +3,23 @@
 namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
-use App\Service\ProviderAwareInterface;
 use Override;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
-class CachingCommitHistoryService extends CommitHistoryService
+final class CachingCommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>>
      */
     private WeakMap $cache;
 
-    /**
-     * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
-     */
     public function __construct(
-        #[TaggedIterator(
-            'app.commit_history',
-            defaultIndexMethod: 'getProvider'
-        )]
-        iterable $parsers,
+        #[Autowire(service: CommitHistoryService::class)]
+        private readonly CommitHistoryServiceInterface $commitHistoryService,
         private readonly LoggerInterface $commitHistoryLogger
     ) {
-        parent::__construct($parsers);
-
         /**
          * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>> $cache
          */
@@ -47,10 +38,13 @@ class CachingCommitHistoryService extends CommitHistoryService
         }
 
         if (!$this->isCacheHit($waypoint, $page)) {
+            /** @var array{commit: string, merged: bool, ref: string|null}[] $results */
+            $results = $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
+
             $this->persistInCache(
                 $waypoint,
                 $page,
-                parent::getPrecedingCommits($waypoint, $page)
+                $results
             );
         }
 
@@ -86,14 +80,18 @@ class CachingCommitHistoryService extends CommitHistoryService
      */
     private function tryPopulatingCacheFromComparableWaypoints(ReportWaypoint $waypoint, int $page): void
     {
-        /** @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history */
+        /**
+         * @var ReportWaypoint $cachedWaypoint
+         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history
+         */
         foreach ($this->cache as $cachedWaypoint => $history) {
-            if (
-                !$cachedWaypoint instanceof ReportWaypoint ||
-                $cachedWaypoint === $waypoint ||
-                !$cachedWaypoint->comparable($waypoint)
-            ) {
-                // We don't want to compare the waypoint to itself, or if its not comparable
+            if ($cachedWaypoint === $waypoint) {
+                // We don't want to compare the waypoint to itself
+                continue;
+            }
+
+            if (!$cachedWaypoint->comparable($waypoint)) {
+                // We don't want to compare the waypoint if its not comparable
                 continue;
             }
 

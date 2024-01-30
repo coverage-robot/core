@@ -7,17 +7,20 @@ use App\Exception\PublishException;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
-class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
+final class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClient $client,
+        #[Autowire(service: GithubAppInstallationClient::class)]
+        private readonly GithubAppInstallationClientInterface $client,
         private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $pullRequestPublisherLogger
@@ -132,7 +135,7 @@ class GithubPullRequestCommentPublisherService implements PublisherServiceInterf
         /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            static fn(array $comment) => isset($comment['id'], $comment['user']['node_id']) &&
+            static fn(array $comment): bool => isset($comment['id'], $comment['user']['node_id']) &&
                 $comment['user']['node_id'] === $botId
         );
 

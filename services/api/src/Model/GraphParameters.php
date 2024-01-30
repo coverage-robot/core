@@ -5,7 +5,7 @@ namespace App\Model;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
-class GraphParameters implements ParametersInterface
+final class GraphParameters implements ParametersInterface
 {
     public function __construct(
         private readonly string $owner,

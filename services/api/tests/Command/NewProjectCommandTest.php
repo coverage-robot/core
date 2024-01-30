@@ -5,12 +5,13 @@ namespace App\Tests\Command;
 use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
+use App\Service\AuthTokenServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class NewProjectCommandTest extends KernelTestCase
+final class NewProjectCommandTest extends KernelTestCase
 {
     public function testCreatingNewProject(): void
     {
@@ -20,7 +21,7 @@ class NewProjectCommandTest extends KernelTestCase
             ->method('save')
             ->with(
                 self::callback(
-                    static fn (Project $project) => $project->getOwner() === 'mock-owner' &&
+                    static fn (Project $project): bool => $project->getOwner() === 'mock-owner' &&
                         $project->getRepository() === 'mock-repository' &&
                         $project->getProvider() === Provider::GITHUB &&
                         $project->getGraphToken() === 'mock-graph-token' &&
@@ -32,8 +33,7 @@ class NewProjectCommandTest extends KernelTestCase
                 true
             );
 
-        $mockAuthTokenService = $this->createMock(AuthTokenService::class);
-
+        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockAuthTokenService->expects($this->once())
             ->method('createNewGraphToken')
             ->willReturn('mock-graph-token');

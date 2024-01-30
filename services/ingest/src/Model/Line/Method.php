@@ -5,7 +5,7 @@ namespace App\Model\Line;
 use Override;
 use Packages\Contracts\Line\LineType;
 
-class Method extends AbstractLine
+final class Method extends AbstractLine
 {
     public function __construct(
         int $lineNumber,
@@ -23,7 +23,7 @@ class Method extends AbstractLine
     #[Override]
     public function getUniqueLineIdentifier(): string
     {
-        return $this->getName();
+        return $this->name;
     }
 
     #[Override]

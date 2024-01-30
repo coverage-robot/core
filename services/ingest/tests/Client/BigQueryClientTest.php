@@ -8,7 +8,7 @@ use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use PHPUnit\Framework\TestCase;
 
-class BigQueryClientTest extends TestCase
+final class BigQueryClientTest extends TestCase
 {
     public function testTableIsCorrectlyConstructed(): void
     {

@@ -4,12 +4,12 @@ namespace App\Tests\Service\Diff;
 
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserService;
-use App\Service\Diff\Github\GithubDiffParserService;
+use App\Service\Diff\DiffParserServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class DiffParserServiceTest extends TestCase
+final class DiffParserServiceTest extends TestCase
 {
     public function testGetUsingValidProvider(): void
     {
@@ -18,7 +18,7 @@ class DiffParserServiceTest extends TestCase
             'file-2' => [4, 5, 6],
         ];
 
-        $mockParser = $this->createMock(GithubDiffParserService::class);
+        $mockParser = $this->createMock(DiffParserServiceInterface::class);
         $mockParser->expects($this->once())
             ->method('get')
             ->willReturn($diff);
@@ -48,7 +48,7 @@ class DiffParserServiceTest extends TestCase
 
     public function testGetUsingInvalidProvider(): void
     {
-        $mockParser = $this->createMock(GithubDiffParserService::class);
+        $mockParser = $this->createMock(DiffParserServiceInterface::class);
         $mockParser->expects($this->never())
             ->method('get');
 

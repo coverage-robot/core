@@ -165,17 +165,17 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
             throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
         }
 
-        if (
-            (
-                !$parameterBag->get(QueryParameter::INGEST_PARTITIONS) ||
-                !$parameterBag->get(QueryParameter::UPLOADS)
-            ) &&
-            !$parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)
-        ) {
-            throw new QueryException(
-                'You must provide either an ingest time scope and uploads scope, or carryforward tags.'
-            );
+        if ($parameterBag->get(QueryParameter::INGEST_PARTITIONS) && $parameterBag->get(QueryParameter::UPLOADS)) {
+            return;
         }
+
+        if ($parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
+            return;
+        }
+
+        throw new QueryException(
+            'You must provide either an ingest time scope and uploads scope, or carryforward tags.'
+        );
     }
 
     /**

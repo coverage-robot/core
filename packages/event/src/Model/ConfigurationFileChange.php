@@ -7,7 +7,7 @@ use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 
-class ConfigurationFileChange implements EventInterface
+final class ConfigurationFileChange implements EventInterface
 {
     public function __construct(
         private readonly Provider $provider,
@@ -17,7 +17,7 @@ class ConfigurationFileChange implements EventInterface
         private readonly string $commit,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if ($this->eventTime === null) {
+        if (!$this->eventTime instanceof \DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

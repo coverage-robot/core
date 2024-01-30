@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 use ValueError;
 use XMLReader;
 
-class CloverParseStrategy implements ParseStrategyInterface
+final class CloverParseStrategy implements ParseStrategyInterface
 {
     private const string PROJECT = 'project';
 
@@ -70,7 +70,7 @@ class CloverParseStrategy implements ParseStrategyInterface
                     sprintf('Received %s errors when validating Clover file.', count(libxml_get_errors())),
                     [
                         'errors' => array_map(
-                            static fn(LibXMLError $error) => [
+                            static fn(LibXMLError $error): array => [
                                 'code' => $error->code,
                                 'message' => $error->message,
                                 'line' => $error->line,
@@ -133,7 +133,7 @@ class CloverParseStrategy implements ParseStrategyInterface
         return $coverage;
     }
 
-    protected function buildXmlReader(string $content): XMLReader
+    private function buildXmlReader(string $content): XMLReader
     {
         /** @var XMLReader|false $reader */
         $reader = XMLReader::XML($content);

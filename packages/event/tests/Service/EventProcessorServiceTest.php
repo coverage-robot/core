@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use RuntimeException;
 
-class EventProcessorServiceTest extends TestCase
+final class EventProcessorServiceTest extends TestCase
 {
     public function testProcessEventSuccessfully(): void
     {

@@ -7,7 +7,7 @@ use Packages\Contracts\Line\LineType;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class LineCoverageQueryResult implements QueryResultInterface
+final class LineCoverageQueryResult implements QueryResultInterface
 {
     /**
      * @param LineType[] $types

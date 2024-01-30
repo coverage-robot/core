@@ -5,7 +5,7 @@ namespace App\Query\Result;
 use App\Model\CarryforwardTag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TagAvailabilityQueryResult implements QueryResultInterface
+final class TagAvailabilityQueryResult implements QueryResultInterface
 {
     /**
      * @param CarryforwardTag[] $carryforwardTags

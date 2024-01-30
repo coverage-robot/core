@@ -4,10 +4,9 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class MetricDirective
+final class MetricDirective
 {
     /**
-     * @param string $namespace
      * @param string[][]|null $dimensions
      * @param MetricDefinition[] $metrics
      */

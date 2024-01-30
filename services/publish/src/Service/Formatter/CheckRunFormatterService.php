@@ -5,7 +5,7 @@ namespace App\Service\Formatter;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 
-class CheckRunFormatterService
+final class CheckRunFormatterService
 {
     public function formatTitle(PublishableCheckRunMessage $message): string
     {

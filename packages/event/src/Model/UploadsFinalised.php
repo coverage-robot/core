@@ -8,7 +8,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 
-class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent
@@ -25,7 +25,7 @@ class UploadsFinalised implements EventInterface, ParentAwareEventInterface, Bas
         private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if ($this->eventTime === null) {
+        if (!$this->eventTime instanceof \DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

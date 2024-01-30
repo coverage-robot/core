@@ -4,6 +4,6 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class AnalysisException extends RuntimeException
+final class AnalysisException extends RuntimeException
 {
 }

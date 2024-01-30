@@ -7,7 +7,7 @@ use App\Service\Publisher\PublisherServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class MockPublisherFactory
+final class MockPublisherFactory
 {
     public static function getMockPublisher(
         TestCase $test,

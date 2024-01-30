@@ -4,6 +4,6 @@ namespace Packages\Configuration\Exception;
 
 use RuntimeException;
 
-class SettingRetrievalFailedException extends RuntimeException
+final class SettingRetrievalFailedException extends RuntimeException
 {
 }

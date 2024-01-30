@@ -6,21 +6,24 @@ use App\Model\CoverageReportComparison;
 use App\Model\CoverageReportInterface;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\CoverageAnalyserServiceInterface;
-use App\Service\CoverageComparisonService;
+use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -32,18 +35,21 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadsFinalisedEventProcessor implements EventProcessorInterface
+final class UploadsFinalisedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
         private readonly SerializerInterface&NormalizerInterface $serializer,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
-        private readonly CoverageComparisonService $coverageComparisonService,
+        private readonly CoverageComparisonServiceInterface $coverageComparisonService,
         private readonly LineGroupingService $annotationGrouperService,
-        private readonly SettingService $settingService,
-        private readonly EventBusClient $eventBusClient,
-        private readonly PublishClient $publishClient
+        #[Autowire(service: SettingService::class)]
+        private readonly SettingServiceInterface $settingService,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
+        #[Autowire(service: PublishClient::class)]
+        private readonly SqsClientInterface $publishClient
     ) {
     }
 

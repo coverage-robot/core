@@ -9,20 +9,20 @@ use App\Webhook\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;
-use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\ConfigurationFileChange;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CommitsPushedWebhookProcessorTest extends TestCase
+final class CommitsPushedWebhookProcessorTest extends TestCase
 {
     #[DataProvider('pushedCommitsDataProvider')]
     public function testHandlingWebhooksWithDifferentCommits(
         GithubPushWebhook $webhook,
         bool $shouldSendConfigurationFileChangeEvent
     ): void {
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->exactly((int)$shouldSendConfigurationFileChangeEvent))
             ->method('fireEvent')
             ->with(

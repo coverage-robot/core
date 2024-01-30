@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TagAvailabilityQuery implements QueryInterface
+final class TagAvailabilityQuery implements QueryInterface
 {
     use UploadTableAwareTrait;
     use ParameterAwareTrait;
@@ -118,10 +118,6 @@ class TagAvailabilityQuery implements QueryInterface
     #[Override]
     public function parseResults(QueryResults $results): TagAvailabilityCollectionQueryResult
     {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
         $row = $results->rows();
 
         /** @var TagAvailabilityCollectionQueryResult $results */

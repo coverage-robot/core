@@ -6,7 +6,7 @@ use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class EnvironmentService implements EnvironmentServiceInterface
+final class EnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(private readonly KernelInterface $kernel)
     {

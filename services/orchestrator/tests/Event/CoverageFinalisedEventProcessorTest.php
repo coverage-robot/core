@@ -8,7 +8,7 @@ use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Finalised;
 use App\Service\EventStoreServiceInterface;
-use App\Tests\Mock\FakeEventStoreRecorderBackoffStrategy;
+use App\Tests\Mock\FakeBackoffStrategy;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
@@ -16,7 +16,7 @@ use Packages\Event\Model\CoverageFinalised;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CoverageFinalisedEventProcessorTest extends TestCase
+final class CoverageFinalisedEventProcessorTest extends TestCase
 {
     public function testGetEvent(): void
     {
@@ -48,12 +48,19 @@ class CoverageFinalisedEventProcessorTest extends TestCase
                     eventTime: $eventTime
                 )
             )
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: []
+            ));
 
         $coverageFinalisedEventProcessor = new CoverageFinalisedEventProcessor(
             $mockEventStoreService,
             new NullLogger(),
-            new FakeEventStoreRecorderBackoffStrategy()
+            new FakeBackoffStrategy()
         );
 
         $coverageFinalisedEventProcessor->process(

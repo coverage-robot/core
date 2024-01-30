@@ -4,7 +4,7 @@ namespace App\Query\Result;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class FileCoverageCollectionQueryResult implements QueryResultInterface
+final class FileCoverageCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param FileCoverageQueryResult[] $files

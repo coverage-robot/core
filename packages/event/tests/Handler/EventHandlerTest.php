@@ -13,8 +13,9 @@ use Packages\Event\Service\EventProcessorServiceInterface;
 use Packages\Event\Service\EventValidationService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EventHandlerTest extends TestCase
+final class EventHandlerTest extends TestCase
 {
     public function testHandlingEvent(): void
     {
@@ -34,7 +35,7 @@ class EventHandlerTest extends TestCase
             'baseRef' => null
         ]);
 
-        $mockUpload = $this->createMock(Upload::class);
+        $mockUpload = $this->createMock(EventInterface::class);
 
         $mockEventProcessor = $this->createMock(EventProcessorServiceInterface::class);
         $mockEventProcessor->expects($this->once())
@@ -51,15 +52,15 @@ class EventHandlerTest extends TestCase
             ->with($serializedEvent, EventInterface::class)
             ->willReturn($mockUpload);
 
-        $mockEventValidationService = $this->createMock(EventValidationService::class);
-        $mockEventValidationService->expects($this->once())
+        $mockValidator = $this->createMock(ValidatorInterface::class);
+        $mockValidator->expects($this->once())
             ->method('validate')
             ->with($mockUpload);
 
         $eventHandler = new EventHandler(
             $mockEventProcessor,
             $mockSerializer,
-            $mockEventValidationService
+            new EventValidationService($mockValidator)
         );
 
         $eventHandler->handleEventBridge(

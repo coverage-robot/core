@@ -9,7 +9,7 @@ use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CoverageFileParserService
+final class CoverageFileParserService implements CoverageFileParserServiceInterface
 {
     public function __construct(
         #[TaggedIterator('app.parser_strategy')]
@@ -19,9 +19,7 @@ class CoverageFileParserService
     }
 
     /**
-     * Attempt to parse an arbitrary coverage file content using all supported parsing
-     * strategies.
-     *
+     * @inheritDoc
      * @throws ParseException
      */
     public function parse(
@@ -31,29 +29,29 @@ class CoverageFileParserService
         string $projectRoot,
         string $coverageFile
     ): Coverage {
-        foreach ($this->parserStrategies as $strategy) {
-            if (!$strategy instanceof ParseStrategyInterface) {
+        foreach ($this->parserStrategies as $parserStrategy) {
+            if (!$parserStrategy instanceof ParseStrategyInterface) {
                 $this->parseStrategyLogger->critical(
                     'Strategy does not implement the correct interface.',
                     [
-                        'strategy' => $strategy::class
+                        'strategy' => $parserStrategy::class
                     ]
                 );
 
                 continue;
             }
 
-            if (!$strategy->supports($coverageFile)) {
+            if (!$parserStrategy->supports($coverageFile)) {
                 $this->parseStrategyLogger->info(
                     sprintf(
                         'Not parsing using %s, as it does not support content',
-                        $strategy::class
+                        $parserStrategy::class
                     )
                 );
                 continue;
             }
 
-            return $strategy->parse(
+            return $parserStrategy->parse(
                 $provider,
                 $owner,
                 $repository,

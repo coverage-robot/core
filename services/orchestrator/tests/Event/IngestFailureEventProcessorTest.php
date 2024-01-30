@@ -9,17 +9,17 @@ use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\Finalised;
 use App\Model\Ingestion;
-use App\Service\EventStoreService;
+use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
-use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
 
-class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
+final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
     #[Override]
     public static function getEventProcessor(): string
@@ -43,14 +43,17 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
 
     public function testHandlingEventWhenOthersOngoing(): void
     {
-        $mockIngestion = $this->createMock(Ingestion::class);
-        $mockIngestion->method('getState')
-            ->willReturn(OrchestratedEventState::ONGOING);
-        $mockIngestion->expects($this->once())
-            ->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
+        $mockIngestion = new Ingestion(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            uploadId: 'mock-upload',
+            state: OrchestratedEventState::ONGOING,
+            eventTime: new DateTimeImmutable()
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
@@ -81,9 +84,16 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
             );
         $mockEventStoreService->expects($this->once())
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: ['mock' => 'change'],
+            ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 
@@ -114,18 +124,27 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
 
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
-        $mockIngestion = $this->createMock(Ingestion::class);
-        $mockIngestion->method('getState')
-            ->willReturn(OrchestratedEventState::SUCCESS);
-        $mockIngestion->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
-        $mockFinalised = $this->createMock(Finalised::class);
-        $mockFinalised->method('getEventTime')
-            ->willReturn(new DateTimeImmutable());
-        $mockFinalised->method('getState')
-            ->willReturn(OrchestratedEventState::SUCCESS);
+        $mockIngestion = new Ingestion(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            uploadId: 'mock-upload',
+            state: OrchestratedEventState::SUCCESS,
+            eventTime: new DateTimeImmutable()
+        );
+        $mockFinalised = new Finalised(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'mock-commit',
+            ref: 'mock-ref',
+            pullRequest: null,
+            state: OrchestratedEventState::SUCCESS,
+            eventTime: new DateTimeImmutable()
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
                 $mockIngestion,
@@ -158,9 +177,16 @@ class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCa
             );
         $mockEventStoreService->expects($this->once())
             ->method('storeStateChange')
-            ->willReturn($this->createMock(EventStateChange::class));
+            ->willReturn(new EventStateChange(
+                provider: Provider::GITHUB,
+                identifier: 'mock-identifier',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                version: 1,
+                event: ['mock' => 'change'],
+            ));
 
-        $mockEventBusClient = $this->createMock(EventBusClient::class);
+        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->never())
             ->method('fireEvent');
 

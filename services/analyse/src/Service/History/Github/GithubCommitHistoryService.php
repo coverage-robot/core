@@ -5,12 +5,14 @@ namespace App\Service\History\Github;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
-use App\Service\ProviderAwareInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @psalm-type History = array{
@@ -45,10 +47,11 @@ use Psr\Log\LoggerInterface;
  *           }
  *      }
  */
-class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
+final class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClient $githubClient,
+        #[Autowire(service: GithubAppInstallationClient::class)]
+        private readonly GithubAppInstallationClientInterface $githubClient,
         private readonly LoggerInterface $githubHistoryLogger
     ) {
     }

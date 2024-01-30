@@ -13,7 +13,7 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ExistingFixtureEventBuilder implements EventBuilderInterface
+final class ExistingFixtureEventBuilder implements EventBuilderInterface
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -53,7 +53,7 @@ class ExistingFixtureEventBuilder implements EventBuilderInterface
 
         $availableFixtures = array_reduce(
             $availableFixtures,
-            static function (array $carry, string $filePath) {
+            static function (array $carry, string $filePath): array {
                 $carry[basename($filePath)] = $filePath;
                 return $carry;
             },

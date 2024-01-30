@@ -117,7 +117,7 @@ resource "aws_lambda_function" "analyse" {
   timeout       = 120
   memory_size   = 1024
   runtime       = "provided.al2"
-  handler       = "App\\Handler\\EventHandler"
+  handler       = "Packages\\Event\\Handler\\EventHandler"
   architectures = ["arm64"]
 
   tracing_config {

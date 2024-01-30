@@ -13,7 +13,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class BigQueryMetadataBuilderService
+final class BigQueryMetadataBuilderService
 {
     public function __construct(
         private readonly LoggerInterface $metadataBuilderServiceLogger,
@@ -44,7 +44,7 @@ class BigQueryMetadataBuilderService
             'sourceFormat' => $coverage->getSourceFormat(),
             'fileName' => $file->getFileName(),
             'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
-                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                $coverage->getGeneratedAt()->format('Y-m-d H:i:s') :
                 null,
             'type' => $line->getType(),
             'lineNumber' => $line->getLineNumber(),
@@ -68,7 +68,7 @@ class BigQueryMetadataBuilderService
             'totalLines' => $totalLines,
             'sourceFormat' => $coverage->getSourceFormat(),
             'generatedAt' => $coverage->getGeneratedAt() instanceof DateTimeImmutable ?
-                $coverage->getGeneratedAt()?->format('Y-m-d H:i:s') :
+                $coverage->getGeneratedAt()->format('Y-m-d H:i:s') :
                 null,
         ];
     }

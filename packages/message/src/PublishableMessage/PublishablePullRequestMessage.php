@@ -8,7 +8,7 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PublishablePullRequestMessage implements PublishableMessageInterface
+final class PublishablePullRequestMessage implements PublishableMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
@@ -29,7 +29,7 @@ class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if ($this->validUntil === null) {
+        if (!$this->validUntil instanceof \DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }

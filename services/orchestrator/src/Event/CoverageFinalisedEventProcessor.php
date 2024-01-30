@@ -15,7 +15,7 @@ use Packages\Event\Model\CoverageFinalised;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRecorderProcessor
+final class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRecorderProcessor
 {
     use OverallCommitStateAwareTrait;
 

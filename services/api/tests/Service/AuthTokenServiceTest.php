@@ -19,7 +19,7 @@ use Psr\Log\NullLogger;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
-class AuthTokenServiceTest extends TestCase
+final class AuthTokenServiceTest extends TestCase
 {
     private ProjectRepository|MockObject $projectRepository;
 
@@ -45,16 +45,20 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateUploadTokenWithEnabledProject(): void
     {
-        $parameters = $this->createMock(SigningParameters::class);
-        $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        $parameters = new SigningParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB,
+            fileName: 'mock-file-name',
+            projectRoot: 'mock-project-root',
+            tag: 'mock-tag',
+            commit: 'mock-commit',
+            parent: [],
+            ref: 'mock-ref',
+            pullRequest: null,
+            baseRef: null,
+            baseCommit: null
+        );
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
@@ -81,16 +85,20 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateUploadTokenWithDisabledProject(): void
     {
-        $parameters = $this->createMock(SigningParameters::class);
-        $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        $parameters = new SigningParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB,
+            fileName: 'mock-file-name',
+            projectRoot: 'mock-project-root',
+            tag: 'mock-tag',
+            commit: 'mock-commit',
+            parent: [],
+            ref: 'mock-ref',
+            pullRequest: null,
+            baseRef: null,
+            baseCommit: null
+        );
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
@@ -117,16 +125,20 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateUploadTokenWithNoProject(): void
     {
-        $parameters = $this->createMock(SigningParameters::class);
-        $parameters->expects($this->once())
-            ->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-            ->method('getRepository')
-            ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-            ->method('getOwner')
-            ->willReturn('mock-owner');
+        $parameters = new SigningParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB,
+            fileName: 'mock-file-name',
+            projectRoot: 'mock-project-root',
+            tag: 'mock-tag',
+            commit: 'mock-commit',
+            parent: [],
+            ref: 'mock-ref',
+            pullRequest: null,
+            baseRef: null,
+            baseCommit: null
+        );
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -228,16 +240,11 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateGraphTokenWithEnabledProject(): void
     {
-        $parameters = $this->createMock(GraphParameters::class);
-        $parameters->expects($this->once())
-        ->method('getProvider')
-        ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-        ->method('getRepository')
-        ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-        ->method('getOwner')
-        ->willReturn('mock-owner');
+        $parameters = new GraphParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB
+        );
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
@@ -264,16 +271,11 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateGraphTokenWithDisabledProject(): void
     {
-        $parameters = $this->createMock(GraphParameters::class);
-        $parameters->expects($this->once())
-        ->method('getProvider')
-        ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-        ->method('getRepository')
-        ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-        ->method('getOwner')
-        ->willReturn('mock-owner');
+        $parameters = new GraphParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB
+        );
 
         $project = $this->createMock(Project::class);
         $project->expects($this->once())
@@ -300,16 +302,11 @@ class AuthTokenServiceTest extends TestCase
 
     public function testValidateGraphTokenWithNoProject(): void
     {
-        $parameters = $this->createMock(GraphParameters::class);
-        $parameters->expects($this->once())
-        ->method('getProvider')
-        ->willReturn(Provider::GITHUB);
-        $parameters->expects($this->once())
-        ->method('getRepository')
-        ->willReturn('mock-repository');
-        $parameters->expects($this->once())
-        ->method('getOwner')
-        ->willReturn('mock-owner');
+        $parameters = new GraphParameters(
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            provider: Provider::GITHUB
+        );
 
         $this->projectRepository->expects($this->once())
         ->method('findOneBy')

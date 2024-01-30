@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CoverageFinalisedEventProcessor implements EventProcessorInterface
+final class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
     private const array REFS = [
         'master',

@@ -7,7 +7,7 @@ use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Service\TraceContext;
 use PHPUnit\Framework\TestCase;
 
-class TraceContextTest extends TestCase
+final class TraceContextTest extends TestCase
 {
     public function testSetTraceHeaderFromEnvironment(): void
     {
