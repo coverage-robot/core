@@ -22,7 +22,7 @@ use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
-use App\Service\Diff\DiffParserService;
+use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
@@ -35,9 +35,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
     public function __construct(
-        #[Autowire(service: QueryService::class)]
+        #[Autowire(service: CachingQueryService::class)]
         private readonly QueryServiceInterface $queryService,
-        #[Autowire(service: DiffParserService::class)]
+        #[Autowire(service: CachingDiffParserService::class)]
         private readonly DiffParserServiceInterface $diffParser,
         #[Autowire(service: CommitHistoryService::class)]
         private readonly CommitHistoryServiceInterface $commitHistoryService,

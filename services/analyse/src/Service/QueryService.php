@@ -28,7 +28,7 @@ final class QueryService implements QueryServiceInterface
         private readonly BigQueryClientInterface $bigQueryClient,
         #[TaggedIterator('app.coverage_query')]
         private readonly iterable $queries,
-        #[Autowire(service: QueryBuilderServiceInterface::class)]
+        #[Autowire(service: QueryBuilderService::class)]
         private readonly QueryBuilderServiceInterface $queryBuilderService,
         private readonly ValidatorInterface $validator,
         private readonly LoggerInterface $queryServiceLogger,
