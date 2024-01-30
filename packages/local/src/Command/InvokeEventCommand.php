@@ -68,7 +68,7 @@ final class InvokeEventCommand extends Command
     {
         $event = Event::tryFrom(strtoupper($input->getArgument('event')));
 
-        if (!$event instanceof \Packages\Contracts\Event\Event) {
+        if (!$event instanceof Event) {
             $output->writeln(
                 [
                     '<error>',
@@ -88,7 +88,7 @@ final class InvokeEventCommand extends Command
                 $event
             );
 
-            if (!$builtEvent instanceof \Packages\Event\Model\EventInterface) {
+            if (!$builtEvent instanceof EventInterface) {
                 $output->writeln('<error>No builder available to build event.</error>');
                 return Command::FAILURE;
             }

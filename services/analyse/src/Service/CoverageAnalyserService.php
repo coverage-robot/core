@@ -98,7 +98,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         try {
             return new CoverageReport(
                 waypoint: $waypoint,
-                uploads:  fn(): \App\Query\Result\TotalUploadsQueryResult => $this->getUploads($waypoint),
+                uploads:  fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
                 totalLines: fn(): int => $this->getTotalLines($waypoint),
                 atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
                 uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),

@@ -69,7 +69,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
         $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
         if (
-            $previousState instanceof \App\Model\OrchestratedEventInterface &&
+            $previousState instanceof OrchestratedEventInterface &&
             $previousState->getEventTime() > $currentState->getEventTime()
         ) {
             $this->eventProcessorLogger->info(
