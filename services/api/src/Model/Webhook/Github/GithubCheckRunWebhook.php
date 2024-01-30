@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
  *
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#check_run
  */
-class GithubCheckRunWebhook extends AbstractWebhook implements
+final class GithubCheckRunWebhook extends AbstractWebhook implements
     PipelineStateChangeWebhookInterface,
     SignedWebhookInterface
 {
@@ -155,9 +155,9 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
                 '',
                 [
                     $this->getProvider()->value,
-                    $this->getOwner(),
-                    $this->getRepository(),
-                    $this->getCommit()
+                    $this->owner,
+                    $this->repository,
+                    $this->commit
                 ]
             )
         );
@@ -169,10 +169,10 @@ class GithubCheckRunWebhook extends AbstractWebhook implements
         return sprintf(
             'GithubCheckRunWebhook#%s-%s-%s-%s-%s',
             $this->getProvider()->value,
-            $this->getOwner(),
-            $this->getRepository(),
-            $this->getExternalId(),
-            $this->getCommit()
+            $this->owner,
+            $this->repository,
+            $this->externalId,
+            $this->commit
         );
     }
 

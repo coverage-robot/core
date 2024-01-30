@@ -17,8 +17,10 @@ use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EventBusClientTest extends TestCase
+final class EventBusClientTest extends TestCase
 {
     public function testEventIsFiredWithCorrectProperties(): void
     {
@@ -43,8 +45,8 @@ class EventBusClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
-        $mockEventValidationService = $this->createMock(EventValidationService::class);
-        $mockEventValidationService->expects($this->once())
+        $mockValidator = $this->createMock(ValidatorInterface::class);
+        $mockValidator->expects($this->once())
             ->method('validate')
             ->with($mockEvent);
 
@@ -52,14 +54,14 @@ class EventBusClientTest extends TestCase
             $mockEventBridgeEventClient,
             $mockEnvironmentService,
             $mockSerializer,
-            $mockEventValidationService,
+            new EventValidationService($mockValidator),
             new NullLogger()
         );
 
         $mockEventBridgeEventClient->expects($this->once())
             ->method('putEvents')
             ->with(
-                self::callback(function (PutEventsRequest $request) {
+                self::callback(function (PutEventsRequest $request): bool {
                     $event = $request->getEntries()[0];
 
                     $this->assertEquals(

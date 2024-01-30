@@ -9,7 +9,7 @@ use Doctrine\SqlFormatter\SqlFormatter;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class QueryBuilderService
+final class QueryBuilderService implements QueryBuilderServiceInterface
 {
     public function __construct(
         private readonly SqlFormatter $sqlFormatter,

@@ -5,7 +5,7 @@ namespace App\Exception;
 use Exception;
 use Throwable;
 
-class GraphException extends Exception
+final class GraphException extends Exception
 {
     public static function invalidParameters(?Throwable $exception = null): self
     {

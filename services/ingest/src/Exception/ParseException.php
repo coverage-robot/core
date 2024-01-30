@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class ParseException extends RuntimeException
+final class ParseException extends RuntimeException
 {
     public static function notSupportedException(): ParseException
     {

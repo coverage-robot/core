@@ -38,7 +38,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
          * @see TagCoverageQueryResult
          * @see FileCoverageQueryResult
          */
-        QueryResult::COVERAGE->value => CoverageQueryResult::class,
+        QueryResult::COVERAGE->value => TotalCoverageQueryResult::class,
     ]
 )]
 interface QueryResultInterface

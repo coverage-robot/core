@@ -17,7 +17,7 @@ use Packages\Contracts\Tag\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CarryforwardTagService implements CarryforwardTagServiceInterface
+final class CarryforwardTagService implements CarryforwardTagServiceInterface
 {
     /**
      * The total number of pages to look back through in order to match the available tags we've seen
@@ -56,7 +56,7 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tagsNotSeen = array_filter(
             $tagAvailability->getAvailableTagNames(),
-            fn(string $tagName) => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
+            fn(string $tagName): bool => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
         );
 
         for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
@@ -202,8 +202,8 @@ class CarryforwardTagService implements CarryforwardTagServiceInterface
             return false;
         }
 
-        foreach ($existingTags as $tag) {
-            if ($tag->getName() !== $tagName) {
+        foreach ($existingTags as $existingTag) {
+            if ($existingTag->getName() !== $tagName) {
                 continue;
             }
 

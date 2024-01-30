@@ -25,7 +25,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class S3PersistServiceTest extends KernelTestCase
+final class S3PersistServiceTest extends KernelTestCase
 {
     #[DataProvider('coverageDataProvider')]
     public function testPersist(
@@ -59,7 +59,7 @@ class S3PersistServiceTest extends KernelTestCase
                 'coverage-output-dev',
                 $upload->getUploadId() . '.txt',
                 self::callback(
-                    function ($body) use ($expectedWrittenLines) {
+                    function ($body) use ($expectedWrittenLines): bool {
                         rewind($body);
                         $this->assertEquals(
                             implode(

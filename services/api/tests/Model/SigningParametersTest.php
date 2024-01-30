@@ -6,7 +6,7 @@ use App\Model\SigningParameters;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
-class SigningParametersTest extends TestCase
+final class SigningParametersTest extends TestCase
 {
     public function testUsingGettersReturnsProperties(): void
     {

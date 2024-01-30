@@ -8,7 +8,7 @@ use Override;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
 
-class ReportWaypoint implements Stringable
+final class ReportWaypoint implements Stringable
 {
     /**
      *  @param Closure(ReportWaypoint $waypoint, int $page):array{

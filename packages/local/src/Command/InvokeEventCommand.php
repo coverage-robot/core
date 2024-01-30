@@ -4,6 +4,7 @@ namespace Packages\Local\Command;
 
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
+use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -21,21 +23,22 @@ use Symfony\Component\Serializer\SerializerInterface;
  * A command designed to be used inside services which can manually invoke
  * an event handler with a custom event.
  */
-class InvokeEventCommand extends Command
+final class InvokeEventCommand extends Command
 {
     /**
      * @param EventBuilderInterface[] $eventBuilders
      */
     public function __construct(
         private readonly SerializerInterface&NormalizerInterface $serializer,
-        private readonly EventHandler $eventHandler,
+        #[Autowire(service: EventHandler::class)]
+        private readonly EventBridgeHandler $eventHandler,
         #[TaggedIterator('package.local.event_builder', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $eventBuilders,
     ) {
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $this->setDescription('Invoke the services event handler with a custom event')
             ->addArgument(
@@ -43,7 +46,7 @@ class InvokeEventCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'The event to invoke the handler with',
                 null,
-                array_map(fn (Event $event) => $event->value, Event::cases())
+                array_map(static fn(Event $event) => $event->value, Event::cases())
             )
             ->addOption(
                 'file',
@@ -65,12 +68,12 @@ class InvokeEventCommand extends Command
     {
         $event = Event::tryFrom(strtoupper($input->getArgument('event')));
 
-        if ($event === null) {
+        if (!$event instanceof Event) {
             $output->writeln(
                 [
                     '<error>',
                     'Invalid event provided, must be one of:',
-                    ...array_map(fn (Event $event) => $event->value, Event::cases()),
+                    ...array_map(static fn(Event $event) => $event->value, Event::cases()),
                     '</error>'
                 ]
             );
@@ -85,7 +88,7 @@ class InvokeEventCommand extends Command
                 $event
             );
 
-            if ($builtEvent === null) {
+            if (!$builtEvent instanceof EventInterface) {
                 $output->writeln('<error>No builder available to build event.</error>');
                 return Command::FAILURE;
             }
@@ -106,12 +109,12 @@ class InvokeEventCommand extends Command
                 ]),
                 Context::fake()
             );
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $exception) {
             $output->writeln(
                 [
                     '<error>',
                     'Failed to build event, see error below:',
-                    $e->getMessage(),
+                    $exception->getMessage(),
                     '</error>'
                 ]
             );

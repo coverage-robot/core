@@ -6,7 +6,7 @@ use App\Enum\EnvironmentVariable;
 use Google\Cloud\Storage\StorageClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
-class GoogleCloudStorageClient extends StorageClient
+final class GoogleCloudStorageClient extends StorageClient implements GoogleCloudStorageClientInterface
 {
     private const SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
 

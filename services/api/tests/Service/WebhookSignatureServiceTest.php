@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
 
-class WebhookSignatureServiceTest extends TestCase
+final class WebhookSignatureServiceTest extends TestCase
 {
     public function testGetPayloadSignatureFromRequest(): void
     {

@@ -38,7 +38,7 @@ trait DiffAwareTrait
     {
         $tableAlias = $tableAlias !== null ? $tableAlias . '.' : '';
 
-        if ($parameterBag && $parameterBag->has(QueryParameter::LINES)) {
+        if ($parameterBag instanceof QueryParameterBag && $parameterBag->has(QueryParameter::LINES)) {
             /** @var array<array-key, list{int}> $fileLineNumbers */
             $fileLineNumbers = $parameterBag->get(QueryParameter::LINES);
 

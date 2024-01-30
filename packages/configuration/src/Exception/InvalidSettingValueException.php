@@ -4,7 +4,7 @@ namespace Packages\Configuration\Exception;
 
 use Exception;
 
-class InvalidSettingValueException extends Exception
+final class InvalidSettingValueException extends Exception
 {
 
 }

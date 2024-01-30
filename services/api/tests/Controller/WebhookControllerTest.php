@@ -2,7 +2,7 @@
 
 namespace App\Tests\Controller;
 
-use App\Client\WebhookQueueClient;
+use App\Client\WebhookQueueClientInterface;
 use App\Controller\WebhookController;
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
@@ -19,23 +19,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookControllerTest extends KernelTestCase
+final class WebhookControllerTest extends KernelTestCase
 {
     public function testHandleWebhookEventWithInvalidEventHeader(): void
     {
-        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('getPayloadSignatureFromRequest');
-        $mockWebhookSignatureService->expects($this->never())
-            ->method('validatePayloadSignature');
-
-        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockWebhookSignatureService,
+            new WebhookSignatureService(new NullLogger()),
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -61,19 +55,13 @@ class WebhookControllerTest extends KernelTestCase
 
     public function testHandleWebhookEventWithInvalidBody(): void
     {
-        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('getPayloadSignatureFromRequest');
-        $mockWebhookSignatureService->expects($this->never())
-            ->method('validatePayloadSignature');
-
-        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockWebhookSignatureService,
+            new WebhookSignatureService(new NullLogger()),
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -104,22 +92,13 @@ class WebhookControllerTest extends KernelTestCase
         string $webhookInstance,
         string $payload
     ): void {
-        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('getPayloadSignatureFromRequest')
-            ->willReturn('invalid-signature');
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('validatePayloadSignature')
-            ->with('invalid-signature', $payload, 'mock-webhook-secret')
-            ->willReturn(false);
-
-        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockWebhookSignatureService,
+            new WebhookSignatureService(new NullLogger()),
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -134,7 +113,10 @@ class WebhookControllerTest extends KernelTestCase
         $webhookController->setContainer($this->getContainer());
 
         $request = new Request(
-            server: ['HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type],
+            server: [
+                'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
+                'HTTP_' . SignedWebhookInterface::SIGNATURE_HEADER => 'invalid-signature'
+            ],
             content: $payload
         );
 
@@ -148,25 +130,17 @@ class WebhookControllerTest extends KernelTestCase
         Provider $provider,
         string $type,
         string $webhookInstance,
-        string $payload
+        string $payload,
+        string $signature
     ): void {
-        $mockWebhookSignatureService = $this->createMock(WebhookSignatureService::class);
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('getPayloadSignatureFromRequest')
-            ->willReturn('valid-signature');
-        $mockWebhookSignatureService->expects($this->once())
-            ->method('validatePayloadSignature')
-            ->with('valid-signature', $payload, 'mock-webhook-secret')
-            ->willReturn(true);
-
-        $mockWebhookQueueClient = $this->createMock(WebhookQueueClient::class);
+        $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->once())
             ->method('dispatchWebhook')
             ->with($this->isInstanceOf($webhookInstance));
 
         $webhookController = new WebhookController(
             new NullLogger(),
-            $mockWebhookSignatureService,
+            new WebhookSignatureService(new NullLogger()),
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -181,7 +155,10 @@ class WebhookControllerTest extends KernelTestCase
         $webhookController->setContainer($this->getContainer());
 
         $request = new Request(
-            server: ['HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type],
+            server: [
+                'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
+                'HTTP_' . SignedWebhookInterface::SIGNATURE_HEADER => $signature
+            ],
             content: $payload
         );
 
@@ -193,6 +170,8 @@ class WebhookControllerTest extends KernelTestCase
     public static function webhookPayloadDataProvider(): iterable
     {
         foreach (glob(__DIR__ . '/../Fixture/Webhook/*.json') as $payload) {
+            $requestBody = file_get_contents($payload);
+
             yield basename($payload) => [
                 Provider::GITHUB,
                 match (basename($payload)) {
@@ -203,7 +182,16 @@ class WebhookControllerTest extends KernelTestCase
                     'github_push.json' => GithubPushWebhook::class,
                     default => GithubCheckRunWebhook::class
                 },
-                file_get_contents($payload)
+                $requestBody,
+                sprintf(
+                    '%s=%s',
+                    SignedWebhookInterface::SIGNATURE_ALGORITHM,
+                    hash_hmac(
+                        SignedWebhookInterface::SIGNATURE_ALGORITHM,
+                        $requestBody,
+                        'mock-webhook-secret'
+                    )
+                )
             ];
         }
     }

@@ -6,7 +6,7 @@ use Packages\Telemetry\Enum\Resolution;
 use Packages\Telemetry\Enum\Unit;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class MetricDefinition
+final class MetricDefinition
 {
     public function __construct(
         #[SerializedName('Name')]

@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Exception;
 
-class UploadError
+final class UploadError
 {
     private readonly string $message;
 

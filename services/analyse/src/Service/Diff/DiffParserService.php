@@ -3,12 +3,12 @@
 namespace App\Service\Diff;
 
 use App\Model\ReportWaypoint;
-use App\Service\ProviderAwareInterface;
 use Override;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class DiffParserService implements DiffParserServiceInterface
+final class DiffParserService implements DiffParserServiceInterface
 {
     /**
      * @param (DiffParserServiceInterface&ProviderAwareInterface)[] $parsers

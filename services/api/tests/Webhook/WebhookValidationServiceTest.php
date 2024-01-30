@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
-class WebhookValidationServiceTest extends TestCase
+final class WebhookValidationServiceTest extends TestCase
 {
     #[DataProvider('webhookDataProvider')]
     public function testValidatingMessages(WebhookInterface $webhook, bool $isValid): void

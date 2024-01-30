@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Tests\Webhook;
+namespace App\Tests\Service;
 
 use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
-use App\Webhook\WebhookProcessor;
+use App\Service\WebhookProcessorService;
 use App\Webhook\WebhookProcessorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookProcessorTest extends KernelTestCase
+final class WebhookProcessorTest extends KernelTestCase
 {
     #[DataProvider('webhookPayloadDataProvider')]
     public function testProcessUsingValidEvent(
@@ -24,7 +24,7 @@ class WebhookProcessorTest extends KernelTestCase
         $mockProcessor->expects($this->once())
             ->method('process');
 
-        $webhookProcessor = new WebhookProcessor(
+        $webhookProcessor = new WebhookProcessorService(
             [
                 $event->value => $mockProcessor,
             ]

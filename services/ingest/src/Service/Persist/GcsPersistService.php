@@ -3,7 +3,9 @@
 namespace App\Service\Persist;
 
 use App\Client\BigQueryClient;
+use App\Client\BigQueryClientInterface;
 use App\Client\GoogleCloudStorageClient;
+use App\Client\GoogleCloudStorageClientInterface;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PersistException;
 use App\Model\Coverage;
@@ -16,22 +18,25 @@ use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class GcsPersistService implements PersistServiceInterface
+final class GcsPersistService implements PersistServiceInterface
 {
-    final public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
+    public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
 
     private const string OUTPUT_KEY = '%s%s.json';
 
     public function __construct(
-        private readonly GoogleCloudStorageClient $googleCloudStorageClient,
-        private readonly BigQueryClient $bigQueryClient,
+        #[Autowire(service: GoogleCloudStorageClient::class)]
+        private readonly GoogleCloudStorageClientInterface $googleCloudStorageClient,
+        #[Autowire(service: BigQueryClient::class)]
+        private readonly BigQueryClientInterface $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $gcsPersistServiceLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 
@@ -130,7 +135,7 @@ class GcsPersistService implements PersistServiceInterface
         $job = $this->bigQueryClient->runJob($loadJob);
 
         $backoff = new ExponentialBackoff(10);
-        $backoff->execute(function () use ($job, $upload) {
+        $backoff->execute(function () use ($job, $upload): void {
             $this->gcsPersistServiceLogger->info(
                 sprintf(
                     'Waiting for load job %s to complete for %s',
@@ -212,7 +217,7 @@ class GcsPersistService implements PersistServiceInterface
     {
         return array_reduce(
             $coverage->getFiles(),
-            static fn(int $totalLines, File $file) => $totalLines + count($file),
+            static fn(int $totalLines, File $file): int => $totalLines + count($file),
             0
         );
     }

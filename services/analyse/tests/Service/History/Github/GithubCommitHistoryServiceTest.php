@@ -4,19 +4,20 @@ namespace App\Tests\Service\History\Github;
 
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class GithubCommitHistoryServiceTest extends TestCase
+final class GithubCommitHistoryServiceTest extends TestCase
 {
     public function testGetProvider(): void
     {
         $service = new GithubCommitHistoryService(
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             new NullLogger()
         );
 
@@ -30,18 +31,23 @@ class GithubCommitHistoryServiceTest extends TestCase
         int $expectedOffset,
         array $expectedCommits
     ): void {
-        $githubClient = $this->createMock(GithubAppInstallationClient::class);
+        $githubClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $gqlClient = $this->createMock(GraphQL::class);
 
-        $mockUpload = $this->createMock(Upload::class);
-        $mockUpload->method('getOwner')
-            ->willReturn('mock-owner');
-        $mockUpload->method('getRepository')
-            ->willReturn('mock-repository');
-        $mockUpload->method('getRef')
-            ->willReturn('mock-ref');
-        $mockUpload->method('getCommit')
-            ->willReturn('uploaded-commit');
+        $mockUpload = new Upload(
+            uploadId: 'mock-upload-id',
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            commit: 'uploaded-commit',
+            parent: [],
+            ref: 'mock-ref',
+            projectRoot: 'mock-project-root',
+            tag: new Tag(
+                name: 'mock-tag',
+                commit: 'mock-tag-commit'
+            )
+        );
 
         $githubClient->method('graphql')
             ->willReturn($gqlClient);
@@ -49,7 +55,7 @@ class GithubCommitHistoryServiceTest extends TestCase
         $gqlClient->expects($this->once())
             ->method('execute')
             ->with(
-                self::callback(function (string $query) use ($expectedOffset) {
+                self::callback(function (string $query) use ($expectedOffset): bool {
                     $this->assertEquals(
                         <<<GQL
                         {

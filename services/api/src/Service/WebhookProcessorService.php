@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Webhook;
+namespace App\Service;
 
 use App\Entity\Project;
 use App\Model\Webhook\WebhookInterface;
+use App\Webhook\WebhookProcessorInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class WebhookProcessor
+final class WebhookProcessorService implements WebhookProcessorServiceInterface
 {
     /**
      * @param WebhookProcessorInterface[] $webhookProcessors

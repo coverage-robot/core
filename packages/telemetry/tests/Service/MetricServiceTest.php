@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-class MetricServiceTest extends TestCase
+final class MetricServiceTest extends TestCase
 {
     use Assert;
 
@@ -95,7 +95,7 @@ class MetricServiceTest extends TestCase
         $mockMetricsLogger->expects($this->once())
             ->method('info')
             ->with(
-                self::callback(function (string $serialisedMetric) {
+                self::callback(function (string $serialisedMetric): bool {
                     $json = json_decode($serialisedMetric);
 
                     $this->assertJsonMatchesSchema(

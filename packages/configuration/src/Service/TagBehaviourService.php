@@ -4,15 +4,17 @@ namespace Packages\Configuration\Service;
 
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A wrapper around the default, and individual tag behaviour settings, which helps
  * to simplify querying behaviours for a specific tag.
  */
-class TagBehaviourService
+final class TagBehaviourService
 {
     public function __construct(
-        private readonly SettingService $settingService
+        #[Autowire(service: SettingService::class)]
+        private readonly SettingServiceInterface $settingService
     ) {
     }
 
@@ -29,14 +31,14 @@ class TagBehaviourService
             SettingKey::INDIVIDUAL_TAG_BEHAVIOURS
         );
 
-        foreach ($individualBehaviours as $behaviour) {
-            if ($behaviour->getName() !== $tag) {
+        foreach ($individualBehaviours as $individualBehaviour) {
+            if ($individualBehaviour->getName() !== $tag) {
                 continue;
             }
 
             // The tag has a tag-specific behaviour setting, so we should conform
             // to that
-            return $behaviour->getCarryforward();
+            return $individualBehaviour->getCarryforward();
         }
 
         // No individual setting has been defined, so fallback to the default

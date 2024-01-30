@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use Exception;
 
-class TokenException extends Exception
+final class TokenException extends Exception
 {
     public static function failedToCreateToken(int $attempts): self
     {

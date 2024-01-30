@@ -6,7 +6,7 @@ use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use PHPUnit\Framework\TestCase;
 
-class JwtGeneratorTest extends TestCase
+final class JwtGeneratorTest extends TestCase
 {
     public function testGenerateUsingValidKey(): void
     {

@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Entity\Project;
 use App\Exception\AuthenticationException;
 use App\Repository\ProjectRepository;
-use App\Service\AuthTokenService;
+use App\Service\AuthTokenServiceInterface;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -15,11 +15,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'app:new_project', description: 'Create a new project with tokens')]
-class NewProjectCommand extends Command
+final class NewProjectCommand extends Command
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
-        private readonly AuthTokenService $authTokenService
+        private readonly AuthTokenServiceInterface $authTokenService
     ) {
         parent::__construct();
     }

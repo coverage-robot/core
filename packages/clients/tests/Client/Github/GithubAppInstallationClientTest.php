@@ -16,7 +16,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-class GithubAppInstallationClientTest extends TestCase
+final class GithubAppInstallationClientTest extends TestCase
 {
     public function testAuthenticatingAsInstallation(): void
     {

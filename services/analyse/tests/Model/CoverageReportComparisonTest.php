@@ -13,7 +13,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class CoverageReportComparisonTest extends TestCase
+final class CoverageReportComparisonTest extends TestCase
 {
     #[DataProvider('coverageReportDataProvider')]
     public function testComparingCoveragePercentageChanges(

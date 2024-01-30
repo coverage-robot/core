@@ -7,7 +7,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ReportWaypointTest extends TestCase
+final class ReportWaypointTest extends TestCase
 {
     public function testWaypointLazyLoading(): void
     {
@@ -17,8 +17,8 @@ class ReportWaypointTest extends TestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-            history: static fn () => [],
-            diff: static fn () => []
+            history: static fn (): array => [],
+            diff: static fn (): array => []
         );
 
         $this->assertEquals(Provider::GITHUB, $waypoint->getProvider());

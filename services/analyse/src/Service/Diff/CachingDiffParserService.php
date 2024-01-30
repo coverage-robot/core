@@ -4,9 +4,10 @@ namespace App\Service\Diff;
 
 use App\Model\ReportWaypoint;
 use Override;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
-class CachingDiffParserService implements DiffParserServiceInterface
+final class CachingDiffParserService implements DiffParserServiceInterface
 {
     /**
      * @var WeakMap<ReportWaypoint, array<string, array<int, int>>>
@@ -14,7 +15,8 @@ class CachingDiffParserService implements DiffParserServiceInterface
     private WeakMap $cache;
 
     public function __construct(
-        private readonly DiffParserService $diffParserService
+        #[Autowire(service: DiffParserService::class)]
+        private readonly DiffParserServiceInterface $diffParserService
     ) {
         /**
          * @var WeakMap<ReportWaypoint, array<string, array<int, int>>> $cache

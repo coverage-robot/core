@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
-class ManualInputEventBuilderTest extends TestCase
+final class ManualInputEventBuilderTest extends TestCase
 {
     #[DataProvider('variedConsoleInputDataProvider')]
     public function testSupports(InputInterface $input, bool $expectedSupport): void
@@ -93,7 +93,7 @@ class ManualInputEventBuilderTest extends TestCase
                     InputInterface $input,
                     OutputInterface $output,
                     Question $question
-                ) {
+                ): string {
                     $this->assertEquals(
                         '<question>(1/1) Enter value for "some-field" (type: string):</question>',
                         $question->getQuestion()

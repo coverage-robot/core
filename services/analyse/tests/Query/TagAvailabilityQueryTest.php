@@ -17,7 +17,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TagAvailabilityQueryTest extends AbstractQueryTestCase
+final class TagAvailabilityQueryTest extends AbstractQueryTestCase
 {
     #[Override]
     public function getQueryClass(): QueryInterface
@@ -39,9 +39,6 @@ class TagAvailabilityQueryTest extends AbstractQueryTestCase
     public function testParseResults(array $queryResult): void
     {
         $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('isComplete')
-            ->willReturn(true);
         $mockBigQueryResult->expects($this->once())
             ->method('rows')
             ->willReturn($queryResult);

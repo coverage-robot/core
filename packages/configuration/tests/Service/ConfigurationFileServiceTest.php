@@ -2,10 +2,11 @@
 
 namespace Packages\Configuration\Tests\Service;
 
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Configuration\Setting\LineAnnotationSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
@@ -19,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 
-class ConfigurationFileServiceTest extends TestCase
+final class ConfigurationFileServiceTest extends TestCase
 {
     #[DataProvider('configurationFileDataProvider')]
     public function testParsingToFile(
@@ -30,10 +31,10 @@ class ConfigurationFileServiceTest extends TestCase
             new SettingService(
                 [
                     SettingKey::LINE_ANNOTATION->value => new LineAnnotationSetting(
-                        $this->createMock(DynamoDbClient::class)
+                        $this->createMock(DynamoDbClientInterface::class)
                     ),
                     SettingKey::PATH_REPLACEMENTS->value => new PathReplacementsSetting(
-                        $this->createMock(DynamoDbClient::class),
+                        $this->createMock(DynamoDbClientInterface::class),
                         new Serializer(
                             [
                                 new ArrayDenormalizer(),
@@ -68,7 +69,7 @@ class ConfigurationFileServiceTest extends TestCase
 
     public function testParseAndPersistFile(): void
     {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->expects($this->exactly(4))
             ->method('deserialize')
             ->willReturn('');

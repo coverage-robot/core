@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ManualInputEventBuilder implements EventBuilderInterface
+final class ManualInputEventBuilder implements EventBuilderInterface
 {
     public function __construct(
         private readonly PropertyInfoExtractor $propertyInfoExtractor,
@@ -81,7 +81,7 @@ class ManualInputEventBuilder implements EventBuilderInterface
                     implode(
                         "|",
                         array_map(
-                            static fn (Type $type) => $type->getClassName() ?? $type->getBuiltinType(),
+                            static fn (Type $type): string => $type->getClassName() ?? $type->getBuiltinType(),
                             $types
                         )
                     )
@@ -105,7 +105,7 @@ class ManualInputEventBuilder implements EventBuilderInterface
     {
         switch ($types[0]->getClassName() ?? $types[0]->getBuiltinType()) {
             case 'array':
-                $question->setNormalizer(static fn(?string $value) => $value !== null ? explode(',', $value) : $value);
+                $question->setNormalizer(static fn(?string $value): ?array => $value !== null ? explode(',', $value) : $value);
                 break;
             case Provider::class:
                 $question->setValidator($this->getEnumValidatorCallback(Provider::class));
@@ -140,7 +140,7 @@ class ManualInputEventBuilder implements EventBuilderInterface
      */
     private function getEnumValidatorCallback(string $enumClass): callable
     {
-        return static function (string $value) use ($enumClass) {
+        return static function (string $value) use ($enumClass): string {
             if (!call_user_func([$enumClass, 'tryFrom'], $value)) {
                 throw new InvalidArgumentException(
                     sprintf(
@@ -160,7 +160,7 @@ class ManualInputEventBuilder implements EventBuilderInterface
     private function getEnumAutocompleteValues(string $enumClass): array
     {
         return array_map(
-            fn (Provider $provider) => $provider->value,
+            static fn(Provider $provider) => $provider->value,
             call_user_func([$enumClass, 'cases'])
         );
     }

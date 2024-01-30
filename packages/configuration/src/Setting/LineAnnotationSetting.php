@@ -3,7 +3,7 @@
 namespace Packages\Configuration\Setting;
 
 use Override;
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -11,12 +11,12 @@ use Packages\Configuration\Exception\SettingNotFoundException;
 use Packages\Configuration\Exception\SettingRetrievalFailedException;
 use Packages\Contracts\Provider\Provider;
 
-class LineAnnotationSetting implements SettingInterface
+final class LineAnnotationSetting implements SettingInterface
 {
     private const true DEFAULT_VALUE = true;
 
     public function __construct(
-        private readonly DynamoDbClient $dynamoDbClient
+        private readonly DynamoDbClientInterface $dynamoDbClient
     ) {
     }
 

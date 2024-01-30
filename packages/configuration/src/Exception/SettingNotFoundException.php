@@ -4,6 +4,6 @@ namespace Packages\Configuration\Exception;
 
 use RuntimeException;
 
-class SettingNotFoundException extends RuntimeException
+final class SettingNotFoundException extends RuntimeException
 {
 }

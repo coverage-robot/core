@@ -21,7 +21,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class BigQueryMetadataBuilderServiceTest extends KernelTestCase
+final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
 {
     public function testBuildRow(): void
     {

@@ -71,7 +71,7 @@ trait OverallCommitStateAwareTrait
 
         /** @var bool $result */
         $result = $this->backoffStrategy
-            ->run(function () use ($currentState, &$previousTotalStateChanges) {
+            ->run(function () use ($currentState, &$previousTotalStateChanges): bool {
                 $mostRecentEventStateChanges = $this->eventStoreService->getAllStateChangesForCommit(
                     $currentState->getUniqueRepositoryIdentifier(),
                     $currentState->getCommit()
@@ -79,7 +79,7 @@ trait OverallCommitStateAwareTrait
 
                 $currentTotalStateChanges = array_sum(
                     array_map(
-                        static fn(EventStateChangeCollection $stateChanges) => count($stateChanges->getEvents()),
+                        static fn(EventStateChangeCollection $stateChanges): int => count($stateChanges->getEvents()),
                         $mostRecentEventStateChanges
                     )
                 );
@@ -159,14 +159,14 @@ trait OverallCommitStateAwareTrait
         OrchestratedEventInterface $newState,
         array $collections
     ): bool {
-        foreach ($collections as $stateChanges) {
-            $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
+        foreach ($collections as $collection) {
+            $previousState = $this->eventStoreService->reduceStateChangesToEvent($collection);
 
             if (!$previousState) {
                 $this->eventProcessorLogger->warning(
                     'Unable to reduce state changes back into an event, skipping.',
                     [
-                        'stateChanges' => $stateChanges
+                        'stateChanges' => $collection
                     ]
                 );
 
@@ -181,7 +181,7 @@ trait OverallCommitStateAwareTrait
                     ),
                     [
                         'ongoingEvent' => $previousState,
-                        'stateChanges' => $stateChanges
+                        'stateChanges' => $collection
                     ]
                 );
 
@@ -207,14 +207,14 @@ trait OverallCommitStateAwareTrait
         $lastIngestionEvent = null;
         $finalisedEvent = null;
 
-        foreach ($collections as $stateChanges) {
-            $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
+        foreach ($collections as $collection) {
+            $previousState = $this->eventStoreService->reduceStateChangesToEvent($collection);
 
             if (!$previousState) {
                 $this->eventProcessorLogger->warning(
                     'Unable to reduce state changes back into an event, skipping.',
                     [
-                        'stateChanges' => $stateChanges->getEvents()
+                        'stateChanges' => $collection->getEvents()
                     ]
                 );
 
@@ -227,7 +227,7 @@ trait OverallCommitStateAwareTrait
                 }
 
                 if (
-                    !$lastIngestionEvent ||
+                    !$lastIngestionEvent instanceof Ingestion ||
                     $previousState->getEventTime() > $lastIngestionEvent->getEventTime()
                 ) {
                     $lastIngestionEvent = $previousState;
@@ -236,7 +236,10 @@ trait OverallCommitStateAwareTrait
 
             if (
                 $previousState instanceof Finalised &&
-                (!$finalisedEvent || $previousState->getEventTime() > $finalisedEvent->getEventTime())
+                (
+                    !$finalisedEvent instanceof Finalised ||
+                    $previousState->getEventTime() > $finalisedEvent->getEventTime()
+                )
             ) {
                 $finalisedEvent = $previousState;
             }
@@ -255,7 +258,10 @@ trait OverallCommitStateAwareTrait
             return false;
         }
 
-        if ($lastIngestionEvent && $lastIngestionEvent->getEventTime() > $finalisedEvent->getEventTime()) {
+        if (
+            $lastIngestionEvent instanceof Ingestion &&
+            $lastIngestionEvent->getEventTime() > $finalisedEvent->getEventTime()
+        ) {
             /**
              * This indicates that at some point we've indirectly finalised the coverage results on a commit
              * **before** all of the coverage files were ingested. This is potentially an error, because it

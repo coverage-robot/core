@@ -3,7 +3,7 @@
 namespace Packages\Configuration\Tests\Setting;
 
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -17,11 +17,11 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DefaultTagBehaviourSettingTest extends TestCase
+final class DefaultTagBehaviourSettingTest extends TestCase
 {
     public function testSettingDefaultTagBehaviourSetting(): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('setSettingInStore')
             ->with(
@@ -62,7 +62,7 @@ class DefaultTagBehaviourSettingTest extends TestCase
             carryforward: false
         );
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getSettingFromStore')
             ->with(
@@ -96,7 +96,7 @@ class DefaultTagBehaviourSettingTest extends TestCase
     public function testValidatingDefaultTagBehaviourValue(mixed $settingValue, bool $expectedValid): void
     {
         $defaultTagBehaviourSetting = new DefaultTagBehaviourSetting(
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             $this->createMock(Serializer::class),
             Validation::createValidatorBuilder()
                 ->enableAttributeMapping()

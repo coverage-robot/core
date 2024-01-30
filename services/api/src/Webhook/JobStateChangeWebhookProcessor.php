@@ -16,16 +16,19 @@ use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\JobStateChange;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
+final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
-        private readonly EventBusClient $eventBusClient,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly EnvironmentServiceInterface $environmentService
     ) {
     }

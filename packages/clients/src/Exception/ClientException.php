@@ -5,7 +5,7 @@ namespace Packages\Clients\Exception;
 use Exception;
 use Throwable;
 
-class ClientException extends Exception
+final class ClientException extends Exception
 {
     public static function authenticationException(?Throwable $previous): self
     {

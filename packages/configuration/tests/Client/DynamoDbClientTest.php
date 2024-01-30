@@ -22,7 +22,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class DynamoDbClientTest extends TestCase
+final class DynamoDbClientTest extends TestCase
 {
     public function testArgumentsWhenStoringSettingValue(): void
     {
@@ -43,7 +43,7 @@ class DynamoDbClientTest extends TestCase
             ->method('putItem')
             ->with(
                 self::callback(
-                    function (PutItemInput $input) {
+                    function (PutItemInput $input): bool {
                         $this->assertEquals(
                             'coverage-configuration-test',
                             $input->getTableName()
@@ -100,7 +100,7 @@ class DynamoDbClientTest extends TestCase
             ->method('query')
             ->with(
                 self::callback(
-                    function (QueryInput $input) {
+                    function (QueryInput $input): bool {
                         $this->assertEquals(
                             'coverage-configuration-test',
                             $input->getTableName()
@@ -191,7 +191,7 @@ class DynamoDbClientTest extends TestCase
             ->method('deleteItem')
             ->with(
                 self::callback(
-                    function (DeleteItemInput $input) {
+                    function (DeleteItemInput $input): bool {
                         $this->assertEquals(
                             'coverage-configuration-test',
                             $input->getTableName()

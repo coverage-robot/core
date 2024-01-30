@@ -2,22 +2,21 @@
 
 namespace App\Tests\Service\Diff\Github;
 
+use App\Model\ReportWaypoint;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
-use App\Model\ReportWaypoint;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SebastianBergmann\Diff\Parser;
 
-class GithubDiffParserServiceTest extends TestCase
+final class GithubDiffParserServiceTest extends TestCase
 {
     public function testGetDiffFromPullRequest(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockPullRequestApi = $this->createMock(PullRequest::class);
 
         $parser = new GithubDiffParserService(
@@ -26,13 +25,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockWaypoint();
-
-        $mockUpload->expects($this->once())
-            ->method('getPullRequest')
-            ->willReturn(1);
-        $mockUpload->expects($this->exactly(2))
-            ->method('getCommit');
+        $mockWaypoint = $this->getMockWaypoint(1);
 
         $mockApiClient->expects($this->once())
             ->method('authenticateAsRepositoryOwner')
@@ -72,7 +65,7 @@ class GithubDiffParserServiceTest extends TestCase
                 DIFF
             );
 
-        $addedLines = $parser->get($mockUpload);
+        $addedLines = $parser->get($mockWaypoint);
 
         $this->assertEquals(
             [
@@ -85,7 +78,7 @@ class GithubDiffParserServiceTest extends TestCase
 
     public function testGetDiffFromCommit(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockRepoApi = $this->createMock(Repo::class);
 
         $parser = new GithubDiffParserService(
@@ -94,13 +87,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockWaypoint();
-
-        $mockUpload->expects($this->once())
-            ->method('getPullRequest')
-            ->willReturn(null);
-        $mockUpload->expects($this->atLeast(1))
-            ->method('getCommit');
+        $mockWaypoint = $this->getMockWaypoint();
 
         $mockApiClient->expects($this->once())
             ->method('authenticateAsRepositoryOwner')
@@ -171,7 +158,7 @@ class GithubDiffParserServiceTest extends TestCase
                 ]
             ]);
 
-        $addedLines = $parser->get($mockUpload);
+        $addedLines = $parser->get($mockWaypoint);
 
         $this->assertEquals(
             [
@@ -185,7 +172,7 @@ class GithubDiffParserServiceTest extends TestCase
 
     public function testGetEmptyDiffFromCommit(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockRepoApi = $this->createMock(Repo::class);
 
         $parser = new GithubDiffParserService(
@@ -194,13 +181,7 @@ class GithubDiffParserServiceTest extends TestCase
             new NullLogger()
         );
 
-        $mockUpload = $this->getMockWaypoint();
-
-        $mockUpload->expects($this->once())
-            ->method('getPullRequest')
-            ->willReturn(null);
-        $mockUpload->expects($this->atLeast(1))
-            ->method('getCommit');
+        $mockWaypoint = $this->getMockWaypoint();
 
         $mockApiClient->expects($this->once())
             ->method('authenticateAsRepositoryOwner')
@@ -217,7 +198,7 @@ class GithubDiffParserServiceTest extends TestCase
                 'files' => []
             ]);
 
-        $addedLines = $parser->get($mockUpload);
+        $addedLines = $parser->get($mockWaypoint);
 
         $this->assertEquals(
             [],
@@ -228,7 +209,7 @@ class GithubDiffParserServiceTest extends TestCase
     public function testGetProvider(): void
     {
         $parser = new GithubDiffParserService(
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             new Parser(),
             new NullLogger()
         );
@@ -239,16 +220,17 @@ class GithubDiffParserServiceTest extends TestCase
         );
     }
 
-    private function getMockWaypoint(): Upload|MockObject
+    private function getMockWaypoint(?int $pullRequest = null): ReportWaypoint
     {
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->expects($this->exactly(4))
-            ->method('getOwner')
-            ->willReturn('mock-owner');
-        $mockWaypoint->expects($this->exactly(3))
-            ->method('getRepository')
-            ->willReturn('mock-repository');
-
-        return $mockWaypoint;
+        return new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: [],
+            pullRequest: $pullRequest
+        );
     }
 }

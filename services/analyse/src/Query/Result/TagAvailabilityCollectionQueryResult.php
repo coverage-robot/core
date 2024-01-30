@@ -5,7 +5,7 @@ namespace App\Query\Result;
 use OutOfBoundsException;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class TagAvailabilityCollectionQueryResult implements QueryResultInterface
+final class TagAvailabilityCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param TagAvailabilityQueryResult[] $tagAvailability
@@ -35,7 +35,7 @@ class TagAvailabilityCollectionQueryResult implements QueryResultInterface
     public function getAvailableTagNames(): array
     {
         return array_map(
-            static fn(TagAvailabilityQueryResult $availability) => $availability->getTagName(),
+            static fn(TagAvailabilityQueryResult $availability): string => $availability->getTagName(),
             $this->tagAvailability
         );
     }

@@ -4,7 +4,7 @@ namespace Packages\Configuration\Setting;
 
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Override;
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -18,12 +18,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class PathReplacementsSetting implements SettingInterface
+final class PathReplacementsSetting implements SettingInterface
 {
     private const array DEFAULT_VALUE = [];
 
     public function __construct(
-        private readonly DynamoDbClient $dynamoDbClient,
+        private readonly DynamoDbClientInterface $dynamoDbClient,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly ValidatorInterface $validator,
     ) {
@@ -158,7 +158,7 @@ class PathReplacementsSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid value for setting: {$violations}"
+                'Invalid value for setting: ' . $violations
             );
         }
 
@@ -166,7 +166,7 @@ class PathReplacementsSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid path replacement value for setting: {$violations}"
+                'Invalid path replacement value for setting: ' . $violations
             );
         }
     }

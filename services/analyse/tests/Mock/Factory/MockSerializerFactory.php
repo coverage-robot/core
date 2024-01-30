@@ -6,7 +6,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class MockSerializerFactory
+final class MockSerializerFactory
 {
     public static function getMock(
         TestCase $test,

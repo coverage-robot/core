@@ -3,6 +3,7 @@
 namespace App\Handler;
 
 use App\Service\Publisher\MessagePublisherService;
+use App\Service\Publisher\PublisherServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
@@ -15,12 +16,14 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\Service\MessageValidationService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandler extends SqsHandler
+final class EventHandler extends SqsHandler
 {
     public function __construct(
-        private readonly MessagePublisherService $messagePublisherService,
+        #[Autowire(service: MessagePublisherService::class)]
+        private readonly PublisherServiceInterface $messagePublisherService,
         private readonly SerializerInterface $serializer,
         private readonly MessageValidationService $messageValidationService,
         private readonly LoggerInterface $eventHandlerLogger,
@@ -41,7 +44,7 @@ class EventHandler extends SqsHandler
          */
         $messages = array_reduce(
             $messages,
-            static function (array $messages, PublishableMessageInterface $message) {
+            static function (array $messages, PublishableMessageInterface $message): array {
 
                 if ($message instanceof PublishableMessageCollection) {
                     return [...$messages, ...$message->getMessages()];

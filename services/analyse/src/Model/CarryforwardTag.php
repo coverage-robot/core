@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CarryforwardTag extends Tag
+final class CarryforwardTag extends Tag
 {
     /**
      * @param DateTimeImmutable[] $ingestTimes

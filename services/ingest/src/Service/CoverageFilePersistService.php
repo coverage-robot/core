@@ -9,7 +9,7 @@ use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CoverageFilePersistService
+final class CoverageFilePersistService implements CoverageFilePersistServiceInterface
 {
     public function __construct(
         #[TaggedIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
@@ -19,19 +19,18 @@ class CoverageFilePersistService
     }
 
     /**
-     * Persist a parsed project's coverage file into all supported services.
-     *
+     * @inheritDoc
      */
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         $successful = true;
 
-        foreach ($this->persistServices as $service) {
-            if (!$service instanceof PersistServiceInterface) {
+        foreach ($this->persistServices as $persistService) {
+            if (!$persistService instanceof PersistServiceInterface) {
                 $this->persistServiceLogger->critical(
                     'Persist service does not implement the correct interface.',
                     [
-                        'persistService' => $service::class
+                        'persistService' => $persistService::class
                     ]
                 );
 
@@ -42,17 +41,17 @@ class CoverageFilePersistService
                 sprintf(
                     'Persisting %s into storage using %s',
                     (string)$upload,
-                    $service::class
+                    $persistService::class
                 )
             );
 
             try {
-                $successful = $service->persist($upload, $coverage) && $successful;
+                $successful = $persistService->persist($upload, $coverage) && $successful;
 
                 $this->persistServiceLogger->info(
                     sprintf(
                         'Persist using %s continues to be a %s',
-                        $service::class,
+                        $persistService::class,
                         $successful ? 'success' : 'fail'
                     )
                 );

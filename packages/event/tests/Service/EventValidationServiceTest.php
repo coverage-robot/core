@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
-class EventValidationServiceTest extends TestCase
+final class EventValidationServiceTest extends TestCase
 {
     #[DataProvider('eventDataProvider')]
     public function testValidatingEvents(EventInterface $event, bool $isValid): void

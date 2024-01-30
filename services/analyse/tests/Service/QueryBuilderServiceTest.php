@@ -7,8 +7,10 @@ use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\QueryInterface;
 use App\Query\Result\CoverageQueryResult;
-use App\Query\TotalCoverageQuery;
+use App\Query\Result\QueryResultInterface;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Service\QueryBuilderService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use DateTimeImmutable;
@@ -22,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class QueryBuilderServiceTest extends KernelTestCase
+final class QueryBuilderServiceTest extends KernelTestCase
 {
     use MatchesSnapshots;
 
@@ -63,9 +65,9 @@ class QueryBuilderServiceTest extends KernelTestCase
                 MockQueryFactory::createMock(
                     $this,
                     $this->getContainer(),
-                    TotalCoverageQuery::class,
+                    QueryInterface::class,
                     'SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"',
-                    $this->createMock(CoverageQueryResult::class)
+                    $this->createMock(QueryResultInterface::class)
                 ),
                 'mock-table',
                 $queryParameters
@@ -86,14 +88,21 @@ class QueryBuilderServiceTest extends KernelTestCase
 
         $this->expectException(QueryException::class);
 
+        $mockQuery = MockQueryFactory::createMock(
+            $this,
+            $this->getContainer(),
+            QueryInterface::class,
+            '',
+            $this->createMock(QueryResultInterface::class)
+        );
+
+        $mockQuery->expects($this->once())
+            ->method('validateParameters')
+            ->with($queryParameters)
+            ->willThrowException(new QueryException('mock-message'));
+
         $queryBuilder->build(
-            MockQueryFactory::createMock(
-                $this,
-                $this->getContainer(),
-                TotalCoverageQuery::class,
-                '',
-                $this->createMock(CoverageQueryResult::class)
-            ),
+            $mockQuery,
             'mock-table',
             $queryParameters
         );

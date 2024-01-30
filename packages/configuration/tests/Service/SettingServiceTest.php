@@ -10,7 +10,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class SettingServiceTest extends TestCase
+final class SettingServiceTest extends TestCase
 {
     #[DataProvider('trueFalseDataProvider')]
     public function testSettingValueOnlySetsWhenCacheIsNotIdentical(bool $isSetSuccessful): void
@@ -127,7 +127,7 @@ class SettingServiceTest extends TestCase
     }
 
     #[DataProvider('trueFalseDataProvider')]
-    public function testDeletingValue($isDeleteSuccessful): void
+    public function testDeletingValue(mixed $isDeleteSuccessful): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
         $mockSetting->expects($this->once())

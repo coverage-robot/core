@@ -3,40 +3,41 @@
 namespace App\Tests\Service;
 
 use App\Model\ReportWaypoint;
-use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\QueryResultInterface;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\CachingCoverageAnalyserService;
-use App\Service\Carryforward\CarryforwardTagService;
-use App\Service\Diff\DiffParserService;
+use App\Service\Carryforward\CarryforwardTagServiceInterface;
+use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
-use App\Service\QueryService;
+use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class CachingCoverageAnalyserServiceTest extends TestCase
+final class CachingCoverageAnalyserServiceTest extends TestCase
 {
     public function testCachingAndLazyLoadingReportMetrics(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
 
         // We're only performing 2 queries, meaning the others must be lazy
         // loaded
         $mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnCallback(
-                static fn(string $queryClass) => match ($queryClass) {
+                static fn(string $queryClass): QueryResultInterface|null => match ($queryClass) {
                     TotalUploadsQuery::class => new TotalUploadsQueryResult(
                         ['1'],
                         [new DateTimeImmutable('2021-01-01')],
                         [new Tag('mock-tag', 'mock-commit')],
                         null
                     ),
-                    TotalCoverageQuery::class => new CoverageQueryResult(
+                    TotalCoverageQuery::class => new TotalCoverageQueryResult(
                         95.6,
                         2,
                         4,
@@ -47,9 +48,9 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 }
             );
 
-        $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
         $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
         $cachingCoverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
@@ -58,9 +59,16 @@ class CachingCoverageAnalyserServiceTest extends TestCase
             $mockCarryforwardTagService
         );
 
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->method('getProvider')
-            ->willReturn(Provider::GITHUB);
+        $mockWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            ref: 'ref',
+            commit: 'commit',
+            history: [],
+            diff: [],
+            pullRequest: 12
+        );
 
         $report = $cachingCoverageAnalyserService->analyse($mockWaypoint);
 
@@ -82,17 +90,17 @@ class CachingCoverageAnalyserServiceTest extends TestCase
     #[DataProvider('diffCoverageDataProvider')]
     public function testCachingDiffCoveragePercentage(
         array $diff,
-        CoverageQueryResult $diffCoverageQueryResult,
+        TotalCoverageQueryResult $diffCoverageQueryResult,
         ?float $expectedDiffCoveragePercentage
     ): void {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
 
         // We're only performing 2 queries, meaning the others must be lazy
         // loaded
         $mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnCallback(
-                static fn(string $queryClass) => match ($queryClass) {
+                static fn(string $queryClass): QueryResultInterface|null => match ($queryClass) {
                     TotalUploadsQuery::class => new TotalUploadsQueryResult(
                         ['1'],
                         [new DateTimeImmutable('2021-01-01')],
@@ -104,17 +112,24 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 }
             );
 
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->method('getProvider')
-            ->willReturn(Provider::GITHUB);
+        $mockWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'owner',
+            repository: 'repository',
+            ref: 'ref',
+            commit: 'commit',
+            history: [],
+            diff: [],
+            pullRequest: 12
+        );
 
-        $mockDiffParserService = $this->createMock(DiffParserService::class);
+        $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
         $mockDiffParserService->expects($this->once())
             ->method('get')
             ->with($mockWaypoint)
             ->willReturn($diff);
 
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagService::class);
+        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
         $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
 
@@ -149,7 +164,7 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 [
                     'mock-file' => [1,2,3]
                 ],
-                new CoverageQueryResult(
+                new TotalCoverageQueryResult(
                     0.0,
                     3,
                     0,
@@ -162,7 +177,7 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 [
                     'mock-file' => [1,2,3]
                 ],
-                new CoverageQueryResult(
+                new TotalCoverageQueryResult(
                     66.6,
                     3,
                     2,
@@ -175,7 +190,7 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 [
                     'mock-file' => [1,2,3]
                 ],
-                new CoverageQueryResult(
+                new TotalCoverageQueryResult(
                     100,
                     3,
                     3,
@@ -188,7 +203,7 @@ class CachingCoverageAnalyserServiceTest extends TestCase
                 [
                     'mock-file' => [1,2,3]
                 ],
-                new CoverageQueryResult(
+                new TotalCoverageQueryResult(
                     0,
                     0,
                     0,

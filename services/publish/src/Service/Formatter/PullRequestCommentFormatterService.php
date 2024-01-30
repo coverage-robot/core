@@ -7,7 +7,7 @@ use DateTimeZone;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 
-class PullRequestCommentFormatterService
+final class PullRequestCommentFormatterService
 {
     public function format(EventInterface $event, PublishablePullRequestMessage $message): string
     {
@@ -111,7 +111,7 @@ class PullRequestCommentFormatterService
             implode(
                 PHP_EOL,
                 array_map(
-                    static fn(array $tag) => sprintf(
+                    static fn(array $tag): string => sprintf(
                         '| %s | %s | %s | %s | %s | %s%% |',
                         sprintf(
                             '%s%s',
@@ -156,7 +156,7 @@ class PullRequestCommentFormatterService
             implode(
                 PHP_EOL,
                 array_map(
-                    static fn(array $file) => sprintf(
+                    static fn(array $file): string => sprintf(
                         '| %s | %s%% |',
                         (string)$file["fileName"],
                         (float)$file["coveragePercentage"],

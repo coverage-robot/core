@@ -11,7 +11,7 @@ use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
-use App\Service\QueryService;
+use App\Service\QueryServiceInterface;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockTagBehaviourServiceFactory;
 use Packages\Contracts\Provider\Provider;
@@ -19,17 +19,17 @@ use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CarryforwardTagServiceTest extends TestCase
+final class CarryforwardTagServiceTest extends TestCase
 {
     public function testNoTagsToCarryforward(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
                 TagAvailabilityQuery::class,
                 self::callback(
-                    function (QueryParameterBag $queryParameterBag) {
+                    function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
                         $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
@@ -78,13 +78,13 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagToCarryforwardFromRecentCommit(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
                 TagAvailabilityQuery::class,
                 self::callback(
-                    function (QueryParameterBag $queryParameterBag) {
+                    function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
                         $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
@@ -183,13 +183,13 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagToCarryforwardWithIgnoreBehaviour(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
                 TagAvailabilityQuery::class,
                 self::callback(
-                    function (QueryParameterBag $queryParameterBag) {
+                    function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
                         $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
@@ -282,13 +282,13 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagsToCarryforwardFromMultiplePagesOfCommits(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
                 TagAvailabilityQuery::class,
                 self::callback(
-                    function (QueryParameterBag $queryParameterBag) {
+                    function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
                         $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
@@ -346,7 +346,7 @@ class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                history: static fn(ReportWaypoint $waypoint, int $page): array => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -443,13 +443,13 @@ class CarryforwardTagServiceTest extends TestCase
 
     public function testTagsToCarryforwardOutOfRangeOfCommits(): void
     {
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
                 TagAvailabilityQuery::class,
                 self::callback(
-                    function (QueryParameterBag $queryParameterBag) {
+                    function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
                         $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;

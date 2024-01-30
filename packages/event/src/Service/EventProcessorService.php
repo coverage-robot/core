@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class EventProcessorService implements EventProcessorServiceInterface
+final class EventProcessorService implements EventProcessorServiceInterface
 {
     /**
      * @param array<value-of<Event>, EventProcessorInterface> $eventProcessors

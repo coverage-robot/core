@@ -36,7 +36,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
          * @var bool|null $result
          */
         $result = $this->backoffStrategy
-            ->run(function () use ($previousState) {
+            ->run(function () use ($previousState): bool {
                 $this->eventProcessorLogger->info(
                     sprintf(
                         'Attempting to record state change for %s in event store.',
@@ -69,7 +69,7 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
         $previousState = $this->eventStoreService->reduceStateChangesToEvent($stateChanges);
 
         if (
-            $previousState &&
+            $previousState instanceof OrchestratedEventInterface &&
             $previousState->getEventTime() > $currentState->getEventTime()
         ) {
             $this->eventProcessorLogger->info(

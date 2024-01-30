@@ -18,7 +18,7 @@ use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class DynamoDbClientTest extends TestCase
+final class DynamoDbClientTest extends TestCase
 {
     public function testPutQueryResultInCache(): void
     {
@@ -34,7 +34,7 @@ class DynamoDbClientTest extends TestCase
             ->method('putItem')
             ->with(
                 self::callback(
-                    function (array $parameters) {
+                    function (array $parameters): bool {
                         $this->assertEquals(
                             'mock-query-cache-table-name',
                             $parameters['TableName']
@@ -110,7 +110,7 @@ class DynamoDbClientTest extends TestCase
             ->method('getItem')
             ->with(
                 self::callback(
-                    function (GetItemInput $input) {
+                    function (GetItemInput $input): bool {
                         $this->assertEquals(
                             'mock-query-cache-table-name',
                             $input->getTableName()

@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class FileCoverageQuery extends AbstractLineCoverageQuery
+final class FileCoverageQuery extends AbstractLineCoverageQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -81,10 +81,6 @@ class FileCoverageQuery extends AbstractLineCoverageQuery
     #[Override]
     public function parseResults(QueryResults $results): FileCoverageCollectionQueryResult
     {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
         $files = $results->rows();
 
         /** @var FileCoverageCollectionQueryResult $results */

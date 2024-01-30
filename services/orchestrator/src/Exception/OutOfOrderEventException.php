@@ -4,6 +4,6 @@ namespace App\Exception;
 
 use Exception;
 
-class OutOfOrderEventException extends Exception
+final class OutOfOrderEventException extends Exception
 {
 }

@@ -9,6 +9,8 @@ use Packages\Contracts\Provider\Provider;
 
 interface CoverageAnalyserServiceInterface
 {
+    final public const int DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
+
     /**
      * Get a waypoint for a particular point in time (or, a commit) for a provider.
      */

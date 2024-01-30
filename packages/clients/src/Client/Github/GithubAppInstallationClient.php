@@ -8,18 +8,22 @@ use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
 use Github\AuthMethod;
+use Github\Client;
 use Github\ResultPager;
 use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use UnexpectedValueException;
 
-class GithubAppInstallationClient
+final class GithubAppInstallationClient implements GithubAppInstallationClientInterface
 {
     private ?string $owner = null;
 
     public function __construct(
-        private readonly GithubAppClient $appClient,
-        private readonly GithubAppClient $installationClient
+        #[Autowire(service: GithubAppClient::class)]
+        private readonly Client $appClient,
+        #[Autowire(service: GithubAppClient::class)]
+        private readonly Client $installationClient
     ) {
     }
 
@@ -86,7 +90,7 @@ class GithubAppInstallationClient
         $installs = array_filter(
             $this->appClient->apps()
                 ->findInstallations(),
-            static fn(array $install) => isset($install['id'], $install['account']['login'])
+            static fn(array $install): bool => isset($install['id'], $install['account']['login'])
                 && $install['account']['login'] === $owner
         );
 

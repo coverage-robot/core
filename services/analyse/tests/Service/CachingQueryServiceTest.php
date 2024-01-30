@@ -2,22 +2,26 @@
 
 namespace App\Tests\Service;
 
-use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
+use App\Query\QueryInterface;
 use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\QueryResultInterface;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\CachingQueryService;
-use App\Service\QueryBuilderService;
-use App\Service\QueryService;
+use App\Service\QueryBuilderServiceInterface;
+use App\Service\QueryServiceInterface;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CachingQueryServiceTest extends KernelTestCase
+final class CachingQueryServiceTest extends KernelTestCase
 {
     public function testRunUncacheableQuery(): void
     {
@@ -26,7 +30,7 @@ class CachingQueryServiceTest extends KernelTestCase
         $parameters = (new QueryParameterBag())
             ->set(QueryParameter::COMMIT, 'mock-commit');
 
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('getQueryClass')
             ->with(TotalUploadsQuery::class)
@@ -34,13 +38,14 @@ class CachingQueryServiceTest extends KernelTestCase
                 MockQueryFactory::createMock(
                     $this,
                     $this->getContainer(),
-                    TotalUploadsQuery::class,
+                    QueryInterface::class,
                     '',
-                    $queryResult
+                    $queryResult,
+                    false
                 )
             );
 
-        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService = $this->createMock(QueryBuilderServiceInterface::class);
         $mockQueryBuilderService->expects($this->never())
             ->method('hash');
 
@@ -49,7 +54,7 @@ class CachingQueryServiceTest extends KernelTestCase
             ->with(TotalUploadsQuery::class, $parameters)
             ->willReturn($queryResult);
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->never())
             ->method('tryFromQueryCache');
         $mockDynamoDbClient->expects($this->never())
@@ -60,7 +65,7 @@ class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -71,7 +76,7 @@ class CachingQueryServiceTest extends KernelTestCase
 
     public function testRunCacheableQueryWithoutExistingCachedValue(): void
     {
-        $queryResult = new CoverageQueryResult(
+        $queryResult = new TotalCoverageQueryResult(
             100,
             1,
             1,
@@ -82,7 +87,7 @@ class CachingQueryServiceTest extends KernelTestCase
         $parameters = (new QueryParameterBag())
             ->set(QueryParameter::COMMIT, 'mock-commit');
 
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('getQueryClass')
             ->with(TotalCoverageQuery::class)
@@ -90,9 +95,10 @@ class CachingQueryServiceTest extends KernelTestCase
                 MockQueryFactory::createMock(
                     $this,
                     $this->getContainer(),
-                    TotalCoverageQuery::class,
+                    QueryInterface::class,
                     '',
-                    $queryResult
+                    $queryResult,
+                    true
                 )
             );
 
@@ -101,13 +107,13 @@ class CachingQueryServiceTest extends KernelTestCase
             ->with(TotalCoverageQuery::class, $parameters)
             ->willReturn($queryResult);
 
-        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService = $this->createMock(QueryBuilderServiceInterface::class);
         $mockQueryBuilderService->expects($this->once())
             ->method('hash')
             ->with(TotalCoverageQuery::class, $parameters)
             ->willReturn('mock-cache-key');
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('tryFromQueryCache')
             ->willReturn(null);
@@ -120,7 +126,7 @@ class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -134,7 +140,7 @@ class CachingQueryServiceTest extends KernelTestCase
         $parameters = (new QueryParameterBag())
             ->set(QueryParameter::COMMIT, 'mock-commit');
 
-        $mockQueryService = $this->createMock(QueryService::class);
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('getQueryClass')
             ->with(TotalCoverageQuery::class)
@@ -142,24 +148,25 @@ class CachingQueryServiceTest extends KernelTestCase
                 MockQueryFactory::createMock(
                     $this,
                     $this->getContainer(),
-                    TotalCoverageQuery::class,
+                    QueryInterface::class,
                     '',
-                    $this->createMock(CoverageQueryResult::class)
+                    $this->createMock(QueryResultInterface::class),
+                    true
                 )
             );
         $mockQueryService->expects($this->never())
             ->method('runQuery');
 
-        $mockQueryBuilderService = $this->createMock(QueryBuilderService::class);
+        $mockQueryBuilderService = $this->createMock(QueryBuilderServiceInterface::class);
         $mockQueryBuilderService->expects($this->once())
             ->method('hash')
             ->with(TotalCoverageQuery::class, $parameters)
             ->willReturn('mock-cache-key');
 
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('tryFromQueryCache')
-            ->willReturn(new CoverageQueryResult(100, 1, 1, 0, 0));
+            ->willReturn(new TotalCoverageQueryResult(100, 1, 1, 0, 0));
         $mockDynamoDbClient->expects($this->never())
             ->method('putQueryResultInCache');
 
@@ -168,7 +175,7 @@ class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(

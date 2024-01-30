@@ -7,7 +7,7 @@ use App\Model\QueryParameterBag;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
-class QueryParameterBagTest extends TestCase
+final class QueryParameterBagTest extends TestCase
 {
     public function testSerialize(): void
     {

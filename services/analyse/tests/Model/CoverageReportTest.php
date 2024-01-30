@@ -9,30 +9,37 @@ use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
-class CoverageReportTest extends TestCase
+final class CoverageReportTest extends TestCase
 {
     public function testReportLazyLoading(): void
     {
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-
         $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], []);
         $tagCoverage = new TagCoverageCollectionQueryResult([]);
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
 
         $report = new CoverageReport(
-            $mockWaypoint,
-            static fn() => $totalUploads,
-            static fn() => 1,
-            static fn() => 2,
-            static fn() => 3,
-            static fn() => 99.9,
-            static fn() => $tagCoverage,
-            static fn() => 95,
-            static fn() => $leastCoveredDiffFiles,
-            static fn() => $diffLineCoverage
+            new ReportWaypoint(
+                provider: Provider::GITHUB,
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                commit: 'mock-commit',
+                history: [],
+                diff: []
+            ),
+            static fn(): TotalUploadsQueryResult => $totalUploads,
+            static fn(): int => 1,
+            static fn(): int => 2,
+            static fn(): int => 3,
+            static fn(): float => 99.9,
+            static fn(): TagCoverageCollectionQueryResult => $tagCoverage,
+            static fn(): int => 95,
+            static fn(): FileCoverageCollectionQueryResult => $leastCoveredDiffFiles,
+            static fn(): LineCoverageCollectionQueryResult => $diffLineCoverage
         );
 
         $this->assertEquals(

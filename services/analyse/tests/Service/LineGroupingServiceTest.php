@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class LineGroupingServiceTest extends TestCase
+final class LineGroupingServiceTest extends TestCase
 {
     #[DataProvider('diffDataProvider')]
     public function testGroupingAnnotationsAgainstDiff(
