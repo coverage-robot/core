@@ -649,7 +649,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
+                "reference": "2a8eeba2ae5037f0bfcf9c20da98265c859b3687"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -663,7 +663,8 @@
                 "symfony/yaml": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -677,6 +678,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -715,7 +719,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
+                "reference": "4137558ae4ae4f6e591f90c4f72e2dea23d834eb"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -729,7 +733,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.4"
             },
             "type": "library",
             "autoload": {
@@ -743,6 +748,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -759,7 +767,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "0f7b07d9e3010c80e67bc74ae710f9dd06478d08"
+                "reference": "43540f2df1e1dea01c3e94e4b667f5c022d31780"
             },
             "require": {
                 "async-aws/sqs": "^2.0",
@@ -770,7 +778,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -784,6 +793,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -800,7 +812,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -816,6 +828,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
             "type": "library",
@@ -830,6 +843,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -8956,7 +8972,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "6eaf120ad505526199826a6acccb43cfdfd1069d"
+                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -8970,7 +8986,8 @@
             },
             "require-dev": {
                 "bref/bref": "^2.1",
-                "phpunit/phpunit": "^10.4"
+                "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -8984,6 +9001,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -11132,16 +11152,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.8.0",
+            "version": "3.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "5805f7a4e4958dbb5e944ef1e6edae0a303765e7"
+                "reference": "14f5fff1e64118595db5408e946f3a22c75807f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/5805f7a4e4958dbb5e944ef1e6edae0a303765e7",
-                "reference": "5805f7a4e4958dbb5e944ef1e6edae0a303765e7",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/14f5fff1e64118595db5408e946f3a22c75807f7",
+                "reference": "14f5fff1e64118595db5408e946f3a22c75807f7",
                 "shasum": ""
             },
             "require": {
@@ -11151,11 +11171,11 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4"
             },
             "bin": [
-                "bin/phpcs",
-                "bin/phpcbf"
+                "bin/phpcbf",
+                "bin/phpcs"
             ],
             "type": "library",
             "extra": {
@@ -11208,7 +11228,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-12-08T12:32:31+00:00"
+            "time": "2024-01-11T20:47:48+00:00"
         },
         {
             "name": "symfony/maker-bundle",
