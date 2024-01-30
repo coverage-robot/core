@@ -2,8 +2,8 @@
 
 namespace App\Handler;
 
-use App\Service\Publisher\MessagePublisherService;
-use App\Service\Publisher\PublisherServiceInterface;
+use App\Service\MessagePublisherService;
+use App\Service\MessagePublisherServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
@@ -23,7 +23,7 @@ final class EventHandler extends SqsHandler
 {
     public function __construct(
         #[Autowire(service: MessagePublisherService::class)]
-        private readonly PublisherServiceInterface $messagePublisherService,
+        private readonly MessagePublisherServiceInterface $messagePublisherService,
         private readonly SerializerInterface $serializer,
         private readonly MessageValidationService $messageValidationService,
         private readonly LoggerInterface $eventHandlerLogger,
