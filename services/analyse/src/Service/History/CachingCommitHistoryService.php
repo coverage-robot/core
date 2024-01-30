@@ -80,15 +80,13 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
      */
     private function tryPopulatingCacheFromComparableWaypoints(ReportWaypoint $waypoint, int $page): void
     {
-        /** @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history */
+        /**
+         * @var ReportWaypoint $cachedWaypoint
+         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history
+         */
         foreach ($this->cache as $cachedWaypoint => $history) {
             if ($cachedWaypoint === $waypoint) {
                 // We don't want to compare the waypoint to itself
-                continue;
-            }
-
-            if (!$cachedWaypoint instanceof ReportWaypoint) {
-                // We don't want to include anything which isn't a waypoint
                 continue;
             }
 
