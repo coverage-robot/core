@@ -2,7 +2,7 @@
 
 namespace Packages\Configuration\Tests\Service;
 
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Configuration\Service\SettingService;
@@ -31,10 +31,10 @@ final class ConfigurationFileServiceTest extends TestCase
             new SettingService(
                 [
                     SettingKey::LINE_ANNOTATION->value => new LineAnnotationSetting(
-                        $this->createMock(DynamoDbClient::class)
+                        $this->createMock(DynamoDbClientInterface::class)
                     ),
                     SettingKey::PATH_REPLACEMENTS->value => new PathReplacementsSetting(
-                        $this->createMock(DynamoDbClient::class),
+                        $this->createMock(DynamoDbClientInterface::class),
                         new Serializer(
                             [
                                 new ArrayDenormalizer(),

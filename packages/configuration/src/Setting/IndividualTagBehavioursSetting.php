@@ -4,7 +4,7 @@ namespace Packages\Configuration\Setting;
 
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Override;
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -23,7 +23,7 @@ final class IndividualTagBehavioursSetting implements SettingInterface
     private const array DEFAULT_VALUE = [];
 
     public function __construct(
-        private readonly DynamoDbClient $dynamoDbClient,
+        private readonly DynamoDbClientInterface $dynamoDbClient,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly ValidatorInterface $validator,
     ) {

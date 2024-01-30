@@ -3,7 +3,7 @@
 namespace Packages\Configuration\Tests\Setting;
 
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -34,7 +34,7 @@ final class PathReplacementsSettingTest extends TestCase
      */
     public function testSettingPathReplacements(): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('setSettingInStore')
             ->with(
@@ -84,7 +84,7 @@ final class PathReplacementsSettingTest extends TestCase
      */
     public function testGettingPathReplacements(): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getSettingFromStore')
             ->with(
@@ -145,7 +145,7 @@ final class PathReplacementsSettingTest extends TestCase
 
     public function testDeletingPathReplacements(): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('deleteSettingFromStore')
             ->with(
@@ -174,7 +174,7 @@ final class PathReplacementsSettingTest extends TestCase
     public function testValidatingPathReplacementsValue(mixed $settingValue, bool $expectedValid): void
     {
         $pathReplacementsSetting = new PathReplacementsSetting(
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             $this->createMock(Serializer::class),
             Validation::createValidatorBuilder()
                 ->enableAttributeMapping()
@@ -193,7 +193,7 @@ final class PathReplacementsSettingTest extends TestCase
     public function testDeserializingPathReplacements(): void
     {
         $pathReplacementsSetting = new PathReplacementsSetting(
-            $this->createMock(DynamoDbClient::class),
+            $this->createMock(DynamoDbClientInterface::class),
             new Serializer(
                 [
                     new ArrayDenormalizer(),

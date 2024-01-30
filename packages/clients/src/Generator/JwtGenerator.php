@@ -11,7 +11,7 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\UnencryptedToken;
 use Packages\Clients\Exception\ClientException;
 
-final class JwtGenerator
+class JwtGenerator
 {
     /**
      * @throws Exception

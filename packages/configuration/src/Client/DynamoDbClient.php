@@ -16,7 +16,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class DynamoDbClient
+final class DynamoDbClient implements DynamoDbClientInterface
 {
     /**
      * The table name which stores the configuration settings.
@@ -25,27 +25,6 @@ final class DynamoDbClient
      * (i.e. coverage-configuration-prod, coverage-configuration-dev, etc).
      */
     private const string TABLE_NAME = 'coverage-configuration-%s';
-
-    /**
-     * The primary key for the configuration store.
-     *
-     * This is the grouping for the settings, which is the provider, owner and repository.
-     */
-    public const string REPOSITORY_IDENTIFIER_COLUMN = 'repositoryIdentifier';
-
-    /**
-     * The range key for the configuration store.
-     *
-     * This is the unique setting identifier (in dot notation).
-     */
-    public const string SETTING_KEY_COLUMN = 'settingKey';
-
-    /**
-     * The value column for the configuration store.
-     *
-     * This is the value of the setting for a repository.
-     */
-    public const string VALUE_COLUMN = 'value';
 
     public function __construct(
         private readonly EnvironmentServiceInterface $environmentService,
@@ -138,7 +117,7 @@ final class DynamoDbClient
                 $httpException
             );
         }
-        
+
         return $value;
     }
 
