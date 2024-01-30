@@ -17,7 +17,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class WebhookQueueClient
+final class WebhookQueueClient implements WebhookQueueClientInterface
 {
     /**
      * The SQS queue (FIFO) which is used to process Webhooks from version control providers.
