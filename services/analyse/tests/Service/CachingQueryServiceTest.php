@@ -17,6 +17,7 @@ use App\Service\QueryBuilderServiceInterface;
 use App\Service\QueryServiceInterface;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -64,7 +65,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -125,7 +126,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -174,7 +175,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(

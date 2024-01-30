@@ -16,6 +16,7 @@ use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use Packages\Event\Enum\JobState;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -67,7 +68,7 @@ final class WebhookHandlerTest extends KernelTestCase
                 Validation::createValidatorBuilder()
                     ->getValidator()
             ),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $sqsEvent = new SqsEvent(
@@ -144,7 +145,7 @@ final class WebhookHandlerTest extends KernelTestCase
                 Validation::createValidatorBuilder()
                     ->getValidator()
             ),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $sqsEvent = new SqsEvent(

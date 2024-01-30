@@ -18,7 +18,7 @@ use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -36,7 +36,7 @@ final class GcsPersistService implements PersistServiceInterface
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $gcsPersistServiceLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

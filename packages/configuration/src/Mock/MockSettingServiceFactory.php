@@ -4,6 +4,7 @@ namespace Packages\Configuration\Mock;
 
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +15,7 @@ final class MockSettingServiceFactory
         TestCase $test,
         $settings = []
     ): SettingService|MockObject {
-        $mockSettingService = $test->getMockBuilder(SettingService::class)
+        $mockSettingService = $test->getMockBuilder(SettingServiceInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

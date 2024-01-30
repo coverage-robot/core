@@ -8,18 +8,22 @@ use Github\Api\PullRequest;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
 use Github\AuthMethod;
+use Github\Client;
 use Github\ResultPager;
 use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use UnexpectedValueException;
 
-final class GithubAppInstallationClient
+final class GithubAppInstallationClient implements GithubAppInstallationClientInterface
 {
     private ?string $owner = null;
 
     public function __construct(
-        private readonly GithubAppClient $appClient,
-        private readonly GithubAppClient $installationClient
+        #[Autowire(service: GithubAppClient::class)]
+        private readonly Client $appClient,
+        #[Autowire(service: GithubAppClient::class)]
+        private readonly Client $installationClient
     ) {
     }
 

@@ -12,7 +12,7 @@ use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -32,7 +32,7 @@ final class QueryService implements QueryServiceInterface
         private readonly QueryBuilderServiceInterface $queryBuilderService,
         private readonly ValidatorInterface $validator,
         private readonly LoggerInterface $queryServiceLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

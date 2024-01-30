@@ -12,6 +12,7 @@ use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -25,7 +26,7 @@ final class CachingQueryService implements QueryServiceInterface
         public readonly QueryBuilderServiceInterface $queryBuilderService,
         #[Autowire(service: DynamoDbClient::class)]
         public readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

@@ -9,3 +9,6 @@ services:
             - '../src/DependencyInjection/'
 
     Symfony\Component\Clock\NativeClock: ~
+
+    Packages\Telemetry\Service\MetricServiceInterface:
+        class: Packages\Telemetry\Service\MetricService

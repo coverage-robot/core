@@ -4,13 +4,13 @@ namespace App\Service;
 
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\PathReplacement;
-use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
 
 final class PathFixingService
 {
     public function __construct(
-        private readonly SettingService $settingService
+        private readonly SettingServiceInterface $settingService
     ) {
     }
 

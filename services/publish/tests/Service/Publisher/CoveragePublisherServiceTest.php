@@ -6,7 +6,7 @@ use App\Service\Publisher\MessagePublisherService;
 use App\Tests\Mock\Factory\MockPublisherFactory;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -32,7 +32,7 @@ final class CoveragePublisherServiceTest extends TestCase
                 $unsupportedPublisher
             ],
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $this->assertTrue($publisher->publish($message));

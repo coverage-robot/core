@@ -27,7 +27,7 @@ use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -44,7 +44,7 @@ final class EventHandler extends S3Handler
         #[Autowire(service: EventBusClient::class)]
         private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $handlerLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

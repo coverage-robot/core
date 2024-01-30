@@ -16,6 +16,7 @@ use Bref\Event\Sqs\SqsHandler;
 use Override;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -36,7 +37,7 @@ final class WebhookHandler extends SqsHandler
         private readonly ProjectRepository $projectRepository,
         private readonly SerializerInterface $serializer,
         private readonly WebhookValidationService $webhookValidationService,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

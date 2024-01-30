@@ -9,7 +9,7 @@ use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-final class SettingService
+final class SettingService implements SettingServiceInterface
 {
     /**
      * A simple in-memory cache for settings which get called
@@ -29,7 +29,7 @@ final class SettingService
     }
 
     /**
-     * Get a setting's value, for a specific repository, from the configuration store.
+     * @inheritDoc
      */
     public function get(
         Provider $provider,
@@ -52,7 +52,8 @@ final class SettingService
     }
 
     /**
-     * Set the state of a setting for a particular repository in the configuration store.
+     * @inheritDoc
+     *
      * @throws InvalidSettingValueException
      */
     public function set(
@@ -105,7 +106,7 @@ final class SettingService
     }
 
     /**
-     * Validate the value of a setting.
+     * @inheritDoc
      *
      * @throws InvalidSettingValueException
      */

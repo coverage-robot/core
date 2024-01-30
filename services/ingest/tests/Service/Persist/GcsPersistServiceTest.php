@@ -22,6 +22,7 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -91,7 +92,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 ]
             ),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $this->assertTrue(
@@ -181,7 +182,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 ]
             ),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $this->assertFalse(

@@ -5,13 +5,15 @@ namespace Packages\Configuration\Service;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 use WeakMap;
 
 final class ConfigurationFileService
 {
     public function __construct(
-        private readonly SettingService $settingService
+        #[Autowire(service: SettingService::class)]
+        private readonly SettingServiceInterface $settingService
     ) {
     }
 
@@ -119,7 +121,7 @@ final class ConfigurationFileService
             if (
                 is_array($value) &&
                 !array_is_list($value) &&
-                !SettingKey::tryFrom($key) instanceof \Packages\Configuration\Enum\SettingKey
+                !SettingKey::tryFrom($key) instanceof SettingKey
             ) {
                 $results = array_merge(
                     $results,

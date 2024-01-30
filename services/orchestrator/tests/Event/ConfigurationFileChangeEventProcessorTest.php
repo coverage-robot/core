@@ -6,15 +6,16 @@ use App\Event\ConfigurationFileChangeEventProcessor;
 use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Contents;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
+use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\ConfigurationFileChange;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
-use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -29,14 +30,18 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         $mockContentsEndpoint = $this->createMock(Contents::class);
         $mockContentsEndpoint->expects($this->exactly((int)$isProcessable))
             ->method('download')
-            ->willReturn('mock-file');
+            ->willReturn(
+                <<<YAML
+                line_annotations: false
+                YAML
+            );
 
         $mockRepoApi = $this->createMock(Repo::class);
         $mockRepoApi->expects($this->exactly((int)$isProcessable))
             ->method('contents')
             ->willReturn($mockContentsEndpoint);
 
-        $mockGithubClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockGithubClient->expects($this->exactly((int)$isProcessable))
             ->method('repo')
             ->willReturn($mockRepoApi);
@@ -44,21 +49,16 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             ->method('authenticateAsRepositoryOwner')
             ->with($event->getOwner());
 
-        $mockConfigurationFileService = $this->createMock(ConfigurationFileService::class);
-        $mockConfigurationFileService->expects($this->exactly((int)$isProcessable))
-            ->method('parseAndPersistFile')
-            ->with(
-                $event->getProvider(),
-                $event->getOwner(),
-                $event->getRepository(),
-                'mock-file'
-            )
-            ->willReturn(true);
+        $mockSettingService = MockSettingServiceFactory::createMock($this);
+        $mockSettingService->method('set')
+            ->willReturn($isProcessable);
+        $mockSettingService->method('delete')
+            ->willReturn($isProcessable);
 
         $configurationFileChangeEventProcessor = new ConfigurationFileChangeEventProcessor(
             new NullLogger(),
             $mockGithubClient,
-            $mockConfigurationFileService
+            new ConfigurationFileService($mockSettingService)
         );
 
         $this->assertEquals(
@@ -71,20 +71,18 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
 
     public function testProcessingEventNotOnMainRef(): void
     {
-        $mockGithubClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockGithubClient->expects($this->never())
             ->method('repo');
         $mockGithubClient->expects($this->never())
             ->method('authenticateAsRepositoryOwner');
 
-        $mockConfigurationFileService = $this->createMock(ConfigurationFileService::class);
-        $mockConfigurationFileService->expects($this->never())
-            ->method('parseAndPersistFile');
-
         $configurationFileChangeEventProcessor = new ConfigurationFileChangeEventProcessor(
             new NullLogger(),
             $mockGithubClient,
-            $mockConfigurationFileService
+            new ConfigurationFileService(
+                MockSettingServiceFactory::createMock($this)
+            )
         );
 
         $this->assertTrue(

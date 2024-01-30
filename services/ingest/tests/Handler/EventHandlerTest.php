@@ -22,12 +22,14 @@ use Bref\Event\S3\S3Event;
 use Exception;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\NullLogger;
@@ -80,7 +82,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -111,7 +113,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -155,7 +157,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3(
@@ -218,7 +220,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -255,13 +257,13 @@ final class EventHandlerTest extends KernelTestCase
 
     private function setSettingsServiceAsMock(): void
     {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->method('get')
             ->willReturn([]);
 
         $this->getContainer()
             ->set(
-                SettingService::class,
+                SettingServiceInterface::class,
                 $mockSettingService
             );
     }

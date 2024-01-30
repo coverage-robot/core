@@ -12,6 +12,7 @@ use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -52,7 +53,7 @@ final class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -86,7 +87,7 @@ final class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -122,7 +123,7 @@ final class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());
@@ -159,7 +160,7 @@ final class UploadControllerTest extends KernelTestCase
             $uploadService,
             $authTokenService,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $uploadController->setContainer($this->getContainer());

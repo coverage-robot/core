@@ -11,6 +11,7 @@ use App\Service\UploadService;
 use App\Service\UploadServiceInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +29,7 @@ final class UploadController extends AbstractController
         #[Autowire(service: AuthTokenService::class)]
         private readonly AuthTokenServiceInterface $authTokenService,
         private readonly LoggerInterface $uploadLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }

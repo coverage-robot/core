@@ -5,7 +5,7 @@ namespace App\Tests\Service;
 use App\Service\PathFixingService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\PathReplacement;
-use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +19,7 @@ final class PathFixingServiceTest extends TestCase
         array $pathReplacements,
         string $expectedPath
     ): void {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->expects($this->once())
             ->method('get')
             ->with(

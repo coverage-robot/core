@@ -5,6 +5,7 @@ namespace App\Service\Publisher;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -14,7 +15,7 @@ final class MessagePublisherService
         #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
         private readonly LoggerInterface $publisherServiceLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 

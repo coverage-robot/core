@@ -7,29 +7,23 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
-use App\Query\QueryInterface;
 use App\Query\Result\CoverageQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
-use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
 use App\Service\QueryBuilderService;
 use App\Service\QueryBuilderServiceInterface;
 use App\Service\QueryService;
-use App\Tests\Mock\Factory\MockQueryFactory;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Google\Cloud\Core\Iterator\ItemIterator;
-use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -59,7 +53,7 @@ final class QueryServiceTest extends KernelTestCase
             $this->getContainer()
                 ->get(ValidatorInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -121,7 +115,7 @@ final class QueryServiceTest extends KernelTestCase
             $mockQueryBuilder,
             $this->createMock(ValidatorInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $mockBigQueryService->expects($this->never())
@@ -175,7 +169,7 @@ final class QueryServiceTest extends KernelTestCase
             $mockQueryBuilderService,
             $mockValidator,
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -224,7 +218,7 @@ final class QueryServiceTest extends KernelTestCase
             $mockQueryBuilderService,
             $this->createMock(ValidatorInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -273,7 +267,7 @@ final class QueryServiceTest extends KernelTestCase
             $mockQueryBuilderService,
             $this->createMock(ValidatorInterface::class),
             new NullLogger(),
-            $this->createMock(MetricService::class)
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);

@@ -6,6 +6,7 @@ use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Configuration\Setting\LineAnnotationSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
@@ -68,7 +69,7 @@ final class ConfigurationFileServiceTest extends TestCase
 
     public function testParseAndPersistFile(): void
     {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->expects($this->exactly(4))
             ->method('deserialize')
             ->willReturn('');
