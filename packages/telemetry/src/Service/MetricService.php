@@ -22,10 +22,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  * A wrapper around the CloudWatch Embedded Metric Format (EMF) which allows custom
  * metrics to be pushed directly into CloudWatch for later analysis.
  */
-class MetricService
+final class MetricService
 {
     private const NAMESPACE = 'Metrics';
+    
     public const FUNCTION_VERSION = 'functionVersion';
+    
     public const FUNCTION_NAME = 'functionName';
 
     public function __construct(
@@ -70,11 +72,11 @@ class MetricService
             );
 
             $this->metricsLogger->info($embeddedMetric);
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $exception) {
             $this->metricsLogger->error(
                 'Failed to serialize metric.',
                 [
-                    'exception' => $e,
+                    'exception' => $exception,
                     'metric' => $metric,
                     'value' => $value,
                     'unit' => $unit,

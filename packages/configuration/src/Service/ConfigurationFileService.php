@@ -8,7 +8,7 @@ use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Yaml\Yaml;
 use WeakMap;
 
-class ConfigurationFileService
+final class ConfigurationFileService
 {
     public function __construct(
         private readonly SettingService $settingService
@@ -119,7 +119,7 @@ class ConfigurationFileService
             if (
                 is_array($value) &&
                 !array_is_list($value) &&
-                SettingKey::tryFrom($key) === null
+                !SettingKey::tryFrom($key) instanceof \Packages\Configuration\Enum\SettingKey
             ) {
                 $results = array_merge(
                     $results,

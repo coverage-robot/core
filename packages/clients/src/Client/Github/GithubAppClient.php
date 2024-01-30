@@ -11,7 +11,7 @@ use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class GithubAppClient extends Client
+final class GithubAppClient extends Client
 {
     /**
      * @throws ClientException
@@ -48,8 +48,8 @@ class GithubAppClient extends Client
                 null,
                 AuthMethod::JWT
             );
-        } catch (Exception $e) {
-            throw ClientException::authenticationException($e);
+        } catch (Exception $exception) {
+            throw ClientException::authenticationException($exception);
         }
     }
 }

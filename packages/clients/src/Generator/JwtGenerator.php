@@ -11,7 +11,7 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\UnencryptedToken;
 use Packages\Clients\Exception\ClientException;
 
-class JwtGenerator
+final class JwtGenerator
 {
     /**
      * @throws Exception
@@ -23,8 +23,8 @@ class JwtGenerator
                 new Sha256(),
                 InMemory::file($privateKeyFile)
             );
-        } catch (FileCouldNotBeRead $e) {
-            throw ClientException::authenticationException($e);
+        } catch (FileCouldNotBeRead $fileCouldNotBeRead) {
+            throw ClientException::authenticationException($fileCouldNotBeRead);
         }
 
         $now = new DateTimeImmutable('@' . time());

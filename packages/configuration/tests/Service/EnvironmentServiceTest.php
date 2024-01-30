@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class EnvironmentServiceTest extends TestCase
+final class EnvironmentServiceTest extends TestCase
 {
     #[DataProvider('environmentDataProvider')]
     public function testGetEnvironment(
@@ -32,7 +32,7 @@ class EnvironmentServiceTest extends TestCase
         return array_combine(
             array_column(Environment::cases(), 'name'),
             array_map(
-                static fn(Environment $environment) => [$environment->value, $environment],
+                static fn(Environment $environment): array => [$environment->value, $environment],
                 Environment::cases()
             )
         );

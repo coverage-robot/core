@@ -11,7 +11,7 @@ use Packages\Configuration\Exception\SettingNotFoundException;
 use Packages\Configuration\Exception\SettingRetrievalFailedException;
 use Packages\Contracts\Provider\Provider;
 
-class LineAnnotationSetting implements SettingInterface
+final class LineAnnotationSetting implements SettingInterface
 {
     private const true DEFAULT_VALUE = true;
 

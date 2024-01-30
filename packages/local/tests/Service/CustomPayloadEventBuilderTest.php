@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
-class CustomPayloadEventBuilderTest extends TestCase
+final class CustomPayloadEventBuilderTest extends TestCase
 {
     #[DataProvider('variedConsoleInputDataProvider')]
     public function testSupports(InputInterface $input, bool $expectedSupport): void

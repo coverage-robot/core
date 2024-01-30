@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class LineAnnotationSettingTest extends TestCase
+final class LineAnnotationSettingTest extends TestCase
 {
     #[DataProvider('trueFalseDataProvider')]
     public function testSettingLineAnnotationSetting(bool $settingValue): void

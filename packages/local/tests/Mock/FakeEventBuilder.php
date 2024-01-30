@@ -13,7 +13,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FakeEventBuilder implements EventBuilderInterface
+final class FakeEventBuilder implements EventBuilderInterface
 {
     #[Override]
     public static function supports(

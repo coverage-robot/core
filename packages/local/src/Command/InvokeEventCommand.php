@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * A command designed to be used inside services which can manually invoke
  * an event handler with a custom event.
  */
-class InvokeEventCommand extends Command
+final class InvokeEventCommand extends Command
 {
     /**
      * @param EventBuilderInterface[] $eventBuilders
@@ -35,7 +35,7 @@ class InvokeEventCommand extends Command
         parent::__construct();
     }
 
-    public function configure(): void
+    protected function configure(): void
     {
         $this->setDescription('Invoke the services event handler with a custom event')
             ->addArgument(
@@ -43,7 +43,7 @@ class InvokeEventCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'The event to invoke the handler with',
                 null,
-                array_map(fn (Event $event) => $event->value, Event::cases())
+                array_map(static fn(Event $event) => $event->value, Event::cases())
             )
             ->addOption(
                 'file',
@@ -65,12 +65,12 @@ class InvokeEventCommand extends Command
     {
         $event = Event::tryFrom(strtoupper($input->getArgument('event')));
 
-        if ($event === null) {
+        if (!$event instanceof \Packages\Contracts\Event\Event) {
             $output->writeln(
                 [
                     '<error>',
                     'Invalid event provided, must be one of:',
-                    ...array_map(fn (Event $event) => $event->value, Event::cases()),
+                    ...array_map(static fn(Event $event) => $event->value, Event::cases()),
                     '</error>'
                 ]
             );
@@ -85,7 +85,7 @@ class InvokeEventCommand extends Command
                 $event
             );
 
-            if ($builtEvent === null) {
+            if (!$builtEvent instanceof \Packages\Event\Model\EventInterface) {
                 $output->writeln('<error>No builder available to build event.</error>');
                 return Command::FAILURE;
             }
@@ -106,12 +106,12 @@ class InvokeEventCommand extends Command
                 ]),
                 Context::fake()
             );
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $exception) {
             $output->writeln(
                 [
                     '<error>',
                     'Failed to build event, see error below:',
-                    $e->getMessage(),
+                    $exception->getMessage(),
                     '</error>'
                 ]
             );

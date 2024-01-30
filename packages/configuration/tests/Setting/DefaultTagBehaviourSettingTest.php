@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DefaultTagBehaviourSettingTest extends TestCase
+final class DefaultTagBehaviourSettingTest extends TestCase
 {
     public function testSettingDefaultTagBehaviourSetting(): void
     {

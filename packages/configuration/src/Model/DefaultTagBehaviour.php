@@ -2,7 +2,7 @@
 
 namespace Packages\Configuration\Model;
 
-class DefaultTagBehaviour
+final class DefaultTagBehaviour
 {
     public function __construct(
         private readonly bool $carryforward

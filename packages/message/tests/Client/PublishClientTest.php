@@ -23,7 +23,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PublishClientTest extends TestCase
+final class PublishClientTest extends TestCase
 {
 
     public function testPublishMessage(): void
@@ -69,7 +69,7 @@ class PublishClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('getQueueUrl')
             ->with(
-                self::callback(function (GetQueueUrlRequest $request) {
+                self::callback(function (GetQueueUrlRequest $request): bool {
                     $this->assertEquals(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()
@@ -98,7 +98,7 @@ class PublishClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('sendMessage')
             ->with(
-                self::callback(function (SendMessageRequest $request) {
+                self::callback(function (SendMessageRequest $request): bool {
                     $this->assertEquals(
                         'mock-url',
                         $request->getQueueUrl()
@@ -144,7 +144,7 @@ class PublishClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('getQueueUrl')
             ->with(
-                self::callback(function (GetQueueUrlRequest $request) {
+                self::callback(function (GetQueueUrlRequest $request): bool {
                     $this->assertEquals(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()

@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class IndividualTagBehavioursSettingTest extends TestCase
+final class IndividualTagBehavioursSettingTest extends TestCase
 {
     /**
      * @throws ExceptionInterface

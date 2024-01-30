@@ -2,7 +2,7 @@
 
 namespace Packages\Configuration\Constant;
 
-class ConfigurationFile
+final class ConfigurationFile
 {
     /**
      * The path to the configuration file (from the project root) in

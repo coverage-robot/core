@@ -7,7 +7,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class MockEnvironmentServiceFactory
+final class MockEnvironmentServiceFactory
 {
     public static function createMock(
         TestCase $testCase,

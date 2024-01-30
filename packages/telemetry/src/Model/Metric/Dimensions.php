@@ -4,7 +4,7 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class Dimensions
+final class Dimensions
 {
     /**
      * @param string[] $dimension

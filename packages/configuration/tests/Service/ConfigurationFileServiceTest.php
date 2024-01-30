@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validation;
 
-class ConfigurationFileServiceTest extends TestCase
+final class ConfigurationFileServiceTest extends TestCase
 {
     #[DataProvider('configurationFileDataProvider')]
     public function testParsingToFile(

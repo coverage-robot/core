@@ -22,7 +22,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class InvokeEventCommandTest extends TestCase
+final class InvokeEventCommandTest extends TestCase
 {
     public function testInvokingEventUsingBuilders(): void
     {

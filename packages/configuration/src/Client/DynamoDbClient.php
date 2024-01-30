@@ -16,7 +16,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-class DynamoDbClient
+final class DynamoDbClient
 {
     /**
      * The table name which stores the configuration settings.
@@ -103,7 +103,7 @@ class DynamoDbClient
 
             $settings = iterator_to_array($response->getItems());
 
-            if (count($settings) === 0) {
+            if ($settings === []) {
                 throw new SettingNotFoundException(
                     sprintf(
                         'Setting %s not found',
@@ -138,6 +138,7 @@ class DynamoDbClient
                 $httpException
             );
         }
+        
         return $value;
     }
 

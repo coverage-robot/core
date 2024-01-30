@@ -9,7 +9,7 @@ use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class SettingService
+final class SettingService
 {
     /**
      * A simple in-memory cache for settings which get called

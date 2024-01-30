@@ -4,7 +4,7 @@ namespace Packages\Configuration\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class IndividualTagBehaviour extends DefaultTagBehaviour
+final class IndividualTagBehaviour extends DefaultTagBehaviour
 {
     public function __construct(
         #[Assert\NotBlank]

@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class DefaultTagBehaviourSetting implements SettingInterface
+final class DefaultTagBehaviourSetting implements SettingInterface
 {
     private DefaultTagBehaviour $default;
 
@@ -98,7 +98,6 @@ class DefaultTagBehaviourSetting implements SettingInterface
     }
 
     /**
-     * @return DefaultTagBehaviour
      * @throws ExceptionInterface
      * @throws InvalidSettingValueException
      */
@@ -126,7 +125,7 @@ class DefaultTagBehaviourSetting implements SettingInterface
         }
 
         throw new InvalidSettingValueException(
-            "Invalid value for setting: {$value}"
+            'Invalid value for setting: ' . $value
         );
     }
 
@@ -149,7 +148,7 @@ class DefaultTagBehaviourSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid value for setting: {$violations}"
+                'Invalid value for setting: ' . $violations
             );
         }
 
@@ -157,7 +156,7 @@ class DefaultTagBehaviourSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid default tag behaviour value for setting: {$violations}"
+                'Invalid default tag behaviour value for setting: ' . $violations
             );
         }
     }

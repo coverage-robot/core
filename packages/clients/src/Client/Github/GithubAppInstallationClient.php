@@ -13,7 +13,7 @@ use OutOfBoundsException;
 use Psr\Http\Message\ResponseInterface;
 use UnexpectedValueException;
 
-class GithubAppInstallationClient
+final class GithubAppInstallationClient
 {
     private ?string $owner = null;
 
@@ -86,7 +86,7 @@ class GithubAppInstallationClient
         $installs = array_filter(
             $this->appClient->apps()
                 ->findInstallations(),
-            static fn(array $install) => isset($install['id'], $install['account']['login'])
+            static fn(array $install): bool => isset($install['id'], $install['account']['login'])
                 && $install['account']['login'] === $owner
         );
 

@@ -8,7 +8,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class MockSettingServiceFactory
+final class MockSettingServiceFactory
 {
     public static function createMock(
         TestCase $test,

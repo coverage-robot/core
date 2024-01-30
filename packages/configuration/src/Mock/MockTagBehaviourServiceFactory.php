@@ -7,7 +7,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class MockTagBehaviourServiceFactory
+final class MockTagBehaviourServiceFactory
 {
     public static function createMock(
         TestCase $test,

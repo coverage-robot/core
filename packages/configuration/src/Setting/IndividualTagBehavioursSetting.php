@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class IndividualTagBehavioursSetting implements SettingInterface
+final class IndividualTagBehavioursSetting implements SettingInterface
 {
     private const array DEFAULT_VALUE = [];
 
@@ -158,7 +158,7 @@ class IndividualTagBehavioursSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid value for setting: {$violations}"
+                'Invalid value for setting: ' . $violations
             );
         }
 
@@ -166,7 +166,7 @@ class IndividualTagBehavioursSetting implements SettingInterface
 
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
-                "Invalid individual path behaviours value for setting: {$violations}"
+                'Invalid individual path behaviours value for setting: ' . $violations
             );
         }
     }
