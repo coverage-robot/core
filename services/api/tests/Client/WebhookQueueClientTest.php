@@ -16,15 +16,15 @@ use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Message\Service\MessageValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validation;
 
-class WebhookQueueClientTest extends TestCase
+final class WebhookQueueClientTest extends TestCase
 {
     public function testPublishMessage(): void
     {
@@ -52,24 +52,21 @@ class WebhookQueueClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
-        $mockWebhookValidationService = $this->createMock(WebhookValidationService::class);
-        $mockWebhookValidationService->expects($this->once())
-            ->method('validate')
-            ->with($mockWebhook);
-
         $webhookQueueClient = new WebhookQueueClient(
-            $mockWebhookValidationService,
+            new WebhookValidationService(
+                Validation::createValidatorBuilder()
+                    ->getValidator()
+            ),
             $mockSqsClient,
             $mockEnvironmentService,
             $mockSerializer,
-            $this->createMock(MessageValidationService::class),
             new NullLogger()
         );
 
         $mockSqsClient->expects($this->once())
             ->method('getQueueUrl')
             ->with(
-                self::callback(function (GetQueueUrlRequest $request) {
+                self::callback(function (GetQueueUrlRequest $request): bool {
                     $this->assertEquals(
                         'coverage-webhooks-test.fifo',
                         $request->getQueueName()
@@ -98,7 +95,7 @@ class WebhookQueueClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('sendMessage')
             ->with(
-                self::callback(function (SendMessageRequest $request) {
+                self::callback(function (SendMessageRequest $request): bool {
                     $this->assertEquals(
                         'mock-url',
                         $request->getQueueUrl()

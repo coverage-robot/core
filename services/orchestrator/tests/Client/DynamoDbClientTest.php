@@ -23,7 +23,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DynamoDbClientTest extends KernelTestCase
+final class DynamoDbClientTest extends KernelTestCase
 {
     public function testArgumentsWhenStoringStateChangeForEvent(): void
     {
@@ -56,7 +56,7 @@ class DynamoDbClientTest extends KernelTestCase
             ->method('putItem')
             ->with(
                 self::callback(
-                    function (PutItemInput $input) use ($mockEvent) {
+                    function (PutItemInput $input) use ($mockEvent): bool {
                         $this->assertEquals(
                             'event-store',
                             $input->getTableName()
@@ -190,7 +190,7 @@ class DynamoDbClientTest extends KernelTestCase
             ->method('query')
             ->with(
                 self::callback(
-                    function (QueryInput $input) use ($mockEvent) {
+                    function (QueryInput $input) use ($mockEvent): bool {
                         $this->assertEquals(
                             'event-store',
                             $input->getTableName()
@@ -316,7 +316,7 @@ class DynamoDbClientTest extends KernelTestCase
             ->method('query')
             ->with(
                 self::callback(
-                    function (QueryInput $input) use ($mockEvent) {
+                    function (QueryInput $input) use ($mockEvent): bool {
                         $this->assertEquals(
                             'event-store',
                             $input->getTableName()

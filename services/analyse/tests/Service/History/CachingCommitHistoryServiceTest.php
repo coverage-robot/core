@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CachingCommitHistoryServiceTest extends TestCase
+final class CachingCommitHistoryServiceTest extends TestCase
 {
     public function testGetPrecedingCommitsUsesCacheForSamePage(): void
     {
@@ -30,9 +30,11 @@ class CachingCommitHistoryServiceTest extends TestCase
             ]);
 
         $cachingCommitHistoryService = new CachingCommitHistoryService(
-            [
-                Provider::GITHUB->value => $mockParser
-            ],
+            new CommitHistoryService(
+                [
+                    Provider::GITHUB->value => $mockParser
+                ]
+            ),
             new NullLogger()
         );
 
@@ -96,9 +98,11 @@ class CachingCommitHistoryServiceTest extends TestCase
             ]);
 
         $cachingCommitHistoryService = new CachingCommitHistoryService(
-            [
-                Provider::GITHUB->value => $mockParser
-            ],
+            new CommitHistoryService(
+                [
+                    Provider::GITHUB->value => $mockParser
+                ]
+            ),
             new NullLogger()
         );
 
@@ -128,18 +132,7 @@ class CachingCommitHistoryServiceTest extends TestCase
     public function testGetPrecedingCommitsDoesntUseCacheForDifferentWaypoints(): void
     {
         $mockWaypointOne = $this->getMockWaypoint();
-        $mockWaypointOne->method('getCommit')
-            ->willReturn('mock-commit-1');
         $mockWaypointTwo = $this->getMockWaypoint();
-        $mockWaypointTwo->method('getCommit')
-            ->willReturn('mock-commit-99');
-
-        $mockWaypointOne->method('comparable')
-            ->with($mockWaypointTwo)
-            ->willReturn(true);
-        $mockWaypointTwo->method('comparable')
-            ->with($mockWaypointOne)
-            ->willReturn(true);
 
         $mockParser = $this->createMock(CommitHistoryServiceInterface::class);
         $mockParser->expects($this->exactly(2))
@@ -170,9 +163,11 @@ class CachingCommitHistoryServiceTest extends TestCase
             ]);
 
         $cachingCommitHistoryService = new CachingCommitHistoryService(
-            [
-                Provider::GITHUB->value => $mockParser
-            ],
+            new CommitHistoryService(
+                [
+                    Provider::GITHUB->value => $mockParser
+                ]
+            ),
             new NullLogger()
         );
 
@@ -201,19 +196,8 @@ class CachingCommitHistoryServiceTest extends TestCase
 
     public function testGetPrecedingCommitsCanUseComparableCommitsAsOverlappingCache(): void
     {
-        $mockWaypointOne = $this->getMockWaypoint();
-        $mockWaypointOne->method('getCommit')
-            ->willReturn('mock-commit-1');
-        $mockWaypointTwo = $this->getMockWaypoint();
-        $mockWaypointTwo->method('getCommit')
-            ->willReturn('mock-commit-3');
-
-        $mockWaypointOne->method('comparable')
-            ->with($mockWaypointTwo)
-            ->willReturn(true);
-        $mockWaypointTwo->method('comparable')
-            ->with($mockWaypointOne)
-            ->willReturn(true);
+        $mockWaypointOne = $this->getMockWaypoint('mock-commit-1');
+        $mockWaypointTwo = $this->getMockWaypoint('mock-commit-3');
 
         $mockParser = $this->createMock(CommitHistoryServiceInterface::class);
         $mockParser->expects($this->exactly(2))
@@ -268,9 +252,11 @@ class CachingCommitHistoryServiceTest extends TestCase
             ]);
 
         $cachingCommitHistoryService = new CachingCommitHistoryService(
-            [
-                Provider::GITHUB->value => $mockParser
-            ],
+            new CommitHistoryService(
+                [
+                    Provider::GITHUB->value => $mockParser
+                ]
+            ),
             new NullLogger()
         );
 
@@ -306,7 +292,7 @@ class CachingCommitHistoryServiceTest extends TestCase
                     ]
                 ),
             ],
-            $cachingCommitHistoryService->getPrecedingCommits($mockWaypointOne, 1)
+            $cachingCommitHistoryService->getPrecedingCommits($mockWaypointOne)
         );
 
         $this->assertEquals(
@@ -338,18 +324,7 @@ class CachingCommitHistoryServiceTest extends TestCase
     public function testGetPrecedingCommitsCanUseComparableCommitsFromDifferentPagesAsOverlappingCache(): void
     {
         $mockWaypointOne = $this->getMockWaypoint();
-        $mockWaypointOne->method('getCommit')
-            ->willReturn('mock-commit-1');
         $mockWaypointTwo = $this->getMockWaypoint();
-        $mockWaypointTwo->method('getCommit')
-            ->willReturn('mock-commit-4');
-
-        $mockWaypointOne->method('comparable')
-            ->with($mockWaypointTwo)
-            ->willReturn(true);
-        $mockWaypointTwo->method('comparable')
-            ->with($mockWaypointOne)
-            ->willReturn(true);
 
         $mockParser = $this->createMock(CommitHistoryServiceInterface::class);
         $mockParser->expects($this->exactly(2))
@@ -406,9 +381,11 @@ class CachingCommitHistoryServiceTest extends TestCase
             ]);
 
         $cachingCommitHistoryService = new CachingCommitHistoryService(
-            [
-                Provider::GITHUB->value => $mockParser
-            ],
+            new CommitHistoryService(
+                [
+                    Provider::GITHUB->value => $mockParser
+                ]
+            ),
             new NullLogger()
         );
 
@@ -463,12 +440,17 @@ class CachingCommitHistoryServiceTest extends TestCase
         );
     }
 
-    private function getMockWaypoint(): ReportWaypoint|MockObject
+    private function getMockWaypoint(string $commit = 'mock-commit'): ReportWaypoint|MockObject
     {
-        $mockWaypoint = $this->createMock(ReportWaypoint::class);
-        $mockWaypoint->method('getProvider')
-            ->willReturn(Provider::GITHUB);
-
-        return $mockWaypoint;
+        return new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: $commit,
+            history: [],
+            diff: [],
+            pullRequest: 1
+        );
     }
 }

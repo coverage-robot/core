@@ -17,7 +17,7 @@ use Bref\Event\S3\BucketObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class CoverageFileRetrievalService
+final class CoverageFileRetrievalService implements CoverageFileRetrievalServiceInterface
 {
     public function __construct(
         private readonly SimpleS3Client $s3Client,
@@ -26,7 +26,7 @@ class CoverageFileRetrievalService
     }
 
     /**
-     * Ingest a file from an S3 bucket.
+     * @inheritDoc
      *
      * @throws RetrievalException
      */
@@ -50,10 +50,7 @@ class CoverageFileRetrievalService
     }
 
     /**
-     * Mark an ingested file as deleted in S3 so that it can be cleaned up later.
-     *
-     * There's versioning and a lifecycle policy on the buckets, meaning the files
-     * will still remain for a short period (days) after deletion, with a delete marker.
+     * @inheritDoc
      *
      * @throws DeletionException
      */

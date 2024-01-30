@@ -4,7 +4,7 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class Metadata
+final class Metadata
 {
     /**
      * @param MetricDirective[] $directives

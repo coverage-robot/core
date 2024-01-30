@@ -6,7 +6,7 @@ use App\Model\Webhook\SignedWebhookInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class WebhookSignatureService
+final class WebhookSignatureService
 {
     public function __construct(
         private readonly LoggerInterface $webhookSignatureLogger

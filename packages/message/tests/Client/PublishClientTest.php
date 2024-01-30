@@ -22,17 +22,16 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validation;
 
-class PublishClientTest extends TestCase
+final class PublishClientTest extends TestCase
 {
-
     public function testPublishMessage(): void
     {
         $mockMessage = $this->createMock(PublishableMessageInterface::class);
         $mockMessage->method('getType')
             ->willReturn(PublishableMessage::PULL_REQUEST);
-        $mockMessage->expects($this->once())
-            ->method('getMessageGroup')
+        $mockMessage->method('getMessageGroup')
             ->willReturn('mock-message-group-value');
 
         $mockSqsClient = $this->createMock(SqsClient::class);
@@ -52,16 +51,15 @@ class PublishClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
-        $mockMessageValidationService = $this->createMock(MessageValidationService::class);
-        $mockMessageValidationService->expects($this->once())
-            ->method('validate')
-            ->with($mockMessage);
-
         $publishClient = new PublishClient(
             $mockSqsClient,
             $mockEnvironmentService,
             $mockSerializer,
-            $mockMessageValidationService,
+            new MessageValidationService(
+                Validation::createValidatorBuilder()
+                    ->enableAttributeMapping()
+                    ->getValidator()
+            ),
             new NullLogger()
         );
 
@@ -69,7 +67,7 @@ class PublishClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('getQueueUrl')
             ->with(
-                self::callback(function (GetQueueUrlRequest $request) {
+                self::callback(function (GetQueueUrlRequest $request): bool {
                     $this->assertEquals(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()
@@ -98,7 +96,7 @@ class PublishClientTest extends TestCase
         $mockSqsClient->expects($this->once())
             ->method('sendMessage')
             ->with(
-                self::callback(function (SendMessageRequest $request) {
+                self::callback(function (SendMessageRequest $request): bool {
                     $this->assertEquals(
                         'mock-url',
                         $request->getQueueUrl()
@@ -137,14 +135,18 @@ class PublishClientTest extends TestCase
             $mockSqsClient,
             $this->createMock(EnvironmentServiceInterface::class),
             $this->createMock(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            new MessageValidationService(
+                Validation::createValidatorBuilder()
+                    ->enableAttributeMapping()
+                    ->getValidator()
+            ),
             new NullLogger()
         );
 
         $mockSqsClient->expects($this->once())
             ->method('getQueueUrl')
             ->with(
-                self::callback(function (GetQueueUrlRequest $request) {
+                self::callback(function (GetQueueUrlRequest $request): bool {
                     $this->assertEquals(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()

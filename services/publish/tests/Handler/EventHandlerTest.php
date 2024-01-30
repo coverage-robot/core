@@ -3,7 +3,9 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\Publisher\MessagePublisherService;
+use App\Service\MessagePublisherService;
+use App\Service\MessagePublisherServiceInterface;
+use App\Service\Publisher\PublisherServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
@@ -16,16 +18,16 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandlerTest extends KernelTestCase
+final class EventHandlerTest extends KernelTestCase
 {
     public function testReceivingSingleMessageInSingleGroup(): void
     {
-        $mockCoveragePublisherService = $this->createMock(MessagePublisherService::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $mockCoveragePublisherService->expects($this->once())
             ->method('publish')
             ->with(
                 self::callback(
-                    function (PublishableMessageInterface $message) {
+                    function (PublishableMessageInterface $message): bool {
                         $this->assertInstanceOf(PublishablePullRequestMessage::class, $message);
                         return true;
                     }
@@ -122,7 +124,7 @@ class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 
@@ -131,12 +133,12 @@ class EventHandlerTest extends KernelTestCase
 
     public function testReceivingMultipleMessageInSingleGroup(): void
     {
-        $mockCoveragePublisherService = $this->createMock(MessagePublisherService::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $mockCoveragePublisherService->expects($this->once())
             ->method('publish')
             ->with(
                 self::callback(
-                    function (PublishableMessageInterface $message) {
+                    function (PublishableMessageInterface $message): bool {
                         $this->assertInstanceOf(PublishablePullRequestMessage::class, $message);
 
                         // It should pick the latest of the two messages for the same message group
@@ -338,7 +340,7 @@ class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 
@@ -347,13 +349,13 @@ class EventHandlerTest extends KernelTestCase
 
     public function testReceivingMultipleMessageAndMultipleGroups(): void
     {
-        $mockCoveragePublisherService = $this->createMock(MessagePublisherService::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $publishMatcher = $this->exactly(2);
         $mockCoveragePublisherService->expects($publishMatcher)
             ->method('publish')
             ->with(
                 self::callback(
-                    function (PublishableMessageInterface $message) use ($publishMatcher) {
+                    function (PublishableMessageInterface $message) use ($publishMatcher): bool {
                         switch ($publishMatcher->numberOfInvocations()) {
                             case 1:
                                 $this->assertInstanceOf(
@@ -648,7 +650,7 @@ class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 

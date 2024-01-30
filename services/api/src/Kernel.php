@@ -6,7 +6,7 @@ use Bref\SymfonyBridge\BrefKernel;
 use Override;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 
-class Kernel extends BrefKernel
+final class Kernel extends BrefKernel
 {
     use MicroKernelTrait;
 

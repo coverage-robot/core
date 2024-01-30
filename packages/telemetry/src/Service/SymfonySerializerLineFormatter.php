@@ -12,7 +12,7 @@ use TypeError;
  * A basic line formatter for monolog which uses the Symfony Serializer to format JSON
  * objects (such as context) instead of PHPs built in `json_encode`.
  */
-class SymfonySerializerLineFormatter extends LineFormatter implements FormatterInterface
+final class SymfonySerializerLineFormatter extends LineFormatter implements FormatterInterface
 {
     public function __construct(
         private readonly SerializerInterface $serializer,
@@ -38,7 +38,7 @@ class SymfonySerializerLineFormatter extends LineFormatter implements FormatterI
      * This is most helpful for Logger context, as it allows us to serialize objects using
      * getters and setters.
      */
-    public function toJson($data, bool $ignoreErrors = false): string
+    protected function toJson($data, bool $ignoreErrors = false): string
     {
         try {
             return $this->serializer->serialize($data, 'json');

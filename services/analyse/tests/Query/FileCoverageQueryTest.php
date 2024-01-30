@@ -20,7 +20,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class FileCoverageQueryTest extends AbstractQueryTestCase
+final class FileCoverageQueryTest extends AbstractQueryTestCase
 {
     #[Override]
     public function getQueryClass(): QueryInterface
@@ -122,9 +122,6 @@ class FileCoverageQueryTest extends AbstractQueryTestCase
     public function testParseResults(array $queryResult): void
     {
         $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('isComplete')
-            ->willReturn(true);
         $mockBigQueryResult->expects($this->once())
             ->method('rows')
             ->willReturn($queryResult);

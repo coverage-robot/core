@@ -17,7 +17,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class PublishClient
+final class PublishClient implements SqsClientInterface
 {
     /**
      * The SQS queue (FIFO) which is used to publish messages to version control providers.
@@ -40,14 +40,14 @@ class PublishClient
     {
         try {
             $this->messageValidationService->validate($publishableMessage);
-        } catch (InvalidMessageException $e) {
+        } catch (InvalidMessageException $invalidMessageException) {
             $this->publishClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
                     (string)$publishableMessage
                 ),
                 [
-                    'exception' => $e,
+                    'exception' => $invalidMessageException,
                     'message' => $publishableMessage
                 ]
             );
@@ -67,7 +67,7 @@ class PublishClient
     /**
      * Publish an SQS message onto the queue, with the trace header if it exists.
      */
-    protected function dispatchWithTraceHeader(array $request): bool
+    private function dispatchWithTraceHeader(array $request): bool
     {
         if ($this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID) !== '') {
             /**

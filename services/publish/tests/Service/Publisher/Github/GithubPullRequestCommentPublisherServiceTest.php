@@ -7,7 +7,7 @@ use App\Exception\PublishException;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use Github\Api\Issue;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
@@ -18,13 +18,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class GithubPullRequestCommentPublisherServiceTest extends TestCase
+final class GithubPullRequestCommentPublisherServiceTest extends TestCase
 {
     #[DataProvider('supportsDataProvider')]
-    public function testSupports(Upload $upload, bool $expectedSupport)
+    public function testSupports(Upload $upload, bool $expectedSupport): void
     {
         $publisher = new GithubPullRequestCommentPublisherService(
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             new PullRequestCommentFormatterService(),
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -50,9 +50,9 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
     }
 
     #[DataProvider('supportsDataProvider')]
-    public function testPublishToNewComment($upload, $expectedSupport): void
+    public function testPublishToNewComment(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),
@@ -126,7 +126,7 @@ class GithubPullRequestCommentPublisherServiceTest extends TestCase
     #[DataProvider('supportsDataProvider')]
     public function testPublishToExistingComment(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             new PullRequestCommentFormatterService(),

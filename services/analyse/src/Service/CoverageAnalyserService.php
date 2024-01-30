@@ -12,10 +12,10 @@ use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
@@ -34,8 +34,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
-    final public const int DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT = 10;
-
     public function __construct(
         #[Autowire(service: QueryService::class)]
         private readonly QueryServiceInterface $queryService,
@@ -66,8 +64,8 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             repository: $repository,
             ref: $ref,
             commit: $commit,
-            history: fn(ReportWaypoint $waypoint, int $page) => $this->getHistory($waypoint, $page),
-            diff: fn(ReportWaypoint $waypoint) => $this->getDiff($waypoint),
+            history: fn(ReportWaypoint $waypoint, int $page): array => $this->getHistory($waypoint, $page),
+            diff: fn(ReportWaypoint $waypoint): array => $this->getDiff($waypoint),
             pullRequest: $pullRequest
         );
     }
@@ -100,15 +98,17 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
         try {
             return new CoverageReport(
                 waypoint: $waypoint,
-                uploads:  fn() => $this->getUploads($waypoint),
-                totalLines: fn() => $this->getTotalLines($waypoint),
-                atLeastPartiallyCoveredLines: fn() => $this->getAtLeastPartiallyCoveredLines($waypoint),
-                uncoveredLines: fn() => $this->getUncoveredLines($waypoint),
-                coveragePercentage: fn() => $this->getCoveragePercentage($waypoint),
-                tagCoverage: fn() => $this->getTagCoverage($waypoint),
-                diffCoveragePercentage: fn() => $this->getDiffCoveragePercentage($waypoint),
-                leastCoveredDiffFiles: fn() => $this->getLeastCoveredDiffFiles($waypoint),
-                diffLineCoverage: fn() => $this->getDiffLineCoverage($waypoint)
+                uploads:  fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
+                totalLines: fn(): int => $this->getTotalLines($waypoint),
+                atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
+                uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),
+                coveragePercentage: fn(): float => $this->getCoveragePercentage($waypoint),
+                tagCoverage: fn(): TagCoverageCollectionQueryResult => $this->getTagCoverage($waypoint),
+                diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
+                leastCoveredDiffFiles: fn(): FileCoverageCollectionQueryResult =>
+                    $this->getLeastCoveredDiffFiles($waypoint),
+                diffLineCoverage: fn(): LineCoverageCollectionQueryResult =>
+                    $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
@@ -186,7 +186,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
                             ...$ingestTimes,
                             ...$carryforwardTag->getIngestTimes()
                         ],
@@ -199,7 +199,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $uploads
             );
 
-        /** @var CoverageQueryResult $totalCoverage */
+        /** @var TotalCoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 
         return $totalCoverage->getLines();
@@ -238,7 +238,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
                             ...$ingestTimes,
                             ...$carryforwardTag->getIngestTimes()
                         ],
@@ -251,7 +251,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $uploads
             );
 
-        /** @var CoverageQueryResult $totalCoverage */
+        /** @var TotalCoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 
         return $totalCoverage->getPartial() + $totalCoverage->getCovered();
@@ -290,7 +290,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
                             ...$ingestTimes,
                             ...$carryforwardTag->getIngestTimes()
                         ],
@@ -303,7 +303,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $uploads
             );
 
-        /** @var CoverageQueryResult $totalCoverage */
+        /** @var TotalCoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 
         return $totalCoverage->getUncovered();
@@ -342,7 +342,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
                             ...$ingestTimes,
                             ...$carryforwardTag->getIngestTimes()
                         ],
@@ -355,7 +355,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                 $uploads
             );
 
-        /** @var CoverageQueryResult $totalCoverage */
+        /** @var TotalCoverageQueryResult $totalCoverage */
         $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 
         return $totalCoverage->getCoveragePercentage();
@@ -394,7 +394,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
                     ...$ingestTimes,
                     ...array_reduce(
                         $carryforwardTags,
-                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag) => [
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
                             ...$ingestTimes,
                             ...$carryforwardTag->getIngestTimes()
                         ],
@@ -463,7 +463,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
             );
 
         /**
-         * @var CoverageQueryResult $diffCoverage
+         * @var TotalCoverageQueryResult $diffCoverage
          */
         $diffCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
 

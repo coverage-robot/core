@@ -8,7 +8,7 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PublishablePartialBranchAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
+final class PublishablePartialBranchAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
@@ -24,7 +24,7 @@ class PublishablePartialBranchAnnotationMessage implements PublishableAnnotation
         private readonly int $coveredBranches,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if ($this->validUntil === null) {
+        if (!$this->validUntil instanceof \DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }

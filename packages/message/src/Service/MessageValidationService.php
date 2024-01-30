@@ -6,7 +6,7 @@ use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class MessageValidationService
+final class MessageValidationService
 {
     public function __construct(
         private readonly ValidatorInterface $validator

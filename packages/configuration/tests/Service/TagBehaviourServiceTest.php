@@ -11,7 +11,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class TagBehaviourServiceTest extends TestCase
+final class TagBehaviourServiceTest extends TestCase
 {
     #[DataProvider('behavioursDataProvider')]
     public function testShouldCarryforwardTag(

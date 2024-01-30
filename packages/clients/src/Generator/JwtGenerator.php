@@ -23,8 +23,8 @@ class JwtGenerator
                 new Sha256(),
                 InMemory::file($privateKeyFile)
             );
-        } catch (FileCouldNotBeRead $e) {
-            throw ClientException::authenticationException($e);
+        } catch (FileCouldNotBeRead $fileCouldNotBeRead) {
+            throw ClientException::authenticationException($fileCouldNotBeRead);
         }
 
         $now = new DateTimeImmutable('@' . time());

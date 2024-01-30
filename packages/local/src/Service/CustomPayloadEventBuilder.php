@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CustomPayloadEventBuilder implements EventBuilderInterface
+final class CustomPayloadEventBuilder implements EventBuilderInterface
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -21,7 +21,7 @@ class CustomPayloadEventBuilder implements EventBuilderInterface
     #[Override]
     public static function supports(InputInterface $input, Event $event): bool
     {
-        return (bool)$input->getOption('file') === true;
+        return (bool)$input->getOption('file');
     }
 
     #[Override]

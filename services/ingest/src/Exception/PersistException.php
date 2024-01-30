@@ -5,7 +5,7 @@ namespace App\Exception;
 use RuntimeException;
 use Throwable;
 
-class PersistException extends RuntimeException
+final class PersistException extends RuntimeException
 {
     public static function from(Throwable $exception): PersistException
     {

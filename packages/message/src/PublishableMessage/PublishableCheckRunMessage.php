@@ -8,7 +8,7 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class PublishableCheckRunMessage implements PublishableMessageInterface
+final class PublishableCheckRunMessage implements PublishableMessageInterface
 {
     /**
      * @param PublishableAnnotationInterface[] $annotations
@@ -30,7 +30,7 @@ class PublishableCheckRunMessage implements PublishableMessageInterface
         private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if ($this->validUntil === null) {
+        if (!$this->validUntil instanceof \DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }

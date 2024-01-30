@@ -4,18 +4,21 @@ namespace App\Service\Diff\Github;
 
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
-use App\Service\ProviderAwareInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
+final class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClient $client,
+        #[Autowire(service: GithubAppInstallationClient::class)]
+        private readonly GithubAppInstallationClientInterface $client,
         private readonly Parser $parser,
         private readonly LoggerInterface $diffParserLogger
     ) {
@@ -158,7 +161,7 @@ class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwa
 
         return array_reduce(
             $files,
-            static fn(string $diff, array $file) => <<<DIFF
+            static fn(string $diff, array $file): string => <<<DIFF
                 $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}

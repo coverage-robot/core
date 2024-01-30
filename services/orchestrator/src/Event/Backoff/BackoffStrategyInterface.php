@@ -3,6 +3,7 @@
 namespace App\Event\Backoff;
 
 use Exception;
+use STS\Backoff\Backoff;
 
 interface BackoffStrategyInterface
 {
@@ -12,4 +13,9 @@ interface BackoffStrategyInterface
      * @throws Exception
      */
     public function run(callable $callback): mixed;
+
+    /**
+     * Get the pre-configured backoff strategy.
+     */
+    public function getBackoffStrategy(): Backoff;
 }

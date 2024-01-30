@@ -16,9 +16,9 @@ use STS\Backoff\Strategies\PolynomialStrategy;
  *
  * The retry interval is: 0ms, 400ms, 900ms, 1600ms, 2500ms
  */
-class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
+final class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
 {
-    protected Backoff $backoff;
+    private Backoff $backoff;
 
     public function __construct()
     {
@@ -29,7 +29,7 @@ class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
                 int $attempt,
                 int $maxAttempts,
                 ?bool $result
-            ) => ($attempt <= $maxAttempts) && $result == true,
+            ): bool => ($attempt <= $maxAttempts) && $result == true,
         );
     }
 
@@ -40,5 +40,11 @@ class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
     public function run(callable $callback): mixed
     {
         return $this->backoff->run($callback);
+    }
+
+    #[Override]
+    public function getBackoffStrategy(): Backoff
+    {
+        return $this->backoff;
     }
 }

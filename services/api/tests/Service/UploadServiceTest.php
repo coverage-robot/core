@@ -6,8 +6,9 @@ use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use App\Service\UniqueIdGeneratorService;
+use App\Service\UniqueIdGeneratorServiceInterface;
 use App\Service\UploadService;
-use App\Service\UploadSignerService;
+use App\Service\UploadSignerServiceInterface;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
@@ -22,14 +23,14 @@ use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class UploadServiceTest extends KernelTestCase
+final class UploadServiceTest extends KernelTestCase
 {
     public function testGetMissingSigningParametersFromRequest(): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerService::class),
+            $this->createMock(UploadSignerServiceInterface::class),
             $this->createMock(EnvironmentServiceInterface::class),
-            $this->createMock(UniqueIdGeneratorService::class),
+            new UniqueIdGeneratorService(),
             $this->createMock(Serializer::class),
             new NullLogger(),
         );
@@ -45,9 +46,9 @@ class UploadServiceTest extends KernelTestCase
     public function testGetSigningParametersFromRequest(array $parameters, ?SigningParameters $expectedParameters): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerService::class),
+            $this->createMock(UploadSignerServiceInterface::class),
             $this->createMock(EnvironmentServiceInterface::class),
-            $this->createMock(UniqueIdGeneratorService::class),
+            new UniqueIdGeneratorService(),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
@@ -67,9 +68,9 @@ class UploadServiceTest extends KernelTestCase
     public function testSignedParentIsJsonEncoded(array $parameters, ?SigningParameters $expectedParameters): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerService::class),
+            $this->createMock(UploadSignerServiceInterface::class),
             $this->createMock(EnvironmentServiceInterface::class),
-            $this->createMock(UniqueIdGeneratorService::class),
+            new UniqueIdGeneratorService(),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );
@@ -90,17 +91,16 @@ class UploadServiceTest extends KernelTestCase
 
     public function testBuildSignedUploadUrl(): void
     {
-        $mockUniqueIdGeneratorService = $this->createMock(UniqueIdGeneratorService::class);
+        $mockUniqueIdGeneratorService = $this->createMock(UniqueIdGeneratorServiceInterface::class);
         $mockUniqueIdGeneratorService->expects($this->once())
             ->method('generate')
             ->willReturn('mock-uuid');
 
-        $mockUploadSignerService = $this->createMock(UploadSignerService::class);
-
+        $mockUploadSignerService = $this->createMock(UploadSignerServiceInterface::class);
         $mockUploadSignerService->expects($this->once())
             ->method('sign')
             ->with(
-                'mock-uuid',
+                $this->isType('string'),
                 new PutObjectRequest([
                     'Bucket' => 'coverage-ingest-prod',
                     'Key' => '1/a/2/mock-uuid.xml',
@@ -122,7 +122,13 @@ class UploadServiceTest extends KernelTestCase
                 ]),
                 $this->isInstanceOf(DateTimeImmutable::class)
             )
-            ->willReturn($this->createMock(SignedUrl::class));
+            ->willReturn(
+                new SignedUrl(
+                    uploadId: 'mock-uuid',
+                    signedUrl: 'https://mock-signed-url',
+                    expiration: new DateTimeImmutable()
+                )
+            );
 
         $uploadService = new UploadService(
             $mockUploadSignerService,

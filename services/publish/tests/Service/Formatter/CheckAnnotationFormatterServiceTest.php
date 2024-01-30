@@ -11,7 +11,7 @@ use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessag
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class CheckAnnotationFormatterServiceTest extends TestCase
+final class CheckAnnotationFormatterServiceTest extends TestCase
 {
     #[DataProvider('annotationDataProvider')]
     public function testFormattingAnnotation(

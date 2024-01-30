@@ -5,7 +5,7 @@ namespace App\Exception;
 use App\Enum\QueryParameter;
 use Exception;
 
-class QueryException extends Exception
+final class QueryException extends Exception
 {
     public static function typeMismatch(string $receivedType, string $expectedType): self
     {

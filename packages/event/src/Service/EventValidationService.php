@@ -6,7 +6,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\InvalidEventException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class EventValidationService
+final class EventValidationService
 {
     public function __construct(
         private readonly ValidatorInterface $validator

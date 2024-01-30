@@ -10,6 +10,7 @@ use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\CoverageQueryResult;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
@@ -21,7 +22,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TotalCoverageQueryTest extends AbstractQueryTestCase
+final class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
     #[Override]
     public static function getQueryParameters(): array
@@ -118,16 +119,13 @@ class TotalCoverageQueryTest extends AbstractQueryTestCase
 
         $mockBigQueryResult = $this->createMock(QueryResults::class);
         $mockBigQueryResult->expects($this->once())
-            ->method('isComplete')
-            ->willReturn(true);
-        $mockBigQueryResult->expects($this->once())
             ->method('rows')
             ->willReturn($mockIterator);
 
         $result = $this->getQueryClass()
             ->parseResults($mockBigQueryResult);
 
-        $this->assertInstanceOf(CoverageQueryResult::class, $result);
+        $this->assertInstanceOf(TotalCoverageQueryResult::class, $result);
     }
 
 

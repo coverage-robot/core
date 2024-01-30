@@ -4,7 +4,7 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class RootNode
+final class RootNode
 {
     public function __construct(
         #[SerializedName('_aws')]

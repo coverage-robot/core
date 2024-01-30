@@ -5,66 +5,100 @@ namespace App\Tests\Service;
 use App\Exception\PersistException;
 use App\Model\Coverage;
 use App\Service\CoverageFilePersistService;
-use App\Service\Persist\GcsPersistService;
-use App\Service\Persist\S3PersistService;
+use App\Service\Persist\PersistServiceInterface;
+use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class CoverageFilePersistServiceTest extends TestCase
+final class CoverageFilePersistServiceTest extends TestCase
 {
     public function testPersistSuccessfully(): void
     {
-        $mockS3PersistService = $this->createMock(S3PersistService::class);
-        $mockS3PersistService->expects($this->once())
+        $mockPersistServiceOne = $this->createMock(PersistServiceInterface::class);
+        $mockPersistServiceOne->expects($this->once())
             ->method('persist')
             ->willReturn(true);
 
-        $mockBigQueryPersistService = $this->createMock(GcsPersistService::class);
-        $mockBigQueryPersistService->expects($this->once())
+        $mockPersistServiceTwo = $this->createMock(PersistServiceInterface::class);
+        $mockPersistServiceTwo->expects($this->once())
             ->method('persist')
             ->willReturn(true);
 
         $coverageFilePersistService = new CoverageFilePersistService(
             [
-                $mockS3PersistService,
-                $mockBigQueryPersistService
+                $mockPersistServiceOne,
+                $mockPersistServiceTwo
             ],
             new NullLogger()
         );
 
         $this->assertTrue(
             $coverageFilePersistService->persist(
-                $this->createMock(Upload::class),
-                $this->createMock(Coverage::class)
+                new Upload(
+                    uploadId: 'mock-upload-id',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag(
+                        name: 'mock-tag-name',
+                        commit: 'mock-tag-commit'
+                    )
+                ),
+                new Coverage(
+                    sourceFormat: CoverageFormat::CLOVER,
+                    root: 'mock-root'
+                )
             )
         );
     }
 
     public function testPersistPartialFailure(): void
     {
-        $mockS3PersistService = $this->createMock(S3PersistService::class);
-        $mockS3PersistService->expects($this->once())
+        $mockPersistServiceOne = $this->createMock(PersistServiceInterface::class);
+        $mockPersistServiceOne->expects($this->once())
             ->method('persist')
             ->willThrowException(new PersistException());
 
-        $mockBigQueryPersistService = $this->createMock(GcsPersistService::class);
-        $mockBigQueryPersistService->expects($this->once())
+        $mockPersistServiceTwo = $this->createMock(PersistServiceInterface::class);
+        $mockPersistServiceTwo->expects($this->once())
             ->method('persist')
             ->willReturn(true);
 
         $coverageFilePersistService = new CoverageFilePersistService(
             [
-                $mockS3PersistService,
-                $mockBigQueryPersistService
+                $mockPersistServiceOne,
+                $mockPersistServiceTwo
             ],
             new NullLogger()
         );
 
         $this->assertFalse(
             $coverageFilePersistService->persist(
-                $this->createMock(Upload::class),
-                $this->createMock(Coverage::class)
+                new Upload(
+                    uploadId: 'mock-upload-id',
+                    provider: Provider::GITHUB,
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: ['mock-parent'],
+                    ref: 'mock-ref',
+                    projectRoot: 'mock-project-root',
+                    tag: new Tag(
+                        name: 'mock-tag-name',
+                        commit: 'mock-tag-commit'
+                    )
+                ),
+                new Coverage(
+                    sourceFormat: CoverageFormat::CLOVER,
+                    root: 'mock-root'
+                )
             )
         );
     }

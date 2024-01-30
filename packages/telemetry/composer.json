@@ -19,7 +19,8 @@
         "phpunit/phpunit": "^10.4",
         "estahn/phpunit-json-assertions": "^4.0",
         "symfony/property-access": "^6.3",
-        "bref/bref": "^2.1"
+        "bref/bref": "^2.1",
+        "rector/rector": "^0.19.5"
     },
     "autoload": {
         "psr-4": {
@@ -32,6 +33,7 @@
         }
     },
     "scripts": {
+        "lint:rector": "rector process --dry-run",
         "test:unit": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --configuration=./phpunit.xml.dist"

@@ -25,7 +25,7 @@ use WeakMap;
  * repeatedly fetching the same metrics when building parameters for
  * each of the report's metrics.
  */
-class CachingCoverageAnalyserService extends CoverageAnalyserService
+final class CachingCoverageAnalyserService extends CoverageAnalyserService
 {
     /**
      * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult>

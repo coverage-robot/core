@@ -7,9 +7,9 @@ use App\Exception\ParseException;
 use App\Exception\PersistException;
 use App\Exception\RetrievalException;
 use App\Model\Coverage;
-use App\Service\CoverageFileParserService;
-use App\Service\CoverageFilePersistService;
-use App\Service\CoverageFileRetrievalService;
+use App\Service\CoverageFileParserServiceInterface;
+use App\Service\CoverageFilePersistServiceInterface;
+use App\Service\CoverageFileRetrievalServiceInterface;
 use AsyncAws\S3\Result\GetObjectOutput;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
@@ -21,27 +21,30 @@ use Override;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventHandler extends S3Handler
+final class EventHandler extends S3Handler
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly CoverageFileRetrievalService $coverageFileRetrievalService,
-        private readonly CoverageFileParserService $coverageFileParserService,
-        private readonly CoverageFilePersistService $coverageFilePersistService,
-        private readonly EventBusClient $eventBusClient,
+        private readonly CoverageFileRetrievalServiceInterface $coverageFileRetrievalService,
+        private readonly CoverageFileParserServiceInterface $coverageFileParserService,
+        private readonly CoverageFilePersistServiceInterface $coverageFilePersistService,
+        #[Autowire(service: EventBusClient::class)]
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $handlerLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 
@@ -54,9 +57,9 @@ class EventHandler extends S3Handler
     {
         TraceContext::setTraceHeaderFromContext($context);
 
-        foreach ($event->getRecords() as $coverageFile) {
+        foreach ($event->getRecords() as $s3Record) {
             try {
-                $source = $this->retrieveFile($coverageFile);
+                $source = $this->retrieveFile($s3Record);
 
                 $metadata = $this->retrieveFileMetadata($source);
 
@@ -69,7 +72,7 @@ class EventHandler extends S3Handler
                 $this->handlerLogger->info(
                     sprintf(
                         'Starting to ingest %s for %s.',
-                        $coverageFile->getObject()->getKey(),
+                        $s3Record->getObject()->getKey(),
                         (string)$upload
                     )
                 );
@@ -96,7 +99,7 @@ class EventHandler extends S3Handler
 
                 $this->triggerIngestionSuccessEvent($upload);
 
-                $this->deleteFile($coverageFile);
+                $this->deleteFile($s3Record);
 
                 $this->handlerLogger->info(
                     sprintf(
@@ -110,8 +113,8 @@ class EventHandler extends S3Handler
                     'Failed to retrieve coverage file.',
                     [
                         'exception' => $e,
-                        'bucket' => $coverageFile->getBucket(),
-                        'key' => $coverageFile->getObject()
+                        'bucket' => $s3Record->getBucket(),
+                        'key' => $s3Record->getObject()
                     ]
                 );
             } catch (ParseException | PersistException $e) {

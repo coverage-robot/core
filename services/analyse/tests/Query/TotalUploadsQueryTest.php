@@ -18,7 +18,7 @@ use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class TotalUploadsQueryTest extends AbstractQueryTestCase
+final class TotalUploadsQueryTest extends AbstractQueryTestCase
 {
     #[Override]
     public function getQueryClass(): QueryInterface
@@ -45,9 +45,6 @@ class TotalUploadsQueryTest extends AbstractQueryTestCase
             ->willReturn($queryResult);
 
         $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('isComplete')
-            ->willReturn(true);
         $mockBigQueryResult->expects($this->once())
             ->method('rows')
             ->willReturn($mockIterator);

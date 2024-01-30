@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
-class Ingestion extends AbstractOrchestratedEvent
+final class Ingestion extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,

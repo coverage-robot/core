@@ -16,7 +16,7 @@ use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-class LcovParseStrategy implements ParseStrategyInterface
+final class LcovParseStrategy implements ParseStrategyInterface
 {
     private const string FILE = 'SF';
 
@@ -45,7 +45,7 @@ class LcovParseStrategy implements ParseStrategyInterface
         'BRH' => '\d+$'
     ];
 
-    final public const string END_OF_RECORD_MARKER = 'end_of_record';
+    public const string END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
         private readonly LoggerInterface $parseStrategyLogger,
@@ -63,9 +63,12 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         foreach ($records as $record) {
             $record = trim($record);
+// Skip empty lines and end-of-record markers
+            if ($record === '') {
+                continue;
+            }
 
-            // Skip empty lines and end-of-record markers
-            if ($record === '' || $record === self::END_OF_RECORD_MARKER) {
+            if ($record === self::END_OF_RECORD_MARKER) {
                 continue;
             }
 
@@ -120,9 +123,12 @@ class LcovParseStrategy implements ParseStrategyInterface
 
         foreach ($records as $record) {
             $record = trim($record);
+// Skip empty lines and end-of-record markers
+            if ($record === '') {
+                continue;
+            }
 
-            // Skip empty lines and end-of-record markers
-            if ($record === '' || $record === self::END_OF_RECORD_MARKER) {
+            if ($record === self::END_OF_RECORD_MARKER) {
                 continue;
             }
 

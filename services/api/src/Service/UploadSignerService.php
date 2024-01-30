@@ -11,7 +11,7 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class UploadSignerService
+final class UploadSignerService implements UploadSignerServiceInterface
 {
     public function __construct(
         #[Autowire(service: S3Client::class)]

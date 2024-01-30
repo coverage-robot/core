@@ -6,6 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
+use Bref\Event\S3\S3Handler;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Override;
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * This command is a helper for manually invoking the ingest handler locally, using the Localstack environment.
@@ -24,12 +26,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the ingest handler')]
-class InvokeCommand extends Command
+final class InvokeCommand extends Command
 {
     private const string BUCKET = 'coverage-ingest-%s';
 
     public function __construct(
-        private readonly EventHandler $handler,
+        #[Autowire(service: EventHandler::class)]
+        private readonly S3Handler $handler,
         private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct();

@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class LineCoverageQuery extends AbstractLineCoverageQuery
+final class LineCoverageQuery extends AbstractLineCoverageQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -45,10 +45,6 @@ class LineCoverageQuery extends AbstractLineCoverageQuery
     #[Override]
     public function parseResults(QueryResults $results): LineCoverageCollectionQueryResult
     {
-        if (!$results->isComplete()) {
-            throw new QueryException('Query was not complete when attempting to parse results.');
-        }
-
         $lines = $results->rows();
 
         /** @var LineCoverageCollectionQueryResult $results */

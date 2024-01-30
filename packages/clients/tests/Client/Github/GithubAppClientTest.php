@@ -8,7 +8,7 @@ use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Clients\Generator\JwtGenerator;
 use PHPUnit\Framework\TestCase;
 
-class GithubAppClientTest extends TestCase
+final class GithubAppClientTest extends TestCase
 {
     public function testAuthenticatingAsApp(): void
     {

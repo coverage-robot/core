@@ -9,7 +9,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
-class IngestFailure implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final class IngestFailure implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     public function __construct(
         private readonly Upload $upload,

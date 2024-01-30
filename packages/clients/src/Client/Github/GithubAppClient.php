@@ -48,8 +48,8 @@ class GithubAppClient extends Client
                 null,
                 AuthMethod::JWT
             );
-        } catch (Exception $e) {
-            throw ClientException::authenticationException($e);
+        } catch (Exception $exception) {
+            throw ClientException::authenticationException($exception);
         }
     }
 }

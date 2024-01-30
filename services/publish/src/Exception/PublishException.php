@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class PublishException extends RuntimeException
+final class PublishException extends RuntimeException
 {
     public static function notSupportedException(): PublishException
     {

@@ -7,7 +7,7 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
-class Finalised extends AbstractOrchestratedEvent
+final class Finalised extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,

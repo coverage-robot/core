@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Client\WebhookQueueClient;
+use App\Client\WebhookQueueClientInterface;
 use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
@@ -14,6 +15,7 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,14 +23,15 @@ use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class WebhookController extends AbstractController
+final class WebhookController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $webhookLogger,
         private readonly WebhookSignatureService $webhookSignatureService,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly WebhookQueueClient $webhookQueueClient
+        #[Autowire(service: WebhookQueueClient::class)]
+        private readonly WebhookQueueClientInterface $webhookQueueClient
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }

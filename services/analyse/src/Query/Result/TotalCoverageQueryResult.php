@@ -2,9 +2,10 @@
 
 namespace App\Query\Result;
 
+use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CoverageQueryResult implements QueryResultInterface
+final class TotalCoverageQueryResult implements QueryResultInterface
 {
     public function __construct(
         #[Assert\GreaterThanOrEqual(0)]

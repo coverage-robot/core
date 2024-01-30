@@ -7,9 +7,10 @@ use App\Model\ReportWaypoint;
 use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Tag\Tag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
-class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
+final class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
 {
     private const string EXISTING_TAGS_CACHE_PARAM = 'existingTags';
 
@@ -21,7 +22,8 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
     private WeakMap $cache;
 
     public function __construct(
-        private readonly CarryforwardTagService $carryforwardTagService
+        #[Autowire(service: CarryforwardTagService::class)]
+        private readonly CarryforwardTagServiceInterface $carryforwardTagService
     ) {
         /**
          * @var WeakMap<EventInterface|ReportWaypoint, array{ existingTags: Tag[], result: CarryforwardTag[] }[]> $cache
@@ -79,7 +81,7 @@ class CachingCarryforwardTagService implements CarryforwardTagServiceInterface
                 array_udiff(
                     $cacheValue[self::EXISTING_TAGS_CACHE_PARAM],
                     $existingTags,
-                    static fn(Tag $a, Tag $b) => $a->getName() <=> $b->getName()
+                    static fn(Tag $a, Tag $b): int => $a->getName() <=> $b->getName()
                 )
             ) {
                 continue;

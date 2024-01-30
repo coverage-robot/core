@@ -2,7 +2,7 @@
 
 namespace Packages\Configuration\Tests\Setting;
 
-use Packages\Configuration\Client\DynamoDbClient;
+use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
@@ -12,12 +12,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class LineAnnotationSettingTest extends TestCase
+final class LineAnnotationSettingTest extends TestCase
 {
     #[DataProvider('trueFalseDataProvider')]
     public function testSettingLineAnnotationSetting(bool $settingValue): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('setSettingInStore')
             ->with(
@@ -47,7 +47,7 @@ class LineAnnotationSettingTest extends TestCase
     #[DataProvider('trueFalseDataProvider')]
     public function testGettingLineAnnotationSetting(bool $settingValue): void
     {
-        $mockDynamoDbClient = $this->createMock(DynamoDbClient::class);
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getSettingFromStore')
             ->with(
@@ -77,7 +77,7 @@ class LineAnnotationSettingTest extends TestCase
     public function testValidatingLineAnnotationValue(mixed $settingValue, bool $expectedValid): void
     {
         $lineAnnotationSetting = new LineAnnotationSetting(
-            $this->createMock(DynamoDbClient::class)
+            $this->createMock(DynamoDbClientInterface::class)
         );
 
         if (!$expectedValid) {

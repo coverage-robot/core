@@ -17,7 +17,7 @@ use Override;
  * this is entirely opt-in. If the metric has already been calculated, it can
  * be passed in directly.
  */
-class CoverageReport implements CoverageReportInterface
+final class CoverageReport implements CoverageReportInterface
 {
     /**
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads

@@ -5,53 +5,60 @@ namespace App\Tests\Service;
 use App\Exception\ParseException;
 use App\Model\Coverage;
 use App\Service\CoverageFileParserService;
-use App\Strategy\Clover\CloverParseStrategy;
-use App\Strategy\Lcov\LcovParseStrategy;
+use App\Strategy\ParseStrategyInterface;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use stdClass;
 
-class CoverageFileParserServiceTest extends TestCase
+final class CoverageFileParserServiceTest extends TestCase
 {
-    private const array STRATEGIES = [
-        CloverParseStrategy::class,
-        LcovParseStrategy::class
-    ];
-
-    #[DataProvider('strategyDataProvider')]
-    public function testParsingSupportedFiles(string $expectedStrategy): void
+    public function testParsingSupportedFiles(): void
     {
         $coverage = new Coverage(
             sourceFormat: CoverageFormat::CLOVER,
             root: 'mock/project/root'
         );
 
-        $mockedStrategies = [];
-        foreach (self::STRATEGIES as $strategy) {
-            $mockStrategy = $this->createMock($strategy);
-            $mockStrategy->expects($this->atMost(1))
-                ->method('supports')
-                ->with('mock-file')
-                ->willReturn($expectedStrategy === $strategy);
+        $mockStrategyOne = $this->createMock(ParseStrategyInterface::class);
+        $mockStrategyOne->expects($this->once())
+            ->method('supports')
+            ->with('mock-file')
+            ->willReturn(true);
+        $mockStrategyOne->expects($this->once())
+            ->method('parse')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                'mock-path',
+                'mock-file'
+            )
+            ->willReturn($coverage);
 
-            $mockStrategy->expects($this->exactly($expectedStrategy === $strategy ? 1 : 0))
-                ->method('parse')
-                ->with(
-                    Provider::GITHUB,
-                    'mock-owner',
-                    'mock-repository',
-                    'mock-path',
-                    'mock-file'
-                )
-                ->willReturn($coverage);
+        $mockStrategyTwo = $this->createMock(ParseStrategyInterface::class);
+        $mockStrategyTwo->expects($this->never())
+            ->method('supports');
+        $mockStrategyTwo->expects($this->never())
+            ->method('parse');
 
-            $mockedStrategies[] = $mockStrategy;
-        }
+        $mockStrategyThree = $this->createMock(ParseStrategyInterface::class);
+        $mockStrategyThree->expects($this->once())
+            ->method('supports')
+            ->with('mock-file')
+            ->willReturn(false);
+        $mockStrategyThree->expects($this->never())
+            ->method('parse');
 
-        $coverageFileParserService = new CoverageFileParserService($mockedStrategies, new NullLogger());
+        $coverageFileParserService = new CoverageFileParserService(
+            [
+                $mockStrategyThree,
+                $mockStrategyOne,
+                $mockStrategyTwo
+            ],
+            new NullLogger()
+        );
         $this->assertEquals(
             $coverage,
             $coverageFileParserService->parse(
@@ -66,7 +73,7 @@ class CoverageFileParserServiceTest extends TestCase
 
     public function testInvalidParser(): void
     {
-        $mockParser = $this->createMock(CloverParseStrategy::class);
+        $mockParser = $this->createMock(ParseStrategyInterface::class);
         $mockParser->expects($this->atMost(1))
             ->method('supports')
             ->with('mock-file')
@@ -91,10 +98,5 @@ class CoverageFileParserServiceTest extends TestCase
             'mock-path',
             'mock-file'
         );
-    }
-
-    public static function strategyDataProvider(): array
-    {
-        return array_map(static fn(string $strategy) => [$strategy], self::STRATEGIES);
     }
 }

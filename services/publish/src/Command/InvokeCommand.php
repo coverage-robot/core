@@ -6,6 +6,7 @@ use App\Handler\EventHandler;
 use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
+use Bref\Event\Sqs\SqsHandler;
 use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Override;
@@ -22,6 +23,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -34,10 +36,11 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the publish handler')]
-class InvokeCommand extends Command
+final class InvokeCommand extends Command
 {
     public function __construct(
-        private readonly EventHandler $handler,
+        #[Autowire(service: EventHandler::class)]
+        private readonly SqsHandler $handler,
         private readonly SerializerInterface $serializer
     ) {
         parent::__construct();

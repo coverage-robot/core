@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Exception\EventStoreException;
 use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
@@ -21,11 +22,11 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class EventStoreService implements EventStoreServiceInterface
+final class EventStoreService implements EventStoreServiceInterface
 {
     public function __construct(
         private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface&DecoderInterface $serializer,
-        private readonly DynamoDbClient $dynamoDbClient,
+        private readonly DynamoDbClientInterface $dynamoDbClient,
         private readonly LoggerInterface $eventStoreLogger
     ) {
     }
@@ -69,7 +70,7 @@ class EventStoreService implements EventStoreServiceInterface
     {
         $latestKnownState = array_reduce(
             $stateChanges->getEvents(),
-            static fn (array $finalState, EventStateChange $stateChange) => [
+            static fn (array $finalState, EventStateChange $stateChange): array => [
                 ...$finalState,
                 ...$stateChange->getEvent()
             ],

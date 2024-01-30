@@ -9,9 +9,10 @@ use App\Tests\Strategy\AbstractParseStrategyTestCase;
 use Override;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Psr\Log\NullLogger;
 
-class CloverParseStrategyTest extends AbstractParseStrategyTestCase
+final class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 {
     #[Override]
     public static function coverageFilesDataProvider(): iterable
@@ -39,7 +40,7 @@ class CloverParseStrategyTest extends AbstractParseStrategyTestCase
     #[Override]
     protected function getParserStrategy(): ParseStrategyInterface
     {
-        $mockSettingService = $this->createMock(SettingService::class);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->method('get')
             ->willReturn([
                 new PathReplacement(

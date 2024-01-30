@@ -4,24 +4,24 @@ namespace App\Tests\Command;
 
 use App\Handler\EventHandler;
 use Bref\Event\InvalidLambdaEvent;
+use Bref\Event\S3\S3Handler;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class InvokeCommandTest extends KernelTestCase
+final class InvokeCommandTest extends KernelTestCase
 {
     public function testInvokeSuccessfully(): void
     {
-        $mockIngestHandler = $this->createMock(EventHandler::class);
-
-        $mockIngestHandler->expects($this->once())
+        $mockHandler = $this->createMock(S3Handler::class);
+        $mockHandler->expects($this->once())
             ->method('handleS3');
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(EventHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
@@ -34,16 +34,15 @@ class InvokeCommandTest extends KernelTestCase
 
     public function testInvokeFailure(): void
     {
-        $mockIngestHandler = $this->createMock(EventHandler::class);
-
-        $mockIngestHandler->expects($this->once())
+        $mockHandler = $this->createMock(S3Handler::class);
+        $mockHandler->expects($this->once())
             ->method('handleS3')
             ->willThrowException(new InvalidLambdaEvent('s3', ''));
 
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        $kernel->getContainer()->set(EventHandler::class, $mockIngestHandler);
+        $kernel->getContainer()->set(EventHandler::class, $mockHandler);
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);

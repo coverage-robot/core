@@ -3,17 +3,17 @@
 namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
-use App\Service\ProviderAwareInterface;
 use Override;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
-class CommitHistoryService implements CommitHistoryServiceInterface
+final class CommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * The total number of commits which should be returned per page.
      */
-    final public const COMMITS_TO_RETURN_PER_PAGE = 100;
+    public const COMMITS_TO_RETURN_PER_PAGE = 100;
 
     /**
      * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers

@@ -9,7 +9,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 
-class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     /**
      * @param string[] $parent
@@ -28,7 +28,7 @@ class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseA
         private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if ($this->eventTime === null) {
+        if (!$this->eventTime instanceof \DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

@@ -5,7 +5,7 @@ namespace App\Exception;
 use RuntimeException;
 use Throwable;
 
-class RetrievalException extends RuntimeException
+final class RetrievalException extends RuntimeException
 {
     public static function from(Throwable $exception): RetrievalException
     {

@@ -6,17 +6,18 @@ use App\Model\EventStateChange;
 use App\Model\EventStateChangeCollection;
 use App\Model\OrchestratedEventInterface;
 use App\Service\CachingEventStoreService;
-use App\Service\EventStoreService;
+use App\Service\EventStoreServiceInterface;
+use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 
-class CachingEventStoreServiceTest extends TestCase
+final class CachingEventStoreServiceTest extends TestCase
 {
     public function testReducingStateChangesToEventUsesCache(): void
     {
-        $mockCollection = $this->createMock(EventStateChangeCollection::class);
+        $mockCollection = new EventStateChangeCollection([]);
         $mockOrchestratedEvent = $this->createMock(OrchestratedEventInterface::class);
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->once())
             ->method('reduceStateChangesToEvent')
             ->willReturn($mockOrchestratedEvent);
@@ -38,7 +39,7 @@ class CachingEventStoreServiceTest extends TestCase
     {
         $mockOrchestratedEvent = $this->createMock(OrchestratedEventInterface::class);
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('getStateChangesBetweenEvent')
             ->willReturn([]);
@@ -59,7 +60,7 @@ class CachingEventStoreServiceTest extends TestCase
     {
         $mockOrchestratedEvent = $this->createMock(OrchestratedEventInterface::class);
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('getAllStateChangesForEvent')
             ->willReturn(new EventStateChangeCollection([]));
@@ -78,7 +79,7 @@ class CachingEventStoreServiceTest extends TestCase
 
     public function testGetAllStateChangesForCommit(): void
     {
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('getAllStateChangesForCommit')
             ->willReturn([]);
@@ -98,9 +99,16 @@ class CachingEventStoreServiceTest extends TestCase
     public function testStoreStateChange(): void
     {
         $mockOrchestratedEvent = $this->createMock(OrchestratedEventInterface::class);
-        $mockStateChange = $this->createMock(EventStateChange::class);
+        $mockStateChange = new EventStateChange(
+            provider: Provider::GITHUB,
+            identifier: '',
+            owner: '',
+            repository: '',
+            version: 1,
+            event: [],
+        );
 
-        $mockEventStoreService = $this->createMock(EventStoreService::class);
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
             ->method('storeStateChange')
             ->willReturn($mockStateChange);

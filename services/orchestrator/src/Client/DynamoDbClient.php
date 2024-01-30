@@ -15,7 +15,7 @@ use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class DynamoDbClient
+final class DynamoDbClient implements DynamoDbClientInterface
 {
     /**
      * The default TTL for each event in the store, in seconds - currently 12 hours.
@@ -42,7 +42,7 @@ class DynamoDbClient
     }
 
     /**
-     * Store an event's state change as a new item in the event store.
+     * @inheritDoc
      *
      * @throws ConditionalCheckFailedException
      * @throws HttpException
@@ -97,9 +97,7 @@ class DynamoDbClient
     }
 
     /**
-     * Get all of the state changes for a particular event.
-     *
-     * @return iterable<AttributeValue[]>
+     * @inheritDoc
      *
      * @throws HttpException
      */
@@ -141,9 +139,7 @@ class DynamoDbClient
     }
 
     /**
-     * Get all of the state changes for all events in a particular repository and commit.
-     *
-     * @return iterable<AttributeValue[]>
+     * @inheritDoc
      *
      * @throws HttpException
      */

@@ -6,24 +6,30 @@ use App\Exception\AuthenticationException;
 use App\Exception\SigningException;
 use App\Model\UploadError;
 use App\Service\AuthTokenService;
+use App\Service\AuthTokenServiceInterface;
 use App\Service\UploadService;
+use App\Service\UploadServiceInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricService;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UploadController extends AbstractController
+final class UploadController extends AbstractController
 {
     public function __construct(
-        private readonly UploadService $uploadService,
-        private readonly AuthTokenService $authTokenService,
+        #[Autowire(service: UploadService::class)]
+        private readonly UploadServiceInterface $uploadService,
+        #[Autowire(service: AuthTokenService::class)]
+        private readonly AuthTokenServiceInterface $authTokenService,
         private readonly LoggerInterface $uploadLogger,
-        private readonly MetricService $metricService
+        private readonly MetricServiceInterface $metricService
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }
