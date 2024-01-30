@@ -3,7 +3,8 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\Publisher\MessagePublisherService;
+use App\Service\MessagePublisherService;
+use App\Service\MessagePublisherServiceInterface;
 use App\Service\Publisher\PublisherServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
@@ -21,7 +22,7 @@ final class EventHandlerTest extends KernelTestCase
 {
     public function testReceivingSingleMessageInSingleGroup(): void
     {
-        $mockCoveragePublisherService = $this->createMock(PublisherServiceInterface::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $mockCoveragePublisherService->expects($this->once())
             ->method('publish')
             ->with(
@@ -132,7 +133,7 @@ final class EventHandlerTest extends KernelTestCase
 
     public function testReceivingMultipleMessageInSingleGroup(): void
     {
-        $mockCoveragePublisherService = $this->createMock(PublisherServiceInterface::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $mockCoveragePublisherService->expects($this->once())
             ->method('publish')
             ->with(
@@ -348,7 +349,7 @@ final class EventHandlerTest extends KernelTestCase
 
     public function testReceivingMultipleMessageAndMultipleGroups(): void
     {
-        $mockCoveragePublisherService = $this->createMock(PublisherServiceInterface::class);
+        $mockCoveragePublisherService = $this->createMock(MessagePublisherServiceInterface::class);
         $publishMatcher = $this->exactly(2);
         $mockCoveragePublisherService->expects($publishMatcher)
             ->method('publish')

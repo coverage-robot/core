@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service\Publisher;
 
-use App\Service\Publisher\MessagePublisherService;
+use App\Service\MessagePublisherService;
 use App\Tests\Mock\Factory\MockPublisherFactory;
 use Packages\Event\Model\EventInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;

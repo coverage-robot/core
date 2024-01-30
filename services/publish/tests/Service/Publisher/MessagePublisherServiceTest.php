@@ -2,7 +2,7 @@
 
 namespace App\Tests\Service\Publisher;
 
-use App\Service\Publisher\MessagePublisherService;
+use App\Service\MessagePublisherService;
 use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
