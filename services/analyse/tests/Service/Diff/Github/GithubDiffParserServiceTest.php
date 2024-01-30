@@ -6,7 +6,7 @@ use App\Model\ReportWaypoint;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -16,7 +16,7 @@ final class GithubDiffParserServiceTest extends TestCase
 {
     public function testGetDiffFromPullRequest(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockPullRequestApi = $this->createMock(PullRequest::class);
 
         $parser = new GithubDiffParserService(
@@ -78,7 +78,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
     public function testGetDiffFromCommit(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockRepoApi = $this->createMock(Repo::class);
 
         $parser = new GithubDiffParserService(
@@ -172,7 +172,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
     public function testGetEmptyDiffFromCommit(): void
     {
-        $mockApiClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $mockRepoApi = $this->createMock(Repo::class);
 
         $parser = new GithubDiffParserService(
@@ -209,7 +209,7 @@ final class GithubDiffParserServiceTest extends TestCase
     public function testGetProvider(): void
     {
         $parser = new GithubDiffParserService(
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             new Parser(),
             new NullLogger()
         );

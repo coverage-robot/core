@@ -4,7 +4,7 @@ namespace App\Tests\Service\Publisher;
 
 use App\Service\Publisher\MessagePublisherService;
 use App\Tests\Mock\Factory\MockPublisherFactory;
-use Packages\Contracts\PublishableMessage\PublishableMessage;
+use Packages\Event\Model\EventInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\TestCase;
@@ -22,9 +22,14 @@ final class CoveragePublisherServiceTest extends TestCase
         $unsupportedPublisher->expects($this->never())
             ->method('publish');
 
-        $message = $this->createMock(PublishablePullRequestMessage::class);
-        $message->method('getType')
-            ->willReturn(PublishableMessage::PULL_REQUEST);
+        $message = new PublishablePullRequestMessage(
+            event: $this->createMock(EventInterface::class),
+            coveragePercentage: 100,
+            diffCoveragePercentage: 100,
+            successfulUploads: 1,
+            tagCoverage: [],
+            leastCoveredDiffFiles: []
+        );
 
         $publisher = new MessagePublisherService(
             [

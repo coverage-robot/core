@@ -3,6 +3,8 @@
 namespace App\Tests\Service\Formatter;
 
 use App\Service\Formatter\CheckRunFormatterService;
+use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -24,7 +26,15 @@ final class CheckRunFormatterServiceTest extends TestCase
             $expectedTitle,
             $formatter->formatTitle(
                 new PublishableCheckRunMessage(
-                    event: $this->createMock(UploadsFinalised::class),
+                    event: new UploadsFinalised(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        parent: [],
+                        eventTime: new DateTimeImmutable('2021-01-01T00:00:00+00:00')
+                    ),
                     status: $status,
                     coveragePercentage: $coveragePercentage,
                     baseCommit: 'mock-base-commit',

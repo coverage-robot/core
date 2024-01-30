@@ -4,15 +4,20 @@ namespace App\Client;
 
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookValidationService;
+use AsyncAws\Core\Exception\Http\HttpException;
+use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
+use AsyncAws\Sqs\Input\GetQueueUrlRequest;
+use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\PublishableMessage\InvalidMessageException;
-use Packages\Message\Client\PublishClient;
-use Packages\Message\Service\MessageValidationService;
+use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class WebhookQueueClient extends PublishClient
+final class WebhookQueueClient
 {
     /**
      * The SQS queue (FIFO) which is used to process Webhooks from version control providers.
@@ -24,19 +29,11 @@ final class WebhookQueueClient extends PublishClient
 
     public function __construct(
         private readonly WebhookValidationService $webhookValidationService,
-        SqsClient $sqsClient,
-        EnvironmentServiceInterface $environmentService,
-        SerializerInterface $serializer,
-        MessageValidationService $messageValidationService,
-        LoggerInterface $publishClientLogger
+        private readonly SqsClient $sqsClient,
+        private readonly EnvironmentServiceInterface $environmentService,
+        private readonly SerializerInterface $serializer,
+        private readonly LoggerInterface $webhookQueueClientLogger
     ) {
-        parent::__construct(
-            $sqsClient,
-            $environmentService,
-            $serializer,
-            $messageValidationService,
-            $publishClientLogger
-        );
     }
 
     public function dispatchWebhook(WebhookInterface $webhook): bool
@@ -44,7 +41,7 @@ final class WebhookQueueClient extends PublishClient
         try {
             $this->webhookValidationService->validate($webhook);
         } catch (InvalidMessageException $invalidMessageException) {
-            $this->publishClientLogger->error(
+            $this->webhookQueueClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
                     (string)$webhook
@@ -65,6 +62,69 @@ final class WebhookQueueClient extends PublishClient
         ];
 
         return $this->dispatchWithTraceHeader($request);
+    }
+
+    /**
+     * Publish an SQS message onto the queue, with the trace header if it exists.
+     */
+    private function dispatchWithTraceHeader(array $request): bool
+    {
+        if ($this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID) !== '') {
+            /**
+             * The trace header will be propagated to the next service in the chain if provided
+             * from a previous request.
+             *
+             * This value is propagated into the environment in a number of methods. But in the
+             * SQS context that's handled by a trait in the event processors.
+             *
+             * @see TraceContext
+             */
+            $request['MessageSystemAttributes'] = [
+                MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [
+                    'StringValue' => $this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID),
+                    'DataType' => 'String',
+                ],
+            ];
+        }
+
+        $response = $this->sqsClient->sendMessage(
+            new SendMessageRequest($request)
+        );
+
+        try {
+            $response->resolve();
+
+            return $response->info()['status'] === Response::HTTP_OK;
+        } catch (HttpException) {
+            return false;
+        }
+    }
+
+    /**
+     * Get the full SQS Queue URL for a queue (using its name).
+     */
+    public function getQueueUrl(string $queueName): ?string
+    {
+        $response = $this->sqsClient->getQueueUrl(
+            new GetQueueUrlRequest(
+                [
+                    'QueueName' => $queueName
+                ]
+            )
+        );
+
+        $queueUrl = $response->getQueueUrl();
+
+        if (!$queueUrl) {
+            throw new RuntimeException(
+                sprintf(
+                    'Could not get queue url for %s',
+                    $queueName
+                )
+            );
+        }
+
+        return $queueUrl;
     }
 
     /**

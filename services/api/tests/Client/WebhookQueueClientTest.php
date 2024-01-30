@@ -16,7 +16,6 @@ use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Message\Service\MessageValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -53,17 +52,14 @@ final class WebhookQueueClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
-        $mockWebhookValidationService = new WebhookValidationService(
-            Validation::createValidatorBuilder()
-                ->getValidator()
-        );
-
         $webhookQueueClient = new WebhookQueueClient(
-            $mockWebhookValidationService,
+            new WebhookValidationService(
+                Validation::createValidatorBuilder()
+                    ->getValidator()
+            ),
             $mockSqsClient,
             $mockEnvironmentService,
             $mockSerializer,
-            $this->createMock(MessageValidationService::class),
             new NullLogger()
         );
 

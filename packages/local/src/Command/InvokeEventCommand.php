@@ -4,6 +4,7 @@ namespace Packages\Local\Command;
 
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
+use Bref\Event\EventBridge\EventBridgeHandler;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -28,7 +30,8 @@ final class InvokeEventCommand extends Command
      */
     public function __construct(
         private readonly SerializerInterface&NormalizerInterface $serializer,
-        private readonly EventHandler $eventHandler,
+        #[Autowire(service: EventHandler::class)]
+        private readonly EventBridgeHandler $eventHandler,
         #[TaggedIterator('package.local.event_builder', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $eventBuilders,
     ) {

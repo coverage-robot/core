@@ -6,7 +6,7 @@ use App\Event\UploadsStartedEventProcessor;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\UploadsStarted;
-use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +32,7 @@ final class UploadsStartedEventProcessorTest extends TestCase
             commit: 'mock-commit'
         );
 
-        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient = $this->createMock(SqsClientInterface::class);
         $mockPublishClient->expects($this->once())
             ->method('dispatch')
             ->with(

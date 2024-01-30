@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
@@ -33,7 +34,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock($this, Environment::TESTING),
             new NullLogger()
         );
@@ -54,7 +55,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishToNewCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -133,7 +134,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishAnnotationsToCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -251,7 +252,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishMultipleChunksOfAnnotationsToCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),
@@ -343,7 +344,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     #[DataProvider('uploadsDataProvider')]
     public function testPublishToExistingCheckRun(Upload $upload, bool $expectedSupport): void
     {
-        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClient::class);
+        $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
             new CheckRunFormatterService(),
             new CheckAnnotationFormatterService(),

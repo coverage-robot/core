@@ -17,7 +17,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class PublishClient
+final class PublishClient implements SqsClientInterface
 {
     /**
      * The SQS queue (FIFO) which is used to publish messages to version control providers.

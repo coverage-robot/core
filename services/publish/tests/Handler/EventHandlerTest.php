@@ -123,7 +123,7 @@ final class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 
@@ -339,7 +339,7 @@ final class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 
@@ -649,7 +649,7 @@ final class EventHandlerTest extends KernelTestCase
         $eventHandler = new EventHandler(
             $mockCoveragePublisherService,
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(MessageValidationService::class),
+            $this->getContainer()->get(MessageValidationService::class),
             new NullLogger()
         );
 

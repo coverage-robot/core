@@ -4,6 +4,7 @@ namespace Packages\Configuration\Service;
 
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Contracts\Provider\Provider;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * A wrapper around the default, and individual tag behaviour settings, which helps
@@ -12,7 +13,8 @@ use Packages\Contracts\Provider\Provider;
 final class TagBehaviourService
 {
     public function __construct(
-        private readonly SettingService $settingService
+        #[Autowire(service: SettingService::class)]
+        private readonly SettingServiceInterface $settingService
     ) {
     }
 

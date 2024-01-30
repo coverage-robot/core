@@ -12,6 +12,7 @@ use DateTimeImmutable;
 use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
@@ -22,6 +23,7 @@ use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -42,10 +44,12 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
         private readonly CoverageComparisonServiceInterface $coverageComparisonService,
         private readonly LineGroupingService $annotationGrouperService,
-        private readonly SettingService $settingService,
+        #[Autowire(service: SettingService::class)]
+        private readonly SettingServiceInterface $settingService,
         #[Autowire(service: EventBusClient::class)]
         private readonly EventBusClientInterface $eventBusClient,
-        private readonly PublishClient $publishClient
+        #[Autowire(service: PublishClient::class)]
+        private readonly SqsClientInterface $publishClient
     ) {
     }
 

@@ -4,7 +4,7 @@ namespace App\Tests\Service\History\Github;
 
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
@@ -17,7 +17,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
     public function testGetProvider(): void
     {
         $service = new GithubCommitHistoryService(
-            $this->createMock(GithubAppInstallationClient::class),
+            $this->createMock(GithubAppInstallationClientInterface::class),
             new NullLogger()
         );
 
@@ -31,7 +31,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
         int $expectedOffset,
         array $expectedCommits
     ): void {
-        $githubClient = $this->createMock(GithubAppInstallationClient::class);
+        $githubClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $gqlClient = $this->createMock(GraphQL::class);
 
         $mockUpload = new Upload(

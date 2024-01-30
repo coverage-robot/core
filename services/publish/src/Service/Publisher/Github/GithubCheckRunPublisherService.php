@@ -12,6 +12,7 @@ use DateTimeInterface;
 use Doctrine\Common\Annotations\Annotation;
 use Generator;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
@@ -20,6 +21,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -39,7 +41,8 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
     public function __construct(
         private readonly CheckRunFormatterService $checkRunFormatterService,
         private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
-        private readonly GithubAppInstallationClient $client,
+        #[Autowire(service: GithubAppInstallationClient::class)]
+        private readonly GithubAppInstallationClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $checkPublisherLogger
     ) {

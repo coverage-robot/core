@@ -18,12 +18,11 @@ use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -125,7 +124,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient = $this->createMock(SqsClientInterface::class);
         $mockPublishClient->expects($this->once())
             ->method('dispatch')
             ->with(
@@ -234,7 +233,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             )
             ->willReturn(true);
 
-        $mockPublishClient = $this->createMock(PublishClient::class);
+        $mockPublishClient = $this->createMock(SqsClientInterface::class);
         $mockPublishClient->expects($this->once())
             ->method('dispatch')
             ->with(

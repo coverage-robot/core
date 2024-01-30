@@ -8,16 +8,19 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\UploadsStarted;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class UploadsStartedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
-        private readonly PublishClient $publishClient
+        #[Autowire(service: PublishClient::class)]
+        private readonly SqsClientInterface $publishClient
     ) {
     }
 
