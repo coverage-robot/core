@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Override;
 use Packages\Event\Enum\JobState;
+use Stringable;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 #[ORM\UniqueConstraint(
@@ -15,7 +16,7 @@ use Packages\Event\Enum\JobState;
 #[ORM\Index(
     columns: ['project_id', 'commit']
 )]
-final class Job implements \Stringable
+class Job implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
