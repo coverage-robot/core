@@ -67,7 +67,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             $mockCarryforwardTagService
         );
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 2; ++$i) {
             if ($i > 1) {
                 // After the first attempt, all subsequent ones should go into the in-memory cache
                 // and not run any additional queries
