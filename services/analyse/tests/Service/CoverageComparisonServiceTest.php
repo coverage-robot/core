@@ -4,8 +4,8 @@ namespace App\Tests\Service;
 
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
+use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
-use App\Service\CoverageAnalyserService;
 use App\Service\CoverageComparisonService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
@@ -71,7 +71,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
-            new CoverageAnalyserService(
+            new CachingCoverageAnalyserService(
                 $this->createMock(QueryServiceInterface::class),
                 $this->createMock(DiffParserServiceInterface::class),
                 $this->createMock(CommitHistoryServiceInterface::class),
@@ -137,7 +137,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
-            new CoverageAnalyserService(
+            new CachingCoverageAnalyserService(
                 $this->createMock(QueryServiceInterface::class),
                 $this->createMock(DiffParserServiceInterface::class),
                 $this->createMock(CommitHistoryServiceInterface::class),
@@ -200,7 +200,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
-            new CoverageAnalyserService(
+            new CachingCoverageAnalyserService(
                 $this->createMock(QueryServiceInterface::class),
                 $this->createMock(DiffParserServiceInterface::class),
                 $this->createMock(CommitHistoryServiceInterface::class),
@@ -262,7 +262,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
-            new CoverageAnalyserService(
+            new CachingCoverageAnalyserService(
                 $this->createMock(QueryServiceInterface::class),
                 $this->createMock(DiffParserServiceInterface::class),
                 $this->createMock(CommitHistoryServiceInterface::class),
