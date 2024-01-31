@@ -70,7 +70,8 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
 
     public function testValidCoverageEventProcess(): void
     {
-        $project = $this->createMock(Project::class);
+        $project = new Project();
+        $project->setCoveragePercentage(0);
 
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->once())
@@ -78,11 +79,10 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
             ->willReturn($project);
         $mockProjectRepository->expects($this->once())
             ->method('save')
-            ->with($project, true);
-
-        $project->expects($this->once())
-            ->method('setCoveragePercentage')
-            ->with(99);
+            ->with(
+                self::callback(static fn (Project $project) => $project->getCoveragePercentage() === 99.0),
+                true
+            );
 
         $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),

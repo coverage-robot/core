@@ -60,10 +60,8 @@ final class AuthTokenServiceTest extends TestCase
             baseCommit: null
         );
 
-        $project = $this->createMock(Project::class);
-        $project->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(true);
+        $project = new Project();
+        $project->setEnabled(true);
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -100,10 +98,8 @@ final class AuthTokenServiceTest extends TestCase
             baseCommit: null
         );
 
-        $project = $this->createMock(Project::class);
-        $project->expects($this->once())
-            ->method('isEnabled')
-            ->willReturn(false);
+        $project = new Project();
+        $project->setEnabled(false);
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -186,8 +182,8 @@ final class AuthTokenServiceTest extends TestCase
         $this->projectRepository->expects($this->exactly(3))
             ->method('findOneBy')
             ->willReturnOnConsecutiveCalls(
-                $this->createMock(Project::class),
-                $this->createMock(Project::class),
+                new Project(),
+                new Project(),
                 null
             );
 
@@ -204,9 +200,9 @@ final class AuthTokenServiceTest extends TestCase
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
         ->method('findOneBy')
         ->willReturnOnConsecutiveCalls(
-            $this->createMock(Project::class),
-            $this->createMock(Project::class),
-            $this->createMock(Project::class)
+            new Project(),
+            new Project(),
+            new Project()
         );
 
         $this->expectExceptionObject(
@@ -246,10 +242,8 @@ final class AuthTokenServiceTest extends TestCase
             provider: Provider::GITHUB
         );
 
-        $project = $this->createMock(Project::class);
-        $project->expects($this->once())
-        ->method('isEnabled')
-        ->willReturn(true);
+        $project = new Project();
+        $project->setEnabled(true);
 
         $this->projectRepository->expects($this->once())
         ->method('findOneBy')
@@ -277,10 +271,8 @@ final class AuthTokenServiceTest extends TestCase
             provider: Provider::GITHUB
         );
 
-        $project = $this->createMock(Project::class);
-        $project->expects($this->once())
-        ->method('isEnabled')
-        ->willReturn(false);
+        $project = new Project();
+        $project->setEnabled(false);
 
         $this->projectRepository->expects($this->once())
         ->method('findOneBy')
@@ -354,8 +346,8 @@ final class AuthTokenServiceTest extends TestCase
         $this->projectRepository->expects($this->exactly(3))
             ->method('findOneBy')
             ->willReturnOnConsecutiveCalls(
-                $this->createMock(Project::class),
-                $this->createMock(Project::class),
+                new Project(),
+                new Project(),
                 null
             );
 
@@ -372,9 +364,9 @@ final class AuthTokenServiceTest extends TestCase
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
         ->method('findOneBy')
         ->willReturnOnConsecutiveCalls(
-            $this->createMock(Project::class),
-            $this->createMock(Project::class),
-            $this->createMock(Project::class)
+            new Project(),
+            new Project(),
+            new Project()
         );
 
         $this->expectExceptionObject(

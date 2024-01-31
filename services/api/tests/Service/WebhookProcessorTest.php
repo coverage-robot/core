@@ -31,7 +31,7 @@ final class WebhookProcessorTest extends KernelTestCase
         );
 
         $webhookProcessor->process(
-            $this->createMock(Project::class),
+            new Project(),
             $this->getContainer()
                 ->get(SerializerInterface::class)
                 ->denormalize(

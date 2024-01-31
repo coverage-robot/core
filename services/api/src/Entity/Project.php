@@ -14,7 +14,7 @@ use Stringable;
 #[ORM\UniqueConstraint(
     columns: ['provider', 'owner', 'repository']
 )]
-class Project implements Stringable
+final class Project implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

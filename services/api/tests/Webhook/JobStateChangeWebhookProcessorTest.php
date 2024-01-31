@@ -11,7 +11,6 @@ use App\Repository\JobRepository;
 use App\Webhook\JobStateChangeWebhookProcessor;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
-use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
@@ -21,8 +20,8 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 {
     public function testProcessingWebhookCreatingNewJobForProject(): void
     {
-        $mockProject = $this->createMock(Project::class);
-        $newJob = $this->createMock(Job::class);
+        $mockProject = new Project();
+        $newJob = new Job();
 
         $mockJobRepository = $this->createMock(JobRepository::class);
         $mockJobRepository->expects($this->exactly(1))
@@ -79,8 +78,8 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 
     public function testProcessingWebhookUpdatingExistingJobForProject(): void
     {
-        $mockProject = $this->createMock(Project::class);
-        $job = $this->createMock(Job::class);
+        $mockProject = new Project();
+        $job = new Job();
 
         $mockJobRepository = $this->createMock(JobRepository::class);
         $mockJobRepository->expects($this->once())
@@ -136,7 +135,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 
     public function testProcessingWebhookForStateChangeTriggeredInternally(): void
     {
-        $mockProject = $this->createMock(Project::class);
+        $mockProject = new Project();
 
         $mockJobRepository = $this->createMock(JobRepository::class);
         $mockJobRepository->expects($this->never())

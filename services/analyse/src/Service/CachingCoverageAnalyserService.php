@@ -2,19 +2,19 @@
 
 namespace App\Service;
 
+use App\Exception\AnalysisException;
+use App\Exception\QueryException;
 use App\Model\CoverageReport;
+use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
-use App\Service\Carryforward\CachingCarryforwardTagService;
-use App\Service\Carryforward\CarryforwardTagServiceInterface;
-use App\Service\Diff\CachingDiffParserService;
-use App\Service\Diff\DiffParserServiceInterface;
-use App\Service\History\CachingCommitHistoryService;
-use App\Service\History\CommitHistoryServiceInterface;
+use DateTimeImmutable;
 use Override;
+use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use WeakMap;
 
@@ -25,7 +25,7 @@ use WeakMap;
  * repeatedly fetching the same metrics when building parameters for
  * each of the report's metrics.
  */
-final class CachingCoverageAnalyserService extends CoverageAnalyserService
+final class CachingCoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
     /**
      * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult>
@@ -73,17 +73,9 @@ final class CachingCoverageAnalyserService extends CoverageAnalyserService
     private WeakMap $leastCoveredDiffFiles;
 
     public function __construct(
-        #[Autowire(service: CachingQueryService::class)]
-        QueryServiceInterface $queryService,
-        #[Autowire(service: CachingDiffParserService::class)]
-        DiffParserServiceInterface $diffParser,
-        #[Autowire(service: CachingCommitHistoryService::class)]
-        CommitHistoryServiceInterface $commitHistoryService,
-        #[Autowire(service: CachingCarryforwardTagService::class)]
-        CarryforwardTagServiceInterface $carryforwardTagService
+        #[Autowire(service: CoverageAnalyserService::class)]
+        private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
     ) {
-        parent::__construct($queryService, $diffParser, $commitHistoryService, $carryforwardTagService);
-
         /**
          * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult> $uploadsCache
          */
@@ -131,73 +123,149 @@ final class CachingCoverageAnalyserService extends CoverageAnalyserService
         $this->leastCoveredDiffFiles = $leastCoveredDiffFilesCache;
     }
 
+
     #[Override]
-    protected function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
+    public function getWaypoint(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $ref,
+        string $commit,
+        int|string|null $pullRequest = null
+    ): ReportWaypoint {
+        return $this->coverageAnalyserService->getWaypoint(
+            $provider,
+            $owner,
+            $repository,
+            $ref,
+            $commit,
+            $pullRequest
+        );
+    }
+
+    #[Override]
+    public function getWaypointFromEvent(EventInterface $event): ReportWaypoint
+    {
+        return $this->coverageAnalyserService->getWaypointFromEvent($event);
+    }
+
+    #[Override]
+    public function analyse(ReportWaypoint $waypoint): CoverageReportInterface
+    {
+        try {
+            return new CoverageReport(
+                waypoint: $waypoint,
+                uploads:  fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
+                totalLines: fn(): int => $this->getTotalLines($waypoint),
+                atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
+                uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),
+                coveragePercentage: fn(): float => $this->getCoveragePercentage($waypoint),
+                tagCoverage: fn(): TagCoverageCollectionQueryResult => $this->getTagCoverage($waypoint),
+                diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
+                leastCoveredDiffFiles: fn(): FileCoverageCollectionQueryResult =>
+                    $this->getLeastCoveredDiffFiles($waypoint),
+                diffLineCoverage: fn(): LineCoverageCollectionQueryResult =>
+                    $this->getDiffLineCoverage($waypoint)
+            );
+        } catch (QueryException $queryException) {
+            throw new AnalysisException(
+                'Unable to analyse event for report generation.',
+                0,
+                $queryException
+            );
+        }
+    }
+
+    /**
+     * @throws QueryException
+     */
+    #[Override]
+    public function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
         if (!isset($this->uploads[$waypoint])) {
-            $this->uploads[$waypoint] = parent::getUploads($waypoint);
+            $this->uploads[$waypoint] = $this->coverageAnalyserService->getUploads($waypoint);
         }
 
         return $this->uploads[$waypoint];
     }
 
+    /**
+     * @throws QueryException
+     */
+    private function getSuccessfulUploads(ReportWaypoint $waypoint): array
+    {
+        return $this->getUploads($waypoint)
+            ->getSuccessfulUploads();
+    }
+
+    /**
+     * @return DateTimeImmutable[]
+     *
+     * @throws QueryException
+     */
+    private function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
+    {
+        return $this->getUploads($waypoint)
+            ->getSuccessfulIngestTimes();
+    }
+
     #[Override]
-    protected function getTotalLines(ReportWaypoint $waypoint): int
+    public function getTotalLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->totalLines[$waypoint])) {
-            $this->totalLines[$waypoint] = parent::getTotalLines($waypoint);
+            $this->totalLines[$waypoint] = $this->coverageAnalyserService->getTotalLines($waypoint);
         }
 
         return $this->totalLines[$waypoint];
     }
 
     #[Override]
-    protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
+    public function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->atLeastPartiallyCoveredLines[$waypoint])) {
-            $this->atLeastPartiallyCoveredLines[$waypoint] = parent::getAtLeastPartiallyCoveredLines($waypoint);
+            $this->atLeastPartiallyCoveredLines[$waypoint] = $this->coverageAnalyserService->getAtLeastPartiallyCoveredLines($waypoint);
         }
 
         return $this->atLeastPartiallyCoveredLines[$waypoint];
     }
 
     #[Override]
-    protected function getUncoveredLines(ReportWaypoint $waypoint): int
+    public function getUncoveredLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->uncoveredLines[$waypoint])) {
-            $this->uncoveredLines[$waypoint] = parent::getUncoveredLines($waypoint);
+            $this->uncoveredLines[$waypoint] = $this->coverageAnalyserService->getUncoveredLines($waypoint);
         }
 
         return $this->uncoveredLines[$waypoint];
     }
 
     #[Override]
-    protected function getCoveragePercentage(ReportWaypoint $waypoint): float
+    public function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
         if (!isset($this->coveragePercentage[$waypoint])) {
-            $this->coveragePercentage[$waypoint] = parent::getCoveragePercentage($waypoint);
+            $this->coveragePercentage[$waypoint] = $this->coverageAnalyserService->getCoveragePercentage($waypoint);
         }
 
         return $this->coveragePercentage[$waypoint];
     }
 
     #[Override]
-    protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
+    public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
         if (!isset($this->tagCoverage[$waypoint])) {
-            $this->tagCoverage[$waypoint] = parent::getTagCoverage($waypoint);
+            $this->tagCoverage[$waypoint] = $this->coverageAnalyserService->getTagCoverage($waypoint);
         }
 
         return $this->tagCoverage[$waypoint];
     }
 
     #[Override]
-    protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
+    public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         if (!isset($this->diffCoveragePercentage[$waypoint])) {
             // Weak maps can't store null values (i.e. the value is never persisted), so
             // we're converting it to false when stored in the map
-            $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint) ?? false;
+            $this->diffCoveragePercentage[$waypoint] = $this->coverageAnalyserService->getDiffCoveragePercentage($waypoint) ?? false;
         }
 
         $diffCoveragePercentage = $this->diffCoveragePercentage[$waypoint];
@@ -206,7 +274,7 @@ final class CachingCoverageAnalyserService extends CoverageAnalyserService
     }
 
     #[Override]
-    protected function getLeastCoveredDiffFiles(
+    public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = CoverageAnalyserService::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
@@ -217,7 +285,7 @@ final class CachingCoverageAnalyserService extends CoverageAnalyserService
             $this->leastCoveredDiffFiles[$waypoint] = array_replace(
                 $this->leastCoveredDiffFiles[$waypoint] ?? [],
                 [
-                    $limit => parent::getLeastCoveredDiffFiles($waypoint, $limit)
+                    $limit => $this->coverageAnalyserService->getLeastCoveredDiffFiles($waypoint, $limit)
                 ]
             );
         }
@@ -226,12 +294,24 @@ final class CachingCoverageAnalyserService extends CoverageAnalyserService
     }
 
     #[Override]
-    protected function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
+    public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         if (!isset($this->diffLineCoverage[$waypoint])) {
-            $this->diffLineCoverage[$waypoint] = parent::getDiffLineCoverage($waypoint);
+            $this->diffLineCoverage[$waypoint] = $this->coverageAnalyserService->getDiffLineCoverage($waypoint);
         }
 
         return $this->diffLineCoverage[$waypoint];
+    }
+
+    #[Override]
+    public function getDiff(ReportWaypoint $waypoint): array
+    {
+        return $this->coverageAnalyserService->getDiff($waypoint);
+    }
+
+    #[Override]
+    public function getHistory(ReportWaypoint $waypoint, int $page = 1): array
+    {
+        return $this->coverageAnalyserService->getHistory($waypoint, $page);
     }
 }

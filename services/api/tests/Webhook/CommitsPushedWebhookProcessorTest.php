@@ -36,7 +36,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
         );
 
         $processor->process(
-            $this->createMock(Project::class),
+            new Project(),
             $webhook
         );
     }

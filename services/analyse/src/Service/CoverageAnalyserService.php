@@ -32,7 +32,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class CoverageAnalyserService implements CoverageAnalyserServiceInterface
+final class CoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
     public function __construct(
         #[Autowire(service: CachingQueryService::class)]
@@ -122,7 +122,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
+    public function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
         /** @var TotalUploadsQueryResult $totalUploads */
         $totalUploads = $this->queryService->runQuery(
@@ -136,7 +136,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getSuccessfulUploads(ReportWaypoint $waypoint): array
+    private function getSuccessfulUploads(ReportWaypoint $waypoint): array
     {
         return $this->getUploads($waypoint)
             ->getSuccessfulUploads();
@@ -147,7 +147,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    protected function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
+    private function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
     {
         return $this->getUploads($waypoint)
             ->getSuccessfulIngestTimes();
@@ -156,7 +156,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getTotalLines(ReportWaypoint $waypoint): int
+    public function getTotalLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -208,7 +208,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
+    public function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -260,7 +260,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getUncoveredLines(ReportWaypoint $waypoint): int
+    public function getUncoveredLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -312,7 +312,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getCoveragePercentage(ReportWaypoint $waypoint): float
+    public function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -364,7 +364,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @throws QueryException
      */
-    protected function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
+    public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -432,7 +432,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    protected function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
+    public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         $diff = $this->getDiff($waypoint);
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -496,7 +496,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    protected function getLeastCoveredDiffFiles(
+    public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
@@ -559,7 +559,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
      *
      * @throws QueryException
      */
-    protected function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
+    public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         $diff = $this->getDiff($waypoint);
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -600,7 +600,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @return array<string, array<int, int>>
      */
-    protected function getDiff(ReportWaypoint $waypoint): array
+    public function getDiff(ReportWaypoint $waypoint): array
     {
         return $this->diffParser->get($waypoint);
     }
@@ -608,7 +608,7 @@ class CoverageAnalyserService implements CoverageAnalyserServiceInterface
     /**
      * @return array{commit: string, merged: bool, ref: string|null}[]
      */
-    protected function getHistory(ReportWaypoint $waypoint, int $page = 1): array
+    public function getHistory(ReportWaypoint $waypoint, int $page = 1): array
     {
         return $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
     }
