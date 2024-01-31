@@ -11,7 +11,6 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
-use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
@@ -189,26 +188,6 @@ final class CachingCoverageAnalyserService implements CoverageAnalyserServiceInt
         return $this->uploads[$waypoint];
     }
 
-    /**
-     * @throws QueryException
-     */
-    private function getSuccessfulUploads(ReportWaypoint $waypoint): array
-    {
-        return $this->getUploads($waypoint)
-            ->getSuccessfulUploads();
-    }
-
-    /**
-     * @return DateTimeImmutable[]
-     *
-     * @throws QueryException
-     */
-    private function getSuccessfulIngestTimes(ReportWaypoint $waypoint): array
-    {
-        return $this->getUploads($waypoint)
-            ->getSuccessfulIngestTimes();
-    }
-
     #[Override]
     public function getTotalLines(ReportWaypoint $waypoint): int
     {
@@ -223,7 +202,8 @@ final class CachingCoverageAnalyserService implements CoverageAnalyserServiceInt
     public function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         if (!isset($this->atLeastPartiallyCoveredLines[$waypoint])) {
-            $this->atLeastPartiallyCoveredLines[$waypoint] = $this->coverageAnalyserService->getAtLeastPartiallyCoveredLines($waypoint);
+            $this->atLeastPartiallyCoveredLines[$waypoint] = $this->coverageAnalyserService
+                ->getAtLeastPartiallyCoveredLines($waypoint);
         }
 
         return $this->atLeastPartiallyCoveredLines[$waypoint];
@@ -265,7 +245,8 @@ final class CachingCoverageAnalyserService implements CoverageAnalyserServiceInt
         if (!isset($this->diffCoveragePercentage[$waypoint])) {
             // Weak maps can't store null values (i.e. the value is never persisted), so
             // we're converting it to false when stored in the map
-            $this->diffCoveragePercentage[$waypoint] = $this->coverageAnalyserService->getDiffCoveragePercentage($waypoint) ?? false;
+            $this->diffCoveragePercentage[$waypoint] = $this->coverageAnalyserService
+                ->getDiffCoveragePercentage($waypoint) ?? false;
         }
 
         $diffCoveragePercentage = $this->diffCoveragePercentage[$waypoint];

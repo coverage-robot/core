@@ -80,7 +80,7 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
         $mockProjectRepository->expects($this->once())
             ->method('save')
             ->with(
-                self::callback(static fn (Project $project) => $project->getCoveragePercentage() === 99.0),
+                self::callback(static fn (Project $project): bool => $project->getCoveragePercentage() === 99.0),
                 true
             );
 
