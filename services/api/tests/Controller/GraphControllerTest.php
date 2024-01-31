@@ -45,7 +45,7 @@ final class GraphControllerTest extends KernelTestCase
                 'owner' => 'owner',
                 'repository' => 'repository',
             ])
-            ->willReturn($this->createMock(Project::class));
+            ->willReturn(new Project());
 
         $mockBadgeService->expects($this->once())
             ->method('renderCoveragePercentageBadge')

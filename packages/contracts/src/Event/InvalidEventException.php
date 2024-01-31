@@ -5,7 +5,7 @@ namespace Packages\Contracts\Event;
 use RuntimeException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class InvalidEventException extends RuntimeException
+final class InvalidEventException extends RuntimeException
 {
     public static function constraintViolations(
         EventInterface $event,

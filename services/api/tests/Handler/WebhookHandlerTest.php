@@ -27,10 +27,8 @@ final class WebhookHandlerTest extends KernelTestCase
     #[DataProvider('webhookDataProvider')]
     public function testHandleSqsDisabledProject(WebhookInterface $webhook): void
     {
-        $mockProject = $this->createMock(Project::class);
-        $mockProject->expects($this->atLeastOnce())
-            ->method('isEnabled')
-            ->willReturn(false);
+        $mockProject = new Project();
+        $mockProject->setEnabled(false);
 
         $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
         $mockWebhookProcessor->expects($this->never())
@@ -101,10 +99,8 @@ final class WebhookHandlerTest extends KernelTestCase
     #[DataProvider('webhookDataProvider')]
     public function testHandleSqsEnabledProject(WebhookInterface $webhook): void
     {
-        $mockProject = $this->createMock(Project::class);
-        $mockProject->expects($this->atLeastOnce())
-            ->method('isEnabled')
-            ->willReturn(true);
+        $mockProject = new Project();
+        $mockProject->setEnabled(true);
 
         $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
         $mockWebhookProcessor->expects($this->once())

@@ -5,7 +5,7 @@ namespace Packages\Contracts\PublishableMessage;
 use RuntimeException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class InvalidMessageException extends RuntimeException
+final class InvalidMessageException extends RuntimeException
 {
     public static function constraintViolations(
         PublishableMessageInterface $message,

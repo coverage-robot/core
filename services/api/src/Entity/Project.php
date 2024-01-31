@@ -14,7 +14,7 @@ use Stringable;
 #[ORM\UniqueConstraint(
     columns: ['provider', 'owner', 'repository']
 )]
-class Project implements Stringable
+final class Project implements Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -183,14 +183,14 @@ class Project implements Stringable
     #[Override]
     public function __toString(): string
     {
-        $projectId = $this->getId();
+        $projectId = $this->id;
 
         if ($projectId === null) {
             return sprintf(
                 'Project#%s-%s-%s',
-                (string)$this->getProvider()?->value,
-                (string)$this->getOwner(),
-                (string)$this->getRepository()
+                (string)$this->provider?->value,
+                (string)$this->owner,
+                (string)$this->repository
             );
         }
 
