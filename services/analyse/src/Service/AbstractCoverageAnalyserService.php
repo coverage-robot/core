@@ -20,29 +20,21 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
 use App\Query\TotalTagCoverageQuery;
 use App\Query\TotalUploadsQuery;
-use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
-use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
-use App\Service\History\CachingCommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CoverageAnalyserService implements CoverageAnalyserServiceInterface
+abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServiceInterface
 {
     public function __construct(
-        #[Autowire(service: CachingQueryService::class)]
-        private readonly QueryServiceInterface $queryService,
-        #[Autowire(service: CachingDiffParserService::class)]
-        private readonly DiffParserServiceInterface $diffParser,
-        #[Autowire(service: CachingCommitHistoryService::class)]
-        private readonly CommitHistoryServiceInterface $commitHistoryService,
-        #[Autowire(service: CachingCarryforwardTagService::class)]
-        private readonly CarryforwardTagServiceInterface $carryforwardTagService
+        protected readonly QueryServiceInterface $queryService,
+        protected readonly DiffParserServiceInterface $diffParser,
+        protected readonly CommitHistoryServiceInterface $commitHistoryService,
+        protected readonly CarryforwardTagServiceInterface $carryforwardTagService
     ) {
     }
 
