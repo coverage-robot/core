@@ -322,16 +322,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.1.12",
+            "version": "2.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788"
+                "reference": "535ad5f035d16892dbccbb785be2333f987a81e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/99eb6766d20df0c3cbacc14d7de29ac9b3616788",
-                "reference": "99eb6766d20df0c3cbacc14d7de29ac9b3616788",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/535ad5f035d16892dbccbb785be2333f987a81e3",
+                "reference": "535ad5f035d16892dbccbb785be2333f987a81e3",
                 "shasum": ""
             },
             "require": {
@@ -385,7 +385,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.12"
+                "source": "https://github.com/brefphp/bref/tree/2.1.13"
             },
             "funding": [
                 {
@@ -397,7 +397,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-23T13:51:26+00:00"
+            "time": "2024-02-01T15:29:14+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -589,7 +589,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "68c5c1a0b6eceffd4ee508fe720a20d80eb7404d"
+                "reference": "62c06058bc0643fe87a567b069be625e0d40f35c"
             },
             "require": {
                 "knplabs/github-api": "^3.13",
@@ -601,7 +601,8 @@
                 "symfony/http-kernel": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -615,6 +616,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -631,7 +635,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
+                "reference": "2a8eeba2ae5037f0bfcf9c20da98265c859b3687"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -645,7 +649,8 @@
                 "symfony/yaml": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -659,6 +664,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -697,7 +705,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
+                "reference": "4137558ae4ae4f6e591f90c4f72e2dea23d834eb"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -711,7 +719,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.4"
             },
             "type": "library",
             "autoload": {
@@ -725,6 +734,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -741,7 +753,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "0f7b07d9e3010c80e67bc74ae710f9dd06478d08"
+                "reference": "43540f2df1e1dea01c3e94e4b667f5c022d31780"
             },
             "require": {
                 "async-aws/sqs": "^2.0",
@@ -752,7 +764,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -766,6 +779,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -782,7 +798,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -798,6 +814,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
             "type": "library",
@@ -812,6 +829,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -6462,16 +6482,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "acd3eb5cb02382c1cb0287ba29b2908cc6ffa83a"
+                "reference": "937a195147e0c27b2759ade834169ed006d0bc74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/acd3eb5cb02382c1cb0287ba29b2908cc6ffa83a",
-                "reference": "acd3eb5cb02382c1cb0287ba29b2908cc6ffa83a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/937a195147e0c27b2759ade834169ed006d0bc74",
+                "reference": "937a195147e0c27b2759ade834169ed006d0bc74",
                 "shasum": ""
             },
             "require": {
@@ -6503,7 +6523,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.0.2"
+                "source": "https://github.com/symfony/process/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -6519,7 +6539,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-24T09:15:37+00:00"
+            "time": "2024-01-23T15:02:46+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -8206,7 +8226,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "6eaf120ad505526199826a6acccb43cfdfd1069d"
+                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -8220,7 +8240,8 @@
             },
             "require-dev": {
                 "bref/bref": "^2.1",
-                "phpunit/phpunit": "^10.4"
+                "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -8234,6 +8255,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
