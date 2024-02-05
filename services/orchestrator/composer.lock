@@ -476,7 +476,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "68c5c1a0b6eceffd4ee508fe720a20d80eb7404d"
+                "reference": "62c06058bc0643fe87a567b069be625e0d40f35c"
             },
             "require": {
                 "knplabs/github-api": "^3.13",
@@ -488,7 +488,8 @@
                 "symfony/http-kernel": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -502,6 +503,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -518,7 +522,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "75490b29b58afdb882f784a1b74daf26160871da"
+                "reference": "2a8eeba2ae5037f0bfcf9c20da98265c859b3687"
             },
             "require": {
                 "async-aws/dynamo-db": "^3.0",
@@ -532,7 +536,8 @@
                 "symfony/yaml": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.5"
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -546,6 +551,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -584,7 +592,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "db1e66f8681a390e39a8c092ac65dd6b6352c04d"
+                "reference": "4137558ae4ae4f6e591f90c4f72e2dea23d834eb"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -598,7 +606,8 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^10.3"
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.19.4"
             },
             "type": "library",
             "autoload": {
@@ -612,6 +621,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -628,7 +640,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "36b2696b313d36997616b1cad738fefc40c402fc"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -644,6 +656,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
             "type": "library",
@@ -658,6 +671,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -7080,7 +7096,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "6eaf120ad505526199826a6acccb43cfdfd1069d"
+                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -7094,7 +7110,8 @@
             },
             "require-dev": {
                 "bref/bref": "^2.1",
-                "phpunit/phpunit": "^10.4"
+                "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5"
             },
             "type": "library",
             "autoload": {
@@ -7108,6 +7125,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -7979,16 +7999,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.9",
+            "version": "10.5.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe"
+                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
-                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/50b8e314b6d0dd06521dc31d1abffa73f25f850c",
+                "reference": "50b8e314b6d0dd06521dc31d1abffa73f25f850c",
                 "shasum": ""
             },
             "require": {
@@ -8060,7 +8080,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.9"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.10"
             },
             "funding": [
                 {
@@ -8076,7 +8096,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-22T14:35:40+00:00"
+            "time": "2024-02-04T09:07:51+00:00"
         },
         {
             "name": "psalm/plugin-symfony",
