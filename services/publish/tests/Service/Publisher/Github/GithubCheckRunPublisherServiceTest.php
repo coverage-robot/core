@@ -7,10 +7,10 @@ use App\Exception\PublishException;
 use App\Service\Formatter\CheckAnnotationFormatterService;
 use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
+use App\Service\Templating\TemplateRenderingService;
 use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -22,18 +22,18 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GithubCheckRunPublisherServiceTest extends TestCase
+final class GithubCheckRunPublisherServiceTest extends KernelTestCase
 {
     #[DataProvider('uploadsDataProvider')]
     public function testSupports(Upload $upload, bool $expectedSupport): void
     {
         $publisher = new GithubCheckRunPublisherService(
-            new CheckRunFormatterService(),
-            new CheckAnnotationFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock($this, Environment::TESTING),
             new NullLogger()
@@ -57,8 +57,8 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
-            new CheckRunFormatterService(),
-            new CheckAnnotationFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -136,8 +136,8 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
-            new CheckRunFormatterService(),
-            new CheckAnnotationFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -254,8 +254,8 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
-            new CheckRunFormatterService(),
-            new CheckAnnotationFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -346,8 +346,8 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubCheckRunPublisherService(
-            new CheckRunFormatterService(),
-            new CheckAnnotationFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
@@ -435,6 +435,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
                     tag: new Tag('mock-tag', 'mock-commit'),
+                    baseCommit: 'mock-base-commit'
                 ),
                 true
             ],
@@ -450,7 +451,7 @@ final class GithubCheckRunPublisherServiceTest extends TestCase
                     projectRoot: 'mock-project-root',
                     tag: new Tag('mock-tag', 'mock-commit'),
                     pullRequest: '1234',
-                    baseCommit: 'commit-on-main',
+                    baseCommit: 'mock-base-commit',
                     baseRef: 'main',
                 ),
                 true

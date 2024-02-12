@@ -146,6 +146,9 @@ jobs:
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
 
+            -   name: Run Twig Lint
+                run: composer lint:templates
+
             -   name: Run Terraform Format
                 uses: dflook/terraform-fmt-check@v1
                 with:

@@ -3,10 +3,10 @@
 namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
+use App\Enum\TemplateVariant;
 use App\Exception\PublishException;
-use App\Service\Formatter\CheckAnnotationFormatterService;
-use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
+use App\Service\Templating\TemplateRenderingService;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Annotations\Annotation;
@@ -39,8 +39,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
     private const int MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
     public function __construct(
-        private readonly CheckRunFormatterService $checkRunFormatterService,
-        private readonly CheckAnnotationFormatterService $checkAnnotationFormatterService,
+        private readonly TemplateRenderingService $templateRenderingService,
         #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
@@ -165,8 +164,11 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'status' => $publishableMessage->getStatus()->value,
                 'annotations' => $annotations,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::IN_PROGRESS
+                    ),
+                    'summary' => '',
                 ]
             ],
             PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
@@ -177,8 +179,11 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'annotations' => $annotations,
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::COMPLETE
+                    ),
+                    'summary' => '',
                 ]
             ]
         };
@@ -227,8 +232,11 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'name' => 'Coverage Robot',
                 'status' => $publishableMessage->getStatus()->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::IN_PROGRESS
+                    ),
+                    'summary' => '',
                     'annotations' => $annotations,
                 ]
             ],
@@ -237,8 +245,11 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
                 'output' => [
-                    'title' => $this->checkRunFormatterService->formatTitle($publishableMessage),
-                    'summary' => $this->checkRunFormatterService->formatSummary(),
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::COMPLETE
+                    ),
+                    'summary' => '',
                     'annotations' => $annotations,
                 ],
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
@@ -288,8 +299,14 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
             $annotations[] = [
                 'path' => $publishableAnnotation->getFileName(),
                 'annotation_level' => 'warning',
-                'title' => $this->checkAnnotationFormatterService->formatTitle(),
-                'message' => $this->checkAnnotationFormatterService->format($publishableAnnotation),
+                'title' => $this->templateRenderingService->render(
+                    $publishableAnnotation,
+                    TemplateVariant::TITLE
+                ),
+                'message' => $this->templateRenderingService->render(
+                    $publishableAnnotation,
+                    TemplateVariant::COMPLETE
+                ),
                 'start_line' => $publishableAnnotation->getStartLineNumber(),
 
                 // We want to place the annotation on the starting line, as opposed to spreading
@@ -306,7 +323,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     /**
      * @param Annotation[] $currentAnnotations
-     * @return PublishableAnnotationInterface[]
+     * @return (PublishableMessageInterface&PublishableAnnotationInterface)[]
      */
     private function filterAnnotations(
         PublishableCheckRunMessage $publishableMessage,
@@ -378,7 +395,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
             return [
                 $checkRunId,
                 $annotations,
-                $conclusion ?
+                $conclusion !== null ?
                     PublishableCheckRunStatus::from($conclusion) :
                     PublishableCheckRunStatus::IN_PROGRESS
             ];
