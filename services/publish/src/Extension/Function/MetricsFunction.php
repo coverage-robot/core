@@ -31,20 +31,20 @@ final class MetricsFunction implements TwigFunctionInterface
                 'coverage_change' => $message->getCoverageChange(),
                 'tag_coverage' => array_map(
                     static fn(array $tag) => [
-                        'name' => (string)$tag["tag"]["name"],
-                        'commit' => (string)$tag["tag"]["commit"],
-                        'lines' => (int)$tag["lines"],
-                        'covered' => (int)$tag["covered"],
-                        'partial' => (int)$tag["partial"],
-                        'uncovered' => (int)$tag["uncovered"],
-                        'coveragePercentage' => (float)$tag["coveragePercentage"],
+                        'name' => (string)$tag['tag']['name'],
+                        'commit' => (string)$tag['tag']['commit'],
+                        'lines' => (int)$tag['lines'],
+                        'covered' => (int)$tag['covered'],
+                        'partial' => (int)$tag['partial'],
+                        'uncovered' => (int)$tag['uncovered'],
+                        'coveragePercentage' => (float)$tag['coveragePercentage'],
                     ],
                     $message->getTagCoverage()
                 ),
                 'impacted_files' => array_map(
                     static fn(array $file) => [
-                        'fileName' => (string)$file["fileName"],
-                        'coveragePercentage' => (float)$file["coveragePercentage"],
+                        'fileName' => (string)$file['fileName'],
+                        'coveragePercentage' => (float)$file['coveragePercentage'],
                     ],
                     $message->getLeastCoveredDiffFiles()
                 )
