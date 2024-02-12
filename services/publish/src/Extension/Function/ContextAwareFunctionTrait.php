@@ -56,8 +56,9 @@ trait ContextAwareFunctionTrait
      *
      * @see TemplateRenderingService::renderAnnotationWithTemplate()
      */
-    protected function getAnnotationFromContext(array $context): PublishableMessageInterface&PublishableAnnotationInterface
-    {
+    protected function getAnnotationFromContext(
+        array $context
+    ): PublishableMessageInterface&PublishableAnnotationInterface {
         $annotation = $context['annotation'] ?? null;
 
         if ($annotation === null) {
