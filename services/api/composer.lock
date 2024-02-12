@@ -7926,16 +7926,16 @@
         },
         {
             "name": "symfony/twig-bridge",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "d6236c6e75ee70317a27f0fd4c3f9bb956f22366"
+                "reference": "414ff6930889262a11ec67f351e9810dd8565b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/d6236c6e75ee70317a27f0fd4c3f9bb956f22366",
-                "reference": "d6236c6e75ee70317a27f0fd4c3f9bb956f22366",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/414ff6930889262a11ec67f351e9810dd8565b0d",
+                "reference": "414ff6930889262a11ec67f351e9810dd8565b0d",
                 "shasum": ""
             },
             "require": {
@@ -7978,7 +7978,7 @@
                 "symfony/security-core": "^6.4|^7.0",
                 "symfony/security-csrf": "^6.4|^7.0",
                 "symfony/security-http": "^6.4|^7.0",
-                "symfony/serializer": "^6.4|^7.0",
+                "symfony/serializer": "^6.4.3|^7.0.3",
                 "symfony/stopwatch": "^6.4|^7.0",
                 "symfony/translation": "^6.4|^7.0",
                 "symfony/web-link": "^6.4|^7.0",
@@ -8014,7 +8014,7 @@
             "description": "Provides integration for Twig with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/twig-bridge/tree/v7.0.2"
+                "source": "https://github.com/symfony/twig-bridge/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -8030,7 +8030,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-15T12:36:57+00:00"
+            "time": "2024-01-30T08:34:29+00:00"
         },
         {
             "name": "symfony/twig-bundle",
