@@ -55,7 +55,7 @@ final class CoverageTemplateSecurityPolicy implements SecurityPolicyInterface
     private function getFunctionNames(): array
     {
         return array_map(
-            fn (TwigFunction $function) => $function->getName(),
+            static fn(TwigFunction $function): string => $function->getName(),
             $this->extension->getFunctions()
         );
     }

@@ -30,7 +30,7 @@ final class MetricsFunction implements TwigFunctionInterface
                 'diff_coverage' => $message->getDiffCoveragePercentage(),
                 'coverage_change' => $message->getCoverageChange(),
                 'tag_coverage' => array_map(
-                    static fn(array $tag) => [
+                    static fn(array $tag): array => [
                         'name' => (string)$tag['tag']['name'],
                         'commit' => (string)$tag['tag']['commit'],
                         'lines' => (int)$tag['lines'],
@@ -42,7 +42,7 @@ final class MetricsFunction implements TwigFunctionInterface
                     $message->getTagCoverage()
                 ),
                 'impacted_files' => array_map(
-                    static fn(array $file) => [
+                    static fn(array $file): array => [
                         'fileName' => (string)$file['fileName'],
                         'coveragePercentage' => (float)$file['coveragePercentage'],
                     ],
