@@ -300,7 +300,7 @@ jobs:
                 run: php bin/console cache:warmup --env=${{ env.workspace }}
 
             -   name: Add Github Private Key
-                uses: DamianReeves/write-file-action@v1.2
+                uses: DamianReeves/write-file-action@v1.3
                 with:
                     path: ${{ env.working-directory }}/config/github.pem
                     write-mode: overwrite

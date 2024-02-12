@@ -299,14 +299,14 @@ jobs:
                 run: php bin/console cache:warmup --env=${{ env.workspace }}
 
             -   name: Add BigQuery Service Account
-                uses: DamianReeves/write-file-action@v1.2
+                uses: DamianReeves/write-file-action@v1.3
                 with:
                     path: ${{ env.working-directory }}/config/bigquery.json
                     write-mode: overwrite
                     contents: ${{ secrets.BIGQUERY_SERVICE_ACCOUNT }}
 
             -   name: Add Github Private Key
-                uses: DamianReeves/write-file-action@v1.2
+                uses: DamianReeves/write-file-action@v1.3
                 with:
                     path: ${{ env.working-directory }}/config/github.pem
                     write-mode: overwrite
