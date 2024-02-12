@@ -30,6 +30,8 @@
         "symfony/property-info": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "7.0.*",
+        "symfony/twig-bridge": "7.0.*",
+        "symfony/twig-bundle": "7.0.*",
         "symfony/yaml": "7.0.*"
     },
     "require-dev": {
@@ -72,6 +74,7 @@
         "lint:rector": "rector process --dry-run",
         "lint:static-analysis": "psalm",
         "lint:security": "psalm --taint-analysis",
+        "lint:templates": "php bin/console lint:twig",
         "test:unit": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --configuration=./phpunit.xml.dist"

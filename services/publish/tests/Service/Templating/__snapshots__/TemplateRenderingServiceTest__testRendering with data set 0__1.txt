@@ -6,18 +6,18 @@
 | 100% | 100% |
 
 <details>
-  <summary>Tags</summary>
+<summary>Tags</summary>
 
-  | Tag | Lines | Covered | Partial | Uncovered | Coverage |
+| Tag | Lines | Covered | Partial | Uncovered | Coverage |
 | --- | --- | --- | --- | --- | --- |
 | mock-tag | 100 | 48 | 2 | 50 | 50% |
 | mock-tag-2<br><sub>(Carried forward from mock-commit-2)</sub> | 2 | 0 | 0 | 2 | 0% |
 </details>
 
 <details>
-  <summary>Impacted Files</summary>
+<summary>Impacted Files</summary>
 
-  | File | Diff Coverage |
+| File | Diff Coverage |
 | --- | --- |
 | mock-file | 50% |
 | mock-file-2 | 100% |

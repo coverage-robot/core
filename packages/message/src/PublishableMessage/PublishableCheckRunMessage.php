@@ -46,7 +46,7 @@ final class PublishableCheckRunMessage implements PublishableMessageInterface
     }
 
     /**
-     * @return PublishableAnnotationInterface[]
+     * @return (PublishableMessageInterface&PublishableAnnotationInterface)[]
      */
     public function getAnnotations(): array
     {

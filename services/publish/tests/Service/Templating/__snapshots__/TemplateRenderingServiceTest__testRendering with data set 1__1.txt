@@ -1,23 +1,26 @@
 ## Coverage Report
-> Merging #unknown will **not change** the total coverage (compared to mock-base-commit)
+> Merging #12 will **decrease** the total coverage by 1.2% (compared to mock-base-commit)
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
-| 100% | &oslash; |
+| 100% | 100% |
 
 <details>
-  <summary>Tags</summary>
+<summary>Tags</summary>
 
-  | Tag | Lines | Covered | Partial | Uncovered | Coverage |
+| Tag | Lines | Covered | Partial | Uncovered | Coverage |
 | --- | --- | --- | --- | --- | --- |
 | mock-tag | 100 | 48 | 2 | 50 | 50% |
 | mock-tag-2<br><sub>(Carried forward from mock-commit-2)</sub> | 2 | 0 | 0 | 2 | 0% |
 </details>
 
 <details>
-  <summary>Impacted Files</summary>
+<summary>Impacted Files</summary>
 
-  > No impacted files
+| File | Diff Coverage |
+| --- | --- |
+| mock-file | 50% |
+| mock-file-2 | 100% |
 </details>
 
 *Last update to mock-commit at 10:12am UTC*

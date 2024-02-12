@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
 use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
+use App\Service\Templating\TemplateRenderingService;
 use Github\Api\Issue;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
@@ -15,17 +16,18 @@ use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class GithubPullRequestCommentPublisherServiceTest extends TestCase
+final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
 {
     #[DataProvider('supportsDataProvider')]
     public function testSupports(Upload $upload, bool $expectedSupport): void
     {
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClientInterface::class),
-            new PullRequestCommentFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING
@@ -37,12 +39,12 @@ final class GithubPullRequestCommentPublisherServiceTest extends TestCase
             new PublishablePullRequestMessage(
                 event: $upload,
                 coveragePercentage: 100,
-                baseCommit: 'mock-base-commit',
-                coverageChange: 0,
                 diffCoveragePercentage: 100,
                 successfulUploads: 1,
                 tagCoverage: [],
-                leastCoveredDiffFiles: []
+                leastCoveredDiffFiles: [],
+                baseCommit: 'mock-base-commit',
+                coverageChange: 0
             )
         );
 
@@ -55,7 +57,8 @@ final class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
-            new PullRequestCommentFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,
@@ -129,7 +132,8 @@ final class GithubPullRequestCommentPublisherServiceTest extends TestCase
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
-            new PullRequestCommentFormatterService(),
+            $this->getContainer()
+                ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
                 $this,
                 Environment::TESTING,

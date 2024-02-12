@@ -3,9 +3,10 @@
 namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
+use App\Enum\TemplateVariant;
 use App\Exception\PublishException;
-use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\PublisherServiceInterface;
+use App\Service\Templating\TemplateRenderingService;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -21,7 +22,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     public function __construct(
         #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
-        private readonly PullRequestCommentFormatterService $pullRequestCommentFormatter,
+        private readonly TemplateRenderingService $templateRenderingService,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $pullRequestPublisherLogger
     ) {
@@ -58,7 +59,10 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
             $event->getOwner(),
             $event->getRepository(),
             $pullRequest,
-            $this->pullRequestCommentFormatter->format($event, $publishableMessage)
+            $this->templateRenderingService->render(
+                $publishableMessage,
+                TemplateVariant::COMPLETE
+            )
         );
     }
 

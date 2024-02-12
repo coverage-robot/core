@@ -1,0 +1,23 @@
+{%- if annotation().type == 'missing_coverage' -%}
+    {%- set totalMissingLines = annotation().endLineNumber - annotation().startLineNumber -%}
+    {%- if annotation().isStartingOnMethod %}
+        {%- if totalMissingLines <= 1 -%}
+            This method has not been covered by any tests.
+        {%- else -%}
+            {{- 'The next ' ~ totalMissingLines ~ ' lines of this method are not covered by any tests.' -}}
+        {%- endif -%}
+    {%- else %}
+        {%- if totalMissingLines == 0 -%}
+            This line is not covered by any tests.
+        {%- else -%}
+            {{- 'The next ' ~ totalMissingLines ~ ' lines are not covered by any tests.' -}}
+        {%- endif -%}
+    {%- endif -%}
+{%- elseif annotation().type == 'partial_branch' -%}
+    {%- set coveredBranches = (annotation().coveredBranches / annotation().totalBranches) * 100 -%}
+    {%- if coveredBranches == 0 -%}
+        None of these branches are covered by tests.
+    {%- else -%}
+        {{coveredBranches|round(2) ~ '% of these branches are not covered by any tests.' -}}
+    {%- endif -%}
+{%- endif -%}
