@@ -6531,16 +6531,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v7.0.0",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "740e8cb8c54a4f16c82179e8558c29d9fc49901d"
+                "reference": "5c7814d1a84bc11254c5bc761d9878b04e708dec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/740e8cb8c54a4f16c82179e8558c29d9fc49901d",
-                "reference": "740e8cb8c54a4f16c82179e8558c29d9fc49901d",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/5c7814d1a84bc11254c5bc761d9878b04e708dec",
+                "reference": "5c7814d1a84bc11254c5bc761d9878b04e708dec",
                 "shasum": ""
             },
             "require": {
@@ -6587,7 +6587,7 @@
                 "reflection"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-access/tree/v7.0.0"
+                "source": "https://github.com/symfony/property-access/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -6603,7 +6603,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-27T14:05:33+00:00"
+            "time": "2024-01-23T15:02:46+00:00"
         },
         {
             "name": "symfony/property-info",
@@ -7103,16 +7103,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "dd7d7612f9ae288889caba4bdff79424ce4ffdf0"
+                "reference": "6e83031c481e50b6f28e72531660341f1f120e6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/dd7d7612f9ae288889caba4bdff79424ce4ffdf0",
-                "reference": "dd7d7612f9ae288889caba4bdff79424ce4ffdf0",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/6e83031c481e50b6f28e72531660341f1f120e6f",
+                "reference": "6e83031c481e50b6f28e72531660341f1f120e6f",
                 "shasum": ""
             },
             "require": {
@@ -7178,7 +7178,7 @@
             "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/serializer/tree/v7.0.2"
+                "source": "https://github.com/symfony/serializer/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -7194,7 +7194,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-29T15:37:40+00:00"
+            "time": "2024-01-30T08:34:29+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -7695,16 +7695,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.0.0",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0055b230c408428b9b5cde7c55659555be5c0278"
+                "reference": "2d4fca631c00700597e9442a0b2451ce234513d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/0055b230c408428b9b5cde7c55659555be5c0278",
-                "reference": "0055b230c408428b9b5cde7c55659555be5c0278",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/2d4fca631c00700597e9442a0b2451ce234513d3",
+                "reference": "2d4fca631c00700597e9442a0b2451ce234513d3",
                 "shasum": ""
             },
             "require": {
@@ -7746,7 +7746,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.0.0"
+                "source": "https://github.com/symfony/yaml/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -7762,7 +7762,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-07T10:26:03+00:00"
+            "time": "2024-01-23T15:02:46+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10341,16 +10341,16 @@
         },
         {
             "name": "spatie/phpunit-snapshot-assertions",
-            "version": "5.1.3",
+            "version": "5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/phpunit-snapshot-assertions.git",
-                "reference": "f97b95081da09a240bace95758ef4f6ac08f1457"
+                "reference": "7e6960cb33fe2d67411bf288aff384984577cac4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/f97b95081da09a240bace95758ef4f6ac08f1457",
-                "reference": "f97b95081da09a240bace95758ef4f6ac08f1457",
+                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/7e6960cb33fe2d67411bf288aff384984577cac4",
+                "reference": "7e6960cb33fe2d67411bf288aff384984577cac4",
                 "shasum": ""
             },
             "require": {
@@ -10359,7 +10359,7 @@
                 "ext-json": "*",
                 "ext-libxml": "*",
                 "php": "^8.1",
-                "phpunit/phpunit": "^10.0",
+                "phpunit/phpunit": "^10.0|^11.0",
                 "symfony/property-access": "^5.2|^6.2|^7.0",
                 "symfony/serializer": "^5.2|^6.2|^7.0",
                 "symfony/yaml": "^5.2|^6.2|^7.0"
@@ -10406,7 +10406,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/phpunit-snapshot-assertions/issues",
-                "source": "https://github.com/spatie/phpunit-snapshot-assertions/tree/5.1.3"
+                "source": "https://github.com/spatie/phpunit-snapshot-assertions/tree/5.1.4"
             },
             "funding": [
                 {
@@ -10414,7 +10414,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2023-11-29T22:07:37+00:00"
+            "time": "2024-02-03T09:55:12+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
