@@ -75,6 +75,7 @@
         "lint:rector": "rector process --dry-run",
         "lint:static-analysis": "psalm",
         "lint:security": "psalm --taint-analysis",
+        "lint:templates": "php bin/console lint:twig templates/",
         "test:unit": [
             "@putenv XDEBUG_MODE=coverage",
             "phpunit --configuration=./phpunit.xml.dist"
