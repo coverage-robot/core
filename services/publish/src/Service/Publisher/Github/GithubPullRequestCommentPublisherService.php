@@ -34,7 +34,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
             return false;
         }
 
-        if (!$publishableMessage->getEvent()->getPullRequest()) {
+        if ($publishableMessage->getEvent()->getPullRequest() === null) {
             return false;
         }
 
@@ -82,7 +82,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
             $pullRequest
         );
 
-        if (!$existingComment) {
+        if ($existingComment === null) {
             $api->comments()
                 ->create(
                     $owner,

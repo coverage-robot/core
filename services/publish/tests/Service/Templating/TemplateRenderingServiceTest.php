@@ -55,7 +55,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             projectRoot: 'project-root',
             tag: new Tag('mock-tag', 'mock-commit'),
             pullRequest: 12,
-            baseCommit: 'commit-on-main',
+            baseCommit: 'mock-base-commit',
             baseRef: 'main',
             eventTime: new DateTimeImmutable('2023-09-02T10:12:00+00:00'),
         );
@@ -222,6 +222,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                         ref: 'main',
                         commit: 'mock-commit',
                         parent: [],
+                        baseCommit: 'mock-base-commit',
                     ),
                     status: PublishableCheckRunStatus::SUCCESS,
                     coveragePercentage: 0,

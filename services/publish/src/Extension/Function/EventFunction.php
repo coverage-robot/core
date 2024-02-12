@@ -3,7 +3,7 @@
 namespace App\Extension\Function;
 
 use Override;
-use Packages\Contracts\PublishableMessage\PublishableMessage;
+use Packages\Contracts\Event\BaseAwareEventInterface;
 
 final class EventFunction implements TwigFunctionInterface
 {
@@ -12,16 +12,24 @@ final class EventFunction implements TwigFunctionInterface
     public function call(array $context): array
     {
         $event = $this->getEventFromContext($context);
-        $message = $this->getMessageFromContext($context);
 
-        return [
+        $properties = [
             'head_commit' => $event->getCommit(),
             'event_time' => $event->getEventTime(),
-            'base_commit' => $message->getBaseCommit() ?? null,
-            'pull_request' => $message->getType() === PublishableMessage::PULL_REQUEST ?
-                $event->getPullRequest()
-                : null
+            'pull_request' => $event->getPullRequest()
         ];
+
+        if ($event instanceof BaseAwareEventInterface) {
+            $properties = array_merge(
+                $properties,
+                [
+                    'base_ref' => $event->getBaseRef(),
+                    'base_commit' => $event->getBaseCommit(),
+                ]
+            );
+        }
+
+        return $properties;
     }
 
     #[Override]

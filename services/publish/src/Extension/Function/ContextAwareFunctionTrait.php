@@ -56,7 +56,7 @@ trait ContextAwareFunctionTrait
      *
      * @see TemplateRenderingService::renderAnnotationWithTemplate()
      */
-    protected function getAnnotationFromContext(array $context): PublishableAnnotationInterface
+    protected function getAnnotationFromContext(array $context): PublishableMessageInterface&PublishableAnnotationInterface
     {
         $annotation = $context['annotation'] ?? null;
 
@@ -64,7 +64,10 @@ trait ContextAwareFunctionTrait
             throw new RuntimeException('No annotation found in context.');
         }
 
-        if (!$annotation instanceof PublishableAnnotationInterface) {
+        if (
+            !$annotation instanceof PublishableAnnotationInterface ||
+            !$annotation instanceof PublishableMessageInterface
+        ) {
             throw new RuntimeException('Value is not a valid annotation.');
         }
 

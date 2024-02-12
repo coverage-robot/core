@@ -435,6 +435,7 @@ final class GithubCheckRunPublisherServiceTest extends KernelTestCase
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
                     tag: new Tag('mock-tag', 'mock-commit'),
+                    baseCommit: 'mock-base-commit'
                 ),
                 true
             ],
@@ -450,7 +451,7 @@ final class GithubCheckRunPublisherServiceTest extends KernelTestCase
                     projectRoot: 'mock-project-root',
                     tag: new Tag('mock-tag', 'mock-commit'),
                     pullRequest: '1234',
-                    baseCommit: 'commit-on-main',
+                    baseCommit: 'mock-base-commit',
                     baseRef: 'main',
                 ),
                 true

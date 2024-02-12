@@ -31,8 +31,8 @@ final class MetricsFunction implements TwigFunctionInterface
                 'coverage_change' => $message->getCoverageChange(),
                 'tag_coverage' => array_map(
                     static fn(array $tag): array => [
-                        'name' => (string)$tag['tag']['name'],
-                        'commit' => (string)$tag['tag']['commit'],
+                        'name' => isset($tag['tag']['name']) ? (string)$tag['tag']['name'] : 'unknown',
+                        'commit' => isset($tag['tag']['commit']) ? (string)$tag['tag']['commit'] : 'unknown',
                         'lines' => (int)$tag['lines'],
                         'covered' => (int)$tag['covered'],
                         'partial' => (int)$tag['partial'],

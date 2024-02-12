@@ -395,7 +395,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
             return [
                 $checkRunId,
                 $annotations,
-                $conclusion ?
+                $conclusion !== null ?
                     PublishableCheckRunStatus::from($conclusion) :
                     PublishableCheckRunStatus::IN_PROGRESS
             ];

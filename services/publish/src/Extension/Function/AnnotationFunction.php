@@ -15,24 +15,38 @@ final class AnnotationFunction implements TwigFunctionInterface
     {
         $annotation = $this->getAnnotationFromContext($context);
 
-        return [
+        $properties = [
             'type' => match ($annotation->getType()) {
                 PublishableMessage::MISSING_COVERAGE_ANNOTATION => 'missing_coverage',
-                PublishableMessage::PARTIAL_BRANCH_ANNOTATION => 'partial_branch'
+                PublishableMessage::PARTIAL_BRANCH_ANNOTATION => 'partial_branch',
+                default => null,
             },
             'fileName' => $annotation->getFileName(),
             'startLineNumber' => $annotation->getStartLineNumber(),
             'endLineNumber' => $annotation->getEndLineNumber(),
-            'coveredBranches' => $annotation instanceof PublishablePartialBranchAnnotationMessage
-                ? $annotation->getCoveredBranches()
-                : null,
-            'totalBranches' => $annotation instanceof PublishablePartialBranchAnnotationMessage
-                ? $annotation->getTotalBranches()
-                : null,
-            'isStartingOnMethod' => $annotation instanceof PublishableMissingCoverageAnnotationMessage
-                ? $annotation->isStartingOnMethod()
-                : null,
         ];
+
+        switch (true) {
+            case $annotation instanceof PublishablePartialBranchAnnotationMessage:
+                $properties = array_merge(
+                    $properties,
+                    [
+                        'coveredBranches' => $annotation->getCoveredBranches(),
+                        'totalBranches' => $annotation->getTotalBranches(),
+                    ]
+                );
+                break;
+            case $annotation instanceof PublishableMissingCoverageAnnotationMessage:
+                $properties = array_merge(
+                    $properties,
+                    [
+                        'isStartingOnMethod' => $annotation->isStartingOnMethod(),
+                    ]
+                );
+                break;
+        }
+
+        return $properties;
     }
 
     #[Override]
