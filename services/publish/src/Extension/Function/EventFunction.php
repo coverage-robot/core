@@ -20,7 +20,7 @@ final class EventFunction implements TwigFunctionInterface
         ];
 
         if ($event instanceof BaseAwareEventInterface) {
-            $properties = array_merge(
+            return array_merge(
                 $properties,
                 [
                     'base_ref' => $event->getBaseRef(),
