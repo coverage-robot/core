@@ -39,7 +39,7 @@
         "coverage-robot/local": "^1.0",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-symfony": "^5.0",
-        "rector/rector": "0.19.2",
+        "rector/rector": "1.0.0",
         "squizlabs/php_codesniffer": "^3.7",
         "vimeo/psalm": "^5.15"
     },
