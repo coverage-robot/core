@@ -61,7 +61,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
             $pullRequest,
             $this->templateRenderingService->render(
                 $publishableMessage,
-                TemplateVariant::COMPLETE
+                TemplateVariant::FULL_PULL_REQUEST_COMMENT
             )
         );
     }

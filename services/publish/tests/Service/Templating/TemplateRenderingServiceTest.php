@@ -112,7 +112,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: 0.1,
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::FULL_PULL_REQUEST_COMMENT
             ],
             [
                 new PublishablePullRequestMessage(
@@ -165,7 +165,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: -1.2
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::FULL_PULL_REQUEST_COMMENT
             ],
             [
                 new PublishablePullRequestMessage(
@@ -201,7 +201,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: 0
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::FULL_PULL_REQUEST_COMMENT
             ],
             [
                 new PublishableCheckRunMessage(
@@ -211,7 +211,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: null
                 ),
-                TemplateVariant::IN_PROGRESS
+                TemplateVariant::IN_PROGRESS_CHECK_RUN
             ],
             [
                 new PublishableCheckRunMessage(
@@ -229,7 +229,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: null
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::COMPLETE_CHECK_RUN
             ],
             [
                 new PublishableCheckRunMessage(
@@ -239,7 +239,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: 0.2
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::COMPLETE_CHECK_RUN
             ],
             [
                 new PublishableCheckRunMessage(
@@ -249,7 +249,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: 0
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::COMPLETE_CHECK_RUN
             ],
             [
                 new PublishableCheckRunMessage(
@@ -259,7 +259,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: -2
                 ),
-                TemplateVariant::COMPLETE
+                TemplateVariant::COMPLETE_CHECK_RUN
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -270,9 +270,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 10,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'The next 9 lines are not covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -283,9 +281,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 1,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'This line is not covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -296,9 +292,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'The next 1 lines are not covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishablePartialBranchAnnotationMessage(
@@ -310,9 +304,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 1,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                '50% of these branches are not covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishablePartialBranchAnnotationMessage(
@@ -324,9 +316,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 0,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'None of these branches are covered by tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishablePartialBranchAnnotationMessage(
@@ -338,9 +328,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                '60% of these branches are not covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -351,9 +339,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'This method has not been covered by any tests.'
+                TemplateVariant::ANNOTATION_BODY
             ],
             [
                 new PublishableMissingCoverageAnnotationMessage(
@@ -364,10 +350,8 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 100,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::COMPLETE,
-                'Opportunity For New Coverage',
-                'The next 99 lines are not covered by any tests.'
-            ],
+                TemplateVariant::ANNOTATION_BODY
+            ]
         ];
     }
 }

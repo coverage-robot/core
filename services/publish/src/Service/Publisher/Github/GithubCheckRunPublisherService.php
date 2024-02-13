@@ -166,7 +166,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::IN_PROGRESS
+                        TemplateVariant::IN_PROGRESS_CHECK_RUN
                     ),
                     'summary' => '',
                 ]
@@ -181,7 +181,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::COMPLETE
+                        TemplateVariant::COMPLETE_CHECK_RUN
                     ),
                     'summary' => '',
                 ]
@@ -234,7 +234,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::IN_PROGRESS
+                        TemplateVariant::IN_PROGRESS_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => $annotations,
@@ -247,7 +247,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::COMPLETE
+                        TemplateVariant::COMPLETE_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => $annotations,
@@ -301,11 +301,11 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 'annotation_level' => 'warning',
                 'title' => $this->templateRenderingService->render(
                     $publishableAnnotation,
-                    TemplateVariant::TITLE
+                    TemplateVariant::ANNOTATION_TITLE
                 ),
                 'message' => $this->templateRenderingService->render(
                     $publishableAnnotation,
-                    TemplateVariant::COMPLETE
+                    TemplateVariant::ANNOTATION_BODY
                 ),
                 'start_line' => $publishableAnnotation->getStartLineNumber(),
 
