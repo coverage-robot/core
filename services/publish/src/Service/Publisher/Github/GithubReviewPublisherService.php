@@ -189,9 +189,13 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 !isset(
                     $existingReviewComment['id'],
                     $existingReviewComment['user']['node_id']
-                ) ||
-                $existingReviewComment['user']['node_id'] !== $botId
+                )
             ) {
+                // Review comment wasn't posted by us, so we can skip.
+                continue;
+            }
+
+            if ($existingReviewComment['user']['node_id'] !== $botId) {
                 // Review comment wasn't posted by us, so we can skip.
                 continue;
             }
@@ -204,15 +208,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                     $existingReviewComment['id']
                 );
 
-            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
-                $this->reviewPublisherLogger->critical(
-                    sprintf(
-                        '%s status code returned while attempting to delete a review comment.',
-                        (string)$this->client->getLastResponse()?->getStatusCode()
-                    )
-                );
-                $successful = false;
-            }
+            $successful = $successful &&
+                $this->client->getLastResponse()?->getStatusCode() === Response::HTTP_NO_CONTENT;
         }
 
         return $successful;

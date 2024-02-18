@@ -33,7 +33,7 @@ trait GithubPullRequestAwareTrait
 
             throw new PublishException(
                 sprintf(
-                    'Failed to fetch a pull request\'s details. Status code was %s',
+                    "Failed to fetch a pull request's details. Status code was %s",
                     (string)$this->client->getLastResponse()?->getStatusCode()
                 )
             );

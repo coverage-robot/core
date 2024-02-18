@@ -53,7 +53,6 @@ trait GithubCheckRunAwareTrait
             ]
         };
 
-        /** @var array{ id: string } $checkRun */
         $this->client->repo()
             ->checkRuns()
             ->create(

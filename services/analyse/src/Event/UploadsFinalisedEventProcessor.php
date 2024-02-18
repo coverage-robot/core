@@ -153,7 +153,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             $validUntil
         );
 
-        if ($lineComments) {
+        if ($lineComments instanceof PublishableLineCommentMessageCollection) {
             $publishableMessages[] = $lineComments;
         }
 

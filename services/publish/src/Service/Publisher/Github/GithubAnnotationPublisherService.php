@@ -38,6 +38,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
         private readonly LoggerInterface $reviewPublisherLogger
     ) {
     }
+
     #[Override]
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
@@ -116,7 +117,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
             }
 
             return $successful;
-        } catch (PublishException $e) {
+        } catch (PublishException $publishException) {
             // As we've enforced the annotations as a lower priority (and therefore executed
             // after the check run has been published), we should never hit this exception.
             $this->reviewPublisherLogger->critical(
@@ -125,7 +126,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
                     (string)$publishableMessage->getEvent()
                 ),
                 [
-                    'exception' => $e
+                    'exception' => $publishException
                 ]
             );
             return false;
@@ -171,7 +172,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
             ];
         }
 
-        if (count($annotations) > 0) {
+        if ($annotations !== []) {
             yield $annotations;
         }
     }
