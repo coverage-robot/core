@@ -31,7 +31,7 @@ final class EventFunction implements TwigFunctionInterface
         }
 
         if ($event instanceof ParentAwareEventInterface) {
-            $properties = array_merge(
+            return array_merge(
                 $properties,
                 [
                     'parents' => $event->getParent(),
