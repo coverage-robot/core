@@ -270,7 +270,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 10,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishableMissingCoverageLineCommentMessage(
@@ -281,7 +281,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 1,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishableMissingCoverageLineCommentMessage(
@@ -292,7 +292,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishablePartialBranchLineCommentMessage(
@@ -304,7 +304,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 1,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishablePartialBranchLineCommentMessage(
@@ -316,7 +316,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 0,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishablePartialBranchLineCommentMessage(
@@ -328,7 +328,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coveredBranches: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishableMissingCoverageLineCommentMessage(
@@ -339,7 +339,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 2,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ],
             [
                 new PublishableMissingCoverageLineCommentMessage(
@@ -350,7 +350,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     endLineNumber: 100,
                     validUntil: $event->getEventTime()
                 ),
-                TemplateVariant::ANNOTATION_BODY
+                TemplateVariant::LINE_COMMENT_BODY
             ]
         ];
     }

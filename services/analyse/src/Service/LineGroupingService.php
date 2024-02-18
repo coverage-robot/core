@@ -6,7 +6,6 @@ use App\Query\Result\LineCoverageQueryResult;
 use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
-use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Event\Model\EventInterface;
 use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
@@ -64,7 +63,7 @@ final class LineGroupingService
      *
      * @param LineCoverageQueryResult[] $lineCoverage
      *
-     * @return PublishableMessageInterface[]
+     * @return PublishablePartialBranchLineCommentMessage[]
      */
     private function annotatePartialBranches(
         EventInterface $event,
