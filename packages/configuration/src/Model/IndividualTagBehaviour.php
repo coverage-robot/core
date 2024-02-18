@@ -4,6 +4,11 @@ namespace Packages\Configuration\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @internal
+ *
+ * @see TagBehaviourService
+ */
 final class IndividualTagBehaviour
 {
     public function __construct(

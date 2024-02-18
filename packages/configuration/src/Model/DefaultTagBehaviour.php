@@ -2,6 +2,12 @@
 
 namespace Packages\Configuration\Model;
 
+
+/**
+ * @internal
+ *
+ * @see TagBehaviourService
+ */
 final class DefaultTagBehaviour
 {
     public function __construct(

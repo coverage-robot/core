@@ -10,7 +10,7 @@ use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Contracts\PublishableMessage\InvalidMessageException;
+use Packages\Message\Exception\InvalidMessageException;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;

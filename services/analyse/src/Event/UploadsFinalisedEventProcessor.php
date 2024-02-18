@@ -12,7 +12,6 @@ use DateTimeImmutable;
 use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
-use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
@@ -45,7 +44,6 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
         private readonly CoverageComparisonServiceInterface $coverageComparisonService,
         private readonly LineGroupingService $lineGroupingService,
-        #[Autowire(service: SettingService::class)]
         private readonly SettingServiceInterface $settingService,
         #[Autowire(service: EventBusClient::class)]
         private readonly EventBusClientInterface $eventBusClient,

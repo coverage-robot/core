@@ -5,7 +5,6 @@ namespace App\Service\Publisher\Github;
 use App\Exception\PublishException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
@@ -13,7 +12,6 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
@@ -21,7 +19,6 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     public function __construct(
         private readonly TemplateRenderingService $templateRenderingService,
-        #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $checkPublisherLogger

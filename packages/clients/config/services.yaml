@@ -7,3 +7,6 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
+
+    Packages\Clients\Client\Github\GithubAppInstallationClientInterface:
+        class: Packages\Clients\Client\Github\GithubAppInstallationClient

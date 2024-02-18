@@ -4,8 +4,77 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f09c4ce6a00514424fdd5ec15f0f8825",
+    "content-hash": "e12735135de85c8d08a23aa48f2cfadd",
     "packages": [
+        {
+            "name": "async-aws/async-aws-bundle",
+            "version": "1.12.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/symfony-bundle.git",
+                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
+                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.0",
+                "php": "^7.2.5 || ^8.0",
+                "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "async-aws/s3": "^1.0",
+                "async-aws/ses": "^1.0",
+                "async-aws/sqs": "^1.0",
+                "async-aws/ssm": "^1.0",
+                "matthiasnoback/symfony-config-test": "^4.1",
+                "nyholm/symfony-bundle-test": "^2.0",
+                "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.12-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\Symfony\\Bundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Configure all your AsyncAws services and enjoy the autowire greatness.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "bundle",
+                "sdk",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-08-07T20:00:50+00:00"
+        },
         {
             "name": "async-aws/core",
             "version": "1.20.1",
@@ -296,7 +365,7 @@
             "dist": {
                 "type": "path",
                 "url": "../event",
-                "reference": "5298329344bda500efd04673b01ebbca4b854029"
+                "reference": "4d7c971b52093faac7135ac8fd93224c06f4c5c7"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -325,6 +394,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
@@ -341,7 +413,7 @@
             "dist": {
                 "type": "path",
                 "url": "../telemetry",
-                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
+                "reference": "7f1611f6fe817f590056214079971e20e7c3b2a3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -357,6 +429,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
             "type": "library",
@@ -371,6 +444,9 @@
                 }
             },
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"

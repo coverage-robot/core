@@ -9,7 +9,7 @@ use AsyncAws\EventBridge\ValueObject\PutEventsRequestEntry;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
-use Packages\Contracts\Event\InvalidEventException;
+use Packages\Event\Exception\InvalidEventException;
 use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Service\TraceContext;

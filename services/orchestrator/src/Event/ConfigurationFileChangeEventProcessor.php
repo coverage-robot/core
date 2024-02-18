@@ -5,7 +5,6 @@ namespace App\Event;
 use Github\Exception\ErrorException;
 use InvalidArgumentException;
 use Override;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Configuration\Service\ConfigurationFileService;
@@ -14,7 +13,6 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\ConfigurationFileChange;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
 {
@@ -25,7 +23,6 @@ final class ConfigurationFileChangeEventProcessor implements EventProcessorInter
 
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
-        #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $githubAppInstallationClient,
         private readonly ConfigurationFileService $configurationFileService
     ) {

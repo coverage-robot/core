@@ -3,7 +3,7 @@
 namespace Packages\Event\Service;
 
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\InvalidEventException;
+use Packages\Event\Exception\InvalidEventException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class EventValidationService

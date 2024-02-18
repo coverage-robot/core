@@ -2,8 +2,8 @@
 
 namespace Packages\Message\Service;
 
-use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\Exception\InvalidMessageException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class MessageValidationService
