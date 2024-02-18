@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba88eecf4c837eae477c86c72dcad451",
+    "content-hash": "8a69cac1d983a24315cef55dc00f482f",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -648,9 +648,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "2a8eeba2ae5037f0bfcf9c20da98265c859b3687"
+                "reference": "7ec9d7390e4f8d28a3d2ab1ce7cafec4d6a11d7c"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
                 "coverage-robot/contracts": "^1.0",
                 "psr/log": "^3.0",
@@ -696,7 +697,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
+                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -718,7 +719,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "4137558ae4ae4f6e591f90c4f72e2dea23d834eb"
+                "reference": "4d7c971b52093faac7135ac8fd93224c06f4c5c7"
             },
             "require": {
                 "async-aws/event-bridge": "^1.5",
@@ -766,7 +767,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
+                "reference": "7f1611f6fe817f590056214079971e20e7c3b2a3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -5050,16 +5051,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.0.2",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "db714986d3b84330bb6196fdb201c9f79b3a8853"
+                "reference": "3d2605c07cd14aec294f72f5bf8147702f7a5ada"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/db714986d3b84330bb6196fdb201c9f79b3a8853",
-                "reference": "db714986d3b84330bb6196fdb201c9f79b3a8853",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/3d2605c07cd14aec294f72f5bf8147702f7a5ada",
+                "reference": "3d2605c07cd14aec294f72f5bf8147702f7a5ada",
                 "shasum": ""
             },
             "require": {
@@ -5122,7 +5123,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.0.2"
+                "source": "https://github.com/symfony/http-client/tree/v7.0.3"
             },
             "funding": [
                 {
@@ -5138,7 +5139,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-02T12:51:19+00:00"
+            "time": "2024-01-29T15:41:16+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -10416,5 +10417,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
