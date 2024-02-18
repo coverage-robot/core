@@ -94,7 +94,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
             return $this->updateCheckRun(
                 $owner,
                 $repository,
-                $checkRun["id"],
+                $checkRun['id'],
                 $publishableMessage
             );
         } catch (RuntimeException) {

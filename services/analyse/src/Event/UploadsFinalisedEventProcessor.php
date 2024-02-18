@@ -132,28 +132,35 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $validUntil = $coverageReport->getLatestSuccessfulUpload() ??
             $uploadsFinalised->getEventTime();
 
+        $publishableMessages = [
+            $this->buildPullRequestMessage(
+                $uploadsFinalised,
+                $coverageReport,
+                $comparison,
+                $validUntil
+            ),
+            $this->buildCheckRunMessage(
+                $uploadsFinalised,
+                $coverageReport,
+                $comparison,
+                $validUntil
+            ),
+        ];
+
+        $lineComments = $this->buildLineCommentCollection(
+            $uploadsFinalised,
+            $coverageReport,
+            $validUntil
+        );
+
+        if ($lineComments) {
+            $publishableMessages[] = $lineComments;
+        }
+
         return $this->publishClient->dispatch(
             new PublishableMessageCollection(
                 $uploadsFinalised,
-                [
-                    $this->buildPullRequestMessage(
-                        $uploadsFinalised,
-                        $coverageReport,
-                        $comparison,
-                        $validUntil
-                    ),
-                    $this->buildCheckRunMessage(
-                        $uploadsFinalised,
-                        $coverageReport,
-                        $comparison,
-                        $validUntil
-                    ),
-                    $this->buildLineCommentCollection(
-                        $uploadsFinalised,
-                        $coverageReport,
-                        $validUntil
-                    )
-                ]
+                $publishableMessages
             ),
         );
     }

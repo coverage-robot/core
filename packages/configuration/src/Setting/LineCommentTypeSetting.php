@@ -97,7 +97,7 @@ final class LineCommentTypeSetting implements SettingInterface
             return;
         }
 
-        if (!is_string($value) || LineCommentType::tryFrom($value) === null) {
+        if (!is_string($value) || !LineCommentType::tryFrom($value) instanceof LineCommentType) {
             throw new InvalidSettingValueException(
                 'The value for the line comment type setting must be a valid enum value.'
             );

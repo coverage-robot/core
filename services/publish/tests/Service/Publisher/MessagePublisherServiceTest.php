@@ -45,6 +45,4 @@ final class MessagePublisherServiceTest extends TestCase
 
         $this->assertTrue($messagePublisherService->publish($mockMessage));
     }
-
-
 }

@@ -101,13 +101,13 @@ final class LineCommentTypeSettingTest extends TestCase
     public static function settingValueDataProvider(): array
     {
         $cases = array_map(
-            fn (LineCommentType $lineCommentType): string => $lineCommentType->value,
+            static fn(LineCommentType $lineCommentType): string => $lineCommentType->value,
             LineCommentType::cases()
         );
         return array_combine(
             $cases,
             array_map(
-                fn(string $case) => [$case],
+                static fn(string $case): array => [$case],
                 $cases
             )
         );
