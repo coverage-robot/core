@@ -1,6 +1,7 @@
+{%- set base_commit = event().base_commit ? event().base_commit : event().parents[0] -%}
 ## Coverage Report
 > Merging #{{ event().pull_request }} will **{{ (report().coverage_change > 0) ? 'increase' : (report().coverage_change < 0) ? 'decrease' : 'not change' }}** the total coverage
-{{- (report().coverage_change != 0) ? ' by ' ~ report().coverage_change|abs ~ '%' : '' }} (compared to {{ event().base_commit }})
+{{- (report().coverage_change != 0) ? ' by ' ~ report().coverage_change|abs ~ '%' : '' }} (compared to {{ base_commit }})
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
@@ -13,7 +14,7 @@
 | Tag | Lines | Covered | Partial | Uncovered | Coverage |
 | --- | --- | --- | --- | --- | --- |
 {%~ for tag in report().tag_coverage -%}
-| {{ tag.name }}{{ (tag.commit != event().head_commit) ? ('<br><sub>(Carried forward from ' ~ tag.commit ~ ')</sub>')|raw : '' }} | {{ tag.lines }} | {{ tag.covered }} | {{ tag.partial }} | {{ tag.uncovered }} | {{ tag.coveragePercentage|round(2) }}% |
+| {{ tag.name }}{{ (tag.commit != event().head_commit) ? ('<br><sub>(Carried forward from ' ~ tag.commit ~ ')</sub>')|raw : '' }} | {{ tag.lines }} | {{ tag.covered }} | {{ tag.partial }} | {{ tag.uncovered }} | {{ tag.coverage_percentage|round(2) }}% |
 {%~ endfor -%}
 {%- else -%}
 > No uploaded tags in #{{ event().pull_request }}
@@ -27,7 +28,7 @@
 | File | Diff Coverage |
 | --- | --- |
 {% for file in report().impacted_files %}
-| {{ file.fileName }} | {{ file.coveragePercentage|round(2) }}% |
+| {{ file.file_name }} | {{ file.coverage_percentage|round(2) }}% |
 {% endfor %}
 {% else %}
 > No impacted files in #{{ event().pull_request }}

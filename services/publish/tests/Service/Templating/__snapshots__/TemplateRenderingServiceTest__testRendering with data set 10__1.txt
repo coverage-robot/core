@@ -1,1 +1,1 @@
-The next 1 lines are not covered by any tests.
+This line is not covered by any tests.

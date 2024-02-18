@@ -1,1 +1,1 @@
-40% of these branches are not covered by any tests.
+None of these branches are covered by tests.

@@ -1,1 +1,1 @@
-Total Coverage: 0% (no change compared to mock-ba)
+Total Coverage: 0%
