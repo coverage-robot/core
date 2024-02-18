@@ -649,7 +649,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "7ec9d7390e4f8d28a3d2ab1ce7cafec4d6a11d7c"
+                "reference": "d162f75f725b0b17de33f6dfb6e6d93a43bbbbd3"
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -698,7 +698,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -720,9 +720,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "4d7c971b52093faac7135ac8fd93224c06f4c5c7"
+                "reference": "5617ef32eee4a5d401a4083559c6761cce5b142a"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/event-bridge": "^1.5",
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
@@ -768,9 +769,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "041dc5cdab22ebc0b140e65d6348d0ed7dcd7c57"
+                "reference": "5feaf4f88ecbae92457bc6bfdbc84830b4c0a9f5"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/sqs": "^2.0",
                 "coverage-robot/event": "^1.0",
                 "coverage-robot/telemetry": "^1.0",
@@ -813,7 +815,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "7f1611f6fe817f590056214079971e20e7c3b2a3"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -8961,7 +8963,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "224256e8d1f17d9acb8143f42b767f552305c670"
+                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -11363,16 +11365,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "5.21.1",
+            "version": "5.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "8c473e2437be8b6a8fd8f630f0f11a16b114c494"
+                "reference": "e9dad66e11274315dac27e08349c628c7d6a1a43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/8c473e2437be8b6a8fd8f630f0f11a16b114c494",
-                "reference": "8c473e2437be8b6a8fd8f630f0f11a16b114c494",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/e9dad66e11274315dac27e08349c628c7d6a1a43",
+                "reference": "e9dad66e11274315dac27e08349c628c7d6a1a43",
                 "shasum": ""
             },
             "require": {
@@ -11395,7 +11397,7 @@
                 "netresearch/jsonmapper": "^1.0 || ^2.0 || ^3.0 || ^4.0",
                 "nikic/php-parser": "^4.16",
                 "php": "^7.4 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
-                "sebastian/diff": "^4.0 || ^5.0",
+                "sebastian/diff": "^4.0 || ^5.0 || ^6.0",
                 "spatie/array-to-xml": "^2.17.0 || ^3.0",
                 "symfony/console": "^4.1.6 || ^5.0 || ^6.0 || ^7.0",
                 "symfony/filesystem": "^5.4 || ^6.0 || ^7.0"
@@ -11469,7 +11471,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2024-02-01T01:04:32+00:00"
+            "time": "2024-02-15T22:52:31+00:00"
         }
     ],
     "aliases": [],
@@ -11483,5 +11485,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
