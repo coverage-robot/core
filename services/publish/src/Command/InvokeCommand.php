@@ -14,8 +14,9 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -128,8 +129,14 @@ final class InvokeCommand extends Command
                                             event: $upload,
                                             status: PublishableCheckRunStatus::SUCCESS,
                                             coveragePercentage: 100,
-                                            annotations: [
-                                                new PublishableMissingCoverageAnnotationMessage(
+                                            baseCommit: null,
+                                            coverageChange: 0,
+                                            validUntil: $validUntil
+                                        ),
+                                        new PublishableLineCommentMessageCollection(
+                                            event: $upload,
+                                            messages: [
+                                                new PublishableMissingCoverageLineCommentMessage(
                                                     event: $upload,
                                                     fileName: '.github/workflows/upload.yml',
                                                     startingOnMethod: true,
@@ -137,10 +144,7 @@ final class InvokeCommand extends Command
                                                     endLineNumber: 100,
                                                     validUntil: $validUntil
                                                 )
-                                            ],
-                                            baseCommit: null,
-                                            coverageChange: 0,
-                                            validUntil: $validUntil
+                                            ]
                                         )
                                     ]
                                 ),

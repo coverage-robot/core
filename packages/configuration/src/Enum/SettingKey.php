@@ -2,13 +2,16 @@
 
 namespace Packages\Configuration\Enum;
 
+use Packages\Configuration\Model\LineCommentType;
+
 enum SettingKey: string
 {
     /**
-     * The setting that controls whether or not line annotations posted as part of
-     * the coverage report.
+     * The setting that controls how line comments are rendered on pull requests.
+     *
+     * @see LineCommentType
      */
-    case LINE_ANNOTATION = 'line_annotations';
+    case LINE_COMMENT_TYPE = 'line_comment.type';
 
     /**
      * Allows for custom path replacement rules when injecting coverage, to ensure

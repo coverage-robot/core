@@ -9,11 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[DiscriminatorMap(
     'type',
     [
-        PublishableMessage::MISSING_COVERAGE_ANNOTATION->value => PublishableMissingCoverageAnnotationMessage::class,
-        PublishableMessage::PARTIAL_BRANCH_ANNOTATION->value => PublishablePartialBranchAnnotationMessage::class,
+        PublishableMessage::MISSING_COVERAGE_LINE_COMMENT->value => PublishableMissingCoverageLineCommentMessage::class,
+        PublishableMessage::PARTIAL_BRANCH_LINE_COMMENT->value => PublishablePartialBranchLineCommentMessage::class,
     ]
 )]
-interface PublishableAnnotationInterface
+interface PublishableLineCommentInterface extends PublishableMessageInterface
 {
     #[Assert\NotBlank]
     public function getFileName(): string;

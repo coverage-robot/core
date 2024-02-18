@@ -16,6 +16,7 @@ use AsyncAws\DynamoDb\ValueObject\Condition;
 use Packages\Configuration\Client\DynamoDbClient;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
+use Packages\Configuration\Model\LineCommentType;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
@@ -55,12 +56,12 @@ final class DynamoDbClientTest extends TestCase
                             $item[DynamoDbClient::REPOSITORY_IDENTIFIER_COLUMN]->getS()
                         );
                         $this->assertEquals(
-                            SettingKey::LINE_ANNOTATION->value,
+                            SettingKey::LINE_COMMENT_TYPE->value,
                             $item[DynamoDbClient::SETTING_KEY_COLUMN]->getS()
                         );
                         $this->assertEquals(
-                            true,
-                            $item[DynamoDbClient::VALUE_COLUMN]->getBool()
+                            LineCommentType::REVIEW_COMMENT->value,
+                            $item[DynamoDbClient::VALUE_COLUMN]->getS()
                         );
                         return true;
                     }
@@ -73,11 +74,10 @@ final class DynamoDbClientTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::LINE_ANNOTATION,
-                SettingValueType::BOOLEAN,
-                true
+                SettingKey::LINE_COMMENT_TYPE,
+                SettingValueType::STRING,
+                LineCommentType::REVIEW_COMMENT->value
             )
-
         );
     }
 
@@ -129,7 +129,7 @@ final class DynamoDbClientTest extends TestCase
                                     [
                                         'AttributeValueList' => [
                                             [
-                                                'S' => SettingKey::LINE_ANNOTATION->value
+                                                'S' => SettingKey::LINE_COMMENT_TYPE->value
                                             ]
                                         ],
                                         'ComparisonOperator' => ComparisonOperator::EQ
@@ -166,7 +166,7 @@ final class DynamoDbClientTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::LINE_ANNOTATION,
+                SettingKey::LINE_COMMENT_TYPE,
                 SettingValueType::BOOLEAN
             )
         );
@@ -205,7 +205,7 @@ final class DynamoDbClientTest extends TestCase
                                 ),
                                 DynamoDbClient::SETTING_KEY_COLUMN => new AttributeValue(
                                     [
-                                        'S' => SettingKey::LINE_ANNOTATION->value
+                                        'S' => SettingKey::LINE_COMMENT_TYPE->value
                                     ]
                                 ),
                             ],
@@ -223,7 +223,7 @@ final class DynamoDbClientTest extends TestCase
                 Provider::GITHUB,
                 'mock-owner',
                 'mock-repository',
-                SettingKey::LINE_ANNOTATION
+                SettingKey::LINE_COMMENT_TYPE
             )
         );
     }

@@ -8,16 +8,16 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishableMessageCollection implements PublishableMessageInterface, Countable
+final class PublishableLineCommentMessageCollection implements PublishableMessageInterface, Countable
 {
     /**
-     * @param PublishableMessageInterface[] $messages
+     * @param PublishableLineCommentInterface[] $messages
      */
     public function __construct(
         private readonly EventInterface $event,
         #[Assert\NotBlank]
         #[Assert\All([
-            new Assert\Type(type: PublishableMessageInterface::class)
+            new Assert\Type(type: PublishableLineCommentInterface::class)
         ])]
         private readonly array $messages,
     ) {
@@ -45,7 +45,7 @@ final class PublishableMessageCollection implements PublishableMessageInterface,
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::COLLECTION;
+        return PublishableMessage::LINE_COMMENT_COLLECTION;
     }
 
     public function getMessageGroup(): string
@@ -62,7 +62,7 @@ final class PublishableMessageCollection implements PublishableMessageInterface,
 
     public function __toString(): string
     {
-        return 'PublishableMessageCollection#' . $this->getValidUntil()->format(DateTimeInterface::ATOM);
+        return 'PublishableLineCommentMessageCollection#' . $this->getValidUntil()->format(DateTimeInterface::ATOM);
     }
 
     public function count(): int

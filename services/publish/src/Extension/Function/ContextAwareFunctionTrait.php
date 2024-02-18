@@ -6,7 +6,6 @@ use App\Service\Templating\TemplateRenderingService;
 use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
-use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use RuntimeException;
 
 trait ContextAwareFunctionTrait
@@ -49,30 +48,6 @@ trait ContextAwareFunctionTrait
         }
 
         return $event;
-    }
-
-    /**
-     * Helper method to get the message from the context.
-     *
-     * @see TemplateRenderingService::renderAnnotationWithTemplate()
-     */
-    protected function getAnnotationFromContext(
-        array $context
-    ): PublishableMessageInterface&PublishableAnnotationInterface {
-        $annotation = $context['annotation'] ?? null;
-
-        if ($annotation === null) {
-            throw new RuntimeException('No annotation found in context.');
-        }
-
-        if (
-            !$annotation instanceof PublishableAnnotationInterface ||
-            !$annotation instanceof PublishableMessageInterface
-        ) {
-            throw new RuntimeException('Value is not a valid annotation.');
-        }
-
-        return $annotation;
     }
 
     #[Override]

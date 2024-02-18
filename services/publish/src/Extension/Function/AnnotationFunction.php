@@ -4,8 +4,8 @@ namespace App\Extension\Function;
 
 use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
-use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 
 final class AnnotationFunction implements TwigFunctionInterface
 {
@@ -13,34 +13,34 @@ final class AnnotationFunction implements TwigFunctionInterface
 
     public function call(array $context): array
     {
-        $annotation = $this->getAnnotationFromContext($context);
+        $message = $this->getMessageFromContext($context);
 
         $properties = [
-            'type' => match ($annotation->getType()) {
-                PublishableMessage::MISSING_COVERAGE_ANNOTATION => 'missing_coverage',
-                PublishableMessage::PARTIAL_BRANCH_ANNOTATION => 'partial_branch',
+            'type' => match ($message->getType()) {
+                PublishableMessage::MISSING_COVERAGE_LINE_COMMENT => 'missing_coverage',
+                PublishableMessage::PARTIAL_BRANCH_LINE_COMMENT => 'partial_branch',
                 default => null,
             },
-            'fileName' => $annotation->getFileName(),
-            'startLineNumber' => $annotation->getStartLineNumber(),
-            'endLineNumber' => $annotation->getEndLineNumber(),
+            'fileName' => $message->getFileName(),
+            'startLineNumber' => $message->getStartLineNumber(),
+            'endLineNumber' => $message->getEndLineNumber(),
         ];
 
         switch (true) {
-            case $annotation instanceof PublishablePartialBranchAnnotationMessage:
+            case $message instanceof PublishablePartialBranchLineCommentMessage:
                 $properties = array_merge(
                     $properties,
                     [
-                        'coveredBranches' => $annotation->getCoveredBranches(),
-                        'totalBranches' => $annotation->getTotalBranches(),
+                        'coveredBranches' => $message->getCoveredBranches(),
+                        'totalBranches' => $message->getTotalBranches(),
                     ]
                 );
                 break;
-            case $annotation instanceof PublishableMissingCoverageAnnotationMessage:
+            case $message instanceof PublishableMissingCoverageLineCommentMessage:
                 $properties = array_merge(
                     $properties,
                     [
-                        'isStartingOnMethod' => $annotation->isStartingOnMethod(),
+                        'isStartingOnMethod' => $message->isStartingOnMethod(),
                     ]
                 );
                 break;

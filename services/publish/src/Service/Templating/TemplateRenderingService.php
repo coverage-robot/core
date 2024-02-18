@@ -7,8 +7,8 @@ use App\Exception\TemplateRenderingException;
 use App\Extension\CoverageTemplateExtension;
 use App\Extension\CoverageTemplateSecurityPolicy;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
-use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
@@ -39,16 +39,10 @@ final class TemplateRenderingService
         TemplateVariant $variant
     ): string {
         try {
-            return match (true) {
-                $message instanceof PublishableAnnotationInterface => $this->renderAnnotationWithTemplate(
-                    $message,
-                    $this->getTemplatePath($message, $variant)
-                ),
-                $message instanceof PublishableMessageInterface => $this->renderMessageWithTemplate(
-                    $message,
-                    $this->getTemplatePath($message, $variant)
-                )
-            };
+            return $this->renderMessageWithTemplate(
+                $message,
+                $this->getTemplatePath($message, $variant)
+            );
         } catch (LoaderError) {
             throw TemplateRenderingException::noTemplateAvailable($message);
         }
@@ -58,13 +52,13 @@ final class TemplateRenderingService
      * Get the path to the template for a specific message and variant.
      */
     private function getTemplatePath(
-        PublishableMessageInterface|PublishableAnnotationInterface $message,
+        PublishableMessageInterface $message,
         TemplateVariant $variant
     ): string {
         $folder = match (true) {
             $message instanceof PublishablePullRequestMessage => 'pull_request',
             $message instanceof PublishableCheckRunMessage => 'check_run',
-            $message instanceof PublishableAnnotationInterface => 'annotation',
+            $message instanceof PublishableLineCommentInterface => 'line_comment',
             default => throw TemplateRenderingException::noTemplateAvailable($message)
         };
 
@@ -93,23 +87,6 @@ final class TemplateRenderingService
             [
                 'event' => $message->getEvent(),
                 'message' => $message
-            ]
-        );
-    }
-
-    /**
-     * Render an annotation using the appropriate template.
-     */
-    private function renderAnnotationWithTemplate(
-        PublishableAnnotationInterface $annotation,
-        string $template
-    ): string {
-        $environment = $this->getTemplatingEnvironment();
-
-        return $environment->render(
-            $template,
-            [
-                'annotation' => $annotation,
             ]
         );
     }

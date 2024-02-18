@@ -9,6 +9,7 @@
         "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "async-aws/async-aws-bundle": "^1.12",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/clients": "*",

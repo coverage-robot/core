@@ -10,4 +10,5 @@ return [
     Packages\Configuration\ConfigurationBundle::class => ['all' => true],
     Packages\Message\MessageBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
+    AsyncAws\Symfony\Bundle\AsyncAwsBundle::class => ['all' => true],
 ];

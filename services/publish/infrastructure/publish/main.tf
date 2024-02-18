@@ -70,6 +70,15 @@ resource "aws_iam_policy" "publish_policy" {
           data.terraform_remote_state.core.outputs.publish_queue.arn
         ]
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:Query"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.configuration_table.arn
+        ]
+      }
     ]
   })
 }

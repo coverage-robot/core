@@ -9,11 +9,12 @@ use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Exception\SettingNotFoundException;
 use Packages\Configuration\Exception\SettingRetrievalFailedException;
+use Packages\Configuration\Model\LineCommentType;
 use Packages\Contracts\Provider\Provider;
 
-final class LineAnnotationSetting implements SettingInterface
+final class LineCommentTypeSetting implements SettingInterface
 {
-    private const true DEFAULT_VALUE = true;
+    private const LineCommentType DEFAULT_VALUE = LineCommentType::REVIEW_COMMENT;
 
     public function __construct(
         private readonly DynamoDbClientInterface $dynamoDbClient
@@ -21,20 +22,20 @@ final class LineAnnotationSetting implements SettingInterface
     }
 
     #[Override]
-    public function get(Provider $provider, string $owner, string $repository): bool
+    public function get(Provider $provider, string $owner, string $repository): LineCommentType
     {
         try {
             $value = $this->dynamoDbClient->getSettingFromStore(
                 $provider,
                 $owner,
                 $repository,
-                SettingKey::LINE_ANNOTATION,
-                SettingValueType::BOOLEAN
+                SettingKey::LINE_COMMENT_TYPE,
+                SettingValueType::STRING
             );
 
             $this->validate($value);
 
-            return $value;
+            return LineCommentType::from($value);
         } catch (
             SettingNotFoundException |
             SettingRetrievalFailedException |
@@ -60,8 +61,8 @@ final class LineAnnotationSetting implements SettingInterface
             $provider,
             $owner,
             $repository,
-            SettingKey::LINE_ANNOTATION,
-            SettingValueType::BOOLEAN,
+            SettingKey::LINE_COMMENT_TYPE,
+            SettingValueType::STRING,
             $value
         );
     }
@@ -76,7 +77,7 @@ final class LineAnnotationSetting implements SettingInterface
             $provider,
             $owner,
             $repository,
-            SettingKey::LINE_ANNOTATION
+            SettingKey::LINE_COMMENT_TYPE
         );
     }
 
@@ -86,22 +87,19 @@ final class LineAnnotationSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): mixed
     {
-        /**
-         * Theres no particular deserialization required for line annotations. At
-         * this point, its not yet confirmed if the value is a boolean, but that will
-         * be handled at the validation step.
-         *
-         * @see self::validate()
-         */
-        return $value;
+        return LineCommentType::from($value);
     }
 
     #[Override]
     public function validate(mixed $value): void
     {
-        if (!is_bool($value)) {
+        if ($value instanceof LineCommentType) {
+            return;
+        }
+
+        if (!is_string($value) || LineCommentType::tryFrom($value) === null) {
             throw new InvalidSettingValueException(
-                'The value for the line annotation setting must be a boolean.'
+                'The value for the line comment type setting must be a valid enum value.'
             );
         }
     }
@@ -109,6 +107,6 @@ final class LineAnnotationSetting implements SettingInterface
     #[Override]
     public static function getSettingKey(): string
     {
-        return SettingKey::LINE_ANNOTATION->value;
+        return SettingKey::LINE_COMMENT_TYPE->value;
     }
 }

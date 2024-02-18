@@ -12,8 +12,8 @@ use Packages\Event\Model\Upload;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
-use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -262,7 +262,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::COMPLETE_CHECK_RUN
             ],
             [
-                new PublishableMissingCoverageAnnotationMessage(
+                new PublishableMissingCoverageLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startingOnMethod: false,
@@ -273,7 +273,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishableMissingCoverageAnnotationMessage(
+                new PublishableMissingCoverageLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startingOnMethod: false,
@@ -284,7 +284,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishableMissingCoverageAnnotationMessage(
+                new PublishableMissingCoverageLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startingOnMethod: false,
@@ -295,7 +295,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishablePartialBranchAnnotationMessage(
+                new PublishablePartialBranchLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startLineNumber: 1,
@@ -307,7 +307,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishablePartialBranchAnnotationMessage(
+                new PublishablePartialBranchLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startLineNumber: 1,
@@ -319,7 +319,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishablePartialBranchAnnotationMessage(
+                new PublishablePartialBranchLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startLineNumber: 1,
@@ -331,7 +331,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishableMissingCoverageAnnotationMessage(
+                new PublishableMissingCoverageLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startingOnMethod: true,
@@ -342,7 +342,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                 TemplateVariant::ANNOTATION_BODY
             ],
             [
-                new PublishableMissingCoverageAnnotationMessage(
+                new PublishableMissingCoverageLineCommentMessage(
                     event: $event,
                     fileName: 'mock-file',
                     startingOnMethod: false,

@@ -28,7 +28,7 @@ final class SettingServiceTest extends TestCase
 
         $settingService = new SettingService(
             [
-                SettingKey::LINE_ANNOTATION->value => $mockSetting
+                SettingKey::LINE_COMMENT_TYPE->value => $mockSetting
             ]
         );
 
@@ -38,7 +38,7 @@ final class SettingServiceTest extends TestCase
                 Provider::GITHUB,
                 'owner',
                 'repository',
-                SettingKey::LINE_ANNOTATION,
+                SettingKey::LINE_COMMENT_TYPE,
                 'value'
             )
         );
@@ -49,7 +49,7 @@ final class SettingServiceTest extends TestCase
                 Provider::GITHUB,
                 'owner',
                 'repository',
-                SettingKey::LINE_ANNOTATION,
+                SettingKey::LINE_COMMENT_TYPE,
                 'value'
             )
         );
@@ -59,10 +59,6 @@ final class SettingServiceTest extends TestCase
     public function testDeserializingValue(bool $isValidateSuccessful): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
-        $mockSetting->expects($this->once())
-            ->method('deserialize')
-            ->with('value')
-            ->willReturn('value');
 
         if (!$isValidateSuccessful) {
             $mockSetting->expects($this->once())
@@ -70,19 +66,27 @@ final class SettingServiceTest extends TestCase
                 ->willThrowException(new InvalidSettingValueException());
 
             $this->expectException(InvalidSettingValueException::class);
+
+            $mockSetting->expects($this->never())
+                ->method('deserialize');
         } else {
             $mockSetting->expects($this->once())
                 ->method('validate');
+
+            $mockSetting->expects($this->once())
+                ->method('deserialize')
+                ->with('value')
+                ->willReturn('value');
         }
 
         $settingService = new SettingService(
             [
-                SettingKey::LINE_ANNOTATION->value => $mockSetting
+                SettingKey::LINE_COMMENT_TYPE->value => $mockSetting
             ]
         );
 
         $value = $settingService->deserialize(
-            SettingKey::LINE_ANNOTATION,
+            SettingKey::LINE_COMMENT_TYPE,
             'value'
         );
 
@@ -109,7 +113,7 @@ final class SettingServiceTest extends TestCase
 
         $settingService = new SettingService(
             [
-                SettingKey::LINE_ANNOTATION->value => $mockSetting
+                SettingKey::LINE_COMMENT_TYPE->value => $mockSetting
             ]
         );
 
@@ -117,7 +121,7 @@ final class SettingServiceTest extends TestCase
             Provider::GITHUB,
             'owner',
             'repository',
-            SettingKey::LINE_ANNOTATION
+            SettingKey::LINE_COMMENT_TYPE
         );
         $this->assertEquals($settingValue, $retrievedValue);
 
@@ -141,7 +145,7 @@ final class SettingServiceTest extends TestCase
 
         $settingService = new SettingService(
             [
-                SettingKey::LINE_ANNOTATION->value => $mockSetting
+                SettingKey::LINE_COMMENT_TYPE->value => $mockSetting
             ]
         );
 
@@ -151,7 +155,7 @@ final class SettingServiceTest extends TestCase
                 Provider::GITHUB,
                 'owner',
                 'repository',
-                SettingKey::LINE_ANNOTATION
+                SettingKey::LINE_COMMENT_TYPE
             )
         );
     }

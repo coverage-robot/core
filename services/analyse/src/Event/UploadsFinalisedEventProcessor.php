@@ -11,6 +11,7 @@ use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Override;
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
@@ -24,9 +25,9 @@ use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
 use Packages\Message\Client\SqsClientInterface;
-use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
@@ -43,7 +44,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         #[Autowire(service: CachingCoverageAnalyserService::class)]
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
         private readonly CoverageComparisonServiceInterface $coverageComparisonService,
-        private readonly LineGroupingService $annotationGrouperService,
+        private readonly LineGroupingService $lineGroupingService,
         #[Autowire(service: SettingService::class)]
         private readonly SettingServiceInterface $settingService,
         #[Autowire(service: EventBusClient::class)]
@@ -119,37 +120,17 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
      * run state, ready to be picked up and published to the version control provider.
      *
      * Right now, this is:
+     * 1. A pull request message
      * 2. A complete check run
-     * 3. A collection of check run annotations, linked to each uncovered line of
-     *    the diff
+     * 3. A collection of line comments, linked to each uncovered line of the diff
      */
     private function queueCoverageReport(
         UploadsFinalised $uploadsFinalised,
         CoverageReportInterface $coverageReport,
         ?CoverageReportComparison $comparison
     ): bool {
-        $annotations = [];
         $validUntil = $coverageReport->getLatestSuccessfulUpload() ??
             $uploadsFinalised->getEventTime();
-
-        /** @var bool $shouldGenerateAnnotations */
-        $shouldGenerateAnnotations = $this->settingService->get(
-            $uploadsFinalised->getProvider(),
-            $uploadsFinalised->getOwner(),
-            $uploadsFinalised->getRepository(),
-            SettingKey::LINE_ANNOTATION
-        );
-
-        if ($shouldGenerateAnnotations === true) {
-            $annotations = $this->annotationGrouperService->generateAnnotations(
-                $uploadsFinalised,
-                $coverageReport->getWaypoint()
-                    ->getDiff(),
-                $coverageReport->getDiffLineCoverage()
-                    ->getLines(),
-                $validUntil
-            );
-        }
 
         return $this->publishClient->dispatch(
             new PublishableMessageCollection(
@@ -165,8 +146,12 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         $uploadsFinalised,
                         $coverageReport,
                         $comparison,
-                        $validUntil,
-                        $annotations
+                        $validUntil
+                    ),
+                    $this->buildLineCommentCollection(
+                        $uploadsFinalised,
+                        $coverageReport,
+                        $validUntil
                     )
                 ]
             ),
@@ -221,27 +206,54 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         );
     }
 
-    /**
-     * @param array<array-key, PublishableAnnotationInterface> $annotations
-     */
     public function buildCheckRunMessage(
         UploadsFinalised $uploadsFinalised,
         CoverageReportInterface $coverageReport,
         ?CoverageReportComparison $comparison,
-        DateTimeImmutable $validUntil,
-        array $annotations
+        DateTimeImmutable $validUntil
     ): PublishableCheckRunMessage {
         return new PublishableCheckRunMessage(
             event: $uploadsFinalised,
             status: PublishableCheckRunStatus::SUCCESS,
             coveragePercentage: $coverageReport->getCoveragePercentage(),
-            annotations: $annotations,
             baseCommit: $comparison?->getBaseReport()
                 ->getWaypoint()
                 ->getCommit(),
             coverageChange: $comparison?->getCoverageChange(),
             validUntil: $validUntil
         );
+    }
+
+    public function buildLineCommentCollection(
+        UploadsFinalised $uploadsFinalised,
+        CoverageReportInterface $coverageReport,
+        DateTimeImmutable $validUntil
+    ): ?PublishableLineCommentMessageCollection {
+        /** @var LineCommentType $lineCommentType */
+        $lineCommentType = $this->settingService->get(
+            $uploadsFinalised->getProvider(),
+            $uploadsFinalised->getOwner(),
+            $uploadsFinalised->getRepository(),
+            SettingKey::LINE_COMMENT_TYPE
+        );
+
+        if ($lineCommentType !== LineCommentType::HIDDEN) {
+            $lineComments = $this->lineGroupingService->generateComments(
+                $uploadsFinalised,
+                $coverageReport->getWaypoint()
+                    ->getDiff(),
+                $coverageReport->getDiffLineCoverage()
+                    ->getLines(),
+                $validUntil
+            );
+
+            return new PublishableLineCommentMessageCollection(
+                $uploadsFinalised,
+                $lineComments
+            );
+        }
+
+        return null;
     }
 
     #[Override]

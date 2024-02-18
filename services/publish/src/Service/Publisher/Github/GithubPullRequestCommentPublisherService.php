@@ -66,6 +66,11 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         );
     }
 
+    public static function getPriority(): int
+    {
+        return 0;
+    }
+
     private function upsertComment(
         string $owner,
         string $repository,
