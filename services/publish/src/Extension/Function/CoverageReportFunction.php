@@ -39,14 +39,14 @@ final class CoverageReportFunction implements TwigFunctionInterface
                         'covered' => (int)$tag['covered'],
                         'partial' => (int)$tag['partial'],
                         'uncovered' => (int)$tag['uncovered'],
-                        'coveragePercentage' => (float)$tag['coveragePercentage'],
+                        'coverage_percentage' => (float)$tag['coveragePercentage'],
                     ],
                     $message->getTagCoverage()
                 ),
                 'impacted_files' => array_map(
                     static fn(array $file): array => [
-                        'fileName' => (string)$file['fileName'],
-                        'coveragePercentage' => (float)$file['coveragePercentage'],
+                        'file_name' => (string)$file['fileName'],
+                        'coverage_percentage' => (float)$file['coveragePercentage'],
                     ],
                     $message->getLeastCoveredDiffFiles()
                 )
@@ -58,17 +58,17 @@ final class CoverageReportFunction implements TwigFunctionInterface
             $message instanceof PublishablePartialBranchLineCommentMessage => [
                 'type' => 'partial_branch',
                 'fileName' => $message->getFileName(),
-                'startLineNumber' => $message->getStartLineNumber(),
-                'endLineNumber' => $message->getEndLineNumber(),
-                'coveredBranches' => $message->getCoveredBranches(),
-                'totalBranches' => $message->getTotalBranches(),
+                'start' => $message->getStartLineNumber(),
+                'end' => $message->getEndLineNumber(),
+                'covered_branches' => $message->getCoveredBranches(),
+                'total_branches' => $message->getTotalBranches(),
             ],
             $message instanceof PublishableMissingCoverageLineCommentMessage => [
                 'type' => 'missing_coverage',
                 'fileName' => $message->getFileName(),
-                'startLineNumber' => $message->getStartLineNumber(),
-                'endLineNumber' => $message->getEndLineNumber(),
-                'isStartingOnMethod' => $message->isStartingOnMethod(),
+                'start' => $message->getStartLineNumber(),
+                'end' => $message->getEndLineNumber(),
+                'starting_on_method' => $message->isStartingOnMethod(),
             ],
             default => []
         };

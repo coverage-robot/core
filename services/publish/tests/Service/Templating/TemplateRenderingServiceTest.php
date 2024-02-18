@@ -50,7 +50,10 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
-            parent: [],
+            parent: [
+                'mock-parent-commit-1',
+                'mock-parent-commit-2',
+            ],
             ref: 'main',
             projectRoot: 'project-root',
             tag: new Tag('mock-tag', 'mock-commit'),
@@ -233,6 +236,25 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ],
             [
                 new PublishableCheckRunMessage(
+                    event: new UploadsFinalised(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'main',
+                        commit: 'mock-commit',
+                        parent: [
+                            'mock-parent-commit-1',
+                            'mock-parent-commit-2',
+                        ],
+                    ),
+                    status: PublishableCheckRunStatus::SUCCESS,
+                    coveragePercentage: 0,
+                    coverageChange: 0.1
+                ),
+                TemplateVariant::COMPLETE_CHECK_RUN
+            ],
+            [
+                new PublishableCheckRunMessage(
                     event: $event,
                     status: PublishableCheckRunStatus::SUCCESS,
                     coveragePercentage: 83.2,
@@ -246,7 +268,6 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     status: PublishableCheckRunStatus::SUCCESS,
                     coveragePercentage: 83.2,
-                    baseCommit: 'mock-base-commit',
                     coverageChange: 0
                 ),
                 TemplateVariant::COMPLETE_CHECK_RUN
@@ -256,7 +277,6 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     status: PublishableCheckRunStatus::SUCCESS,
                     coveragePercentage: 83.2,
-                    baseCommit: 'mock-base-commit',
                     coverageChange: -2
                 ),
                 TemplateVariant::COMPLETE_CHECK_RUN

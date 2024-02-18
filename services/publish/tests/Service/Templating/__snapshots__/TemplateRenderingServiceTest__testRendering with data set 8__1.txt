@@ -1,1 +1,1 @@
-The next 9 lines are not covered by any tests.
+Total Coverage: 83.2% (-2% compared to mock-ba)

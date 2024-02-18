@@ -1,23 +1,23 @@
 {%- if report().type == 'missing_coverage' -%}
-    {%- set totalMissingLines = report().endLineNumber - report().startLineNumber -%}
-    {%- if report().isStartingOnMethod %}
-        {%- if totalMissingLines <= 1 -%}
+    {%- set missing_lines = report().end - report().start -%}
+    {%- if report().starting_on_method %}
+        {%- if missing_lines <= 1 -%}
             This method has not been covered by any tests.
         {%- else -%}
-            {{- 'The next ' ~ totalMissingLines ~ ' lines of this method are not covered by any tests.' -}}
+            {{- 'The next ' ~ missing_lines ~ ' lines of this method are not covered by any tests.' -}}
         {%- endif -%}
     {%- else %}
-        {%- if totalMissingLines == 0 -%}
+        {%- if missing_lines == 0 -%}
             This line is not covered by any tests.
         {%- else -%}
-            {{- 'The next ' ~ totalMissingLines ~ ' lines are not covered by any tests.' -}}
+            {{- 'The next ' ~ missing_lines ~ ' lines are not covered by any tests.' -}}
         {%- endif -%}
     {%- endif -%}
 {%- elseif report().type == 'partial_branch' -%}
-    {%- set coveredBranches = (report().coveredBranches / report().totalBranches) * 100 -%}
-    {%- if coveredBranches == 0 -%}
+    {%- set covered_branches = (report().covered_branches / report().total_branches) * 100 -%}
+    {%- if covered_branches == 0 -%}
         None of these branches are covered by tests.
     {%- else -%}
-        {{coveredBranches|round(2) ~ '% of these branches are not covered by any tests.' -}}
+        {{covered_branches|round(2) ~ '% of these branches are not covered by any tests.' -}}
     {%- endif -%}
 {%- endif -%}

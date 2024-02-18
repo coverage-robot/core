@@ -1,1 +1,1 @@
-Total Coverage: 83.2% (no change compared to mock-ba)
+Total Coverage: 83.2% (+0.2% compared to mock-ba)

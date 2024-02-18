@@ -4,6 +4,7 @@ namespace App\Extension\Function;
 
 use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
+use Packages\Contracts\Event\ParentAwareEventInterface;
 
 final class EventFunction implements TwigFunctionInterface
 {
@@ -20,11 +21,20 @@ final class EventFunction implements TwigFunctionInterface
         ];
 
         if ($event instanceof BaseAwareEventInterface) {
-            return array_merge(
+            $properties = array_merge(
                 $properties,
                 [
                     'base_ref' => $event->getBaseRef(),
                     'base_commit' => $event->getBaseCommit(),
+                ]
+            );
+        }
+
+        if ($event instanceof ParentAwareEventInterface) {
+            $properties = array_merge(
+                $properties,
+                [
+                    'parents' => $event->getParent(),
                 ]
             );
         }
