@@ -8,11 +8,9 @@ use App\Exception\PublishException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
 use Override;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
-use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -21,7 +19,6 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 final class GithubReviewPublisherService implements PublisherServiceInterface
@@ -30,9 +27,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
     public function __construct(
         private readonly TemplateRenderingService $templateRenderingService,
-        #[Autowire(service: SettingService::class)]
         private readonly SettingServiceInterface $settingService,
-        #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $reviewPublisherLogger

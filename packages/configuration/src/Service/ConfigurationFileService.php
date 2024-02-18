@@ -5,14 +5,12 @@ namespace Packages\Configuration\Service;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Contracts\Provider\Provider;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Yaml\Yaml;
 use WeakMap;
 
 final class ConfigurationFileService
 {
     public function __construct(
-        #[Autowire(service: SettingService::class)]
         private readonly SettingServiceInterface $settingService
     ) {
     }

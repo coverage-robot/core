@@ -7,7 +7,6 @@ use App\Enum\TemplateVariant;
 use App\Exception\PublishException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -15,13 +14,11 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
 final class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
-        #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly TemplateRenderingService $templateRenderingService,
         private readonly EnvironmentServiceInterface $environmentService,

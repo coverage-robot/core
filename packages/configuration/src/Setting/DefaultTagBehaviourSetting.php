@@ -18,6 +18,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * @internal
+ *
+ * @see TagBehaviourService
+ */
 final class DefaultTagBehaviourSetting implements SettingInterface
 {
     private DefaultTagBehaviour $default;

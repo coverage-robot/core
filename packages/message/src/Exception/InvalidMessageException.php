@@ -1,7 +1,8 @@
 <?php
 
-namespace Packages\Contracts\PublishableMessage;
+namespace Packages\Message\Exception;
 
+use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use RuntimeException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 

@@ -3,9 +3,9 @@
 namespace Packages\Event\Tests\Service;
 
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\InvalidEventException;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
+use Packages\Event\Exception\InvalidEventException;
 use Packages\Event\Model\Upload;
 use Packages\Event\Service\EventValidationService;
 use PHPUnit\Framework\Attributes\DataProvider;

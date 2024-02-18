@@ -1,7 +1,8 @@
 <?php
 
-namespace Packages\Contracts\Event;
+namespace Packages\Event\Exception;
 
+use Packages\Contracts\Event\EventInterface;
 use RuntimeException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 

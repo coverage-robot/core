@@ -3,10 +3,10 @@
 namespace Packages\Message\Tests\Service;
 
 use Packages\Contracts\Provider\Provider;
-use Packages\Contracts\PublishableMessage\InvalidMessageException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
+use Packages\Message\Exception\InvalidMessageException;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Message\Service\MessageValidationService;
 use PHPUnit\Framework\Attributes\DataProvider;

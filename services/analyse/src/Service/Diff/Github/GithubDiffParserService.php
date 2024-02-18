@@ -5,19 +5,16 @@ namespace App\Service\Diff\Github;
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
 use Override;
-use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
 {
     public function __construct(
-        #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly Parser $parser,
         private readonly LoggerInterface $diffParserLogger

@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
-use Packages\Contracts\PublishableMessage\InvalidMessageException;
+use Packages\Message\Exception\InvalidMessageException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class WebhookValidationService
