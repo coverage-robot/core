@@ -1,6 +1,6 @@
-{%- set base_commit = event().base_commit ? event().base_commit|slice(0, 7) : event().parents[0]|slice(0, 7) -%}
+{%- set base_commit = event().base_commit != null ? event().base_commit|slice(0, 7) : event().parents[0]|slice(0, 7) -%}
 Total Coverage: {{ report().total_coverage -}}%
-{%- if report().coverage_change and base_commit -%}
+{%- if report().coverage_change != null and base_commit != null -%}
     {%- if report().coverage_change > 0 -%}
         {{ ' ' }}(+{{ report().coverage_change }}% compared to {{ base_commit }})
     {%- elseif report().coverage_change < 0 -%}
