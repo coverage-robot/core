@@ -150,14 +150,22 @@ trait GithubCheckRunAwareTrait
      *          summary: string,
      *          annotations_count: non-negative-int
      *      }
-     *  }[]
+     *  }
      */
     private function getCheckRun(string $owner, string $repository, string $commit): array
     {
         $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
 
         /**
-         * @var  $checkRuns
+         * @var array{
+         *     id: int,
+         *     conclusion: string|null,
+         *     output: array{
+         *          title: string,
+         *          summary: string,
+         *          annotations_count: non-negative-int
+         *      }
+         * }[] $checkRuns
          */
         $checkRuns = $this->client->repo()
             ->checkRuns()

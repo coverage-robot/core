@@ -16,7 +16,7 @@ trait GithubPullRequestAwareTrait
         int $pullRequest,
         string $commit
     ): bool {
-        $pullRequest = $this->client->pullRequest()
+        $details = $this->client->pullRequest()
             ->show(
                 $owner,
                 $repository,
@@ -39,6 +39,13 @@ trait GithubPullRequestAwareTrait
             );
         }
 
-        return (string)$pullRequest['head']['sha'] === $commit;
+        if (
+            !isset($details['head']['sha']) ||
+            !is_string($details['head']['sha'])
+        ) {
+            return true;
+        }
+
+        return $details['head']['sha'] === $commit;
     }
 }

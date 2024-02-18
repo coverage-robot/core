@@ -4,8 +4,10 @@ namespace App\Extension\Function;
 
 use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
+use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
+use RuntimeException;
 
 final class AnnotationFunction implements TwigFunctionInterface
 {
@@ -14,6 +16,10 @@ final class AnnotationFunction implements TwigFunctionInterface
     public function call(array $context): array
     {
         $message = $this->getMessageFromContext($context);
+
+        if (!$message instanceof PublishableLineCommentInterface) {
+            throw new RuntimeException('The message is not a line comment.');
+        }
 
         $properties = [
             'type' => match ($message->getType()) {

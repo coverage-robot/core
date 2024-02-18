@@ -8,6 +8,7 @@ use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Event\Model\EventInterface;
+use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Psr\Log\LoggerInterface;
@@ -20,7 +21,7 @@ final class LineGroupingService
     }
 
     /**
-     * Group lines into annotations which can be published.
+     * Group lines into comments which can be published.
      *
      * This takes into account a number of scenarios:
      * 1. Blocks of missing coverage (i.e. grouping 10 sequential uncovered lines)
@@ -31,7 +32,7 @@ final class LineGroupingService
      * @param array<string, array<int, int>> $diff
      * @param LineCoverageQueryResult[] $lineCoverage
      *
-     * @return PublishableMessageInterface[]
+     * @return PublishableLineCommentInterface[]
      */
     public function generateComments(
         EventInterface $event,

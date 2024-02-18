@@ -23,6 +23,9 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
     ) {
     }
 
+    /**
+     * @return PublishableLineCommentInterface[]
+     */
     public function getMessages(): array
     {
         return $this->messages;

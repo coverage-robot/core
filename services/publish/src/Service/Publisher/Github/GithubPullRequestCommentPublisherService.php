@@ -10,6 +10,7 @@ use App\Service\Templating\TemplateRenderingService;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -53,6 +54,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         /** @var PublishablePullRequestMessage $publishableMessage */
         $pullRequest = (int)$publishableMessage->getEvent()->getPullRequest();
 
+        /** @var EventInterface $event */
         $event = $publishableMessage->getEvent();
 
         return $this->upsertComment(

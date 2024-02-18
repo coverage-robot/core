@@ -72,6 +72,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             throw PublishException::notSupportedException();
         }
 
+        /** @var PublishableLineCommentMessageCollection $publishableMessage */
+        $messages = $publishableMessage->getMessages();
         $event = $publishableMessage->getEvent();
 
         $this->client->authenticateAsRepositoryOwner($event->getOwner());
@@ -88,7 +90,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 sprintf(
                     '%s is no longer HEAD for %s, skipping review creation for %s.',
                     $event->getCommit(),
-                    $event->getPullRequest(),
+                    (string)$event->getPullRequest(),
                     (string)$event
                 )
             );
@@ -102,9 +104,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             (int)$event->getPullRequest()
         );
 
-        /** @var PublishableLineCommentMessageCollection $publishableMessage */
         return $clearedSuccessfully &&
-            $this->createReviewWithComments($event, $publishableMessage->getMessages());
+            $this->createReviewWithComments($event, $messages);
     }
 
     public static function getPriority(): int
@@ -117,6 +118,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
      *
      * This _will_ trigger a GitHub notification for any subscribers on the Pull Request,
      * so use with caution.
+     *
+     * @param PublishableLineCommentInterface[] $lineComments
      */
     private function createReviewWithComments(
         EventInterface $event,
@@ -159,6 +162,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     ): bool {
         $paginator = $this->client->pagination(100);
 
+        /** @var array{ id: int, user: array{ node: string }}[] $existingReviewComments */
         $existingReviewComments = $paginator->fetchAllLazy(
             $this->client->pullRequest()
                 ->comments(),
@@ -185,18 +189,10 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         $botId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID);
 
         foreach ($existingReviewComments as $existingReviewComment) {
-            if (
-                !isset(
-                    $existingReviewComment['id'],
-                    $existingReviewComment['user']['node_id']
-                )
-            ) {
-                // Review comment wasn't posted by us, so we can skip.
-                continue;
-            }
+            $existingId = $existingReviewComment['id'];
+            $existingUserNodeId = $existingReviewComment['user']['node'];
 
-            if ($existingReviewComment['user']['node_id'] !== $botId) {
-                // Review comment wasn't posted by us, so we can skip.
+            if ($existingUserNodeId !== $botId) {
                 continue;
             }
 
@@ -205,7 +201,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 ->remove(
                     $owner,
                     $repository,
-                    $existingReviewComment['id']
+                    $existingId
                 );
 
             $successful = $successful &&

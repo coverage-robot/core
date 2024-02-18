@@ -35,7 +35,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
         #[Autowire(service: GithubAppInstallationClient::class)]
         private readonly GithubAppInstallationClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $reviewPublisherLogger
+        private readonly LoggerInterface $checkPublisherLogger
     ) {
     }
 
@@ -72,9 +72,10 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
             throw PublishException::notSupportedException();
         }
 
+        /** @var PublishableLineCommentMessageCollection $publishableMessage */
         $event = $publishableMessage->getEvent();
 
-        /** @var PublishableLineCommentMessageCollection $publishableMessage */
+        /** @var PublishableLineCommentInterface[] $comments */
         $comments = $publishableMessage->getMessages();
 
         try {
@@ -105,7 +106,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
                     );
 
                 if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-                    $this->reviewPublisherLogger->critical(
+                    $this->checkPublisherLogger->critical(
                         sprintf(
                             '%s status code returned while attempting to update check run with new annotations.',
                             (string)$this->client->getLastResponse()?->getStatusCode()
@@ -120,7 +121,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
         } catch (PublishException $publishException) {
             // As we've enforced the annotations as a lower priority (and therefore executed
             // after the check run has been published), we should never hit this exception.
-            $this->reviewPublisherLogger->critical(
+            $this->checkPublisherLogger->critical(
                 sprintf(
                     'Failed to find existing check run to publish annotations to: %s',
                     (string)$publishableMessage->getEvent()
@@ -140,6 +141,8 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
 
     /**
      * @param PublishableLineCommentInterface[] $comments
+     *
+     * @return iterable<array>
      */
     private function formatAndBatchAnnotations(array $comments): iterable
     {
