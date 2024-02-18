@@ -589,7 +589,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/clients",
-                "reference": "faa93aad232199e1d160edc9c037b58e5f15bc75"
+                "reference": "62c06058bc0643fe87a567b069be625e0d40f35c"
             },
             "require": {
                 "knplabs/github-api": "^3.13",
@@ -635,7 +635,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "7ec9d7390e4f8d28a3d2ab1ce7cafec4d6a11d7c"
+                "reference": "d162f75f725b0b17de33f6dfb6e6d93a43bbbbd3"
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -684,7 +684,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -706,9 +706,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "4d7c971b52093faac7135ac8fd93224c06f4c5c7"
+                "reference": "5617ef32eee4a5d401a4083559c6761cce5b142a"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/event-bridge": "^1.5",
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
@@ -754,9 +755,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/message",
-                "reference": "041dc5cdab22ebc0b140e65d6348d0ed7dcd7c57"
+                "reference": "5feaf4f88ecbae92457bc6bfdbc84830b4c0a9f5"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/sqs": "^2.0",
                 "coverage-robot/event": "^1.0",
                 "coverage-robot/telemetry": "^1.0",
@@ -799,7 +801,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "7f1611f6fe817f590056214079971e20e7c3b2a3"
+                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -8215,7 +8217,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "224256e8d1f17d9acb8143f42b767f552305c670"
+                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -10419,16 +10421,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.8.1",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "14f5fff1e64118595db5408e946f3a22c75807f7"
+                "reference": "d63cee4890a8afaf86a22e51ad4d97c91dd4579b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/14f5fff1e64118595db5408e946f3a22c75807f7",
-                "reference": "14f5fff1e64118595db5408e946f3a22c75807f7",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/d63cee4890a8afaf86a22e51ad4d97c91dd4579b",
+                "reference": "d63cee4890a8afaf86a22e51ad4d97c91dd4579b",
                 "shasum": ""
             },
             "require": {
@@ -10495,7 +10497,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-01-11T20:47:48+00:00"
+            "time": "2024-02-16T15:06:51+00:00"
         },
         {
             "name": "symfony/maker-bundle",
@@ -10761,5 +10763,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
