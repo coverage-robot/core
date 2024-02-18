@@ -135,7 +135,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
@@ -244,7 +244,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
