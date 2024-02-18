@@ -3,12 +3,11 @@
 namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishableMissingCoverageAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
+final class PublishableMissingCoverageLineCommentMessage implements PublishableLineCommentInterface
 {
     public function __construct(
         private readonly EventInterface $event,
@@ -57,14 +56,14 @@ final class PublishableMissingCoverageAnnotationMessage implements PublishableAn
         return $this->endLineNumber;
     }
 
-    public function getValidUntil(): DateTimeInterface
+    public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
     }
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::MISSING_COVERAGE_ANNOTATION;
+        return PublishableMessage::MISSING_COVERAGE_LINE_COMMENT;
     }
 
     public function getMessageGroup(): string

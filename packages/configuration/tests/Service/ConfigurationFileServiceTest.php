@@ -4,10 +4,11 @@ namespace Packages\Configuration\Tests\Service;
 
 use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Service\ConfigurationFileService;
 use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
-use Packages\Configuration\Setting\LineAnnotationSetting;
+use Packages\Configuration\Setting\LineCommentTypeSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -30,7 +31,7 @@ final class ConfigurationFileServiceTest extends TestCase
         $configurationFileService = new ConfigurationFileService(
             new SettingService(
                 [
-                    SettingKey::LINE_ANNOTATION->value => new LineAnnotationSetting(
+                    SettingKey::LINE_COMMENT_TYPE->value => new LineCommentTypeSetting(
                         $this->createMock(DynamoDbClientInterface::class)
                     ),
                     SettingKey::PATH_REPLACEMENTS->value => new PathReplacementsSetting(
@@ -90,7 +91,8 @@ final class ConfigurationFileServiceTest extends TestCase
                 'mock-owner',
                 'mock-repository',
                 <<<YAML
-                line_annotations: false
+                line_comment:
+                    type: review_comment
 
                 path_replacements:
                     - before: a
@@ -117,32 +119,45 @@ final class ConfigurationFileServiceTest extends TestCase
         return [
             [
                 <<<YAML
-                line_annotations: true
+                line_comment:
+                    type: annotation
                 YAML,
                 [
-                    'line_annotations' => true
+                    'line_comment.type' => LineCommentType::ANNOTATION
                 ]
             ],
             [
                 <<<YAML
-                line_annotations: false
+                line_comment:
+                    type: hidden
                 YAML,
                 [
-                    'line_annotations' => false
+                    'line_comment.type' => LineCommentType::HIDDEN
                 ]
             ],
             [
                 <<<YAML
-                line_annotations: some-other-value
+                line_comment:
+                    type: review_comment
+                YAML,
+                [
+                    'line_comment.type' => LineCommentType::REVIEW_COMMENT
+                ]
+            ],
+            [
+                <<<YAML
+                line_comment:
+                    type: some-other-value
                 YAML,
                 []
             ],
             [
                 <<<YAML
-                line_annotations:
-                    - a
-                    - b
-                    - c
+                line_comment:
+                    type:
+                        - a
+                        - b
+                        - c
                 YAML,
                 []
             ],

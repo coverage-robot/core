@@ -135,7 +135,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
@@ -166,7 +166,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             MockSettingServiceFactory::createMock(
                 $this,
                 [
-                    SettingKey::LINE_ANNOTATION->value => true
+                    SettingKey::LINE_COMMENT_TYPE->value => true
                 ]
             ),
             $mockEventBusClient,
@@ -244,7 +244,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
@@ -270,7 +270,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             MockSettingServiceFactory::createMock(
                 $this,
                 [
-                    SettingKey::LINE_ANNOTATION->value => true
+                    SettingKey::LINE_COMMENT_TYPE->value => true
                 ]
             ),
             $mockEventBusClient,

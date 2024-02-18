@@ -3,7 +3,6 @@
 namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,7 +28,7 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof \DateTimeImmutable) {
+        if (!$this->validUntil instanceof DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }
@@ -39,7 +38,7 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         return $this->event;
     }
 
-    public function getValidUntil(): DateTimeInterface
+    public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
     }

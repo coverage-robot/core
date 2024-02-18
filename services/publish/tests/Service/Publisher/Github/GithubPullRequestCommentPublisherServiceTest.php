@@ -4,25 +4,27 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\Formatter\PullRequestCommentFormatterService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Service\Templating\TemplateRenderingService;
+use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\Issue;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
+use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
+final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
+    #[Override]
     #[DataProvider('supportsDataProvider')]
-    public function testSupports(Upload $upload, bool $expectedSupport): void
+    public function testSupports(EventInterface $event, bool $expectedSupport): void
     {
         $publisher = new GithubPullRequestCommentPublisherService(
             $this->createMock(GithubAppInstallationClientInterface::class),
@@ -37,7 +39,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
 
         $isSupported = $publisher->supports(
             new PublishablePullRequestMessage(
-                event: $upload,
+                event: $event,
                 coveragePercentage: 100,
                 diffCoveragePercentage: 100,
                 successfulUploads: 1,
@@ -116,12 +118,12 @@ final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
             new PublishablePullRequestMessage(
                 event: $upload,
                 coveragePercentage: 100,
-                baseCommit: 'mock-base-commit',
-                coverageChange: 0,
                 diffCoveragePercentage: 100,
                 successfulUploads: 1,
                 tagCoverage: [],
-                leastCoveredDiffFiles: []
+                leastCoveredDiffFiles: [],
+                baseCommit: 'mock-base-commit',
+                coverageChange: 0
             ),
         );
     }
@@ -130,6 +132,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
     public function testPublishToExistingComment(Upload $upload, bool $expectedSupport): void
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
+
         $publisher = new GithubPullRequestCommentPublisherService(
             $mockGithubAppInstallationClient,
             $this->getContainer()
@@ -205,6 +208,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends KernelTestCase
         );
     }
 
+    #[Override]
     public static function supportsDataProvider(): array
     {
         return [

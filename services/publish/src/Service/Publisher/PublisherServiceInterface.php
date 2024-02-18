@@ -20,4 +20,12 @@ interface PublisherServiceInterface
      * Execute the implementation for publishing the message.
      */
     public function publish(PublishableMessageInterface $publishableMessage): bool;
+
+    /**
+     * Enforce the priority of the publisher to influence the order publishers
+     * are executed in.
+     *
+     * The higher the number, the earlier the publisher is executed.
+     */
+    public static function getPriority(): int;
 }

@@ -116,11 +116,9 @@ final class SettingService implements SettingServiceInterface
     ): mixed {
         $setting = $this->getSetting($key);
 
-        $value = $setting->deserialize($value);
-
         $setting->validate($value);
 
-        return $value;
+        return $setting->deserialize($value);
     }
 
     /**

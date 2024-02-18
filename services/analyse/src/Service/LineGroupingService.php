@@ -7,9 +7,9 @@ use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
 use Packages\Event\Model\EventInterface;
-use Packages\Message\PublishableMessage\PublishableAnnotationInterface;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
-use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Psr\Log\LoggerInterface;
 
 final class LineGroupingService
@@ -20,7 +20,7 @@ final class LineGroupingService
     }
 
     /**
-     * Group lines into annotations which can be published.
+     * Group lines into comments which can be published.
      *
      * This takes into account a number of scenarios:
      * 1. Blocks of missing coverage (i.e. grouping 10 sequential uncovered lines)
@@ -31,9 +31,9 @@ final class LineGroupingService
      * @param array<string, array<int, int>> $diff
      * @param LineCoverageQueryResult[] $lineCoverage
      *
-     * @return PublishableAnnotationInterface[]
+     * @return PublishableLineCommentInterface[]
      */
-    public function generateAnnotations(
+    public function generateComments(
         EventInterface $event,
         array $diff,
         array $lineCoverage,
@@ -46,7 +46,7 @@ final class LineGroupingService
 
         $this->lineGroupingLogger->info(
             sprintf(
-                'Generated %d annotations for %s from %s lines of coverage.',
+                'Generated %d comments for %s from %s lines of coverage.',
                 count($annotations),
                 (string)$event,
                 count($lineCoverage)
@@ -63,7 +63,7 @@ final class LineGroupingService
      *
      * @param LineCoverageQueryResult[] $lineCoverage
      *
-     * @return PublishableAnnotationInterface[]
+     * @return PublishablePartialBranchLineCommentMessage[]
      */
     private function annotatePartialBranches(
         EventInterface $event,
@@ -97,7 +97,7 @@ final class LineGroupingService
                 continue;
             }
 
-            $annotations[] = new PublishablePartialBranchAnnotationMessage(
+            $annotations[] = new PublishablePartialBranchLineCommentMessage(
                 $event,
                 $line->getFileName(),
                 $line->getLineNumber(),
@@ -118,7 +118,7 @@ final class LineGroupingService
      * @param array<string, array<int, int>> $diff
      * @param LineCoverageQueryResult[] $line
      *
-     * @return PublishableMissingCoverageAnnotationMessage[]
+     * @return PublishableMissingCoverageLineCommentMessage[]
      */
     public function annotateBlocksOfMissingCoverage(
         EventInterface $event,
@@ -242,8 +242,8 @@ final class LineGroupingService
         LineCoverageQueryResult $startLine,
         LineCoverageQueryResult $endLine,
         DateTimeImmutable $validUntil
-    ): PublishableMissingCoverageAnnotationMessage {
-        return new PublishableMissingCoverageAnnotationMessage(
+    ): PublishableMissingCoverageLineCommentMessage {
+        return new PublishableMissingCoverageLineCommentMessage(
             $event,
             $startLine->getFileName(),
             in_array(LineType::METHOD, $startLine->getTypes()),

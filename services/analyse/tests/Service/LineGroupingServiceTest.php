@@ -9,8 +9,8 @@ use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageAnnotationMessage;
-use Packages\Message\PublishableMessage\PublishablePartialBranchAnnotationMessage;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -31,7 +31,7 @@ final class LineGroupingServiceTest extends TestCase
 
         $this->assertEquals(
             $expectedAnnotations,
-            $groupingService->generateAnnotations(
+            $groupingService->generateComments(
                 $event,
                 $diff,
                 $lineCoverage,
@@ -127,7 +127,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         true,
@@ -135,7 +135,7 @@ final class LineGroupingServiceTest extends TestCase
                         3,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         true,
@@ -210,7 +210,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -218,7 +218,7 @@ final class LineGroupingServiceTest extends TestCase
                         4,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -293,7 +293,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -301,7 +301,7 @@ final class LineGroupingServiceTest extends TestCase
                         4,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         true,
@@ -390,7 +390,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishablePartialBranchAnnotationMessage(
+                    new PublishablePartialBranchLineCommentMessage(
                         $event,
                         'mock-file',
                         5,
@@ -399,7 +399,7 @@ final class LineGroupingServiceTest extends TestCase
                         1,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -407,7 +407,7 @@ final class LineGroupingServiceTest extends TestCase
                         5,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -436,7 +436,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishablePartialBranchAnnotationMessage(
+                    new PublishablePartialBranchLineCommentMessage(
                         $event,
                         'mock-file',
                         5,
@@ -496,7 +496,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishablePartialBranchAnnotationMessage(
+                    new PublishablePartialBranchLineCommentMessage(
                         $event,
                         'mock-file',
                         5,
@@ -505,7 +505,7 @@ final class LineGroupingServiceTest extends TestCase
                         0,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -575,7 +575,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-1',
                         false,
@@ -583,7 +583,7 @@ final class LineGroupingServiceTest extends TestCase
                         2,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-2',
                         false,
@@ -662,7 +662,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-1',
                         false,
@@ -670,7 +670,7 @@ final class LineGroupingServiceTest extends TestCase
                         2,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-1',
                         false,
@@ -723,7 +723,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-1',
                         true,
@@ -731,7 +731,7 @@ final class LineGroupingServiceTest extends TestCase
                         5,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file-1',
                         false,
@@ -801,7 +801,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -809,7 +809,7 @@ final class LineGroupingServiceTest extends TestCase
                         8,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -838,7 +838,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         true,
@@ -892,7 +892,7 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ],
                 [
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,
@@ -900,7 +900,7 @@ final class LineGroupingServiceTest extends TestCase
                         185,
                         $date
                     ),
-                    new PublishableMissingCoverageAnnotationMessage(
+                    new PublishableMissingCoverageLineCommentMessage(
                         $event,
                         'mock-file',
                         false,

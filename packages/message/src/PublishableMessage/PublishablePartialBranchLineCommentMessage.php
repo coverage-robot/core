@@ -3,12 +3,11 @@
 namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
-use DateTimeInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishablePartialBranchAnnotationMessage implements PublishableAnnotationInterface, PublishableMessageInterface
+final class PublishablePartialBranchLineCommentMessage implements PublishableLineCommentInterface
 {
     public function __construct(
         private readonly EventInterface $event,
@@ -24,7 +23,7 @@ final class PublishablePartialBranchAnnotationMessage implements PublishableAnno
         private readonly int $coveredBranches,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof \DateTimeImmutable) {
+        if (!$this->validUntil instanceof DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }
@@ -59,14 +58,14 @@ final class PublishablePartialBranchAnnotationMessage implements PublishableAnno
         return $this->coveredBranches;
     }
 
-    public function getValidUntil(): DateTimeInterface
+    public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
     }
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::PARTIAL_BRANCH_ANNOTATION;
+        return PublishableMessage::PARTIAL_BRANCH_LINE_COMMENT;
     }
 
     public function getMessageGroup(): string

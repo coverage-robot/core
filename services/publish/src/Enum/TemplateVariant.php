@@ -2,24 +2,27 @@
 
 namespace App\Enum;
 
+use App\Service\Publisher\Github\GithubAnnotationPublisherService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
+use App\Service\Publisher\Github\GithubReviewPublisherService;
 
 enum TemplateVariant: string
 {
     /**
-     * Load the title template for annotations.
+     * Load the line comment titles template for annotations.
      *
-     * @see GithubCheckRunPublisherService
+     *  @see GithubAnnotationPublisherService
      */
-    case ANNOTATION_TITLE = 'annotation_title';
+    case LINE_COMMENT_TITLE = 'line_comment_title';
 
     /**
-     * Load the annotation template for annotations.
+     * Load the line comment body template for reviews.
      *
-     * @see GithubCheckRunPublisherService
+     * @see GithubAnnotationPublisherService
+     * @see GithubReviewPublisherService
      */
-    case ANNOTATION_BODY = 'annotation_body';
+    case LINE_COMMENT_BODY = 'line_comment_body';
 
     /**
      * Load the complete template for Pull Requests, Check Runs or
