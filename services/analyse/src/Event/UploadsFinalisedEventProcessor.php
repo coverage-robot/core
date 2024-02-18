@@ -254,6 +254,10 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $validUntil
             );
 
+            if ($lineComments === []) {
+                return null;
+            }
+
             return new PublishableLineCommentMessageCollection(
                 $uploadsFinalised,
                 $lineComments
