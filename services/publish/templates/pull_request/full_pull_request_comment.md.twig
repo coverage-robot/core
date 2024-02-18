@@ -1,4 +1,4 @@
-{%- set base_commit = event().base_commit ? event().base_commit : event().parents[0] -%}
+{%- set base_commit = event().base_commit != null ? event().base_commit : event().parents[0] -%}
 ## Coverage Report
 > Merging #{{ event().pull_request }} will **{{ (report().coverage_change > 0) ? 'increase' : (report().coverage_change < 0) ? 'decrease' : 'not change' }}** the total coverage
 {{- (report().coverage_change != 0) ? ' by ' ~ report().coverage_change|abs ~ '%' : '' }} (compared to {{ base_commit }})
