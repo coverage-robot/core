@@ -35,7 +35,7 @@ final class LineCommentTypeSetting implements SettingInterface
 
             $this->validate($value);
 
-            return LineCommentType::from($value);
+            return $this->deserialize($value);
         } catch (
             SettingNotFoundException |
             SettingRetrievalFailedException |

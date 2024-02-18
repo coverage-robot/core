@@ -4,29 +4,30 @@ namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishException;
-use App\Service\Formatter\CheckAnnotationFormatterService;
-use App\Service\Formatter\CheckRunFormatterService;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Templating\TemplateRenderingService;
+use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
+use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GithubCheckRunPublisherServiceTest extends KernelTestCase
+final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
-    #[DataProvider('uploadsDataProvider')]
-    public function testSupports(Upload $upload, bool $expectedSupport): void
+    #[Override]
+    #[DataProvider('supportsDataProvider')]
+    public function testSupports(EventInterface $upload, bool $expectedSupport): void
     {
         $publisher = new GithubCheckRunPublisherService(
             $this->getContainer()
@@ -49,7 +50,7 @@ final class GithubCheckRunPublisherServiceTest extends KernelTestCase
         );
     }
 
-    #[DataProvider('uploadsDataProvider')]
+    #[DataProvider('supportsDataProvider')]
     public function testPublishToNewCheckRun(Upload $upload, bool $expectedSupport): void
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
@@ -119,7 +120,7 @@ final class GithubCheckRunPublisherServiceTest extends KernelTestCase
         );
     }
 
-    #[DataProvider('uploadsDataProvider')]
+    #[DataProvider('supportsDataProvider')]
     public function testPublishToExistingCheckRun(Upload $upload, bool $expectedSupport): void
     {
         $mockGithubAppInstallationClient = $this->createMock(GithubAppInstallationClientInterface::class);
@@ -193,7 +194,8 @@ final class GithubCheckRunPublisherServiceTest extends KernelTestCase
         );
     }
 
-    public static function uploadsDataProvider(): array
+    #[Override]
+    public static function supportsDataProvider(): array
     {
         return [
             [

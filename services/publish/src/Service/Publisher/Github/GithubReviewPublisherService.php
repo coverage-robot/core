@@ -52,6 +52,10 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             return false;
         }
 
+        if ($publishableMessage->getEvent()->getPullRequest() === null) {
+            return false;
+        }
+
         /** @var LineCommentType $lineCommentType */
         $lineCommentType = $this->settingService->get(
             $event->getProvider(),
@@ -162,7 +166,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     ): bool {
         $paginator = $this->client->pagination(100);
 
-        /** @var array{ id: int, user: array{ node: string }}[] $existingReviewComments */
+        /** @var array{ id: int, user: array{ node_id: string }}[] $existingReviewComments */
         $existingReviewComments = $paginator->fetchAllLazy(
             $this->client->pullRequest()
                 ->comments(),
@@ -190,9 +194,10 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
         foreach ($existingReviewComments as $existingReviewComment) {
             $existingId = $existingReviewComment['id'];
-            $existingUserNodeId = $existingReviewComment['user']['node'];
+            $existingUserNodeId = $existingReviewComment['user']['node_id'];
 
             if ($existingUserNodeId !== $botId) {
+                // Review comment wasn't created by us, so we can skip it.
                 continue;
             }
 
