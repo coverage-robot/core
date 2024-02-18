@@ -1,9 +1,9 @@
-Total Coverage: {{ metrics().total_coverage -}}%
+Total Coverage: {{ report().total_coverage -}}%
 {%- if event().base_commit -%}
-    {%- if metrics().coverage_change > 0 -%}
-        {{ ' ' }}(+{{ metrics().coverage_change }}% compared to {{ event().base_commit|slice(0, 7) }})
-    {%- elseif metrics().coverage_change < 0 -%}
-        {{ ' ' }}({{ metrics().coverage_change }}% compared to {{ event().base_commit|slice(0, 7) }})
+    {%- if report().coverage_change > 0 -%}
+        {{ ' ' }}(+{{ report().coverage_change }}% compared to {{ event().base_commit|slice(0, 7) }})
+    {%- elseif report().coverage_change < 0 -%}
+        {{ ' ' }}({{ report().coverage_change }}% compared to {{ event().base_commit|slice(0, 7) }})
     {%- else -%}
         {{ ' ' }}(no change compared to {{ event().base_commit|slice(0, 7) }})
     {%- endif %}

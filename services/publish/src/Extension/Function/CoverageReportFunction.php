@@ -5,9 +5,11 @@ namespace App\Extension\Function;
 use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 
-final class MetricsFunction implements TwigFunctionInterface
+final class CoverageReportFunction implements TwigFunctionInterface
 {
     use ContextAwareFunctionTrait;
 
@@ -53,6 +55,21 @@ final class MetricsFunction implements TwigFunctionInterface
                 'total_coverage' => $message->getCoveragePercentage(),
                 'coverage_change' => $message->getCoverageChange(),
             ],
+            $message instanceof PublishablePartialBranchLineCommentMessage => [
+                'type' => 'partial_branch',
+                'fileName' => $message->getFileName(),
+                'startLineNumber' => $message->getStartLineNumber(),
+                'endLineNumber' => $message->getEndLineNumber(),
+                'coveredBranches' => $message->getCoveredBranches(),
+                'totalBranches' => $message->getTotalBranches(),
+            ],
+            $message instanceof PublishableMissingCoverageLineCommentMessage => [
+                'type' => 'missing_coverage',
+                'fileName' => $message->getFileName(),
+                'startLineNumber' => $message->getStartLineNumber(),
+                'endLineNumber' => $message->getEndLineNumber(),
+                'isStartingOnMethod' => $message->isStartingOnMethod(),
+            ],
             default => []
         };
     }
@@ -60,6 +77,6 @@ final class MetricsFunction implements TwigFunctionInterface
     #[Override]
     public static function getFunctionName(): string
     {
-        return 'metrics';
+        return 'report';
     }
 }
