@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce8db1652b758d146dab53859e48a362",
+    "content-hash": "30dfc37522c44a145276ef9362111bc0",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -580,9 +580,10 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "5a0fa8b8211d234b325c337e77e221d55bba1ac3"
+                "reference": "7ec9d7390e4f8d28a3d2ab1ce7cafec4d6a11d7c"
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
                 "coverage-robot/contracts": "^1.0",
                 "psr/log": "^3.0",
