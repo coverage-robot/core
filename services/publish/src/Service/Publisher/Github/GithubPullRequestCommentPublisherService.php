@@ -4,9 +4,10 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
+use Github\Exception\ExceptionInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -45,7 +46,10 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
-            throw PublishException::notSupportedException();
+            throw new PublishingNotSupportedException(
+                self::class,
+                $publishableMessage
+            );
         }
 
         /** @var PublishablePullRequestMessage $publishableMessage */
@@ -54,15 +58,29 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         /** @var EventInterface $event */
         $event = $publishableMessage->getEvent();
 
-        return $this->upsertComment(
-            $event->getOwner(),
-            $event->getRepository(),
-            $pullRequest,
-            $this->templateRenderingService->render(
-                $publishableMessage,
-                TemplateVariant::FULL_PULL_REQUEST_COMMENT
-            )
-        );
+        try {
+            return $this->upsertComment(
+                $event->getOwner(),
+                $event->getRepository(),
+                $pullRequest,
+                $this->templateRenderingService->render(
+                    $publishableMessage,
+                    TemplateVariant::FULL_PULL_REQUEST_COMMENT
+                )
+            );
+        } catch (ExceptionInterface $exception) {
+            $this->pullRequestPublisherLogger->error(
+                sprintf(
+                    'Failed to publish pull request comment for %s',
+                    (string)$event
+                ),
+                [
+                    'exception' => $exception
+                ]
+            );
+
+            return false;
+        }
     }
 
     public static function getPriority(): int
@@ -70,6 +88,9 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         return 0;
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     private function upsertComment(
         string $owner,
         string $repository,

@@ -3,7 +3,7 @@
 namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
@@ -69,7 +69,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($this->once())
@@ -139,7 +139,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($this->once())

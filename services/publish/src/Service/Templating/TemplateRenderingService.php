@@ -3,7 +3,7 @@
 namespace App\Service\Templating;
 
 use App\Enum\TemplateVariant;
-use App\Exception\TemplateRenderingException;
+use App\Exception\NoTemplateAvailableException;
 use App\Extension\CoverageTemplateExtension;
 use App\Extension\CoverageTemplateSecurityPolicy;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
@@ -44,7 +44,7 @@ final class TemplateRenderingService
                 $this->getTemplatePath($message, $variant)
             );
         } catch (LoaderError) {
-            throw TemplateRenderingException::noTemplateAvailable($message);
+            throw new NoTemplateAvailableException($message);
         }
     }
 
@@ -59,7 +59,7 @@ final class TemplateRenderingService
             $message instanceof PublishablePullRequestMessage => 'pull_request',
             $message instanceof PublishableCheckRunMessage => 'check_run',
             $message instanceof PublishableLineCommentInterface => 'line_comment',
-            default => throw TemplateRenderingException::noTemplateAvailable($message)
+            default => throw new NoTemplateAvailableException($message)
         };
 
         return sprintf(
