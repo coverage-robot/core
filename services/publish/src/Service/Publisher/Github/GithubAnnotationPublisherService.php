@@ -118,8 +118,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
             }
 
             return $successful;
-        }
-        catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface $exception) {
             $this->checkPublisherLogger->critical(
                 sprintf(
                     'Exception while writing annotations to check run for %s',
@@ -130,8 +129,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
                 ]
             );
             return false;
-        }
-        catch (CheckRunNotFoundException $exception) {
+        } catch (CheckRunNotFoundException $exception) {
             // As we've enforced the annotations as a lower priority (and therefore executed
             // after the check run has been published), we should never hit this exception.
             $this->checkPublisherLogger->critical(
