@@ -4,9 +4,10 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
+use Github\Exception\ExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Enum\SettingKey;
@@ -68,43 +69,60 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
-            throw PublishException::notSupportedException();
+            throw new PublishingNotSupportedException(
+                self::class,
+                $publishableMessage
+            );
         }
 
         /** @var PublishableLineCommentMessageCollection $publishableMessage */
         $messages = $publishableMessage->getMessages();
         $event = $publishableMessage->getEvent();
 
-        $this->client->authenticateAsRepositoryOwner($event->getOwner());
+        try {
+            $this->client->authenticateAsRepositoryOwner($event->getOwner());
 
-        if (
-            !$this->isCommitStillPullRequestHead(
+            if (
+                !$this->isCommitStillPullRequestHead(
+                    $event->getOwner(),
+                    $event->getRepository(),
+                    (int)$event->getPullRequest(),
+                    $event->getCommit()
+                )
+            ) {
+                $this->reviewPublisherLogger->info(
+                    sprintf(
+                        '%s is no longer HEAD for %s, skipping review creation for %s.',
+                        $event->getCommit(),
+                        (string)$event->getPullRequest(),
+                        (string)$event
+                    )
+                );
+
+                return true;
+            }
+
+            $clearedSuccessfully = $this->clearExistingReviews(
                 $event->getOwner(),
                 $event->getRepository(),
-                (int)$event->getPullRequest(),
-                $event->getCommit()
-            )
-        ) {
-            $this->reviewPublisherLogger->info(
-                sprintf(
-                    '%s is no longer HEAD for %s, skipping review creation for %s.',
-                    $event->getCommit(),
-                    (string)$event->getPullRequest(),
-                    (string)$event
-                )
+                (int)$event->getPullRequest()
             );
 
-            return true;
+            return $clearedSuccessfully &&
+                $this->createReviewWithComments($event, $messages);
+        } catch (ExceptionInterface $exception) {
+            $this->reviewPublisherLogger->error(
+                sprintf(
+                    'Failed to publish review for %s',
+                    (string)$event
+                ),
+                [
+                    'exception' => $exception
+                ]
+            );
+
+            return false;
         }
-
-        $clearedSuccessfully = $this->clearExistingReviews(
-            $event->getOwner(),
-            $event->getRepository(),
-            (int)$event->getPullRequest()
-        );
-
-        return $clearedSuccessfully &&
-            $this->createReviewWithComments($event, $messages);
     }
 
     public static function getPriority(): int
@@ -119,6 +137,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
      * so use with caution.
      *
      * @param PublishableLineCommentInterface[] $lineComments
+     *
+     * @throws ExceptionInterface
      */
     private function createReviewWithComments(
         EventInterface $event,
@@ -153,6 +173,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
     /**
      * Remove any existing reviews, and review comments, from the pull request.
+     *
+     * @throws ExceptionInterface
      */
     private function clearExistingReviews(
         string $owner,

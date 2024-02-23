@@ -2,7 +2,6 @@
 
 namespace App\Service\Publisher;
 
-use App\Exception\PublishException;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -11,8 +10,6 @@ interface PublisherServiceInterface
 {
     /**
      * Check if the publisher supports being executed with the given message.
-     *
-     * @throws PublishException
      */
     public function supports(PublishableMessageInterface $publishableMessage): bool;
 

@@ -2,16 +2,17 @@
 
 namespace App\Service\Publisher\Github;
 
-use App\Exception\PublishException;
+use App\Exception\CheckRunNotFoundException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
+use Github\Exception\ExceptionInterface;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 final class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
@@ -40,7 +41,10 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
-            throw PublishException::notSupportedException();
+            throw new PublishingNotSupportedException(
+                self::class,
+                $publishableMessage
+            );
         }
 
         /** @var PublishableCheckRunMessage $publishableMessage */
@@ -94,13 +98,25 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
                 $checkRun['id'],
                 $publishableMessage
             );
-        } catch (RuntimeException) {
+        } catch (CheckRunNotFoundException) {
             return $this->createCheckRun(
                 $owner,
                 $repository,
                 $commit,
                 $publishableMessage
             );
+        } catch (ExceptionInterface $exception) {
+            $this->checkPublisherLogger->critical(
+                sprintf(
+                    'Exception while writing check run for %s',
+                    (string)$publishableMessage->getEvent()
+                ),
+                [
+                    'exception' => $exception
+                ]
+            );
+
+            return false;
         }
     }
 }
