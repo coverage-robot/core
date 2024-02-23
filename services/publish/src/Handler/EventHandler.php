@@ -98,6 +98,19 @@ final class EventHandler extends SqsHandler
             /** @var array{MessageGroupId: string} $attributes */
             $attributes = $record->toArray()['attributes'];
 
+            $messageGroupId = $attributes['MessageGroupId'] ?? null;
+
+            if ($messageGroupId === null) {
+                $this->eventHandlerLogger->error(
+                    'Failed to get message group ID from SQS record',
+                    [
+                        'record' => $record->toArray()
+                    ]
+                );
+
+                continue;
+            }
+
             $newMessage = $this->serializer->deserialize(
                 $record->getBody(),
                 \Packages\Message\PublishableMessage\PublishableMessageInterface::class,
@@ -109,17 +122,17 @@ final class EventHandler extends SqsHandler
                 continue;
             }
 
-            $currentNewestMessage = $messages[$attributes['MessageGroupId']] ?? null;
+            $currentNewestMessage = $messages[$messageGroupId] ?? null;
 
             if ($currentNewestMessage === null) {
                 // This is the first set of messages to publish for this owner/repository
-                $messages[$attributes['MessageGroupId']] = $newMessage;
+                $messages[$messageGroupId] = $newMessage;
                 continue;
             }
 
             if ($currentNewestMessage->getValidUntil() < $newMessage->getValidUntil()) {
                 // This set of messages is more up to date than the current set of messages
-                $messages[$attributes['MessageGroupId']] = $newMessage;
+                $messages[$messageGroupId] = $newMessage;
             }
         }
 
