@@ -9,6 +9,7 @@ use Github\Client;
 use Github\HttpClient\Builder;
 use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class GithubAppClient extends Client
@@ -22,6 +23,7 @@ class GithubAppClient extends Client
         #[Autowire(value: '%kernel.project_dir%/config/github.pem')]
         private readonly string $privateKeyFile,
         private readonly JwtGenerator $jwtGenerator,
+        private readonly MetricServiceInterface $metricService,
         ?Builder $httpClientBuilder = null,
         ?string $apiVersion = null,
         public readonly ?string $enterpriseUrl = null
@@ -42,6 +44,8 @@ class GithubAppClient extends Client
     private function authenticateAsApp(): void
     {
         try {
+            $this->metricService->increment(metric: 'GithubAppAuthenticationRequests');
+
             $this->authenticate(
                 $this->jwtGenerator->generate($this->appId, $this->privateKeyFile)
                     ->toString(),

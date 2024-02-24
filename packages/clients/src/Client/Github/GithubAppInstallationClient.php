@@ -11,6 +11,7 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\ResultPager;
 use OutOfBoundsException;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use UnexpectedValueException;
@@ -23,7 +24,8 @@ final class GithubAppInstallationClient implements GithubAppInstallationClientIn
         #[Autowire(service: GithubAppClient::class)]
         private readonly Client $appClient,
         #[Autowire(service: GithubAppClient::class)]
-        private readonly Client $installationClient
+        private readonly Client $installationClient,
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 
@@ -32,6 +34,12 @@ final class GithubAppInstallationClient implements GithubAppInstallationClientIn
         if ($owner === $this->owner) {
             return;
         }
+
+        $this->metricService->increment(
+            metric: 'GithubAppInstallationTokenRequests',
+            dimensions: [[$owner]],
+            properties: ['owner' => $owner]
+        );
 
         $accessToken = $this->appClient->apps()
             ->createInstallationToken($this->getInstallationForOwner($owner));
