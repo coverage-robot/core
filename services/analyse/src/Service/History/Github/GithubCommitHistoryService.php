@@ -10,6 +10,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Provider\ProviderAwareInterface;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -49,7 +50,8 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
 {
     public function __construct(
         private readonly GithubAppInstallationClientInterface $githubClient,
-        private readonly LoggerInterface $githubHistoryLogger
+        private readonly LoggerInterface $githubHistoryLogger,
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 
@@ -64,6 +66,12 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
         $this->githubClient->authenticateAsRepositoryOwner($waypoint->getOwner());
 
         $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
+
+        $this->metricService->increment(
+            metric: 'CommitHistoryRetrievalRequest',
+            dimensions: [['provider']],
+            properties: ['provider' => Provider::GITHUB->value]
+        );
 
         $commits = $this->getHistoricCommits(
             $waypoint->getOwner(),

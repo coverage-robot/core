@@ -3,6 +3,7 @@
 namespace Packages\Clients\Client\Github;
 
 use Exception;
+use Github\Api\AbstractApi;
 use Github\Api\Apps;
 use Github\AuthMethod;
 use Github\Client;
@@ -14,6 +15,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 class GithubAppClient extends Client
 {
+    private bool $isAuthenticated = false;
+
     /**
      * @throws ClientException
      */
@@ -29,8 +32,22 @@ class GithubAppClient extends Client
         public readonly ?string $enterpriseUrl = null
     ) {
         parent::__construct($httpClientBuilder, $apiVersion, $this->enterpriseUrl);
+    }
 
-        $this->authenticateAsApp();
+    /**
+     * Before performing any API requests, the client must authenticate as an app.
+     *
+     * This lazily authenticates the client as the app, just before the first API request is made.
+     *
+     * @throws ClientException
+     */
+    public function api($name): AbstractApi
+    {
+        if ( ! $this->isAuthenticated) {
+            $this->authenticateAsApp();
+        }
+
+        return parent::api($name);
     }
 
     public function apps(): Apps
@@ -52,6 +69,8 @@ class GithubAppClient extends Client
                 null,
                 AuthMethod::JWT
             );
+
+            $this->isAuthenticated = true;
         } catch (Exception $exception) {
             throw ClientException::authenticationException($exception);
         }
