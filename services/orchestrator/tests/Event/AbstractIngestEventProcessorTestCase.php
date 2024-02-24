@@ -102,7 +102,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('mock-tag', 'mock-commit'),
+                        tag: new Tag('mock-tag', 'mock-commit', [11]),
                         baseCommit: 'commit-on-main',
                         baseRef: 'main'
                     ),
@@ -165,7 +165,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('mock-tag', 'mock-commit'),
+                        tag: new Tag('mock-tag', 'mock-commit', [12]),
                         baseCommit: 'commit-on-main',
                         baseRef: 'main',
                         eventTime: $eventTime->sub(new DateInterval('PT30S'))
