@@ -21,7 +21,6 @@ use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
@@ -106,7 +105,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                     parent: [],
                     ref: 'mock-branch-reference',
                     projectRoot: 'project/root',
-                    tag: new Tag('mock-tag', ''),
+                    tag: new Tag('mock-tag', '', [0]),
                     pullRequest: 1,
                     baseCommit: 'commit-on-main',
                     baseRef: 'main'
@@ -196,7 +195,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                     parent: [],
                     ref: 'mock-branch-reference',
                     projectRoot: 'project/root',
-                    tag: new Tag('mock-tag', ''),
+                    tag: new Tag('mock-tag', '', [0]),
                     pullRequest: 1,
                     baseCommit: 'commit-on-main',
                     baseRef: 'main'

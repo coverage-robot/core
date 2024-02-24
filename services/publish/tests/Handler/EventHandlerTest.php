@@ -3,9 +3,7 @@
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
-use App\Service\MessagePublisherService;
 use App\Service\MessagePublisherServiceInterface;
-use App\Service\Publisher\PublisherServiceInterface;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeInterface;
@@ -15,12 +13,10 @@ use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
-use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Message\Service\MessageValidationService;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class EventHandlerTest extends KernelTestCase
@@ -55,7 +51,8 @@ final class EventHandlerTest extends KernelTestCase
             projectRoot: 'mock-root',
             tag: new Tag(
                 name: 'mock-tag',
-                commit: 'mock-commit'
+                commit: 'mock-commit',
+                successfullyUploadedLines: [0]
             ),
             pullRequest: 1,
             eventTime: new DateTimeImmutable('2023-09-18 01:15:37')
@@ -164,7 +161,8 @@ final class EventHandlerTest extends KernelTestCase
             projectRoot: 'mock-root',
             tag: new Tag(
                 name: 'mock-tag',
-                commit: 'mock-commit'
+                commit: 'mock-commit',
+                successfullyUploadedLines: [0]
             ),
             pullRequest: 1,
             eventTime: DateTimeImmutable::createFromFormat(

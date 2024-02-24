@@ -107,7 +107,7 @@ final class S3PersistServiceTest extends KernelTestCase
             parent: [],
             ref: 'mock-branch-reference',
             projectRoot: 'project/root',
-            tag: new Tag('mock-tag', ''),
+            tag: new Tag('mock-tag', '', [3]),
             pullRequest: 1,
             baseCommit: 'commit-on-main',
             baseRef: 'main'

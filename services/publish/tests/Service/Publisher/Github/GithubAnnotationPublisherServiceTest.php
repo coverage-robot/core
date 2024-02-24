@@ -70,7 +70,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             parent: ['mock-parent'],
             ref: 'mock-ref',
             projectRoot: 'mock-project-root',
-            tag: new Tag('mock-tag', 'mock-commit'),
+            tag: new Tag('mock-tag', 'mock-commit', [0]),
             pullRequest: '1234',
             baseCommit: 'mock-base-commit',
             baseRef: 'main',

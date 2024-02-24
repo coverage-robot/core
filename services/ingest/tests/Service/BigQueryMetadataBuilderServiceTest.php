@@ -42,7 +42,7 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 parent: [],
                 ref: 'main',
                 projectRoot: 'project/root',
-                tag: new Tag('mock-tag', 'mock-commit'),
+                tag: new Tag('mock-tag', 'mock-commit', [0]),
                 pullRequest: 1234,
                 baseCommit: 'commit-on-main',
                 baseRef: 'main',
