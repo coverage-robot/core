@@ -11,6 +11,7 @@ use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
@@ -18,7 +19,6 @@ use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -90,7 +90,7 @@ final class InvokeCommand extends Command
                 parent: ['mock-parent'],
                 ref: 'mock-ref',
                 projectRoot: 'mock-project-root',
-                tag: new Tag('mock-tag', 'mock-commit'),
+                tag: new Tag('mock-tag', 'mock-commit', [6]),
             );
 
             $sqsEvent = new SqsEvent(
