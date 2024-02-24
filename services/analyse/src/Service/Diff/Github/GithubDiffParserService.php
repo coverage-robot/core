@@ -8,6 +8,7 @@ use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Provider\ProviderAwareInterface;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
@@ -17,7 +18,8 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
     public function __construct(
         private readonly GithubAppInstallationClientInterface $client,
         private readonly Parser $parser,
-        private readonly LoggerInterface $diffParserLogger
+        private readonly LoggerInterface $diffParserLogger,
+        private readonly MetricServiceInterface $metricService
     ) {
     }
 
@@ -39,6 +41,12 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
                 'commit' => $waypoint->getCommit(),
                 'pull_request' => $pullRequest
             ]
+        );
+
+        $this->metricService->increment(
+            metric: 'DiffRetrievalRequest',
+            dimensions: [['provider']],
+            properties: ['provider' => Provider::GITHUB->value]
         );
 
         $diff = $pullRequest !== null ?

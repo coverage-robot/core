@@ -13,6 +13,7 @@ use Github\ResultPager;
 use OutOfBoundsException;
 use Packages\Clients\Client\Github\GithubAppClient;
 use Packages\Clients\Client\Github\GithubAppInstallationClient;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
@@ -48,7 +49,8 @@ final class GithubAppInstallationClientTest extends TestCase
 
         $installation = new GithubAppInstallationClient(
             $appClient,
-            $installationClient
+            $installationClient,
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -83,7 +85,8 @@ final class GithubAppInstallationClientTest extends TestCase
 
         $installation = new GithubAppInstallationClient(
             $appClient,
-            $installationClient
+            $installationClient,
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -117,7 +120,8 @@ final class GithubAppInstallationClientTest extends TestCase
 
         $installation = new GithubAppInstallationClient(
             $appClient,
-            $installationClient
+            $installationClient,
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -127,7 +131,8 @@ final class GithubAppInstallationClientTest extends TestCase
     {
         $client = new GithubAppInstallationClient(
             $this->createMock(GithubAppClient::class),
-            $this->createMock(GithubAppClient::class)
+            $this->createMock(GithubAppClient::class),
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $this->assertInstanceOf(Issue::class, $client->issue());
@@ -145,7 +150,8 @@ final class GithubAppInstallationClientTest extends TestCase
         $installationClient = $this->createMock(GithubAppClient::class);
         $client = new GithubAppInstallationClient(
             $this->createMock(GithubAppClient::class),
-            $installationClient
+            $installationClient,
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $installationClient->expects($this->once())
