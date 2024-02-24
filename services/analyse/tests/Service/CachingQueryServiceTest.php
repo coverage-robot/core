@@ -24,7 +24,7 @@ final class CachingQueryServiceTest extends KernelTestCase
 {
     public function testRunUncacheableQuery(): void
     {
-        $queryResult = new TotalUploadsQueryResult([], [], [], []);
+        $queryResult = new TotalUploadsQueryResult([], [], []);
 
         $parameters = (new QueryParameterBag())
             ->set(QueryParameter::COMMIT, 'mock-commit');

@@ -8,9 +8,7 @@ use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
-use App\Query\Result\TotalCoverageQueryResult;
 use App\Service\QueryBuilderService;
 use App\Tests\Mock\Factory\MockQueryFactory;
 use DateTimeImmutable;
@@ -48,6 +46,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
                     new CarryforwardTag(
                         'mock-tag',
                         'mock-commit',
+                        [100],
                         [new DateTimeImmutable()]
                     )
                 ]
@@ -193,12 +192,12 @@ final class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::OWNER->value => 'some-value-1',
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::CARRYFORWARD_TAGS->value => [
-                        new Tag('tag-1', 'commit-1'),
-                        new Tag('tag-2', 'commit-1'),
-                        new Tag('tag-3', 'commit-3'),
+                        new Tag('tag-1', 'commit-1', [12]),
+                        new Tag('tag-2', 'commit-1', [12]),
+                        new Tag('tag-3', 'commit-3', [12]),
                     ]
                 ],
-                'e1d213850cef9ac67bccd8ab1b674a98'
+                '107509417c5920a4e7f1636581f039b9'
             ],
             [
                 'some-class-3',
@@ -206,12 +205,12 @@ final class QueryBuilderServiceTest extends KernelTestCase
                     QueryParameter::OWNER->value => 'some-value-1',
                     QueryParameter::PROVIDER->value => 'some-value-3',
                     QueryParameter::CARRYFORWARD_TAGS->value => [
-                        new Tag('tag-1', 'commit-1'),
-                        new Tag('tag-3', 'commit-3'),
-                        new Tag('tag-2', 'commit-1'),
+                        new Tag('tag-1', 'commit-1', [12]),
+                        new Tag('tag-3', 'commit-3', [12]),
+                        new Tag('tag-2', 'commit-1', [12]),
                     ]
                 ],
-                'e1d213850cef9ac67bccd8ab1b674a98'
+                '107509417c5920a4e7f1636581f039b9'
             ],
             [
                 'some-class-4',

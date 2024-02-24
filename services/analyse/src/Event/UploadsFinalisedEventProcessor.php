@@ -16,6 +16,7 @@ use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
@@ -202,15 +203,31 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         CoverageReportInterface $coverageReport,
         ?CoverageReportComparison $comparison
     ): void {
-        $headUploadedLines = array_sum($coverageReport->getUploads()->getSuccessfullyUploadedLines());
+        $headUploadedLines = array_reduce(
+            [
+                ...$coverageReport->getUploads()->getSuccessfulTags(),
+
+                // Include the carried forward tags from the report, so that previous coverage is still
+                // factored into the report size analysis
+                ...$this->coverageAnalyserService->getCarryforwardTags($coverageReport->getWaypoint())
+            ],
+            static fn(int $total, Tag $tag) => $total + array_sum($tag->getSuccessfullyUploadedLines()),
+            0
+        );
 
         if ($comparison instanceof CoverageReportComparison) {
             // We generated a report comparison, which means we also need to include the fact we've
             // compiled a base report to compare against.
-            $baseUploadedLines = array_sum(
-                $comparison->getBaseReport()
-                    ->getUploads()
-                    ->getSuccessfullyUploadedLines()
+            $baseUploadedLines = array_reduce(
+                [
+                    ...$comparison->getBaseReport()->getUploads()->getSuccessfulTags(),
+
+                    // Include the carried forward tags from the report, so that previous coverage is still
+                    // factored into the report size analysis
+                    ...$this->coverageAnalyserService->getCarryforwardTags($comparison->getBaseReport()->getWaypoint())
+                ],
+                static fn(int $total, Tag $tag) => $total + array_sum($tag->getSuccessfullyUploadedLines()),
+                0
             );
             $this->metricService->increment(
                 metric: 'CoverageReportSize',

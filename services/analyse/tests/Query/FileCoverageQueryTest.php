@@ -73,10 +73,10 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
                 ]
             );
 
@@ -90,10 +90,10 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
                 ]
             );
 
@@ -240,6 +240,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                             new CarryforwardTag(
                                 '1',
                                 'mock-commit',
+                                [12],
                                 [new DateTimeImmutable('2024-01-03 00:00:00')]
                             )
                         ]

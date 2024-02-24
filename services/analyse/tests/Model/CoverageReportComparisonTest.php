@@ -46,7 +46,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -66,7 +66,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -89,7 +89,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -109,7 +109,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -132,7 +132,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -152,7 +152,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -175,7 +175,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,
@@ -195,7 +195,7 @@ final class CoverageReportComparisonTest extends TestCase
                         history: [],
                         diff: []
                     ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], [], []),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
                     totalLines: 1,
                     atLeastPartiallyCoveredLines: 2,
                     uncoveredLines: 3,

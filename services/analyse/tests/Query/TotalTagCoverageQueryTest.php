@@ -71,10 +71,10 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag('1', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')])
                 ]
             );
 
@@ -91,10 +91,10 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag('1', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('2', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
+                    new CarryforwardTag('3', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')]),
+                    new CarryforwardTag('4', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')])
                 ]
             );
 
@@ -142,6 +142,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'tag' => [
                             'name' => '1',
                             'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [110],
                         ],
                         'lines' => 1,
                         'covered' => 1,
@@ -157,6 +158,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'tag' => [
                             'name' => '2',
                             'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ],
                         'lines' => 1,
                         'covered' => 0,
@@ -168,6 +170,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'tag' => [
                             'name' => '3',
                             'commit' => 'mock-commit-2',
+                            'successfullyUploadedLines' => [90],
                         ],
                         'lines' => 1,
                         'covered' => 0,
@@ -179,6 +182,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                         'tag' => [
                             'name' => '4',
                             'commit' => 'mock-commit-2',
+                            'successfullyUploadedLines' => [80],
                         ],
                         'lines' => 1,
                         'covered' => 0,
@@ -238,6 +242,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                             new CarryforwardTag(
                                 '1',
                                 'mock-commit',
+                                [110],
                                 [new DateTimeImmutable('2024-01-03 00:00:00')]
                             )
                         ]

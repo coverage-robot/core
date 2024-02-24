@@ -327,13 +327,15 @@ final class QueryServiceTest extends KernelTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
-                        ],[
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [1],
+                        ],
+                        [
                             'name' => 'tag-2',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [1],
                         ]
                     ],
-                    'successfullyUploadedLines' => [100, 150],
                     'successfulIngestTimes' => [
                         '2021-01-01T00:00:00+0000',
                         '2021-01-01T00:00:00+0000'
@@ -342,10 +344,9 @@ final class QueryServiceTest extends KernelTestCase
                 new TotalUploadsQueryResult(
                     [1, 2],
                     [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
-                    [100, 150],
                     [
-                        new Tag('tag-1', 'mock-commit'),
-                        new Tag('tag-2', 'mock-commit')
+                        new Tag('tag-1', 'mock-commit', [1]),
+                        new Tag('tag-2', 'mock-commit', [1])
                     ]
                 )
             ]

@@ -3,6 +3,7 @@ WITH
     SELECT
       commit,
       tag,
+      ARRAY_AGG(totalLines) as successfullyUploadedLines,
       ARRAY_AGG(
         STRING(ingestTime)
       ) as ingestTimes
@@ -20,7 +21,8 @@ SELECT
   availability.tag as tagName,
   ARRAY_AGG(
     STRUCT(
-      commit as commit, tag as name, ingestTimes as ingestTimes
+      commit as commit, tag as name, successfullyUploadedLines as successfullyUploadedLines,
+      ingestTimes as ingestTimes
     )
   ) as carryforwardTags,
 FROM

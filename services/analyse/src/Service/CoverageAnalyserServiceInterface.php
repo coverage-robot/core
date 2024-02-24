@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Model\CarryforwardTag;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageCollectionQueryResult;
@@ -88,6 +89,14 @@ interface CoverageAnalyserServiceInterface
      * Get the individual lines and their associated coverage for the diff of the waypoint.
      */
     public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult;
+
+    /**
+     * Get all of the tags which had no uploads on a waypoint, and should be carried forward from
+     * previous commits.
+     *
+     * @return CarryforwardTag[]
+     */
+    public function getCarryforwardTags(ReportWaypoint $waypoint): array;
 
     /**
      * Get the diff associated with the waypoint.
