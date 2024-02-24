@@ -55,7 +55,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('mock-tag', 'mock-commit'),
+                        tag: new Tag('mock-tag', 'mock-commit', [8]),
                     ),
                     new DateTimeImmutable()
                 )

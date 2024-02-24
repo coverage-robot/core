@@ -77,10 +77,10 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
-                    'successfullyUploadedLines' => [100],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
                     ]
@@ -92,14 +92,15 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ],
                         [
                             'name' => 'tag-2',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
-                    'successfullyUploadedLines' => [100],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000',
                         '2024-01-03T12:19:30'
@@ -112,10 +113,10 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
-                    'successfullyUploadedLines' => [100],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
                     ]
@@ -127,10 +128,10 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
-                    'successfullyUploadedLines' => [100],
                     'successfulIngestTimes' => [
                         '2023-09-09T12:00:00+0000'
                     ]
@@ -141,7 +142,6 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'commit' => 'mock-commit',
                     'successfulUploads' => [],
                     'successfulIngestTimes' => [],
-                    'successfullyUploadedLines' => [],
                     'successfulTags' => []
                 ]
             ],

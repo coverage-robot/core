@@ -3,6 +3,7 @@
 namespace App\Tests\Event;
 
 use App\Event\UploadsFinalisedEventProcessor;
+use App\Model\CarryforwardTag;
 use App\Model\CoverageReport;
 use App\Model\CoverageReportComparison;
 use App\Model\ReportWaypoint;
@@ -77,7 +78,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         $reportComparison = new CoverageReportComparison(
             baseReport: new CoverageReport(
                 $baseWaypoint,
-                new TotalUploadsQueryResult([], [], [], []),
+                new TotalUploadsQueryResult([], [], []),
                 0,
                 0,
                 0,
@@ -89,7 +90,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ),
             headReport: new CoverageReport(
                 $headWaypoint,
-                new TotalUploadsQueryResult([], [], [], []),
+                new TotalUploadsQueryResult([], [], []),
                 0,
                 0,
                 0,
@@ -106,6 +107,12 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getWaypointFromEvent')
             ->with($uploadsFinalised)
             ->willReturn($headWaypoint);
+        $mockCoverageAnalyserService->expects($this->exactly(2))
+            ->method('getCarryforwardTags')
+            ->willReturnMap([
+                [$headWaypoint, [new CarryforwardTag('', '', [100], [])]],
+                [$baseWaypoint, [new CarryforwardTag('', '', [101], [])]],
+            ]);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
             ->willReturn($reportComparison->getHeadReport());
@@ -200,7 +207,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         );
         $mockReport = new CoverageReport(
             $headWaypoint,
-            new TotalUploadsQueryResult([], [], [], []),
+            new TotalUploadsQueryResult([], [], []),
             0,
             0,
             0,
@@ -216,6 +223,11 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getWaypointFromEvent')
             ->with($uploadsFinalised)
             ->willReturn($headWaypoint);
+        $mockCoverageAnalyserService->expects($this->once())
+            ->method('getCarryforwardTags')
+            ->willReturnMap([
+                [$headWaypoint, [new CarryforwardTag('', '', [100], [])]]
+            ]);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
             ->with($headWaypoint)

@@ -36,6 +36,7 @@ final class TagAvailabilityQuery implements QueryInterface
             SELECT
                 commit,
                 tag,
+                ARRAY_AGG(totalLines) as successfullyUploadedLines,
                 ARRAY_AGG(STRING(ingestTime)) as ingestTimes
             FROM
                 `{$table}`
@@ -53,6 +54,7 @@ final class TagAvailabilityQuery implements QueryInterface
                 STRUCT(
                     commit as commit,
                     tag as name,
+                    successfullyUploadedLines as successfullyUploadedLines,
                     ingestTimes as ingestTimes
                 )
             ) as carryforwardTags,

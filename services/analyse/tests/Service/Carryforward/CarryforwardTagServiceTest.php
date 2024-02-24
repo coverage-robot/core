@@ -68,8 +68,8 @@ final class CarryforwardTagServiceTest extends TestCase
                 diff: []
             ),
             [
-                new Tag('tag-1', 'mock-commit'),
-                new Tag('tag-2', 'mock-commit')
+                new Tag('tag-1', 'mock-commit', [1]),
+                new Tag('tag-2', 'mock-commit', [1])
             ]
         );
 
@@ -100,6 +100,7 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-1',
                                     'mock-commit',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-03 00:00:00')]
                                 )
                             ]
@@ -110,11 +111,13 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-3',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-02 00:00:00')]
                                 ),
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-2',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                                 )
                             ]
@@ -165,7 +168,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 diff: []
             ),
             [
-                new Tag('tag-1', 'mock-current-commit')
+                new Tag('tag-1', 'mock-current-commit', [1]),
             ]
         );
 
@@ -174,6 +177,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 new CarryforwardTag(
                     'tag-2',
                     'mock-commit-2',
+                    [100],
                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                 )
             ],
@@ -205,6 +209,7 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-1',
                                     'mock-commit',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-03 00:00:00')]
                                 )
                             ]
@@ -215,11 +220,13 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-3',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-02 00:00:00')]
                                 ),
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-2',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                                 )
                             ]
@@ -270,7 +277,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 diff: []
             ),
             [
-                new Tag('tag-1', 'mock-current-commit')
+                new Tag('tag-1', 'mock-current-commit', [1])
             ]
         );
 
@@ -304,6 +311,7 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-1',
                                     'mock-commit',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                                 ),
                             ]
@@ -314,11 +322,13 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-8',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-04 00:00:00')]
                                 ),
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-11',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                                 ),
                             ]
@@ -429,11 +439,13 @@ final class CarryforwardTagServiceTest extends TestCase
                 new CarryforwardTag(
                     'tag-1',
                     'mock-commit',
+                    [100],
                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                 ),
                 new CarryforwardTag(
                     'tag-2',
                     'mock-commit-8',
+                    [100],
                     [new DateTimeImmutable('2024-01-04 00:00:00')]
                 )
             ],
@@ -465,6 +477,7 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-1',
                                     'mock-commit',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                                 )
                             ]
@@ -475,11 +488,13 @@ final class CarryforwardTagServiceTest extends TestCase
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-1010',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                                 ),
                                 new CarryforwardTag(
                                     'tag-2',
                                     'mock-commit-999',
+                                    [100],
                                     [new DateTimeImmutable('2024-01-01 00:00:00')]
                                 ),
                             ]
@@ -605,6 +620,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 new CarryforwardTag(
                     'tag-1',
                     'mock-commit',
+                    [100],
                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                 )
             ],

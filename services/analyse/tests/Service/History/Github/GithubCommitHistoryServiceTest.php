@@ -47,7 +47,8 @@ final class GithubCommitHistoryServiceTest extends TestCase
             projectRoot: 'mock-project-root',
             tag: new Tag(
                 name: 'mock-tag',
-                commit: 'mock-tag-commit'
+                commit: 'mock-tag-commit',
+                successfullyUploadedLines: [100]
             )
         );
 

@@ -91,6 +91,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-1',
+                                'successfullyUploadedLines' => [100],
                                 'ingestTimes' => [
                                     '2023-09-09T12:00:00+0000'
                                 ]
@@ -98,6 +99,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-2',
+                                'successfullyUploadedLines' => [100],
                                 'ingestTimes' => [
                                     '2023-09-11T12:00:00+0000',
                                     '2023-09-11T12:00:00+0000'
@@ -115,6 +117,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-1',
+                                'successfullyUploadedLines' => [100],
                                 'ingestTimes' => [
                                     '2023-09-09T12:00:00+0000'
                                 ]
@@ -122,6 +125,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag',
                                 'commit' => 'mock-commit-2',
+                                'successfullyUploadedLines' => [2, 100],
                                 'ingestTimes' => [
                                     '2023-09-11T12:00:00+0000',
                                     '2023-09-11T12:00:00+0000'
@@ -135,6 +139,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag-2',
                                 'commit' => 'mock-commit-3',
+                                'successfullyUploadedLines' => [100, 200],
                                 'ingestTimes' => [
                                     '2023-09-09T12:00:00+0000'
                                 ]
@@ -142,6 +147,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                             [
                                 'name' => 'mock-tag-2',
                                 'commit' => 'mock-commit-4',
+                                'successfullyUploadedLines' => [100, 1],
                                 'ingestTimes' => [
                                     '2023-09-11T12:00:00+0000',
                                     '2023-09-11T12:00:00+0000'

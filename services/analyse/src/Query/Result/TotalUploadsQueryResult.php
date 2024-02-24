@@ -11,7 +11,6 @@ final class TotalUploadsQueryResult implements QueryResultInterface
     /**
      * @param string[] $successfulUploads
      * @param DateTimeImmutable[] $successfulIngestTimes
-     * @param int[] $successfullyUploadedLines
      * @param Tag[] $successfulTags
      */
     public function __construct(
@@ -25,11 +24,6 @@ final class TotalUploadsQueryResult implements QueryResultInterface
             new Assert\LessThanOrEqual(value: 'now')
         ])]
         private readonly array $successfulIngestTimes,
-        #[Assert\All([
-            new Assert\Type(type: 'int'),
-            new Assert\Positive()
-        ])]
-        private readonly array $successfullyUploadedLines,
         #[Assert\All([
             new Assert\Type(type: Tag::class)
         ])]
@@ -59,13 +53,5 @@ final class TotalUploadsQueryResult implements QueryResultInterface
     public function getSuccessfulIngestTimes(): array
     {
         return $this->successfulIngestTimes;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getSuccessfullyUploadedLines(): array
-    {
-        return $this->successfullyUploadedLines;
     }
 }

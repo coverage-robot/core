@@ -140,7 +140,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
                         parent: ['parent'],
                         ref: 'ref',
                         projectRoot: 'projectRoot',
-                        tag: new Tag('tag', 'value'),
+                        tag: new Tag('tag', 'value', [2]),
                         eventTime: new DateTimeImmutable()
                     ),
                     new DateTimeImmutable()

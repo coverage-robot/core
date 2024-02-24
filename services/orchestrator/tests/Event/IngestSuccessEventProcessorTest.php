@@ -114,7 +114,7 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('mock-tag', 'mock-commit'),
+                        tag: new Tag('mock-tag', 'mock-commit', [8]),
                     ),
                     new DateTimeImmutable()
                 )
@@ -207,7 +207,7 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('mock-tag', 'mock-commit')
+                        tag: new Tag('mock-tag', 'mock-commit', [8])
                     ),
                     new DateTimeImmutable()
                 )
