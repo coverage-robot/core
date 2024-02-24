@@ -26,6 +26,7 @@ use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -76,7 +77,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         $reportComparison = new CoverageReportComparison(
             baseReport: new CoverageReport(
                 $baseWaypoint,
-                new TotalUploadsQueryResult([], [], []),
+                new TotalUploadsQueryResult([], [], [], []),
                 0,
                 0,
                 0,
@@ -88,7 +89,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ),
             headReport: new CoverageReport(
                 $headWaypoint,
-                new TotalUploadsQueryResult([], [], []),
+                new TotalUploadsQueryResult([], [], [], []),
                 0,
                 0,
                 0,
@@ -159,6 +160,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
             new NullLogger(),
+            $this->createMock(MetricServiceInterface::class),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,
@@ -198,7 +200,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         );
         $mockReport = new CoverageReport(
             $headWaypoint,
-            new TotalUploadsQueryResult([], [], []),
+            new TotalUploadsQueryResult([], [], [], []),
             0,
             0,
             0,
@@ -263,6 +265,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
             new NullLogger(),
+            $this->createMock(MetricServiceInterface::class),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,

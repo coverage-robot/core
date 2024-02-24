@@ -29,6 +29,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -39,6 +40,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
+        private readonly MetricServiceInterface $metricService,
         private readonly SerializerInterface&NormalizerInterface $serializer,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
         private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
@@ -180,7 +182,62 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             $event
         );
 
+        $this->recordReportSize($headReport, $comparison);
+
         return [$headReport, $comparison];
+    }
+
+    /**
+     * Record the total size (aka the total number of lines uploaded to each report) as a metric.
+     *
+     * This uses the sum of the total number of lines of the uploads used to generate the report (or multiple in
+     * the case of a comparison, _both_ reports). This allows us to accurately track the total amount of data analysed
+     * to build the final report result.
+     *
+     * The coverage reports 'total number of lines' isn't necessarily comparable, as that represents the unique number
+     * of lines of a codebase - i.e. two uploads with coverage for the same line will only return 1 line on the
+     * coverage report which vastly under values the effort used to compile results.
+     */
+    private function recordReportSize(
+        CoverageReportInterface $coverageReport,
+        ?CoverageReportComparison $comparison
+    ): void {
+        $headUploadedLines = array_sum($coverageReport->getUploads()->getSuccessfullyUploadedLines());
+
+        if ($comparison instanceof CoverageReportComparison) {
+            // We generated a report comparison, which means we also need to include the fact we've
+            // compiled a base report to compare against.
+            $baseUploadedLines = array_sum(
+                $comparison->getBaseReport()
+                    ->getUploads()
+                    ->getSuccessfullyUploadedLines()
+            );
+            $this->metricService->increment(
+                metric: 'CoverageReportSize',
+                value: $headUploadedLines + $baseUploadedLines,
+                dimensions: [['provider', 'owner'], ['provider', 'owner', 'repository']],
+                properties: [
+                    'provider' => $coverageReport->getWaypoint()
+                        ->getProvider(),
+                    'owner' => $coverageReport->getWaypoint()
+                        ->getOwner(),
+                    'repository' => $coverageReport->getWaypoint()
+                        ->getRepository()
+                ]
+            );
+        }
+
+        // No comparison, just count the head report.
+        $this->metricService->increment(
+            metric: 'CoverageReportSize',
+            value: $headUploadedLines,
+            dimensions: [['provider', 'owner'], ['provider', 'owner', 'repository']],
+            properties: [
+                'provider' => $coverageReport->getWaypoint()->getProvider(),
+                'owner' => $coverageReport->getWaypoint()->getOwner(),
+                'repository' => $coverageReport->getWaypoint()->getRepository()
+            ]
+        );
     }
 
     private function buildPullRequestMessage(

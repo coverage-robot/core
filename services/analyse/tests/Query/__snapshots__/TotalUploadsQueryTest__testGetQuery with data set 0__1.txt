@@ -10,6 +10,10 @@ SELECT
     []
   ) as successfulIngestTimes,
   COALESCE(
+    ARRAY_AGG(totalLines),
+    []
+  ) as successfullyUploadedLines,
+  COALESCE(
     ARRAY_AGG(
       STRUCT(tag as name, @COMMIT as commit)
     ),

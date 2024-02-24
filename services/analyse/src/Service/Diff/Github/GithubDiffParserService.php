@@ -45,8 +45,8 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
 
         $this->metricService->increment(
             metric: 'DiffRetrievalRequest',
-            dimensions: [['provider']],
-            properties: ['provider' => Provider::GITHUB->value]
+            dimensions: [['provider', 'owner']],
+            properties: ['provider' => Provider::GITHUB->value, 'owner' => $waypoint->getOwner()]
         );
 
         $diff = $pullRequest !== null ?
