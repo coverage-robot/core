@@ -52,6 +52,7 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
             lines
         GROUP BY
             tagName,
+            totalLines,
             commit
         ORDER BY
             tagName ASC
@@ -74,6 +75,7 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 fileName,
                 lineNumber,
                 tag,
+                totalLines,
                 commit,
                 MAX(containsMethod) as containsMethod,
                 MAX(containsBranch) as containsBranch,
@@ -94,12 +96,14 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
                 fileName,
                 lineNumber,
                 tag,
+                totalLines,
                 commit,
                 branchIndex
         ),
         lines AS (
             SELECT
                 tag,
+                totalLines,
                 commit,
                 fileName,
                 lineNumber,
@@ -123,6 +127,7 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
             GROUP BY
                 tag,
                 commit,
+                totalLines,
                 fileName,
                 lineNumber
         )
