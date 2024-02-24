@@ -211,7 +211,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 // factored into the report size analysis
                 ...$this->coverageAnalyserService->getCarryforwardTags($coverageReport->getWaypoint())
             ],
-            static fn(int $total, Tag $tag) => $total + array_sum($tag->getSuccessfullyUploadedLines()),
+            static fn(int $total, Tag $tag): int => $total + array_sum($tag->getSuccessfullyUploadedLines()),
             0
         );
 
@@ -226,7 +226,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     // factored into the report size analysis
                     ...$this->coverageAnalyserService->getCarryforwardTags($comparison->getBaseReport()->getWaypoint())
                 ],
-                static fn(int $total, Tag $tag) => $total + array_sum($tag->getSuccessfullyUploadedLines()),
+                static fn(int $total, Tag $tag): int => $total + array_sum($tag->getSuccessfullyUploadedLines()),
                 0
             );
             $this->metricService->increment(
