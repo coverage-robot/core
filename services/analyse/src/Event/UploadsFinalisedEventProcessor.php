@@ -195,8 +195,8 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
      * to build the final report result.
      *
      * The coverage reports 'total number of lines' isn't necessarily comparable, as that represents the unique number
-     * of lines of a codebase - i.e. two uploads with coverage for the same line will only return 1 line on the coverage report
-     * which vastly under values the effort used to compile results.
+     * of lines of a codebase - i.e. two uploads with coverage for the same line will only return 1 line on the
+     * coverage report which vastly under values the effort used to compile results.
      */
     private function recordReportSize(
         CoverageReportInterface $coverageReport,
@@ -231,7 +231,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $this->metricService->increment(
             metric: 'CoverageReportSize',
             value: $headUploadedLines,
-            dimensions: [['provider', 'owner',], ['provider', 'owner', 'repository']],
+            dimensions: [['provider', 'owner'], ['provider', 'owner', 'repository']],
             properties: [
                 'provider' => $coverageReport->getWaypoint()->getProvider(),
                 'owner' => $coverageReport->getWaypoint()->getOwner(),

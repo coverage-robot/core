@@ -69,8 +69,8 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
 
         $this->metricService->increment(
             metric: 'CommitHistoryRetrievalRequest',
-            dimensions: [['provider']],
-            properties: ['provider' => Provider::GITHUB->value]
+            dimensions: [['provider', 'owner']],
+            properties: ['provider' => Provider::GITHUB->value, 'owner' => $waypoint->getOwner()]
         );
 
         $commits = $this->getHistoricCommits(
