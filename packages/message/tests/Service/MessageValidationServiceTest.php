@@ -49,7 +49,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [11]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null
@@ -73,7 +73,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [12]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null
@@ -97,7 +97,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [13]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null
@@ -121,7 +121,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [14]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null
@@ -145,7 +145,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [15]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null
@@ -169,7 +169,7 @@ final class MessageValidationServiceTest extends TestCase
                         parent: [],
                         ref: 'mock-ref',
                         projectRoot: '',
-                        tag: new Tag('1', 'mock-commit'),
+                        tag: new Tag('1', 'mock-commit', [16]),
                         pullRequest: null,
                         baseCommit: null,
                         baseRef: null

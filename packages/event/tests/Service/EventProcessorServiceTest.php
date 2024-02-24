@@ -28,7 +28,7 @@ final class EventProcessorServiceTest extends TestCase
                 parent: [],
                 ref: 'mock-ref',
                 projectRoot: '',
-                tag: new Tag('mock-tag', 'mock-commit'),
+                tag: new Tag('mock-tag', 'mock-commit', [31]),
             ),
             new DateTimeImmutable()
         );
@@ -67,7 +67,7 @@ final class EventProcessorServiceTest extends TestCase
                 parent: [],
                 ref: 'mock-ref',
                 projectRoot: '',
-                tag: new Tag('mock-tag', 'mock-commit'),
+                tag: new Tag('mock-tag', 'mock-commit', [32]),
             ),
             new DateTimeImmutable()
         );

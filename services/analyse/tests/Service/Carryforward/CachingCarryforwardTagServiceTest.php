@@ -79,7 +79,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
                     diff: [],
                     pullRequest: 1
                 ),
-                [new Tag('tag', 'commit' , [10])]
+                [new Tag('tag', 'commit', [10])]
             )
         );
         $this->assertEquals(

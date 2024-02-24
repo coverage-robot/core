@@ -32,6 +32,6 @@ final class CarryforwardTag extends Tag
 
     public function __toString(): string
     {
-        return sprintf("CarryforwardTag#%s-%s", $this->getName(), $this->getCommit());
+        return sprintf('CarryforwardTag#%s-%s', $this->getName(), $this->getCommit());
     }
 }
