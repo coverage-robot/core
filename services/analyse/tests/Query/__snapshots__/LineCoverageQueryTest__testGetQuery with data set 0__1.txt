@@ -2,6 +2,7 @@ WITH
   unnested AS (
     SELECT
       upload.tag,
+      upload.totalLines,
       upload.commit,
       fileName,
       lineNumber,

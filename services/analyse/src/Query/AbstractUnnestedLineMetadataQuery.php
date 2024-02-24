@@ -51,6 +51,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         WITH unnested AS (
             SELECT
                 {$uploadTableAlias}.tag,
+                {$uploadTableAlias}.totalLines,
                 {$uploadTableAlias}.commit,
                 fileName,
                 lineNumber,
