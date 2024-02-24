@@ -3,9 +3,11 @@
 namespace App\Service\Publisher\Github;
 
 use App\Enum\TemplateVariant;
-use App\Exception\PublishException;
+use App\Exception\CheckRunNotFoundException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
+use Github\Exception\ExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Enum\SettingKey;
@@ -64,7 +66,10 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
-            throw PublishException::notSupportedException();
+            throw new PublishingNotSupportedException(
+                self::class,
+                $publishableMessage
+            );
         }
 
         /** @var PublishableLineCommentMessageCollection $publishableMessage */
@@ -113,7 +118,18 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
             }
 
             return $successful;
-        } catch (PublishException $publishException) {
+        } catch (ExceptionInterface $exception) {
+            $this->checkPublisherLogger->critical(
+                sprintf(
+                    'Exception while writing annotations to check run for %s',
+                    (string)$publishableMessage->getEvent()
+                ),
+                [
+                    'exception' => $exception
+                ]
+            );
+            return false;
+        } catch (CheckRunNotFoundException $exception) {
             // As we've enforced the annotations as a lower priority (and therefore executed
             // after the check run has been published), we should never hit this exception.
             $this->checkPublisherLogger->critical(
@@ -122,7 +138,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
                     (string)$publishableMessage->getEvent()
                 ),
                 [
-                    'exception' => $publishException
+                    'exception' => $exception
                 ]
             );
             return false;

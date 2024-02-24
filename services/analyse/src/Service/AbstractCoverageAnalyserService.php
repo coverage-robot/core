@@ -152,11 +152,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
-            $this->getUploads($waypoint)
-                ->getSuccessfulTags()
-        );
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
             $ingestTimes === [] &&
@@ -204,11 +200,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
-            $this->getUploads($waypoint)
-                ->getSuccessfulTags()
-        );
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
             $ingestTimes === [] &&
@@ -256,11 +248,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
-            $this->getUploads($waypoint)
-                ->getSuccessfulTags()
-        );
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
             $ingestTimes === [] &&
@@ -308,11 +296,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
-            $this->getUploads($waypoint)
-                ->getSuccessfulTags()
-        );
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
             $ingestTimes === [] &&
@@ -360,11 +344,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
-        $carryforwardTags = $this->carryforwardTagService->getTagsToCarryforward(
-            $waypoint,
-            $this->getUploads($waypoint)
-                ->getSuccessfulTags()
-        );
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
             $ingestTimes === [] &&
@@ -587,6 +567,18 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
         return $lines;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCarryforwardTags(ReportWaypoint $waypoint): array
+    {
+        return $this->carryforwardTagService->getTagsToCarryforward(
+            $waypoint,
+            $this->getUploads($waypoint)
+                ->getSuccessfulTags()
+        );
     }
 
     /**

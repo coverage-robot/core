@@ -82,6 +82,26 @@ final class MetricService implements MetricServiceInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function increment(
+        string $metric,
+        int $value = 1,
+        Resolution $resolution = Resolution::LOW,
+        ?array $dimensions = null,
+        array $properties = []
+    ): void {
+        $this->put(
+            $metric,
+            $value,
+            Unit::COUNT,
+            $resolution,
+            $dimensions,
+            $properties
+        );
+    }
+
+    /**
      * Format a singular metric into the Embedded Metric Format.
      *
      * @throws ExceptionInterface

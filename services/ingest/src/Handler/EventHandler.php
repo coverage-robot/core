@@ -196,7 +196,9 @@ final class EventHandler extends S3Handler
             },
             'tag' => [
                 'name' => $output->getMetadata()['tag'],
-                'commit' => $output->getMetadata()['commit']
+                'commit' => $output->getMetadata()['commit'],
+                // Nothings been uploaded yet so we'd expect this to be 0
+                'successfullyUploadedLines' => [0]
             ],
             'parent' => $this->serializer->deserialize(
                 $output->getMetadata()['parent'],

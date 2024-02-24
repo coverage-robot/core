@@ -77,7 +77,8 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
                     'successfulIngestTimes' => [
@@ -91,11 +92,13 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ],
                         [
                             'name' => 'tag-2',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
                     'successfulIngestTimes' => [
@@ -110,7 +113,8 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
                     'successfulIngestTimes' => [
@@ -124,7 +128,8 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [100],
                         ]
                     ],
                     'successfulIngestTimes' => [

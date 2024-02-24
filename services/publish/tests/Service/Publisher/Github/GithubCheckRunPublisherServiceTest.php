@@ -3,7 +3,7 @@
 namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
@@ -69,7 +69,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($this->once())
@@ -139,7 +139,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($this->once())
@@ -208,7 +208,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     baseCommit: 'mock-base-commit'
                 ),
                 true
@@ -223,7 +223,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     pullRequest: '1234',
                     baseCommit: 'mock-base-commit',
                     baseRef: 'main',

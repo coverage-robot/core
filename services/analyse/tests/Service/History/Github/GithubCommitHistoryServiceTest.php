@@ -8,6 +8,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
+use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -18,7 +19,8 @@ final class GithubCommitHistoryServiceTest extends TestCase
     {
         $service = new GithubCommitHistoryService(
             $this->createMock(GithubAppInstallationClientInterface::class),
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(MetricServiceInterface::class)
         );
 
         $this->assertEquals(Provider::GITHUB->value, $service->getProvider());
@@ -45,7 +47,8 @@ final class GithubCommitHistoryServiceTest extends TestCase
             projectRoot: 'mock-project-root',
             tag: new Tag(
                 name: 'mock-tag',
-                commit: 'mock-tag-commit'
+                commit: 'mock-tag-commit',
+                successfullyUploadedLines: [100]
             )
         );
 
@@ -98,7 +101,11 @@ final class GithubCommitHistoryServiceTest extends TestCase
                 ]
             ]);
 
-        $service = new GithubCommitHistoryService($githubClient, new NullLogger());
+        $service = new GithubCommitHistoryService(
+            $githubClient,
+            new NullLogger(),
+            $this->createMock(MetricServiceInterface::class)
+        );
 
         $this->assertEquals(
             $expectedCommits,

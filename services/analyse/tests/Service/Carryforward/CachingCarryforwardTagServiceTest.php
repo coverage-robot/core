@@ -13,7 +13,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
 {
     public function testCachesRepeatedRequests(): void
     {
-        $carryforwardTags = [new Tag('tag', 'commit')];
+        $carryforwardTags = [new Tag('tag', 'commit', [1])];
 
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
@@ -39,7 +39,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 $mockWaypoint,
                 [
-                    new Tag('tag', 'commit')
+                    new Tag('tag', 'commit', [1])
                 ]
             )
         );
@@ -48,7 +48,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 $mockWaypoint,
                 [
-                    new Tag('tag', 'commit')
+                    new Tag('tag', 'commit', [1])
                 ]
             )
         );
@@ -56,7 +56,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
 
     public function testDoesNotCacheDifferentUploads(): void
     {
-        $tags = [new Tag('tag', 'commit')];
+        $tags = [new Tag('tag', 'commit', [1])];
 
         $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
 
@@ -79,7 +79,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
                     diff: [],
                     pullRequest: 1
                 ),
-                [new Tag('tag', 'commit')]
+                [new Tag('tag', 'commit', [10])]
             )
         );
         $this->assertEquals(
@@ -95,7 +95,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
                     diff: [],
                     pullRequest: 1
                 ),
-                [new Tag('tag', 'commit')]
+                [new Tag('tag', 'commit', [10])]
             )
         );
     }

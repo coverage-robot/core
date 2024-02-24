@@ -145,7 +145,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                     TotalUploadsQuery::class => new TotalUploadsQueryResult(
                         ['1'],
                         [new DateTimeImmutable('2024-01-03 00:00:00')],
-                        [new Tag('mock-tag', 'mock-commit')]
+                        [new Tag('mock-tag', 'mock-commit', [20])],
                     ),
                     TotalCoverageQuery::class => new TotalCoverageQueryResult(
                         100,
@@ -157,7 +157,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                     TotalTagCoverageQuery::class => new TagCoverageCollectionQueryResult(
                         [
                             new TagCoverageQueryResult(
-                                new Tag('mock-tag', 'mock-commit'),
+                                new Tag('mock-tag', 'mock-commit', [20]),
                                 100,
                                 1,
                                 0,

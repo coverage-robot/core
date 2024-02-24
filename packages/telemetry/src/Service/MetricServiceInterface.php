@@ -31,4 +31,15 @@ interface MetricServiceInterface
         ?array $dimensions = null,
         array $properties = []
     ): void;
+
+    /**
+     * Increment a metric by a given value.
+     */
+    public function increment(
+        string $metric,
+        int $value = 1,
+        Resolution $resolution = Resolution::LOW,
+        ?array $dimensions = null,
+        array $properties = []
+    ): void;
 }

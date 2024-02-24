@@ -4,9 +4,11 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
-use App\Exception\PublishException;
+use App\Exception\CheckRunCreationFailedException;
+use App\Exception\CheckRunNotFoundException;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Github\Exception\ExceptionInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +17,8 @@ trait GithubCheckRunAwareTrait
 {
     /**
      * Create a new check run for the given commit.
+     *
+     * @throws ExceptionInterface
      */
     private function createCheckRun(
         string $owner,
@@ -69,7 +73,7 @@ trait GithubCheckRunAwareTrait
                 )
             );
 
-            throw new PublishException(
+            throw new CheckRunCreationFailedException(
                 sprintf(
                     'Failed to create check run. Status code was %s',
                     (string)$this->client->getLastResponse()?->getStatusCode()
@@ -82,6 +86,8 @@ trait GithubCheckRunAwareTrait
 
     /**
      * Update an existing check run for the given commit.
+     *
+     * @throws ExceptionInterface
      */
     private function updateCheckRun(
         string $owner,
@@ -151,6 +157,9 @@ trait GithubCheckRunAwareTrait
      *          annotations_count: non-negative-int
      *      }
      *  }
+     *
+     * @throws ExceptionInterface
+     * @throws CheckRunNotFoundException
      */
     private function getCheckRun(string $owner, string $repository, string $commit): array
     {
@@ -182,6 +191,13 @@ trait GithubCheckRunAwareTrait
             return reset($checkRuns);
         }
 
-        throw PublishException::notFoundException('check run');
+        throw new CheckRunNotFoundException(
+            sprintf(
+                'Failed to find existing check run. Owner: %s Repository: %s Commit: %s',
+                $owner,
+                $repository,
+                $commit
+            )
+        );
     }
 }

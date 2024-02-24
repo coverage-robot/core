@@ -16,7 +16,6 @@ use App\Service\CachingQueryService;
 use App\Service\QueryBuilderServiceInterface;
 use App\Service\QueryServiceInterface;
 use App\Tests\Mock\Factory\MockQueryFactory;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -25,7 +24,7 @@ final class CachingQueryServiceTest extends KernelTestCase
 {
     public function testRunUncacheableQuery(): void
     {
-        $queryResult = new TotalUploadsQueryResult([], [], [], null);
+        $queryResult = new TotalUploadsQueryResult([], [], []);
 
         $parameters = (new QueryParameterBag())
             ->set(QueryParameter::COMMIT, 'mock-commit');

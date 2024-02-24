@@ -7,7 +7,6 @@ use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -328,10 +327,13 @@ final class QueryServiceTest extends KernelTestCase
                     'successfulTags' => [
                         [
                             'name' => 'tag-1',
-                            'commit' => 'mock-commit'
-                        ],[
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [1],
+                        ],
+                        [
                             'name' => 'tag-2',
-                            'commit' => 'mock-commit'
+                            'commit' => 'mock-commit',
+                            'successfullyUploadedLines' => [1],
                         ]
                     ],
                     'successfulIngestTimes' => [
@@ -343,8 +345,8 @@ final class QueryServiceTest extends KernelTestCase
                     [1, 2],
                     [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
                     [
-                        new Tag('tag-1', 'mock-commit'),
-                        new Tag('tag-2', 'mock-commit')
+                        new Tag('tag-1', 'mock-commit', [1]),
+                        new Tag('tag-2', 'mock-commit', [1])
                     ]
                 )
             ]

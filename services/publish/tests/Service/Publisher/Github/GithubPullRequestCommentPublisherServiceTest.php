@@ -3,7 +3,7 @@
 namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
@@ -72,7 +72,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($expectedSupport ? $this->once() : $this->never())
@@ -148,7 +148,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
         );
 
         if (!$expectedSupport) {
-            $this->expectExceptionObject(PublishException::notSupportedException());
+            $this->expectException(PublishingNotSupportedException::class);
         }
 
         $mockGithubAppInstallationClient->expects($expectedSupport ? $this->once() : $this->never())
@@ -222,7 +222,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     pullRequest: '1234',
                     baseCommit: 'commit-on-main',
                     baseRef: 'main',
@@ -239,7 +239,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     baseCommit: 'commit-on-main',
                     baseRef: 'main',
                 ),

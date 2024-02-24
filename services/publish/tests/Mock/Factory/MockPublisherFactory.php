@@ -2,8 +2,9 @@
 
 namespace App\Tests\Mock\Factory;
 
-use App\Exception\PublishException;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +26,13 @@ final class MockPublisherFactory
                 ->willReturn($publishSuccessfully);
         } else {
             $mockPublisher->method('publish')
-                ->willThrowException(PublishException::notSupportedException());
+                ->willThrowException(
+                    new PublishingNotSupportedException(
+                        PublisherServiceInterface::class,
+                        $test->getMockBuilder(PublishableMessageInterface::class)
+                            ->getMock()
+                    )
+                );
         }
 
         return $mockPublisher;

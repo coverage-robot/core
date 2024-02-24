@@ -39,6 +39,7 @@ final class TotalUploadsQuery implements QueryInterface
                 ARRAY_AGG(
                     STRUCT(
                         tag as name,
+                        [totalLines] as successfullyUploadedLines,
                         {$this->getAlias(QueryParameter::COMMIT)} as commit
                     )
                 ),

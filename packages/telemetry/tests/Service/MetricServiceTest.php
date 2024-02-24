@@ -38,7 +38,7 @@ final class MetricServiceTest extends TestCase
      * @throws Exception
      */
     #[DataProvider('putMetricDataProvider')]
-    public function testMetricBuilding(
+    public function testPutMetric(
         string $metric,
         array|float|int $value,
         Unit $unit,
@@ -121,6 +121,90 @@ final class MetricServiceTest extends TestCase
             $metric,
             $value,
             $unit,
+            $resolution,
+            $dimensions,
+            $properties
+        );
+    }
+
+    #[DataProvider('putMetricDataProvider')]
+    public function testIncrementMetrics(
+        string $metric,
+        array|float|int $value,
+        Unit $unit,
+        Resolution $resolution,
+        array $dimensions,
+        array $properties
+    ): void {
+        $mockMetricsLogger = $this->createMock(LoggerInterface::class);
+        $mockClock = $this->createMock(ClockInterface::class);
+        $mockClock->method('now')
+            ->willReturn(new DateTimeImmutable('2023-11-20 09:00:00'));
+
+        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->method('getVariable')
+            ->willReturnMap(
+                [
+                    [
+                        EnvironmentVariable::AWS_LAMBDA_FUNCTION_NAME,
+                        'mock-function-name'
+                    ],
+                    [
+                        EnvironmentVariable::AWS_LAMBDA_FUNCTION_VERSION,
+                        '$LATEST'
+                    ]
+                ]
+            );
+
+        $metricService = new MetricService(
+            $mockMetricsLogger,
+            $mockClock,
+            $mockEnvironmentService,
+            new Serializer(
+                [
+                    new ArrayDenormalizer(),
+                    new UidNormalizer(),
+                    new BackedEnumNormalizer(),
+                    new DateTimeNormalizer(),
+                    new ObjectNormalizer(
+                        classMetadataFactory: new ClassMetadataFactory(
+                            new AttributeLoader()
+                        ),
+                        nameConverter: new MetadataAwareNameConverter(
+                            new ClassMetadataFactory(
+                                new AttributeLoader()
+                            ),
+                            new CamelCaseToSnakeCaseNameConverter()
+                        ),
+                    ),
+                ],
+                [new JsonEncoder()]
+            )
+        );
+
+        $mockMetricsLogger->expects($this->once())
+            ->method('info')
+            ->with(
+                self::callback(function (string $serialisedMetric): bool {
+                    $json = json_decode($serialisedMetric);
+
+                    $this->assertJsonMatchesSchema(
+                        $json,
+                        './tests/Service/cloudwatch-emf-schema.json'
+                    );
+                    $this->assertJsonValueEquals(
+                        Unit::COUNT->value,
+                        '_aws.CloudWatchMetrics[0].Metrics[0].Unit',
+                        $json
+                    );
+
+                    return true;
+                })
+            );
+
+        $metricService->increment(
+            $metric,
+            $value,
             $resolution,
             $dimensions,
             $properties

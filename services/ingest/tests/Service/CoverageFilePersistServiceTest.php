@@ -48,7 +48,8 @@ final class CoverageFilePersistServiceTest extends TestCase
                     projectRoot: 'mock-project-root',
                     tag: new Tag(
                         name: 'mock-tag-name',
-                        commit: 'mock-tag-commit'
+                        commit: 'mock-tag-commit',
+                        successfullyUploadedLines: [0]
                     )
                 ),
                 new Coverage(
@@ -92,7 +93,8 @@ final class CoverageFilePersistServiceTest extends TestCase
                     projectRoot: 'mock-project-root',
                     tag: new Tag(
                         name: 'mock-tag-name',
-                        commit: 'mock-tag-commit'
+                        commit: 'mock-tag-commit',
+                        successfullyUploadedLines: [0]
                     )
                 ),
                 new Coverage(
