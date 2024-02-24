@@ -16,7 +16,7 @@ final class CoverageReportTest extends TestCase
 {
     public function testReportLazyLoading(): void
     {
-        $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], []);
+        $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], [10], []);
         $tagCoverage = new TagCoverageCollectionQueryResult([]);
         $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
         $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
