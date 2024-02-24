@@ -140,7 +140,7 @@ WITH
 SELECT
   tag as tagName,
   STRUCT(
-    tag as name, commit as commit, totalLines as successfullyUploadedLines
+    tag as name, commit as commit, [totalLines] as successfullyUploadedLines
   ) as tag,
   COUNT(*) as lines,
   COALESCE(
