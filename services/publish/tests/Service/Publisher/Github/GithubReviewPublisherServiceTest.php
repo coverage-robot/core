@@ -229,7 +229,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     baseCommit: 'mock-base-commit'
                 ),
                 false
@@ -244,7 +244,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                     parent: ['mock-parent'],
                     ref: 'mock-ref',
                     projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit'),
+                    tag: new Tag('mock-tag', 'mock-commit', [2]),
                     pullRequest: '1234',
                     baseCommit: 'mock-base-commit',
                     baseRef: 'main',
