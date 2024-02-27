@@ -242,6 +242,8 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                         ->getRepository()
                 ]
             );
+
+            return;
         }
 
         // No comparison, just count the head report.
