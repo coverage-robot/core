@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Webhook;
+namespace App\Webhook\Processor;
 
 use App\Entity\Project;
 use App\Model\Webhook\WebhookInterface;

@@ -8,7 +8,7 @@ use App\Entity\Project;
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
-use App\Webhook\JobStateChangeWebhookProcessor;
+use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Event\Client\EventBusClientInterface;

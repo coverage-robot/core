@@ -115,7 +115,7 @@ final class WebhookControllerTest extends KernelTestCase
         $request = new Request(
             server: [
                 'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
-                'HTTP_' . SignedWebhookInterface::SIGNATURE_HEADER => 'invalid-signature'
+                'HTTP_' . SignedWebhookInterface::GITHUB_SIGNATURE_HEADER => 'invalid-signature'
             ],
             content: $payload
         );
@@ -157,7 +157,7 @@ final class WebhookControllerTest extends KernelTestCase
         $request = new Request(
             server: [
                 'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
-                'HTTP_' . SignedWebhookInterface::SIGNATURE_HEADER => $signature
+                'HTTP_' . SignedWebhookInterface::GITHUB_SIGNATURE_HEADER => $signature
             ],
             content: $payload
         );

@@ -4,13 +4,9 @@ namespace App\Controller;
 
 use App\Client\WebhookQueueClient;
 use App\Client\WebhookQueueClientInterface;
-use App\Enum\EnvironmentVariable;
-use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookSignatureService;
-use Exception;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
@@ -20,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -29,7 +26,6 @@ final class WebhookController extends AbstractController
         private readonly LoggerInterface $webhookLogger,
         private readonly WebhookSignatureService $webhookSignatureService,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService,
         #[Autowire(service: WebhookQueueClient::class)]
         private readonly WebhookQueueClientInterface $webhookQueueClient
     ) {
@@ -49,6 +45,8 @@ final class WebhookController extends AbstractController
     public function handleWebhookEvent(string $provider, Request $request): Response
     {
         try {
+            $provider = Provider::from($provider);
+
             /**
              * Attach the provider and webhook type so that the serializer can
              * discriminate against the payload body uniformly and decode the
@@ -57,20 +55,22 @@ final class WebhookController extends AbstractController
              * @var WebhookInterface $webhook
              */
             $webhook = $this->serializer->denormalize(
-                [
-                    ...$request->toArray(),
-                    'type' => WebhookType::tryFrom(
-                        sprintf(
-                            '%s_%s',
-                            Provider::tryFrom($provider)?->value ?? '',
-                            $request->headers->get(SignedWebhookInterface::GITHUB_EVENT_HEADER) ?? ''
+                array_merge(
+                    $request->toArray(),
+                    [
+                        'type' => $this->webhookSignatureService->getWebhookTypeFromRequest(
+                            $provider,
+                            $request
+                        ),
+                        'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest(
+                            $provider,
+                            $request
                         )
-                    )?->value,
-                    'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest($request)
-                ],
+                    ]
+                ),
                 WebhookInterface::class
             );
-        } catch (Exception $exception) {
+        } catch (ExceptionInterface $exception) {
             // Occurs whenever the denormalized fails to denormalize the payload. This
             // common as providers frequently send payloads which aren't ones want to act on
             $this->webhookLogger->info(
@@ -83,12 +83,7 @@ final class WebhookController extends AbstractController
             return new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (
-            !$this->validateSignature(
-                $webhook,
-                $request->getContent()
-            )
-        ) {
+        if (!$this->validateSignature($webhook)) {
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
@@ -110,39 +105,21 @@ final class WebhookController extends AbstractController
      *
      * If the webhook is not signed, then we assume that the webhook is valid.
      */
-    private function validateSignature(WebhookInterface $webhook, string $originalPayload): bool
+    private function validateSignature(WebhookInterface $webhook): bool
     {
         if (!$webhook instanceof SignedWebhookInterface) {
             // The webhook isn't signed, so we assume that it's valid.
             return true;
         }
 
-        $payload = $this->serializer->serialize($webhook, 'json');
-        $secret = $this->environmentService->getVariable(
-            EnvironmentVariable::WEBHOOK_SECRET
-        );
-
-        $signature = $webhook->getSignature();
-
-        if (
-            $signature === null ||
-            !$this->webhookSignatureService->validatePayloadSignature(
-                $signature,
-                $originalPayload,
-                $secret
-            )
-        ) {
+        if (!$this->webhookSignatureService->validatePayloadSignature($webhook->getProvider(), $webhook)) {
             $this->webhookLogger->warning(
                 sprintf(
                     'Signature validation failed for webhook payload %s.',
                     (string)$webhook
                 ),
                 [
-                    'provided' => $webhook->getSignature(),
-                    'computed' => $this->webhookSignatureService->computePayloadSignature(
-                        $payload,
-                        $secret
-                    )
+                    'provided' => $webhook->getSignature()
                 ]
             );
 

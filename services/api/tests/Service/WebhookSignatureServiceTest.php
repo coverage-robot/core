@@ -15,7 +15,7 @@ final class WebhookSignatureServiceTest extends TestCase
     {
         $request = new Request();
         $request->headers->set(
-            SignedWebhookInterface::SIGNATURE_HEADER,
+            SignedWebhookInterface::GITHUB_SIGNATURE_HEADER,
             sprintf(
                 '%s=mock-signature',
                 SignedWebhookInterface::SIGNATURE_ALGORITHM
@@ -44,7 +44,7 @@ final class WebhookSignatureServiceTest extends TestCase
     public function testGetInvalidPayloadSignatureFromRequest(string $header): void
     {
         $request = new Request();
-        $request->headers->set(SignedWebhookInterface::SIGNATURE_HEADER, $header);
+        $request->headers->set(SignedWebhookInterface::GITHUB_SIGNATURE_HEADER, $header);
 
         $webhookSignatureService = new WebhookSignatureService(new NullLogger());
 
