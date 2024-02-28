@@ -86,7 +86,9 @@ final class LineCommentTypeSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): LineCommentType
     {
-        $value = LineCommentType::tryFrom((string) $value);
+        if (is_string($value) || is_int($value)) {
+            $value = LineCommentType::tryFrom($value);
+        }
 
         return $this->validate($value);
     }
