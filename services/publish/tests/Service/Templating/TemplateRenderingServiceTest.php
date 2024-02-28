@@ -371,7 +371,20 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     validUntil: $event->getEventTime()
                 ),
                 TemplateVariant::LINE_COMMENT_BODY
-            ]
+            ],
+            [
+                new PublishablePullRequestMessage(
+                    event: $event,
+                    coveragePercentage: 99.0,
+                    diffCoveragePercentage: 0,
+                    successfulUploads: 2,
+                    tagCoverage: [],
+                    leastCoveredDiffFiles: [],
+                    baseCommit: 'mock-base-commit',
+                    coverageChange: 0
+                ),
+                TemplateVariant::FULL_PULL_REQUEST_COMMENT
+            ],
         ];
     }
 }
