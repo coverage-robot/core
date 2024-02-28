@@ -131,12 +131,11 @@ final class DefaultTagBehaviourSetting implements SettingInterface
     #[Override]
     public function serialize(mixed $value): array
     {
-        $this->validate($value);
-
         return [
             'carryforward' => new AttributeValue(
                 [
-                    SettingValueType::BOOLEAN->value => $value->getCarryforward()
+                    SettingValueType::BOOLEAN->value => $this->validate($value)
+                        ->getCarryforward()
                 ]
             ),
         ];

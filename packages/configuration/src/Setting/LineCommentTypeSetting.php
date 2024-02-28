@@ -61,7 +61,8 @@ final class LineCommentTypeSetting implements SettingInterface
             $repository,
             SettingKey::LINE_COMMENT_TYPE,
             SettingValueType::STRING,
-            $this->serialize($value)
+            $this->validate($value)
+                ->value
         );
     }
 

@@ -151,18 +151,18 @@ final class IndividualTagBehavioursSetting implements SettingInterface
     {
         $attributeValues = [];
 
-        foreach ($this->validate($value) as $behaviour) {
+        foreach ($this->validate($value) as $individualTagBehaviour) {
             $attributeValues[] = new AttributeValue(
                 [
                     SettingValueType::MAP->value => [
                         'name' => new AttributeValue(
                             [
-                                SettingValueType::STRING->value => $behaviour->getName()
+                                SettingValueType::STRING->value => $individualTagBehaviour->getName()
                             ]
                         ),
                         'carryforward' => new AttributeValue(
                             [
-                                SettingValueType::BOOLEAN->value => $behaviour->getCarryforward()
+                                SettingValueType::BOOLEAN->value => $individualTagBehaviour->getCarryforward()
                             ]
                         ),
                     ],
