@@ -30,6 +30,9 @@ interface SettingServiceInterface
         mixed $value
     ): bool;
 
+    /**
+     * Delete a setting for a particular repository in the configuration store.
+     */
     public function delete(
         Provider $provider,
         string $owner,

@@ -25,17 +25,15 @@ final class LineCommentTypeSetting implements SettingInterface
     public function get(Provider $provider, string $owner, string $repository): LineCommentType
     {
         try {
-            $value = $this->dynamoDbClient->getSettingFromStore(
-                $provider,
-                $owner,
-                $repository,
-                SettingKey::LINE_COMMENT_TYPE,
-                SettingValueType::STRING
+            return $this->deserialize(
+                $this->dynamoDbClient->getSettingFromStore(
+                    $provider,
+                    $owner,
+                    $repository,
+                    SettingKey::LINE_COMMENT_TYPE,
+                    SettingValueType::STRING
+                )
             );
-
-            $this->validate($value);
-
-            return $this->deserialize($value);
         } catch (
             SettingNotFoundException |
             SettingRetrievalFailedException |
@@ -48,7 +46,7 @@ final class LineCommentTypeSetting implements SettingInterface
     }
 
     /**
-     * @param bool $value
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function set(
@@ -63,7 +61,8 @@ final class LineCommentTypeSetting implements SettingInterface
             $repository,
             SettingKey::LINE_COMMENT_TYPE,
             SettingValueType::STRING,
-            $value
+            $this->validate($value)
+                ->value
         );
     }
 
@@ -85,28 +84,39 @@ final class LineCommentTypeSetting implements SettingInterface
      * @throws InvalidSettingValueException
      */
     #[Override]
-    public function deserialize(mixed $value): mixed
+    public function deserialize(mixed $value): LineCommentType
     {
-        return LineCommentType::from($value);
+        if (is_string($value) || is_int($value)) {
+            $value = LineCommentType::tryFrom($value);
+        }
+
+        return $this->validate($value);
     }
 
+    /**
+     * @throws InvalidSettingValueException
+     */
     #[Override]
-    public function validate(mixed $value): void
+    public function serialize(mixed $value): string
     {
-        if ($value instanceof LineCommentType) {
-            return;
-        }
-
-        if (!is_string($value) || !LineCommentType::tryFrom($value) instanceof LineCommentType) {
-            throw new InvalidSettingValueException(
-                'The value for the line comment type setting must be a valid enum value.'
-            );
-        }
+        return $this->validate($value)
+            ->value;
     }
 
     #[Override]
     public static function getSettingKey(): string
     {
         return SettingKey::LINE_COMMENT_TYPE->value;
+    }
+
+    private function validate(mixed $value): LineCommentType
+    {
+        if ($value instanceof LineCommentType) {
+            return $value;
+        }
+
+        throw new InvalidSettingValueException(
+            'The value for the line comment type setting must be a valid enum value.'
+        );
     }
 }

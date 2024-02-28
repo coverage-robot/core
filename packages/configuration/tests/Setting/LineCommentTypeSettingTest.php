@@ -5,7 +5,6 @@ namespace Packages\Configuration\Tests\Setting;
 use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
-use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Setting\LineCommentTypeSetting;
 use Packages\Contracts\Provider\Provider;
@@ -16,7 +15,7 @@ use stdClass;
 final class LineCommentTypeSettingTest extends TestCase
 {
     #[DataProvider('settingValueDataProvider')]
-    public function testSettingLineCommentTypeSetting(string $settingValue): void
+    public function testSettingLineCommentTypeSetting(LineCommentType $settingValue): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
@@ -27,7 +26,7 @@ final class LineCommentTypeSettingTest extends TestCase
                 'repository',
                 SettingKey::LINE_COMMENT_TYPE,
                 SettingValueType::STRING,
-                $settingValue
+                $settingValue->value
             )
             ->willReturn(true);
 
@@ -46,7 +45,7 @@ final class LineCommentTypeSettingTest extends TestCase
     }
 
     #[DataProvider('settingValueDataProvider')]
-    public function testGettingLineAnnotationSetting(string $settingValue): void
+    public function testGettingLineAnnotationSetting(LineCommentType $settingValue): void
     {
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
@@ -58,36 +57,20 @@ final class LineCommentTypeSettingTest extends TestCase
                 SettingKey::LINE_COMMENT_TYPE,
                 SettingValueType::STRING
             )
-            ->willReturn($settingValue);
+            ->willReturn($settingValue->value);
 
         $lineCommentTypeSetting = new LineCommentTypeSetting(
             $mockDynamoDbClient
         );
 
         $this->assertEquals(
-            LineCommentType::from($settingValue),
+            $settingValue,
             $lineCommentTypeSetting->get(
                 Provider::GITHUB,
                 'owner',
                 'repository'
             )
         );
-    }
-
-    #[DataProvider('validatingValuesDataProvider')]
-    public function testValidatingLineAnnotationValue(mixed $settingValue, bool $expectedValid): void
-    {
-        $lineCommentTypeSetting = new LineCommentTypeSetting(
-            $this->createMock(DynamoDbClientInterface::class)
-        );
-
-        if (!$expectedValid) {
-            $this->expectException(InvalidSettingValueException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $lineCommentTypeSetting->validate($settingValue);
     }
 
     public function testSettingKey(): void
@@ -101,13 +84,16 @@ final class LineCommentTypeSettingTest extends TestCase
     public static function settingValueDataProvider(): array
     {
         $cases = array_map(
-            static fn(LineCommentType $lineCommentType): string => $lineCommentType->value,
+            static fn(LineCommentType $lineCommentType): LineCommentType => $lineCommentType,
             LineCommentType::cases()
         );
         return array_combine(
-            $cases,
             array_map(
-                static fn(string $case): array => [$case],
+                static fn(LineCommentType $case): string => $case->value,
+                $cases
+            ),
+            array_map(
+                static fn(LineCommentType $case): array => [$case],
                 $cases
             )
         );

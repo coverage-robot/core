@@ -9,6 +9,8 @@ interface SettingInterface
 {
     /**
      * Get the configuration setting's value from the configuration store.
+     *
+     * @throws InvalidSettingValueException
      */
     public function get(
         Provider $provider,
@@ -38,15 +40,18 @@ interface SettingInterface
     /**
      * Deserialize the configuration setting's value from the a configuration file,
      * or the configuration store, into a manipulate format (i.e. model, primitive, etc)
+     *
+     * @throws InvalidSettingValueException
      */
     public function deserialize(mixed $value): mixed;
 
     /**
-     * Validate the configuration setting's value.
+     * Serialize the configuration setting's value from a manipulate format (i.e. model, primitive, etc)
+     * into a format that can be stored in the configuration store.
      *
      * @throws InvalidSettingValueException
      */
-    public function validate(mixed $value): void;
+    public function serialize(mixed $value): mixed;
 
     /**
      * The key of the configuration value.

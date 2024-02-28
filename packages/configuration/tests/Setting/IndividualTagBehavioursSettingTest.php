@@ -6,13 +6,11 @@ use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
-use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Setting\IndividualTagBehavioursSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -170,26 +168,6 @@ final class IndividualTagBehavioursSettingTest extends TestCase
                 'mock-repository'
             )
         );
-    }
-
-    #[DataProvider('validatingValuesDataProvider')]
-    public function testValidatingIndividualTagBehavioursValue(mixed $settingValue, bool $expectedValid): void
-    {
-        $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
-            $this->createMock(DynamoDbClientInterface::class),
-            $this->createMock(Serializer::class),
-            Validation::createValidatorBuilder()
-                ->enableAttributeMapping()
-                ->getValidator()
-        );
-
-        if (!$expectedValid) {
-            $this->expectException(InvalidSettingValueException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $individualTagBehavioursSetting->validate($settingValue);
     }
 
     public function testDeserializingPathReplacements(): void

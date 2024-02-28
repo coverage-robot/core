@@ -16,4 +16,4 @@ services:
         class: Packages\Configuration\Service\EnvironmentService
 
     Packages\Configuration\Service\SettingServiceInterface:
-        class: Packages\Configuration\Service\SettingService
+        class: Packages\Configuration\Service\CachingSettingService

@@ -19,6 +19,10 @@ final class EnvironmentService implements EnvironmentServiceInterface
 
     public function getVariable($variable): string
     {
-        return (string)($_ENV[$variable->value] ?: getenv($variable->value));
+        if (array_key_exists($variable->value, $_ENV)) {
+            return (string)$_ENV[$variable->value];
+        }
+
+        return getenv($variable->value) ?: '';
     }
 }

@@ -13,10 +13,10 @@ use PHPUnit\Framework\TestCase;
 final class SettingServiceTest extends TestCase
 {
     #[DataProvider('trueFalseDataProvider')]
-    public function testSettingValueOnlySetsWhenCacheIsNotIdentical(bool $isSetSuccessful): void
+    public function testSettingValue(bool $isSetSuccessful): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
-        $mockSetting->expects($this->exactly($isSetSuccessful ? 1 : 2))
+        $mockSetting->expects($this->once())
             ->method('set')
             ->with(
                 Provider::GITHUB,
@@ -42,17 +42,6 @@ final class SettingServiceTest extends TestCase
                 'value'
             )
         );
-
-        $this->assertEquals(
-            $isSetSuccessful,
-            $settingService->set(
-                Provider::GITHUB,
-                'owner',
-                'repository',
-                SettingKey::LINE_COMMENT_TYPE,
-                'value'
-            )
-        );
     }
 
     #[DataProvider('trueFalseDataProvider')]
@@ -62,17 +51,11 @@ final class SettingServiceTest extends TestCase
 
         if (!$isValidateSuccessful) {
             $mockSetting->expects($this->once())
-                ->method('validate')
+                ->method('deserialize')
                 ->willThrowException(new InvalidSettingValueException());
 
             $this->expectException(InvalidSettingValueException::class);
-
-            $mockSetting->expects($this->never())
-                ->method('deserialize');
         } else {
-            $mockSetting->expects($this->once())
-                ->method('validate');
-
             $mockSetting->expects($this->once())
                 ->method('deserialize')
                 ->with('value')
@@ -99,7 +82,7 @@ final class SettingServiceTest extends TestCase
     }
 
     #[DataProvider('settingValueDataProvider')]
-    public function testGettingValueUsesCacheForSubsequentCalls(mixed $settingValue): void
+    public function testGettingValue(mixed $settingValue): void
     {
         $mockSetting = $this->createMock(SettingInterface::class);
         $mockSetting->expects($this->once())
@@ -117,17 +100,15 @@ final class SettingServiceTest extends TestCase
             ]
         );
 
-        $retrievedValue = $settingService->get(
-            Provider::GITHUB,
-            'owner',
-            'repository',
-            SettingKey::LINE_COMMENT_TYPE
+        $this->assertEquals(
+            $settingValue,
+            $settingService->get(
+                Provider::GITHUB,
+                'owner',
+                'repository',
+                SettingKey::LINE_COMMENT_TYPE
+            )
         );
-        $this->assertEquals($settingValue, $retrievedValue);
-
-        $mockSetting->expects($this->never())
-            ->method('get');
-        $this->assertEquals($settingValue, $retrievedValue);
     }
 
     #[DataProvider('trueFalseDataProvider')]
