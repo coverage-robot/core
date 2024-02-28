@@ -32,28 +32,22 @@ final class DefaultTagBehaviourSetting implements SettingInterface
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly ValidatorInterface $validator,
     ) {
-        $this->default = new DefaultTagBehaviour(
-            carryforward: true
-        );
+        $this->default = new DefaultTagBehaviour(carryforward: true);
     }
 
     #[Override]
     public function get(Provider $provider, string $owner, string $repository): DefaultTagBehaviour
     {
         try {
-            $value = $this->dynamoDbClient->getSettingFromStore(
-                $provider,
-                $owner,
-                $repository,
-                SettingKey::from(self::getSettingKey()),
-                SettingValueType::MAP
+            return $this->deserialize(
+                $this->dynamoDbClient->getSettingFromStore(
+                    $provider,
+                    $owner,
+                    $repository,
+                    SettingKey::DEFAULT_TAG_BEHAVIOUR,
+                    SettingValueType::MAP
+                )
             );
-
-            $value = $this->deserialize($value);
-
-            $this->validate($value);
-
-            return $value;
         } catch (
             ExceptionInterface |
             SettingNotFoundException |
@@ -70,6 +64,7 @@ final class DefaultTagBehaviourSetting implements SettingInterface
      * @param DefaultTagBehaviour $value
      *
      * @throws ExceptionInterface
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function set(
@@ -109,29 +104,19 @@ final class DefaultTagBehaviourSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): DefaultTagBehaviour
     {
-        if ($value instanceof DefaultTagBehaviour) {
-            return $value;
-        }
-
-        if ($value instanceof AttributeValue) {
-            $map = $value->getM();
-
-            return new DefaultTagBehaviour(
-                $map['carryforward']->getBool()
-            );
-        }
-
-        if (is_array($value)) {
-            return $this->serializer->denormalize(
+        $value = match (true) {
+            $value instanceof AttributeValue => new DefaultTagBehaviour(
+                $value->getM()['carryforward']->getBool()
+            ),
+            is_array($value) => $this->serializer->denormalize(
                 $value,
                 DefaultTagBehaviour::class,
                 'json'
-            );
-        }
+            ),
+            default => $value
+        };
 
-        throw new InvalidSettingValueException(
-            'Invalid value for setting: ' . $value
-        );
+        return $this->validate($value);
     }
 
     #[Override]
@@ -140,40 +125,41 @@ final class DefaultTagBehaviourSetting implements SettingInterface
         return SettingKey::DEFAULT_TAG_BEHAVIOUR->value;
     }
 
+    /**
+     * @throws InvalidSettingValueException
+     */
     #[Override]
-    public function validate(mixed $value): void
+    public function serialize(mixed $value): array
+    {
+        $this->validate($value);
+
+        return [
+            'carryforward' => new AttributeValue(
+                [
+                    SettingValueType::BOOLEAN->value => $value->getCarryforward()
+                ]
+            ),
+        ];
+    }
+
+    /**
+     * @throws InvalidSettingValueException
+     */
+    private function validate(mixed $value): DefaultTagBehaviour
     {
         $violations = $this->validator->validate(
             $value,
             [
-                new Assert\NotNull(),
+                new Assert\Valid(),
                 new Assert\Type(DefaultTagBehaviour::class)
             ]
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid value for setting: ' . $violations
-            );
+            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
         }
 
-        $violations = $this->validator->validate($value);
-
-        if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid default tag behaviour value for setting: ' . $violations
-            );
-        }
-    }
-
-    private function serialize(DefaultTagBehaviour $defaultTagBehaviour): array
-    {
-        return [
-            'carryforward' => new AttributeValue(
-                [
-                    SettingValueType::BOOLEAN->value => $defaultTagBehaviour->getCarryforward()
-                ]
-            ),
-        ];
+        /** @var DefaultTagBehaviour $value */
+        return $value;
     }
 }

@@ -41,19 +41,15 @@ final class IndividualTagBehavioursSetting implements SettingInterface
     public function get(Provider $provider, string $owner, string $repository): array
     {
         try {
-            $value = $this->dynamoDbClient->getSettingFromStore(
-                $provider,
-                $owner,
-                $repository,
-                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
-                SettingValueType::LIST
+            return $this->deserialize(
+                $this->dynamoDbClient->getSettingFromStore(
+                    $provider,
+                    $owner,
+                    $repository,
+                    SettingKey::INDIVIDUAL_TAG_BEHAVIOURS,
+                    SettingValueType::LIST
+                )
             );
-
-            $value = $this->deserialize($value);
-
-            $this->validate($value);
-
-            return $value;
         } catch (
             ExceptionInterface |
             SettingNotFoundException |
@@ -70,6 +66,7 @@ final class IndividualTagBehavioursSetting implements SettingInterface
      * @param IndividualTagBehaviour[] $value
      *
      * @throws ExceptionInterface
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function set(
@@ -105,6 +102,7 @@ final class IndividualTagBehavioursSetting implements SettingInterface
     /**
      * @return IndividualTagBehaviour[]
      * @throws ExceptionInterface
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function deserialize(mixed $value): array
@@ -134,7 +132,7 @@ final class IndividualTagBehavioursSetting implements SettingInterface
             }
         }
 
-        return $behaviours;
+        return $this->validate($behaviours);
     }
 
     #[Override]
@@ -143,48 +141,17 @@ final class IndividualTagBehavioursSetting implements SettingInterface
         return SettingKey::INDIVIDUAL_TAG_BEHAVIOURS->value;
     }
 
-    #[Override]
-    public function validate(mixed $value): void
-    {
-        if (!is_array($value)) {
-            throw new InvalidSettingValueException(
-                "Individual tag behaviours must be an array."
-            );
-        }
-
-        $violations = $this->validator->validate(
-            $value,
-            [
-                new Assert\All([
-                    new Assert\Type(IndividualTagBehaviour::class),
-                ]),
-            ]
-        );
-
-        if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid value for setting: ' . $violations
-            );
-        }
-
-        $violations = $this->validator->validate($value);
-
-        if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid individual path behaviours value for setting: ' . $violations
-            );
-        }
-    }
-
     /**
-     * @param IndividualTagBehaviour[] $behaviours
+     * @param IndividualTagBehaviour[] $value
      * @return AttributeValue[]
+     * @throws InvalidSettingValueException
      */
-    private function serialize(array $behaviours): array
+    #[Override]
+    public function serialize(mixed $value): array
     {
         $attributeValues = [];
 
-        foreach ($behaviours as $behaviour) {
+        foreach ($this->validate($value) as $behaviour) {
             $attributeValues[] = new AttributeValue(
                 [
                     SettingValueType::MAP->value => [
@@ -204,5 +171,29 @@ final class IndividualTagBehavioursSetting implements SettingInterface
         }
 
         return $attributeValues;
+    }
+
+    /**
+     * @return IndividualTagBehaviour[]
+     * @throws InvalidSettingValueException
+     */
+    private function validate(mixed $value): array
+    {
+        $violations = $this->validator->validate(
+            $value,
+            [
+                new Assert\Valid(),
+                new Assert\All([
+                    new Assert\Type(IndividualTagBehaviour::class)
+                ]),
+            ]
+        );
+
+        if ($violations->count() > 0) {
+            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+        }
+
+        /** @var IndividualTagBehaviour[] $value */
+        return $value;
     }
 }

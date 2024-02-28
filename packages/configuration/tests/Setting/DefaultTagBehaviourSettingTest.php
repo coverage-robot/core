@@ -6,15 +6,12 @@ use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
-use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Model\DefaultTagBehaviour;
 use Packages\Configuration\Setting\DefaultTagBehaviourSetting;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class DefaultTagBehaviourSettingTest extends TestCase
@@ -90,26 +87,6 @@ final class DefaultTagBehaviourSettingTest extends TestCase
                 'repository'
             )
         );
-    }
-
-    #[DataProvider('validatingValuesDataProvider')]
-    public function testValidatingDefaultTagBehaviourValue(mixed $settingValue, bool $expectedValid): void
-    {
-        $defaultTagBehaviourSetting = new DefaultTagBehaviourSetting(
-            $this->createMock(DynamoDbClientInterface::class),
-            $this->createMock(Serializer::class),
-            Validation::createValidatorBuilder()
-                ->enableAttributeMapping()
-                ->getValidator()
-        );
-
-        if (!$expectedValid) {
-            $this->expectException(InvalidSettingValueException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $defaultTagBehaviourSetting->validate($settingValue);
     }
 
     public function testSettingKey(): void
