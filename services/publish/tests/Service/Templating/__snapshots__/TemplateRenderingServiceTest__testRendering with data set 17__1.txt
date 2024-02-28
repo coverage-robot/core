@@ -1,0 +1,19 @@
+## Coverage Report
+> Merging #12 will **not change** the total coverage (compared to mock-base-commit)
+
+| Total Coverage | Diff Coverage |
+| --- | --- |
+| 99% | 0% |
+
+<details>
+<summary>Tags</summary>
+
+> No uploaded tags in #12</details>
+
+<details>
+<summary>Impacted Files</summary>
+
+> No impacted files in #12
+</details>
+
+*Last update to mock-commit at 10:12am UTC*

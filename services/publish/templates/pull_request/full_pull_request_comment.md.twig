@@ -5,7 +5,7 @@
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
-| {{ report().total_coverage|round(2) }}% | {{ report().diff_coverage ? report().diff_coverage|round(2) ~ "%" : "&oslash;" }} |
+| {{ report().total_coverage|round(2) }}% | {{ report().diff_coverage is not same as null ? report().diff_coverage|round(2) ~ "%" : "&oslash;" }} |
 
 <details>
 <summary>Tags</summary>
