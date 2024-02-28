@@ -36,19 +36,15 @@ final class PathReplacementsSetting implements SettingInterface
     public function get(Provider $provider, string $owner, string $repository): array
     {
         try {
-            $value = $this->dynamoDbClient->getSettingFromStore(
-                $provider,
-                $owner,
-                $repository,
-                SettingKey::PATH_REPLACEMENTS,
-                SettingValueType::LIST
+            return $this->deserialize(
+                $this->dynamoDbClient->getSettingFromStore(
+                    $provider,
+                    $owner,
+                    $repository,
+                    SettingKey::PATH_REPLACEMENTS,
+                    SettingValueType::LIST
+                )
             );
-
-            $value = $this->deserialize($value);
-
-            $this->validate($value);
-
-            return $value;
         } catch (
             ExceptionInterface |
             SettingNotFoundException |
@@ -65,6 +61,7 @@ final class PathReplacementsSetting implements SettingInterface
      * @param PathReplacement[] $value
      *
      * @throws ExceptionInterface
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function set(
@@ -100,36 +97,29 @@ final class PathReplacementsSetting implements SettingInterface
     /**
      * @return PathReplacement[]
      * @throws ExceptionInterface
+     * @throws InvalidSettingValueException
      */
     #[Override]
     public function deserialize(mixed $value): array
     {
         $pathReplacements = [];
 
-        foreach ($value as $item) {
-            if ($item instanceof PathReplacement) {
-                $pathReplacements[] = $item;
-
-                continue;
-            }
-
-            if ($item instanceof AttributeValue) {
-                $map = $item->getM();
-
-                $pathReplacements[] = new PathReplacement(
-                    $map['before']->getS(),
-                    $map['after']->getS()
-                );
-            } elseif (is_array($item)) {
-                $pathReplacements[] = $this->serializer->denormalize(
+        foreach ((array) $value as $item) {
+            $pathReplacements[] = match (true) {
+                $item instanceof AttributeValue => new PathReplacement(
+                    $item->getM()['before']->getS(),
+                    $item->getM()['after']->getS()
+                ),
+                is_array($item) => $this->serializer->denormalize(
                     $item,
                     PathReplacement::class,
                     'json'
-                );
-            }
+                ),
+                default => $item,
+            };
         }
 
-        return $pathReplacements;
+        return $this->validate($pathReplacements);
     }
 
     #[Override]
@@ -138,48 +128,18 @@ final class PathReplacementsSetting implements SettingInterface
         return SettingKey::PATH_REPLACEMENTS->value;
     }
 
-    #[Override]
-    public function validate(mixed $value): void
-    {
-        if (!is_array($value)) {
-            throw new InvalidSettingValueException(
-                "Path replacements must be an array."
-            );
-        }
-
-        $violations = $this->validator->validate(
-            $value,
-            [
-                new Assert\All([
-                    new Assert\Type(PathReplacement::class),
-                ]),
-            ]
-        );
-
-        if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid value for setting: ' . $violations
-            );
-        }
-
-        $violations = $this->validator->validate($value);
-
-        if ($violations->count() > 0) {
-            throw new InvalidSettingValueException(
-                'Invalid path replacement value for setting: ' . $violations
-            );
-        }
-    }
-
     /**
-     * @param PathReplacement[] $pathReplacements
+     * @param PathReplacement[] $value
      * @return AttributeValue[]
+     *
+     * @throws InvalidSettingValueException
      */
-    private function serialize(array $pathReplacements): array
+    #[Override]
+    public function serialize(mixed $value): array
     {
         $attributeValues = [];
 
-        foreach ($pathReplacements as $pathReplacement) {
+        foreach ($this->validate($value) as $pathReplacement) {
             $before = [SettingValueType::STRING->value => $pathReplacement->getBefore()];
             $after = $pathReplacement->getAfter() === null ?
                 [SettingValueType::NULL->value => true] :
@@ -196,5 +156,29 @@ final class PathReplacementsSetting implements SettingInterface
         }
 
         return $attributeValues;
+    }
+
+    /**
+     * @return PathReplacement[]
+     * @throws InvalidSettingValueException
+     */
+    private function validate(mixed $value): array
+    {
+        $violations = $this->validator->validate(
+            $value,
+            [
+                new Assert\Valid(),
+                new Assert\All([
+                    new Assert\Type(PathReplacement::class),
+                ]),
+            ]
+        );
+
+        if ($violations->count() > 0) {
+            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+        }
+
+        /** @var PathReplacement[] $value */
+        return $value;
     }
 }
