@@ -7,6 +7,7 @@ use App\Client\WebhookQueueClientInterface;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookSignatureService;
+use App\Service\WebhookSignatureServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
@@ -24,7 +25,8 @@ final class WebhookController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $webhookLogger,
-        private readonly WebhookSignatureService $webhookSignatureService,
+        #[Autowire(service: WebhookSignatureService::class)]
+        private readonly WebhookSignatureServiceInterface $webhookSignatureService,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
         #[Autowire(service: WebhookQueueClient::class)]
         private readonly WebhookQueueClientInterface $webhookQueueClient
@@ -47,6 +49,11 @@ final class WebhookController extends AbstractController
         try {
             $provider = Provider::from($provider);
 
+            $webhookType = $this->webhookSignatureService->getWebhookTypeFromRequest(
+                $provider,
+                $request
+            );
+
             /**
              * Attach the provider and webhook type so that the serializer can
              * discriminate against the payload body uniformly and decode the
@@ -58,10 +65,7 @@ final class WebhookController extends AbstractController
                 array_merge(
                     $request->toArray(),
                     [
-                        'type' => $this->webhookSignatureService->getWebhookTypeFromRequest(
-                            $provider,
-                            $request
-                        ),
+                        'type' => $webhookType->value,
                         'signature' => $this->webhookSignatureService->getPayloadSignatureFromRequest(
                             $provider,
                             $request
@@ -83,7 +87,7 @@ final class WebhookController extends AbstractController
             return new Response(null, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$this->validateSignature($webhook)) {
+        if (!$this->validateSignature($webhook, $request)) {
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
 
@@ -105,14 +109,14 @@ final class WebhookController extends AbstractController
      *
      * If the webhook is not signed, then we assume that the webhook is valid.
      */
-    private function validateSignature(WebhookInterface $webhook): bool
+    private function validateSignature(WebhookInterface $webhook, Request $request): bool
     {
         if (!$webhook instanceof SignedWebhookInterface) {
             // The webhook isn't signed, so we assume that it's valid.
             return true;
         }
 
-        if (!$this->webhookSignatureService->validatePayloadSignature($webhook->getProvider(), $webhook)) {
+        if (!$this->webhookSignatureService->validatePayloadSignature($webhook->getProvider(), $webhook, $request)) {
             $this->webhookLogger->warning(
                 sprintf(
                     'Signature validation failed for webhook payload %s.',

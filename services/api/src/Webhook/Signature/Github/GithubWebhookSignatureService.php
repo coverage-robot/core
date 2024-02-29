@@ -6,21 +6,17 @@ use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
-use App\Webhook\Signature\WebhookSignatureServiceInterface;
+use App\Webhook\Signature\ProviderWebhookSignatureServiceInterface;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Packages\Contracts\Provider\ProviderAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
-class GithubWebhookSignatureService implements WebhookSignatureServiceInterface, ProviderAwareInterface
+class GithubWebhookSignatureService implements ProviderWebhookSignatureServiceInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookSignatureLogger,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly EnvironmentServiceInterface $environmentService
     ) {
     }
@@ -89,14 +85,26 @@ class GithubWebhookSignatureService implements WebhookSignatureServiceInterface,
     }
 
     #[Override]
-    public function validatePayloadSignature(WebhookInterface&SignedWebhookInterface $webhook): bool
-    {
-        $payload = $this->serializer->serialize($webhook, 'json');
+    public function validatePayloadSignature(
+        WebhookInterface&SignedWebhookInterface $webhook,
+        Request $request
+    ): bool {
         $secret = $this->environmentService->getVariable(EnvironmentVariable::WEBHOOK_SECRET);
 
+        $signature = $webhook->getSignature();
+
+        if ($signature === null) {
+            return false;
+        }
+
         return hash_equals(
-            $this->computePayloadSignature($payload, $secret),
-            $webhook->getSignature()
+        /**
+         * We're using the request payload, as opposed to the serialized webhook, because the webhook
+         * isn't guaranteed to contain all of the same properties, in the same order. Therefore its unlikely
+         * to produce the same hash.
+         */
+            $this->computePayloadSignature($request->getContent(), $secret),
+            $signature
         );
     }
 

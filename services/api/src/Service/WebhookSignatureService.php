@@ -5,13 +5,13 @@ namespace App\Service;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
-use App\Webhook\Signature\WebhookSignatureServiceInterface;
+use App\Webhook\Signature\ProviderWebhookSignatureServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\Request;
 
-final class WebhookSignatureService
+final class WebhookSignatureService implements WebhookSignatureServiceInterface
 {
     /**
      * @param WebhookSignatureServiceInterface[] $webhookSignatureServices
@@ -23,9 +23,7 @@ final class WebhookSignatureService
     }
 
     /**
-     * Get the type of webhook the request is for.
-     *
-     * @throws RuntimeException
+     * @inheritDoc
      */
     public function getWebhookTypeFromRequest(Provider $provider, Request $request): WebhookType
     {
@@ -34,9 +32,7 @@ final class WebhookSignatureService
     }
 
     /**
-     * Get the signature for the payload received as a webhook.
-     *
-     *  @throws RuntimeException
+     * @inheritDoc
      */
     public function getPayloadSignatureFromRequest(Provider $provider, Request $request): ?string
     {
@@ -45,24 +41,25 @@ final class WebhookSignatureService
     }
 
     /**
-     * Validate the signature of a webhook.
-     *
-     *  @throws RuntimeException
+     * @inheritDoc
      */
-    public function validatePayloadSignature(Provider $provider, WebhookInterface&SignedWebhookInterface $webhook): bool
-    {
+    public function validatePayloadSignature(
+        Provider $provider,
+        WebhookInterface&SignedWebhookInterface $webhook,
+        Request $request
+    ): bool {
         return $this->getServiceForProvider($provider)
-            ->validatePayloadSignature($webhook);
+            ->validatePayloadSignature($webhook, $request);
     }
 
     /**
      * @throws RuntimeException
      */
-    private function getServiceForProvider(Provider $provider): WebhookSignatureServiceInterface
+    private function getServiceForProvider(Provider $provider): ProviderWebhookSignatureServiceInterface
     {
         $service = (iterator_to_array($this->webhookSignatureServices)[$provider->value]) ?? null;
 
-        if (!$service instanceof WebhookSignatureServiceInterface) {
+        if (!$service instanceof ProviderWebhookSignatureServiceInterface) {
             throw new RuntimeException(
                 sprintf(
                     'No webhook signature service for %s',

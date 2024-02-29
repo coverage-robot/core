@@ -5,11 +5,12 @@ namespace App\Webhook\Signature;
 use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
+use Packages\Contracts\Provider\ProviderAwareInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Request;
 
 #[AutoconfigureTag('app.webhook_signature')]
-interface WebhookSignatureServiceInterface
+interface ProviderWebhookSignatureServiceInterface extends ProviderAwareInterface
 {
     /**
      * Get the payload type from a request.
@@ -24,5 +25,5 @@ interface WebhookSignatureServiceInterface
     /**
      * Securely validate a signed webhook.
      */
-    public function validatePayloadSignature(WebhookInterface&SignedWebhookInterface $webhook): bool;
+    public function validatePayloadSignature(WebhookInterface&SignedWebhookInterface $webhook, Request $request): bool;
 }
