@@ -8,6 +8,7 @@ use App\Model\Webhook\WebhookInterface;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
+use ValueError;
 
 interface WebhookSignatureServiceInterface
 {
@@ -15,6 +16,7 @@ interface WebhookSignatureServiceInterface
      * Get the type of webhook the request is for.
      *
      * @throws RuntimeException
+     * @throws ValueError
      */
     public function getWebhookTypeFromRequest(Provider $provider, Request $request): WebhookType;
 

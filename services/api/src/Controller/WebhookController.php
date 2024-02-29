@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Requirement\EnumRequirement;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use ValueError;
 
 final class WebhookController extends AbstractController
 {
@@ -74,7 +75,7 @@ final class WebhookController extends AbstractController
                 ),
                 WebhookInterface::class
             );
-        } catch (ExceptionInterface $exception) {
+        } catch (ExceptionInterface | ValueError $exception) {
             // Occurs whenever the denormalized fails to denormalize the payload. This
             // common as providers frequently send payloads which aren't ones want to act on
             $this->webhookLogger->info(
