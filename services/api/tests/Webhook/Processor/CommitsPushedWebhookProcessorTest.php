@@ -5,7 +5,7 @@ namespace App\Tests\Webhook;
 use App\Entity\Project;
 use App\Model\Webhook\Github\GithubPushedCommit;
 use App\Model\Webhook\Github\GithubPushWebhook;
-use App\Webhook\CommitsPushedWebhookProcessor;
+use App\Webhook\Processor\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;

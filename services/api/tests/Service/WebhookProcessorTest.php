@@ -7,7 +7,7 @@ use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookProcessorService;
-use App\Webhook\WebhookProcessorInterface;
+use App\Webhook\Processor\WebhookProcessorInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;

@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Project;
 use App\Model\Webhook\WebhookInterface;
-use App\Webhook\WebhookProcessorInterface;
+use App\Webhook\Processor\WebhookProcessorInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
