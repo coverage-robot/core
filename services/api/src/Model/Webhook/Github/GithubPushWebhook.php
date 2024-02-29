@@ -87,13 +87,13 @@ final class GithubPushWebhook extends AbstractWebhook implements
     #[Override]
     public function getEventTime(): DateTimeImmutable
     {
-        if ($this->getCommits() === []) {
+        if ($this->commits === []) {
             return new DateTimeImmutable();
         }
 
         $commitTimes = array_map(
             static fn (PushedCommitInterface $pushedCommit): DateTimeImmutable => $pushedCommit->getCommittedAt(),
-            $this->getCommits()
+            $this->commits
         );
 
         return max($commitTimes);
