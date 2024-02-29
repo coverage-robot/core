@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Webhook\Signature\Github\GithubWebhookSignatureService;
+use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Event\Enum\JobState;
@@ -112,7 +113,9 @@ final class GithubWebhookSignatureServiceTest extends TestCase
                 pullRequest: 123,
                 baseRef: null,
                 baseCommit: null,
-                jobState: JobState::COMPLETED
+                jobState: JobState::COMPLETED,
+                startedAt: new DateTimeImmutable(),
+                completedAt: new DateTimeImmutable()
             ),
             new Request(content: $payload)
         );

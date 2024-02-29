@@ -6,6 +6,7 @@ use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\Github\GithubPushWebhook;
+use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
@@ -29,6 +30,9 @@ interface WebhookInterface extends Stringable
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getRepository(): string;
+
+    #[Assert\LessThanOrEqual('now')]
+    public function getEventTime(): DateTimeImmutable;
 
     public function getType(): WebhookType;
 

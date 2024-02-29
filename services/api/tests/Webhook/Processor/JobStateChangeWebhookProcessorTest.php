@@ -9,6 +9,7 @@ use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
+use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Event\Client\EventBusClientInterface;
@@ -71,7 +72,9 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 null,
                 null,
-                JobState::COMPLETED
+                JobState::COMPLETED,
+                new DateTimeImmutable(),
+                new DateTimeImmutable()
             )
         );
     }
@@ -128,7 +131,9 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 null,
                 null,
-                JobState::COMPLETED
+                JobState::COMPLETED,
+                new DateTimeImmutable(),
+                new DateTimeImmutable()
             )
         );
     }
@@ -174,7 +179,9 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
                 null,
                 null,
                 null,
-                JobState::COMPLETED
+                JobState::COMPLETED,
+                new DateTimeImmutable(),
+                new DateTimeImmutable()
             )
         );
     }

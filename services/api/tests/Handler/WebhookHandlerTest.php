@@ -12,6 +12,7 @@ use App\Service\WebhookValidationService;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
+use DateTimeImmutable;
 use Packages\Event\Enum\JobState;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -184,7 +185,9 @@ final class WebhookHandlerTest extends KernelTestCase
                     'mock-pull-request',
                     'mock-base-ref',
                     'mock-base-commit',
-                    JobState::COMPLETED
+                    JobState::COMPLETED,
+                    new DateTimeImmutable(),
+                    new DateTimeImmutable()
                 )
             ]
         ];
