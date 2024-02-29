@@ -6,7 +6,9 @@ use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\CommitsPushedWebhookInterface;
+use App\Model\Webhook\PushedCommitInterface;
 use App\Model\Webhook\SignedWebhookInterface;
+use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\SerializedPath;
@@ -72,6 +74,29 @@ final class GithubPushWebhook extends AbstractWebhook implements
     public function getCommits(): array
     {
         return $this->commits;
+    }
+
+    /**
+     * Get the time the push happened. Given that a push webhook from GitHub might include
+     * more than one commit, the latest commit time (effectively, the commit time of the head
+     * commit) is used.
+     *
+     * In the case that theres no commits (which shouldn't happen), the current time should
+     * suffice.
+     */
+    #[Override]
+    public function getEventTime(): DateTimeImmutable
+    {
+        if ($this->commits === []) {
+            return new DateTimeImmutable();
+        }
+
+        $commitTimes = array_map(
+            static fn (PushedCommitInterface $pushedCommit): DateTimeImmutable => $pushedCommit->getCommittedAt(),
+            $this->commits
+        );
+
+        return max($commitTimes);
     }
 
     /**

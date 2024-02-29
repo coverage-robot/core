@@ -7,6 +7,7 @@ use App\Enum\WebhookType;
 use App\Model\Webhook\AbstractWebhook;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\SignedWebhookInterface;
+use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
@@ -38,7 +39,9 @@ final class GithubCheckRunWebhook extends AbstractWebhook implements
         protected readonly string|int|null $pullRequest,
         protected readonly ?string $baseRef,
         protected readonly ?string $baseCommit,
-        protected readonly JobState $jobState
+        protected readonly JobState $jobState,
+        protected readonly DateTimeImmutable $startedAt,
+        protected readonly ?DateTimeImmutable $completedAt,
     ) {
     }
 
@@ -140,6 +143,24 @@ final class GithubCheckRunWebhook extends AbstractWebhook implements
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;
+    }
+
+    #[SerializedPath('[check_run][started_at]')]
+    public function getStartedAt(): DateTimeImmutable
+    {
+        return $this->startedAt;
+    }
+
+    #[SerializedPath('[check_run][completed_at]')]
+    public function getCompletedAt(): ?DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
+    #[Override]
+    public function getEventTime(): DateTimeImmutable
+    {
+        return $this->completedAt ?? $this->startedAt;
     }
 
     /**

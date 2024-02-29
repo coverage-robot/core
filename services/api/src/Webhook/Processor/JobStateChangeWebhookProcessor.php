@@ -103,7 +103,8 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 state: $webhook->getJobState(),
                 pullRequest: $webhook->getPullRequest(),
                 baseCommit: $webhook->getBaseCommit(),
-                baseRef: $webhook->getBaseRef()
+                baseRef: $webhook->getBaseRef(),
+                eventTime: $webhook->getEventTime()
             )
         );
     }
@@ -129,37 +130,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         }
 
         return $job;
-    }
-
-    private function getJobIndex(Job $job, Project $project, PipelineStateChangeWebhookInterface $webhook): int
-    {
-        /** @var int|false $index */
-        $index = array_search(
-            $job,
-            $this->getJobs($project, $webhook->getCommit()),
-            true
-        );
-
-        if ($index === false) {
-            throw new RuntimeException(
-                sprintf(
-                    'Failed to find job index for %s',
-                    (string)$job
-                )
-            );
-        }
-
-        return $index;
-    }
-
-    private function getJobs(Project $project, string $commit): array
-    {
-        return $this->jobRepository->findBy(
-            [
-                'project' => $project,
-                'commit' => $commit,
-            ]
-        );
     }
 
     private function fireEvent(JobStateChange $jobStateChange): void
