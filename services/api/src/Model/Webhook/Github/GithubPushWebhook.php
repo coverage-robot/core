@@ -92,7 +92,7 @@ final class GithubPushWebhook extends AbstractWebhook implements
         }
 
         $commitTimes = array_map(
-            static fn (PushedCommitInterface $pushedCommit) => $pushedCommit->getCommittedAt(),
+            static fn (PushedCommitInterface $pushedCommit): DateTimeImmutable => $pushedCommit->getCommittedAt(),
             $this->getCommits()
         );
 
