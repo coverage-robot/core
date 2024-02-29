@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface WebhookSignatureServiceInterface
 {
-
     /**
      * Get the type of webhook the request is for.
      *
