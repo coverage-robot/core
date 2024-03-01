@@ -9,8 +9,6 @@ use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use DateTimeImmutable;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
@@ -47,11 +45,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
             $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION
-            )
+            $mockEventBusClient
         );
 
         $jobStateChangeWebhookProcessor->process(
@@ -103,11 +97,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
             $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION
-            )
+            $mockEventBusClient
         );
 
         $jobStateChangeWebhookProcessor->process(
@@ -148,11 +138,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
             $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION
-            )
+            $mockEventBusClient
         );
 
         $jobStateChangeWebhookProcessor->process(

@@ -59,7 +59,10 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
             return false;
         }
 
-        if ($event->getTriggeredByExternalId() === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)) {
+        if (
+            $event->getTriggeredByExternalId() ===
+                $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
+        ) {
             $this->eventProcessorLogger->info(
                 sprintf(
                     'Ignoring event as the state change was caused by us: %s',

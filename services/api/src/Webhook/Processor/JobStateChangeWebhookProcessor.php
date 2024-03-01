@@ -12,7 +12,6 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
 use Override;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
@@ -27,8 +26,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient,
-        private readonly EnvironmentServiceInterface $environmentService
+        private readonly EventBusClientInterface $eventBusClient
     ) {
     }
 
