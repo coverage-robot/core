@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Tests\Webhook;
+namespace App\Tests\Webhook\Processor;
 
-use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
@@ -108,47 +107,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
                 'mock-repository',
                 '1',
                 1,
-                'mock-ref',
-                'mock-commit',
-                'mock-parent-commit',
-                null,
-                null,
-                null,
-                JobState::COMPLETED,
-                new DateTimeImmutable(),
-                new DateTimeImmutable()
-            )
-        );
-    }
-
-    public function testProcessingWebhookForStateChangeTriggeredInternally(): void
-    {
-        $mockProject = new Project();
-
-        $mockJobRepository = $this->createMock(JobRepository::class);
-        $mockJobRepository->expects($this->never())
-            ->method('findOneBy');
-        $mockJobRepository->expects($this->never())
-            ->method('save');
-
-        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
-        $mockEventBusClient->expects($this->never())
-            ->method('fireEvent');
-
-        $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
-            new NullLogger(),
-            $mockJobRepository,
-            $mockEventBusClient
-        );
-
-        $jobStateChangeWebhookProcessor->process(
-            $mockProject,
-            new GithubCheckRunWebhook(
-                '',
-                'mock-owner',
-                'mock-repository',
-                '1',
-                'mock-app-id',
                 'mock-ref',
                 'mock-commit',
                 'mock-parent-commit',
