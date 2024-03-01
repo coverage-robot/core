@@ -10,12 +10,10 @@ use App\Repository\ProjectRepository;
 use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
 use App\Tests\Mock\Factory\MockSerializerFactory;
-use App\Service\WebhookProcessorService;
-use App\Webhook\WebhookProcessorInterface;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
+use DateTimeImmutable;
 use Packages\Event\Enum\JobState;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
@@ -187,7 +185,9 @@ final class WebhookHandlerTest extends KernelTestCase
                     'mock-pull-request',
                     'mock-base-ref',
                     'mock-base-commit',
-                    JobState::COMPLETED
+                    JobState::COMPLETED,
+                    new DateTimeImmutable(),
+                    new DateTimeImmutable()
                 )
             ]
         ];

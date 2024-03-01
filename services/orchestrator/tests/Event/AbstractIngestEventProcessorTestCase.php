@@ -16,7 +16,6 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
-use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestFailure;
@@ -56,6 +55,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     commit: 'commit',
                     parent: ['parent-1'],
                     externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
                     state: JobState::COMPLETED
                 )
             )

@@ -2,6 +2,7 @@
 
 namespace App\Event;
 
+use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\BackoffStrategyInterface;
 use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
@@ -11,6 +12,7 @@ use App\Service\CachingEventStoreService;
 use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Override;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
@@ -34,7 +36,8 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
         private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
-        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
+        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy,
+        private readonly EnvironmentServiceInterface $environmentService
     ) {
         parent::__construct(
             $eventStoreService,
@@ -54,6 +57,20 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
                 ]
             );
             return false;
+        }
+
+        if (
+            $event->getTriggeredByExternalId() ===
+                $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
+        ) {
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Ignoring event as the state change was caused by us: %s',
+                    (string)$event
+                )
+            );
+
+            return true;
         }
 
         $newState = new Job(

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Webhook;
+namespace App\Webhook\Processor;
 
 use App\Entity\Job;
 use App\Entity\Project;
-use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
@@ -13,7 +12,6 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use DateTimeImmutable;
 use JsonException;
 use Override;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
@@ -28,8 +26,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         private readonly LoggerInterface $webhookProcessorLogger,
         private readonly JobRepository $jobRepository,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient,
-        private readonly EnvironmentServiceInterface $environmentService
+        private readonly EventBusClientInterface $eventBusClient
     ) {
     }
 
@@ -51,18 +48,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                     PipelineStateChangeWebhookInterface::class
                 )
             );
-        }
-
-        if ($webhook->getAppId() === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)) {
-            $this->webhookProcessorLogger->info(
-                sprintf(
-                    'Ignoring as webhook is a state change caused by us: %s. Current state of the job is: %s',
-                    (string)$webhook,
-                    $webhook->getJobState()->value
-                )
-            );
-
-            return;
         }
 
         $this->webhookProcessorLogger->info(
@@ -100,10 +85,12 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 commit: $webhook->getCommit(),
                 parent: array_filter([$webhook->getParent()]),
                 externalId: $webhook->getExternalId(),
+                triggeredByExternalId: $webhook->getAppId(),
                 state: $webhook->getJobState(),
                 pullRequest: $webhook->getPullRequest(),
                 baseCommit: $webhook->getBaseCommit(),
-                baseRef: $webhook->getBaseRef()
+                baseRef: $webhook->getBaseRef(),
+                eventTime: $webhook->getEventTime()
             )
         );
     }
@@ -129,37 +116,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         }
 
         return $job;
-    }
-
-    private function getJobIndex(Job $job, Project $project, PipelineStateChangeWebhookInterface $webhook): int
-    {
-        /** @var int|false $index */
-        $index = array_search(
-            $job,
-            $this->getJobs($project, $webhook->getCommit()),
-            true
-        );
-
-        if ($index === false) {
-            throw new RuntimeException(
-                sprintf(
-                    'Failed to find job index for %s',
-                    (string)$job
-                )
-            );
-        }
-
-        return $index;
-    }
-
-    private function getJobs(Project $project, string $commit): array
-    {
-        return $this->jobRepository->findBy(
-            [
-                'project' => $project,
-                'commit' => $commit,
-            ]
-        );
     }
 
     private function fireEvent(JobStateChange $jobStateChange): void

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Webhook;
+namespace App\Webhook\Processor;
 
 use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
@@ -82,44 +82,46 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
             [],
         );
 
-        if ($this->isConfigurationFileEffected($effectedFiles)) {
-            $this->webhookProcessorLogger->info(
+        if (!$this->isConfigurationFileEffected($effectedFiles)) {
+            return;
+        }
+
+        $this->webhookProcessorLogger->info(
+            sprintf(
+                'Configuration file has been effected by commits in %s',
+                (string)$webhook,
+            ),
+            [
+                'effectedFiles' => $effectedFiles,
+            ]
+        );
+
+        $headCommit = array_filter(
+            $webhook->getCommits(),
+            static fn (PushedCommitInterface $commit): bool =>
+                $commit->getCommit() === $webhook->getHeadCommit()
+        );
+
+        if (count($headCommit) !== 1) {
+            throw new RuntimeException(
                 sprintf(
-                    'Configuration file has been effected by commits in %s',
-                    (string)$webhook,
-                ),
-                [
-                    'effectedFiles' => $effectedFiles,
-                ]
-            );
-
-            $headCommit = array_filter(
-                $webhook->getCommits(),
-                static fn (PushedCommitInterface $commit): bool =>
-                    $commit->getCommit() === $webhook->getHeadCommit()
-            );
-
-            if (count($headCommit) !== 1) {
-                throw new RuntimeException(
-                    sprintf(
-                        'Expected to find 1 head commit, found %d for %s',
-                        count($headCommit),
-                        (string)$webhook
-                    )
-                );
-            }
-
-            $this->publishEvent(
-                new ConfigurationFileChange(
-                    provider: $webhook->getProvider(),
-                    owner: $webhook->getOwner(),
-                    repository: $webhook->getRepository(),
-                    ref: $ref,
-                    commit: $webhook->getHeadCommit(),
-                    eventTime: end($headCommit)->getCommittedAt(),
+                    'Expected to find 1 head commit, found %d for %s',
+                    count($headCommit),
+                    (string)$webhook
                 )
             );
         }
+
+        $this->publishEvent(
+            new ConfigurationFileChange(
+                provider: $webhook->getProvider(),
+                owner: $webhook->getOwner(),
+                repository: $webhook->getRepository(),
+                ref: $ref,
+                commit: $webhook->getHeadCommit(),
+                eventTime: $webhook->getEventTime()
+            )
+        );
     }
 
     /**
