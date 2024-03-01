@@ -4,7 +4,6 @@ namespace App\Webhook\Processor;
 
 use App\Entity\Job;
 use App\Entity\Project;
-use App\Enum\EnvironmentVariable;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
@@ -53,18 +52,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             );
         }
 
-        if ($webhook->getAppId() === $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)) {
-            $this->webhookProcessorLogger->info(
-                sprintf(
-                    'Ignoring as webhook is a state change caused by us: %s. Current state of the job is: %s',
-                    (string)$webhook,
-                    $webhook->getJobState()->value
-                )
-            );
-
-            return;
-        }
-
         $this->webhookProcessorLogger->info(
             sprintf(
                 'Processing pipeline state change (%s). Current state of the job is: %s',
@@ -100,6 +87,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 commit: $webhook->getCommit(),
                 parent: array_filter([$webhook->getParent()]),
                 externalId: $webhook->getExternalId(),
+                triggeredByExternalId: $webhook->getAppId(),
                 state: $webhook->getJobState(),
                 pullRequest: $webhook->getPullRequest(),
                 baseCommit: $webhook->getBaseCommit(),

@@ -5,7 +5,6 @@ namespace App\Tests\Webhook;
 use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
-use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
@@ -51,10 +50,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
             $mockEventBusClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
+                Environment::PRODUCTION
             )
         );
 
@@ -110,10 +106,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
             $mockEventBusClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
+                Environment::PRODUCTION
             )
         );
 
@@ -158,10 +151,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
             $mockEventBusClient,
             MockEnvironmentServiceFactory::createMock(
                 $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
+                Environment::PRODUCTION
             )
         );
 

@@ -21,7 +21,8 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
         private readonly string $ref,
         private readonly string $commit,
         private readonly array $parent,
-        private readonly string|int $externalId,
+        private readonly string|int|null $externalId,
+        private readonly string|int|null $triggeredByExternalId,
         private readonly JobState $state,
         private readonly string|int|null $pullRequest = null,
         private readonly ?string $baseCommit = null,
@@ -81,9 +82,24 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
         return $this->baseRef;
     }
 
-    public function getExternalId(): string|int
+    /**
+     * The ID of the entity in the provider which the state change is for.
+     *
+     * For example, this may be the check run ID from GitHub.
+     */
+    public function getExternalId(): string|int|null
     {
         return $this->externalId;
+    }
+
+    /**
+     * The ID of the person (app, etc) in the provider which triggered the state change.
+     *
+     * For example, this may be the app ID from GitHub.
+     */
+    public function getTriggeredByExternalId(): int|string|null
+    {
+        return $this->triggeredByExternalId;
     }
 
     public function getState(): JobState
