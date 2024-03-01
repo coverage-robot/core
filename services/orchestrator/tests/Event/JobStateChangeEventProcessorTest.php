@@ -3,6 +3,7 @@
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
+use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
 use App\Event\JobStateChangeEventProcessor;
@@ -15,6 +16,8 @@ use App\Tests\Mock\FakeBackoffStrategy;
 use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -34,7 +37,14 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $this->createMock(EventStoreServiceInterface::class),
             $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            )
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -63,6 +73,47 @@ final class JobStateChangeEventProcessorTest extends TestCase
         );
     }
 
+    public function testHandlingEventTriggeredByUs(): void
+    {
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
+
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
+            $mockEventStoreService,
+            $this->createMock(EventBusClientInterface::class),
+            new NullLogger(),
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app'
+                ]
+            )
+        );
+
+        $mockEventStoreService->expects($this->never())
+            ->method('getAllStateChangesForCommit');
+
+        $mockEventStoreService->expects($this->never())
+            ->method('storeStateChange');
+
+        $this->assertTrue(
+            $jobStateChangeEventProcessor->process(
+                new JobStateChange(
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
+                    state: JobState::COMPLETED
+                )
+            )
+        );
+    }
+
     public function testHandlingEventWithNoExistingStateChanges(): void
     {
         $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
@@ -85,7 +136,14 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            )
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -104,6 +162,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     commit: 'commit',
                     parent: ['parent-1'],
                     externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
                     state: JobState::COMPLETED
                 )
             )
@@ -148,7 +207,14 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $this->createMock(EventBusClientInterface::class),
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            )
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -167,6 +233,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     commit: 'commit',
                     parent: ['parent-1'],
                     externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
                     state: JobState::COMPLETED,
                     eventTime: $eventTime->sub(new DateInterval('PT10S'))
                 )
@@ -242,7 +309,14 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $mockEventBusClient,
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            )
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -261,6 +335,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     commit: 'commit',
                     parent: ['parent-1'],
                     externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
                     state: JobState::COMPLETED
                 )
             )
@@ -339,7 +414,14 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $mockEventStoreService,
             $mockEventBusClient,
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            )
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -358,6 +440,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     commit: 'commit',
                     parent: ['parent-1'],
                     externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
                     state: JobState::COMPLETED
                 )
             )

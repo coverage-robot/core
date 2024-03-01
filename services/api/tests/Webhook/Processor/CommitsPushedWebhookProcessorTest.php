@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Webhook;
+namespace App\Tests\Webhook\Processor;
 
 use App\Entity\Project;
 use App\Model\Webhook\Github\GithubPushedCommit;

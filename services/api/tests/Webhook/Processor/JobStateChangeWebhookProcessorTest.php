@@ -1,17 +1,13 @@
 <?php
 
-namespace App\Tests\Webhook;
+namespace App\Tests\Webhook\Processor;
 
-use App\Client\EventBridgeEventClient;
 use App\Entity\Job;
 use App\Entity\Project;
-use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Repository\JobRepository;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use DateTimeImmutable;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
@@ -48,14 +44,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
             $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
-            )
+            $mockEventBusClient
         );
 
         $jobStateChangeWebhookProcessor->process(
@@ -107,14 +96,7 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
             $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
-            )
+            $mockEventBusClient
         );
 
         $jobStateChangeWebhookProcessor->process(
@@ -125,54 +107,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
                 'mock-repository',
                 '1',
                 1,
-                'mock-ref',
-                'mock-commit',
-                'mock-parent-commit',
-                null,
-                null,
-                null,
-                JobState::COMPLETED,
-                new DateTimeImmutable(),
-                new DateTimeImmutable()
-            )
-        );
-    }
-
-    public function testProcessingWebhookForStateChangeTriggeredInternally(): void
-    {
-        $mockProject = new Project();
-
-        $mockJobRepository = $this->createMock(JobRepository::class);
-        $mockJobRepository->expects($this->never())
-            ->method('findOneBy');
-        $mockJobRepository->expects($this->never())
-            ->method('save');
-
-        $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
-        $mockEventBusClient->expects($this->never())
-            ->method('fireEvent');
-
-        $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
-            new NullLogger(),
-            $mockJobRepository,
-            $mockEventBusClient,
-            MockEnvironmentServiceFactory::createMock(
-                $this,
-                Environment::PRODUCTION,
-                [
-                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-app-id',
-                ]
-            )
-        );
-
-        $jobStateChangeWebhookProcessor->process(
-            $mockProject,
-            new GithubCheckRunWebhook(
-                '',
-                'mock-owner',
-                'mock-repository',
-                '1',
-                'mock-app-id',
                 'mock-ref',
                 'mock-commit',
                 'mock-parent-commit',

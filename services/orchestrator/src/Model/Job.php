@@ -16,7 +16,7 @@ final class Job extends AbstractOrchestratedEvent
         private readonly string $commit,
         private readonly OrchestratedEventState $state,
         private readonly DateTimeImmutable $eventTime,
-        private readonly string|int $externalId
+        private readonly string|int|null $externalId
     ) {
         parent::__construct($provider, $owner, $repository);
     }
@@ -57,7 +57,7 @@ final class Job extends AbstractOrchestratedEvent
         return $this->eventTime;
     }
 
-    public function getExternalId(): string|int
+    public function getExternalId(): string|int|null
     {
         return $this->externalId;
     }
@@ -70,7 +70,7 @@ final class Job extends AbstractOrchestratedEvent
             $this->provider->value,
             $this->owner,
             $this->repository,
-            $this->externalId
+            (string) $this->externalId
         );
     }
 }
