@@ -11,7 +11,7 @@
         "ext-iconv": "*",
         "ext-libxml": "*",
         "ext-xmlreader": "*",
-        "async-aws/event-bridge": "^1.5",
+        "async-aws/async-aws-bundle": "^1.12",
         "async-aws/simple-s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",

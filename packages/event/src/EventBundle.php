@@ -21,4 +21,10 @@ final class EventBundle extends AbstractBundle
         $builder->registerForAutoconfiguration(EventProcessorInterface::class)
             ->addTag('event.processor');
     }
+
+    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        // Register configuration for the Event Bus client
+        $container->import('../config/packages/async_aws.yaml');
+    }
 }
