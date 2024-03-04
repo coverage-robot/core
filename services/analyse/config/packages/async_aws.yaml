@@ -3,15 +3,6 @@ when@dev: &aws_dev
     config:
       region: eu-west-2
 
-    clients:
-      event-bridge:
-        config:
-          endpoint: 'http://localstack:4587'
-
-      sqs:
-        config:
-          endpoint: 'http://localstack:4566'
-
 when@test: *aws_dev
 
 when@prod:

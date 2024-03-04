@@ -9,10 +9,6 @@ when@dev: &aws_dev
                     endpoint: '%env(S3_ENDPOINT)%'
                     pathStyleEndpoint: true
 
-            sqs:
-                config:
-                    endpoint: 'http://localstack:4566'
-
 when@test: *aws_dev
 
 when@prod:

@@ -15,4 +15,10 @@ final class MessageBundle extends AbstractBundle
     ): void {
         $container->import(__DIR__ . '/../config/services.yaml');
     }
+
+    public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
+    {
+        // Register configuration for the Sqs client
+        $container->import('../config/packages/async_aws.yaml');
+    }
 }
