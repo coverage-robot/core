@@ -263,6 +263,65 @@
             "time": "2023-12-13T20:52:19+00:00"
         },
         {
+            "name": "async-aws/scheduler",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/scheduler.git",
+                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/64c983b65237e3f332af016e48213a29f4b06ae8",
+                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.9",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0",
+                "symfony/polyfill-uuid": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\Scheduler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Scheduler client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "scheduler",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/scheduler/tree/1.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-12-13T20:52:19+00:00"
+        },
+        {
             "name": "bref/bref",
             "version": "2.1.14",
             "source": {
@@ -523,7 +582,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/configuration",
-                "reference": "d162f75f725b0b17de33f6dfb6e6d93a43bbbbd3"
+                "reference": "e9b87239a9fe19c31615d74bbf6beda2fe7c3ab7"
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -541,7 +600,7 @@
                 "phpunit/phpunit": "^10.5",
                 "rector/rector": "^0.19.5"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Configuration\\": "src/"
@@ -572,12 +631,12 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/contracts",
-                "reference": "9e3113a231a244398801212b47df5e21a6d786d4"
+                "reference": "48dc6dd4dec5044045d03f390e3b7603bb2b3bce"
             },
             "require": {
                 "symfony/validator": "^7.0"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Contracts\\": "src/"
@@ -594,11 +653,12 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f6026682e17f1e0ef135f28c3281a0f8cf248c81"
+                "reference": "66bf8bddb4b3575bdcb223edbde90cb7543b5700"
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/event-bridge": "^1.5",
+                "async-aws/scheduler": "^1.1",
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
                 "coverage-robot/telemetry": "^1.0",
@@ -643,7 +703,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/telemetry",
-                "reference": "82d6e1293c5497cbc28d0566eef655e9fff01dc3"
+                "reference": "8f3d598638090dfbf88ba1b9845bf6c6d3e1335c"
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -662,7 +722,7 @@
                 "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Telemetry\\": "src/"
@@ -7087,7 +7147,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/local",
-                "reference": "28496fdfc009b4ccd52af41173395f7391468181"
+                "reference": "8f1bade72941588a2b44c3292c7c582d1d38740e"
             },
             "require": {
                 "coverage-robot/event": "^1.0",
@@ -7104,7 +7164,7 @@
                 "phpunit/phpunit": "^10.4",
                 "rector/rector": "^0.19.5"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Local\\": "src/"

@@ -1,0 +1,4 @@
+event:
+    event_bus:
+        region: eu-west-2
+        account_id: '%env(int:AWS_ACCOUNT_ID)%'

@@ -23,9 +23,8 @@ final class EventBundle extends AbstractBundle
         $builder->registerForAutoconfiguration(EventProcessorInterface::class)
             ->addTag('event.processor');
 
-        // Load the configuration into the container
-        $container->parameters()
-            ->set('event_bus.name', $config['event_bus']['name'] ?? EventBusClient::EVENT_BUS_NAME);
+        $this->populateContainerWithConfiguration($container, $config);
+        $this->populateTemplatedContainerParameters($container);
     }
 
     public function configure(DefinitionConfigurator $definition): void
@@ -35,6 +34,9 @@ final class EventBundle extends AbstractBundle
                 ->arrayNode('event_bus')
                     ->children()
                         ->scalarNode('name')->end()
+                        ->scalarNode('account_id')->end()
+                        ->scalarNode('region')->end()
+                        ->scalarNode('scheduler_role')->end()
                     ->end()
                 ->end()
             ->end()
@@ -45,5 +47,28 @@ final class EventBundle extends AbstractBundle
     {
         // Register configuration for the Event Bus client
         $container->import('../config/packages/async_aws.yaml');
+    }
+
+    /**
+     * Extract any configuration values from the configuration and populate the container with them.
+     */
+    private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
+    {
+        $container->parameters()
+            ->set('event_bus.name', $config['event_bus']['name'] ?? EventBusClient::EVENT_BUS_NAME)
+            ->set('event_bus.scheduler_role', $config['event_bus']['scheduler_role'] ?? EventBusClient::EVENT_SCHEDULER_ROLE)
+            ->set('event_bus.account_id', $config['event_bus']['account_id'])
+            ->set('event_bus.region', $config['event_bus']['region']);
+    }
+
+    /**
+     * Load the container with any templated parameters which usually come from values set in the
+     * configuration, strung together using interpolation.
+     */
+    private function populateTemplatedContainerParameters(ContainerConfigurator $container): void
+    {
+        $container->parameters()
+            ->set('event_bus.event_bus_arn', EventBusClient::EVENT_BUS_ARN)
+            ->set('event_bus.scheduler_role_arn', EventBusClient::EVENT_SCHEDULER_ROLE_ARN);
     }
 }
