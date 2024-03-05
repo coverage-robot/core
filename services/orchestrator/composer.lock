@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b237a549a2ce5e23550fa26a51a1c40f",
+    "content-hash": "85f4c4deb4ff7f67259d0c49e6c02664",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -653,11 +653,12 @@
             "dist": {
                 "type": "path",
                 "url": "../../packages/event",
-                "reference": "f6026682e17f1e0ef135f28c3281a0f8cf248c81"
+                "reference": "66bf8bddb4b3575bdcb223edbde90cb7543b5700"
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/event-bridge": "^1.5",
+                "async-aws/scheduler": "^1.1",
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
                 "coverage-robot/telemetry": "^1.0",
