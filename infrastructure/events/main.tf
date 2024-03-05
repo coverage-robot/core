@@ -33,7 +33,7 @@ resource "aws_iam_policy" "coverage_event_scheduler_policy" {
         Resource = [
           aws_cloudwatch_event_bus.coverage_events_bus
         ]
-      }
+      },
     ]
   })
 }
