@@ -4,5 +4,8 @@ when@dev: &aws_dev
             event-bridge:
                 config:
                     endpoint: 'http://localstack:4587'
+            scheduler:
+                config:
+                    endpoint: 'http://localstack:4587'
 
 when@test: *aws_dev

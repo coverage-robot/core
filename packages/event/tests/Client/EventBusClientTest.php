@@ -6,6 +6,12 @@ use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\EventBridge\EventBridgeClient;
 use AsyncAws\EventBridge\Input\PutEventsRequest;
 use AsyncAws\EventBridge\Result\PutEventsResponse;
+use AsyncAws\Scheduler\Enum\ActionAfterCompletion;
+use AsyncAws\Scheduler\Enum\FlexibleTimeWindowMode;
+use AsyncAws\Scheduler\Input\CreateScheduleInput;
+use AsyncAws\Scheduler\Result\CreateScheduleOutput;
+use AsyncAws\Scheduler\SchedulerClient;
+use DateTimeImmutable;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\Event;
@@ -37,9 +43,6 @@ final class EventBusClientTest extends TestCase
             ->willReturn('mock-serialized-json');
 
         $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
-        $mockEnvironmentService->expects($this->once())
-            ->method('getEnvironment')
-            ->willReturn(Environment::TESTING);
         $mockEnvironmentService->expects($this->exactly(2))
             ->method('getVariable')
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
@@ -51,9 +54,12 @@ final class EventBusClientTest extends TestCase
             ->with($mockEvent);
 
         $eventBusClient = new EventBusClient(
+            'mock-event-bus',
+            'mock-event-bus-arn',
+            'mock-scheduler-role-arn',
             $mockEventBridgeEventClient,
+            $this->createMock(SchedulerClient::class),
             $mockEnvironmentService,
-            EventBusClient::EVENT_BUS_NAME,
             $mockSerializer,
             new EventValidationService($mockValidator),
             new NullLogger()
@@ -98,6 +104,84 @@ final class EventBusClientTest extends TestCase
             $eventBusClient->fireEvent(
                 EventSource::ANALYSE,
                 $mockEvent
+            )
+        );
+    }
+    public function testEventCanBeScheduled(): void
+    {
+        $fireAt = new DateTimeImmutable('2055-01-01 00:00:00');
+
+        $mockEvent = $this->createMock(EventInterface::class);
+        $mockEvent->method('getType')
+            ->willReturn(Event::INGEST_SUCCESS);
+
+        $mockSerializer = $this->createMock(SerializerInterface::class);
+        $mockSerializer->expects($this->once())
+            ->method('serialize')
+            ->with($mockEvent, 'json')
+            ->willReturn('mock-serialized-json');
+
+        $mockScheduler = $this->createMock(SchedulerClient::class);
+        $mockScheduler->expects($this->once())
+            ->method('createSchedule')
+            ->with(
+                $this->callback(function (CreateScheduleInput $input): bool {
+                    $this->assertEquals(
+                        FlexibleTimeWindowMode::OFF,
+                        $input->getFlexibleTimeWindow()->getMode()
+                    );
+                    $this->assertEquals(
+                        'at(2055-01-01T00:00:00)',
+                        $input->getScheduleExpression()
+                    );
+                    $this->assertEquals(
+                        ActionAfterCompletion::DELETE,
+                        $input->getActionAfterCompletion()
+                    );
+                    $this->assertEquals(
+                        'mock-scheduler-role-arn',
+                        $input->getTarget()->getRoleArn()
+                    );
+                    $this->assertEquals(
+                        'mock-event-bus-arn',
+                        $input->getTarget()->getArn()
+                    );
+                    $this->assertEquals(
+                        'mock-serialized-json',
+                        $input->getTarget()->getInput()
+                    );
+
+                    return true;
+                })
+            )
+            ->willReturn(
+                ResultMockFactory::create(
+                    CreateScheduleOutput::class
+                )
+            );
+
+        $mockValidator = $this->createMock(ValidatorInterface::class);
+        $mockValidator->expects($this->once())
+            ->method('validate')
+            ->with($mockEvent);
+
+        $eventBusClient = new EventBusClient(
+            'mock-event-bus',
+            'mock-event-bus-arn',
+            'mock-scheduler-role-arn',
+            $this->createMock(EventBridgeClient::class),
+            $mockScheduler,
+            $this->createMock(EnvironmentServiceInterface::class),
+            $mockSerializer,
+            new EventValidationService($mockValidator),
+            new NullLogger()
+        );
+
+        $this->assertTrue(
+            $eventBusClient->scheduleEvent(
+                EventSource::ANALYSE,
+                $mockEvent,
+                $fireAt
             )
         );
     }
