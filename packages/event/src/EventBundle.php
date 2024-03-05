@@ -2,7 +2,10 @@
 
 namespace Packages\Event;
 
+use Packages\Event\Client\EventBusClient;
 use Packages\Event\Processor\EventProcessorInterface;
+use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
@@ -20,6 +23,23 @@ final class EventBundle extends AbstractBundle
         // can auto discover all of the available processors
         $builder->registerForAutoconfiguration(EventProcessorInterface::class)
             ->addTag('event.processor');
+
+        // Load the configuration into the container
+        $container->parameters()
+            ->set('event_bus.name', $config['event_bus']['name'] ?? EventBusClient::EVENT_BUS_NAME);
+    }
+
+    public function configure(DefinitionConfigurator $definition): void
+    {
+        $definition->rootNode()
+            ->children()
+                ->arrayNode('event_bus')
+                    ->children()
+                        ->scalarNode('name')->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void

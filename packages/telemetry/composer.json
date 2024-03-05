@@ -1,7 +1,7 @@
 {
     "name": "coverage-robot/telemetry",
     "description": "Shared telemetry tooling across the services",
-    "type": "library",
+    "type": "symfony-bundle",
     "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
