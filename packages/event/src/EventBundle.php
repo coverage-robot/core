@@ -24,7 +24,7 @@ final class EventBundle extends AbstractBundle
             ->addTag('event.processor');
 
         $this->populateContainerWithConfiguration($container, $config);
-        $this->populateTemplatedContainerParameters($container, $config);
+        $this->populateTemplatedContainerParameters($container);
     }
 
     public function configure(DefinitionConfigurator $definition): void
@@ -65,7 +65,7 @@ final class EventBundle extends AbstractBundle
      * Load the container with any templated parameters which usually come from values set in the
      * configuration, strung together using interpolation.
      */
-    private function populateTemplatedContainerParameters(ContainerConfigurator $container, array $config): void
+    private function populateTemplatedContainerParameters(ContainerConfigurator $container): void
     {
         $container->parameters()
             ->set('event_bus.event_bus_arn', EventBusClient::EVENT_BUS_ARN)

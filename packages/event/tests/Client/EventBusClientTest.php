@@ -107,6 +107,7 @@ final class EventBusClientTest extends TestCase
             )
         );
     }
+
     public function testEventCanBeScheduled(): void
     {
         $fireAt = new DateTimeImmutable('2055-01-01 00:00:00');
