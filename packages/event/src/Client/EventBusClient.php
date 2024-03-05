@@ -14,6 +14,7 @@ use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class EventBusClient implements EventBusClientInterface
@@ -24,11 +25,13 @@ final class EventBusClient implements EventBusClientInterface
      * This is dynamic based on the environment the application is running in
      * (i.e. coverage-events-prod, coverage-events-dev, etc).
      */
-    private const string EVENT_BUS_NAME = 'coverage-events-%s';
+    public const string EVENT_BUS_NAME = 'coverage-events-%s';
 
     public function __construct(
         private readonly EventBridgeClient $eventBridgeClient,
         private readonly EnvironmentServiceInterface $environmentService,
+        #[Autowire(value: '%event_bus.name%')]
+        private readonly string $eventBusName,
         private readonly SerializerInterface $serializer,
         private readonly EventValidationService $eventValidationService,
         private readonly LoggerInterface $eventBusClientLogger
@@ -59,7 +62,7 @@ final class EventBusClient implements EventBusClientInterface
 
         $request = [
             'EventBusName' => sprintf(
-                self::EVENT_BUS_NAME,
+                $this->eventBusName,
                 $this->environmentService->getEnvironment()->value
             ),
             'Source' => $source->value,

@@ -53,6 +53,7 @@ final class EventBusClientTest extends TestCase
         $eventBusClient = new EventBusClient(
             $mockEventBridgeEventClient,
             $mockEnvironmentService,
+            EventBusClient::EVENT_BUS_NAME,
             $mockSerializer,
             new EventValidationService($mockValidator),
             new NullLogger()
