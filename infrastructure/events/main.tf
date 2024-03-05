@@ -31,7 +31,7 @@ resource "aws_iam_policy" "coverage_event_scheduler_policy" {
           "events:PutEvents"
         ]
         Resource = [
-          aws_cloudwatch_event_bus.coverage_events_bus
+          aws_cloudwatch_event_bus.coverage_events_bus.arn
         ]
       },
     ]
