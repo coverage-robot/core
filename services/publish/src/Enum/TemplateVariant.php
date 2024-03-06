@@ -43,4 +43,9 @@ enum TemplateVariant: string
      * @see GithubCheckRunPublisherService
      */
     case IN_PROGRESS_CHECK_RUN = 'in_progress_check_run';
+
+    /**
+     * Load the template for a failed check run.
+     */
+    case FAILED_CHECK_RUN = 'failed_check_run';
 }

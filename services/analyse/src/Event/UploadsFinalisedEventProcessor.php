@@ -2,6 +2,7 @@
 
 namespace App\Event;
 
+use App\Exception\AnalysisException;
 use App\Model\CoverageReportComparison;
 use App\Model\CoverageReportInterface;
 use App\Service\CachingCoverageAnalyserService;
@@ -19,7 +20,7 @@ use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
-use Packages\Event\Model\AnalyseFailure;
+use Packages\Event\Model\CoverageFailed;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
@@ -67,42 +68,66 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
         }
 
-        [$coverageReport, $comparison] = $this->generateCoverageReport($event);
+        try {
+            [$coverageReport, $comparison] = $this->generateCoverageReport($event);
 
-        $successful = $this->queueCoverageReport(
-            $event,
-            $coverageReport,
-            $comparison
-        );
+            $successful = $this->queueCoverageReport(
+                $event,
+                $coverageReport,
+                $comparison
+            );
 
-        if (!$successful) {
+            if ($successful) {
+                $this->eventBusClient->fireEvent(
+                    EventSource::ANALYSE,
+                    new CoverageFinalised(
+                        provider: $event->getProvider(),
+                        owner: $event->getOwner(),
+                        repository: $event->getRepository(),
+                        ref: $event->getRef(),
+                        commit: $event->getCommit(),
+                        coveragePercentage: $coverageReport->getCoveragePercentage(),
+                        pullRequest: $event->getPullRequest(),
+                        baseRef: $comparison?->getBaseReport()
+                            ->getWaypoint()
+                            ->getRef(),
+                        baseCommit: $comparison?->getBaseReport()
+                            ->getWaypoint()
+                            ->getCommit()
+                    )
+                );
+
+                return true;
+            }
+
             $this->eventProcessorLogger->critical(
                 sprintf(
                     'Attempt to publish coverage for %s was unsuccessful.',
                     (string)$event
                 )
             );
-
-            $this->eventBusClient->fireEvent(
-                EventSource::ANALYSE,
-                new AnalyseFailure(
-                    $event,
-                    new DateTimeImmutable()
-                )
+        } catch (AnalysisException $analysisException) {
+            $this->eventProcessorLogger->critical(
+                sprintf(
+                    'Attempt to publish coverage for %s resulted in an exception.',
+                    (string)$event
+                ),
+                [
+                    'exception' => $analysisException
+                ]
             );
-
-            return false;
         }
 
+        // If we've reached this point, we've failed to publish the coverage report. We should broadcast that
+        // in case any services are subscribed to the event.
         $this->eventBusClient->fireEvent(
             EventSource::ANALYSE,
-            new CoverageFinalised(
+            new CoverageFailed(
                 provider: $event->getProvider(),
                 owner: $event->getOwner(),
                 repository: $event->getRepository(),
                 ref: $event->getRef(),
                 commit: $event->getCommit(),
-                coveragePercentage: $coverageReport->getCoveragePercentage(),
                 pullRequest: $event->getPullRequest(),
                 baseRef: $comparison?->getBaseReport()
                     ->getWaypoint()
@@ -113,7 +138,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             )
         );
 
-        return true;
+        return false;
     }
 
     /**

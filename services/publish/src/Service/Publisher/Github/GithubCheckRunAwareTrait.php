@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Github\Exception\ExceptionInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,7 +25,7 @@ trait GithubCheckRunAwareTrait
         string $owner,
         string $repository,
         string $commit,
-        PublishableCheckRunMessage $publishableMessage
+        PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
         $body = match ($publishableMessage->getStatus()) {
             PublishableCheckRunStatus::IN_PROGRESS => [
@@ -40,7 +41,7 @@ trait GithubCheckRunAwareTrait
                     'summary' => '',
                 ]
             ],
-            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
+            PublishableCheckRunStatus::SUCCESS => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
                 'status' => 'completed',
@@ -51,6 +52,21 @@ trait GithubCheckRunAwareTrait
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
                         TemplateVariant::COMPLETE_CHECK_RUN
+                    ),
+                    'summary' => '',
+                ]
+            ],
+            PublishableCheckRunStatus::FAILURE => [
+                'name' => 'Coverage Robot',
+                'head_sha' => $commit,
+                'status' => 'completed',
+                'conclusion' => $publishableMessage->getStatus()->value,
+                'annotations' => [],
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'output' => [
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::FAILED_CHECK_RUN
                     ),
                     'summary' => '',
                 ]
@@ -93,7 +109,7 @@ trait GithubCheckRunAwareTrait
         string $owner,
         string $repository,
         int $checkRunId,
-        PublishableCheckRunMessage $publishableMessage
+        PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
         $body = match ($publishableMessage->getStatus()) {
             PublishableCheckRunStatus::IN_PROGRESS => [

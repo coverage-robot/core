@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85f4c4deb4ff7f67259d0c49e6c02664",
+    "content-hash": "5de5324b3f993c36292eb60026dce5b8",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -308,6 +308,64 @@
             ],
             "support": {
                 "source": "https://github.com/async-aws/scheduler/tree/1.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-12-13T20:52:19+00:00"
+        },
+        {
+            "name": "async-aws/sqs",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/sqs.git",
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/sqs/zipball/0208ec744847020b08da0541b2fb5536875a70c8",
+                "reference": "0208ec744847020b08da0541b2fb5536875a70c8",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.9",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\Sqs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "SQS client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "sdk",
+                "sqs"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/sqs/tree/2.0.0"
             },
             "funding": [
                 {
@@ -693,6 +751,52 @@
                 ]
             },
             "description": "Shared event logic across the services",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "coverage-robot/message",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "../../packages/message",
+                "reference": "4fddbc966769e07a28dda1b5af0d813bfa2da734"
+            },
+            "require": {
+                "async-aws/async-aws-bundle": "^1.12",
+                "async-aws/sqs": "^2.0",
+                "coverage-robot/event": "^1.0",
+                "coverage-robot/telemetry": "^1.0",
+                "symfony/dependency-injection": "^7.0",
+                "symfony/http-kernel": "^7.0",
+                "symfony/validator": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5",
+                "rector/rector": "^0.19.5"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Packages\\Message\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Packages\\Message\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
+                "test:unit": [
+                    "@putenv XDEBUG_MODE=coverage",
+                    "phpunit --configuration=./phpunit.xml.dist"
+                ]
+            },
+            "description": "Decoupled queue messages usable across the services",
             "transport-options": {
                 "relative": true
             }

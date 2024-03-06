@@ -26,9 +26,9 @@ enum Event: string
     case COVERAGE_FINALISED = 'COVERAGE_FINALISED';
 
     /**
-     * Analysis of results has failed.
+     * The coverage for a given commit could not be calculated.
      */
-    case ANALYSE_FAILURE = 'ANALYSE_FAILURE';
+    case COVERAGE_FAILED = 'COVERAGE_FAILED';
 
     /**
      * A job which is being tracked has changed state (i.e. started, completed, queued, etc).

@@ -2,12 +2,12 @@
 
 namespace App\Tests\Service\Diff;
 
+use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 final class DiffParserServiceTest extends TestCase
 {
@@ -58,7 +58,7 @@ final class DiffParserServiceTest extends TestCase
             ]
         );
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(CommitDiffException::class);
 
         $diffParser->get(
             new ReportWaypoint(
@@ -67,9 +67,9 @@ final class DiffParserServiceTest extends TestCase
                 repository: 'repository',
                 ref: 'ref',
                 commit: 'commit',
-                pullRequest: 12,
                 history: [],
-                diff: []
+                diff: [],
+                pullRequest: 12
             )
         );
     }

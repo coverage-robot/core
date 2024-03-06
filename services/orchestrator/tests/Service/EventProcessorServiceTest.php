@@ -24,6 +24,7 @@ final class EventProcessorServiceTest extends KernelTestCase
         $this->assertEquals(
             [
                 Event::CONFIGURATION_FILE_CHANGE->value,
+                Event::COVERAGE_FAILED->value,
                 Event::COVERAGE_FINALISED->value,
                 Event::INGEST_FAILURE->value,
                 Event::INGEST_STARTED->value,

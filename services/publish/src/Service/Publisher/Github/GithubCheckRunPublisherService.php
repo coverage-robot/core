@@ -11,7 +11,7 @@ use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
-use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessageInterface;
 use Psr\Log\LoggerInterface;
 
 final class GithubCheckRunPublisherService implements PublisherServiceInterface
@@ -28,7 +28,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
 
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
-        if (!$publishableMessage instanceof PublishableCheckRunMessage) {
+        if (!$publishableMessage instanceof PublishableCheckRunMessageInterface) {
             return false;
         }
 
@@ -47,7 +47,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
             );
         }
 
-        /** @var PublishableCheckRunMessage $publishableMessage */
+        /** @var PublishableCheckRunMessageInterface $publishableMessage */
         $event = $publishableMessage->getEvent();
 
         $successful = $this->upsertCheckRun(
@@ -81,30 +81,32 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
         string $owner,
         string $repository,
         string $commit,
-        PublishableCheckRunMessage $publishableMessage
+        PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
         $this->client->authenticateAsRepositoryOwner($owner);
 
         try {
-            $checkRun = $this->getCheckRun(
-                $owner,
-                $repository,
-                $commit
-            );
+            try {
+                $checkRun = $this->getCheckRun(
+                    $owner,
+                    $repository,
+                    $commit
+                );
 
-            return $this->updateCheckRun(
-                $owner,
-                $repository,
-                $checkRun['id'],
-                $publishableMessage
-            );
-        } catch (CheckRunNotFoundException) {
-            return $this->createCheckRun(
-                $owner,
-                $repository,
-                $commit,
-                $publishableMessage
-            );
+                return $this->updateCheckRun(
+                    $owner,
+                    $repository,
+                    $checkRun['id'],
+                    $publishableMessage
+                );
+            } catch (CheckRunNotFoundException) {
+                return $this->createCheckRun(
+                    $owner,
+                    $repository,
+                    $commit,
+                    $publishableMessage
+                );
+            }
         } catch (ExceptionInterface $exception) {
             $this->checkPublisherLogger->critical(
                 sprintf(

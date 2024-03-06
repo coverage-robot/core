@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Enum\QueryParameter;
 use App\Exception\AnalysisException;
+use App\Exception\CommitDiffException;
+use App\Exception\CommitHistoryException;
 use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\CoverageReport;
@@ -403,6 +405,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * currently being analysed.
      *
      * @throws QueryException
+     * @throws AnalysisException
      */
     public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
@@ -467,6 +470,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * currently being analysed.
      *
      * @throws QueryException
+     * @throws AnalysisException
      */
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
@@ -530,6 +534,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * currently being analysed.
      *
      * @throws QueryException
+     * @throws AnalysisException
      */
     public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
@@ -571,6 +576,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
 
     /**
      * @inheritDoc
+     * @throws QueryException
      */
     public function getCarryforwardTags(ReportWaypoint $waypoint): array
     {
@@ -583,17 +589,40 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
 
     /**
      * @return array<string, array<int, int>>
+     * @throws AnalysisException
      */
     public function getDiff(ReportWaypoint $waypoint): array
     {
-        return $this->diffParser->get($waypoint);
+        try {
+            return $this->diffParser->get($waypoint);
+        } catch (CommitDiffException $exception) {
+            throw new AnalysisException(
+                sprintf(
+                    'Unable to get diff for %s',
+                    $waypoint->getProvider()->value
+                ),
+                0,
+                $exception
+            );
+        }
     }
 
     /**
      * @return array{commit: string, merged: bool, ref: string|null}[]
+     * @throws AnalysisException
      */
     public function getHistory(ReportWaypoint $waypoint, int $page = 1): array
     {
-        return $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
+        try {
+            return $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
+        } catch (CommitHistoryException $exception) {
+            throw new AnalysisException(
+                sprintf(
+                    'Failed to retrieve commit history for %s',
+                    (string)$waypoint
+                ),
+                previous: $exception
+            );
+        }
     }
 }
