@@ -1,6 +1,12 @@
 name: Local Package
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/local.yml'
+            - 'packages/local/**'
+            - 'packages/event/**'
+
     push:
         branches:
             - main

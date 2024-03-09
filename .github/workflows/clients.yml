@@ -1,6 +1,11 @@
 name: Clients Package
 
 on:
+    merge_group:
+        paths:
+            - 'packages/clients/**'
+            - '.github/workflows/clients.yml'
+
     push:
         branches:
             - main
