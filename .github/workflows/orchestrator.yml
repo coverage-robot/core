@@ -1,6 +1,17 @@
 name: Orchestrator
 
 on:
+    merge_group:
+        paths:
+            - 'services/orchestrator/**'
+            - '.github/workflows/orchestrator.yml'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/telemetry/**'
+            - 'rector.php'
+        
     push:
         branches:
             - main

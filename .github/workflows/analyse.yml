@@ -1,6 +1,19 @@
 name: Analyse
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/analyse.yml'
+            - 'services/analyse/**'
+            - '.github/workflows/analyse.yml'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/message/**'
+            - 'packages/telemetry/**'
+            - 'rector.php'
+
     push:
         branches:
             - main

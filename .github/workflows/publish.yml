@@ -1,6 +1,18 @@
 name: Publish
 
 on:
+    merge_group:
+        paths:
+            - 'services/publish/**'
+            - '.github/workflows/publish.yml'
+            - 'packages/clients/**'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - 'packages/event/**'
+            - 'packages/message/**'
+            - 'packages/telemetry/**'
+            - 'rector.php'
+
     push:
         branches:
             - main
