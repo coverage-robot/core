@@ -117,34 +117,36 @@ trait GithubCheckRunAwareTrait
         int $checkRunId,
         PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
-        $body = match ($publishableMessage->getStatus()) {
-            PublishableCheckRunStatus::IN_PROGRESS => [
+        $body = match (true) {
+            $publishableMessage instanceof PublishableCheckRunMessage => [
                 'name' => 'Coverage Robot',
                 'status' => $publishableMessage->getStatus()->value,
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::WAITING_CHECK_RUN
+                        PublishableCheckRunStatus::IN_PROGRESS ?
+                            TemplateVariant::WAITING_CHECK_RUN :
+                            TemplateVariant::COMPLETE_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => [],
                 ]
             ],
-            PublishableCheckRunStatus::SUCCESS => [
+            $publishableMessage instanceof PublishableCoverageRunningJobMessage => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        TemplateVariant::COMPLETE_CHECK_RUN
+                        TemplateVariant::RUNNING_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => [],
                 ],
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
             ],
-            PublishableCheckRunStatus::FAILURE => [
+            $publishableMessage instanceof PublishableCoverageFailedJobMessage => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
