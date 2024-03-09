@@ -1,6 +1,13 @@
 name: Event Package
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/event.yml'
+            - 'packages/event/**'
+            - 'packages/contracts/**'
+            - 'packages/telemetry/**'
+        
     push:
         branches:
             - main

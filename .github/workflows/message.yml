@@ -1,6 +1,14 @@
 name: Message Package
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/message.yml'
+            - 'packages/message/**'
+            - 'packages/event/**'
+            - 'packages/contracts/**'
+            - 'packages/telemetry/**'
+        
     push:
         branches:
             - main

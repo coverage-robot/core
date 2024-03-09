@@ -1,6 +1,11 @@
 name: Infrastructure
 
 on:
+    merge_group:
+        paths:
+            - 'infrastructure/**'
+            - '.github/workflows/infrastructure.yml'
+
     push:
         branches:
             - main

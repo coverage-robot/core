@@ -1,6 +1,12 @@
 name: Telemetry Package
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/telemetry.yml'
+            - 'packages/telemetry/**'
+            - 'packages/contracts/**'
+
     push:
         branches:
             - main

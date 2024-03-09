@@ -1,6 +1,13 @@
 name: Configuration Package
 
 on:
+    merge_group:
+        paths:
+            - '.github/workflows/configuration.yml'
+            - 'packages/configuration/**'
+            - 'packages/contracts/**'
+            - '.github/workflows/configuration.yml'
+
     push:
         branches:
             - main
