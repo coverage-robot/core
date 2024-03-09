@@ -29,12 +29,12 @@ final class PublishableCoverageRunningJobMessage implements PublishableCheckRunM
 
     public function getStatus(): PublishableCheckRunStatus
     {
-        return PublishableCheckRunStatus::FAILURE;
+        return PublishableCheckRunStatus::IN_PROGRESS;
     }
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::COVERAGE_FAILED_JOB;
+        return PublishableMessage::COVERAGE_RUNNING_JOB;
     }
 
     public function getMessageGroup(): string
