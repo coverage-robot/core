@@ -116,6 +116,9 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     'exception' => $analysisException
                 ]
             );
+
+            $coverageReport = null;
+            $comparison = null;
         }
 
         // If we've reached this point, we've failed to publish the coverage report. We should broadcast that
