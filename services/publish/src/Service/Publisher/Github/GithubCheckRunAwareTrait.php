@@ -30,19 +30,32 @@ trait GithubCheckRunAwareTrait
         PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
         $body = match (true) {
-            $publishableMessage instanceof PublishableCheckRunMessage => [
+            $publishableMessage instanceof PublishableCheckRunMessage &&
+            $publishableMessage->getStatus() === PublishableCheckRunStatus::IN_PROGRESS => [
+                'name' => 'Coverage Robot',
+                'head_sha' => $commit,
+                'status' => 'in_progress',
+                'annotations' => [],
+                'output' => [
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::WAITING_CHECK_RUN
+                    ),
+                    'summary' => '',
+                ]
+            ],
+            $publishableMessage instanceof PublishableCheckRunMessage &&
+            $publishableMessage->getStatus() !== PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
-                'annotations' => [],
                 'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'annotations' => [],
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        PublishableCheckRunStatus::IN_PROGRESS ?
-                            TemplateVariant::WAITING_CHECK_RUN :
-                            TemplateVariant::COMPLETE_CHECK_RUN
+                        TemplateVariant::COMPLETE_CHECK_RUN
                     ),
                     'summary' => '',
                 ]
@@ -50,10 +63,8 @@ trait GithubCheckRunAwareTrait
             $publishableMessage instanceof PublishableCoverageRunningJobMessage => [
                 'name' => 'Coverage Robot',
                 'head_sha' => $commit,
-                'status' => 'completed',
-                'conclusion' => $publishableMessage->getStatus()->value,
+                'status' => 'in_progress',
                 'annotations' => [],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
@@ -118,25 +129,36 @@ trait GithubCheckRunAwareTrait
         PublishableCheckRunMessageInterface $publishableMessage
     ): bool {
         $body = match (true) {
-            $publishableMessage instanceof PublishableCheckRunMessage => [
+            $publishableMessage instanceof PublishableCheckRunMessage &&
+            $publishableMessage->getStatus() === PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
-                'status' => 'completed',
-                'conclusion' => $publishableMessage->getStatus()->value,
+                'status' => 'in_progress',
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
-                        PublishableCheckRunStatus::IN_PROGRESS ?
-                            TemplateVariant::WAITING_CHECK_RUN :
-                            TemplateVariant::COMPLETE_CHECK_RUN
+                        TemplateVariant::WAITING_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => [],
                 ]
             ],
-            $publishableMessage instanceof PublishableCoverageRunningJobMessage => [
+            $publishableMessage instanceof PublishableCheckRunMessage &&
+            $publishableMessage->getStatus() !== PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
-                'conclusion' => $publishableMessage->getStatus()->value,
+                'output' => [
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::COMPLETE_CHECK_RUN
+                    ),
+                    'summary' => '',
+                    'annotations' => [],
+                ],
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+            ],
+            $publishableMessage instanceof PublishableCoverageRunningJobMessage => [
+                'name' => 'Coverage Robot',
+                'status' => 'in_progress',
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
@@ -145,7 +167,6 @@ trait GithubCheckRunAwareTrait
                     'summary' => '',
                     'annotations' => [],
                 ],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
             ],
             $publishableMessage instanceof PublishableCoverageFailedJobMessage => [
                 'name' => 'Coverage Robot',
