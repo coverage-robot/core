@@ -23,6 +23,7 @@ use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
+use Packages\Message\Client\SqsClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -42,7 +43,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     {
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $this->createMock(EventStoreServiceInterface::class),
-            $this->createMock(EventBusClientInterface::class)
+            $this->createMock(EventBusClientInterface::class),
+            $this->createMock(SqsClientInterface::class)
         );
 
         $this->assertFalse(
@@ -87,7 +89,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class)
+            $this->createMock(EventBusClientInterface::class),
+            $this->createMock(SqsClientInterface::class)
         );
 
         $this->assertTrue(
@@ -150,7 +153,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class)
+            $this->createMock(EventBusClientInterface::class),
+            $this->createMock(SqsClientInterface::class)
         );
 
         $this->assertFalse(
@@ -178,13 +182,15 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
     protected function getIngestEventProcessor(
         EventStoreServiceInterface $mockEventStoreService,
-        EventBusClientInterface $eventBusClient
+        EventBusClientInterface $eventBusClient,
+        SqsClientInterface $sqsClient
     ): AbstractIngestEventProcessor {
         $ingestEventProcessor = new ($this::getEventProcessor())(
             $mockEventStoreService,
             $eventBusClient,
             new NullLogger(),
-            new FakeBackoffStrategy()
+            new FakeBackoffStrategy(),
+            $sqsClient
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage

@@ -8,6 +8,7 @@ use App\Extension\CoverageTemplateExtension;
 use App\Extension\CoverageTemplateSecurityPolicy;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
+use Packages\Message\PublishableMessage\PublishableCheckRunMessageInterface;
 use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Container\ContainerInterface;
@@ -57,7 +58,7 @@ final class TemplateRenderingService
     ): string {
         $folder = match (true) {
             $message instanceof PublishablePullRequestMessage => 'pull_request',
-            $message instanceof PublishableCheckRunMessage => 'check_run',
+            $message instanceof PublishableCheckRunMessageInterface => 'check_run',
             $message instanceof PublishableLineCommentInterface => 'line_comment',
             default => throw new NoTemplateAvailableException($message)
         };
