@@ -22,6 +22,9 @@ use Packages\Event\Enum\JobState;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Model\UploadsStarted;
+use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
+use Packages\Message\PublishableMessage\PublishableCoverageRunningJobMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -37,7 +40,9 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
         private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy,
-        private readonly EnvironmentServiceInterface $environmentService
+        private readonly EnvironmentServiceInterface $environmentService,
+        #[Autowire(service: PublishClient::class)]
+        private readonly SqsClientInterface $publishClient
     ) {
         parent::__construct(
             $eventStoreService,
@@ -138,6 +143,8 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
             );
 
             if ($this->recordFinalisedEvent($finalisedEvent)) {
+                $this->publishClient->dispatch(new PublishableCoverageRunningJobMessage($event));
+
                 $this->eventBusClient->fireEvent(
                     EventSource::ORCHESTRATOR,
                     new UploadsFinalised(

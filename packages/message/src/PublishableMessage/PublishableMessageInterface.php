@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
         PublishableMessage::COLLECTION->value => PublishableMessageCollection::class,
         PublishableMessage::PULL_REQUEST->value => PublishablePullRequestMessage::class,
         PublishableMessage::CHECK_RUN->value => PublishableCheckRunMessage::class,
+        PublishableMessage::COVERAGE_RUNNING_JOB->value => PublishableCoverageRunningJobMessage::class,
         PublishableMessage::COVERAGE_FAILED_JOB->value => PublishableCoverageFailedJobMessage::class,
     ]
 )]

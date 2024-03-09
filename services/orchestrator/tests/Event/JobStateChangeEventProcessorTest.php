@@ -26,6 +26,7 @@ use Packages\Event\Enum\JobState;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\JobStateChange;
 use Packages\Event\Model\Upload;
+use Packages\Message\Client\SqsClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -44,7 +45,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -88,7 +90,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         $mockEventStoreService->expects($this->never())
@@ -143,7 +146,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -214,7 +218,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -316,7 +321,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -421,7 +427,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
-            )
+            ),
+            $this->createMock(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage

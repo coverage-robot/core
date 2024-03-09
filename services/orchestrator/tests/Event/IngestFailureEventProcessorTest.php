@@ -18,6 +18,7 @@ use Packages\Contracts\Tag\Tag;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
 use Packages\Event\Model\Upload;
+use Packages\Message\Client\SqsClientInterface;
 
 final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessorTestCase
 {
@@ -99,7 +100,8 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockEventBusClient
+            $mockEventBusClient,
+            $this->createMock(SqsClientInterface::class)
         );
 
         $this->assertTrue(
@@ -192,7 +194,8 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $mockEventBusClient
+            $mockEventBusClient,
+            $this->createMock(SqsClientInterface::class)
         );
 
         $this->assertTrue(

@@ -38,11 +38,18 @@ enum TemplateVariant: string
     case COMPLETE_CHECK_RUN = 'complete_check_run';
 
     /**
+     * Load the running template for Check Runs.
+     *
+     * @see GithubCheckRunPublisherService
+     */
+    case RUNNING_CHECK_RUN = 'running_check_run';
+
+    /**
      * Load the in progress template for Pull Requests or Check Runs.
      *
      * @see GithubCheckRunPublisherService
      */
-    case IN_PROGRESS_CHECK_RUN = 'in_progress_check_run';
+    case WAITING_CHECK_RUN = 'waiting_check_run';
 
     /**
      * Load the template for a failed check run.

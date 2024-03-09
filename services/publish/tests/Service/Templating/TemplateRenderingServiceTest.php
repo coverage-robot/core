@@ -12,6 +12,8 @@ use Packages\Event\Model\Upload;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
+use Packages\Message\PublishableMessage\PublishableCoverageFailedJobMessage;
+use Packages\Message\PublishableMessage\PublishableCoverageRunningJobMessage;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -214,7 +216,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     baseCommit: 'mock-base-commit',
                     coverageChange: null
                 ),
-                TemplateVariant::IN_PROGRESS_CHECK_RUN
+                TemplateVariant::WAITING_CHECK_RUN
             ],
             [
                 new PublishableCheckRunMessage(
@@ -384,6 +386,18 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     coverageChange: 0
                 ),
                 TemplateVariant::FULL_PULL_REQUEST_COMMENT
+            ],
+            [
+                new PublishableCoverageFailedJobMessage(
+                    event: $event
+                ),
+                TemplateVariant::FAILED_CHECK_RUN
+            ],
+            [
+                new PublishableCoverageRunningJobMessage(
+                    event: $event
+                ),
+                TemplateVariant::RUNNING_CHECK_RUN
             ],
         ];
     }

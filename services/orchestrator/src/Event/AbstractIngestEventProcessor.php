@@ -20,6 +20,9 @@ use Packages\Event\Model\IngestStarted;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Event\Model\UploadsStarted;
+use Packages\Message\Client\PublishClient;
+use Packages\Message\Client\SqsClientInterface;
+use Packages\Message\PublishableMessage\PublishableCoverageRunningJobMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -34,7 +37,9 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
         private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $eventProcessorLogger,
         #[Autowire(service: EventStoreRecorderBackoffStrategy::class)]
-        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy
+        private readonly BackoffStrategyInterface $eventStoreRecorderBackoffStrategy,
+        #[Autowire(service: PublishClient::class)]
+        private readonly SqsClientInterface $publishClient
     ) {
         parent::__construct(
             $eventStoreService,
@@ -126,6 +131,8 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             );
 
             if ($this->recordFinalisedEvent($finalisedEvent)) {
+                $this->publishClient->dispatch(new PublishableCoverageRunningJobMessage($event));
+
                 $this->eventBusClient->fireEvent(
                     EventSource::ORCHESTRATOR,
                     new UploadsFinalised(
