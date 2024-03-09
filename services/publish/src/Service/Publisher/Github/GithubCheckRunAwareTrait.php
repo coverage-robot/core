@@ -120,7 +120,8 @@ trait GithubCheckRunAwareTrait
         $body = match (true) {
             $publishableMessage instanceof PublishableCheckRunMessage => [
                 'name' => 'Coverage Robot',
-                'status' => $publishableMessage->getStatus()->value,
+                'status' => 'completed',
+                'conclusion' => $publishableMessage->getStatus()->value,
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
