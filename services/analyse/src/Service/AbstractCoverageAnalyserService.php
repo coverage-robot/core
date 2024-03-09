@@ -595,14 +595,14 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         try {
             return $this->diffParser->get($waypoint);
-        } catch (CommitDiffException $exception) {
+        } catch (CommitDiffException $commitDiffException) {
             throw new AnalysisException(
                 sprintf(
                     'Unable to get diff for %s',
                     $waypoint->getProvider()->value
                 ),
                 0,
-                $exception
+                $commitDiffException
             );
         }
     }
@@ -615,13 +615,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         try {
             return $this->commitHistoryService->getPrecedingCommits($waypoint, $page);
-        } catch (CommitHistoryException $exception) {
+        } catch (CommitHistoryException $commitHistoryException) {
             throw new AnalysisException(
                 sprintf(
                     'Failed to retrieve commit history for %s',
                     (string)$waypoint
                 ),
-                previous: $exception
+                previous: $commitHistoryException
             );
         }
     }
