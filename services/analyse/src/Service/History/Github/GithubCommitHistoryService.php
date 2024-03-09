@@ -2,9 +2,11 @@
 
 namespace App\Service\History\Github;
 
+use App\Exception\CommitHistoryException;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
+use Github\Exception\ExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -59,12 +61,11 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
      * @inheritDoc
      *
      * @return array{commit: string, merged: bool, ref: string|null}[]
+     * @throws CommitHistoryException
      */
     #[Override]
     public function getPrecedingCommits(EventInterface|ReportWaypoint $waypoint, int $page = 1): array
     {
-        $this->githubClient->authenticateAsRepositoryOwner($waypoint->getOwner());
-
         $offset = (max(1, $page) * CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE) + 1;
 
         $this->metricService->increment(
@@ -73,12 +74,22 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
             properties: ['provider' => Provider::GITHUB->value, 'owner' => $waypoint->getOwner()]
         );
 
-        $commits = $this->getHistoricCommits(
-            $waypoint->getOwner(),
-            $waypoint->getRepository(),
-            $waypoint->getCommit(),
-            $offset
-        );
+        try {
+            $commits = $this->getHistoricCommits(
+                $waypoint->getOwner(),
+                $waypoint->getRepository(),
+                $waypoint->getCommit(),
+                $offset
+            );
+        } catch (ExceptionInterface $exception) {
+            throw new CommitHistoryException(
+                sprintf(
+                    'Failed to retrieve commit history for %s',
+                    (string)$waypoint
+                ),
+                previous: $exception
+            );
+        }
 
         $this->githubHistoryLogger->info(
             sprintf(
@@ -105,6 +116,8 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
         string $beforeCommit,
         int $offset
     ): array {
+        $this->githubClient->authenticateAsRepositoryOwner($owner);
+
         $commitsPerPage = CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE;
 
         /** @var History $result */

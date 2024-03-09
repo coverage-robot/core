@@ -2,12 +2,12 @@
 
 namespace App\Tests\Service\History;
 
+use App\Exception\CommitHistoryException;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 final class CommitHistoryServiceTest extends TestCase
 {
@@ -56,7 +56,7 @@ final class CommitHistoryServiceTest extends TestCase
             ]
         );
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(CommitHistoryException::class);
 
         $historyService->getPrecedingCommits(
             new ReportWaypoint(

@@ -2,8 +2,8 @@
 
 namespace App\Service\Diff;
 
+use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
-use Packages\Contracts\Event\EventInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.diff_parser')]
@@ -17,6 +17,8 @@ interface DiffParserServiceInterface
      * on the context of the upload.
      *
      * @return array<string, array<int, int>>
+     *
+     * @throws CommitDiffException
      */
     public function get(ReportWaypoint $waypoint): array;
 }

@@ -2,8 +2,10 @@
 
 namespace App\Service\Diff\Github;
 
+use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
+use Github\Exception\ExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
@@ -25,12 +27,11 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
 
     /**
      * @inheritDoc
+     * @throws CommitDiffException
      */
     #[Override]
     public function get(ReportWaypoint $waypoint): array
     {
-        $this->client->authenticateAsRepositoryOwner($waypoint->getOwner());
-
         $pullRequest = $waypoint->getPullRequest();
 
         $this->diffParserLogger->info(
@@ -49,17 +50,27 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
             properties: ['provider' => Provider::GITHUB->value, 'owner' => $waypoint->getOwner()]
         );
 
-        $diff = $pullRequest !== null ?
-            $this->getPullRequestDiff(
-                $waypoint->getOwner(),
-                $waypoint->getRepository(),
-                (int)$pullRequest
-            ) :
-            $this->getCommitDiff(
-                $waypoint->getOwner(),
-                $waypoint->getRepository(),
-                $waypoint->getCommit()
+        try {
+            $diff = $pullRequest !== null ?
+                $this->getPullRequestDiff(
+                    $waypoint->getOwner(),
+                    $waypoint->getRepository(),
+                    (int)$pullRequest
+                ) :
+                $this->getCommitDiff(
+                    $waypoint->getOwner(),
+                    $waypoint->getRepository(),
+                    $waypoint->getCommit()
+                );
+        } catch (ExceptionInterface $exception) {
+            throw new CommitDiffException(
+                sprintf(
+                    'Failed to retrieve diff for %s',
+                    (string)$waypoint
+                ),
+                previous: $exception
             );
+        }
 
         $files = $this->parser->parse($diff);
 
@@ -114,6 +125,8 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
      */
     private function getPullRequestDiff(string $owner, string $repository, int $pullRequest): string
     {
+        $this->client->authenticateAsRepositoryOwner($owner);
+
         $this->diffParserLogger->info(
             sprintf('Fetching pull request diff for %s pull request in %s repository.', $pullRequest, $repository),
             [
@@ -143,6 +156,8 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
      */
     private function getCommitDiff(string $owner, string $repository, string $sha): string
     {
+        $this->client->authenticateAsRepositoryOwner($owner);
+
         $this->diffParserLogger->info(
             sprintf('Fetching commit diff for %s commit in %s repository.', $sha, $repository),
             [

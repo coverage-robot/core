@@ -7,19 +7,10 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishableCheckRunMessage implements PublishableCheckRunMessageInterface
+final class PublishableCoverageFailedJobMessage implements PublishableCheckRunMessageInterface
 {
     public function __construct(
         private readonly EventInterface $event,
-        private readonly PublishableCheckRunStatus $status,
-        #[Assert\PositiveOrZero]
-        #[Assert\LessThanOrEqual(100)]
-        private readonly float $coveragePercentage,
-        #[Assert\NotBlank(allowNull: true)]
-        private readonly ?string $baseCommit = null,
-        #[Assert\LessThanOrEqual(100)]
-        #[Assert\GreaterThanOrEqual(-100)]
-        private readonly ?float $coverageChange = 0,
         private ?DateTimeImmutable $validUntil = null,
     ) {
         if (!$this->validUntil instanceof DateTimeImmutable) {
@@ -32,34 +23,19 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
         return $this->event;
     }
 
-    public function getStatus(): PublishableCheckRunStatus
-    {
-        return $this->status;
-    }
-
     public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
     }
 
-    public function getCoveragePercentage(): float
+    public function getStatus(): PublishableCheckRunStatus
     {
-        return $this->coveragePercentage;
-    }
-
-    public function getBaseCommit(): ?string
-    {
-        return $this->baseCommit;
-    }
-
-    public function getCoverageChange(): ?float
-    {
-        return $this->coverageChange;
+        return PublishableCheckRunStatus::FAILURE;
     }
 
     public function getType(): PublishableMessage
     {
-        return PublishableMessage::CHECK_RUN;
+        return PublishableMessage::COVERAGE_FAILED_JOB;
     }
 
     public function getMessageGroup(): string
@@ -77,7 +53,7 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
     public function __toString(): string
     {
         return sprintf(
-            "PublishableCheckRunMessage#%s-%s-%s",
+            "PublishableCoverageFailedJobMessage#%s-%s-%s",
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()

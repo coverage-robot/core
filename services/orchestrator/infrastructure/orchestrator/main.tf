@@ -73,6 +73,16 @@ resource "aws_iam_policy" "orchestrator_policy" {
       {
         Effect = "Allow"
         Action = [
+          "sqs:GetQueueUrl",
+          "sqs:SendMessage"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.publish_queue.arn
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "dynamodb:DescribeTable",
           "dynamodb:Get*",
           "dynamodb:Query",
@@ -155,7 +165,8 @@ resource "aws_cloudwatch_event_rule" "service" {
       "INGEST_FAILURE",
       "JOB_STATE_CHANGE",
       "CONFIGURATION_FILE_CHANGE",
-      "COVERAGE_FINALISED"
+      "COVERAGE_FINALISED",
+      "COVERAGE_FAILED"
     ]
   }
   EOF

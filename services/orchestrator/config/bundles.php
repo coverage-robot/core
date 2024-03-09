@@ -10,4 +10,5 @@ return [
     Packages\Clients\ClientsBundle::class => ['all' => true],
     Packages\Configuration\ConfigurationBundle::class => ['all' => true],
     Packages\Local\LocalBundle::class => ['dev' => true],
+    Packages\Message\MessageBundle::class => ['all' => true],
 ];

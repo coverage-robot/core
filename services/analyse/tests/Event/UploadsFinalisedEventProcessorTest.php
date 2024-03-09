@@ -21,6 +21,7 @@ use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
+use Packages\Event\Model\CoverageFailed;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\Client\SqsClientInterface;
@@ -243,7 +244,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('fireEvent')
             ->with(
                 EventSource::ANALYSE,
-                $this->isInstanceOf(AnalyseFailure::class)
+                $this->isInstanceOf(CoverageFailed::class)
             )
             ->willReturn(true);
 

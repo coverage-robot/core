@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\AnalysisException;
 use App\Model\CarryforwardTag;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
@@ -102,6 +103,8 @@ interface CoverageAnalyserServiceInterface
      * Get the diff associated with the waypoint.
      *
      * @return array<string, array<int, int>>
+     *
+     * @throws AnalysisException
      */
     public function getDiff(ReportWaypoint $waypoint): array;
 
@@ -109,6 +112,8 @@ interface CoverageAnalyserServiceInterface
      * Get the commit history from before the waypoint.
      *
      * @return array{commit: string, merged: bool, ref: string|null}[]
+     *
+     * @throws AnalysisException
      */
     public function getHistory(ReportWaypoint $waypoint, int $page = 1): array;
 }

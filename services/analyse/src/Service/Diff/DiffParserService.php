@@ -2,10 +2,10 @@
 
 namespace App\Service\Diff;
 
+use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
 use Override;
 use Packages\Contracts\Provider\ProviderAwareInterface;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class DiffParserService implements DiffParserServiceInterface
@@ -32,7 +32,7 @@ final class DiffParserService implements DiffParserServiceInterface
         $parser = (iterator_to_array($this->parsers)[$waypoint->getProvider()->value]) ?? null;
 
         if (!$parser instanceof DiffParserServiceInterface) {
-            throw new RuntimeException(
+            throw new CommitDiffException(
                 sprintf(
                     'No diff parser found for %s',
                     $waypoint->getProvider()->value
