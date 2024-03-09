@@ -124,7 +124,7 @@ trait GithubCheckRunAwareTrait
                     'annotations' => [],
                 ]
             ],
-            PublishableCheckRunStatus::SUCCESS, PublishableCheckRunStatus::FAILURE => [
+            PublishableCheckRunStatus::SUCCESS => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
@@ -132,6 +132,20 @@ trait GithubCheckRunAwareTrait
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
                         TemplateVariant::COMPLETE_CHECK_RUN
+                    ),
+                    'summary' => '',
+                    'annotations' => [],
+                ],
+                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+            ],
+            PublishableCheckRunStatus::FAILURE => [
+                'name' => 'Coverage Robot',
+                'status' => 'completed',
+                'conclusion' => $publishableMessage->getStatus()->value,
+                'output' => [
+                    'title' => $this->templateRenderingService->render(
+                        $publishableMessage,
+                        TemplateVariant::FAILED_CHECK_RUN
                     ),
                     'summary' => '',
                     'annotations' => [],
