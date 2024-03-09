@@ -146,6 +146,7 @@ trait GithubCheckRunAwareTrait
             $publishableMessage->getStatus() !== PublishableCheckRunStatus::IN_PROGRESS => [
                 'name' => 'Coverage Robot',
                 'status' => 'completed',
+                'conclusion' => $publishableMessage->getStatus()->value,
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
