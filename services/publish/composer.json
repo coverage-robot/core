@@ -32,7 +32,8 @@
         "symfony/serializer": "7.0.*",
         "symfony/twig-bridge": "7.0.*",
         "symfony/twig-bundle": "7.0.*",
-        "symfony/yaml": "7.0.*"
+        "symfony/yaml": "7.0.*",
+        "twig/string-extra": "^3.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.1",

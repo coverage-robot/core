@@ -7,7 +7,6 @@ use App\Exception\NoTemplateAvailableException;
 use App\Extension\CoverageTemplateExtension;
 use App\Extension\CoverageTemplateSecurityPolicy;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
-use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessageInterface;
 use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
@@ -18,6 +17,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\SandboxExtension;
+use Twig\Extra\String\StringExtension;
 use Twig\RuntimeLoader\ContainerRuntimeLoader;
 
 final class TemplateRenderingService
@@ -118,6 +118,12 @@ final class TemplateRenderingService
          * Add the coverage template extension to add custom functions for coverage data.
          */
         $environment->addExtension($this->coverageTemplateExtension);
+
+        /**
+         * Add simple string helpers provided by Twig. This includes string manipulation
+         * using the UnicodeString class - line truncating strings at a certain length.
+         */
+        $environment->addExtension(new StringExtension());
 
         return $environment;
     }
