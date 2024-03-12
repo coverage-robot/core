@@ -22,15 +22,16 @@ final class CoverageReportFunction implements TwigFunctionInterface
      * Get a custom set of metrics based on the message the template is being
      * rendered for.
      */
-    private function getMetricsForSpecificMessage(
-        PublishableMessageInterface $message
-    ): array {
+    private function getMetricsForSpecificMessage(PublishableMessageInterface $message): array
+    {
         return match (true) {
             $message instanceof PublishablePullRequestMessage => [
                 'total_uploads' => $message->getSuccessfulUploads(),
                 'total_coverage' => $message->getCoveragePercentage(),
                 'diff_coverage' => $message->getDiffCoveragePercentage(),
+                'diff_uncovered_lines' => $message->getDiffUncoveredLines(),
                 'coverage_change' => $message->getCoverageChange(),
+                'uncovered_lines_change' => $message->getUncoveredLinesChange(),
                 'tag_coverage' => array_map(
                     static fn(array $tag): array => [
                         'name' => isset($tag['tag']['name']) ? (string)$tag['tag']['name'] : 'unknown',
