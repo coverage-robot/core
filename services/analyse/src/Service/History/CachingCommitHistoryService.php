@@ -82,7 +82,7 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
          * @var ReportWaypoint $cachedWaypoint
          * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history
          */
-        foreach ($this->getAllCacheValues(self::CACHE_METHOD_NAME) as $cachedWaypoint => $history) {
+        foreach ($this->getAllCacheValues(self::CACHE_METHOD_NAME) as $cachedWaypoint => $allCacheValue) {
             if ($cachedWaypoint === $waypoint) {
                 // We don't want to compare the waypoint to itself
                 continue;
@@ -93,7 +93,7 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
                 continue;
             }
 
-            foreach ($history as $cachedPage => $cachedCommits) {
+            foreach ($allCacheValue as $cachedPage => $cachedCommits) {
                 $commitIndex = array_search(
                     $waypoint->getCommit(),
                     array_column($cachedCommits, 'commit'),

@@ -20,7 +20,6 @@ use Override;
 final class CoverageReport implements CoverageReportInterface
 {
     /**
-     * @param ReportWaypoint $waypoint
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
      * @param int|Closure():int $totalLines
      * @param int|Closure():int $atLeastPartiallyCoveredLines

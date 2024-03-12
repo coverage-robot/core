@@ -42,11 +42,13 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 event: $event,
                 coveragePercentage: 100,
                 diffCoveragePercentage: 100,
+                diffUncoveredLines: 1,
                 successfulUploads: 1,
                 tagCoverage: [],
                 leastCoveredDiffFiles: [],
                 baseCommit: 'mock-base-commit',
-                coverageChange: 0
+                uncoveredLinesChange: 2,
+                coverageChange: 0,
             )
         );
 
@@ -119,10 +121,12 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 event: $upload,
                 coveragePercentage: 100,
                 diffCoveragePercentage: 100,
+                diffUncoveredLines: 1,
                 successfulUploads: 1,
                 tagCoverage: [],
                 leastCoveredDiffFiles: [],
                 baseCommit: 'mock-base-commit',
+                uncoveredLinesChange: 2,
                 coverageChange: 0
             ),
         );
@@ -199,10 +203,12 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 event: $upload,
                 coveragePercentage: 100,
                 diffCoveragePercentage: 100,
+                diffUncoveredLines: 1,
                 successfulUploads: 1,
                 tagCoverage: [],
                 leastCoveredDiffFiles: [],
                 baseCommit: 'mock-base-commit',
+                uncoveredLinesChange: 2,
                 coverageChange: 0
             ),
         );

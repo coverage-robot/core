@@ -26,9 +26,11 @@ final class CoveragePublisherServiceTest extends TestCase
             event: $this->createMock(EventInterface::class),
             coveragePercentage: 100,
             diffCoveragePercentage: 100,
+            diffUncoveredLines: 1,
             successfulUploads: 1,
             tagCoverage: [],
-            leastCoveredDiffFiles: []
+            leastCoveredDiffFiles: [],
+            uncoveredLinesChange: 2,
         );
 
         $publisher = new MessagePublisherService(

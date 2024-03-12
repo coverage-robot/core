@@ -66,6 +66,7 @@ final class EventHandlerTest extends KernelTestCase
                         event: $event,
                         coveragePercentage: 100.0,
                         diffCoveragePercentage: 100.0,
+                        diffUncoveredLines: 1,
                         successfulUploads: 1,
                         tagCoverage: [
                             0 => [
@@ -81,6 +82,7 @@ final class EventHandlerTest extends KernelTestCase
                             ],
                         ],
                         leastCoveredDiffFiles: [],
+                        uncoveredLinesChange: 2,
                         validUntil: new DateTimeImmutable('2023-08-30 12:00:78'),
                     )
                 ]
@@ -179,6 +181,7 @@ final class EventHandlerTest extends KernelTestCase
                         event: $event,
                         coveragePercentage: 100.0,
                         diffCoveragePercentage: 100.0,
+                        diffUncoveredLines: 1,
                         successfulUploads: 1,
                         tagCoverage: [
                             0 => [
@@ -194,6 +197,7 @@ final class EventHandlerTest extends KernelTestCase
                             ],
                         ],
                         leastCoveredDiffFiles: [],
+                        uncoveredLinesChange: 2,
                         validUntil: DateTimeImmutable::createFromFormat(
                             DateTimeInterface::ATOM,
                             '2023-08-30T12:00:78+00:00'
