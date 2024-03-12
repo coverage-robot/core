@@ -311,6 +311,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             baseCommit: $comparison?->getBaseReport()
                 ->getWaypoint()
                 ->getCommit(),
+            uncoveredLinesChange: $comparison?->getUncoveredLinesChange(),
             coverageChange: $comparison?->getCoverageChange(),
             validUntil: $validUntil
         );

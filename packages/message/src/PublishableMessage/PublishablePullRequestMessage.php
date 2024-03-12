@@ -25,6 +25,7 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         private readonly array $leastCoveredDiffFiles,
         #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
+        private readonly ?int $uncoveredLinesChange = 0,
         #[Assert\GreaterThanOrEqual(-100)]
         #[Assert\LessThanOrEqual(100)]
         private readonly ?float $coverageChange = 0,
@@ -65,6 +66,11 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;
+    }
+
+    public function getUncoveredLinesChange(): ?int
+    {
+        return $this->uncoveredLinesChange;
     }
 
     public function getCoverageChange(): ?float
