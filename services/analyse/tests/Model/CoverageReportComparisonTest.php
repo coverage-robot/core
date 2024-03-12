@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 final class CoverageReportComparisonTest extends TestCase
 {
-    #[DataProvider('coverageReportDataProvider')]
+    #[DataProvider('coverageChangesDataProvider')]
     public function testComparingCoveragePercentageChanges(
         CoverageReport $baseReport,
         CoverageReport $headReport,
@@ -32,7 +32,24 @@ final class CoverageReportComparisonTest extends TestCase
         );
     }
 
-    public static function coverageReportDataProvider(): array
+    #[DataProvider('uncoveredLineChangesDataProvider')]
+    public function testComparingUncoveredLinesChange(
+        CoverageReport $baseReport,
+        CoverageReport $headReport,
+        int $expectedUncoveredLineChange
+    ): void {
+        $comparison = new CoverageReportComparison(
+            $baseReport,
+            $headReport
+        );
+
+        $this->assertEquals(
+            $expectedUncoveredLineChange,
+            $comparison->getUncoveredLinesChange()
+        );
+    }
+
+    public static function coverageChangesDataProvider(): array
     {
         return [
             'No change in total coverage' => [
@@ -54,6 +71,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -74,6 +92,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 0
@@ -97,6 +116,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -117,6 +137,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -10
@@ -140,6 +161,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -160,6 +182,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -0.33
@@ -183,6 +206,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -203,9 +227,151 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([]),
                 ),
                 5.3
+            ],
+        ];
+    }
+
+    public static function uncoveredLineChangesDataProvider(): array
+    {
+        return [
+            '+2 change in uncovered lines' => [
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 4,
+                    coveragePercentage: 56.67,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
+                ),
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 6,
+                    coveragePercentage: 56.34,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
+                ),
+                2
+            ],
+            '-2 change in uncovered lines' => [
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 4,
+                    coveragePercentage: 56.67,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
+                ),
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 2,
+                    coveragePercentage: 56.34,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
+                ),
+                -2
+            ],
+            'No change in uncovered lines' => [
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 4,
+                    coveragePercentage: 56.67,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([])
+                ),
+                new CoverageReport(
+                    waypoint: new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    ),
+                    uploads: new TotalUploadsQueryResult(['1'], [], []),
+                    totalLines: 1,
+                    atLeastPartiallyCoveredLines: 2,
+                    uncoveredLines: 4,
+                    coveragePercentage: 61.97,
+                    tagCoverage: new TagCoverageCollectionQueryResult([]),
+                    diffCoveragePercentage: 95,
+                    leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
+                    diffLineCoverage: new LineCoverageCollectionQueryResult([]),
+                ),
+                0
             ],
         ];
     }

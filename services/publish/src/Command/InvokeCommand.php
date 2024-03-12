@@ -107,6 +107,7 @@ final class InvokeCommand extends Command
                                             event: $upload,
                                             coveragePercentage: 100,
                                             diffCoveragePercentage: 0,
+                                            diffUncoveredLines: 1,
                                             successfulUploads: 1,
                                             tagCoverage: [
                                                 [
@@ -122,6 +123,7 @@ final class InvokeCommand extends Command
                                                 ],
                                             ],
                                             leastCoveredDiffFiles: [],
+                                            uncoveredLinesChange: 1,
                                             coverageChange: 100,
                                             validUntil: $validUntil
                                         ),

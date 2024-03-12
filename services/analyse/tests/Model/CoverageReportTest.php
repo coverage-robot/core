@@ -39,6 +39,7 @@ final class CoverageReportTest extends TestCase
             static fn(): TagCoverageCollectionQueryResult => $tagCoverage,
             static fn(): int => 95,
             static fn(): FileCoverageCollectionQueryResult => $leastCoveredDiffFiles,
+            static fn(): int => 10,
             static fn(): LineCoverageCollectionQueryResult => $diffLineCoverage
         );
 

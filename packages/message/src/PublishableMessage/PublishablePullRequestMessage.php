@@ -18,11 +18,14 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         #[Assert\LessThanOrEqual(100)]
         private readonly ?float $diffCoveragePercentage,
         #[Assert\PositiveOrZero]
+        private readonly ?float $diffUncoveredLines,
+        #[Assert\PositiveOrZero]
         private readonly int $successfulUploads,
         private readonly array $tagCoverage,
         private readonly array $leastCoveredDiffFiles,
         #[Assert\NotBlank(allowNull: true)]
         private readonly ?string $baseCommit = null,
+        private readonly ?int $uncoveredLinesChange = 0,
         #[Assert\GreaterThanOrEqual(-100)]
         #[Assert\LessThanOrEqual(100)]
         private readonly ?float $coverageChange = 0,
@@ -65,6 +68,11 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         return $this->baseCommit;
     }
 
+    public function getUncoveredLinesChange(): ?int
+    {
+        return $this->uncoveredLinesChange;
+    }
+
     public function getCoverageChange(): ?float
     {
         return $this->coverageChange;
@@ -73,6 +81,11 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
     public function getDiffCoveragePercentage(): float|null
     {
         return $this->diffCoveragePercentage;
+    }
+
+    public function getDiffUncoveredLines(): ?float
+    {
+        return $this->diffUncoveredLines;
     }
 
     public function getSuccessfulUploads(): int

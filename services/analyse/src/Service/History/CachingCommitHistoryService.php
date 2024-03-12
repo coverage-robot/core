@@ -3,29 +3,22 @@
 namespace App\Service\History;
 
 use App\Model\ReportWaypoint;
+use App\Trait\InMemoryCacheTrait;
 use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use WeakMap;
 
 final class CachingCommitHistoryService implements CommitHistoryServiceInterface
 {
-    /**
-     * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>>
-     */
-    private WeakMap $cache;
+    use InMemoryCacheTrait;
+
+    private const string CACHE_METHOD_NAME = 'getPrecedingCommits';
 
     public function __construct(
         #[Autowire(service: CommitHistoryService::class)]
         private readonly CommitHistoryServiceInterface $commitHistoryService,
         private readonly LoggerInterface $commitHistoryLogger
     ) {
-        /**
-         * @var WeakMap<ReportWaypoint, array<int, array{commit: string, merged: bool, ref: string|null}[]>> $cache
-         */
-        $cache = new WeakMap();
-
-        $this->cache = $cache;
     }
 
     #[Override]
@@ -48,7 +41,12 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
             );
         }
 
-        return $this->cache[$waypoint][$page];
+        /**
+         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $results
+         */
+        $results = $this->getCacheValue(self::CACHE_METHOD_NAME, $waypoint, []);
+
+        return $results[$page];
     }
 
     /**
@@ -82,9 +80,9 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
     {
         /**
          * @var ReportWaypoint $cachedWaypoint
-         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history
+         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $allCacheValue
          */
-        foreach ($this->cache as $cachedWaypoint => $history) {
+        foreach ($this->getAllCacheValues(self::CACHE_METHOD_NAME) as $cachedWaypoint => $allCacheValue) {
             if ($cachedWaypoint === $waypoint) {
                 // We don't want to compare the waypoint to itself
                 continue;
@@ -95,7 +93,7 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
                 continue;
             }
 
-            foreach ($history as $cachedPage => $cachedCommits) {
+            foreach ($allCacheValue as $cachedPage => $cachedCommits) {
                 $commitIndex = array_search(
                     $waypoint->getCommit(),
                     array_column($cachedCommits, 'commit'),
@@ -215,7 +213,7 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
      */
     private function isCacheHit(ReportWaypoint $waypoint, int $page): bool
     {
-        return isset($this->cache[$waypoint][$page]);
+        return isset($this->getCacheValue(self::CACHE_METHOD_NAME, $waypoint, [])[$page]);
     }
 
     /**
@@ -225,11 +223,18 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
      */
     private function persistInCache(ReportWaypoint $waypoint, int $page, array $commits): void
     {
-        $this->cache[$waypoint] = array_replace(
-            $this->cache[$waypoint] ?? [],
-            [
-                $page => $commits
-            ]
+        /** @var array $pages */
+        $pages = $this->getCacheValue(self::CACHE_METHOD_NAME, $waypoint, []);
+
+        $this->setCacheValue(
+            self::CACHE_METHOD_NAME,
+            $waypoint,
+            array_replace(
+                $pages,
+                [
+                    $page => $commits
+                ]
+            )
         );
     }
 }

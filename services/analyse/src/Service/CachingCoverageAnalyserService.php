@@ -15,9 +15,9 @@ use App\Service\Diff\CachingDiffParserService;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CachingCommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
+use App\Trait\InMemoryCacheTrait;
 use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use WeakMap;
 
 /**
  * An in-memory caching implementation for caching queries on reports.
@@ -28,50 +28,7 @@ use WeakMap;
  */
 final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserService
 {
-    /**
-     * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult>
-     */
-    private WeakMap $uploads;
-
-    /**
-     * @var WeakMap<ReportWaypoint, int>
-     */
-    private WeakMap $totalLines;
-
-    /**
-     * @var WeakMap<ReportWaypoint, int>
-     */
-    private WeakMap $atLeastPartiallyCoveredLines;
-
-    /**
-     * @var WeakMap<ReportWaypoint, int>
-     */
-    private WeakMap $uncoveredLines;
-
-    /**
-     * @var WeakMap<ReportWaypoint, float>
-     */
-    private WeakMap $coveragePercentage;
-
-    /**
-     * @var WeakMap<ReportWaypoint, TagCoverageCollectionQueryResult>
-     */
-    private WeakMap $tagCoverage;
-
-    /**
-     * @var WeakMap<ReportWaypoint, float|false>
-     */
-    private WeakMap $diffCoveragePercentage;
-
-    /**
-     * @var WeakMap<ReportWaypoint, LineCoverageCollectionQueryResult>
-     */
-    private WeakMap $diffLineCoverage;
-
-    /**
-     * @var WeakMap<ReportWaypoint, array<int, FileCoverageCollectionQueryResult>>
-     */
-    private WeakMap $leastCoveredDiffFiles;
+    use InMemoryCacheTrait;
 
     public function __construct(
         #[Autowire(service: CachingQueryService::class)]
@@ -89,52 +46,6 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
             $commitHistoryService,
             $carryforwardTagService
         );
-
-        /**
-         * @var WeakMap<ReportWaypoint, TotalUploadsQueryResult> $uploadsCache
-         */
-        $uploadsCache = new WeakMap();
-        $this->uploads = $uploadsCache;
-        /**
-         * @var WeakMap<ReportWaypoint, int> $totalLinesCache
-         */
-        $totalLinesCache = new WeakMap();
-        $this->totalLines = $totalLinesCache;
-        /**
-         * @var WeakMap<ReportWaypoint, int> $atLeastPartiallyCoveredLinesCache
-         */
-        $atLeastPartiallyCoveredLinesCache = new WeakMap();
-        $this->atLeastPartiallyCoveredLines = $atLeastPartiallyCoveredLinesCache;
-        /**
-         * @var WeakMap<ReportWaypoint, int> $uncoveredLinesCache
-         */
-        $uncoveredLinesCache = new WeakMap();
-        $this->uncoveredLines = $uncoveredLinesCache;
-        /**
-         * @var WeakMap<ReportWaypoint, float> $coveragePercentageCache
-         */
-        $coveragePercentageCache = new WeakMap();
-        $this->coveragePercentage = $coveragePercentageCache;
-        /**
-         * @var WeakMap<ReportWaypoint, TagCoverageCollectionQueryResult> $tagCoverageCache
-         */
-        $tagCoverageCache = new WeakMap();
-        $this->tagCoverage = $tagCoverageCache;
-        /**
-         * @var WeakMap<ReportWaypoint, float|false> $diffCoveragePercentageCache
-         */
-        $diffCoveragePercentageCache = new WeakMap();
-        $this->diffCoveragePercentage = $diffCoveragePercentageCache;
-        /**
-         * @var WeakMap<ReportWaypoint, LineCoverageCollectionQueryResult> $diffLineCoverageCache
-         */
-        $diffLineCoverageCache = new WeakMap();
-        $this->diffLineCoverage = $diffLineCoverageCache;
-        /**
-         * @var WeakMap<ReportWaypoint, array<int, FileCoverageCollectionQueryResult>> $leastCoveredDiffFilesCache
-         */
-        $leastCoveredDiffFilesCache = new WeakMap();
-        $this->leastCoveredDiffFiles = $leastCoveredDiffFilesCache;
     }
 
     /**
@@ -143,75 +54,113 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     #[Override]
     public function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
-        if (!isset($this->uploads[$waypoint])) {
-            $this->uploads[$waypoint] = parent::getUploads($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var TotalUploadsQueryResult
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->uploads[$waypoint];
+        $uploads = parent::getUploads($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $uploads);
+
+        return $uploads;
     }
 
     #[Override]
     public function getTotalLines(ReportWaypoint $waypoint): int
     {
-        if (!isset($this->totalLines[$waypoint])) {
-            $this->totalLines[$waypoint] = parent::getTotalLines($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var int
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->totalLines[$waypoint];
+        $totalLines = parent::getTotalLines($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $totalLines);
+
+        return $totalLines;
     }
 
     #[Override]
     public function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
-        if (!isset($this->atLeastPartiallyCoveredLines[$waypoint])) {
-            $this->atLeastPartiallyCoveredLines[$waypoint] = parent::getAtLeastPartiallyCoveredLines($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var int
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->atLeastPartiallyCoveredLines[$waypoint];
+        $atLeastPartiallyCoveredLines = parent::getAtLeastPartiallyCoveredLines($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $atLeastPartiallyCoveredLines);
+
+        return $atLeastPartiallyCoveredLines;
     }
 
     #[Override]
     public function getUncoveredLines(ReportWaypoint $waypoint): int
     {
-        if (!isset($this->uncoveredLines[$waypoint])) {
-            $this->uncoveredLines[$waypoint] = parent::getUncoveredLines($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var int
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->uncoveredLines[$waypoint];
+        $uncoveredLines = parent::getUncoveredLines($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $uncoveredLines);
+
+        return $uncoveredLines;
     }
 
     #[Override]
     public function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
-        if (!isset($this->coveragePercentage[$waypoint])) {
-            $this->coveragePercentage[$waypoint] = parent::getCoveragePercentage($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var float
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->coveragePercentage[$waypoint];
+        $coveragePercentage = parent::getCoveragePercentage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $coveragePercentage);
+
+        return $coveragePercentage;
     }
 
     #[Override]
     public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
-        if (!isset($this->tagCoverage[$waypoint])) {
-            $this->tagCoverage[$waypoint] = parent::getTagCoverage($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var TagCoverageCollectionQueryResult
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->tagCoverage[$waypoint];
+        $tagCoverage = parent::getTagCoverage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $tagCoverage);
+
+        return $tagCoverage;
     }
 
     #[Override]
     public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
-        if (!isset($this->diffCoveragePercentage[$waypoint])) {
-            // Weak maps can't store null values (i.e. the value is never persisted), so
-            // we're converting it to false when stored in the map
-            $this->diffCoveragePercentage[$waypoint] = parent::getDiffCoveragePercentage($waypoint) ?? false;
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var float|null
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        $diffCoveragePercentage = $this->diffCoveragePercentage[$waypoint];
+        $diffCoveragePercentage = parent::getDiffCoveragePercentage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $diffCoveragePercentage);
 
-        return $diffCoveragePercentage !== false ? $diffCoveragePercentage : null;
+        return $diffCoveragePercentage;
     }
 
     #[Override]
@@ -219,28 +168,62 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
         ReportWaypoint $waypoint,
         int $limit = AbstractCoverageAnalyserService::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
-        if (
-            !isset($this->leastCoveredDiffFiles[$waypoint]) ||
-            !array_key_exists($limit, $this->leastCoveredDiffFiles[$waypoint])
-        ) {
-            $this->leastCoveredDiffFiles[$waypoint] = array_replace(
-                $this->leastCoveredDiffFiles[$waypoint] ?? [],
-                [
-                    $limit => parent::getLeastCoveredDiffFiles($waypoint, $limit)
-                ]
-            );
+        $cachedResults = [];
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var array<int, FileCoverageCollectionQueryResult> $cachedResults
+             */
+            $cachedResults = $this->getCacheValue(__FUNCTION__, $waypoint);
+
+            if (array_key_exists($limit, $cachedResults)) {
+                return $cachedResults[$limit];
+            }
         }
 
-        return $this->leastCoveredDiffFiles[$waypoint][$limit];
+        $leastCoveredDiffFiles = parent::getLeastCoveredDiffFiles($waypoint, $limit);
+        $this->setCacheValue(
+            __FUNCTION__,
+            $waypoint,
+            array_replace(
+                $cachedResults,
+                [
+                    $limit => $leastCoveredDiffFiles
+                ]
+            )
+        );
+
+        return $leastCoveredDiffFiles;
+    }
+
+    #[Override]
+    public function getDiffUncoveredLines(ReportWaypoint $waypoint): int
+    {
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var int
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
+        }
+
+        $diffUncoveredLines = parent::getDiffUncoveredLines($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $diffUncoveredLines);
+
+        return $diffUncoveredLines;
     }
 
     #[Override]
     public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
-        if (!isset($this->diffLineCoverage[$waypoint])) {
-            $this->diffLineCoverage[$waypoint] = parent::getDiffLineCoverage($waypoint);
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var LineCoverageCollectionQueryResult
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        return $this->diffLineCoverage[$waypoint];
+        $diffLineCoverage = parent::getDiffLineCoverage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $diffLineCoverage);
+
+        return $diffLineCoverage;
     }
 }

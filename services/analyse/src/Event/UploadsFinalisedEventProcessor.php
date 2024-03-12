@@ -297,6 +297,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             event: $uploadsFinalised,
             coveragePercentage: $coverageReport->getCoveragePercentage(),
             diffCoveragePercentage: $coverageReport->getDiffCoveragePercentage(),
+            diffUncoveredLines: $coverageReport->getDiffUncoveredLines(),
             successfulUploads: count($coverageReport->getUploads()
                 ->getSuccessfulUploads()),
             tagCoverage: (array)$this->serializer->normalize(
@@ -310,6 +311,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             baseCommit: $comparison?->getBaseReport()
                 ->getWaypoint()
                 ->getCommit(),
+            uncoveredLinesChange: $comparison?->getUncoveredLinesChange(),
             coverageChange: $comparison?->getCoverageChange(),
             validUntil: $validUntil
         );

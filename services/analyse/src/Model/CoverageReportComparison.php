@@ -47,6 +47,22 @@ final class CoverageReportComparison implements Stringable
         return round($coverageChange, 2);
     }
 
+    /**
+     * The change in the total number of uncovered lines between the base and head reports.
+     *
+     * For example:
+     * 1. A change of 0, means the number of uncovered lines as not changed.
+     * 2. A change of 10, means overall (including new lines, and removed lines) the codebase
+     *    has 10 more uncovered lines that it did before.
+     * 3. A change of -2, means overall (including new lines, and removed lines) the codebase
+     *    has 2 less uncovered lines than it did before.
+     */
+    public function getUncoveredLinesChange(): int
+    {
+        return $this->headReport->getUncoveredLines() -
+            $this->baseReport->getUncoveredLines();
+    }
+
     #[Override]
     public function __toString(): string
     {

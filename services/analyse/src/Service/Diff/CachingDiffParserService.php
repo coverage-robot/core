@@ -3,38 +3,33 @@
 namespace App\Service\Diff;
 
 use App\Model\ReportWaypoint;
+use App\Trait\InMemoryCacheTrait;
 use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use WeakMap;
 
 final class CachingDiffParserService implements DiffParserServiceInterface
 {
-    /**
-     * @var WeakMap<ReportWaypoint, array<string, array<int, int>>>
-     */
-    private WeakMap $cache;
+    use InMemoryCacheTrait;
 
     public function __construct(
         #[Autowire(service: DiffParserService::class)]
         private readonly DiffParserServiceInterface $diffParserService
     ) {
-        /**
-         * @var WeakMap<ReportWaypoint, array<string, array<int, int>>> $cache
-         */
-        $cache = new WeakMap();
-
-        $this->cache = $cache;
     }
 
     #[Override]
     public function get(ReportWaypoint $waypoint): array
     {
-        if (isset($this->cache[$waypoint])) {
-            return $this->cache[$waypoint];
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var array<string, array<int, int>>
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        $this->cache[$waypoint] = $this->diffParserService->get($waypoint);
+        $results = $this->diffParserService->get($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $results);
 
-        return $this->cache[$waypoint];
+        return $results;
     }
 }

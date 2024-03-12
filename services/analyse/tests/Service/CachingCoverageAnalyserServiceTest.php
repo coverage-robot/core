@@ -47,7 +47,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         );
 
         $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
-        $mockDiffParserService->expects($this->exactly(3))
+        $mockDiffParserService->expects($this->exactly(4))
             ->method('get')
             ->with($waypoint)
             ->willReturn([
@@ -115,6 +115,10 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                 $coverageReport->getDiffCoveragePercentage()
             );
             $this->assertEquals(
+                0,
+                $coverageReport->getDiffUncoveredLines()
+            );
+            $this->assertEquals(
                 'mock-file',
                 $coverageReport->getLeastCoveredDiffFiles()
                     ->getFiles()[0]
@@ -132,6 +136,96 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                     ->getSuccessfulUploads()
             );
         }
+    }
+
+    public function testNullableDiffCoveragePercentageIsStoredCorrectly(): void
+    {
+        $waypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: [],
+            pullRequest: 12
+        );
+
+        $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
+        $mockDiffParserService->expects($this->once())
+            ->method('get')
+            ->with($waypoint)
+            ->willReturn([]);
+
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
+        $mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $coverageAnalyserService = new CachingCoverageAnalyserService(
+            $mockQueryService,
+            $mockDiffParserService,
+            $this->createMock(CommitHistoryServiceInterface::class),
+            $this->createMock(CarryforwardTagServiceInterface::class)
+        );
+
+        $coverageReport = $coverageAnalyserService->analyse($waypoint);
+
+        $this->assertNull($coverageReport->getDiffCoveragePercentage());
+
+        $this->assertNull($coverageReport->getDiffCoveragePercentage());
+    }
+
+    public function testNoDiffOnWaypointToAnalyse(): void
+    {
+        $waypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: [],
+            diff: [],
+            pullRequest: 12
+        );
+
+        $mockDiffParserService = $this->createMock(DiffParserServiceInterface::class);
+        $mockDiffParserService->method('get')
+            ->with($waypoint)
+            ->willReturn([]);
+
+        $mockQueryService = $this->createMock(QueryServiceInterface::class);
+        $mockQueryService->expects($this->never())
+            ->method('runQuery');
+
+        $coverageAnalyserService = new CachingCoverageAnalyserService(
+            $mockQueryService,
+            $mockDiffParserService,
+            $this->createMock(CommitHistoryServiceInterface::class),
+            $this->createMock(CarryforwardTagServiceInterface::class)
+        );
+
+        $coverageReport = $coverageAnalyserService->analyse($waypoint);
+
+        $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
+        $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
+
+        $this->assertEquals(
+            new FileCoverageCollectionQueryResult([]),
+            $coverageReport->getLeastCoveredDiffFiles()
+        );
+        $this->assertEquals(
+            new FileCoverageCollectionQueryResult([]),
+            $coverageReport->getLeastCoveredDiffFiles()
+        );
+
+        $this->assertEquals(
+            new LineCoverageCollectionQueryResult([]),
+            $coverageReport->getDiffLineCoverage()
+        );
+        $this->assertEquals(
+            new LineCoverageCollectionQueryResult([]),
+            $coverageReport->getDiffLineCoverage()
+        );
     }
 
     private function getMockedQueryService(): MockObject|QueryService

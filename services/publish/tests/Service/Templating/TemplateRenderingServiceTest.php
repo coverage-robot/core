@@ -71,6 +71,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     coveragePercentage: 100.0,
                     diffCoveragePercentage: 100.0,
+                    diffUncoveredLines: 1,
                     successfulUploads: 2,
                     tagCoverage: [
                         [
@@ -115,6 +116,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                         ]
                     ],
                     baseCommit: 'mock-base-commit',
+                    uncoveredLinesChange: 2,
                     coverageChange: 0.1,
                 ),
                 TemplateVariant::FULL_PULL_REQUEST_COMMENT
@@ -124,6 +126,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     coveragePercentage: 100.0,
                     diffCoveragePercentage: 100.0,
+                    diffUncoveredLines: 1,
                     successfulUploads: 2,
                     tagCoverage: [
                         [
@@ -168,6 +171,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                         ]
                     ],
                     baseCommit: 'mock-base-commit',
+                    uncoveredLinesChange: 2,
                     coverageChange: -1.2
                 ),
                 TemplateVariant::FULL_PULL_REQUEST_COMMENT
@@ -177,6 +181,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     coveragePercentage: 100.0,
                     diffCoveragePercentage: null,
+                    diffUncoveredLines: 1,
                     successfulUploads: 2,
                     tagCoverage: [
                         [
@@ -204,6 +209,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     ],
                     leastCoveredDiffFiles: [],
                     baseCommit: 'mock-base-commit',
+                    uncoveredLinesChange: 2,
                     coverageChange: 0
                 ),
                 TemplateVariant::FULL_PULL_REQUEST_COMMENT
@@ -379,11 +385,13 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     coveragePercentage: 99.0,
                     diffCoveragePercentage: 0,
+                    diffUncoveredLines: 1,
                     successfulUploads: 2,
                     tagCoverage: [],
                     leastCoveredDiffFiles: [],
                     baseCommit: 'mock-base-commit',
-                    coverageChange: 0
+                    uncoveredLinesChange: 2,
+                    coverageChange: 0,
                 ),
                 TemplateVariant::FULL_PULL_REQUEST_COMMENT
             ],
