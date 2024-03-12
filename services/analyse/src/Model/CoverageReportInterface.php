@@ -69,6 +69,12 @@ interface CoverageReportInterface extends Stringable
     public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult;
 
     /**
+     * The number of lines that were added in the diff, and were not at least partially covered by
+     * tests in any of the uploads.
+     */
+    public function getDiffUncoveredLines(): int;
+
+    /**
      * The coverage recorded against each line in the diff.
      *
      * This isn't an exhaustive list of the whole diff (i.e. code comments will **not** show up here). THis

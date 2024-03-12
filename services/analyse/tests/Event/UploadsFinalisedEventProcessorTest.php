@@ -87,6 +87,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 new TagCoverageCollectionQueryResult([]),
                 0.0,
                 new FileCoverageCollectionQueryResult([]),
+                10,
                 new LineCoverageCollectionQueryResult([])
             ),
             headReport: new CoverageReport(
@@ -99,6 +100,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 new TagCoverageCollectionQueryResult([]),
                 0.0,
                 new FileCoverageCollectionQueryResult([]),
+                10,
                 new LineCoverageCollectionQueryResult([])
             ),
         );
@@ -216,6 +218,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             new TagCoverageCollectionQueryResult([]),
             0.0,
             new FileCoverageCollectionQueryResult([]),
+            10,
             new LineCoverageCollectionQueryResult([])
         );
 

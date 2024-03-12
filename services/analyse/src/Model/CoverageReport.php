@@ -20,6 +20,7 @@ use Override;
 final class CoverageReport implements CoverageReportInterface
 {
     /**
+     * @param ReportWaypoint $waypoint
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
      * @param int|Closure():int $totalLines
      * @param int|Closure():int $atLeastPartiallyCoveredLines
@@ -28,6 +29,7 @@ final class CoverageReport implements CoverageReportInterface
      * @param TagCoverageCollectionQueryResult|Closure():TagCoverageCollectionQueryResult $tagCoverage
      * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
      * @param FileCoverageCollectionQueryResult|Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
+     * @param int|Closure():int $diffUncoveredLines
      * @param LineCoverageCollectionQueryResult|Closure():LineCoverageCollectionQueryResult $diffLineCoverage
      */
     public function __construct(
@@ -40,6 +42,7 @@ final class CoverageReport implements CoverageReportInterface
         private Closure|TagCoverageCollectionQueryResult $tagCoverage,
         private Closure|float|null $diffCoveragePercentage,
         private Closure|FileCoverageCollectionQueryResult $leastCoveredDiffFiles,
+        private Closure|int $diffUncoveredLines,
         private Closure|LineCoverageCollectionQueryResult $diffLineCoverage,
     ) {
     }
@@ -144,6 +147,16 @@ final class CoverageReport implements CoverageReportInterface
         }
 
         return $this->leastCoveredDiffFiles;
+    }
+
+    #[Override]
+    public function getDiffUncoveredLines(): int
+    {
+        if (is_callable($this->diffUncoveredLines)) {
+            $this->diffUncoveredLines = ($this->diffUncoveredLines)();
+        }
+
+        return $this->diffUncoveredLines;
     }
 
     #[Override]

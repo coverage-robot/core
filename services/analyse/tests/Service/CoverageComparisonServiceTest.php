@@ -55,6 +55,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
+            diffUncoveredLines: static fn(): null => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -120,6 +121,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
+            diffUncoveredLines: static fn(): null => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -186,6 +188,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
+            diffUncoveredLines: static fn(): null => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -248,6 +251,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
+            diffUncoveredLines: static fn(): null => 0,
             diffLineCoverage: static fn(): null => null,
         );
 

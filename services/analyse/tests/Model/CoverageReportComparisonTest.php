@@ -54,6 +54,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -74,6 +75,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 0
@@ -97,6 +99,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -117,6 +120,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -10
@@ -140,6 +144,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -160,6 +165,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 -0.33
@@ -183,6 +189,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([])
                 ),
                 new CoverageReport(
@@ -203,6 +210,7 @@ final class CoverageReportComparisonTest extends TestCase
                     tagCoverage: new TagCoverageCollectionQueryResult([]),
                     diffCoveragePercentage: 95,
                     leastCoveredDiffFiles: new FileCoverageCollectionQueryResult([]),
+                    diffUncoveredLines: static fn(): null => 0,
                     diffLineCoverage: new LineCoverageCollectionQueryResult([]),
                 ),
                 5.3

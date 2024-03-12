@@ -101,6 +101,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
                 diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
                 leastCoveredDiffFiles: fn(): FileCoverageCollectionQueryResult =>
                     $this->getLeastCoveredDiffFiles($waypoint),
+                diffUncoveredLines: fn(): int => $this->getDiffUncoveredLines($waypoint),
                 diffLineCoverage: fn(): LineCoverageCollectionQueryResult =>
                     $this->getDiffLineCoverage($waypoint)
             );
@@ -410,15 +411,19 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         $diff = $this->getDiff($waypoint);
+        if ($diff == []) {
+            // Theres no point in checking diff coverage if theirs no diff
+            return null;
+        }
+
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
         if (
-            $diff == [] ||
             $uploads === [] ||
             $ingestTimes === []
         ) {
-            // Theres no point in checking diff coverage if theirs no diff or no
+            // Theres no point in checking diff coverage if theirs no
             // uploads from coverage with the up to date diff
             return 0;
         }
@@ -477,16 +482,20 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
     ): FileCoverageCollectionQueryResult {
         $diff = $this->getDiff($waypoint);
+        if ($diff == []) {
+            // Theres no point in checking diff coverage if theirs no diff
+            return new FileCoverageCollectionQueryResult([]);
+        }
+
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
         if (
-            $diff == [] ||
             $uploads === [] ||
             $ingestTimes === []
         ) {
-            // Theres no point in checking diff coverage if theirs no diff or no
-            // uploads from coverage with the up to date diff
+            // Theres no point in checking diff coverage if theirs no uploads
+            // from coverage with the up to date diff
             return new FileCoverageCollectionQueryResult([]);
         }
 
@@ -517,6 +526,49 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     }
 
     /**
+     * @throws QueryException
+     */
+    public function getDiffUncoveredLines(ReportWaypoint $waypoint): int
+    {
+        $diff = $this->getDiff($waypoint);
+        if ($diff == []) {
+            // Theres no point in checking diff coverage if theirs no diff
+            return 0;
+        }
+
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+
+        if (
+            $uploads === [] ||
+            $ingestTimes === []
+        ) {
+            // Theres no point in checking diff coverage if theirs no uploads
+            // from coverage with the up to date diff
+            return 0;
+        }
+
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::LINES,
+                $diff
+            )
+            ->set(
+                QueryParameter::INGEST_PARTITIONS,
+                $ingestTimes
+            )
+            ->set(
+                QueryParameter::UPLOADS,
+                $uploads
+            );
+
+        /** @var TotalCoverageQueryResult $totalCoverage */
+        $totalCoverage = $this->queryService->runQuery(TotalCoverageQuery::class, $params);
+
+        return $totalCoverage->getUncovered();
+    }
+
+    /**
      * Get the line coverage of a commits diff.
      *
      * It's important to note that the line coverage against a commits diff **does not** make use
@@ -539,16 +591,20 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         $diff = $this->getDiff($waypoint);
+        if ($diff == []) {
+            // Theres no point in checking diff coverage if theirs no diff
+            return new LineCoverageCollectionQueryResult([]);
+        }
+
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
 
         if (
-            $diff == [] ||
             $uploads === [] ||
             $ingestTimes === []
         ) {
-            // Theres no point in checking diff coverage if theirs no diff or no
-            // uploads from coverage with the up to date diff
+            // Theres no point in checking diff coverage if theirs no uploads
+            // from coverage with the up to date diff
             return new LineCoverageCollectionQueryResult([]);
         }
 
