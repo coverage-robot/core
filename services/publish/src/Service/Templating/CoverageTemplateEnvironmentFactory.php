@@ -5,6 +5,7 @@ namespace App\Service\Templating;
 use App\Extension\CoverageTemplateExtension;
 use App\Extension\CoverageTemplateSecurityPolicy;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use Twig\Environment;
 use Twig\Extension\SandboxExtension;
@@ -15,6 +16,8 @@ use Twig\RuntimeLoader\ContainerRuntimeLoader;
 final class CoverageTemplateEnvironmentFactory
 {
     public function __construct(
+        #[Autowire(value: '%kernel.project_dir%')]
+        private string $rootDirectory,
         #[TaggedLocator('app.template_available')]
         private readonly ContainerInterface $container,
         private readonly CoverageTemplateSecurityPolicy $securityPolicy,
@@ -32,9 +35,12 @@ final class CoverageTemplateEnvironmentFactory
     public function create(): Environment
     {
         $environment = new Environment(
-            new FilesystemLoader([
-                'templates/coverage',
-            ])
+            new FilesystemLoader(
+                [
+                    'templates/coverage',
+                ],
+                $this->rootDirectory
+            )
         );
 
         /**
@@ -55,7 +61,7 @@ final class CoverageTemplateEnvironmentFactory
 
         /**
          * Add simple string helpers provided by Twig. This includes string manipulation
-         * using the UnicodeString class - line truncating strings at a certain length.
+         * using the UnicodeString class - like truncating strings at a certain length.
          */
         $environment->addExtension(new StringExtension());
 
