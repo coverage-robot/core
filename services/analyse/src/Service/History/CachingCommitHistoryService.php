@@ -80,7 +80,7 @@ final class CachingCommitHistoryService implements CommitHistoryServiceInterface
     {
         /**
          * @var ReportWaypoint $cachedWaypoint
-         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $history
+         * @var array<int, array{commit: string, merged: bool, ref: string|null}[]> $allCacheValue
          */
         foreach ($this->getAllCacheValues(self::CACHE_METHOD_NAME) as $cachedWaypoint => $allCacheValue) {
             if ($cachedWaypoint === $waypoint) {
