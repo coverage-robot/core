@@ -159,7 +159,7 @@ jobs:
                 run: composer lint:security
 
             -   name: Run Twig Lint
-                run: composer lint:templates
+                run: composer lint:coverage_templates
 
             -   name: Run Terraform Format
                 uses: dflook/terraform-fmt-check@v1
