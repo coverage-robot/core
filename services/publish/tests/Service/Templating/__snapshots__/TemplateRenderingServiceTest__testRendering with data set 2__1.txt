@@ -10,7 +10,7 @@
 
 | Tag | Lines | Covered | Partial | Uncovered | Coverage |
 | --- | --- | --- | --- | --- | --- |
-| mock-tag | 100 | 48 | 2 | 50 | 50% |
+| mock-tag-which-is-really-long-and-needs-to-be-truncated-a... | 100 | 48 | 2 | 50 | 50% |
 | mock-tag-2<br><sub>(Carried forward from mock-commit-2)</sub> | 2 | 0 | 0 | 2 | 0% |
 </details>
 

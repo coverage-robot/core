@@ -181,7 +181,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     tagCoverage: [
                         [
                             'tag' => [
-                                'name' => 'mock-tag',
+                                'name' => 'mock-tag-which-is-really-long-and-needs-to-be-truncated-at-some-point',
                                 'commit' => 'mock-commit',
                             ],
                             'lines' => 100,

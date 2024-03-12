@@ -14,7 +14,7 @@
 | Tag | Lines | Covered | Partial | Uncovered | Coverage |
 | --- | --- | --- | --- | --- | --- |
 {%~ for tag in report().tag_coverage -%}
-| {{ tag.name }}{{ (tag.commit != event().head_commit) ? ('<br><sub>(Carried forward from ' ~ tag.commit ~ ')</sub>')|raw : '' }} | {{ tag.lines }} | {{ tag.covered }} | {{ tag.partial }} | {{ tag.uncovered }} | {{ tag.coverage_percentage|round(2) }}% |
+| {{ tag.name|u.truncate(60, '...') }}{{ (tag.commit != event().head_commit) ? ('<br><sub>(Carried forward from ' ~ tag.commit ~ ')</sub>')|raw : '' }} | {{ tag.lines }} | {{ tag.covered }} | {{ tag.partial }} | {{ tag.uncovered }} | {{ tag.coverage_percentage|round(2) }}% |
 {%~ endfor -%}
 {%- else -%}
 > No uploaded tags in #{{ event().pull_request }}
