@@ -1,7 +1,7 @@
 {%- set base_commit = event().base_commit is not same as null ? event().base_commit : event().parents[0] -%}
 {%- set line_plural = report().uncovered_lines_change|abs != 1 ? 'lines' : 'line' -%}
 ## Coverage Report
-> Merging #{{ event().pull_request }} will {{ (report().uncovered_lines_change > 0) ? '**increase** untested code by `' ~ report().uncovered_lines_change ~ ' ' ~ line_plural ~ '`' : (report().uncovered_lines_change < 0) ? '**decrease** untested code by `' ~ report().uncovered_lines_change|abs ~ ' ' ~ line_plural ~ '`' : '**not change** untested code' }} (compared to {{ base_commit }})
+> Merging #{{ event().pull_request }} will {{ (report().uncovered_lines_change > 0) ? '**increase** the amount of untested code by `' ~ report().uncovered_lines_change ~ ' ' ~ line_plural ~ '`' : (report().uncovered_lines_change < 0) ? '**decrease** the amount of untested code by `' ~ report().uncovered_lines_change|abs ~ ' ' ~ line_plural ~ '`' : '**not change** the amount of untested code' }} (compared to {{ base_commit }})
 
 {% if report().diff_uncovered_lines > 0 %}
 > [!WARNING]
