@@ -423,9 +423,9 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             $uploads === [] ||
             $ingestTimes === []
         ) {
-            // Theres no point in checking diff coverage if theirs no
-            // uploads from coverage with the up to date diff
-            return 0;
+            // Theres no point in checking diff coverage if theirs no uploads from
+            // coverage with the up to date diff
+            return null;
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
