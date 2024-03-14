@@ -16,16 +16,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
 use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
+use Symfony\Component\Serializer\Mapping\ClassDiscriminatorResolverInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ManualInputEventBuilder implements EventBuilderInterface
 {
     public function __construct(
-        private readonly PropertyInfoExtractor $propertyInfoExtractor,
-        private readonly ClassDiscriminatorFromClassMetadata $classDiscriminatorFromClassMetadata,
+        private readonly PropertyInfoExtractorInterface $propertyInfoExtractor,
+        private readonly ClassDiscriminatorResolverInterface $classDiscriminatorFromClassMetadata,
         private readonly SerializerInterface&DenormalizerInterface $serializer,
     ) {
     }
