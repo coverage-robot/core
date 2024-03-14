@@ -2,14 +2,7 @@ name: Ingest
 
 on:
     merge_group:
-        paths:
-            - 'services/ingest/**'
-            - '.github/workflows/ingest.yml'
-            - 'packages/configuration/**'
-            - 'packages/contracts/**'
-            - 'packages/event/**'
-            - 'packages/telemetry/**'
-            - 'rector.php'
+        # Path filtering isn't supported on merge queues, so we're forced to run all services
 
     push:
         branches:
