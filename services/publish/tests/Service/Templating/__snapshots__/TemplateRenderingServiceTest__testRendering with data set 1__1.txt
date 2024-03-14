@@ -1,8 +1,8 @@
 ## Coverage Report
-> Merging #12 will **increase** the amount of untested code by `2 lines` (compared to mock-base-commit)
+> Merging #12 will **decrease** the total coverage by `1.2%` (compared to mock-base-commit)
 
 > [!WARNING]
-> ** Consider additional tests:** There's `1 line` that is new and not tested!
+> **Consider additional tests:** There's `1 line` that's new and not tested!
 
 | Total Coverage | Diff Coverage |
 | --- | --- |
