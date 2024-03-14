@@ -5,16 +5,6 @@ namespace App\Enum;
 enum QueryResult: string
 {
     /**
-     * A collection of commits from the data warehouse.
-     */
-    case COMMIT_COLLECTION = 'COMMIT_COLLECTION';
-
-    /**
-     * A singular commit from the data warehouse.
-     */
-    case COMMIT = 'COMMIT';
-
-    /**
      * The total coverage for a commit.
      */
     case COVERAGE = 'COVERAGE';
