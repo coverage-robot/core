@@ -181,7 +181,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
                     event: $event,
                     coveragePercentage: 100.0,
                     diffCoveragePercentage: null,
-                    diffUncoveredLines: 1,
+                    diffUncoveredLines: 0,
                     successfulUploads: 2,
                     tagCoverage: [
                         [
