@@ -2,9 +2,7 @@ name: Infrastructure
 
 on:
     merge_group:
-        paths:
-            - 'infrastructure/**'
-            - '.github/workflows/infrastructure.yml'
+        # Path filtering isn't supported on merge queues, so we're forced to run all services
 
     push:
         branches:

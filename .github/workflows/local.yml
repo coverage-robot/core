@@ -2,10 +2,7 @@ name: Local Package
 
 on:
     merge_group:
-        paths:
-            - '.github/workflows/local.yml'
-            - 'packages/local/**'
-            - 'packages/event/**'
+        # Path filtering isn't supported on merge queues, so we're forced to run all services
 
     push:
         branches:
