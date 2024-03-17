@@ -1,29 +1,13 @@
 monolog:
   handlers:
-    nested:
+    main:
       type: stream
       path: "php://stderr"
-      formatter: Packages\Telemetry\Service\SymfonySerializerLineFormatter
+      formatter: "telemetry.symfony_serializer_line_formatter"
       channels: ['!metrics']
 
-    metrics:
-      type: stream
-      path: "php://stdout"
-      formatter: metrics_formatter
-      level: info
-      channels: [ 'metrics' ]
-
-  channels: [ "upload", "metrics" ]
+  channels: [ "upload" ]
 
 services:
-    Packages\Telemetry\Service\SymfonySerializerLineFormatter:
-        autowire: true
-        arguments:
-            $format: "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n"
-
-    metrics_formatter:
-        class: Monolog\Formatter\LineFormatter
-        arguments: [ "%%message%%\n" ]
-
     Monolog\Processor\PsrLogMessageProcessor:
-        tags: { name: monolog.processor, handler: nested }
+        tags: { name: monolog.processor, handler: main }

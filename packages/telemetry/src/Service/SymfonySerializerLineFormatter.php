@@ -4,6 +4,7 @@ namespace Packages\Telemetry\Service;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use TypeError;
@@ -16,6 +17,7 @@ final class SymfonySerializerLineFormatter extends LineFormatter implements Form
 {
     public function __construct(
         private readonly SerializerInterface $serializer,
+        #[Autowire(value: "[%%channel%%] %%level_name%%: %%message%% %%context%% %%extra%%\n")]
         ?string $format = null,
         ?string $dateFormat = null,
         bool $allowInlineLineBreaks = false,

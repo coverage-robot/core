@@ -1,0 +1,10 @@
+monolog:
+    handlers:
+        metrics:
+            type: stream
+            path: "php://stdout"
+            formatter: telemetry.metrics_formatter
+            level: info
+            channels: [ 'metrics' ]
+
+    channels: [ 'metrics' ]
