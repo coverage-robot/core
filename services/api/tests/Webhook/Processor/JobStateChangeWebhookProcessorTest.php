@@ -2,10 +2,8 @@
 
 namespace App\Tests\Webhook\Processor;
 
-use App\Entity\Job;
 use App\Entity\Project;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
-use App\Repository\JobRepository;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use DateTimeImmutable;
 use Packages\Event\Client\EventBusClientInterface;
@@ -18,24 +16,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
     public function testProcessingWebhookCreatingNewJobForProject(): void
     {
         $mockProject = new Project();
-        $newJob = new Job();
-
-        $mockJobRepository = $this->createMock(JobRepository::class);
-        $mockJobRepository->expects($this->exactly(1))
-            ->method('findOneBy')
-            ->with(
-                [
-                    'project' => $mockProject,
-                    'externalId' => '1',
-                    'commit' => 'mock-commit'
-                ]
-            )
-            ->willReturn(null);
-        $mockJobRepository->expects($this->once())
-            ->method('create')
-            ->willReturn($newJob);
-        $mockJobRepository->expects($this->once())
-            ->method('save');
 
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
@@ -43,7 +23,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
-            $mockJobRepository,
             $mockEventBusClient
         );
 
@@ -71,23 +50,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
     public function testProcessingWebhookUpdatingExistingJobForProject(): void
     {
         $mockProject = new Project();
-        $job = new Job();
-
-        $mockJobRepository = $this->createMock(JobRepository::class);
-        $mockJobRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with(
-                [
-                    'project' => $mockProject,
-                    'externalId' => '1',
-                    'commit' => 'mock-commit'
-                ]
-            )
-            ->willReturn($job);
-        $mockJobRepository->expects($this->never())
-            ->method('create');
-        $mockJobRepository->expects($this->once())
-            ->method('save');
 
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
@@ -95,7 +57,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
-            $mockJobRepository,
             $mockEventBusClient
         );
 

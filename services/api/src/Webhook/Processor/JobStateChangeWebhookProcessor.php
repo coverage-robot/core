@@ -2,14 +2,11 @@
 
 namespace App\Webhook\Processor;
 
-use App\Entity\Job;
 use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
-use App\Repository\JobRepository;
 use AsyncAws\Core\Exception\Http\HttpException;
-use DateTimeImmutable;
 use JsonException;
 use Override;
 use Packages\Contracts\Event\EventSource;
@@ -24,7 +21,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
-        private readonly JobRepository $jobRepository,
         #[Autowire(service: EventBusClient::class)]
         private readonly EventBusClientInterface $eventBusClient
     ) {
@@ -33,10 +29,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     /**
      * Process any webhooks received from third-party providers which relate to potential changes
      * in the state of a job (i.e. a CI pipeline job has completed).
-     *
-     * In practice this involves ingesting the modelled webhook payload and updating the state of
-     * the associated job in the database. If theres no job associated with the ID from the webhook
-     * one will be created.
      */
     #[Override]
     public function process(Project $project, WebhookInterface $webhook): void
@@ -58,24 +50,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             )
         );
 
-        $job = $this->findOrCreateJob($project, $webhook);
-
-        $job->setState($webhook->getJobState());
-        $job->setUpdatedAt(new DateTimeImmutable());
-
-        $this->jobRepository->save($job, true);
-
-        $this->webhookProcessorLogger->info(
-            sprintf(
-                'Job updated successfully based on webhook changes: %s.',
-                (string)$webhook
-            ),
-            [
-                'jobId' => $job->getId(),
-                'isNewJob' => $job->getId() === null
-            ]
-        );
-
         $this->fireEvent(
             new JobStateChange(
                 provider: $webhook->getProvider(),
@@ -93,29 +67,6 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
                 eventTime: $webhook->getEventTime()
             )
         );
-    }
-
-    private function findOrCreateJob(
-        Project $project,
-        WebhookInterface&PipelineStateChangeWebhookInterface $webhook
-    ): Job {
-        $job = $this->jobRepository->findOneBy(
-            [
-                'project' => $project,
-                'commit' => $webhook->getCommit(),
-                'externalId' => $webhook->getExternalId()
-            ]
-        );
-
-        if ($job === null) {
-            return $this->jobRepository->create(
-                $project,
-                $webhook->getCommit(),
-                (string)$webhook->getExternalId()
-            );
-        }
-
-        return $job;
     }
 
     private function fireEvent(JobStateChange $jobStateChange): void
