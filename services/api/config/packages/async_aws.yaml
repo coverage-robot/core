@@ -6,7 +6,7 @@ when@dev: &aws_dev
         clients:
             s3:
                 config:
-                    endpoint: '%env(S3_ENDPOINT)%'
+                    endpoint: 'http://localstack:4566'
                     pathStyleEndpoint: true
 
 when@test: *aws_dev
