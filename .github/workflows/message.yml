@@ -2,6 +2,11 @@ name: Message Package
 
 on:
     merge_group:
+        types:
+            - checks_requested
+        branches:
+            - main
+
         # Path filtering isn't supported on merge queues, so we're forced to run all services
         
     push:
