@@ -12,3 +12,10 @@ services:
 
     Packages\Telemetry\Service\MetricServiceInterface:
         class: Packages\Telemetry\Service\MetricService
+
+    telemetry.symfony_serializer_line_formatter:
+        class: Packages\Telemetry\Service\SymfonySerializerLineFormatter
+
+    telemetry.metrics_formatter:
+        class: Monolog\Formatter\LineFormatter
+        arguments: [ "%%message%%\n" ]

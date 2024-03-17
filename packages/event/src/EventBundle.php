@@ -47,6 +47,9 @@ final class EventBundle extends AbstractBundle
     {
         // Register configuration for the Event Bus client
         $container->import('../config/packages/async_aws.yaml');
+
+        // Register the configuration for the Event Processors logger
+        $container->import('../config/packages/monolog.yaml');
     }
 
     /**
