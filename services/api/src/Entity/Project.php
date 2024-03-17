@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Override;
 use Packages\Contracts\Provider\Provider;
@@ -53,17 +51,6 @@ class Project implements Stringable
 
     #[ORM\Column(options: ['default' => null], nullable: true)]
     private ?float $coveragePercentage = null;
-
-    /**
-     * @var Collection<int, Job>
-     */
-    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Job::class, orphanRemoval: true)]
-    private Collection $jobs;
-
-    public function __construct()
-    {
-        $this->jobs = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -149,34 +136,6 @@ class Project implements Stringable
     public function setCoveragePercentage(?float $coveragePercentage): Project
     {
         $this->coveragePercentage = $coveragePercentage;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Job>
-     */
-    public function getJobs(): Collection
-    {
-        return $this->jobs;
-    }
-
-    public function addJob(Job $job): static
-    {
-        if (!$this->jobs->contains($job)) {
-            $this->jobs->add($job);
-            $job->setProject($this);
-        }
-
-        return $this;
-    }
-
-    public function removeJob(Job $job): static
-    {
-        // set the owning side to null (unless already changed)
-        if ($this->jobs->removeElement($job) && $job->getProject() === $this) {
-            $job->setProject(null);
-        }
-
         return $this;
     }
 
