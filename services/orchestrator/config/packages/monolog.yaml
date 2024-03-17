@@ -4,7 +4,12 @@ monolog:
             type: stream
             path: "php://stderr"
             formatter: "telemetry.symfony_serializer_line_formatter"
-            channels: ['!metrics']
+            channels:
+                - '!metrics'
+
+    channels:
+        - "event_processor"
+        - "event_store"
 
 services:
     Monolog\Processor\PsrLogMessageProcessor:

@@ -4,9 +4,17 @@ monolog:
       type: stream
       path: "php://stderr"
       formatter: "telemetry.symfony_serializer_line_formatter"
-      channels: ['!metrics']
+      channels:
+          - "!metrics"
 
-  channels: [ "upload" ]
+  channels:
+      - "webhook"
+      - "webhook_queue_client"
+      - "upload"
+      - "event_handler"
+      - "auth_token"
+      - "webhook_processor"
+      - "webhook_signature"
 
 services:
     Monolog\Processor\PsrLogMessageProcessor:
