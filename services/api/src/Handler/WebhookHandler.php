@@ -72,11 +72,7 @@ final class WebhookHandler extends SqsHandler
                     ]
                 );
 
-                $this->metricService->put(
-                    metric: 'InvalidWebhooks',
-                    value: 1,
-                    unit: Unit::COUNT
-                );
+                $this->metricService->increment(metric: 'InvalidWebhooks');
 
                 continue;
             } catch (InvalidWebhookException $e) {
@@ -88,11 +84,7 @@ final class WebhookHandler extends SqsHandler
                     ]
                 );
 
-                $this->metricService->put(
-                    metric: 'InvalidWebhooks',
-                    value: 1,
-                    unit: Unit::COUNT
-                );
+                $this->metricService->increment(metric: 'InvalidWebhooks');
 
                 continue;
             }
