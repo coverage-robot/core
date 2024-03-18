@@ -19,7 +19,7 @@ final class UploadControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

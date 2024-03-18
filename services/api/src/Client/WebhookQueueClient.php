@@ -40,15 +40,15 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
     {
         try {
             $this->webhookValidationService->validate($webhook);
-        } catch (InvalidWebhookException $invalidMessageException) {
+        } catch (InvalidWebhookException $invalidWebhookException) {
             $this->webhookQueueClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
                     (string)$webhook
                 ),
                 [
-                    'exception' => $invalidMessageException,
-                    'violations' => $invalidMessageException->getViolations(),
+                    'exception' => $invalidWebhookException,
+                    'violations' => $invalidWebhookException->getViolations(),
                     'webhook' => $webhook
                 ]
             );
