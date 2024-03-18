@@ -102,7 +102,7 @@ final class WebhookController extends AbstractController
             ),
         );
 
-        return new Response(null, Response::HTTP_OK);
+        return new Response(null, Response::HTTP_ACCEPTED);
     }
 
 
