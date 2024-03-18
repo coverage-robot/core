@@ -63,11 +63,26 @@ final class WebhookHandler extends SqsHandler
                 );
 
                 $this->webhookValidationService->validate($webhook);
-            } catch (ExceptionInterface | InvalidWebhookException $e) {
+            } catch (ExceptionInterface $e) {
                 $this->webhookLogger->error(
                     'Failed to deserialize webhook payload.',
                     [
                         'exception' => $e,
+                        'payload' => $sqsRecord->getBody()
+                    ]
+                );
+
+                $this->metricService->put(
+                    metric: 'InvalidWebhooks',
+                    value: 1,
+                    unit: Unit::COUNT
+                );
+
+                continue;
+            } catch (InvalidWebhookException $e) {
+                $this->webhookLogger->error(
+                    'Failed to validate webhook payload.',
+                    [
                         'violations' => $e->getViolations(),
                         'payload' => $sqsRecord->getBody()
                     ]
