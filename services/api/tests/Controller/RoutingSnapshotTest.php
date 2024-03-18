@@ -4,20 +4,23 @@ namespace App\Tests\Controller;
 
 use Exception;
 use JsonException;
+use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class RoutingSnapshotTest extends KernelTestCase
 {
+    use MatchesSnapshots;
+
     public function testCurrentRoutingConfigurationMatchesSnapshot(): void
     {
         try {
-            $router = (static::getContainer())->get('router');
+            $router = $this->getContainer()->get('router');
+
+            if ($router === null) {
+                $this->fail('Unable to get router from container.');
+            }
         } catch (Exception $exception) {
             $this->fail($exception->getMessage());
-        }
-
-        if ($router === null) {
-            $this->fail('Unable to get router from container.');
         }
 
         $routeCollection = $router->getRouteCollection();
@@ -43,11 +46,6 @@ final class RoutingSnapshotTest extends KernelTestCase
             );
         }
 
-        $expectedRouteMapFile = __DIR__ . '/../Fixture/routing.json';
-
-        $this->assertJsonStringEqualsJsonFile(
-            $expectedRouteMapFile,
-            $currentRouteMapJson
-        );
+        $this->assertMatchesSnapshot($currentRouteMapJson);
     }
 }

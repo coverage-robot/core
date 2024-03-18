@@ -25,9 +25,6 @@ final class WebhookValidationService
             return true;
         }
 
-        throw InvalidWebhookException::constraintViolations(
-            $webhook,
-            $errors
-        );
+        throw InvalidWebhookException::constraintViolations($webhook, $errors);
     }
 }

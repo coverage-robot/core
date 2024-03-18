@@ -2,30 +2,41 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\GraphController;
 use App\Entity\Project;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GraphControllerTest extends KernelTestCase
+final class GraphControllerTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = GraphControllerTest::createClient([
+            /**
+             * Turning off debug mode so that problem responses do not contain the full
+             * stack trace.
+             */
+            'debug' => false
+        ]);
+    }
+
     public function testBadgeWithValidParameters(): void
     {
-        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-
         $mockAuthTokenService->expects($this->once())
             ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
             ->willReturn('mock-graph-token');
-
         $mockAuthTokenService->expects($this->once())
             ->method('validateParametersWithGraphToken')
             ->with(
@@ -38,6 +49,10 @@ final class GraphControllerTest extends KernelTestCase
             )
             ->willReturn(true);
 
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+
+        $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->once())
             ->method('findOneBy')
             ->with([
@@ -47,84 +62,126 @@ final class GraphControllerTest extends KernelTestCase
             ])
             ->willReturn(new Project());
 
+        $this->getContainer()
+            ->set(ProjectRepository::class, $mockProjectRepository);
+
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->once())
             ->method('renderCoveragePercentageBadge')
             ->with(null)
             ->willReturn('<svg></svg>');
 
-        $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
+        $this->getContainer()
+            ->set(BadgeServiceInterface::class, $mockBadgeService);
 
-        $uploadController->setContainer($this->getContainer());
+        $this->client->request(
+            Request::METHOD_GET,
+            '/graph/' . Provider::GITHUB->value . '/owner/repository/badge.svg'
+        );
 
-        $response = $uploadController->badge(Provider::GITHUB->value, 'owner', 'repository', new Request());
+        $this->assertResponseIsSuccessful();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals('<svg></svg>', $response->getContent());
+        $this->assertEquals(
+            <<<HTML
+            <svg></svg>
+            HTML,
+            $this->client->getResponse()->getContent()
+        );
     }
 
     public function testBadgeWithInvalidToken(): void
     {
-        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-
         $mockAuthTokenService->expects($this->once())
             ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
             ->willReturn('mock-graph-token');
-
         $mockAuthTokenService->expects($this->once())
             ->method('validateParametersWithGraphToken')
             ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
             ->willReturn(false);
 
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+
+        $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->never())
             ->method('findOneBy');
 
+        $this->getContainer()
+            ->set(ProjectRepository::class, $mockProjectRepository);
+
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
             ->method('renderCoveragePercentageBadge');
 
-        $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
+        $this->getContainer()
+            ->set(BadgeServiceInterface::class, $mockBadgeService);
 
-        $uploadController->setContainer($this->getContainer());
+        $this->client->request(
+            Request::METHOD_GET,
+            '/graph/' . Provider::GITHUB->value . '/owner/repository/badge.svg'
+        );
 
-        $response = $uploadController->badge(Provider::GITHUB->value, 'owner', 'repository', new Request());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->assertEquals(
-            Response::HTTP_UNAUTHORIZED,
-            $response->getStatusCode()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "detail": "The provided graph token is invalid.",
+                "status": 401,
+                "title": "Unauthorized",
+                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 
     public function testBadgeWithMissingToken(): void
     {
-        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-
         $mockAuthTokenService->expects($this->once())
             ->method('getGraphTokenFromRequest')
             ->with($this->isInstanceOf(Request::class))
             ->willReturn(null);
-
         $mockAuthTokenService->expects($this->never())
             ->method('validateParametersWithGraphToken');
 
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+
+        $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->never())
             ->method('findOneBy');
 
+        $this->getContainer()
+            ->set(ProjectRepository::class, $mockProjectRepository);
+
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
             ->method('renderCoveragePercentageBadge');
 
-        $uploadController = new GraphController($mockBadgeService, $mockAuthTokenService, $mockProjectRepository);
+        $this->getContainer()
+            ->set(BadgeServiceInterface::class, $mockBadgeService);
 
-        $uploadController->setContainer($this->getContainer());
+        $this->client->request(
+            Request::METHOD_GET,
+            '/graph/' . Provider::GITHUB->value . '/owner/repository/badge.svg'
+        );
 
-        $response = $uploadController->badge(Provider::GITHUB->value, 'owner', 'repository', new Request());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->assertEquals(
-            Response::HTTP_UNAUTHORIZED,
-            $response->getStatusCode()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "detail": "The provided graph token is invalid.",
+                "status": 401,
+                "title": "Unauthorized",
+                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 }

@@ -7,7 +7,6 @@ use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
-use InvalidArgumentException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -48,9 +47,7 @@ final class UploadService implements UploadServiceInterface
                 ]
             );
 
-            throw SigningException::invalidParameters(
-                new InvalidArgumentException('No data key found in request body.')
-            );
+            throw SigningException::invalidSignature();
         }
 
         /** @var array{ data: array<array-key, mixed> } $body */

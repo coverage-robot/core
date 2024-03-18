@@ -15,7 +15,6 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Override;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
@@ -64,7 +63,7 @@ final class WebhookHandler extends SqsHandler
                 );
 
                 $this->webhookValidationService->validate($webhook);
-            } catch (ExceptionInterface | InvalidWebhookException $e) {
+            } catch (ExceptionInterface $e) {
                 $this->webhookLogger->error(
                     'Failed to deserialize webhook payload.',
                     [
@@ -73,11 +72,19 @@ final class WebhookHandler extends SqsHandler
                     ]
                 );
 
-                $this->metricService->put(
-                    metric: 'InvalidWebhooks',
-                    value: 1,
-                    unit: Unit::COUNT
+                $this->metricService->increment(metric: 'InvalidWebhooks');
+
+                continue;
+            } catch (InvalidWebhookException $e) {
+                $this->webhookLogger->error(
+                    'Failed to validate webhook payload.',
+                    [
+                        'violations' => $e->getViolations(),
+                        'payload' => $sqsRecord->getBody()
+                    ]
                 );
+
+                $this->metricService->increment(metric: 'InvalidWebhooks');
 
                 continue;
             }
