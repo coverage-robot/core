@@ -3,7 +3,6 @@
 namespace App\Tests\Controller;
 
 use App\Client\WebhookQueueClientInterface;
-use App\Controller\WebhookController;
 use App\Enum\EnvironmentVariable;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\Github\GithubPushWebhook;
@@ -15,36 +14,46 @@ use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Serializer\SerializerInterface;
 
-final class WebhookControllerTest extends KernelTestCase
+final class WebhookControllerTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = WebhookControllerTest::createClient([
+            /**
+             * Turning off debug mode so that problem responses do not contain the full
+             * stack trace.
+             */
+            'debug' => false
+        ]);
+    }
+
     public function testHandleWebhookEventWithInvalidEventHeader(): void
     {
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
-        $webhookController = new WebhookController(
-            new NullLogger(),
-            $this->getWebhookSignatureService(),
-            $this->getContainer()->get(SerializerInterface::class),
-            $mockWebhookQueueClient
-        );
+        $this->getContainer()
+            ->set(WebhookQueueClientInterface::class, $mockWebhookQueueClient);
 
-        $webhookController->setContainer($this->getContainer());
-
-        $request = new Request(
-            server: ['HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => 'check_run'],
+        $this->client->request(
+            method: Request::METHOD_POST,
+            uri: '/event/' . Provider::GITHUB->value,
+            server: ['HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => 'some_other_invalid_event'],
             content: json_encode(['invalid' => 'body'])
         );
 
-        $response = $webhookController->handleWebhookEvent(Provider::GITHUB->value, $request);
-
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $this->assertResponseIsUnprocessable();
+        $this->assertEmpty($this->client->getResponse()->getContent());
     }
 
     public function testHandleWebhookEventWithInvalidBody(): void
@@ -53,23 +62,18 @@ final class WebhookControllerTest extends KernelTestCase
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
-        $webhookController = new WebhookController(
-            new NullLogger(),
-            $this->getWebhookSignatureService(),
-            $this->getContainer()->get(SerializerInterface::class),
-            $mockWebhookQueueClient
-        );
+        $this->getContainer()
+            ->set(WebhookQueueClientInterface::class, $mockWebhookQueueClient);
 
-        $webhookController->setContainer($this->getContainer());
-
-        $request = new Request(
+        $this->client->request(
+            method: Request::METHOD_POST,
+            uri: '/event/' . Provider::GITHUB->value,
             server: ['HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => 'check_run'],
             content: json_encode(['invalid' => 'body'])
         );
 
-        $response = $webhookController->handleWebhookEvent(Provider::GITHUB->value, $request);
-
-        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
+        $this->assertResponseIsUnprocessable();
+        $this->assertEmpty($this->client->getResponse()->getContent());
     }
 
     #[DataProvider('webhookPayloadDataProvider')]
@@ -83,16 +87,12 @@ final class WebhookControllerTest extends KernelTestCase
         $mockWebhookQueueClient->expects($this->never())
             ->method('dispatchWebhook');
 
-        $webhookController = new WebhookController(
-            new NullLogger(),
-            $this->getWebhookSignatureService(),
-            $this->getContainer()->get(SerializerInterface::class),
-            $mockWebhookQueueClient
-        );
+        $this->getContainer()
+            ->set(WebhookQueueClientInterface::class, $mockWebhookQueueClient);
 
-        $webhookController->setContainer($this->getContainer());
-
-        $request = new Request(
+        $this->client->request(
+            method: Request::METHOD_POST,
+            uri: '/event/' . $provider->value,
             server: [
                 'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
                 'HTTP_' . SignedWebhookInterface::GITHUB_SIGNATURE_HEADER => 'invalid-signature'
@@ -100,9 +100,8 @@ final class WebhookControllerTest extends KernelTestCase
             content: $payload
         );
 
-        $response = $webhookController->handleWebhookEvent($provider->value, $request);
-
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        $this->assertEmpty($this->client->getResponse()->getContent());
     }
 
     #[DataProvider('webhookPayloadDataProvider')]
@@ -118,16 +117,15 @@ final class WebhookControllerTest extends KernelTestCase
             ->method('dispatchWebhook')
             ->with($this->isInstanceOf($webhookInstance));
 
-        $webhookController = new WebhookController(
-            new NullLogger(),
-            $this->getWebhookSignatureService(),
-            $this->getContainer()->get(SerializerInterface::class),
-            $mockWebhookQueueClient
-        );
+        $this->getContainer()
+            ->set(WebhookQueueClientInterface::class, $mockWebhookQueueClient);
 
-        $webhookController->setContainer($this->getContainer());
+        $this->getContainer()
+            ->set(WebhookSignatureService::class, $this->getWebhookSignatureService());
 
-        $request = new Request(
+        $this->client->request(
+            method: Request::METHOD_POST,
+            uri: '/event/' . $provider->value,
             server: [
                 'HTTP_' . SignedWebhookInterface::GITHUB_EVENT_HEADER => $type,
                 'HTTP_' . SignedWebhookInterface::GITHUB_SIGNATURE_HEADER => $signature
@@ -135,9 +133,8 @@ final class WebhookControllerTest extends KernelTestCase
             content: $payload
         );
 
-        $response = $webhookController->handleWebhookEvent($provider->value, $request);
-
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertResponseIsSuccessful();
+        $this->assertEmpty($this->client->getResponse()->getContent());
     }
 
     public static function webhookPayloadDataProvider(): iterable

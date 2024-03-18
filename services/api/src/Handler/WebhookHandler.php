@@ -15,7 +15,6 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Override;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
@@ -69,6 +68,7 @@ final class WebhookHandler extends SqsHandler
                     'Failed to deserialize webhook payload.',
                     [
                         'exception' => $e,
+                        'violations' => $e->getViolations(),
                         'payload' => $sqsRecord->getBody()
                     ]
                 );

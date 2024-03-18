@@ -2,17 +2,16 @@
 
 namespace App\Exception;
 
-use Exception;
-use Throwable;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class SigningException extends Exception
+final class SigningException extends HttpException
 {
-    public static function invalidParameters(?Throwable $exception = null): self
+    public static function invalidSignature(): self
     {
         return new self(
-            'Parameters provided for signing do not match expectation.',
-            0,
-            $exception
+            Response::HTTP_BAD_REQUEST,
+            'The signature provided is invalid.'
         );
     }
 }

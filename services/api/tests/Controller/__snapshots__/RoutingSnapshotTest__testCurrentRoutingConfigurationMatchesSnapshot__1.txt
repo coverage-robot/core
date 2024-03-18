@@ -1,36 +1,39 @@
 {
     "badge": {
+        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{type}",
+        "requirements": {
+            "type": "(.+)\\.svg"
+        },
         "defaults": {
+            "_format": "json",
             "_controller": "App\\Controller\\GraphController::badge"
         },
         "methods": [
             "GET"
-        ],
-        "path": "/graph/{provider}/{owner}/{repository}/{type}",
-        "requirements": {
-            "type": "(.+)\\.svg"
-        }
+        ]
     },
     "upload": {
+        "path": "\/upload",
+        "requirements": [],
         "defaults": {
+            "_format": "json",
             "_controller": "App\\Controller\\UploadController::handleUpload"
         },
         "methods": [
             "POST"
-        ],
-        "path": "/upload",
-        "requirements": []
+        ]
     },
     "webhook_event": {
+        "path": "\/event\/{provider}",
+        "requirements": {
+            "provider": "github"
+        },
         "defaults": {
+            "_format": "json",
             "_controller": "App\\Controller\\WebhookController::handleWebhookEvent"
         },
         "methods": [
             "POST"
-        ],
-        "path": "/event/{provider}",
-        "requirements": {
-            "provider": "github"
-        }
+        ]
     }
 }

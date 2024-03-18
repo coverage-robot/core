@@ -2,6 +2,7 @@
 
 namespace App\Client;
 
+use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookValidationService;
 use AsyncAws\Core\Exception\Http\HttpException;
@@ -10,7 +11,6 @@ use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Message\Exception\InvalidMessageException;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -40,7 +40,7 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
     {
         try {
             $this->webhookValidationService->validate($webhook);
-        } catch (InvalidMessageException $invalidMessageException) {
+        } catch (InvalidWebhookException $invalidMessageException) {
             $this->webhookQueueClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed validation.',
@@ -48,6 +48,7 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
                 ),
                 [
                     'exception' => $invalidMessageException,
+                    'violations' => $invalidMessageException->getViolations(),
                     'webhook' => $webhook
                 ]
             );

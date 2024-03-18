@@ -2,25 +2,36 @@
 
 namespace App\Tests\Controller;
 
-use App\Controller\UploadController;
 use App\Exception\SigningException;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
-use App\Service\AuthTokenService;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
-use Packages\Telemetry\Service\MetricService;
-use Packages\Telemetry\Service\MetricServiceInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Psr\Log\NullLogger;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class UploadControllerTest extends KernelTestCase
+final class UploadControllerTest extends WebTestCase
 {
+    private KernelBrowser $client;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = UploadControllerTest::createClient([
+            /**
+             * Turning off debug mode so that problem responses do not contain the full
+             * stack trace.
+             */
+            'debug' => false
+        ]);
+    }
+
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleSuccessfulUpload(SigningParameters $parameters): void
     {
@@ -28,7 +39,6 @@ final class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
-
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
             ->with($parameters)
@@ -40,6 +50,9 @@ final class UploadControllerTest extends KernelTestCase
                 )
             );
 
+        $this->getContainer()
+            ->set(UploadServiceInterface::class, $uploadService);
+
         $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
             ->method('getUploadTokenFromRequest')
@@ -49,21 +62,30 @@ final class UploadControllerTest extends KernelTestCase
             ->with($parameters, 'mock-project-token')
             ->willReturn(true);
 
-        $uploadController = new UploadController(
-            $uploadService,
-            $authTokenService,
-            new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $authTokenService);
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/upload',
+            [],
+            [],
+            [],
+            json_encode($parameters)
         );
 
-        $uploadController->setContainer($this->getContainer());
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseFormatSame('json');
 
-        $response = $uploadController->handleUpload($this->createMock(Request::class));
-
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals(
-            '{"uploadId":"mock-upload-id","signedUrl":"mock-signed-url","expiration":"2023-05-10T10:10:10+00:00"}',
-            $response->getContent()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "expiration": "2023-05-10T10:10:10+00:00",
+                "signedUrl": "mock-signed-url",
+                "uploadId": "mock-upload-id"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 
@@ -72,10 +94,12 @@ final class UploadControllerTest extends KernelTestCase
         $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
-            ->willThrowException(SigningException::invalidParameters());
-
+            ->willThrowException(SigningException::invalidSignature());
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
+
+        $this->getContainer()
+            ->set(UploadServiceInterface::class, $uploadService);
 
         $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->never())
@@ -83,21 +107,30 @@ final class UploadControllerTest extends KernelTestCase
         $authTokenService->expects($this->never())
             ->method('validateParametersWithUploadToken');
 
-        $uploadController = new UploadController(
-            $uploadService,
-            $authTokenService,
-            new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $authTokenService);
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/upload',
+            [],
+            [],
+            [],
+            'invalid-json'
         );
 
-        $uploadController->setContainer($this->getContainer());
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
 
-        $response = $uploadController->handleUpload($this->createMock(Request::class));
-
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertEquals(
-            '{"message":"Parameters provided for signing do not match expectation."}',
-            $response->getContent()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "detail": "The signature provided is invalid.",
+                "status": 400,
+                "title": "Bad Request",
+                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 
@@ -108,9 +141,11 @@ final class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
-
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
+
+        $this->getContainer()
+            ->set(UploadServiceInterface::class, $uploadService);
 
         $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
@@ -119,21 +154,30 @@ final class UploadControllerTest extends KernelTestCase
         $authTokenService->expects($this->never())
             ->method('validateParametersWithUploadToken');
 
-        $uploadController = new UploadController(
-            $uploadService,
-            $authTokenService,
-            new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $authTokenService);
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/upload',
+            [],
+            [],
+            [],
+            'invalid-json'
         );
 
-        $uploadController->setContainer($this->getContainer());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $response = $uploadController->handleUpload($this->createMock(Request::class));
-
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
-        $this->assertEquals(
-            '{"message":"The provided upload token is invalid."}',
-            $response->getContent()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "detail": "The provided upload token is invalid.",
+                "status": 401,
+                "title": "Unauthorized",
+                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 
@@ -144,9 +188,11 @@ final class UploadControllerTest extends KernelTestCase
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
-
         $uploadService->expects($this->never())
             ->method('buildSignedUploadUrl');
+
+        $this->getContainer()
+            ->set(UploadServiceInterface::class, $uploadService);
 
         $authTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $authTokenService->expects($this->once())
@@ -156,21 +202,30 @@ final class UploadControllerTest extends KernelTestCase
             ->method('validateParametersWithUploadToken')
             ->willReturn(false);
 
-        $uploadController = new UploadController(
-            $uploadService,
-            $authTokenService,
-            new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+        $this->getContainer()
+            ->set(AuthTokenServiceInterface::class, $authTokenService);
+
+        $this->client->request(
+            Request::METHOD_POST,
+            '/upload',
+            [],
+            [],
+            [],
+            'invalid-json'
         );
 
-        $uploadController->setContainer($this->getContainer());
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $response = $uploadController->handleUpload($this->createMock(Request::class));
-
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
-        $this->assertEquals(
-            '{"message":"The provided upload token is invalid."}',
-            $response->getContent()
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+            {
+                "detail": "The provided upload token is invalid.",
+                "status": 401,
+                "title": "Unauthorized",
+                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
+            }
+            JSON,
+            $this->client->getResponse()->getContent()
         );
     }
 

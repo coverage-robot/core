@@ -43,6 +43,7 @@ final class WebhookController extends AbstractController
                 Provider::class
             )
         ],
+        defaults: ['_format' => 'json'],
         methods: ['POST']
     )]
     public function handleWebhookEvent(string $provider, Request $request): Response

@@ -2,30 +2,24 @@
 
 namespace App\Exception;
 
-use Exception;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class AuthenticationException extends Exception
+final class AuthenticationException extends HttpException
 {
-    public static function invalidProvider(): self
-    {
-        return new self('The provider is invalid.');
-    }
-
-    /**
-     * @param Exception|null $exception
-     */
     public static function invalidUploadToken(): self
     {
-        return new self('The provided upload token is invalid.');
+        return new self(
+            Response::HTTP_UNAUTHORIZED,
+            'The provided upload token is invalid.'
+        );
     }
 
     public static function invalidGraphToken(): self
     {
-        return new self('The provided graph token is invalid.');
-    }
-
-    public static function invalidSignature(): self
-    {
-        return new self('The provided signature is invalid.');
+        return new self(
+            Response::HTTP_UNAUTHORIZED,
+            'The provided graph token is invalid.'
+        );
     }
 }
