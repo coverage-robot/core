@@ -85,4 +85,11 @@ resource "aws_cognito_user_pool" "project_pool" {
       min_length = 25
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      password_policy,
+      schema
+    ]
+  }
 }

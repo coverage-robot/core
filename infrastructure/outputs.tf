@@ -34,6 +34,10 @@ output "configuration_table" {
   value = module.configuration.configuration_table
 }
 
+output "project_pool" {
+  value = module.authentication.project_pool
+}
+
 output "environment_dataset" {
   value = length(module.warehouse) > 0 ? module.warehouse.environment_dataset : null
 }
