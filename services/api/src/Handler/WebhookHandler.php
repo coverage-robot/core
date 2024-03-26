@@ -2,6 +2,8 @@
 
 namespace App\Handler;
 
+use App\Client\CognitoClient;
+use App\Client\CognitoClientInterface;
 use App\Entity\Project;
 use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
@@ -34,6 +36,8 @@ final class WebhookHandler extends SqsHandler
         private readonly WebhookProcessorServiceInterface $webhookProcessor,
         private readonly LoggerInterface $webhookLogger,
         private readonly ProjectRepository $projectRepository,
+        #[Autowire(service: CognitoClient::class)]
+        private readonly CognitoClientInterface $cognitoClient,
         private readonly SerializerInterface $serializer,
         private readonly WebhookValidationService $webhookValidationService,
         private readonly MetricServiceInterface $metricService
@@ -108,6 +112,24 @@ final class WebhookHandler extends SqsHandler
                 unit: Unit::COUNT
             );
             return;
+        }
+
+        if (
+            !$this->cognitoClient->doesProjectExist(
+                $webhook->getProvider(),
+                $webhook->getOwner(),
+                $webhook->getRepository()
+            )
+        ) {
+            $this->webhookLogger->error(
+                'Project does not exist in Cognito but does in the database.',
+                [
+                    'provider' => $webhook->getProvider(),
+                    'repository' => $webhook->getRepository(),
+                    'owner' => $webhook->getOwner(),
+                    'project' => $project->getId()
+                ]
+            );
         }
 
         $this->webhookProcessor->process($project, $webhook);

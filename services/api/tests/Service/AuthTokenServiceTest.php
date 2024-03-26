@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use App\Client\CognitoClientInterface;
 use App\Entity\Project;
 use App\Exception\AuthenticationException;
 use App\Exception\TokenException;
@@ -23,18 +24,26 @@ final class AuthTokenServiceTest extends TestCase
 {
     private ProjectRepository|MockObject $projectRepository;
 
+    private CognitoClientInterface $cognitoClient;
+
     #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->projectRepository = $this->createMock(ProjectRepository::class);
+        $this->cognitoClient = $this->createMock(CognitoClientInterface::class);
     }
 
     #[DataProvider('authorizationHeaderDataProvider')]
     public function testGetUploadTokenFromRequest(?string $authHeader, ?string $expectedResponse): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $token = $authTokenService->getUploadTokenFromRequest(
             new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [], content: '{}')
@@ -73,7 +82,12 @@ final class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertTrue($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -111,7 +125,12 @@ final class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -146,7 +165,12 @@ final class AuthTokenServiceTest extends TestCase
             ])
             ->willReturn(null);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertFalse($authTokenService->validateParametersWithUploadToken(
             $parameters,
@@ -159,7 +183,12 @@ final class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateUploadTokenWithNoRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -177,7 +206,12 @@ final class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateUploadTokenWithConsecutiveRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->exactly(3))
             ->method('findOneBy')
@@ -195,7 +229,12 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testGenerateUploadTokenFailure(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
         ->method('findOneBy')
@@ -214,7 +253,12 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testGetGraphTokenFromRequest(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $token = $authTokenService->getGraphTokenFromRequest(
             new Request(query: ['token' => '1234'], content: '{}')
@@ -225,7 +269,12 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testGetMissingGraphTokenFromRequest(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $token = $authTokenService->getGraphTokenFromRequest(
             new Request(query: [], content: '{}')
@@ -255,7 +304,12 @@ final class AuthTokenServiceTest extends TestCase
         ])
         ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertTrue($authTokenService->validateParametersWithGraphToken(
             $parameters,
@@ -284,7 +338,12 @@ final class AuthTokenServiceTest extends TestCase
         ])
         ->willReturn($project);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertFalse($authTokenService->validateParametersWithGraphToken(
             $parameters,
@@ -310,7 +369,12 @@ final class AuthTokenServiceTest extends TestCase
         ])
         ->willReturn(null);
 
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->assertFalse($authTokenService->validateParametersWithGraphToken(
             $parameters,
@@ -323,7 +387,12 @@ final class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateGraphTokenWithNoRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->once())
             ->method('findOneBy')
@@ -341,7 +410,12 @@ final class AuthTokenServiceTest extends TestCase
      */
     public function testGenerateGraphTokenWithConsecutiveRetry(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->exactly(3))
             ->method('findOneBy')
@@ -359,7 +433,12 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testGenerateGraphTokenFailure(): void
     {
-        $authTokenService = new AuthTokenService($this->projectRepository, new Randomizer(), new NullLogger());
+        $authTokenService = new AuthTokenService(
+            $this->projectRepository,
+            $this->cognitoClient,
+            new Randomizer(),
+            new NullLogger()
+        );
 
         $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
         ->method('findOneBy')

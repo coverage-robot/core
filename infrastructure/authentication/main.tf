@@ -1,6 +1,5 @@
 resource "aws_cognito_user_pool" "project_pool" {
   name                = format("coverage-projects-%s", var.environment)
-  alias_attributes    = ["preferred_username"]
   deletion_protection = "ACTIVE"
 
   username_configuration {
@@ -15,27 +14,19 @@ resource "aws_cognito_user_pool" "project_pool" {
   }
 
   admin_create_user_config {
-    allow_admin_create_user_only = true
+    # Requests to create users will only be performed by admins, but it will go through the sign up process
+    # without using the admin scoped requests. This allows the clients to do a single request to commit a
+    # new project to the pool (i.e. no need to perform password confirmations, etc).
+    allow_admin_create_user_only = false
   }
 
   password_policy {
     minimum_length                   = 25
     temporary_password_validity_days = 1
-    require_numbers                  = true
-    require_uppercase                = true
-    require_lowercase                = true
-    require_symbols                  = true
-  }
-
-  schema {
-    attribute_data_type = "String"
-    mutable             = true
-    name                = "preferred_username"
-    required            = true
-
-    string_attribute_constraints {
-      min_length = 1
-    }
+    require_numbers                  = false
+    require_uppercase                = false
+    require_lowercase                = false
+    require_symbols                  = false
   }
 
   schema {
