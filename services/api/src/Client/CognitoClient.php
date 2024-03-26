@@ -125,7 +125,7 @@ final class CognitoClient implements CognitoClientInterface
     public function doesProjectExist(Provider $provider, string $owner, string $repository): bool
     {
         try {
-            return $this->getUser($provider, $owner, $repository) !== null;
+            return $this->getUser($provider, $owner, $repository) instanceof AdminGetUserResponse;
         } catch (HttpException) {
             return false;
         }
