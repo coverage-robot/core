@@ -79,6 +79,20 @@ resource "aws_iam_policy" "api_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.webhooks_queue.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:SignUp",
+          "cognito-idp:AdminConfirmSignUp",
+          "cognito-idp:AdminSetUserPassword",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:AdminInitiateAuth"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.project_pool.arn
+        ]
       }
     ]
   })

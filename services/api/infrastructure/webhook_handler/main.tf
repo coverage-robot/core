@@ -79,6 +79,20 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.coverage_event_bus.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cognito-idp:AdminGetUser",
+          "cognito-idp:SignUp",
+          "cognito-idp:AdminConfirmSignUp",
+          "cognito-idp:AdminSetUserPassword",
+          "cognito-idp:AdminUpdateUserAttributes",
+          "cognito-idp:AdminInitiateAuth"
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.project_pool.arn
+        ]
       }
     ]
   })
