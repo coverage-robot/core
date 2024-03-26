@@ -9,7 +9,6 @@ use Packages\Contracts\Provider\Provider;
 
 interface CognitoClientInterface
 {
-
     /**
      * Create a new project with authentication tokens in Cognito.
      */
