@@ -12,6 +12,7 @@ use App\Model\SigningParameters;
 use App\Repository\ProjectRepository;
 use Psr\Log\LoggerInterface;
 use Random\Randomizer;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 
 final class AuthTokenService implements AuthTokenServiceInterface
