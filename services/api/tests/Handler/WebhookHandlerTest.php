@@ -2,6 +2,7 @@
 
 namespace App\Tests\Handler;
 
+use App\Client\CognitoClientInterface;
 use App\Entity\Project;
 use App\Handler\WebhookHandler;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
@@ -48,6 +49,7 @@ final class WebhookHandlerTest extends KernelTestCase
             $mockWebhookProcessor,
             new NullLogger(),
             $mockProjectRepository,
+            $this->createMock(CognitoClientInterface::class),
             MockSerializerFactory::getMock(
                 $this,
                 deserializeMap: [
@@ -123,6 +125,7 @@ final class WebhookHandlerTest extends KernelTestCase
             $mockWebhookProcessor,
             new NullLogger(),
             $mockProjectRepository,
+            $this->createMock(CognitoClientInterface::class),
             MockSerializerFactory::getMock(
                 $this,
                 deserializeMap: [

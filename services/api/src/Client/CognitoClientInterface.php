@@ -21,6 +21,15 @@ interface CognitoClientInterface
     ): bool;
 
     /**
+     * Check if the project exists in Cognito.
+     */
+    public function doesProjectExist(
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): bool;
+
+    /**
      * Authenticate a request for a project, using a given token.
      *
      * This could be:

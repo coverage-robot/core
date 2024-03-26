@@ -8,14 +8,17 @@ use App\Exception\AuthenticationException;
 use App\Model\Tokens;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use AsyncAws\CognitoIdentityProvider\Enum\AuthFlowType;
+use AsyncAws\CognitoIdentityProvider\Exception\UserNotFoundException;
 use AsyncAws\CognitoIdentityProvider\Input\AdminConfirmSignUpRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminGetUserRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminInitiateAuthRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminSetUserPasswordRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminUpdateUserAttributesRequest;
 use AsyncAws\CognitoIdentityProvider\Input\SignUpRequest;
+use AsyncAws\CognitoIdentityProvider\Result\AdminGetUserResponse;
 use AsyncAws\CognitoIdentityProvider\ValueObject\AttributeType;
 use AsyncAws\Core\Exception\Http\HttpException;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -55,7 +58,6 @@ final class CognitoClient implements CognitoClientInterface
             $response = $this->cognitoClient->signUp(
                 new SignUpRequest(
                     [
-                        'UserPoolId' => $userPoolId,
                         'ClientId' => $clientId,
                         'SecretHash' => $this->getSecretHash($provider, $owner, $repository),
                         'Username' => $username,
@@ -114,6 +116,19 @@ final class CognitoClient implements CognitoClientInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override]
+    public function doesProjectExist(Provider $provider, string $owner, string $repository): bool
+    {
+        try {
+            return $this->getUser($provider, $owner, $repository) !== null;
+        } catch (HttpException) {
+            return false;
+        }
     }
 
     /**
@@ -333,24 +348,13 @@ final class CognitoClient implements CognitoClientInterface
         string $owner,
         string $repository
     ): string {
-        $userPoolId = $this->environmentService->getVariable(EnvironmentVariable::PROJECT_POOL_ID);
-
-        $response = $this->cognitoClient->adminGetUser(
-            new AdminGetUserRequest(
-                [
-                    'Username' => $this->getUsername(
-                        $provider,
-                        $owner,
-                        $repository
-                    ),
-                    'UserPoolId' => $userPoolId
-                ]
-            )
+        $project = $this->getUser(
+            $provider,
+            $owner,
+            $repository
         );
 
-        $response->resolve();
-
-        foreach ($response->getUserAttributes() as $attributeType) {
+        foreach ($project->getUserAttributes() as $attributeType) {
             if ($attributeType->getName() !== self::GRAPH_TOKEN_ATTRIBUTE) {
                 continue;
             }
@@ -365,6 +369,36 @@ final class CognitoClient implements CognitoClientInterface
         }
 
         throw AuthenticationException::invalidGraphToken();
+    }
+
+    /**
+     * Get the project from Cognito.
+     *
+     * @throws HttpException
+     */
+    private function getUser(
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): ?AdminGetUserResponse {
+        $userPoolId = $this->environmentService->getVariable(EnvironmentVariable::PROJECT_POOL_ID);
+
+        try {
+            return $this->cognitoClient->adminGetUser(
+                new AdminGetUserRequest(
+                    [
+                        'Username' => $this->getUsername(
+                            $provider,
+                            $owner,
+                            $repository
+                        ),
+                        'UserPoolId' => $userPoolId
+                    ]
+                )
+            );
+        } catch (UserNotFoundException) {
+            return null;
+        }
     }
 
     /**
