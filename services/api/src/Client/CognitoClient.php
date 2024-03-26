@@ -23,8 +23,11 @@ use Psr\Log\LoggerInterface;
 final class CognitoClient implements CognitoClientInterface
 {
     private const string PROVIDER_ATTRIBUTE = 'custom:provider';
+
     private const string OWNER_ATTRIBUTE = 'custom:owner';
+
     private const string REPOSITORY_ATTRIBUTE = 'custom:repository';
+
     private const string GRAPH_TOKEN_ATTRIBUTE = 'custom:graph_token';
 
     public function __construct(
@@ -275,14 +278,14 @@ final class CognitoClient implements CognitoClientInterface
             $response->resolve();
 
             return $response->getAuthenticationResult()?->getAccessToken() !== null;
-        } catch (HttpException $e) {
+        } catch (HttpException $httpException) {
             $this->cognitoClientLogger->error(
-                'Failed to authenticate project\'s upload token.',
+                "Failed to authenticate project's upload token.",
                 [
                     'owner' => $owner,
                     'repository' => $repository,
                     'provider' => $provider->value,
-                    'exception' => $e
+                    'exception' => $httpException
                 ]
             );
 
@@ -307,7 +310,7 @@ final class CognitoClient implements CognitoClientInterface
             );
         } catch (HttpException | AuthenticationException $e) {
             $this->cognitoClientLogger->error(
-                'Failed to authenticate project\'s graph token.',
+                "Failed to authenticate project's graph token.",
                 [
                     'owner' => $owner,
                     'repository' => $repository,
@@ -350,12 +353,12 @@ final class CognitoClient implements CognitoClientInterface
 
         $response->resolve();
 
-        foreach ($response->getUserAttributes() as $attribute) {
-            if ($attribute->getName() !== self::GRAPH_TOKEN_ATTRIBUTE) {
+        foreach ($response->getUserAttributes() as $attributeType) {
+            if ($attributeType->getName() !== self::GRAPH_TOKEN_ATTRIBUTE) {
                 continue;
             }
 
-            $graphToken = $attribute->getValue();
+            $graphToken = $attributeType->getValue();
 
             if ($graphToken === null) {
                 throw AuthenticationException::invalidGraphToken();
