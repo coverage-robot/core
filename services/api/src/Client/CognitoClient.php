@@ -8,12 +8,12 @@ use App\Exception\AuthenticationException;
 use App\Model\Tokens;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use AsyncAws\CognitoIdentityProvider\Enum\AuthFlowType;
-use AsyncAws\CognitoIdentityProvider\Enum\MessageActionType;
-use AsyncAws\CognitoIdentityProvider\Input\AdminCreateUserRequest;
+use AsyncAws\CognitoIdentityProvider\Input\AdminConfirmSignUpRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminGetUserRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminInitiateAuthRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminSetUserPasswordRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminUpdateUserAttributesRequest;
+use AsyncAws\CognitoIdentityProvider\Input\SignUpRequest;
 use AsyncAws\CognitoIdentityProvider\ValueObject\AttributeType;
 use AsyncAws\Core\Exception\Http\HttpException;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -50,24 +50,20 @@ final class CognitoClient implements CognitoClientInterface
         try {
             $username = $this->getUsername($provider, $owner, $repository);
             $userPoolId = $this->environmentService->getVariable(EnvironmentVariable::PROJECT_POOL_ID);
+            $clientId = $this->environmentService->getVariable(EnvironmentVariable::PROJECT_POOL_CLIENT_ID);
 
-            $response = $this->cognitoClient->adminCreateUser(
-                new AdminCreateUserRequest(
+            $response = $this->cognitoClient->signUp(
+                new SignUpRequest(
                     [
                         'UserPoolId' => $userPoolId,
+                        'ClientId' => $clientId,
+                        'SecretHash' => $this->getSecretHash($provider, $owner, $repository),
                         'Username' => $username,
+                        'Password' => $tokens->getUploadToken(),
                         'UserAttributes' => [
-                            new AttributeType([
-                                'Name' => 'preferred_username',
-                                'Value' => $username
-                            ]),
                             new AttributeType([
                                 'Name' => 'email',
                                 'Value' => $email
-                            ]),
-                            new AttributeType([
-                                'Name' => 'email_verified',
-                                'Value' => 'true'
                             ]),
                             new AttributeType([
                                 'Name' => self::PROVIDER_ATTRIBUTE,
@@ -80,30 +76,29 @@ final class CognitoClient implements CognitoClientInterface
                             new AttributeType([
                                 'Name' => self::REPOSITORY_ATTRIBUTE,
                                 'Value' => $repository
+                            ]),
+                            new AttributeType([
+                                'Name' => self::GRAPH_TOKEN_ATTRIBUTE,
+                                'Value' => $tokens->getGraphToken()
                             ])
                         ],
-                        'MessageAction' => MessageActionType::SUPPRESS,
                     ]
                 )
             );
 
             $response->resolve();
 
-            $uploadTokenSet = $this->setUploadToken(
-                $provider,
-                $owner,
-                $repository,
-                $tokens->getUploadToken()
+            // Confirm the sign up to lock in the Projects password (upload token) and attributes
+            $response = $this->cognitoClient->adminConfirmSignUp(
+                new AdminConfirmSignUpRequest(
+                    [
+                        'UserPoolId' => $userPoolId,
+                        'Username' => $username,
+                    ]
+                )
             );
 
-            $graphTokenSet = $this->setGraphToken(
-                $provider,
-                $owner,
-                $repository,
-                $tokens->getGraphToken()
-            );
-
-            return $uploadTokenSet && $graphTokenSet;
+            $response->resolve();
         } catch (HttpException $httpException) {
             $this->cognitoClientLogger->error(
                 'Failed to successfully create project.',
@@ -117,6 +112,8 @@ final class CognitoClient implements CognitoClientInterface
 
             return false;
         }
+
+        return true;
     }
 
     /**
