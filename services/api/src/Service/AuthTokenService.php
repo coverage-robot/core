@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Client\CognitoClient;
+use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
 use App\Exception\TokenException;
 use App\Model\GraphParameters;
@@ -16,6 +18,8 @@ final class AuthTokenService implements AuthTokenServiceInterface
 {
     public function __construct(
         private readonly ProjectRepository $projectRepository,
+        #[Autowire(service: CognitoClient::class)]
+        private readonly CognitoClientInterface $cognitoClient,
         private readonly Randomizer $randomizer,
         private readonly LoggerInterface $authTokenLogger
     ) {
@@ -168,7 +172,34 @@ final class AuthTokenService implements AuthTokenServiceInterface
                 'provider' => $parameters->getProvider(),
             ]);
 
-        return $project !== null && $project->isEnabled();
+        $isAuthenticatedByDatabase = $project !== null && $project->isEnabled();
+
+        $isAuthenticatedByCognito = $this->cognitoClient->authenticate(
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository(),
+            $tokenType,
+            $token
+        );
+
+        if ($isAuthenticatedByCognito !== $isAuthenticatedByDatabase) {
+            /**
+             * Temporarily mirror the database check against Cognito to identify mismatches in
+             * behaviour.
+             */
+            $this->authTokenLogger->error(
+                'Token validation mismatch between database and Cognito.',
+                [
+                    'tokenType' => $tokenType,
+                    'parameters' => $parameters,
+                    'token' => $token,
+                    'isAuthenticatedByDatabase' => $isAuthenticatedByDatabase,
+                    'isAuthenticatedByCognito' => $isAuthenticatedByCognito,
+                ]
+            );
+        }
+
+        return $isAuthenticatedByDatabase;
     }
 
     private function createNewToken(TokenType $tokenType): string

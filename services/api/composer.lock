@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c544d6c83228849b2892bc3909c76e7",
+    "content-hash": "83023e506f58e74eee6c5a4bcde144ca",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -74,6 +74,64 @@
                 }
             ],
             "time": "2023-08-07T20:00:50+00:00"
+        },
+        {
+            "name": "async-aws/cognito-identity-provider",
+            "version": "1.7.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/cognito-identity-provider.git",
+                "reference": "747a0672020bca44ee47e8fa2cecc141d87f9764"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/747a0672020bca44ee47e8fa2cecc141d87f9764",
+                "reference": "747a0672020bca44ee47e8fa2cecc141d87f9764",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.9",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\CognitoIdentityProvider\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "CognitoIdentityProvider client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "cognito-identity-provider",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.7.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-02-27T14:44:12+00:00"
         },
         {
             "name": "async-aws/core",
