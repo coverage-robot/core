@@ -33,7 +33,7 @@ final class CognitoClientTest extends TestCase
             ->method('signUp')
             ->with(
                 $this->callback(
-                    function (SignUpRequest $request) {
+                    function (SignUpRequest $request): bool {
                         $this->assertEquals('owner-github-repository', $request->getUsername());
                         $this->assertEquals('upload-token', $request->getPassword());
 
@@ -54,7 +54,7 @@ final class CognitoClientTest extends TestCase
             ->method('adminConfirmSignUp')
             ->with(
                 $this->callback(
-                    function (AdminConfirmSignUpRequest $request) {
+                    function (AdminConfirmSignUpRequest $request): bool {
                         $this->assertEquals('owner-github-repository', $request->getUsername());
 
                         return true;
@@ -115,7 +115,7 @@ final class CognitoClientTest extends TestCase
                 ->method('adminGetUser')
                 ->with(
                     $this->callback(
-                        function (AdminGetUserRequest $request) {
+                        function (AdminGetUserRequest $request): bool {
                             $this->assertEquals('owner-github-repository', $request->getUsername());
 
                             return true;
@@ -185,7 +185,7 @@ final class CognitoClientTest extends TestCase
                 ->method('adminGetUser')
                 ->with(
                     $this->callback(
-                        function (AdminGetUserRequest $request) {
+                        function (AdminGetUserRequest $request): bool {
                             $this->assertEquals('owner-github-repository', $request->getUsername());
 
                             return true;
