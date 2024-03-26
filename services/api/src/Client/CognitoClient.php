@@ -354,6 +354,10 @@ final class CognitoClient implements CognitoClientInterface
             $repository
         );
 
+        if (!$project instanceof AdminGetUserResponse) {
+            throw AuthenticationException::invalidGraphToken();
+        }
+
         foreach ($project->getUserAttributes() as $attributeType) {
             if ($attributeType->getName() !== self::GRAPH_TOKEN_ATTRIBUTE) {
                 continue;
