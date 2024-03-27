@@ -12,6 +12,7 @@ use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -47,6 +48,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
      * @throws ConditionalCheckFailedException
      * @throws HttpException
      */
+    #[Override]
     public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): bool
     {
         $response = $this->dynamoDbClient->putItem(
@@ -101,6 +103,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
      *
      * @throws HttpException
      */
+    #[Override]
     public function getStateChangesForEvent(OrchestratedEventInterface $event): iterable
     {
         $response = $this->dynamoDbClient->query(
@@ -143,6 +146,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
      *
      * @throws HttpException
      */
+    #[Override]
     public function getEventStateChangesForCommit(string $repositoryIdentifier, string $commit): iterable
     {
         $response = $this->dynamoDbClient->query(

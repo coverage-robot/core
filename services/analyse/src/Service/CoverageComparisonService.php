@@ -7,6 +7,7 @@ use App\Model\CoverageReportComparison;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
+use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\ParentAwareEventInterface;
@@ -22,6 +23,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
     ) {
     }
 
+    #[Override]
     public function getComparisonForCoverageReport(
         CoverageReportInterface $headReport,
         EventInterface $event

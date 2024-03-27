@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Model\Webhook\WebhookInterface;
 use App\Webhook\Processor\WebhookProcessorInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
@@ -18,6 +19,7 @@ final class WebhookProcessorService implements WebhookProcessorServiceInterface
     ) {
     }
 
+    #[Override]
     public function process(WebhookInterface $webhook): void
     {
         $processor = (iterator_to_array($this->webhookProcessors)[$webhook->getEvent()->value]) ?? null;

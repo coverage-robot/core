@@ -7,6 +7,7 @@ use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -35,6 +36,7 @@ final class UploadService implements UploadServiceInterface
     /**
      * @throws SigningException
      */
+    #[Override]
     public function getSigningParametersFromRequest(Request $request): SigningParameters
     {
         $body = $request->toArray();
@@ -80,6 +82,7 @@ final class UploadService implements UploadServiceInterface
         }
     }
 
+    #[Override]
     public function buildSignedUploadUrl(SigningParameters $signingParameters): SignedUrl
     {
         $uploadId = $this->uniqueIdGeneratorService->generate();

@@ -7,6 +7,7 @@ use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
 use Github\Exception\ExceptionInterface;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
@@ -26,6 +27,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
     ) {
     }
 
+    #[Override]
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$publishableMessage instanceof PublishableCheckRunMessageInterface) {
@@ -38,6 +40,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
     /**
      * Publish a check run to the PR, or commit, with the total coverage percentage.
      */
+    #[Override]
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
@@ -69,6 +72,7 @@ final class GithubCheckRunPublisherService implements PublisherServiceInterface
         return $successful;
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return 0;

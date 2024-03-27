@@ -43,6 +43,7 @@ final class CognitoClient implements CognitoClientInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function createProject(
         Provider $provider,
         string $owner,
@@ -134,6 +135,7 @@ final class CognitoClient implements CognitoClientInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function authenticate(
         Provider $provider,
         string $owner,
@@ -160,6 +162,7 @@ final class CognitoClient implements CognitoClientInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function setUploadToken(
         Provider $provider,
         string $owner,
@@ -205,6 +208,7 @@ final class CognitoClient implements CognitoClientInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function setGraphToken(
         Provider $provider,
         string $owner,

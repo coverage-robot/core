@@ -38,7 +38,7 @@ final class FakeBackoffStrategy implements BackoffStrategyInterface
         return $this->backoff->run($callback);
     }
 
-    #[\Override]
+    #[Override]
     public function getBackoffStrategy(): Backoff
     {
         return $this->backoff->getBackoffStrategy();

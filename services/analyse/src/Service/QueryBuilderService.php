@@ -6,6 +6,7 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use Doctrine\SqlFormatter\SqlFormatter;
+use Override;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -24,6 +25,7 @@ final class QueryBuilderService implements QueryBuilderServiceInterface
      *
      * @throws QueryException
      */
+    #[Override]
     public function build(QueryInterface $query, string $table, ?QueryParameterBag $parameterBag = null): string
     {
         $query->validateParameters($parameterBag);
@@ -42,6 +44,7 @@ final class QueryBuilderService implements QueryBuilderServiceInterface
      * This function will also normalize the order of parameters in order to generate a
      * more predictable hash that is not affected by the order of the parameters.
      */
+    #[Override]
     public function hash(string $queryClass, ?QueryParameterBag $parameterBag): string
     {
         $parameters = [];

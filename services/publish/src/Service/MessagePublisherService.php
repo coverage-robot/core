@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Service\Publisher\PublisherServiceInterface;
+use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -22,6 +23,7 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
     /**
      * Publish the message with _all_ publishers which support it.
      */
+    #[Override]
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         $successful = true;

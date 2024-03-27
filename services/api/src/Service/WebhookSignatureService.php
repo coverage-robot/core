@@ -6,6 +6,7 @@ use App\Enum\WebhookType;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use App\Webhook\Signature\ProviderWebhookSignatureServiceInterface;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -25,6 +26,7 @@ final class WebhookSignatureService implements WebhookSignatureServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getWebhookTypeFromRequest(Provider $provider, Request $request): WebhookType
     {
         return $this->getServiceForProvider($provider)
@@ -34,6 +36,7 @@ final class WebhookSignatureService implements WebhookSignatureServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function getPayloadSignatureFromRequest(Provider $provider, Request $request): ?string
     {
         return $this->getServiceForProvider($provider)
@@ -43,6 +46,7 @@ final class WebhookSignatureService implements WebhookSignatureServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function validatePayloadSignature(
         Provider $provider,
         WebhookInterface&SignedWebhookInterface $webhook,

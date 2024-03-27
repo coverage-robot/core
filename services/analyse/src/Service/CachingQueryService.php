@@ -11,7 +11,6 @@ use App\Query\Result\QueryResultInterface;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Telemetry\Enum\Unit;
-use Packages\Telemetry\Service\MetricService;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -133,7 +132,7 @@ final class CachingQueryService implements QueryServiceInterface
         return $this->queryService->runQuery($queryClass, $parameterBag);
     }
 
-    #[\Override]
+    #[Override]
     public function getQueryClass(string $queryClass): QueryInterface
     {
         return $this->queryService->getQueryClass($queryClass);

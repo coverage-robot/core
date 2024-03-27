@@ -125,6 +125,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         }
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return 0;

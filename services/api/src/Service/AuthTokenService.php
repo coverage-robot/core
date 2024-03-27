@@ -7,6 +7,7 @@ use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
 use App\Model\GraphParameters;
 use App\Model\SigningParameters;
+use Override;
 use Psr\Log\LoggerInterface;
 use Random\Randomizer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -28,6 +29,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
      * In practice this performs a lookup in the request headers for the
      * 'Authorization' key, and decodes it based on the Basic schema pattern.
      */
+    #[Override]
     public function getUploadTokenFromRequest(Request $request): ?string
     {
         $this->authTokenLogger->info(
@@ -95,6 +97,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
         return $uploadToken;
     }
 
+    #[Override]
     public function getGraphTokenFromRequest(Request $request): ?string
     {
         $graphToken = $request->query->get('token');
@@ -125,6 +128,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
     /**
      * Validate a potential upload using a user-provided upload token.
      */
+    #[Override]
     public function validateParametersWithUploadToken(SigningParameters $parameters, string $token): bool
     {
         return $this->cognitoClient->authenticate(
@@ -136,6 +140,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
         );
     }
 
+    #[Override]
     public function validateParametersWithGraphToken(GraphParameters $parameters, string $token): bool
     {
         return $this->cognitoClient->authenticate(
@@ -150,6 +155,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
     /**
      * Create a new unique upload token.
      */
+    #[Override]
     public function createNewUploadToken(): string
     {
         return $this->createNewToken();
@@ -158,6 +164,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
     /**
      * Create a new unique graph token.
      */
+    #[Override]
     public function createNewGraphToken(): string
     {
         return $this->createNewToken();

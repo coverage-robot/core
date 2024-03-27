@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -30,6 +31,7 @@ final class CarryforwardTag extends Tag
         return $this->ingestTimes;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf('CarryforwardTag#%s-%s', $this->getName(), $this->getCommit());

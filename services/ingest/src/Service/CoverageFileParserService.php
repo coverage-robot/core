@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Exception\ParseException;
 use App\Model\Coverage;
 use App\Strategy\ParseStrategyInterface;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -22,6 +23,7 @@ final class CoverageFileParserService implements CoverageFileParserServiceInterf
      * @inheritDoc
      * @throws ParseException
      */
+    #[Override]
     public function parse(
         Provider $provider,
         string $owner,

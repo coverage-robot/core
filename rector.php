@@ -5,6 +5,7 @@ use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\Set\ValueObject\SetList;
 
@@ -23,6 +24,11 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::EARLY_RETURN,
         SetList::INSTANCEOF,
     ]);
+
+    /**
+     * Make sure all overridden methods have the `#[Override]` attribute.
+     */
+    $rectorConfig->rule(AddOverrideAttributeToOverriddenMethodsRector::class);
 
     $rectorConfig->skip([
         /**

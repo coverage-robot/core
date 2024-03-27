@@ -4,12 +4,13 @@ namespace App\Extension;
 
 use App\Extension\Function\CoverageReportFunction;
 use App\Extension\Function\EventFunction;
-use App\Extension\Function\LineCommentFunction;
+use Override;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 final class CoverageTemplateExtension extends AbstractExtension
 {
+    #[Override]
     public function getFunctions(): array
     {
         return [

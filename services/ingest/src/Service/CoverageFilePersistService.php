@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Exception\PersistException;
 use App\Model\Coverage;
 use App\Service\Persist\PersistServiceInterface;
+use Override;
 use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
@@ -21,6 +22,7 @@ final class CoverageFilePersistService implements CoverageFilePersistServiceInte
     /**
      * @inheritDoc
      */
+    #[Override]
     public function persist(Upload $upload, Coverage $coverage): bool
     {
         $successful = true;
