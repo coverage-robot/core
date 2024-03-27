@@ -51,6 +51,11 @@ data "archive_file" "deployment" {
   ]
 }
 
+module "ref_metadata" {
+  source      = "./ref_metadata"
+  environment = local.environment
+}
+
 module "api" {
   source = "./api"
 
