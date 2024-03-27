@@ -9,6 +9,7 @@ use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Service\WebhookSignatureService;
 use App\Webhook\Signature\Github\GithubWebhookSignatureService;
+use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
@@ -23,6 +24,7 @@ final class WebhookControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

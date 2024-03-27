@@ -117,6 +117,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getUploads(ReportWaypoint $waypoint): TotalUploadsQueryResult
     {
         /** @var TotalUploadsQueryResult $totalUploads */
@@ -151,6 +152,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getTotalLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -199,6 +201,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getAtLeastPartiallyCoveredLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -247,6 +250,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getUncoveredLines(ReportWaypoint $waypoint): int
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -295,6 +299,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getCoveragePercentage(ReportWaypoint $waypoint): float
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -343,6 +348,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     /**
      * @throws QueryException
      */
+    #[Override]
     public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -408,6 +414,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @throws QueryException
      * @throws AnalysisException
      */
+    #[Override]
     public function getDiffCoveragePercentage(ReportWaypoint $waypoint): float|null
     {
         $diff = $this->getDiff($waypoint);
@@ -477,6 +484,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @throws QueryException
      * @throws AnalysisException
      */
+    #[Override]
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
@@ -588,6 +596,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @throws QueryException
      * @throws AnalysisException
      */
+    #[Override]
     public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
     {
         $diff = $this->getDiff($waypoint);
@@ -634,6 +643,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @inheritDoc
      * @throws QueryException
      */
+    #[Override]
     public function getCarryforwardTags(ReportWaypoint $waypoint): array
     {
         return $this->carryforwardTagService->getTagsToCarryforward(
@@ -647,6 +657,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @return array<string, array<int, int>>
      * @throws AnalysisException
      */
+    #[Override]
     public function getDiff(ReportWaypoint $waypoint): array
     {
         try {
@@ -667,6 +678,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @return array{commit: string, merged: bool, ref: string|null}[]
      * @throws AnalysisException
      */
+    #[Override]
     public function getHistory(ReportWaypoint $waypoint, int $page = 1): array
     {
         try {

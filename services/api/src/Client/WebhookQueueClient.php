@@ -10,6 +10,7 @@ use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
@@ -36,6 +37,7 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
     ) {
     }
 
+    #[Override]
     public function dispatchWebhook(WebhookInterface $webhook): bool
     {
         try {

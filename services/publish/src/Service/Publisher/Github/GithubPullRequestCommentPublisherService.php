@@ -8,6 +8,7 @@ use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
 use Github\Exception\ExceptionInterface;
+use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
@@ -27,6 +28,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     ) {
     }
 
+    #[Override]
     public function supports(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$publishableMessage instanceof PublishablePullRequestMessage) {
@@ -43,6 +45,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     /**
      * Publish a PR comment with segmented breakdowns extracted from the uploaded coverage data.
      */
+    #[Override]
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
         if (!$this->supports($publishableMessage)) {
@@ -83,6 +86,7 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         }
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return 0;

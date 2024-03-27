@@ -14,6 +14,7 @@ use AsyncAws\S3\Result\GetObjectOutput;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
+use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,7 @@ final class CoverageFileRetrievalService implements CoverageFileRetrievalService
      *
      * @throws RetrievalException
      */
+    #[Override]
     public function ingestFromS3(Bucket $bucket, BucketObject $object): GetObjectOutput
     {
         try {
@@ -54,6 +56,7 @@ final class CoverageFileRetrievalService implements CoverageFileRetrievalService
      *
      * @throws DeletionException
      */
+    #[Override]
     public function deleteFromS3(Bucket $bucket, BucketObject $object): bool
     {
         try {

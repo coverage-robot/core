@@ -7,6 +7,7 @@ use App\Model\SignedUrl;
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
+use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -20,6 +21,7 @@ final class UploadSignerService implements UploadSignerServiceInterface
     ) {
     }
 
+    #[Override]
     public function sign(string $uploadId, PutObjectRequest $input, DateTimeImmutable $expiry): SignedUrl
     {
         $signedUrl = new SignedUrl(

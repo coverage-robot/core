@@ -6,6 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Input\GetItemInput;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -25,6 +26,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
     ) {
     }
 
+    #[Override]
     public function tryFromQueryCache(string $cacheKey): ?QueryResultInterface
     {
         try {
@@ -77,6 +79,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
         return null;
     }
 
+    #[Override]
     public function putQueryResultInCache(string $cacheKey, QueryResultInterface $queryResult): bool
     {
         try {

@@ -4,6 +4,7 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use Google\Cloud\BigQuery\Dataset;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient implements BigQueryClientInterface
@@ -31,6 +32,7 @@ final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient impleme
         );
     }
 
+    #[Override]
     public function getEnvironmentDataset(): Dataset
     {
         return $this->dataset(
@@ -38,6 +40,7 @@ final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient impleme
         );
     }
 
+    #[Override]
     public function getTable(): string
     {
         return sprintf(

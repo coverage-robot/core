@@ -56,6 +56,7 @@ final class QueryService implements QueryServiceInterface
      *
      * @throws QueryException
      */
+    #[Override]
     public function getQueryClass(string $queryClass): QueryInterface
     {
         foreach ($this->queries as $query) {

@@ -8,6 +8,7 @@ use App\Model\SigningParameters;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -19,6 +20,7 @@ final class UploadControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

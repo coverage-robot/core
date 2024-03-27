@@ -4,6 +4,7 @@ namespace App\Service;
 
 use Cog\SvgFont\FontList;
 use Cog\Unicode\UnicodeString;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 
@@ -19,6 +20,7 @@ final class BadgeService implements BadgeServiceInterface
     /**
      * Fully render a coverage badge, using the coverage percentage as the value.
      */
+    #[Override]
     public function renderCoveragePercentageBadge(
         ?float $coveragePercentage,
         bool $includeIcon = true

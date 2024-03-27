@@ -145,6 +145,7 @@ final class GithubAnnotationPublisherService implements PublisherServiceInterfac
         }
     }
 
+    #[Override]
     public static function getPriority(): int
     {
         return GithubCheckRunPublisherService::getPriority() - 1;
