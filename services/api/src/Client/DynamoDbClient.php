@@ -9,7 +9,6 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
-use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
@@ -140,16 +139,17 @@ final class DynamoDbClient implements DynamoDbClientInterface
             return null;
         }
 
-        /**
-         * @var AttributeValue[] $items
-         */
-        $items = (array)$response->getItems(true);
-
-        if (count($items) === 0) {
-            return null;
+        foreach ($response->getItems(true) as $item) {
+            /**
+             * Grab the first item out of the response (iterable), which should be the ref we're
+             * looking for
+             */
+            return $item[self::COVERAGE_PERCENTAGE_COLUMN]->getN() !== null ?
+                (float)$item[self::COVERAGE_PERCENTAGE_COLUMN]->getN()
+                : null;
         }
 
-        return $items[0]->getN() !== null ? (float)$items[0]->getN() : null;
+        return null;
     }
 
     private function getUniqueRepositoryIdentifier(
