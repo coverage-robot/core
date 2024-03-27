@@ -68,9 +68,9 @@ final class NewProjectCommand extends Command
         if ($created) {
             $output->writeln(sprintf('New upload token: %s, New graph token: %s', $uploadToken, $graphToken));
             return Command::SUCCESS;
-        } else {
-            $output->writeln('Failed to create project');
-            return Command::FAILURE;
         }
+
+        $output->writeln('Failed to create project');
+        return Command::FAILURE;
     }
 }
