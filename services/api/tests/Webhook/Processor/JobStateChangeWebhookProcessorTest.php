@@ -2,7 +2,6 @@
 
 namespace App\Tests\Webhook\Processor;
 
-use App\Entity\Project;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use DateTimeImmutable;
@@ -15,8 +14,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 {
     public function testProcessingWebhookCreatingNewJobForProject(): void
     {
-        $mockProject = new Project();
-
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
@@ -27,7 +24,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         );
 
         $jobStateChangeWebhookProcessor->process(
-            $mockProject,
             new GithubCheckRunWebhook(
                 '',
                 'mock-owner',
@@ -49,8 +45,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
 
     public function testProcessingWebhookUpdatingExistingJobForProject(): void
     {
-        $mockProject = new Project();
-
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
@@ -61,7 +55,6 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         );
 
         $jobStateChangeWebhookProcessor->process(
-            $mockProject,
             new GithubCheckRunWebhook(
                 '',
                 'mock-owner',

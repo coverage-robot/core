@@ -3,18 +3,14 @@
 namespace App\Tests\Service;
 
 use App\Client\CognitoClientInterface;
-use App\Entity\Project;
+use App\Enum\TokenType;
 use App\Exception\AuthenticationException;
-use App\Exception\TokenException;
 use App\Model\GraphParameters;
 use App\Model\SigningParameters;
-use App\Repository\ProjectRepository;
 use App\Service\AuthTokenService;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Random\Randomizer;
@@ -22,8 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class AuthTokenServiceTest extends TestCase
 {
-    private ProjectRepository|MockObject $projectRepository;
-
     private CognitoClientInterface $cognitoClient;
 
     #[Override]
@@ -31,7 +25,6 @@ final class AuthTokenServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->projectRepository = $this->createMock(ProjectRepository::class);
         $this->cognitoClient = $this->createMock(CognitoClientInterface::class);
     }
 
@@ -39,7 +32,6 @@ final class AuthTokenServiceTest extends TestCase
     public function testGetUploadTokenFromRequest(?string $authHeader, ?string $expectedResponse): void
     {
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -69,21 +61,18 @@ final class AuthTokenServiceTest extends TestCase
             baseCommit: null
         );
 
-        $project = new Project();
-        $project->setEnabled(true);
-
-        $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'uploadToken' => 'mock-token'
-            ])
-            ->willReturn($project);
+        $this->cognitoClient->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                TokenType::UPLOAD,
+                'mock-token'
+            )
+            ->willReturn(true);
 
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -112,61 +101,18 @@ final class AuthTokenServiceTest extends TestCase
             baseCommit: null
         );
 
-        $project = new Project();
-        $project->setEnabled(false);
-
-        $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'uploadToken' => 'mock-token'
-            ])
-            ->willReturn($project);
+        $this->cognitoClient->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                TokenType::UPLOAD,
+                'mock-token'
+            )
+            ->willReturn(false);
 
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->assertFalse($authTokenService->validateParametersWithUploadToken(
-            $parameters,
-            'mock-token'
-        ));
-    }
-
-    public function testValidateUploadTokenWithNoProject(): void
-    {
-        $parameters = new SigningParameters(
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            provider: Provider::GITHUB,
-            fileName: 'mock-file-name',
-            projectRoot: 'mock-project-root',
-            tag: 'mock-tag',
-            commit: 'mock-commit',
-            parent: [],
-            ref: 'mock-ref',
-            pullRequest: null,
-            baseRef: null,
-            baseCommit: null
-        );
-
-        $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB,
-                'repository' => 'mock-repository',
-                'owner' => 'mock-owner',
-                'uploadToken' => 'mock-token'
-            ])
-            ->willReturn(null);
-
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -181,80 +127,23 @@ final class AuthTokenServiceTest extends TestCase
     /**
      * @throws AuthenticationException
      */
-    public function testGenerateUploadTokenWithNoRetry(): void
+    public function testGenerateUploadToken(): void
     {
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
         );
-
-        $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->willReturn(null);
 
         $generatedToken = $authTokenService->createNewUploadToken();
 
         $this->assertIsString($generatedToken);
         $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
-    }
-
-    /**
-     * @throws AuthenticationException
-     * @throws Exception
-     */
-    public function testGenerateUploadTokenWithConsecutiveRetry(): void
-    {
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->projectRepository->expects($this->exactly(3))
-            ->method('findOneBy')
-            ->willReturnOnConsecutiveCalls(
-                new Project(),
-                new Project(),
-                null
-            );
-
-        $generatedToken = $authTokenService->createNewUploadToken();
-
-        $this->assertIsString($generatedToken);
-        $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
-    }
-
-    public function testGenerateUploadTokenFailure(): void
-    {
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
-        ->method('findOneBy')
-        ->willReturnOnConsecutiveCalls(
-            new Project(),
-            new Project(),
-            new Project()
-        );
-
-        $this->expectExceptionObject(
-            TokenException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
-        );
-
-        $authTokenService->createNewUploadToken();
     }
 
     public function testGetGraphTokenFromRequest(): void
     {
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -270,7 +159,6 @@ final class AuthTokenServiceTest extends TestCase
     public function testGetMissingGraphTokenFromRequest(): void
     {
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -291,21 +179,18 @@ final class AuthTokenServiceTest extends TestCase
             provider: Provider::GITHUB
         );
 
-        $project = new Project();
-        $project->setEnabled(true);
-
-        $this->projectRepository->expects($this->once())
-        ->method('findOneBy')
-        ->with([
-            'provider' => Provider::GITHUB,
-            'repository' => 'mock-repository',
-            'owner' => 'mock-owner',
-            'graphToken' => 'mock-token'
-        ])
-        ->willReturn($project);
+        $this->cognitoClient->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                TokenType::GRAPH,
+                'mock-token'
+            )
+            ->willReturn(true);
 
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -325,52 +210,18 @@ final class AuthTokenServiceTest extends TestCase
             provider: Provider::GITHUB
         );
 
-        $project = new Project();
-        $project->setEnabled(false);
-
-        $this->projectRepository->expects($this->once())
-        ->method('findOneBy')
-        ->with([
-            'provider' => Provider::GITHUB,
-            'repository' => 'mock-repository',
-            'owner' => 'mock-owner',
-            'graphToken' => 'mock-token'
-        ])
-        ->willReturn($project);
+        $this->cognitoClient->expects($this->once())
+            ->method('authenticate')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository',
+                TokenType::GRAPH,
+                'mock-token'
+            )
+            ->willReturn(false);
 
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->assertFalse($authTokenService->validateParametersWithGraphToken(
-            $parameters,
-            'mock-token'
-        ));
-    }
-
-    public function testValidateGraphTokenWithNoProject(): void
-    {
-        $parameters = new GraphParameters(
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            provider: Provider::GITHUB
-        );
-
-        $this->projectRepository->expects($this->once())
-        ->method('findOneBy')
-        ->with([
-            'provider' => Provider::GITHUB,
-            'repository' => 'mock-repository',
-            'owner' => 'mock-owner',
-            'graphToken' => 'mock-token'
-        ])
-        ->willReturn(null);
-
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
@@ -388,71 +239,15 @@ final class AuthTokenServiceTest extends TestCase
     public function testGenerateGraphTokenWithNoRetry(): void
     {
         $authTokenService = new AuthTokenService(
-            $this->projectRepository,
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
         );
-
-        $this->projectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->willReturn(null);
 
         $generatedToken = $authTokenService->createNewGraphToken();
 
         $this->assertIsString($generatedToken);
         $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
-    }
-
-    /**
-     * @throws AuthenticationException
-     * @throws Exception
-     */
-    public function testGenerateGraphTokenWithConsecutiveRetry(): void
-    {
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->projectRepository->expects($this->exactly(3))
-            ->method('findOneBy')
-            ->willReturnOnConsecutiveCalls(
-                new Project(),
-                new Project(),
-                null
-            );
-
-        $generatedToken = $authTokenService->createNewGraphToken();
-
-        $this->assertIsString($generatedToken);
-        $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
-    }
-
-    public function testGenerateGraphTokenFailure(): void
-    {
-        $authTokenService = new AuthTokenService(
-            $this->projectRepository,
-            $this->cognitoClient,
-            new Randomizer(),
-            new NullLogger()
-        );
-
-        $this->projectRepository->expects($this->exactly(AuthTokenService::MAX_TOKEN_RETRIES))
-        ->method('findOneBy')
-        ->willReturnOnConsecutiveCalls(
-            new Project(),
-            new Project(),
-            new Project()
-        );
-
-        $this->expectExceptionObject(
-            TokenException::failedToCreateToken(AuthTokenService::MAX_TOKEN_RETRIES)
-        );
-
-        $authTokenService->createNewGraphToken();
     }
 
     public static function authorizationHeaderDataProvider(): array

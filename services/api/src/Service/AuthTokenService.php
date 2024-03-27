@@ -5,11 +5,8 @@ namespace App\Service;
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
-use App\Exception\TokenException;
 use App\Model\GraphParameters;
-use App\Model\ParametersInterface;
 use App\Model\SigningParameters;
-use App\Repository\ProjectRepository;
 use Psr\Log\LoggerInterface;
 use Random\Randomizer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -18,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 final class AuthTokenService implements AuthTokenServiceInterface
 {
     public function __construct(
-        private readonly ProjectRepository $projectRepository,
         #[Autowire(service: CognitoClient::class)]
         private readonly CognitoClientInterface $cognitoClient,
         private readonly Randomizer $randomizer,
@@ -131,12 +127,24 @@ final class AuthTokenService implements AuthTokenServiceInterface
      */
     public function validateParametersWithUploadToken(SigningParameters $parameters, string $token): bool
     {
-        return $this->validateParametersWithToken(TokenType::UPLOAD, $parameters, $token);
+        return $this->cognitoClient->authenticate(
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository(),
+            TokenType::UPLOAD,
+            $token
+        );
     }
 
     public function validateParametersWithGraphToken(GraphParameters $parameters, string $token): bool
     {
-        return $this->validateParametersWithToken(TokenType::GRAPH, $parameters, $token);
+        return $this->cognitoClient->authenticate(
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository(),
+            TokenType::GRAPH,
+            $token
+        );
     }
 
     /**
@@ -144,7 +152,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
      */
     public function createNewUploadToken(): string
     {
-        return $this->createNewToken(TokenType::UPLOAD);
+        return $this->createNewToken();
     }
 
     /**
@@ -152,86 +160,11 @@ final class AuthTokenService implements AuthTokenServiceInterface
      */
     public function createNewGraphToken(): string
     {
-        return $this->createNewToken(TokenType::GRAPH);
+        return $this->createNewToken();
     }
 
-    private function validateParametersWithToken(
-        TokenType $tokenType,
-        ParametersInterface $parameters,
-        string $token
-    ): bool {
-        $field = match ($tokenType) {
-            TokenType::UPLOAD => 'uploadToken',
-            TokenType::GRAPH => 'graphToken',
-        };
-
-        $project = $this->projectRepository
-            ->findOneBy([
-                $field => $token,
-                'repository' => $parameters->getRepository(),
-                'owner' => $parameters->getOwner(),
-                'provider' => $parameters->getProvider(),
-            ]);
-
-        $isAuthenticatedByDatabase = $project !== null && $project->isEnabled();
-
-        $isAuthenticatedByCognito = $this->cognitoClient->authenticate(
-            $parameters->getProvider(),
-            $parameters->getOwner(),
-            $parameters->getRepository(),
-            $tokenType,
-            $token
-        );
-
-        if ($isAuthenticatedByCognito !== $isAuthenticatedByDatabase) {
-            /**
-             * Temporarily mirror the database check against Cognito to identify mismatches in
-             * behaviour.
-             */
-            $this->authTokenLogger->error(
-                'Token validation mismatch between database and Cognito.',
-                [
-                    'tokenType' => $tokenType,
-                    'parameters' => $parameters,
-                    'token' => $token,
-                    'isAuthenticatedByDatabase' => $isAuthenticatedByDatabase,
-                    'isAuthenticatedByCognito' => $isAuthenticatedByCognito,
-                ]
-            );
-        }
-
-        return $isAuthenticatedByDatabase;
-    }
-
-    private function createNewToken(TokenType $tokenType): string
+    private function createNewToken(): string
     {
-        $field = match ($tokenType) {
-            TokenType::UPLOAD => 'uploadToken',
-            TokenType::GRAPH => 'graphToken',
-        };
-
-        $attempts = 0;
-
-        do {
-            $token = bin2hex($this->randomizer->getBytes(self::TOKEN_LENGTH));
-
-            $isUnique = $this->projectRepository->findOneBy([$field => $token]) === null;
-
-            ++$attempts;
-        } while ($attempts < self::MAX_TOKEN_RETRIES && !$isUnique);
-
-        if (!$isUnique) {
-            $this->authTokenLogger->critical(
-                sprintf('Failed to create a unique token after %s attempts.', $attempts),
-                [
-                    'attempts' => $attempts,
-                    'tokenType' => $tokenType,
-                ]
-            );
-
-            throw TokenException::failedToCreateToken($attempts);
-        }
-
-        return $token;
+        return bin2hex($this->randomizer->getBytes(self::TOKEN_LENGTH));
     }
 }

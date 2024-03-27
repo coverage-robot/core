@@ -2,7 +2,6 @@
 
 namespace App\Webhook\Processor;
 
-use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\CommitsPushedWebhookInterface;
 use App\Model\Webhook\PushedCommitInterface;
@@ -35,7 +34,7 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
      * it amongst the services.
      */
     #[Override]
-    public function process(Project $project, WebhookInterface $webhook): void
+    public function process(WebhookInterface $webhook): void
     {
         if (!$webhook instanceof CommitsPushedWebhookInterface) {
             throw new RuntimeException(

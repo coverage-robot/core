@@ -2,7 +2,6 @@
 
 namespace App\Tests\Webhook\Processor;
 
-use App\Entity\Project;
 use App\Model\Webhook\Github\GithubPushedCommit;
 use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Webhook\Processor\CommitsPushedWebhookProcessor;
@@ -35,10 +34,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             $mockEventBusClient
         );
 
-        $processor->process(
-            new Project(),
-            $webhook
-        );
+        $processor->process($webhook);
     }
 
     public static function pushedCommitsDataProvider(): array

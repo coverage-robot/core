@@ -3,11 +3,9 @@
 namespace App\Tests\Handler;
 
 use App\Client\CognitoClientInterface;
-use App\Entity\Project;
 use App\Handler\WebhookHandler;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\WebhookInterface;
-use App\Repository\ProjectRepository;
 use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
 use App\Tests\Mock\Factory\MockSerializerFactory;
@@ -24,32 +22,27 @@ use Symfony\Component\Validator\Validation;
 final class WebhookHandlerTest extends KernelTestCase
 {
     #[DataProvider('webhookDataProvider')]
-    public function testHandleSqsDisabledProject(WebhookInterface $webhook): void
+    public function testHandleSqsEnabledProject(WebhookInterface $webhook): void
     {
-        $mockProject = new Project();
-        $mockProject->setEnabled(false);
-
         $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
-        $mockWebhookProcessor->expects($this->never())
-            ->method('process');
+        $mockWebhookProcessor->expects($this->once())
+            ->method('process')
+            ->with($webhook);
 
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-        $mockProjectRepository->expects($this->once())
-            ->method('findOneBy')
+        $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
+        $mockCognitoClient->expects($this->once())
+            ->method('doesProjectExist')
             ->with(
-                [
-                    'provider' => $webhook->getProvider(),
-                    'repository' => $webhook->getRepository(),
-                    'owner' => $webhook->getOwner(),
-                ]
+                $webhook->getProvider(),
+                $webhook->getOwner(),
+                $webhook->getRepository(),
             )
-            ->willReturn($mockProject);
+            ->willReturn(true);
 
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
-            $mockProjectRepository,
-            $this->createMock(CognitoClientInterface::class),
+            $mockCognitoClient,
             MockSerializerFactory::getMock(
                 $this,
                 deserializeMap: [
@@ -97,35 +90,26 @@ final class WebhookHandlerTest extends KernelTestCase
     }
 
     #[DataProvider('webhookDataProvider')]
-    public function testHandleSqsEnabledProject(WebhookInterface $webhook): void
+    public function testHandleSqsWithNoProject(WebhookInterface $webhook): void
     {
-        $mockProject = new Project();
-        $mockProject->setEnabled(true);
-
         $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
-        $mockWebhookProcessor->expects($this->once())
-            ->method('process')
+        $mockWebhookProcessor->expects($this->never())
+            ->method('process');
+
+        $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
+        $mockCognitoClient->expects($this->once())
+            ->method('doesProjectExist')
             ->with(
-                $mockProject,
-                $webhook
-            );
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-        $mockProjectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with(
-                [
-                    'provider' => $webhook->getProvider(),
-                    'repository' => $webhook->getRepository(),
-                    'owner' => $webhook->getOwner(),
-                ]
+                $webhook->getProvider(),
+                $webhook->getOwner(),
+                $webhook->getRepository(),
             )
-            ->willReturn($mockProject);
+            ->willReturn(false);
 
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
-            $mockProjectRepository,
-            $this->createMock(CognitoClientInterface::class),
+            $mockCognitoClient,
             MockSerializerFactory::getMock(
                 $this,
                 deserializeMap: [
