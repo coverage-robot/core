@@ -2,6 +2,7 @@
 
 namespace App\Tests\Event;
 
+use App\Client\DynamoDbClientInterface;
 use App\Entity\Project;
 use App\Event\CoverageFinalisedEventProcessor;
 use App\Repository\ProjectRepository;
@@ -34,7 +35,8 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
 
         $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
-            $mockProjectRepository
+            $mockProjectRepository,
+            $this->createMock(DynamoDbClientInterface::class)
         );
 
         $eventProcessor->process($coverageFinalised);
@@ -52,7 +54,8 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
 
         $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
-            $mockProjectRepository
+            $mockProjectRepository,
+            $this->createMock(DynamoDbClientInterface::class)
         );
 
         $eventProcessor->process(new CoverageFinalised(
@@ -86,7 +89,8 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
 
         $eventProcessor = new CoverageFinalisedEventProcessor(
             new NullLogger(),
-            $mockProjectRepository
+            $mockProjectRepository,
+            $this->createMock(DynamoDbClientInterface::class)
         );
 
         $eventProcessor->process(

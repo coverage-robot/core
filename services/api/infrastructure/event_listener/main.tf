@@ -60,6 +60,17 @@ resource "aws_iam_policy" "api_service_policy" {
         ]
         Resource = "*"
       },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:Query",
+          "dynamodb:PutItem"
+        ]
+        Resource = [
+          var.ref_metadata_table.arn
+        ]
+      }
     ]
   })
 }
@@ -96,8 +107,9 @@ resource "aws_lambda_function" "events" {
 
   environment {
     variables = {
-      BREF_PING_DISABLE = "1"
-      "AWS_ACCOUNT_ID"  = data.aws_caller_identity.current.account_id
+      BREF_PING_DISABLE    = "1"
+      "AWS_ACCOUNT_ID"     = data.aws_caller_identity.current.account_id
+      "REF_METADATA_TABLE" = var.ref_metadata_table.name,
     }
   }
 }

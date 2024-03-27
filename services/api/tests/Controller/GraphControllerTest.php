@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller;
 
+use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Entity\Project;
 use App\Model\GraphParameters;
 use App\Repository\ProjectRepository;
@@ -62,10 +64,19 @@ final class GraphControllerTest extends WebTestCase
                 'owner' => 'owner',
                 'repository' => 'repository',
             ])
-            ->willReturn(new Project());
+            ->willReturn(
+                (new Project())
+                    ->setProvider(Provider::GITHUB)
+                    ->setOwner('owner')
+                    ->setRepository('repository')
+            )
+        ;
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
 
         $this->getContainer()
             ->set(ProjectRepository::class, $mockProjectRepository);
+        $this->getContainer()
+            ->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->once())
@@ -109,9 +120,12 @@ final class GraphControllerTest extends WebTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->never())
             ->method('findOneBy');
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
 
         $this->getContainer()
             ->set(ProjectRepository::class, $mockProjectRepository);
+        $this->getContainer()
+            ->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
@@ -156,9 +170,12 @@ final class GraphControllerTest extends WebTestCase
         $mockProjectRepository = $this->createMock(ProjectRepository::class);
         $mockProjectRepository->expects($this->never())
             ->method('findOneBy');
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
 
         $this->getContainer()
             ->set(ProjectRepository::class, $mockProjectRepository);
+        $this->getContainer()
+            ->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
