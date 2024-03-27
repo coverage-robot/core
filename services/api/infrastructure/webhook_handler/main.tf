@@ -103,6 +103,15 @@ resource "aws_iam_role_policy_attachment" "attach_lamdba_logging_policy" {
   policy_arn = aws_iam_policy.api_service_policy.arn
 }
 
+resource "aws_cognito_user_pool_client" "cognito_client" {
+  name = format("coverage-api-webhook-handler-%s", var.environment)
+
+  user_pool_id = data.terraform_remote_state.core.outputs.project_pool.id
+
+  generate_secret     = true
+  explicit_auth_flows = ["ALLOW_ADMIN_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+}
+
 resource "aws_lambda_function" "webhooks" {
   filename         = "${path.module}/../deployment.zip"
   source_code_hash = var.deployment_hash
@@ -130,8 +139,11 @@ resource "aws_lambda_function" "webhooks" {
 
   environment {
     variables = {
-      "BREF_PING_DISABLE" = "1"
-      "AWS_ACCOUNT_ID"    = data.aws_caller_identity.current.account_id
+      "BREF_PING_DISABLE"          = "1",
+      "AWS_ACCOUNT_ID"             = data.aws_caller_identity.current.account_id,
+      "PROJECT_POOL_ID"            = data.terraform_remote_state.core.outputs.project_pool.id,
+      "PROJECT_POOL_CLIENT_ID"     = aws_cognito_user_pool_client.cognito_client.id,
+      "PROJECT_POOL_CLIENT_SECRET" = aws_cognito_user_pool_client.cognito_client.client_secret,
     }
   }
 }
