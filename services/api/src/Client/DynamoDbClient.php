@@ -130,13 +130,14 @@ final class DynamoDbClient implements DynamoDbClientInterface
         /**
          * @var AttributeValue[] $items
          */
-        $items = iterator_to_array($response->getItems(true));
+        $items = (array)$response->getItems(true);
 
         if (count($items) === 0) {
             return null;
         }
 
-        return gettype($items[0]->getN()) === 'string' ? (float)$items[0]->getN()
+        return gettype($items[0]->getN()) === 'string' ?
+            (float)$items[0]->getN()
             : null;
     }
 

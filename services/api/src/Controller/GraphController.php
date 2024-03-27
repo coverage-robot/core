@@ -14,6 +14,7 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -62,11 +63,11 @@ final class GraphController extends AbstractController
             'repository' => $repository,
         ]);
 
-
         $coveragePercentageFromRefMetadata = $this->dynamoDbClient->getCoveragePercentage(
-            $project->getProvider(),
-            $project->getOwner(),
-            $project->getRepository(),
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository(),
+            // TODO(RM): Support different refs being passed through the URI.
             'main'
         );
 
