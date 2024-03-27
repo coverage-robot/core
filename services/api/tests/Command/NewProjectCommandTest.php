@@ -2,11 +2,18 @@
 
 namespace App\Tests\Command;
 
-use App\Entity\Project;
-use App\Repository\ProjectRepository;
+use App\Client\CognitoClient;
+use App\Enum\EnvironmentVariable;
 use App\Service\AuthTokenService;
 use App\Service\AuthTokenServiceInterface;
+use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
+use AsyncAws\CognitoIdentityProvider\Result\AdminConfirmSignUpResponse;
+use AsyncAws\CognitoIdentityProvider\Result\SignUpResponse;
+use AsyncAws\Core\Test\ResultMockFactory;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
+use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -15,23 +22,27 @@ final class NewProjectCommandTest extends KernelTestCase
 {
     public function testCreatingNewProject(): void
     {
-        $mockProjectRepo = $this->createMock(ProjectRepository::class);
+        $mockClient = $this->createMock(CognitoIdentityProviderClient::class);
+        $mockClient->expects($this->once())
+            ->method('signUp')
+            ->willReturn(ResultMockFactory::create(SignUpResponse::class));
+        $mockClient->expects($this->once())
+            ->method('adminConfirmSignUp')
+            ->willReturn(ResultMockFactory::create(AdminConfirmSignUpResponse::class));
 
-        $mockProjectRepo->expects($this->once())
-            ->method('save')
-            ->with(
-                self::callback(
-                    static fn (Project $project): bool => $project->getOwner() === 'mock-owner' &&
-                        $project->getRepository() === 'mock-repository' &&
-                        $project->getProvider() === Provider::GITHUB &&
-                        $project->getGraphToken() === 'mock-graph-token' &&
-                        $project->getUploadToken() === 'mock-upload-token' &&
-                        $project->getId() === null &&
-                        $project->getCoveragePercentage() === null &&
-                        $project->isEnabled()
-                ),
-                true
-            );
+        $mockCognitoClient = new CognitoClient(
+            $mockClient,
+            MockEnvironmentServiceFactory::createMock(
+                $this,
+                Environment::PRODUCTION,
+                [
+                    EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-project-pool-id',
+                    EnvironmentVariable::PROJECT_POOL_CLIENT_ID->value => 'mock-project-pool-client-id',
+                    EnvironmentVariable::PROJECT_POOL_CLIENT_SECRET->value => 'mock-project-pool-client-secret',
+                ]
+            ),
+            new NullLogger()
+        );
 
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockAuthTokenService->expects($this->once())
@@ -46,7 +57,7 @@ final class NewProjectCommandTest extends KernelTestCase
         $application = new Application($kernel);
 
         static::getContainer()->set(AuthTokenService::class, $mockAuthTokenService);
-        static::getContainer()->set(ProjectRepository::class, $mockProjectRepo);
+        static::getContainer()->set(CognitoClient::class, $mockCognitoClient);
 
         $command = $application->find('app:new_project');
         $commandTester = new CommandTester($command);
@@ -54,6 +65,7 @@ final class NewProjectCommandTest extends KernelTestCase
             'owner' => 'mock-owner',
             'repository' => 'mock-repository',
             'provider' => Provider::GITHUB->value,
+            'email' => 'mock-contact-email@example.com'
         ]);
 
         $commandTester->assertCommandIsSuccessful();

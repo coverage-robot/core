@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Project;
 use App\Model\Webhook\WebhookInterface;
 use App\Webhook\Processor\WebhookProcessorInterface;
 use RuntimeException;
@@ -19,7 +18,7 @@ final class WebhookProcessorService implements WebhookProcessorServiceInterface
     ) {
     }
 
-    public function process(Project $project, WebhookInterface $webhook): void
+    public function process(WebhookInterface $webhook): void
     {
         $processor = (iterator_to_array($this->webhookProcessors)[$webhook->getEvent()->value]) ?? null;
 
@@ -32,6 +31,6 @@ final class WebhookProcessorService implements WebhookProcessorServiceInterface
             );
         }
 
-        $processor->process($project, $webhook);
+        $processor->process($webhook);
     }
 }

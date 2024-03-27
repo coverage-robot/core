@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service;
 
-use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Enum\WebhookType;
 use App\Model\Webhook\WebhookInterface;
@@ -31,7 +30,6 @@ final class WebhookProcessorTest extends KernelTestCase
         );
 
         $webhookProcessor->process(
-            new Project(),
             $this->getContainer()
                 ->get(SerializerInterface::class)
                 ->denormalize(

@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Entity\Project;
+use App\Client\CognitoClient;
 use App\Exception\AuthenticationException;
-use App\Repository\ProjectRepository;
+use App\Model\Tokens;
 use App\Service\AuthTokenServiceInterface;
 use Override;
 use Packages\Contracts\Provider\Provider;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class NewProjectCommand extends Command
 {
     public function __construct(
-        private readonly ProjectRepository $projectRepository,
+        private readonly CognitoClient $cognitoClient,
         private readonly AuthTokenServiceInterface $authTokenService
     ) {
         parent::__construct();
@@ -27,7 +27,8 @@ final class NewProjectCommand extends Command
     #[Override]
     protected function configure(): void
     {
-        $this->addArgument('repository', InputArgument::REQUIRED, 'The repository the token belongs to')
+        $this->addArgument('email', InputArgument::REQUIRED, 'The contact email for the project')
+            ->addArgument('repository', InputArgument::REQUIRED, 'The repository the token belongs to')
             ->addArgument('owner', InputArgument::REQUIRED, 'The owner of the repository the token belongs to')
             ->addArgument('provider', InputArgument::REQUIRED, 'The VCS provider the repository belongs to');
     }
@@ -47,19 +48,29 @@ final class NewProjectCommand extends Command
         /** @var string $owner */
         $owner = $input->getArgument('owner');
 
+        /** @var string $email */
+        $email = $input->getArgument('email');
+
         $uploadToken = $this->authTokenService->createNewUploadToken();
         $graphToken = $this->authTokenService->createNewGraphToken();
 
-        $project = (new Project())->setProvider(Provider::from($provider))
-            ->setRepository($repository)
-            ->setOwner($owner)
-            ->setUploadToken($uploadToken)
-            ->setGraphToken($graphToken);
+        $created = $this->cognitoClient->createProject(
+            Provider::from($provider),
+            $owner,
+            $repository,
+            $email,
+            new Tokens(
+                $uploadToken,
+                $graphToken
+            )
+        );
 
-        $this->projectRepository->save($project, true);
+        if ($created) {
+            $output->writeln(sprintf('New upload token: %s, New graph token: %s', $uploadToken, $graphToken));
+            return Command::SUCCESS;
+        }
 
-        $output->writeln(sprintf('New upload token: %s, New graph token: %s', $uploadToken, $graphToken));
-
-        return Command::SUCCESS;
+        $output->writeln('Failed to create project');
+        return Command::FAILURE;
     }
 }

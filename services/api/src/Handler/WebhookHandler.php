@@ -4,10 +4,8 @@ namespace App\Handler;
 
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
-use App\Entity\Project;
 use App\Exception\InvalidWebhookException;
 use App\Model\Webhook\WebhookInterface;
-use App\Repository\ProjectRepository;
 use App\Service\WebhookProcessorService;
 use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
@@ -35,7 +33,6 @@ final class WebhookHandler extends SqsHandler
         #[Autowire(service: WebhookProcessorService::class)]
         private readonly WebhookProcessorServiceInterface $webhookProcessor,
         private readonly LoggerInterface $webhookLogger,
-        private readonly ProjectRepository $projectRepository,
         #[Autowire(service: CognitoClient::class)]
         private readonly CognitoClientInterface $cognitoClient,
         private readonly SerializerInterface $serializer,
@@ -103,9 +100,13 @@ final class WebhookHandler extends SqsHandler
      */
     private function processWebhookEvent(WebhookInterface $webhook): void
     {
-        $project = $this->getProject($webhook);
-
-        if (!$project instanceof Project) {
+        if (
+            !$this->cognitoClient->doesProjectExist(
+                $webhook->getProvider(),
+                $webhook->getOwner(),
+                $webhook->getRepository()
+            )
+        ) {
             $this->metricService->put(
                 metric: 'InvalidWebhooks',
                 value: 1,
@@ -114,62 +115,12 @@ final class WebhookHandler extends SqsHandler
             return;
         }
 
-        if (
-            !$this->cognitoClient->doesProjectExist(
-                $webhook->getProvider(),
-                $webhook->getOwner(),
-                $webhook->getRepository()
-            )
-        ) {
-            $this->webhookLogger->error(
-                'Project does not exist in Cognito but does in the database.',
-                [
-                    'provider' => $webhook->getProvider(),
-                    'repository' => $webhook->getRepository(),
-                    'owner' => $webhook->getOwner(),
-                    'project' => $project->getId()
-                ]
-            );
-        }
-
-        $this->webhookProcessor->process($project, $webhook);
+        $this->webhookProcessor->process($webhook);
 
         $this->metricService->put(
             metric: 'ValidWebhooks',
             value: 1,
             unit: Unit::COUNT
         );
-    }
-
-    /**
-     * Validate that the project the webhook is for is present and enabled.
-     */
-    private function getProject(WebhookInterface $webhook): ?Project
-    {
-        $project = $this->projectRepository
-            ->findOneBy(
-                [
-                    'provider' => $webhook->getProvider(),
-                    'repository' => $webhook->getRepository(),
-                    'owner' => $webhook->getOwner(),
-                ]
-            );
-
-        if (!$project || !$project->isEnabled()) {
-            $this->webhookLogger->warning(
-                'Webhook received from disabled (or non-existent) project.',
-                [
-                    'provider' => $webhook->getProvider(),
-                    'repository' => $webhook->getRepository(),
-                    'owner' => $webhook->getOwner(),
-                    'project' => $project?->getId(),
-                    'enabled' => $project?->isEnabled()
-                ]
-            );
-
-            return null;
-        }
-
-        return $project;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Webhook\Processor;
 
-use App\Entity\Project;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
@@ -31,7 +30,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
      * in the state of a job (i.e. a CI pipeline job has completed).
      */
     #[Override]
-    public function process(Project $project, WebhookInterface $webhook): void
+    public function process(WebhookInterface $webhook): void
     {
         if (!$webhook instanceof PipelineStateChangeWebhookInterface) {
             throw new RuntimeException(
