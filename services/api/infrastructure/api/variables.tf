@@ -16,3 +16,5 @@ variable "php_version" {
 variable "deployment_hash" {
   type = string
 }
+
+variable "ref_metadata_table" {}

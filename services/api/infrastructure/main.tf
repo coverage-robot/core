@@ -64,6 +64,8 @@ module "api" {
 
   environment = local.environment
   region      = var.region
+
+  ref_metadata_table = module.ref_metadata.ref_metadata_table
 }
 
 module "event_listener" {
@@ -74,6 +76,8 @@ module "event_listener" {
 
   environment = local.environment
   region      = var.region
+
+  ref_metadata_table = module.ref_metadata.ref_metadata_table
 }
 
 module "webhook_handler" {

@@ -93,6 +93,16 @@ resource "aws_iam_policy" "api_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.project_pool.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:Query",
+        ]
+        Resource = [
+          var.ref_metadata_table.arn
+        ]
       }
     ]
   })
@@ -144,6 +154,7 @@ resource "aws_lambda_function" "api" {
       "PROJECT_POOL_ID"            = data.terraform_remote_state.core.outputs.project_pool.id,
       "PROJECT_POOL_CLIENT_ID"     = aws_cognito_user_pool_client.cognito_client.id,
       "PROJECT_POOL_CLIENT_SECRET" = aws_cognito_user_pool_client.cognito_client.client_secret,
+      "REF_METADATA_TABLE"         = var.ref_metadata_table.name,
     }
   }
 }

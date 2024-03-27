@@ -2,6 +2,8 @@
 
 namespace App\Event;
 
+use App\Client\DynamoDbClient;
+use App\Client\DynamoDbClientInterface;
 use App\Repository\ProjectRepository;
 use Override;
 use Packages\Contracts\Event\Event;
@@ -9,9 +11,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
@@ -20,12 +20,11 @@ final class CoverageFinalisedEventProcessor implements EventProcessorInterface
         'main',
     ];
 
-    /**
-     * @param SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer
-     */
     public function __construct(
         private readonly LoggerInterface $eventHandlerLogger,
-        private readonly ProjectRepository $projectRepository
+        private readonly ProjectRepository $projectRepository,
+        #[Autowire(service: DynamoDbClient::class)]
+        private readonly DynamoDbClientInterface $dynamoDbClient,
     ) {
     }
 
@@ -44,6 +43,14 @@ final class CoverageFinalisedEventProcessor implements EventProcessorInterface
         }
 
         $coveragePercentage = $event->getCoveragePercentage();
+
+        $this->dynamoDbClient->setCoveragePercentage(
+            $event->getProvider(),
+            $event->getOwner(),
+            $event->getRepository(),
+            $event->getRef(),
+            $coveragePercentage
+        );
 
         if (!in_array($event->getRef(), self::REFS, true)) {
             $this->eventHandlerLogger->info(
