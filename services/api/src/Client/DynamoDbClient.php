@@ -65,7 +65,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
             );
 
             $response->resolve();
-        } catch (HttpException $exception) {
+        } catch (HttpException $httpException) {
             $this->dynamoDbClientLogger->error(
                 'Failed to set coverage percentage for ref.',
                 [
@@ -74,11 +74,11 @@ final class DynamoDbClient implements DynamoDbClientInterface
                     'repository' => $repository,
                     'ref' => $ref,
                     'coveragePercentage' => $coveragePercentage,
-                    'exception' => $exception,
+                    'exception' => $httpException,
                 ]
             );
 
-            throw $exception;
+            throw $httpException;
         }
     }
 
