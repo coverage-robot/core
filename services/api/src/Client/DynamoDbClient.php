@@ -92,40 +92,53 @@ final class DynamoDbClient implements DynamoDbClientInterface
         string $repository,
         string $ref
     ): ?float {
-        $response = $this->dynamoDbClient->query(
-            new QueryInput(
-                [
-                    'TableName' => $this->environmentService->getVariable(
-                        EnvironmentVariable::REF_METADATA_TABLE
-                    ),
-                    'Select' => Select::SPECIFIC_ATTRIBUTES,
-                    'Limit' => 1,
-                    'AttributesToGet' => [
-                        self::COVERAGE_PERCENTAGE_COLUMN
-                    ],
-                    'KeyConditions' => [
-                        self::REPOSITORY_IDENTIFIER_COLUMN => [
-                            'AttributeValueList' => [
-                                [
-                                    'S' => $this->getUniqueRepositoryIdentifier($provider, $owner, $repository)
-                                ]
+        try {
+            $response = $this->dynamoDbClient->query(
+                new QueryInput(
+                    [
+                        'TableName' => $this->environmentService->getVariable(
+                            EnvironmentVariable::REF_METADATA_TABLE
+                        ),
+                        'Select' => Select::SPECIFIC_ATTRIBUTES,
+                        'Limit' => 1,
+                        'ProjectionExpression' => self::COVERAGE_PERCENTAGE_COLUMN,
+                        'KeyConditions' => [
+                            self::REPOSITORY_IDENTIFIER_COLUMN => [
+                                'AttributeValueList' => [
+                                    [
+                                        'S' => $this->getUniqueRepositoryIdentifier($provider, $owner, $repository)
+                                    ]
+                                ],
+                                'ComparisonOperator' => ComparisonOperator::EQ
                             ],
-                            'ComparisonOperator' => ComparisonOperator::EQ
-                        ],
-                        self::REF_COLUMN => [
-                            'AttributeValueList' => [
-                                [
-                                    'S' => $ref
-                                ]
+                            self::REF_COLUMN => [
+                                'AttributeValueList' => [
+                                    [
+                                        'S' => $ref
+                                    ]
+                                ],
+                                'ComparisonOperator' => ComparisonOperator::EQ
                             ],
-                            'ComparisonOperator' => ComparisonOperator::EQ
                         ],
-                    ],
-                ]
-            )
-        );
+                    ]
+                )
+            );
 
-        $response->resolve();
+            $response->resolve();
+        } catch (HttpException $httpException) {
+            $this->dynamoDbClientLogger->error(
+                'Failed to get coverage percentage for ref.',
+                [
+                    'provider' => $provider,
+                    'owner' => $owner,
+                    'repository' => $repository,
+                    'ref' => $ref,
+                    'exception' => $httpException,
+                ]
+            );
+
+            return null;
+        }
 
         /**
          * @var AttributeValue[] $items
@@ -136,9 +149,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
             return null;
         }
 
-        return gettype($items[0]->getN()) === 'string' ?
-            (float)$items[0]->getN()
-            : null;
+        return $items[0]->getN() !== null ? (float)$items[0]->getN() : null;
     }
 
     private function getUniqueRepositoryIdentifier(
