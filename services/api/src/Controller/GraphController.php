@@ -4,15 +4,12 @@ namespace App\Controller;
 
 use App\Client\DynamoDbClient;
 use App\Client\DynamoDbClientInterface;
-use App\Entity\Project;
 use App\Exception\AuthenticationException;
 use App\Model\GraphParameters;
-use App\Repository\ProjectRepository;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\TraceContext;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +21,8 @@ final class GraphController extends AbstractController
     public function __construct(
         private readonly BadgeServiceInterface $badgeService,
         private readonly AuthTokenServiceInterface $authTokenService,
-        private readonly ProjectRepository $projectRepository,
         #[Autowire(service: DynamoDbClient::class)]
-        private readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly LoggerInterface $graphLogger
+        private readonly DynamoDbClientInterface $dynamoDbClient
     ) {
         TraceContext::setTraceHeaderFromEnvironment();
     }
@@ -56,14 +51,7 @@ final class GraphController extends AbstractController
             throw AuthenticationException::invalidGraphToken();
         }
 
-        /** @var Project $project */
-        $project = $this->projectRepository->findOneBy([
-            'provider' => $provider,
-            'owner' => $owner,
-            'repository' => $repository,
-        ]);
-
-        $coveragePercentageFromRefMetadata = $this->dynamoDbClient->getCoveragePercentage(
+        $coveragePercentage = $this->dynamoDbClient->getCoveragePercentage(
             $parameters->getProvider(),
             $parameters->getOwner(),
             $parameters->getRepository(),
@@ -71,20 +59,8 @@ final class GraphController extends AbstractController
             'main'
         );
 
-        if ($coveragePercentageFromRefMetadata !== $project->getCoveragePercentage()) {
-            $this->graphLogger->error(
-                'Coverage percentage from ref metadata does not match project coverage percentage.',
-                [
-                    'projectTable' => $project->getCoveragePercentage(),
-                    'refTable' => $coveragePercentageFromRefMetadata,
-                ]
-            );
-        }
-
         return new Response(
-            $this->badgeService->renderCoveragePercentageBadge(
-                $project->getCoveragePercentage()
-            ),
+            $this->badgeService->renderCoveragePercentageBadge($coveragePercentage),
             Response::HTTP_OK,
             [
                 'Content-Type' => 'image/svg+xml',

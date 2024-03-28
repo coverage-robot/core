@@ -41,11 +41,6 @@ services:
         links:
             - api_db
 
-    api_db:
-        extends:
-            file: services/api/docker-compose.yml
-            service: database
-
     localstack:
         container_name: "localstack"
         image: localstack/localstack:3.0.2
