@@ -21,10 +21,3 @@ services:
       - ../../packages:/var/task/vendor/coverage-robot
     environment:
       HANDLER: App\Handler\EventHandler
-
-  database:
-    image: mysql:8.0.33
-    ports: [ '3306:3306' ]
-    environment:
-      MYSQL_DATABASE: coverage-api-dev
-      MYSQL_ROOT_PASSWORD: root

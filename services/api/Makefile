@@ -1,11 +1,5 @@
 all:
 
-migration:
-	docker compose -f ../../docker-compose.yml exec api php bin/console make:migration
-
-migrate:
-	docker compose -f ../../docker-compose.yml exec api php bin/console doctrine:migrations:migrate
-
 token:
 	docker compose -f ../../docker-compose.yml exec -ePHP_IDE_CONFIG=serverName=api api php -dxdebug.mode=debug -dxdebug.start_with_request=yes bin/console app:new_project $(repository) $(owner) $(provider)
 

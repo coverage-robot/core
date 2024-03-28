@@ -73,14 +73,6 @@ module "warehouse" {
   environment = local.environment
 }
 
-module "database" {
-  source      = "./database"
-  environment = local.environment
-
-  organisation = var.planetscale_organisation
-  region       = var.planetscale_region
-}
-
 module "authentication" {
   source      = "./authentication"
   environment = local.environment

@@ -4,9 +4,7 @@ namespace App\Tests\Controller;
 
 use App\Client\DynamoDbClient;
 use App\Client\DynamoDbClientInterface;
-use App\Entity\Project;
 use App\Model\GraphParameters;
-use App\Repository\ProjectRepository;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeServiceInterface;
 use Override;
@@ -53,30 +51,15 @@ final class GraphControllerTest extends WebTestCase
             )
             ->willReturn(true);
 
-        $this->getContainer()
-            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+        $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
 
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-        $mockProjectRepository->expects($this->once())
-            ->method('findOneBy')
-            ->with([
-                'provider' => Provider::GITHUB->value,
-                'owner' => 'owner',
-                'repository' => 'repository',
-            ])
-            ->willReturn(
-                (new Project())
-                    ->setProvider(Provider::GITHUB)
-                    ->setOwner('owner')
-                    ->setRepository('repository')
-            )
-        ;
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getCoveragePercentage')
+            ->with(Provider::GITHUB, 'owner', 'repository', 'main')
+            ->willReturn(null);
 
-        $this->getContainer()
-            ->set(ProjectRepository::class, $mockProjectRepository);
-        $this->getContainer()
-            ->set(DynamoDbClient::class, $mockDynamoDbClient);
+        $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->once())
@@ -114,18 +97,13 @@ final class GraphControllerTest extends WebTestCase
             ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
             ->willReturn(false);
 
-        $this->getContainer()
-            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+        $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
 
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-        $mockProjectRepository->expects($this->never())
-            ->method('findOneBy');
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
+        $mockDynamoDbClient->expects($this->never())
+            ->method('getCoveragePercentage');
 
-        $this->getContainer()
-            ->set(ProjectRepository::class, $mockProjectRepository);
-        $this->getContainer()
-            ->set(DynamoDbClient::class, $mockDynamoDbClient);
+        $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
@@ -164,18 +142,13 @@ final class GraphControllerTest extends WebTestCase
         $mockAuthTokenService->expects($this->never())
             ->method('validateParametersWithGraphToken');
 
-        $this->getContainer()
-            ->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+        $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
 
-        $mockProjectRepository = $this->createMock(ProjectRepository::class);
-        $mockProjectRepository->expects($this->never())
-            ->method('findOneBy');
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
+        $mockDynamoDbClient->expects($this->never())
+            ->method('getCoveragePercentage');
 
-        $this->getContainer()
-            ->set(ProjectRepository::class, $mockProjectRepository);
-        $this->getContainer()
-            ->set(DynamoDbClient::class, $mockDynamoDbClient);
+        $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
 
         $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
         $mockBadgeService->expects($this->never())
