@@ -8,26 +8,7 @@ variable "gcp_region" {
   default = "europe-west2"
 }
 
-variable "planetscale_region" {
-  type    = string
-  default = "eu-west"
-}
-
 variable "gcp_project" {
-  type = string
-}
-
-variable "planetscale_service_token_id" {
-  type      = string
-  sensitive = true
-}
-
-variable "planetscale_service_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "planetscale_organisation" {
   type = string
 }
 

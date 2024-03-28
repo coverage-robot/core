@@ -45,27 +45,3 @@ provider "registry.terraform.io/hashicorp/google" {
     "zh:fdad54c5e50751cef3f39a8666ff6adbb3bd860d396d5a9a0a3526e204f60454",
   ]
 }
-
-provider "registry.terraform.io/koslib/planetscale" {
-  version     = "0.8.1"
-  constraints = "~> 0.5"
-  hashes = [
-    "h1:bg4NU0KVYriNAAJCovBr1Wsb+2YK25QU1fEMupQ5rx0=",
-    "h1:oFZzri8/dhawC+gDqetKpqmIF9akl1UqL+Ev6kcuk1A=",
-    "zh:357cd861f01da2048be7b4056b5b637546ea2e8524271262894bdfd7b5fec44a",
-    "zh:3ac100d43b9c98f965930a48041099325d743483ed9b090d6d314fe32bbdf13b",
-    "zh:3d21deeed827dafea572cc1aae329c0836246c6d204b6f2bcb61569b7fa5a287",
-    "zh:5811283ea1766334f705f83fcb52bd153d3e5d42f1b11343a4624730dae91bc1",
-    "zh:732540b691ede07f646bdbe36518eecba12db5dd47768f6317a00d4e9b02e158",
-    "zh:7491eeb61e4e21b76f875fd4822b5889f5004ac7c91de345d9301a7aa8c53724",
-    "zh:7d25b6c236f669edd9e1760cf7a4b735884985deaac441442c99cfc05d93e277",
-    "zh:8630a2774fb2a36b601a62b2e45494138aca66081a5ba313ac980dcabe7662df",
-    "zh:890df766e9b839623b1f0437355032a3c006226a6c200cd911e15ee1a9014e9f",
-    "zh:a9a1810a5589c8231c1b84ebfa31d383920900f36e5834f5751f4a63ffc4cc8e",
-    "zh:afa1883ca794c323e534b7d685d9caab27f067a4504da253d27bcb21100d9369",
-    "zh:ca9556287069a49d8f478b41602094219b3ecaad914e91aa5094f7b22b507a03",
-    "zh:d2dcf74d7b8d6132d6e209cafc9c0484b3df75c3d6a9f6817a37f9aaa53653b0",
-    "zh:d3d4ebc0dce95de40c5613c4568c93a74b85ebad93ac34a4c1428407f40d538d",
-    "zh:ea6f47743afc7f1dda7d262f375bb0b2157cd6105921c3a161b0dc0d0edfb41d",
-  ]
-}

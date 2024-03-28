@@ -8,10 +8,6 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 5.0"
     }
-    planetscale = {
-      source  = "koslib/planetscale"
-      version = "~> 0.5"
-    }
   }
 
   required_version = ">= 1.2.0"
@@ -36,11 +32,6 @@ provider "aws" {
 provider "google" {
   project = var.gcp_project
   region  = var.gcp_region
-}
-
-provider "planetscale" {
-  service_token_id = var.planetscale_service_token_id
-  service_token    = var.planetscale_service_token
 }
 
 module "routing" {

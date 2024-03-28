@@ -97,9 +97,6 @@ jobs:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
                     var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
-                    variables: |
-                        planetscale_service_token_id = "${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}"
-                        planetscale_service_token = "${{ secrets.PLANETSCALE_SERVICE_TOKEN }}"
 
     deployment:
         name: Deployment
@@ -133,9 +130,6 @@ jobs:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
                     var_file: ${{ env.working-directory }}/${{ env.workspace }}.tfvars
-                    variables: |
-                        planetscale_service_token_id = "${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}"
-                        planetscale_service_token = "${{ secrets.PLANETSCALE_SERVICE_TOKEN }}"
 
                     # The plan will already have been generated on the PR, so approving here should be fine
                     auto_approve: true
