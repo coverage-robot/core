@@ -12,11 +12,6 @@ provider "google" {
   credentials = "{\"type\":\"service_account\",\"project_id\":\"\",\"private_key_id\":\"\",\"private_key\":\"\",\"client_email\":\"\",\"client_id\":\"\",\"auth_uri\":\"\",\"token_uri\":\"\",\"auth_provider_x509_cert_url\":\"\",\"client_x509_cert_url\":\"\",\"universe_domain\":\"\"}"
 }
 
-provider "planetscale" {
-  service_token_id = "mock"
-  service_token    = "mock"
-}
-
 // Turn off any non-essential services which aren't mocked via Localstack
 
 module "warehouse" {
