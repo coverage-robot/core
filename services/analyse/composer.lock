@@ -460,16 +460,16 @@
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
-                "reference": "0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0"
+                "reference": "1bab91b55b718cc044bbd031374a7f0a375e3971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0",
-                "reference": "0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0",
+                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/1bab91b55b718cc044bbd031374a7f0a375e3971",
+                "reference": "1bab91b55b718cc044bbd031374a7f0a375e3971",
                 "shasum": ""
             },
             "require": {
@@ -511,7 +511,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/1.0.0"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/1.0.1"
             },
             "funding": [
                 {
@@ -519,7 +519,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-30T14:50:48+00:00"
+            "time": "2024-02-20T14:08:53+00:00"
         },
         {
             "name": "brick/math",
@@ -6534,16 +6534,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.0.3",
+            "version": "v7.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "937a195147e0c27b2759ade834169ed006d0bc74"
+                "reference": "0e7727191c3b71ebec6d529fa0e50a01ca5679e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/937a195147e0c27b2759ade834169ed006d0bc74",
-                "reference": "937a195147e0c27b2759ade834169ed006d0bc74",
+                "url": "https://api.github.com/repos/symfony/process/zipball/0e7727191c3b71ebec6d529fa0e50a01ca5679e9",
+                "reference": "0e7727191c3b71ebec6d529fa0e50a01ca5679e9",
                 "shasum": ""
             },
             "require": {
@@ -6575,7 +6575,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.0.3"
+                "source": "https://github.com/symfony/process/tree/v7.0.4"
             },
             "funding": [
                 {
@@ -6591,7 +6591,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:02:46+00:00"
+            "time": "2024-02-22T20:27:20+00:00"
         },
         {
             "name": "symfony/property-access",
