@@ -6,9 +6,9 @@ WITH
       upload.commit,
       fileName,
       lineNumber,
-      type = 'METHOD' as containsMethod,
-      type = 'BRANCH' as containsBranch,
-      type = 'STATEMENT' as containsStatement,
+      TYPE = 'METHOD' AS containsMethod,
+      TYPE = 'BRANCH' AS containsBranch,
+      TYPE = 'STATEMENT' AS containsStatement,
       (
         SELECT
           IF (
@@ -19,7 +19,7 @@ WITH
         FROM
           UNNEST(metadata)
         WHERE
-          key = "lineHits"
+          KEY = "lineHits"
       ) AS hits,
       ARRAY(
         SELECT
@@ -44,10 +44,10 @@ WITH
         GROUP BY
           branchIndex,
           branchHits
-      ) as branchHits
+      ) AS branchHits
     FROM
-      `mock-table` as upload
-      INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+      `mock-table` AS upload
+      INNER JOIN `mock-line-coverage-table` AS LINES ON LINES.uploadId = upload.uploadId
     WHERE
       1 = 1
       AND upload.provider = @PROVIDER
@@ -55,15 +55,15 @@ WITH
       AND upload.repository = @REPOSITORY
       AND upload.commit = @COMMIT
       AND upload.uploadId IN UNNEST(@UPLOADS)
-      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
+      AND DATE(LINES.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
       AND (
         (
-          lines.fileName = "1"
-          AND lines.lineNumber IN (1, 2, 3)
+          LINES.fileName = "1"
+          AND LINES.lineNumber IN (1, 2, 3)
         )
         OR(
-          lines.fileName = "2"
-          AND lines.lineNumber IN (1, 2, 3)
+          LINES.fileName = "2"
+          AND LINES.lineNumber IN (1, 2, 3)
         )
       )
   ),
@@ -73,13 +73,13 @@ WITH
       lineNumber,
       tag,
       totalLines,
-      commit,
-      MAX(containsMethod) as containsMethod,
-      MAX(containsBranch) as containsBranch,
-      MAX(containsStatement) as containsStatement,
-      SUM(hits) as hits,
+      COMMIT,
+      MAX(containsMethod) AS containsMethod,
+      MAX(containsBranch) AS containsBranch,
+      MAX(containsStatement) AS containsStatement,
+      SUM(hits) AS hits,
       branchIndex,
-      SUM(branchHit) > 0 as isBranchedLineHit
+      SUM(branchHit) > 0 AS isBranchedLineHit
     FROM
       unnested,
       UNNEST(
@@ -96,14 +96,14 @@ WITH
       lineNumber,
       tag,
       totalLines,
-      commit,
+      COMMIT,
       branchIndex
   ),
-  lines AS (
+  LINES AS (
     SELECT
       tag,
       totalLines,
-      commit,
+      COMMIT,
       fileName,
       lineNumber,
       IF(
@@ -111,8 +111,8 @@ WITH
         -- definitely not been covered at all (as we'll want to show that as a partial line)
         SUM(hits) = 0
         AND COUNTIF(
-          containsBranch = true
-          AND isBranchedLineHit = true
+          containsBranch = TRUE
+          AND isBranchedLineHit = TRUE
         ) = 0,
         "uncovered",
         IF (
@@ -120,40 +120,40 @@ WITH
           "partial",
           "covered"
         )
-      ) as state
+      ) AS state
     FROM
       branchingLines
     GROUP BY
       tag,
-      commit,
+      COMMIT,
       totalLines,
       fileName,
       lineNumber
   )
 SELECT
-  tag as tagName,
+  tag AS tagName,
   STRUCT(
-    tag as name, commit as commit, [totalLines] as successfullyUploadedLines
-  ) as tag,
-  COUNT(*) as lines,
+    tag AS name, COMMIT AS COMMIT, [totalLines] AS successfullyUploadedLines
+  ) AS tag,
+  COUNT(*) AS LINES,
   COALESCE(
     SUM(
       IF(state = "covered", 1, 0)
     ),
     0
-  ) as covered,
+  ) AS covered,
   COALESCE(
     SUM(
       IF(state = "partial", 1, 0)
     ),
     0
-  ) as partial,
+  ) AS PARTIAL,
   COALESCE(
     SUM(
       IF(state = "uncovered", 1, 0)
     ),
     0
-  ) as uncovered,
+  ) AS uncovered,
   ROUND(
     (
       SUM(
@@ -163,12 +163,12 @@ SELECT
       )
     ) / COUNT(*) * 100,
     2
-  ) as coveragePercentage
+  ) AS coveragePercentage
 FROM
-  lines
+  LINES
 GROUP BY
   tagName,
   totalLines,
-  commit
+  COMMIT
 ORDER BY
   tagName ASC

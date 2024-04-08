@@ -2,26 +2,26 @@ SELECT
   COALESCE(
     ARRAY_AGG(uploadId),
     []
-  ) as successfulUploads,
+  ) AS successfulUploads,
   COALESCE(
     ARRAY_AGG(
       STRING(ingestTime)
     ),
     []
-  ) as successfulIngestTimes,
+  ) AS successfulIngestTimes,
   COALESCE(
     ARRAY_AGG(
       STRUCT(
-        tag as name, [totalLines] as successfullyUploadedLines,
-        @COMMIT as commit
+        tag AS name, [totalLines] AS successfullyUploadedLines,
+        @COMMIT AS COMMIT
       )
     ),
     []
-  ) as successfulTags
+  ) AS successfulTags
 FROM
   `mock-table`
 WHERE
   provider = @PROVIDER
   AND owner = @OWNER
   AND repository = @REPOSITORY
-  AND commit = @COMMIT
+  AND COMMIT = @COMMIT
