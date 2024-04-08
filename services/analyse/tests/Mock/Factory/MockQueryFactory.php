@@ -13,9 +13,6 @@ use Psr\Container\NotFoundExceptionInterface;
 final class MockQueryFactory
 {
     /**
-     * @param string|null $queryString
-     * @param mixed|null $parsedResults
-     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
