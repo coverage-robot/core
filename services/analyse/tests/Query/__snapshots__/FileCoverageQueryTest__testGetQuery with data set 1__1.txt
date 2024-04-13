@@ -6,9 +6,9 @@ WITH
       upload.commit,
       fileName,
       lineNumber,
-      type = 'METHOD' as containsMethod,
-      type = 'BRANCH' as containsBranch,
-      type = 'STATEMENT' as containsStatement,
+      TYPE = 'METHOD' AS containsMethod,
+      TYPE = 'BRANCH' AS containsBranch,
+      TYPE = 'STATEMENT' AS containsStatement,
       (
         SELECT
           IF (
@@ -19,7 +19,7 @@ WITH
         FROM
           UNNEST(metadata)
         WHERE
-          key = "lineHits"
+          KEY = "lineHits"
       ) AS hits,
       ARRAY(
         SELECT
@@ -44,10 +44,10 @@ WITH
         GROUP BY
           branchIndex,
           branchHits
-      ) as branchHits
+      ) AS branchHits
     FROM
-      `mock-table` as upload
-      INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+      `mock-table` AS upload
+      INNER JOIN `mock-line-coverage-table` AS LINES ON LINES.uploadId = upload.uploadId
     WHERE
       (
         (
@@ -72,18 +72,18 @@ WITH
         AND upload.owner = @OWNER
         AND upload.repository = @REPOSITORY
       )
-      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
+      AND DATE(LINES.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
   ),
   branchingLines AS (
     SELECT
       fileName,
       lineNumber,
-      MAX(containsMethod) as containsMethod,
-      MAX(containsBranch) as containsBranch,
-      MAX(containsStatement) as containsStatement,
-      SUM(hits) as hits,
+      MAX(containsMethod) AS containsMethod,
+      MAX(containsBranch) AS containsBranch,
+      MAX(containsStatement) AS containsStatement,
+      SUM(hits) AS hits,
       branchIndex,
-      SUM(branchHit) > 0 as isBranchedLineHit
+      SUM(branchHit) > 0 AS isBranchedLineHit
     FROM
       unnested,
       UNNEST(
@@ -100,25 +100,25 @@ WITH
       lineNumber,
       branchIndex
   ),
-  lines AS (
+  LINES AS (
     SELECT
       fileName,
       lineNumber,
-      MAX(containsMethod) as containsMethod,
-      MAX(containsBranch) as containsBranch,
-      MAX(containsStatement) as containsStatement,
-      COUNTIF(containsBranch = true) as totalBranches,
+      MAX(containsMethod) AS containsMethod,
+      MAX(containsBranch) AS containsBranch,
+      MAX(containsStatement) AS containsStatement,
+      COUNTIF(containsBranch = TRUE) AS totalBranches,
       COUNTIF(
-        containsBranch = true
-        AND isBranchedLineHit = true
-      ) as coveredBranches,
+        containsBranch = TRUE
+        AND isBranchedLineHit = TRUE
+      ) AS coveredBranches,
       IF(
         -- Check that the line hits are 0 (i.e. not executed) and that, if theres a branch, it's
         -- definitely not been covered at all (as we'll want to show that as a partial line)
         SUM(hits) = 0
         AND COUNTIF(
-          containsBranch = true
-          AND isBranchedLineHit = true
+          containsBranch = TRUE
+          AND isBranchedLineHit = TRUE
         ) = 0,
         "uncovered",
         IF (
@@ -126,7 +126,7 @@ WITH
           "partial",
           "covered"
         )
-      ) as state
+      ) AS state
     FROM
       branchingLines
     GROUP BY
@@ -135,25 +135,25 @@ WITH
   )
 SELECT
   fileName,
-  COUNT(*) as lines,
+  COUNT(*) AS LINES,
   COALESCE(
     SUM(
       IF(state = "covered", 1, 0)
     ),
     0
-  ) as covered,
+  ) AS covered,
   COALESCE(
     SUM(
       IF(state = "partial", 1, 0)
     ),
     0
-  ) as partial,
+  ) AS PARTIAL,
   COALESCE(
     SUM(
       IF(state = "uncovered", 1, 0)
     ),
     0
-  ) as uncovered,
+  ) AS uncovered,
   ROUND(
     (
       SUM(
@@ -163,9 +163,9 @@ SELECT
       )
     ) / COUNT(*) * 100,
     2
-  ) as coveragePercentage
+  ) AS coveragePercentage
 FROM
-  lines
+  LINES
 GROUP BY
   fileName
 ORDER BY
