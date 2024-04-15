@@ -135,7 +135,7 @@ SELECT
   STRUCT(
     tag AS name, COMMIT AS `commit`, [totalLines] AS successfullyUploadedLines
   ) AS tag,
-  COUNT(*) AS LINES,
+  COUNT(*) AS `lines`,
   COALESCE(
     SUM(
       IF(state = "covered", 1, 0)
@@ -147,7 +147,7 @@ SELECT
       IF(state = "partial", 1, 0)
     ),
     0
-  ) AS PARTIAL,
+  ) AS `partial`,
   COALESCE(
     SUM(
       IF(state = "uncovered", 1, 0)

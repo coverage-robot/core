@@ -158,9 +158,9 @@ WITH
       LINES
   )
 SELECT
-  SUM(LINES) AS LINES,
+  SUM(LINES) AS `lines`,
   SUM(covered) AS covered,
-  SUM(PARTIAL) AS PARTIAL,
+  SUM(PARTIAL) AS `partial`,
   SUM(uncovered) AS uncovered,
   (
     SUM(covered) + SUM(PARTIAL)

@@ -29,9 +29,9 @@ final class TotalCoverageQuery extends AbstractLineCoverageQuery
         return <<<SQL
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
-            SUM(lines) as lines,
+            SUM(lines) as `lines`,
             SUM(covered) as covered,
-            SUM(partial) as partial,
+            SUM(partial) as `partial`,
             SUM(uncovered) as uncovered,
             (SUM(covered) + SUM(partial)) / IF(SUM(lines) = 0, 1, SUM(lines)) * 100 as coveragePercentage
         FROM

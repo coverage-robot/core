@@ -35,9 +35,9 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
         SELECT
             tag as tagName,
             STRUCT(tag as name, commit as `commit`, [totalLines] as successfullyUploadedLines) as tag,
-            COUNT(*) as lines,
+            COUNT(*) as `lines`,
             COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
-            COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
+            COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as `partial`,
             COALESCE(SUM(IF(state = "{$uncovered}", 1, 0)), 0) as uncovered,
             ROUND(
                 (
