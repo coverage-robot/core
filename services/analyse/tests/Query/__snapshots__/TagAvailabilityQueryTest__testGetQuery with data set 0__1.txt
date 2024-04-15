@@ -21,7 +21,7 @@ SELECT
   availability.tag AS tagName,
   ARRAY_AGG(
     STRUCT(
-      COMMIT AS COMMIT, tag AS name, successfullyUploadedLines AS successfullyUploadedLines,
+      COMMIT AS `commit`, tag AS name, successfullyUploadedLines AS successfullyUploadedLines,
       ingestTimes AS ingestTimes
     )
   ) AS carryforwardTags,

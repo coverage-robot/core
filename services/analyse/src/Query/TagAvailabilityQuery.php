@@ -52,7 +52,7 @@ final class TagAvailabilityQuery implements QueryInterface
             availability.tag as tagName,
             ARRAY_AGG(
                 STRUCT(
-                    commit as commit,
+                    commit as `commit`,
                     tag as name,
                     successfullyUploadedLines as successfullyUploadedLines,
                     ingestTimes as ingestTimes
