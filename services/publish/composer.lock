@@ -381,16 +381,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.1.20",
+            "version": "2.1.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "1ed871a6ecfa1f4d0d0023b57c95b446a05f15cc"
+                "reference": "597830c01de581d6cf09541b059179091f5156ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/1ed871a6ecfa1f4d0d0023b57c95b446a05f15cc",
-                "reference": "1ed871a6ecfa1f4d0d0023b57c95b446a05f15cc",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/597830c01de581d6cf09541b059179091f5156ec",
+                "reference": "597830c01de581d6cf09541b059179091f5156ec",
                 "shasum": ""
             },
             "require": {
@@ -444,7 +444,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.20"
+                "source": "https://github.com/brefphp/bref/tree/2.1.21"
             },
             "funding": [
                 {
@@ -456,20 +456,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-06T09:03:54+00:00"
+            "time": "2024-04-13T09:30:11+00:00"
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
-                "reference": "0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0"
+                "reference": "1bab91b55b718cc044bbd031374a7f0a375e3971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0",
-                "reference": "0b2ecdbd9ecff1e412ed66d1c20f4492cdb52da0",
+                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/1bab91b55b718cc044bbd031374a7f0a375e3971",
+                "reference": "1bab91b55b718cc044bbd031374a7f0a375e3971",
                 "shasum": ""
             },
             "require": {
@@ -511,7 +511,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/1.0.0"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/1.0.1"
             },
             "funding": [
                 {
@@ -519,7 +519,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-30T14:50:48+00:00"
+            "time": "2024-02-20T14:08:53+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -5681,16 +5681,16 @@
         },
         {
             "name": "symfony/psr-http-message-bridge",
-            "version": "v7.0.3",
+            "version": "v7.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/psr-http-message-bridge.git",
-                "reference": "d9fadaf9541d7c01c307e48905d7ce1dbee6bf38"
+                "reference": "fbc500cbcb64d3ea7469f019ab7aa717b320ff3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/d9fadaf9541d7c01c307e48905d7ce1dbee6bf38",
-                "reference": "d9fadaf9541d7c01c307e48905d7ce1dbee6bf38",
+                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/fbc500cbcb64d3ea7469f019ab7aa717b320ff3f",
+                "reference": "fbc500cbcb64d3ea7469f019ab7aa717b320ff3f",
                 "shasum": ""
             },
             "require": {
@@ -5744,7 +5744,7 @@
                 "psr-7"
             ],
             "support": {
-                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v7.0.3"
+                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v7.0.6"
             },
             "funding": [
                 {
@@ -5760,7 +5760,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:02:46+00:00"
+            "time": "2024-03-28T09:20:36+00:00"
         },
         {
             "name": "symfony/routing",
