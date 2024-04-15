@@ -35,9 +35,9 @@ final class FileCoverageQuery extends AbstractLineCoverageQuery
         {$this->getNamedQueries($table, $parameterBag)}
         SELECT
             fileName,
-            COUNT(*) as lines,
+            COUNT(*) as `lines`,
             COALESCE(SUM(IF(state = "{$covered}", 1, 0)), 0) as covered,
-            COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as partial,
+            COALESCE(SUM(IF(state = "{$partial}", 1, 0)), 0) as `partial`,
             COALESCE(SUM(IF(state = "{$uncovered}", 1, 0)), 0) as uncovered,
             ROUND(
                 (
