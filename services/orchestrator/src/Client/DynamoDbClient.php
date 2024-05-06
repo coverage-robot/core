@@ -33,7 +33,8 @@ final class DynamoDbClient implements DynamoDbClientInterface
      * The name of the index used to query for all of the events for a particular
      * repository and commit.
      */
-    private const REPOSITORY_COMMIT_INDEX = self:: REPOSITORY_IDENTIFIER_COLUMN . '-' . self::COMMIT_COLUMN . '-index';
+    private const string REPOSITORY_COMMIT_INDEX =
+        self::REPOSITORY_IDENTIFIER_COLUMN . '-' . self::COMMIT_COLUMN . '-index';
 
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
