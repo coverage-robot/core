@@ -9,6 +9,7 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
 use Http\Client\Common\Plugin\RetryPlugin;
+use Override;
 use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -56,6 +57,7 @@ class GithubAppClient extends Client
      *
      * @throws ClientException
      */
+    #[Override]
     public function api($name): AbstractApi
     {
         if ( ! $this->isAuthenticated) {
