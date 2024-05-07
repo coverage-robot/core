@@ -2,6 +2,7 @@
 
 namespace Packages\Configuration\Service;
 
+use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Setting\SettingInterface;
@@ -24,6 +25,7 @@ final class SettingService implements SettingServiceInterface
      * @inheritDoc
      * @throws InvalidSettingValueException
      */
+    #[Override]
     public function get(
         Provider $provider,
         string $owner,
@@ -43,6 +45,7 @@ final class SettingService implements SettingServiceInterface
      *
      * @throws InvalidSettingValueException
      */
+    #[Override]
     public function set(
         Provider $provider,
         string $owner,
@@ -62,6 +65,7 @@ final class SettingService implements SettingServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function delete(
         Provider $provider,
         string $owner,
@@ -81,6 +85,7 @@ final class SettingService implements SettingServiceInterface
      *
      * @throws InvalidSettingValueException
      */
+    #[Override]
     public function deserialize(
         SettingKey $key,
         mixed $value

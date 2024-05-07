@@ -2,6 +2,7 @@
 
 namespace Packages\Event\Service;
 
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Processor\EventProcessorInterface;
@@ -24,6 +25,7 @@ final class EventProcessorService implements EventProcessorServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function process(Event $eventType, EventInterface $event): bool
     {
         $processor = ($this->getRegisteredProcessors()[$eventType->value]) ?? null;

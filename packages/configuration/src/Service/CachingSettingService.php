@@ -2,6 +2,7 @@
 
 namespace Packages\Configuration\Service;
 
+use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Contracts\Provider\Provider;
@@ -26,6 +27,7 @@ final class CachingSettingService implements SettingServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function get(
         Provider $provider,
         string $owner,
@@ -51,6 +53,7 @@ final class CachingSettingService implements SettingServiceInterface
      *
      * @throws InvalidSettingValueException
      */
+    #[Override]
     public function set(
         Provider $provider,
         string $owner,
@@ -87,6 +90,7 @@ final class CachingSettingService implements SettingServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function delete(
         Provider $provider,
         string $owner,
@@ -106,6 +110,7 @@ final class CachingSettingService implements SettingServiceInterface
      *
      * @throws InvalidSettingValueException
      */
+    #[Override]
     public function deserialize(
         SettingKey $key,
         mixed $value

@@ -3,6 +3,7 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
@@ -26,41 +27,49 @@ final class CoverageFinalised implements EventInterface, BaseAwareEventInterface
         }
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
     }
 
+    #[Override]
     public function getPullRequest(): int|string|null
     {
         return $this->pullRequest;
     }
 
+    #[Override]
     public function getRef(): string
     {
         return $this->ref;
     }
 
+    #[Override]
     public function getBaseRef(): ?string
     {
         return $this->baseRef;
     }
 
+    #[Override]
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;
@@ -71,16 +80,19 @@ final class CoverageFinalised implements EventInterface, BaseAwareEventInterface
         return $this->coveragePercentage;
     }
 
+    #[Override]
     public function getType(): Event
     {
         return Event::COVERAGE_FINALISED;
     }
 
+    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

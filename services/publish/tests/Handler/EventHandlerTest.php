@@ -10,6 +10,7 @@ use DateTimeInterface;
 use Monolog\DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
+use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageInterface;
@@ -116,6 +117,7 @@ final class EventHandlerTest extends KernelTestCase
             $serializer,
             $this->getContainer()
                 ->get(MessageValidationService::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger()
         );
 
@@ -248,6 +250,7 @@ final class EventHandlerTest extends KernelTestCase
             $serializer,
             $this->getContainer()
                 ->get(MessageValidationService::class),
+            $this->createMock(EventBusClientInterface::class),
             new NullLogger()
         );
 

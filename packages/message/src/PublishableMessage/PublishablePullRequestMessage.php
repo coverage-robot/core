@@ -3,6 +3,7 @@
 namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -36,16 +37,19 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         }
     }
 
+    #[Override]
     public function getEvent(): EventInterface
     {
         return $this->event;
     }
 
+    #[Override]
     public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
     }
 
+    #[Override]
     public function getMessageGroup(): string
     {
         return md5(
@@ -103,11 +107,13 @@ final class PublishablePullRequestMessage implements PublishableMessageInterface
         return $this->leastCoveredDiffFiles;
     }
 
+    #[Override]
     public function getType(): PublishableMessage
     {
         return PublishableMessage::PULL_REQUEST;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

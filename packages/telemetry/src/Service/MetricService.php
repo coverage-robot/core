@@ -2,6 +2,7 @@
 
 namespace Packages\Telemetry\Service;
 
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Enum\Resolution;
@@ -40,6 +41,7 @@ final class MetricService implements MetricServiceInterface
      *
      * @param int|float|(int|float)[] $value
      */
+    #[Override]
     public function put(
         string $metric,
         int|float|array $value,
@@ -84,6 +86,7 @@ final class MetricService implements MetricServiceInterface
     /**
      * @inheritDoc
      */
+    #[Override]
     public function increment(
         string $metric,
         int $value = 1,

@@ -3,6 +3,7 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
@@ -34,26 +35,31 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
         }
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getRef(): string
     {
         return $this->ref;
     }
 
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
@@ -62,21 +68,25 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
     /**
      * @return string[]
      */
+    #[Override]
     public function getParent(): array
     {
         return $this->parent;
     }
 
+    #[Override]
     public function getPullRequest(): ?string
     {
         return $this->pullRequest;
     }
 
+    #[Override]
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;
     }
 
+    #[Override]
     public function getBaseRef(): ?string
     {
         return $this->baseRef;
@@ -107,16 +117,19 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
         return $this->state;
     }
 
+    #[Override]
     public function getType(): Event
     {
         return Event::JOB_STATE_CHANGE;
     }
 
+    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
