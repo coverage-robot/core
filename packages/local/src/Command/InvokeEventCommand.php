@@ -5,6 +5,7 @@ namespace Packages\Local\Command;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
+use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
@@ -38,6 +39,7 @@ final class InvokeEventCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this->setDescription('Invoke the services event handler with a custom event')
@@ -64,6 +66,7 @@ final class InvokeEventCommand extends Command
             );
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $event = Event::tryFrom(strtoupper($input->getArgument('event')));
