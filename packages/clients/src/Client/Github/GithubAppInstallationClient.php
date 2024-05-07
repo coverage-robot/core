@@ -11,6 +11,7 @@ use Github\AuthMethod;
 use Github\Client;
 use Github\ResultPager;
 use OutOfBoundsException;
+use Override;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -29,6 +30,7 @@ final class GithubAppInstallationClient implements GithubAppInstallationClientIn
     ) {
     }
 
+    #[Override]
     public function authenticateAsRepositoryOwner(string $owner): void
     {
         if ($owner === $this->owner) {
@@ -57,36 +59,43 @@ final class GithubAppInstallationClient implements GithubAppInstallationClientIn
         $this->owner = $owner;
     }
 
+    #[Override]
     public function getLastResponse(): ?ResponseInterface
     {
         return $this->installationClient->getLastResponse();
     }
 
+    #[Override]
     public function issue(): Issue
     {
         return new Issue($this->installationClient);
     }
 
+    #[Override]
     public function repo(): Repo
     {
         return new Repo($this->installationClient);
     }
 
+    #[Override]
     public function pullRequest(): PullRequest
     {
         return new PullRequest($this->installationClient);
     }
 
+    #[Override]
     public function checkRuns(): CheckRuns
     {
         return new CheckRuns($this->installationClient);
     }
 
+    #[Override]
     public function graphql(): GraphQL
     {
         return new GraphQL($this->installationClient);
     }
 
+    #[Override]
     public function pagination(int $maxItems = 30): ResultPager
     {
         return new ResultPager($this->installationClient, $maxItems);
