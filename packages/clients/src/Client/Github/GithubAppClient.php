@@ -8,6 +8,7 @@ use Github\Api\Apps;
 use Github\AuthMethod;
 use Github\Client;
 use Github\HttpClient\Builder;
+use Http\Client\Common\Plugin\RetryPlugin;
 use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -31,6 +32,19 @@ class GithubAppClient extends Client
         ?string $apiVersion = null,
         public readonly ?string $enterpriseUrl = null
     ) {
+        /**
+         * Retry requests up to 2 additional times when a failure occurs.
+         *
+         * GitHub is files occasionally, usually occurring at benign points in time, like when attempting
+         * to retrieve commit history. In this case, it's safe to retry the request and see if we can get
+         * a response 1 or 2 more times.
+         */
+        $httpClientBuilder->addPlugin(
+            new RetryPlugin([
+                'retries' => 2
+            ])
+        );
+
         parent::__construct($httpClientBuilder, $apiVersion, $this->enterpriseUrl);
     }
 
