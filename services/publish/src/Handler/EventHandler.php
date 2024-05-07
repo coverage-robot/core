@@ -11,7 +11,12 @@ use Bref\Event\Sqs\SqsHandler;
 use Bref\Event\Sqs\SqsRecord;
 use JsonException;
 use Override;
+use Packages\Contracts\Event\BaseAwareEventInterface;
+use Packages\Contracts\Event\EventInterface;
+use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
+use Packages\Event\Client\EventBusClientInterface;
+use Packages\Event\Model\CoverageFailed;
 use Packages\Message\Exception\InvalidMessageException;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\Service\MessageValidationService;
@@ -26,6 +31,7 @@ final class EventHandler extends SqsHandler
         private readonly MessagePublisherServiceInterface $messagePublisherService,
         private readonly SerializerInterface $serializer,
         private readonly MessageValidationService $messageValidationService,
+        private readonly EventBusClientInterface $eventBusClient,
         private readonly LoggerInterface $eventHandlerLogger,
     ) {
     }
@@ -68,6 +74,10 @@ final class EventHandler extends SqsHandler
                         'message' => $message
                     ]
                 );
+
+                // The publishing wasn't completely successful. We should broadcast that in case
+                // any services are subscribed to the event.
+                $this->triggerFailureEvent($message);
             }
         }
     }
@@ -159,5 +169,38 @@ final class EventHandler extends SqsHandler
         }
 
         return false;
+    }
+
+    /**
+     * Broadcast a failure event for the given message when publishing doesn't succeed.
+     *
+     * This helps to tell subscribers that the message wasn't successfully published.
+     */
+    private function triggerFailureEvent(PublishableMessageInterface $message): void
+    {
+        $event = $message->getEvent();
+
+        if (!$event instanceof EventInterface) {
+            // No event related to the message, so we can't broadcast a failure event
+            return;
+        }
+
+        $this->eventBusClient->fireEvent(
+            EventSource::PUBLISH,
+            new CoverageFailed(
+                provider: $event->getProvider(),
+                owner: $event->getOwner(),
+                repository: $event->getRepository(),
+                ref: $event->getRef(),
+                commit: $event->getCommit(),
+                pullRequest: $event->getPullRequest(),
+                baseRef: $event instanceof BaseAwareEventInterface ?
+                    $event->getBaseRef() :
+                    null,
+                baseCommit: $event instanceof BaseAwareEventInterface ?
+                    $event->getBaseCommit() :
+                    null,
+            )
+        );
     }
 }

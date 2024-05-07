@@ -8,4 +8,5 @@ enum EventSource: string
     case INGEST = 'service.ingest';
     case ANALYSE = 'service.analyse';
     case ORCHESTRATOR = 'service.orchestrator';
+    case PUBLISH = 'service.publish';
 }
