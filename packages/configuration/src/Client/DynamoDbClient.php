@@ -8,6 +8,7 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Input\DeleteItemInput;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
+use Override;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
 use Packages\Configuration\Exception\SettingNotFoundException;
@@ -33,6 +34,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
     ) {
     }
 
+    #[Override]
     public function getSettingFromStore(
         Provider $provider,
         string $owner,
@@ -121,6 +123,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
         return $value;
     }
 
+    #[Override]
     public function setSettingInStore(
         Provider $provider,
         string $owner,
@@ -179,6 +182,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
         return true;
     }
 
+    #[Override]
     public function deleteSettingFromStore(
         Provider $provider,
         string $owner,

@@ -3,6 +3,7 @@
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
@@ -39,21 +40,25 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         return $this->uploadId;
     }
 
+    #[Override]
     public function getProvider(): Provider
     {
         return $this->provider;
     }
 
+    #[Override]
     public function getOwner(): string
     {
         return $this->owner;
     }
 
+    #[Override]
     public function getRepository(): string
     {
         return $this->repository;
     }
 
+    #[Override]
     public function getRef(): string
     {
         return $this->ref;
@@ -64,31 +69,37 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         return $this->projectRoot;
     }
 
+    #[Override]
     public function getPullRequest(): int|string|null
     {
         return $this->pullRequest;
     }
 
+    #[Override]
     public function getBaseCommit(): ?string
     {
         return $this->baseCommit;
     }
 
+    #[Override]
     public function getBaseRef(): ?string
     {
         return $this->baseRef;
     }
 
+    #[Override]
     public function getEventTime(): DateTimeImmutable
     {
         return $this->eventTime;
     }
 
+    #[Override]
     public function getCommit(): string
     {
         return $this->commit;
     }
 
+    #[Override]
     public function getParent(): array
     {
         return $this->parent;
@@ -99,11 +110,13 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         return $this->tag;
     }
 
+    #[Override]
     public function getType(): Event
     {
         return Event::UPLOAD;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return 'Upload#' . $this->uploadId;

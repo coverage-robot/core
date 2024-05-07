@@ -15,6 +15,7 @@ use AsyncAws\Scheduler\ValueObject\EventBridgeParameters;
 use AsyncAws\Scheduler\ValueObject\FlexibleTimeWindow;
 use AsyncAws\Scheduler\ValueObject\Target;
 use DateTimeInterface;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
@@ -73,6 +74,7 @@ final class EventBusClient implements EventBusClientInterface
     /**
      * @throws HttpException
      */
+    #[Override]
     public function fireEvent(EventSource $source, EventInterface $event): bool
     {
         try {
@@ -130,6 +132,7 @@ final class EventBusClient implements EventBusClientInterface
      *
      * @throws HttpException
      */
+    #[Override]
     public function scheduleEvent(
         EventSource $source,
         EventInterface $event,

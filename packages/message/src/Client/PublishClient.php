@@ -7,6 +7,7 @@ use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
+use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\Exception\InvalidMessageException;
@@ -36,6 +37,7 @@ final class PublishClient implements SqsClientInterface
     ) {
     }
 
+    #[Override]
     public function dispatch(PublishableMessageInterface $publishableMessage): bool
     {
         try {
@@ -103,6 +105,7 @@ final class PublishClient implements SqsClientInterface
     /**
      * Get the full SQS Queue URL for a queue (using its name).
      */
+    #[Override]
     public function getQueueUrl(string $queueName): ?string
     {
         $response = $this->sqsClient->getQueueUrl(

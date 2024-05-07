@@ -2,6 +2,7 @@
 
 namespace Packages\Event;
 
+use Override;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Processor\EventProcessorInterface;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 final class EventBundle extends AbstractBundle
 {
+    #[Override]
     public function loadExtension(
         array $config,
         ContainerConfigurator $container,
@@ -27,6 +29,7 @@ final class EventBundle extends AbstractBundle
         $this->populateTemplatedContainerParameters($container);
     }
 
+    #[Override]
     public function configure(DefinitionConfigurator $definition): void
     {
         $definition->rootNode()
@@ -43,6 +46,7 @@ final class EventBundle extends AbstractBundle
         ;
     }
 
+    #[Override]
     public function prependExtension(ContainerConfigurator $container, ContainerBuilder $builder): void
     {
         // Register configuration for the Event Bus client

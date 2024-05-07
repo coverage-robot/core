@@ -4,6 +4,7 @@ namespace Packages\Telemetry\Service;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -40,6 +41,7 @@ final class SymfonySerializerLineFormatter extends LineFormatter implements Form
      * This is most helpful for Logger context, as it allows us to serialize objects using
      * getters and setters.
      */
+    #[Override]
     protected function toJson($data, bool $ignoreErrors = false): string
     {
         try {

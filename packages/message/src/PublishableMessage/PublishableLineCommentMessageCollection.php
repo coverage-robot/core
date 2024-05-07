@@ -4,6 +4,7 @@ namespace Packages\Message\PublishableMessage;
 
 use Countable;
 use DateTimeInterface;
+use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -31,11 +32,13 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
         return $this->messages;
     }
 
+    #[Override]
     public function getEvent(): EventInterface
     {
         return $this->event;
     }
 
+    #[Override]
     public function getValidUntil(): DateTimeInterface
     {
         return max(
@@ -46,11 +49,13 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
         );
     }
 
+    #[Override]
     public function getType(): PublishableMessage
     {
         return PublishableMessage::LINE_COMMENT_COLLECTION;
     }
 
+    #[Override]
     public function getMessageGroup(): string
     {
         return md5(
@@ -63,11 +68,13 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
         );
     }
 
+    #[Override]
     public function __toString(): string
     {
         return 'PublishableLineCommentMessageCollection#' . $this->getValidUntil()->format(DateTimeInterface::ATOM);
     }
 
+    #[Override]
     public function count(): int
     {
         return count($this->messages);

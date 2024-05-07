@@ -3,6 +3,7 @@
 namespace Packages\Message\PublishableMessage;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,16 +28,19 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
         }
     }
 
+    #[Override]
     public function getEvent(): EventInterface
     {
         return $this->event;
     }
 
+    #[Override]
     public function getStatus(): PublishableCheckRunStatus
     {
         return $this->status;
     }
 
+    #[Override]
     public function getValidUntil(): DateTimeImmutable
     {
         return $this->validUntil;
@@ -57,11 +61,13 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
         return $this->coverageChange;
     }
 
+    #[Override]
     public function getType(): PublishableMessage
     {
         return PublishableMessage::CHECK_RUN;
     }
 
+    #[Override]
     public function getMessageGroup(): string
     {
         return md5(
@@ -74,6 +80,7 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
         );
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf(
