@@ -2,6 +2,8 @@ locals {
   bref_layers = jsondecode(file("${path.module}/../../vendor/bref/bref/layers.json"))
 }
 
+data "aws_caller_identity" "current" {}
+
 data "terraform_remote_state" "core" {
   backend = "s3"
 
@@ -110,6 +112,12 @@ resource "aws_lambda_function" "service" {
     # permissions applied on the IAM policy, so theres sufficient permissions to write
     # traces
     mode = "Active"
+  }
+
+  environment {
+    variables = {
+      "AWS_ACCOUNT_ID" = data.aws_caller_identity.current.account_id
+    }
   }
 }
 
