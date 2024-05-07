@@ -44,7 +44,7 @@ class GithubAppClient extends Client
          * response 1 or 2 more times.
          *
          * We're also doing this _before_ calling the constructor, so that we can apply the retry plugin _before_
-         * the GitHub client applies its own plugins. Tat way, we can be in front of the plugin which converts
+         * the GitHub client applies its own plugins. That way, we can be in front of the plugin which converts
          * exceptions into GitHub-specific variants (which will stop the chain).
          *
          * @see GithubExceptionThrower
