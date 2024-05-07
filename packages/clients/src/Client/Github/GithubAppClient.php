@@ -35,9 +35,9 @@ class GithubAppClient extends Client
         /**
          * Retry requests up to 2 additional times when a failure occurs.
          *
-         * GitHub is files occasionally, usually occurring at benign points in time, like when attempting
-         * to retrieve commit history. In this case, it's safe to retry the request and see if we can get
-         * a response 1 or 2 more times.
+         * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
+         * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
+         * response 1 or 2 more times.
          */
         $httpClientBuilder->addPlugin(
             new RetryPlugin([
