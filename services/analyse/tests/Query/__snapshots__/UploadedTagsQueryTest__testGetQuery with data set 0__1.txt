@@ -1,0 +1,8 @@
+SELECT
+  DISTINCT tag AS tagName
+FROM
+  `mock-table`
+WHERE
+  provider = @PROVIDER
+  AND owner = @OWNER
+  AND repository = @REPOSITORY
