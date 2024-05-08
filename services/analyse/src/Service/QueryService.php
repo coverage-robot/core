@@ -176,6 +176,16 @@ final class QueryService implements QueryServiceInterface
             );
         }
 
+        $this->queryServiceLogger->info(
+            sprintf(
+                'Results for query %s are valid and ready to be returned.',
+                $query::class
+            ),
+            [
+                'query' => $query,
+            ]
+        );
+
         return $results;
     }
 }
