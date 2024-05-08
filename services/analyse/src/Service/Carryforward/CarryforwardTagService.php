@@ -59,6 +59,17 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
             fn(string $tagName): bool => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
         );
 
+        $this->carryforwardLogger->info(
+            sprintf(
+                'Looking for %s tags to carry forward for %s',
+                count($tagsNotSeen),
+                (string)$waypoint
+            ),
+            [
+                'tagsNotSeen' => $tagsNotSeen,
+            ]
+        );
+
         for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
             if ($tagsNotSeen === []) {
                 break;
