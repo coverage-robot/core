@@ -36,3 +36,5 @@ FROM
   availability
 GROUP BY
   availability.tag
+
+
