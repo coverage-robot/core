@@ -12,7 +12,14 @@ WITH
     WHERE
       provider = @PROVIDER
       AND owner = @OWNER
-      AND repository = @REPOSITORY
+      AND repository = @REPOSITORY -- Only include uploads on tags which are recent. That way we can avoid permanently
+      -- looking for tags deep in the commit history which are obsolete/no longer uploaded.
+      AND ingestTime > CAST(
+        TIMESTAMP_SUB(
+          CURRENT_TIMESTAMP(),
+          INTERVAL 120 DAY
+        ) AS DATETIME
+      )
     GROUP BY
       COMMIT,
       tag
