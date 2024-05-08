@@ -2,15 +2,20 @@
 
 namespace App\Service\Carryforward;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
+use App\Query\Result\UploadedTagsCollectionQueryResult;
+use App\Query\Result\UploadedTagsQueryResult;
 use App\Query\TagAvailabilityQuery;
+use App\Query\UploadedTagsQuery;
 use App\Service\CachingQueryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
+use OutOfBoundsException;
 use Override;
 use Packages\Configuration\Service\TagBehaviourService;
 use Packages\Contracts\Tag\Tag;
@@ -45,9 +50,9 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
     {
         $carryforwardTags = [];
 
-        /** @var TagAvailabilityCollectionQueryResult $tagAvailability */
-        $tagAvailability = $this->queryService->runQuery(
-            TagAvailabilityQuery::class,
+        /** @var UploadedTagsCollectionQueryResult $uploadedTags */
+        $uploadedTags = $this->queryService->runQuery(
+            UploadedTagsQuery::class,
             QueryParameterBag::fromWaypoint($waypoint)
         );
 
@@ -55,7 +60,10 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
          * @var string[] $tagsNotSeen
          */
         $tagsNotSeen = array_filter(
-            $tagAvailability->getAvailableTagNames(),
+            array_map(
+                static fn (UploadedTagsQueryResult $uploadedTag): string => $uploadedTag->getTagName(),
+                $uploadedTags->getUploadedTags()
+            ),
             fn(string $tagName): bool => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
         );
 
@@ -83,7 +91,6 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
                 $hasReachedEndOfHistory
             ] = $this->lookForCarryforwardTagsInPaginatedTree(
                 $waypoint,
-                $tagAvailability,
                 $page,
                 $tagsNotSeen
             );
@@ -126,10 +133,10 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
      */
     private function lookForCarryforwardTagsInPaginatedTree(
         ReportWaypoint $waypoint,
-        TagAvailabilityCollectionQueryResult $tagAvailability,
         int $page = 0,
         array $tagsNotSeen = []
     ): array {
+        /** @var CarryforwardTag[] $carryforwardTags */
         $carryforwardTags = [];
 
         if ($tagsNotSeen === []) {
@@ -142,8 +149,21 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
 
         $commitsFromTree = $waypoint->getHistory($page);
 
+        /** @var TagAvailabilityCollectionQueryResult $tagAvailability */
+        $tagAvailability = $this->queryService->runQuery(
+            TagAvailabilityQuery::class,
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::COMMIT, array_column($commitsFromTree, 'commit'))
+        );
+
         foreach ($tagsNotSeen as $index => $tagName) {
-            $availability = $tagAvailability->getAvailabilityForTagName($tagName);
+            try {
+                $availability = $tagAvailability->getAvailabilityForTagName($tagName);
+            } catch (OutOfBoundsException) {
+                // This tag wasn't uploaded to in this portion of the commit history, so we can't
+                // carry it forward yet from here.
+                continue;
+            }
 
             // The commits in the tree will be in descending order, and the intersection will
             // tell us which of the tag's available commits is the newest in the tree

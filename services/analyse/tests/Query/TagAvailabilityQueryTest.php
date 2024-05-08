@@ -3,6 +3,7 @@
 namespace App\Tests\Query;
 
 use App\Enum\EnvironmentVariable;
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
@@ -76,7 +77,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                     history: [],
                     diff: []
                 )
-            )
+            )->set(QueryParameter::COMMIT, ['1', '2']),
         ];
     }
 
@@ -179,6 +180,20 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                         diff: []
                     )
                 ),
+                false
+            ],
+            [
+                QueryParameterBag::fromWaypoint(
+                    new ReportWaypoint(
+                        provider: Provider::GITHUB,
+                        owner: 'mock-owner',
+                        repository: 'mock-repository',
+                        ref: 'mock-ref',
+                        commit: 'mock-commit',
+                        history: [],
+                        diff: []
+                    )
+                )->set(QueryParameter::COMMIT, ['1', '2']),
                 true
             ],
         ];

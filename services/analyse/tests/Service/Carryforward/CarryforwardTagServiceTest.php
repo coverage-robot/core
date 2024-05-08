@@ -8,7 +8,9 @@ use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
-use App\Query\TagAvailabilityQuery;
+use App\Query\Result\UploadedTagsCollectionQueryResult;
+use App\Query\Result\UploadedTagsQueryResult;
+use App\Query\UploadedTagsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
@@ -27,7 +29,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->with(
-                TagAvailabilityQuery::class,
+                UploadedTagsQuery::class,
                 self::callback(
                     function (QueryParameterBag $queryParameterBag): bool {
                         $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
@@ -37,10 +39,10 @@ final class CarryforwardTagServiceTest extends TestCase
                 )
             )
             ->willReturn(
-                new TagAvailabilityCollectionQueryResult(
+                new UploadedTagsCollectionQueryResult(
                     [
-                        new TagAvailabilityQueryResult('tag-1', ['mock-commit']),
-                        new TagAvailabilityQueryResult('tag-2', ['mock-commit-3', 'mock-commit-2']),
+                        new UploadedTagsQueryResult('tag-1'),
+                        new UploadedTagsQueryResult('tag-2'),
                     ]
                 )
             );
@@ -79,19 +81,15 @@ final class CarryforwardTagServiceTest extends TestCase
     public function testTagToCarryforwardFromRecentCommit(): void
     {
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
-        $mockQueryService->expects($this->once())
+        $mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
-            ->with(
-                TagAvailabilityQuery::class,
-                self::callback(
-                    function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                new UploadedTagsCollectionQueryResult(
+                    [
+                        new UploadedTagsQueryResult('tag-1'),
+                        new UploadedTagsQueryResult('tag-2'),
+                    ]
+                ),
                 new TagAvailabilityCollectionQueryResult(
                     [
                         new TagAvailabilityQueryResult(
@@ -190,17 +188,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
-            ->with(
-                TagAvailabilityQuery::class,
-                self::callback(
-                    function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                new UploadedTagsCollectionQueryResult(
+                    [
+                        new UploadedTagsQueryResult('tag-1'),
+                        new UploadedTagsQueryResult('tag-2'),
+                    ]
+                ),
                 new TagAvailabilityCollectionQueryResult(
                     [
                         new TagAvailabilityQueryResult(
@@ -290,19 +284,15 @@ final class CarryforwardTagServiceTest extends TestCase
     public function testTagsToCarryforwardFromMultiplePagesOfCommits(): void
     {
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
-        $mockQueryService->expects($this->once())
+        $mockQueryService->expects($this->exactly(4))
             ->method('runQuery')
-            ->with(
-                TagAvailabilityQuery::class,
-                self::callback(
-                    function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                new UploadedTagsCollectionQueryResult(
+                    [
+                        new UploadedTagsQueryResult('tag-1'),
+                        new UploadedTagsQueryResult('tag-2'),
+                    ]
+                ),
                 new TagAvailabilityCollectionQueryResult(
                     [
                         new TagAvailabilityQueryResult(
@@ -315,7 +305,12 @@ final class CarryforwardTagServiceTest extends TestCase
                                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                                 ),
                             ]
-                        ),
+                        )
+                    ]
+                ),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult(
+                    [
                         new TagAvailabilityQueryResult(
                             'tag-2',
                             [
@@ -325,16 +320,21 @@ final class CarryforwardTagServiceTest extends TestCase
                                     [100],
                                     [new DateTimeImmutable('2024-01-04 00:00:00')]
                                 ),
-                                new CarryforwardTag(
-                                    'tag-2',
-                                    'mock-commit-11',
-                                    [100],
-                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
-                                ),
                             ]
                         ),
+                        new TagAvailabilityQueryResult(
+                            'tag-2',
+                            [
+                                new CarryforwardTag(
+                                    'tag-2',
+                                    'mock-commit-9',
+                                    [100],
+                                    [new DateTimeImmutable('2024-01-06 00:00:00')]
+                                ),
+                            ]
+                        )
                     ]
-                )
+                ),
             );
 
         $carryforwardTagService = new CarryforwardTagService(
@@ -456,19 +456,15 @@ final class CarryforwardTagServiceTest extends TestCase
     public function testTagsToCarryforwardOutOfRangeOfCommits(): void
     {
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
-        $mockQueryService->expects($this->once())
+        $mockQueryService->expects($this->exactly(6))
             ->method('runQuery')
-            ->with(
-                TagAvailabilityQuery::class,
-                self::callback(
-                    function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(
+            ->willReturnOnConsecutiveCalls(
+                new UploadedTagsCollectionQueryResult(
+                    [
+                        new UploadedTagsQueryResult('tag-1'),
+                        new UploadedTagsQueryResult('tag-2'),
+                    ]
+                ),
                 new TagAvailabilityCollectionQueryResult(
                     [
                         new TagAvailabilityQueryResult(
@@ -481,26 +477,13 @@ final class CarryforwardTagServiceTest extends TestCase
                                     [new DateTimeImmutable('2024-01-05 00:00:00')]
                                 )
                             ]
-                        ),
-                        new TagAvailabilityQueryResult(
-                            'tag-2',
-                            [
-                                new CarryforwardTag(
-                                    'tag-2',
-                                    'mock-commit-1010',
-                                    [100],
-                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
-                                ),
-                                new CarryforwardTag(
-                                    'tag-2',
-                                    'mock-commit-999',
-                                    [100],
-                                    [new DateTimeImmutable('2024-01-01 00:00:00')]
-                                ),
-                            ]
-                        ),
+                        )
                     ]
-                )
+                ),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
             );
 
         $carryforwardTagService = new CarryforwardTagService(
@@ -522,7 +505,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                history: static fn(ReportWaypoint $waypoint, int $page): array => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -538,7 +521,16 @@ final class CarryforwardTagServiceTest extends TestCase
                             'commit' => 'mock-commit-3',
                             'ref' => 'non-main-branch',
                             'merged' => false
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'ref' => 'non-main-branch',
+                                'merged' => false
+                            ]
+                        )
                     ],
                     2 => [
                         [
@@ -555,7 +547,16 @@ final class CarryforwardTagServiceTest extends TestCase
                             'commit' => 'mock-commit-6',
                             'ref' => 'main-branch',
                             'merged' => true
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'ref' => 'non-main-branch',
+                                'merged' => false
+                            ]
+                        )
                     ],
                     3 => [
                         [
@@ -572,7 +573,16 @@ final class CarryforwardTagServiceTest extends TestCase
                             'commit' => 'mock-commit-9',
                             'ref' => 'main-branch',
                             'merged' => true
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'ref' => 'non-main-branch',
+                                'merged' => false
+                            ]
+                        )
                     ],
                     4 => [
                         [
@@ -589,7 +599,16 @@ final class CarryforwardTagServiceTest extends TestCase
                             'commit' => 'mock-commit-12',
                             'ref' => 'main-branch',
                             'merged' => true
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'ref' => 'non-main-branch',
+                                'merged' => false
+                            ]
+                        )
                     ],
                     5 => [
                         [
@@ -606,7 +625,16 @@ final class CarryforwardTagServiceTest extends TestCase
                             'commit' => 'mock-commit-15',
                             'ref' => 'main-branch',
                             'merged' => true
-                        ]
+                        ],
+                        ...array_fill(
+                            0,
+                            CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE - 3,
+                            [
+                                'commit' => 'mock-commit-99',
+                                'ref' => 'non-main-branch',
+                                'merged' => false
+                            ]
+                        )
                     ],
                     default => [],
                 },

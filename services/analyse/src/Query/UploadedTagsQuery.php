@@ -5,7 +5,7 @@ namespace App\Query;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\TagAvailabilityCollectionQueryResult;
+use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\Trait\ParameterAwareTrait;
 use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class TagAvailabilityQuery implements QueryInterface
+final class UploadedTagsQuery implements QueryInterface
 {
     use UploadTableAwareTrait;
     use ParameterAwareTrait;
@@ -32,37 +32,14 @@ final class TagAvailabilityQuery implements QueryInterface
     public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
     {
         return <<<SQL
-        WITH availability AS (
-            SELECT
-                commit,
-                tag,
-                ARRAY_AGG(totalLines) as successfullyUploadedLines,
-                ARRAY_AGG(STRING(ingestTime)) as ingestTimes
-            FROM
-                `{$table}`
-            WHERE
-                provider = {$this->getAlias(QueryParameter::PROVIDER)}
-                AND owner = {$this->getAlias(QueryParameter::OWNER)}
-                AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
-                AND commit IN UNNEST({$this->getAlias(QueryParameter::COMMIT)})
-            GROUP BY
-                commit,
-                tag
-        )
         SELECT
-            availability.tag as tagName,
-            ARRAY_AGG(
-                STRUCT(
-                    commit as `commit`,
-                    tag as name,
-                    successfullyUploadedLines as successfullyUploadedLines,
-                    ingestTimes as ingestTimes
-                )
-            ) as carryforwardTags,
+            DISTINCT tag as tagName
         FROM
-            availability
-        GROUP BY
-            availability.tag
+            `{$table}`
+        WHERE
+            provider = {$this->getAlias(QueryParameter::PROVIDER)}
+            AND owner = {$this->getAlias(QueryParameter::OWNER)}
+            AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
         SQL;
     }
 
@@ -101,13 +78,6 @@ final class TagAvailabilityQuery implements QueryInterface
         ) {
             throw QueryException::invalidParameters(QueryParameter::PROVIDER);
         }
-
-        if (
-            !$parameterBag->has(QueryParameter::COMMIT) ||
-            !is_array($parameterBag->get(QueryParameter::COMMIT))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::COMMIT);
-        }
     }
 
     /**
@@ -126,14 +96,14 @@ final class TagAvailabilityQuery implements QueryInterface
      * @throws QueryException
      */
     #[Override]
-    public function parseResults(QueryResults $results): TagAvailabilityCollectionQueryResult
+    public function parseResults(QueryResults $results): UploadedTagsCollectionQueryResult
     {
         $row = $results->rows();
 
-        /** @var TagAvailabilityCollectionQueryResult $results */
+        /** @var UploadedTagsCollectionQueryResult $results */
         $results = $this->serializer->denormalize(
-            ['tagAvailability' => iterator_to_array($row)],
-            TagAvailabilityCollectionQueryResult::class,
+            ['uploadedTags' => iterator_to_array($row)],
+            UploadedTagsCollectionQueryResult::class,
             'array'
         );
 
