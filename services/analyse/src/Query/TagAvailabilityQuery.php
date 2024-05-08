@@ -28,7 +28,7 @@ final class TagAvailabilityQuery implements QueryInterface
      * This influences how long we look back in the commit history when carrying
      * forward tags from older commits, and reduces the total result size when returned.
      */
-    private const int MAXIMUM_TAG_AGE_DAYS = 120;
+    private const int MAXIMUM_TAG_AGE_DAYS = 60;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
