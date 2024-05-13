@@ -199,7 +199,7 @@ jobs:
                     composer test:unit -- --coverage-clover='./coverage.xml'
                 shell: bash
 
-            -   uses: coverage-robot/action@v1.0.4
+            -   uses: coverage-robot/action@v1.0.5
                 if: always()
                 with:
                     token: ${{ secrets.COVERAGE_TOKEN }}
