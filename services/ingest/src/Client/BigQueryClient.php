@@ -9,7 +9,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 final class BigQueryClient extends \Google\Cloud\BigQuery\BigQueryClient implements BigQueryClientInterface
 {
-    private const SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
+    private const string SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
 
     public function __construct(
         private readonly EnvironmentServiceInterface $environmentService,

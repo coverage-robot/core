@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class GcsPersistService implements PersistServiceInterface
 {
-    public const OUTPUT_BUCKET = 'coverage-loadable-data-%s';
+    public const string OUTPUT_BUCKET = 'coverage-loadable-data-%s';
 
     private const string OUTPUT_KEY = '%s%s.json';
 

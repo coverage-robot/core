@@ -8,7 +8,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 
 final class GoogleCloudStorageClient extends StorageClient implements GoogleCloudStorageClientInterface
 {
-    private const SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
+    private const string SERVICE_ACCOUNT_KEY = __DIR__ . '/../../config/bigquery.json';
 
     public function __construct(
         private readonly EnvironmentServiceInterface $environmentService,
