@@ -35,7 +35,7 @@
         "symfony/property-info": "7.1.*",
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "7.0.*",
-        "symfony/validator": "7.0.*",
+        "symfony/validator": "7.1.*",
         "symfony/yaml": "7.0.*"
     },
     "require-dev": {
