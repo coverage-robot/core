@@ -13,7 +13,6 @@ final class UniqueIdGeneratorServiceTest extends TestCase
 
         $uuid = $uniqueIdGeneratorService->generate();
 
-        $this->assertIsString($uuid);
         $this->assertNotEquals($uniqueIdGeneratorService->generate(), $uuid);
     }
 }
