@@ -9,6 +9,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
@@ -35,6 +36,8 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         }
     }
 
+    #[Assert\NotBlank]
+    #[Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])]
     public function getUploadId(): string
     {
         return $this->uploadId;
