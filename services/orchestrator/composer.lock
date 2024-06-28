@@ -145,16 +145,16 @@
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.1.1",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "1bfa2c24de8197de08be8d2d5c1c3f25f90a37e5"
+                "reference": "3198ec972bbd44d57ea4ac81d9bd43b968acd4cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/1bfa2c24de8197de08be8d2d5c1c3f25f90a37e5",
-                "reference": "1bfa2c24de8197de08be8d2d5c1c3f25f90a37e5",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/3198ec972bbd44d57ea4ac81d9bd43b968acd4cd",
+                "reference": "3198ec972bbd44d57ea4ac81d9bd43b968acd4cd",
                 "shasum": ""
             },
             "require": {
@@ -170,7 +170,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -191,7 +191,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.1.1"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.2.0"
             },
             "funding": [
                 {
@@ -203,7 +203,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-27T14:44:12+00:00"
+            "time": "2024-05-14T07:34:42+00:00"
         },
         {
             "name": "async-aws/event-bridge",
@@ -4240,22 +4240,23 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.0.5",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b"
+                "reference": "2266f9813ed7d8c84e04627edead7b7fd249d6e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/425f462a59d8030703ee04a9e1c666575ed5db3b",
-                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/2266f9813ed7d8c84e04627edead7b7fd249d6e9",
+                "reference": "2266f9813ed7d8c84e04627edead7b7fd249d6e9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
-                "symfony/http-client-contracts": "^3",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/http-client-contracts": "^3.4.1",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -4273,7 +4274,7 @@
                 "amphp/http-client": "^4.2.1",
                 "amphp/http-tunnel": "^1.0",
                 "amphp/socket": "^1.1",
-                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/promises": "^1.4|^2.0",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
@@ -4281,6 +4282,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -4312,7 +4314,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.0.5"
+                "source": "https://github.com/symfony/http-client/tree/v7.1.0"
             },
             "funding": [
                 {
@@ -4328,7 +4330,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-02T12:46:12+00:00"
+            "time": "2024-05-13T15:35:37+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
