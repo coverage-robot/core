@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use Override;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 final class UniqueIdGeneratorService implements UniqueIdGeneratorServiceInterface
 {
@@ -14,6 +14,6 @@ final class UniqueIdGeneratorService implements UniqueIdGeneratorServiceInterfac
     #[Override]
     public function generate(): string
     {
-        return Uuid::uuid4()->toString();
+        return Uuid::v7()->toRfc4122();
     }
 }
