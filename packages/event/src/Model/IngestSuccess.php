@@ -9,6 +9,7 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class IngestSuccess implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
@@ -24,6 +25,8 @@ final class IngestSuccess implements EventInterface, ParentAwareEventInterface, 
     }
 
     #[Ignore]
+    #[Assert\NotBlank]
+    #[Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])]
     public function getUploadId(): string
     {
         return $this->upload->getUploadId();
