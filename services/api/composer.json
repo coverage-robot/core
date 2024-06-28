@@ -37,7 +37,7 @@
         "symfony/twig-bundle": "7.0.*",
         "symfony/uid": "7.0.*",
         "symfony/validator": "7.0.*",
-        "symfony/yaml": "7.0.*"
+        "symfony/yaml": "7.1.*"
     },
     "config": {
         "allow-plugins": {
