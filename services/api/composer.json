@@ -129,7 +129,7 @@
         "rector/rector": "^1.0.0",
         "spatie/phpunit-snapshot-assertions": "^5.1",
         "squizlabs/php_codesniffer": "^3.7",
-        "symfony/browser-kit": "7.0.*",
+        "symfony/browser-kit": "7.1.*",
         "symfony/maker-bundle": "^1.48",
         "vimeo/psalm": "^5.11"
     }
