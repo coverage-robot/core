@@ -20,9 +20,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     use DiffAwareTrait;
     use ParameterAwareTrait;
 
-    protected const UPLOAD_TABLE_ALIAS = 'upload';
+    protected const string UPLOAD_TABLE_ALIAS = 'upload';
 
-    protected const LINES_TABLE_ALIAS = 'lines';
+    protected const string LINES_TABLE_ALIAS = 'lines';
 
     #[Override]
     abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
