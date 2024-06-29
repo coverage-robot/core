@@ -8,12 +8,12 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class MessagePublisherService implements MessagePublisherServiceInterface
 {
     public function __construct(
-        #[TaggedIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
+        #[AutowireIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
         private readonly LoggerInterface $publisherServiceLogger,
         private readonly MetricServiceInterface $metricService
