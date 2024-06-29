@@ -6,7 +6,7 @@ use App\Model\Webhook\WebhookInterface;
 use App\Webhook\Processor\WebhookProcessorInterface;
 use Override;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class WebhookProcessorService implements WebhookProcessorServiceInterface
 {
@@ -14,7 +14,7 @@ final class WebhookProcessorService implements WebhookProcessorServiceInterface
      * @param WebhookProcessorInterface[] $webhookProcessors
      */
     public function __construct(
-        #[TaggedIterator('app.webhook_processor', defaultIndexMethod: 'getEvent')]
+        #[AutowireIterator('app.webhook_processor', defaultIndexMethod: 'getEvent')]
         private readonly iterable $webhookProcessors
     ) {
     }
