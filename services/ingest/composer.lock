@@ -1040,16 +1040,16 @@
         },
         {
             "name": "google/cloud-bigquery",
-            "version": "v1.30.1",
+            "version": "v1.30.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-bigquery.git",
-                "reference": "f5ed50cd0fae334a788cb4f611db7a2eca075b46"
+                "reference": "d5fee14c475aa56a32b3312e94e01a98315b1003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/f5ed50cd0fae334a788cb4f611db7a2eca075b46",
-                "reference": "f5ed50cd0fae334a788cb4f611db7a2eca075b46",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/d5fee14c475aa56a32b3312e94e01a98315b1003",
+                "reference": "d5fee14c475aa56a32b3312e94e01a98315b1003",
                 "shasum": ""
             },
             "require": {
@@ -1090,9 +1090,9 @@
             ],
             "description": "BigQuery Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.30.1"
+                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.30.3"
             },
-            "time": "2024-03-01T11:25:35+00:00"
+            "time": "2024-06-07T22:33:41+00:00"
         },
         {
             "name": "google/cloud-core",
