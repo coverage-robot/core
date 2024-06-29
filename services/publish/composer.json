@@ -31,7 +31,7 @@
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "7.1.*",
         "symfony/twig-bridge": "7.1.*",
-        "symfony/twig-bundle": "7.0.*",
+        "symfony/twig-bundle": "7.1.*",
         "symfony/yaml": "7.0.*",
         "twig/string-extra": "^3.8"
     },
