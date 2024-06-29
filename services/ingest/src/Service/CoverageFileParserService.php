@@ -8,12 +8,13 @@ use App\Strategy\ParseStrategyInterface;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class CoverageFileParserService implements CoverageFileParserServiceInterface
 {
     public function __construct(
-        #[TaggedIterator('app.parser_strategy')]
+        #[AutowireIterator('app.parser_strategy')]
         private readonly iterable $parserStrategies,
         private readonly LoggerInterface $parseStrategyLogger
     ) {

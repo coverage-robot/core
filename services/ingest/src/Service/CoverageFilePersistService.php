@@ -8,12 +8,13 @@ use App\Service\Persist\PersistServiceInterface;
 use Override;
 use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class CoverageFilePersistService implements CoverageFilePersistServiceInterface
 {
     public function __construct(
-        #[TaggedIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
+        #[AutowireIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $persistServices,
         private readonly LoggerInterface $persistServiceLogger
     ) {
