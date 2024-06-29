@@ -6,7 +6,7 @@ use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
 use Override;
 use Packages\Contracts\Provider\ProviderAwareInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class DiffParserService implements DiffParserServiceInterface
 {
@@ -14,7 +14,7 @@ final class DiffParserService implements DiffParserServiceInterface
      * @param (DiffParserServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
-        #[TaggedIterator(
+        #[AutowireIterator(
             'app.diff_parser',
             defaultIndexMethod: 'getProvider',
             exclude: ['CachingDiffParserService', 'DiffParserService']

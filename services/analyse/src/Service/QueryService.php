@@ -15,7 +15,7 @@ use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class QueryService implements QueryServiceInterface
@@ -26,7 +26,7 @@ final class QueryService implements QueryServiceInterface
     public function __construct(
         #[Autowire(service: BigQueryClient::class)]
         private readonly BigQueryClientInterface $bigQueryClient,
-        #[TaggedIterator('app.coverage_query')]
+        #[AutowireIterator('app.coverage_query')]
         private readonly iterable $queries,
         #[Autowire(service: QueryBuilderService::class)]
         private readonly QueryBuilderServiceInterface $queryBuilderService,
