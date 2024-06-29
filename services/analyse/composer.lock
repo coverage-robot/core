@@ -7739,16 +7739,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.0.3",
+            "version": "v7.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "2d4fca631c00700597e9442a0b2451ce234513d3"
+                "reference": "89bdddd79e918448ce978be664768ef27b9e5798"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/2d4fca631c00700597e9442a0b2451ce234513d3",
-                "reference": "2d4fca631c00700597e9442a0b2451ce234513d3",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/89bdddd79e918448ce978be664768ef27b9e5798",
+                "reference": "89bdddd79e918448ce978be664768ef27b9e5798",
                 "shasum": ""
             },
             "require": {
@@ -7790,7 +7790,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.0.3"
+                "source": "https://github.com/symfony/yaml/tree/v7.0.8"
             },
             "funding": [
                 {
@@ -7806,7 +7806,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T15:02:46+00:00"
+            "time": "2024-05-31T14:55:39+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -10392,16 +10392,16 @@
         },
         {
             "name": "spatie/phpunit-snapshot-assertions",
-            "version": "5.1.5",
+            "version": "5.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/phpunit-snapshot-assertions.git",
-                "reference": "fe84650c4cfb8f51ecf5146f4089369fafea2c94"
+                "reference": "61e2eb567713c89987895b8f514a7a4d3bff89c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/fe84650c4cfb8f51ecf5146f4089369fafea2c94",
-                "reference": "fe84650c4cfb8f51ecf5146f4089369fafea2c94",
+                "url": "https://api.github.com/repos/spatie/phpunit-snapshot-assertions/zipball/61e2eb567713c89987895b8f514a7a4d3bff89c9",
+                "reference": "61e2eb567713c89987895b8f514a7a4d3bff89c9",
                 "shasum": ""
             },
             "require": {
@@ -10457,7 +10457,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/phpunit-snapshot-assertions/issues",
-                "source": "https://github.com/spatie/phpunit-snapshot-assertions/tree/5.1.5"
+                "source": "https://github.com/spatie/phpunit-snapshot-assertions/tree/5.1.6"
             },
             "funding": [
                 {
@@ -10465,7 +10465,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-02-20T10:04:25+00:00"
+            "time": "2024-05-03T07:53:03+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
