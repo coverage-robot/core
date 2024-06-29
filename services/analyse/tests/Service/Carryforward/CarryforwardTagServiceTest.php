@@ -143,7 +143,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                history: static fn(ReportWaypoint $waypoint, int $page): array => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
@@ -248,7 +248,7 @@ final class CarryforwardTagServiceTest extends TestCase
                 repository: 'mock-repository',
                 ref: 'mock-ref',
                 commit: 'mock-commit',
-                history: static fn(ReportWaypoint $waypoint, int $page) => match ($page) {
+                history: static fn(ReportWaypoint $waypoint, int $page): array => match ($page) {
                     1 => [
                         [
                             'commit' => 'mock-commit',
