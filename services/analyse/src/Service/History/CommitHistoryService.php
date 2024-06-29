@@ -6,7 +6,7 @@ use App\Exception\CommitHistoryException;
 use App\Model\ReportWaypoint;
 use Override;
 use Packages\Contracts\Provider\ProviderAwareInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class CommitHistoryService implements CommitHistoryServiceInterface
 {
@@ -19,7 +19,7 @@ final class CommitHistoryService implements CommitHistoryServiceInterface
      * @param (CommitHistoryServiceInterface&ProviderAwareInterface)[] $parsers
      */
     public function __construct(
-        #[TaggedIterator(
+        #[AutowireIterator(
             'app.commit_history',
             defaultIndexMethod: 'getProvider'
         )]
