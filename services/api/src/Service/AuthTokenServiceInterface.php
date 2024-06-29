@@ -11,9 +11,7 @@ interface AuthTokenServiceInterface
     /**
      * Produces a token with a length of 50 (`TOKEN_LENGTH * 2`)
      */
-    public const TOKEN_LENGTH = 25;
-
-    public const MAX_TOKEN_RETRIES = 3;
+    public const int TOKEN_LENGTH = 25;
 
     /**
      * Attempt to retrieve the upload token from a request.

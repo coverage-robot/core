@@ -9,7 +9,7 @@ use App\Webhook\Signature\ProviderWebhookSignatureServiceInterface;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\Request;
 
 final class WebhookSignatureService implements WebhookSignatureServiceInterface
@@ -18,7 +18,7 @@ final class WebhookSignatureService implements WebhookSignatureServiceInterface
      * @param WebhookSignatureServiceInterface[] $webhookSignatureServices
      */
     public function __construct(
-        #[TaggedIterator('app.webhook_signature', defaultIndexMethod: 'getProvider')]
+        #[AutowireIterator('app.webhook_signature', defaultIndexMethod: 'getProvider')]
         private readonly iterable $webhookSignatureServices
     ) {
     }
