@@ -440,16 +440,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.1.25",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "71765be3b539ed2000f3610fed7dcdce23a24268"
+                "reference": "cb264c28fd4c3449853dccfe0dada08155e69264"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/71765be3b539ed2000f3610fed7dcdce23a24268",
-                "reference": "71765be3b539ed2000f3610fed7dcdce23a24268",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/cb264c28fd4c3449853dccfe0dada08155e69264",
+                "reference": "cb264c28fd4c3449853dccfe0dada08155e69264",
                 "shasum": ""
             },
             "require": {
@@ -503,7 +503,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.25"
+                "source": "https://github.com/brefphp/bref/tree/2.2.1"
             },
             "funding": [
                 {
@@ -515,7 +515,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-18T09:51:26+00:00"
+            "time": "2024-07-06T12:49:37+00:00"
         },
         {
             "name": "bref/symfony-bridge",
