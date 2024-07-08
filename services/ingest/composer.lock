@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.12.1",
+            "version": "1.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "c76bc39d99907d6aa62caa14c0771aefe5caaa9d"
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/c76bc39d99907d6aa62caa14c0771aefe5caaa9d",
-                "reference": "c76bc39d99907d6aa62caa14c0771aefe5caaa9d",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.1"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.2"
             },
             "funding": [
                 {
@@ -73,20 +73,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-27T14:44:12+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/core",
-            "version": "1.21.0",
+            "version": "1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "eb23cc59515d8d529163313bbf9e02f666e515ef"
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/eb23cc59515d8d529163313bbf9e02f666e515ef",
-                "reference": "eb23cc59515d8d529163313bbf9e02f666e515ef",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/cbd7012890a35a9b21f7235817a627488709551b",
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.21-dev"
+                    "dev-master": "1.22-dev"
                 }
             },
             "autoload": {
@@ -129,7 +129,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.21.0"
+                "source": "https://github.com/async-aws/core/tree/1.22.0"
             },
             "funding": [
                 {
@@ -141,7 +141,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-27T14:44:12+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
@@ -4549,22 +4549,23 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.0.4",
+            "version": "v7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "8384876f49a2316a63f88a9cd12436de6936bee6"
+                "reference": "90ace27d17ccc9afc6f7ec0081e8529fb0e29425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/8384876f49a2316a63f88a9cd12436de6936bee6",
-                "reference": "8384876f49a2316a63f88a9cd12436de6936bee6",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/90ace27d17ccc9afc6f7ec0081e8529fb0e29425",
+                "reference": "90ace27d17ccc9afc6f7ec0081e8529fb0e29425",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
-                "symfony/http-client-contracts": "^3",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/http-client-contracts": "^3.4.1",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -4582,7 +4583,7 @@
                 "amphp/http-client": "^4.2.1",
                 "amphp/http-tunnel": "^1.0",
                 "amphp/socket": "^1.1",
-                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/promises": "^1.4|^2.0",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
@@ -4590,6 +4591,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -4621,7 +4623,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.0.4"
+                "source": "https://github.com/symfony/http-client/tree/v7.1.2"
             },
             "funding": [
                 {
@@ -4637,7 +4639,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-15T11:33:06+00:00"
+            "time": "2024-06-28T08:00:31+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
