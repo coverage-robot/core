@@ -1,8 +1,46 @@
 version: 2
+
+registries:
+    packages-registry:
+        type: composer-registry
+        url: https://coverage-robot.repo.repman.io
+        username: token
+        password: ${{ secrets.REPMAN_TOKEN }}
+
+groups:
+    production-dependencies:
+        dependency-type: "production"
+        exclude-patterns:
+            - "coverage-robot/*"
+            - "symfony/*"
+
+    dev-dependencies:
+        dependency-type: "development"
+        exclude-patterns:
+            - "coverage-robot/*"
+            - "symfony/*"
+
+    coverage-robot-dependencies:
+        patterns:
+            - "coverage-robot/*"
+
+    symfony-dependencies:
+        patterns:
+            - "symfony/*"
+
 updates:
-    ## Ingest service dependencies
     -   package-ecosystem: "composer"
-        directory: "services/ingest"
+        directories:
+            - "services/ingest"
+            - "services/api"
+            - "services/analyse"
+            - "services/orchestrator"
+            - "services/publish"
+            - "packages/clients"
+            - "packages/message"
+            - "packages/configuration"
+            - "packages/event"
+            - "packages/telemetry"
         schedule:
             interval: "weekly"
         reviewers:
@@ -14,95 +52,13 @@ updates:
             - "bump-patch"
 
     -   package-ecosystem: "terraform"
-        directory: "services/ingest/infrastructure"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "terraform"
-            - "chore"
-            - "bump-patch"
-
-    ## Analyse service dependencies
-    -   package-ecosystem: "composer"
-        directory: "services/analyse"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    -   package-ecosystem: "terraform"
-        directory: "services/analyse/infrastructure"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "terraform"
-            - "chore"
-            - "bump-patch"
-
-    ## API service dependencies
-    -   package-ecosystem: "composer"
-        directory: "services/api"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    -   package-ecosystem: "terraform"
-        directory: "services/api/infrastructure"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "terraform"
-            - "chore"
-            - "bump-patch"
-
-    ## Orchestrator service dependencies
-    -   package-ecosystem: "composer"
-        directory: "services/orchestrator"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    -   package-ecosystem: "terraform"
-        directory: "services/orchestrator/infrastructure"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "terraform"
-            - "chore"
-            - "bump-patch"
-
-    ## Global infrastructure dependencies
-    -   package-ecosystem: "terraform"
-        directory: "infrastructure"
+        directories:
+            - "services/ingest/infrastructure"
+            - "services/analyse/infrastructure"
+            - "services/api/infrastructure"
+            - "services/orchestrator/infrastructure"
+            - "services/publish/infrastructure"
+            - "infrastructure"
         schedule:
             interval: "weekly"
         reviewers:
@@ -122,95 +78,5 @@ updates:
         labels:
             - "dependencies"
             - "github_actions"
-            - "chore"
-            - "bump-patch"
-
-    ## Publish service dependencies
-    -   package-ecosystem: "composer"
-        directory: "services/publish"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    -   package-ecosystem: "terraform"
-        directory: "services/publish/infrastructure"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "terraform"
-            - "chore"
-            - "bump-patch"
-
-    ## Clients package dependencies
-    -   package-ecosystem: "composer"
-        directory: "packages/clients"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    ## Message package dependencies
-    -   package-ecosystem: "composer"
-        directory: "packages/message"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    ## Configuration package dependencies
-    -   package-ecosystem: "composer"
-        directory: "packages/configuration"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    ## Event package dependencies
-    -   package-ecosystem: "composer"
-        directory: "packages/event"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
-            - "chore"
-            - "bump-patch"
-
-    ## Telemetry package dependencies
-    -   package-ecosystem: "composer"
-        directory: "packages/telemetry"
-        schedule:
-            interval: "weekly"
-        reviewers:
-            - "ryanmab"
-        labels:
-            - "dependencies"
-            - "php"
             - "chore"
             - "bump-patch"
