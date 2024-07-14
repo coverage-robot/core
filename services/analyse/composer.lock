@@ -649,16 +649,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.5.7",
+            "version": "v1.5.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "3e051bac721a95ec0b121e6f1872e60c82034d9d"
+                "reference": "dc771da2d6ab25c2ad5f839e9f4e5572944eeaf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/3e051bac721a95ec0b121e6f1872e60c82034d9d",
-                "reference": "3e051bac721a95ec0b121e6f1872e60c82034d9d",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/dc771da2d6ab25c2ad5f839e9f4e5572944eeaf0",
+                "reference": "dc771da2d6ab25c2ad5f839e9f4e5572944eeaf0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -668,10 +668,11 @@
                 ]
             },
             "require": {
-                "coverage-robot/telemetry": "1.5.6",
+                "coverage-robot/telemetry": "^1.5",
                 "knplabs/github-api": "^3.13",
                 "lcobucci/jwt": "^5.2",
                 "nyholm/psr7": "^1.8",
+                "php": ">=8.3",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-client": "^7.0",
@@ -704,10 +705,10 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/clients/tree/v1.5.10",
                 "issues": "https://github.com/coverage-robot/clients/issues"
             },
-            "time": "2024-07-14T16:41:50+00:00"
+            "time": "2024-07-14T18:34:10+00:00"
         },
         {
             "name": "coverage-robot/configuration",
