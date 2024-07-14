@@ -2,31 +2,10 @@ version: 2
 
 registries:
     packages-registry:
-        type: composer-registry
+        type: composer-repository
         url: https://coverage-robot.repo.repman.io
         username: token
         password: ${{ secrets.REPMAN_TOKEN }}
-
-groups:
-    production-dependencies:
-        dependency-type: "production"
-        exclude-patterns:
-            - "coverage-robot/*"
-            - "symfony/*"
-
-    dev-dependencies:
-        dependency-type: "development"
-        exclude-patterns:
-            - "coverage-robot/*"
-            - "symfony/*"
-
-    coverage-robot-dependencies:
-        patterns:
-            - "coverage-robot/*"
-
-    symfony-dependencies:
-        patterns:
-            - "symfony/*"
 
 updates:
     -   package-ecosystem: "composer"
@@ -50,6 +29,26 @@ updates:
             - "php"
             - "chore"
             - "bump-patch"
+        groups:
+            production-dependencies:
+                dependency-type: "production"
+                exclude-patterns:
+                    - "coverage-robot/*"
+                    - "symfony/*"
+
+            dev-dependencies:
+                dependency-type: "development"
+                exclude-patterns:
+                    - "coverage-robot/*"
+                    - "symfony/*"
+
+            coverage-robot-dependencies:
+                patterns:
+                    - "coverage-robot/*"
+
+            symfony-dependencies:
+                patterns:
+                    - "symfony/*"
 
     -   package-ecosystem: "terraform"
         directories:
@@ -68,6 +67,12 @@ updates:
             - "terraform"
             - "chore"
             - "bump-patch"
+        groups:
+            production-dependencies:
+                dependency-type: "production"
+
+            dev-dependencies:
+                dependency-type: "development"
 
     -   package-ecosystem: "github-actions"
         directory: "/"
@@ -80,3 +85,8 @@ updates:
             - "github_actions"
             - "chore"
             - "bump-patch"
+        groups:
+            dependencies:
+                patterns:
+                    - "coverage-robot/*"
+                    - "*"
