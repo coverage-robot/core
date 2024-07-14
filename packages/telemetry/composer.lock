@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6cfd67a54fb3e760e294c7a78da9d5e7",
+    "content-hash": "11be73f640724632b8290e89bb94f3ff",
     "packages": [
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.8",
+            "version": "v1.5.9",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -39,7 +39,7 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.8"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.9"
             },
             "time": "2024-07-14T17:34:00+00:00"
         },

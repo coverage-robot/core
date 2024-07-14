@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1da8aad6a01dc61041542eefe387ed91",
+    "content-hash": "9ffcb6aaaa4a5d8021ac72fe71815c50",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -207,7 +207,7 @@
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.8",
+            "version": "v1.5.9",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -238,7 +238,7 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.8"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.9"
             },
             "time": "2024-07-14T17:34:00+00:00"
         },

@@ -6,11 +6,11 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.3",
-        "coverage-robot/event": "1.5.6",
+        "coverage-robot/event": "^1.5",
         "async-aws/sqs": "^2.0",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
-        "coverage-robot/telemetry": "1.5.8",
+        "coverage-robot/telemetry": "^1.5",
         "symfony/validator": "^7.0",
         "async-aws/async-aws-bundle": "^1.12"
     },

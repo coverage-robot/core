@@ -7,7 +7,7 @@
     "require": {
         "php": ">=8.3",
         "psr/log": "^3.0",
-        "coverage-robot/contracts": "1.5.8",
+        "coverage-robot/contracts": "^1.5",
         "symfony/serializer": "^7.0",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
