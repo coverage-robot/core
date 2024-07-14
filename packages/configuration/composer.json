@@ -9,7 +9,7 @@
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
         "async-aws/dynamo-db": "^3.0",
-        "coverage-robot/contracts": "1.5.9",
+        "coverage-robot/contracts": "^1.5",
         "psr/log": "^3.0",
         "symfony/yaml": "^7.0",
         "symfony/validator": "^7.0",

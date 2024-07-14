@@ -13,11 +13,11 @@
         "async-aws/s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
-        "coverage-robot/configuration": "1.5.7",
-        "coverage-robot/contracts": "1.5.6",
-        "coverage-robot/event": "1.5.7",
-        "coverage-robot/message": "1.5.6",
-        "coverage-robot/telemetry": "1.5.6",
+        "coverage-robot/configuration": "^1.5",
+        "coverage-robot/contracts": "^1.5",
+        "coverage-robot/event": "^1.5",
+        "coverage-robot/message": "^1.5",
+        "coverage-robot/telemetry": "^1.5",
         "cybercog/php-svg-font": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpro/api-problem-bundle": "^1.7",
@@ -96,11 +96,11 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.0.*"
+            "require": "7.1.*"
         }
     },
     "require-dev": {
-        "coverage-robot/local": "1.5.6",
+        "coverage-robot/local": "^1.5",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-symfony": "^5.0",
         "rector/rector": "^1.0.0",
