@@ -4,8 +4,77 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1d2cb46d603b6ff615134f4722d2942",
+    "content-hash": "6d739af166afafd16e90accf71910537",
     "packages": [
+        {
+            "name": "async-aws/async-aws-bundle",
+            "version": "1.12.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/symfony-bundle.git",
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.0",
+                "php": "^7.2.5 || ^8.0",
+                "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "async-aws/s3": "^1.0 || ^2.0",
+                "async-aws/ses": "^1.0",
+                "async-aws/sqs": "^1.0 || ^2.0",
+                "async-aws/ssm": "^1.0 || ^2.0",
+                "matthiasnoback/symfony-config-test": "^4.1 || ^5.0",
+                "nyholm/symfony-bundle-test": "^3.0",
+                "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.12-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\Symfony\\Bundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Configure all your AsyncAws services and enjoy the autowire greatness.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "bundle",
+                "sdk",
+                "symfony"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-07-03T17:28:59+00:00"
+        },
         {
             "name": "async-aws/core",
             "version": "1.20.1",
@@ -132,6 +201,65 @@
             "time": "2023-12-13T20:52:19+00:00"
         },
         {
+            "name": "async-aws/scheduler",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/async-aws/scheduler.git",
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
+                "shasum": ""
+            },
+            "require": {
+                "async-aws/core": "^1.9",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "^7.2.5 || ^8.0",
+                "symfony/polyfill-uuid": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AsyncAws\\Scheduler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Scheduler client, part of the AWS SDK provided by AsyncAws.",
+            "keywords": [
+                "amazon",
+                "async-aws",
+                "aws",
+                "scheduler",
+                "sdk"
+            ],
+            "support": {
+                "source": "https://github.com/async-aws/scheduler/tree/1.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jderusse",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nyholm",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-07-03T17:28:59+00:00"
+        },
+        {
             "name": "bref/bref",
             "version": "2.1.8",
             "source": {
@@ -213,35 +341,63 @@
         {
             "name": "coverage-robot/contracts",
             "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/contracts.git",
+                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4"
+            },
             "dist": {
-                "type": "path",
-                "url": "../contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "symfony/validator": "^7.0"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Contracts\\": "src/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.3"
+            },
+            "time": "2024-07-14T14:31:45+00:00"
         },
         {
             "name": "coverage-robot/event",
             "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/event.git",
+                "reference": "8432a1af3fc281beac7ec5baaa4ee8b557886def"
+            },
             "dist": {
-                "type": "path",
-                "url": "../event",
-                "reference": "5298329344bda500efd04673b01ebbca4b854029"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/8432a1af3fc281beac7ec5baaa4ee8b557886def",
+                "reference": "8432a1af3fc281beac7ec5baaa4ee8b557886def",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
+                "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/event-bridge": "^1.5",
+                "async-aws/scheduler": "^1.1",
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.0",
                 "coverage-robot/telemetry": "^1.0",
@@ -255,7 +411,7 @@
                 "phpunit/phpunit": "^10.3",
                 "rector/rector": "^0.19.4"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Event\\": "src/"
@@ -266,24 +422,42 @@
                     "Packages\\Event\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
                 ]
             },
             "description": "Shared event logic across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.3",
+                "issues": "https://github.com/coverage-robot/event/issues"
+            },
+            "time": "2024-07-14T14:36:09+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
             "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/telemetry.git",
+                "reference": "67ed2028e1796404356abbec2611f13a14fe4dcc"
+            },
             "dist": {
-                "type": "path",
-                "url": "../telemetry",
-                "reference": "22052226aa1794bae376b5f6f1313461fe0d8bf4"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/67ed2028e1796404356abbec2611f13a14fe4dcc",
+                "reference": "67ed2028e1796404356abbec2611f13a14fe4dcc",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -299,9 +473,10 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
+                "rector/rector": "^0.19.5",
                 "symfony/property-access": "^6.3"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Telemetry\\": "src/"
@@ -312,16 +487,22 @@
                     "Packages\\Telemetry\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:rector": [
+                    "rector process --dry-run"
+                ],
                 "test:unit": [
                     "@putenv XDEBUG_MODE=coverage",
                     "phpunit --configuration=./phpunit.xml.dist"
                 ]
             },
             "description": "Shared telemetry tooling across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.3",
+                "issues": "https://github.com/coverage-robot/telemetry/issues"
+            },
+            "time": "2024-07-14T14:36:12+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -2613,6 +2794,85 @@
                 }
             ],
             "time": "2023-08-16T06:22:46+00:00"
+        },
+        {
+            "name": "symfony/polyfill-uuid",
+            "version": "v1.30.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-uuid.git",
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/2ba1f33797470debcda07fe9dce20a0003df18e9",
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "provide": {
+                "ext-uuid": "*"
+            },
+            "suggest": {
+                "ext-uuid": "For best performance"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Uuid\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Pineau",
+                    "email": "lyrixx@lyrixx.info"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for uuid functions",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "polyfill",
+                "portable",
+                "uuid"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.30.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-05-31T15:07:36+00:00"
         },
         {
             "name": "symfony/process",
@@ -5091,5 +5351,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
