@@ -2,14 +2,13 @@
     "name": "coverage-robot/configuration",
     "description": "Tooling to access user-defined configuration settings",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
         "async-aws/dynamo-db": "^3.0",
-        "coverage-robot/contracts": "^1.0",
+        "coverage-robot/contracts": "1.5.6",
         "psr/log": "^3.0",
         "symfony/yaml": "^7.0",
         "symfony/validator": "^7.0",
@@ -39,9 +38,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/contracts"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ]
 }

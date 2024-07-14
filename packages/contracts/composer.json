@@ -2,7 +2,6 @@
     "name": "coverage-robot/contracts",
     "description": "Decoupled contracts usable across the services",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
@@ -12,5 +11,8 @@
         "psr-4": {
             "Packages\\Contracts\\": "src/"
         }
-    }
+    },
+    "repositories": [
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
+    ]
 }

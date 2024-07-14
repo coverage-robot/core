@@ -2,12 +2,11 @@
     "name": "coverage-robot/telemetry",
     "description": "Shared telemetry tooling across the services",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "psr/log": "^3.0",
-        "coverage-robot/contracts": "^1.0",
+        "coverage-robot/contracts": "1.5.6",
         "symfony/serializer": "^7.0",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
@@ -40,9 +39,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../contracts"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ]
 }

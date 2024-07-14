@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab3f1b1c4616565bbd4bb48620fc3ffa",
+    "content-hash": "dbc86581a6c6be267f67f3bba6d02595",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -340,11 +340,23 @@
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/contracts.git",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966"
+            },
             "dist": {
-                "type": "path",
-                "url": "../contracts",
-                "reference": "48dc6dd4dec5044045d03f390e3b7603bb2b3bce"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -355,18 +367,32 @@
                     "Packages\\Contracts\\": "src/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.6"
+            },
+            "time": "2024-07-14T16:20:05+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/telemetry.git",
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b"
+            },
             "dist": {
-                "type": "path",
-                "url": "../telemetry",
-                "reference": "8f3d598638090dfbf88ba1b9845bf6c6d3e1335c"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -396,6 +422,7 @@
                     "Packages\\Telemetry\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -406,9 +433,11 @@
                 ]
             },
             "description": "Shared telemetry tooling across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/telemetry/issues"
+            },
+            "time": "2024-07-14T16:20:07+00:00"
         },
         {
             "name": "crwlr/query-string",

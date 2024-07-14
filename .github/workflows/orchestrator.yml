@@ -8,18 +8,13 @@ on:
             - main
 
         # Path filtering isn't supported on merge queues, so we're forced to run all services
-        
+
     push:
         branches:
             - main
         paths:
             - 'services/orchestrator/**'
             - '.github/workflows/orchestrator.yml'
-            - 'packages/clients/**'
-            - 'packages/configuration/**'
-            - 'packages/contracts/**'
-            - 'packages/event/**'
-            - 'packages/telemetry/**'
             - 'rector.php'
 
     pull_request:
@@ -28,11 +23,6 @@ on:
         paths:
             - 'services/orchestrator/**'
             - '.github/workflows/orchestrator.yml'
-            - 'packages/clients/**'
-            - 'packages/configuration/**'
-            - 'packages/contracts/**'
-            - 'packages/event/**'
-            - 'packages/telemetry/**'
             - 'rector.php'
 
     workflow_dispatch:
@@ -85,6 +75,8 @@ jobs:
 
             -   name: Install Composer dependencies
                 run: composer install --prefer-dist --no-progress
+                env:
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
                 # For Psalm's symfony plugin, which requires the test containers
             -   name: Warm testing environment cache
@@ -296,7 +288,7 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative --no-dev --no-scripts
                 env:
-                    COMPOSER_MIRROR_PATH_REPOS: 1
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
             -   name: Clear platform cache
                 run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}

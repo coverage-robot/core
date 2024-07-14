@@ -8,16 +8,13 @@ on:
             - main
 
         # Path filtering isn't supported on merge queues, so we're forced to run all services
-        
+
     push:
         branches:
             - main
         paths:
             - '.github/workflows/message.yml'
             - 'packages/message/**'
-            - 'packages/event/**'
-            - 'packages/contracts/**'
-            - 'packages/telemetry/**'
 
     pull_request:
         branches:
@@ -25,9 +22,6 @@ on:
         paths:
             - '.github/workflows/message.yml'
             - 'packages/message/**'
-            - 'packages/event/**'
-            - 'packages/contracts/**'
-            - 'packages/telemetry/**'
 
     workflow_dispatch:
 
@@ -60,7 +54,9 @@ jobs:
                 run: composer validate
 
             -   name: Install Composer dependencies
-                run: composer install --prefer-dist --no-progress
+                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative
+                env:
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
             -   name: Run Rector
                 run: composer lint:rector

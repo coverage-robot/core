@@ -2,16 +2,15 @@
     "name": "coverage-robot/event",
     "description": "Shared event logic across the services",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "psr/log": "^3.0",
-        "coverage-robot/contracts": "^1.0",
+        "coverage-robot/contracts": "1.5.6",
         "symfony/http-kernel": "^7.0",
         "symfony/config": "^7.0",
         "symfony/dependency-injection": "^7.0",
-        "coverage-robot/telemetry": "^1.0",
+        "coverage-robot/telemetry": "1.5.6",
         "bref/bref": "^2.1",
         "async-aws/event-bridge": "^1.5",
         "symfony/validator": "^7.0",
@@ -40,14 +39,7 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../contracts"
-        },
-        {
-            "type": "path",
-            "url": "../telemetry"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "config": {
         "allow-plugins": {

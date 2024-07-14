@@ -3,7 +3,7 @@
     "description": "The api coverage service.",
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.3",
@@ -13,11 +13,11 @@
         "async-aws/s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
-        "coverage-robot/configuration": "^1.0",
-        "coverage-robot/contracts": "^1.0",
-        "coverage-robot/event": "^1.0",
-        "coverage-robot/message": "^1.0",
-        "coverage-robot/telemetry": "^1.0",
+        "coverage-robot/configuration": "1.5.6",
+        "coverage-robot/contracts": "1.5.6",
+        "coverage-robot/event": "1.5.6",
+        "coverage-robot/message": "1.5.6",
+        "coverage-robot/telemetry": "1.5.6",
         "cybercog/php-svg-font": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpro/api-problem-bundle": "^1.7",
@@ -91,30 +91,7 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/event"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/telemetry"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/contracts"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/configuration"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/message"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/local"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "extra": {
         "symfony": {
@@ -123,7 +100,7 @@
         }
     },
     "require-dev": {
-        "coverage-robot/local": "^1.0",
+        "coverage-robot/local": "1.5.6",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-symfony": "^5.0",
         "rector/rector": "^1.0.0",

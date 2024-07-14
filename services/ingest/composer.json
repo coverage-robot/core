@@ -15,10 +15,10 @@
         "async-aws/simple-s3": "^2.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
-        "coverage-robot/configuration": "^1.0",
-        "coverage-robot/contracts": "^1.0",
-        "coverage-robot/event": "^1.0",
-        "coverage-robot/telemetry": "^1.0",
+        "coverage-robot/configuration": "1.5.6",
+        "coverage-robot/contracts": "1.5.6",
+        "coverage-robot/event": "1.5.6",
+        "coverage-robot/telemetry": "1.5.6",
         "google/cloud-bigquery": "^1.24",
         "google/cloud-storage": "^1.33",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -97,22 +97,7 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/event"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/telemetry"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/contracts"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/configuration"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "extra": {
         "symfony": {

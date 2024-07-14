@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8d9348b28f2f74bd7cfc252389f9982b",
+    "content-hash": "38541f31bb415b5dc2c567eacce4c1ea",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.12.0",
+            "version": "1.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb"
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
-                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c",
                 "shasum": ""
             },
             "require": {
@@ -28,12 +28,12 @@
                 "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
-                "async-aws/s3": "^1.0",
+                "async-aws/s3": "^1.0 || ^2.0",
                 "async-aws/ses": "^1.0",
-                "async-aws/sqs": "^1.0",
-                "async-aws/ssm": "^1.0",
-                "matthiasnoback/symfony-config-test": "^4.1",
-                "nyholm/symfony-bundle-test": "^2.0",
+                "async-aws/sqs": "^1.0 || ^2.0",
+                "async-aws/ssm": "^1.0 || ^2.0",
+                "matthiasnoback/symfony-config-test": "^4.1 || ^5.0",
+                "nyholm/symfony-bundle-test": "^3.0",
                 "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "symfony-bundle",
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.0"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.2"
             },
             "funding": [
                 {
@@ -73,20 +73,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T20:00:50+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/core",
-            "version": "1.20.1",
+            "version": "1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11"
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/7e079d52ac27b8c5a2036df8daea567c9728ee11",
-                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/cbd7012890a35a9b21f7235817a627488709551b",
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.20-dev"
+                    "dev-master": "1.22-dev"
                 }
             },
             "autoload": {
@@ -129,7 +129,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.20.1"
+                "source": "https://github.com/async-aws/core/tree/1.22.0"
             },
             "funding": [
                 {
@@ -141,20 +141,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.1.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "32429771f8933fe1abb3032f1472788a197f4b59"
+                "reference": "f6174e95384a3739554e5f574c407338cb169ed5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/32429771f8933fe1abb3032f1472788a197f4b59",
-                "reference": "32429771f8933fe1abb3032f1472788a197f4b59",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/f6174e95384a3739554e5f574c407338cb169ed5",
+                "reference": "f6174e95384a3739554e5f574c407338cb169ed5",
                 "shasum": ""
             },
             "require": {
@@ -170,7 +170,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -191,7 +191,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.1.0"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.2.1"
             },
             "funding": [
                 {
@@ -203,20 +203,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-09T08:38:58+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/event-bridge",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/event-bridge.git",
-                "reference": "fd913e11ac462713bed4eb7f2cc15f4015831ba4"
+                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/fd913e11ac462713bed4eb7f2cc15f4015831ba4",
-                "reference": "fd913e11ac462713bed4eb7f2cc15f4015831ba4",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/844f8745fc69d3efe6c3c391982befd336066a1f",
+                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f",
                 "shasum": ""
             },
             "require": {
@@ -248,7 +248,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/event-bridge/tree/1.5.2"
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.4"
             },
             "funding": [
                 {
@@ -260,20 +260,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/scheduler",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/scheduler.git",
-                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8"
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/64c983b65237e3f332af016e48213a29f4b06ae8",
-                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
                 "shasum": ""
             },
             "require": {
@@ -307,7 +307,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/scheduler/tree/1.1.1"
+                "source": "https://github.com/async-aws/scheduler/tree/1.1.2"
             },
             "funding": [
                 {
@@ -319,20 +319,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/sqs",
-            "version": "2.0.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/sqs.git",
-                "reference": "0208ec744847020b08da0541b2fb5536875a70c8"
+                "reference": "6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/sqs/zipball/0208ec744847020b08da0541b2fb5536875a70c8",
-                "reference": "0208ec744847020b08da0541b2fb5536875a70c8",
+                "url": "https://api.github.com/repos/async-aws/sqs/zipball/6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2",
+                "reference": "6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2",
                 "shasum": ""
             },
             "require": {
@@ -344,7 +344,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -365,7 +365,7 @@
                 "sqs"
             ],
             "support": {
-                "source": "https://github.com/async-aws/sqs/tree/2.0.0"
+                "source": "https://github.com/async-aws/sqs/tree/2.1.1"
             },
             "funding": [
                 {
@@ -377,20 +377,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "bref/bref",
-            "version": "2.1.25",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "71765be3b539ed2000f3610fed7dcdce23a24268"
+                "reference": "4b13acad9187b1486f8c549d0ffd26e3d50c1f46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/71765be3b539ed2000f3610fed7dcdce23a24268",
-                "reference": "71765be3b539ed2000f3610fed7dcdce23a24268",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/4b13acad9187b1486f8c549d0ffd26e3d50c1f46",
+                "reference": "4b13acad9187b1486f8c549d0ffd26e3d50c1f46",
                 "shasum": ""
             },
             "require": {
@@ -444,7 +444,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.25"
+                "source": "https://github.com/brefphp/bref/tree/2.3.0"
             },
             "funding": [
                 {
@@ -456,7 +456,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-18T09:51:26+00:00"
+            "time": "2024-07-11T07:34:32+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -589,11 +589,23 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/clients.git",
+                "reference": "e1e9626a7e01a971d9fda0579b4dd2f7051f0cc0"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/clients",
-                "reference": "c26a4af164decb8e9ff12b11eacc61005c23de0d"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/e1e9626a7e01a971d9fda0579b4dd2f7051f0cc0",
+                "reference": "e1e9626a7e01a971d9fda0579b4dd2f7051f0cc0",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "coverage-robot/telemetry": "^1.0",
@@ -620,6 +632,7 @@
                     "Packages\\Clients\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -630,17 +643,31 @@
                 ]
             },
             "description": "Shared clients across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/clients/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/clients/issues"
+            },
+            "time": "2024-07-14T16:20:07+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/configuration.git",
+                "reference": "aa552b759413458c73f0ae164d569feb4bbf1300"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/configuration",
-                "reference": "e9b87239a9fe19c31615d74bbf6beda2fe7c3ab7"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/aa552b759413458c73f0ae164d569feb4bbf1300",
+                "reference": "aa552b759413458c73f0ae164d569feb4bbf1300",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -669,6 +696,7 @@
                     "Packages\\Configuration\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -679,17 +707,31 @@
                 ]
             },
             "description": "Tooling to access user-defined configuration settings",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/configuration/issues"
+            },
+            "time": "2024-07-14T16:20:11+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/contracts.git",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/contracts",
-                "reference": "48dc6dd4dec5044045d03f390e3b7603bb2b3bce"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "symfony/validator": "^7.0"
@@ -700,18 +742,32 @@
                     "Packages\\Contracts\\": "src/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.6"
+            },
+            "time": "2024-07-14T16:20:05+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/event.git",
+                "reference": "604021faf122c9bd23a5643e1887ffc59b10242a"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/event",
-                "reference": "66bf8bddb4b3575bdcb223edbde90cb7543b5700"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/604021faf122c9bd23a5643e1887ffc59b10242a",
+                "reference": "604021faf122c9bd23a5643e1887ffc59b10242a",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -741,6 +797,7 @@
                     "Packages\\Event\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -751,17 +808,31 @@
                 ]
             },
             "description": "Shared event logic across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/event/issues"
+            },
+            "time": "2024-07-14T16:20:04+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/message.git",
+                "reference": "5dd77c5880e2b96854b5864b14def375a1db0ca2"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/message",
-                "reference": "4fddbc966769e07a28dda1b5af0d813bfa2da734"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/message/zipball/5dd77c5880e2b96854b5864b14def375a1db0ca2",
+                "reference": "5dd77c5880e2b96854b5864b14def375a1db0ca2",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
@@ -787,6 +858,7 @@
                     "Packages\\Message\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -797,17 +869,31 @@
                 ]
             },
             "description": "Decoupled queue messages usable across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/message/issues"
+            },
+            "time": "2024-07-14T16:20:03+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "1.0.0",
+            "version": "v1.5.6",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/telemetry.git",
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b"
+            },
             "dist": {
-                "type": "path",
-                "url": "../../packages/telemetry",
-                "reference": "8f3d598638090dfbf88ba1b9845bf6c6d3e1335c"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "coverage-robot/contracts": "^1.0",
@@ -837,6 +923,7 @@
                     "Packages\\Telemetry\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
                 "lint:rector": [
                     "rector process --dry-run"
@@ -847,9 +934,11 @@
                 ]
             },
             "description": "Shared telemetry tooling across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.6",
+                "issues": "https://github.com/coverage-robot/telemetry/issues"
+            },
+            "time": "2024-07-14T16:20:07+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -1182,22 +1271,22 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "v3.13.0",
+            "version": "v3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "47024f3483520c0fafdfc5c10d2a20d87b4c7ceb"
+                "reference": "71fec50e228737ec23c0b69801b85bf596fbdaca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/47024f3483520c0fafdfc5c10d2a20d87b4c7ceb",
-                "reference": "47024f3483520c0fafdfc5c10d2a20d87b4c7ceb",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/71fec50e228737ec23c0b69801b85bf596fbdaca",
+                "reference": "71fec50e228737ec23c0b69801b85bf596fbdaca",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": "^7.2.5 || ^8.0",
-                "php-http/cache-plugin": "^1.7.1",
+                "php-http/cache-plugin": "^1.7.1|^2.0",
                 "php-http/client-common": "^2.3",
                 "php-http/discovery": "^1.12",
                 "php-http/httplug": "^2.2",
@@ -1225,7 +1314,7 @@
             "extra": {
                 "branch-alias": {
                     "dev-2.x": "2.20.x-dev",
-                    "dev-master": "3.12-dev"
+                    "dev-master": "3.14-dev"
                 }
             },
             "autoload": {
@@ -1258,7 +1347,7 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/php-github-api/issues",
-                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.13.0"
+                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.14.1"
             },
             "funding": [
                 {
@@ -1266,20 +1355,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-19T21:08:19+00:00"
+            "time": "2024-03-24T18:21:15+00:00"
         },
         {
             "name": "lcobucci/jwt",
-            "version": "5.2.0",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "0ba88aed12c04bd2ed9924f500673f32b67a6211"
+                "reference": "08071d8d2c7f4b00222cc4b1fb6aa46990a80f83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/0ba88aed12c04bd2ed9924f500673f32b67a6211",
-                "reference": "0ba88aed12c04bd2ed9924f500673f32b67a6211",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/08071d8d2c7f4b00222cc4b1fb6aa46990a80f83",
+                "reference": "08071d8d2c7f4b00222cc4b1fb6aa46990a80f83",
                 "shasum": ""
             },
             "require": {
@@ -1327,7 +1416,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/5.2.0"
+                "source": "https://github.com/lcobucci/jwt/tree/5.3.0"
             },
             "funding": [
                 {
@@ -1339,20 +1428,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2023-11-20T21:17:42+00:00"
+            "time": "2024-04-11T23:07:54+00:00"
         },
         {
             "name": "monolog/monolog",
-            "version": "3.5.0",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c915e2634718dbc8a4a15c61b0e62e7a44e14448"
+                "reference": "f4393b648b78a5408747de94fca38beb5f7e9ef8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c915e2634718dbc8a4a15c61b0e62e7a44e14448",
-                "reference": "c915e2634718dbc8a4a15c61b0e62e7a44e14448",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/f4393b648b78a5408747de94fca38beb5f7e9ef8",
+                "reference": "f4393b648b78a5408747de94fca38beb5f7e9ef8",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1464,7 @@
                 "phpstan/phpstan": "^1.9",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.4",
-                "phpunit/phpunit": "^10.1",
+                "phpunit/phpunit": "^10.5.17",
                 "predis/predis": "^1.1 || ^2",
                 "ruflin/elastica": "^7",
                 "symfony/mailer": "^5.4 || ^6",
@@ -1428,7 +1517,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/3.5.0"
+                "source": "https://github.com/Seldaek/monolog/tree/3.7.0"
             },
             "funding": [
                 {
@@ -1440,7 +1529,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-27T15:32:31+00:00"
+            "time": "2024-06-28T09:40:51+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -1522,26 +1611,27 @@
         },
         {
             "name": "php-http/cache-plugin",
-            "version": "1.8.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/cache-plugin.git",
-                "reference": "b3e6c25d89ee5e4ac82115ed23b21ba87986d614"
+                "reference": "539b2d1ea0dc1c2f141c8155f888197d4ac5635b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/b3e6c25d89ee5e4ac82115ed23b21ba87986d614",
-                "reference": "b3e6c25d89ee5e4ac82115ed23b21ba87986d614",
+                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/539b2d1ea0dc1c2f141c8155f888197d4ac5635b",
+                "reference": "539b2d1ea0dc1c2f141c8155f888197d4ac5635b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
                 "php-http/client-common": "^1.9 || ^2.0",
-                "php-http/message-factory": "^1.0",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "psr/http-factory-implementation": "^1.0",
                 "symfony/options-resolver": "^2.6 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
+                "nyholm/psr7": "^1.6.1",
                 "phpspec/phpspec": "^5.1 || ^6.0 || ^7.0"
             },
             "type": "library",
@@ -1570,9 +1660,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/cache-plugin/issues",
-                "source": "https://github.com/php-http/cache-plugin/tree/1.8.1"
+                "source": "https://github.com/php-http/cache-plugin/tree/2.0.0"
             },
-            "time": "2023-11-21T08:52:56+00:00"
+            "time": "2024-02-19T17:02:14+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -1849,72 +1939,17 @@
             "time": "2024-03-07T13:22:09+00:00"
         },
         {
-            "name": "php-http/message-factory",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-http/message-factory.git",
-                "reference": "4d8778e1c7d405cbb471574821c1ff5b68cc8f57"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-http/message-factory/zipball/4d8778e1c7d405cbb471574821c1ff5b68cc8f57",
-                "reference": "4d8778e1c7d405cbb471574821c1ff5b68cc8f57",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Http\\Message\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Márk Sági-Kazár",
-                    "email": "mark.sagikazar@gmail.com"
-                }
-            ],
-            "description": "Factory interfaces for PSR-7 HTTP Message",
-            "homepage": "http://php-http.org",
-            "keywords": [
-                "factory",
-                "http",
-                "message",
-                "stream",
-                "uri"
-            ],
-            "support": {
-                "issues": "https://github.com/php-http/message-factory/issues",
-                "source": "https://github.com/php-http/message-factory/tree/1.1.0"
-            },
-            "abandoned": "psr/http-factory",
-            "time": "2023-04-14T14:16:17+00:00"
-        },
-        {
             "name": "php-http/multipart-stream-builder",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/multipart-stream-builder.git",
-                "reference": "f5938fd135d9fa442cc297dc98481805acfe2b6a"
+                "reference": "ed56da23b95949ae4747378bed8a5b61a2fdae24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/f5938fd135d9fa442cc297dc98481805acfe2b6a",
-                "reference": "f5938fd135d9fa442cc297dc98481805acfe2b6a",
+                "url": "https://api.github.com/repos/php-http/multipart-stream-builder/zipball/ed56da23b95949ae4747378bed8a5b61a2fdae24",
+                "reference": "ed56da23b95949ae4747378bed8a5b61a2fdae24",
                 "shasum": ""
             },
             "require": {
@@ -1955,9 +1990,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/multipart-stream-builder/issues",
-                "source": "https://github.com/php-http/multipart-stream-builder/tree/1.3.0"
+                "source": "https://github.com/php-http/multipart-stream-builder/tree/1.3.1"
             },
-            "time": "2023-04-28T14:10:22+00:00"
+            "time": "2024-06-10T14:51:55+00:00"
         },
         {
             "name": "php-http/promise",
@@ -4201,22 +4236,23 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.0.5",
+            "version": "v7.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b"
+                "reference": "90ace27d17ccc9afc6f7ec0081e8529fb0e29425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/425f462a59d8030703ee04a9e1c666575ed5db3b",
-                "reference": "425f462a59d8030703ee04a9e1c666575ed5db3b",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/90ace27d17ccc9afc6f7ec0081e8529fb0e29425",
+                "reference": "90ace27d17ccc9afc6f7ec0081e8529fb0e29425",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
                 "psr/log": "^1|^2|^3",
-                "symfony/http-client-contracts": "^3",
+                "symfony/deprecation-contracts": "^2.5|^3",
+                "symfony/http-client-contracts": "^3.4.1",
                 "symfony/service-contracts": "^2.5|^3"
             },
             "conflict": {
@@ -4234,7 +4270,7 @@
                 "amphp/http-client": "^4.2.1",
                 "amphp/http-tunnel": "^1.0",
                 "amphp/socket": "^1.1",
-                "guzzlehttp/promises": "^1.4",
+                "guzzlehttp/promises": "^1.4|^2.0",
                 "nyholm/psr7": "^1.0",
                 "php-http/httplug": "^1.0|^2.0",
                 "psr/http-client": "^1.0",
@@ -4242,6 +4278,7 @@
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/messenger": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
+                "symfony/rate-limiter": "^6.4|^7.0",
                 "symfony/stopwatch": "^6.4|^7.0"
             },
             "type": "library",
@@ -4273,7 +4310,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.0.5"
+                "source": "https://github.com/symfony/http-client/tree/v7.1.2"
             },
             "funding": [
                 {
@@ -4289,7 +4326,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-02T12:46:12+00:00"
+            "time": "2024-06-28T08:00:31+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -4721,16 +4758,16 @@
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v7.0.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
-                "reference": "700ff4096e346f54cb628ea650767c8130f1001f"
+                "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/700ff4096e346f54cb628ea650767c8130f1001f",
-                "reference": "700ff4096e346f54cb628ea650767c8130f1001f",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/47aa818121ed3950acd2b58d1d37d08a94f9bf55",
+                "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55",
                 "shasum": ""
             },
             "require": {
@@ -4768,7 +4805,7 @@
                 "options"
             ],
             "support": {
-                "source": "https://github.com/symfony/options-resolver/tree/v7.0.0"
+                "source": "https://github.com/symfony/options-resolver/tree/v7.1.1"
             },
             "funding": [
                 {
@@ -4784,7 +4821,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-08T10:20:21+00:00"
+            "time": "2024-05-31T14:57:53+00:00"
         },
         {
             "name": "symfony/password-hasher",
@@ -5175,16 +5212,16 @@
         },
         {
             "name": "symfony/polyfill-uuid",
-            "version": "v1.29.0",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-uuid.git",
-                "reference": "3abdd21b0ceaa3000ee950097bc3cf9efc137853"
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/3abdd21b0ceaa3000ee950097bc3cf9efc137853",
-                "reference": "3abdd21b0ceaa3000ee950097bc3cf9efc137853",
+                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/2ba1f33797470debcda07fe9dce20a0003df18e9",
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9",
                 "shasum": ""
             },
             "require": {
@@ -5234,7 +5271,7 @@
                 "uuid"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.29.0"
+                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.30.0"
             },
             "funding": [
                 {
@@ -5250,7 +5287,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T20:11:03+00:00"
+            "time": "2024-05-31T15:07:36+00:00"
         },
         {
             "name": "symfony/process",
@@ -7270,16 +7307,16 @@
         },
         {
             "name": "composer/semver",
-            "version": "3.4.0",
+            "version": "3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32"
+                "reference": "c51258e759afdb17f1fd1fe83bc12baaef6309d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/35e8d0af4486141bc745f23a29cc2091eb624a32",
-                "reference": "35e8d0af4486141bc745f23a29cc2091eb624a32",
+                "url": "https://api.github.com/repos/composer/semver/zipball/c51258e759afdb17f1fd1fe83bc12baaef6309d6",
+                "reference": "c51258e759afdb17f1fd1fe83bc12baaef6309d6",
                 "shasum": ""
             },
             "require": {
@@ -7331,7 +7368,7 @@
             "support": {
                 "irc": "ircs://irc.libera.chat:6697/composer",
                 "issues": "https://github.com/composer/semver/issues",
-                "source": "https://github.com/composer/semver/tree/3.4.0"
+                "source": "https://github.com/composer/semver/tree/3.4.2"
             },
             "funding": [
                 {
@@ -7347,7 +7384,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-31T09:50:34+00:00"
+            "time": "2024-07-12T11:35:52+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -7901,16 +7938,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.11.5",
+            "version": "1.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "490f0ae1c92b082f154681d7849aee776a7c1443"
+                "reference": "52d2bbfdcae7f895915629e4694e9497d0f8e28d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/490f0ae1c92b082f154681d7849aee776a7c1443",
-                "reference": "490f0ae1c92b082f154681d7849aee776a7c1443",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/52d2bbfdcae7f895915629e4694e9497d0f8e28d",
+                "reference": "52d2bbfdcae7f895915629e4694e9497d0f8e28d",
                 "shasum": ""
             },
             "require": {
@@ -7955,7 +7992,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-17T15:10:54+00:00"
+            "time": "2024-07-06T11:17:41+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8381,16 +8418,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.2.4",
+            "version": "v5.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "353c9b0be952d7d98a743922570436fa4953ab29"
+                "reference": "fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/353c9b0be952d7d98a743922570436fa4953ab29",
-                "reference": "353c9b0be952d7d98a743922570436fa4953ab29",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196",
+                "reference": "fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196",
                 "shasum": ""
             },
             "require": {
@@ -8440,22 +8477,22 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.4"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.5"
             },
-            "time": "2024-06-22T08:33:24+00:00"
+            "time": "2024-07-03T11:57:02+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "c930cdb21294f10955ddfc31b720971e8333943d"
+                "reference": "2fa387553db22b6f9bcccf5ff16f2c2c18a52a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/c930cdb21294f10955ddfc31b720971e8333943d",
-                "reference": "c930cdb21294f10955ddfc31b720971e8333943d",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/2fa387553db22b6f9bcccf5ff16f2c2c18a52a65",
+                "reference": "2fa387553db22b6f9bcccf5ff16f2c2c18a52a65",
                 "shasum": ""
             },
             "require": {
@@ -8493,7 +8530,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.1.1"
+                "source": "https://github.com/rectorphp/rector/tree/1.2.0"
             },
             "funding": [
                 {
@@ -8501,7 +8538,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-21T07:51:17+00:00"
+            "time": "2024-07-01T14:24:45+00:00"
         },
         {
             "name": "sebastian/cli-parser",
