@@ -340,7 +340,7 @@
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.10",
+            "version": "v1.5.11",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -371,22 +371,22 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.10"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.11"
             },
             "time": "2024-07-14T17:34:00+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.10",
+            "version": "v1.5.11",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950"
+                "reference": "25c3a6c77ba8aeec288bf9e8b98b1d774850db72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/33644db8e4b396c51b467b0b5c3448e8e8dad950",
-                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/25c3a6c77ba8aeec288bf9e8b98b1d774850db72",
+                "reference": "25c3a6c77ba8aeec288bf9e8b98b1d774850db72",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -436,10 +436,10 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.11",
                 "issues": "https://github.com/coverage-robot/telemetry/issues"
             },
-            "time": "2024-07-14T18:34:09+00:00"
+            "time": "2024-07-14T18:53:55+00:00"
         },
         {
             "name": "crwlr/query-string",
