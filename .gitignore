@@ -13,3 +13,9 @@ phpunit.xml
 .localstack/
 bigquery.json
 github.pem
+
+# Ignore lock files in packages, as library lock files have no effect on the application and do
+# cause Dependabot to raise cyclical (and unnessesary) PRs for inter-dependant packages
+#
+# https://getcomposer.org/doc/02-libraries.md#lock-file
+packages/**/composer.lock
