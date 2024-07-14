@@ -63,6 +63,9 @@ updates:
             - "php"
             - "chore"
             - "bump-patch"
+        # Only increase the versions in packages if necessary so that interdependent packages don't cause cyclical lock
+        # file bumps
+        versioning-strategy: increase-if-necessary
         groups:
             packages-production:
                 dependency-type: "production"
