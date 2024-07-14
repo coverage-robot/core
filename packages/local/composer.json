@@ -38,17 +38,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../contracts"
-        },
-        {
-            "type": "path",
-            "url": "../event"
-        },
-        {
-            "type": "path",
-            "url": "../telemetry"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ]
 }

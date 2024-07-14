@@ -4,29 +4,43 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "431026b2da6c95808756735a17773f45",
+    "content-hash": "9d73de0b45eece57fb5ccf49438af47b",
     "packages": [
         {
             "name": "coverage-robot/contracts",
             "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:coverage-robot/contracts.git",
+                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4"
+            },
             "dist": {
-                "type": "path",
-                "url": "../contracts",
-                "reference": "915de77354a73cf9f5e1c0a3e641b4d54d9dd8e9"
+                "type": "zip",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://coverage-robot.repo.repman.io/dists/%package%/%version%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "symfony/validator": "^7.0"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Packages\\Contracts\\": "src/"
                 }
             },
+            "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.3"
+            },
+            "time": "2024-07-14T14:31:45+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4836,5 +4850,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

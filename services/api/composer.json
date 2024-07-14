@@ -3,7 +3,7 @@
     "description": "The api coverage service.",
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.3",
@@ -91,30 +91,7 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/event"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/telemetry"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/contracts"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/configuration"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/message"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/local"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "extra": {
         "symfony": {
