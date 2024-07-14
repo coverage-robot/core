@@ -711,16 +711,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.7",
+            "version": "v1.5.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925"
+                "reference": "82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/8085da123e0f35ed0dcaf9ecd04b120232dc9925",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0",
+                "reference": "82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -732,7 +732,8 @@
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
-                "coverage-robot/contracts": "1.5.6",
+                "coverage-robot/contracts": "^1.5",
+                "php": ">=8.3",
                 "psr/log": "^3.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-kernel": "^7.0",
@@ -768,10 +769,10 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.10",
                 "issues": "https://github.com/coverage-robot/configuration/issues"
             },
-            "time": "2024-07-14T16:41:41+00:00"
+            "time": "2024-07-14T18:34:06+00:00"
         },
         {
             "name": "coverage-robot/contracts",
