@@ -69,3 +69,6 @@ jobs:
                   # The user signed under the split commit
                   user_name: "ryanmab"
                   user_email: "ryan@ryanmaber.com"
+            # Tags must be associated with a release for the private packages to pick up the available versions.
+            -   if: "startsWith(github.ref, 'refs/tags/')"
+                run: gh release create ${GITHUB_REF#refs/tags/} --repo "${{ matrix.package.organization }}/${{ matrix.package.repository }}" --notes "" --target "main" --verify-tag --latest
