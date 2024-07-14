@@ -2,7 +2,7 @@ version: 2
 
 registries:
     packages-registry:
-        type: composer-registry
+        type: composer-repository
         url: https://coverage-robot.repo.repman.io
         username: token
         password: ${{ secrets.REPMAN_TOKEN }}
