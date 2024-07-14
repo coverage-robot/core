@@ -5,6 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
+        "php": ">=8.3",
         "symfony/validator": "^7.0"
     },
     "autoload": {
