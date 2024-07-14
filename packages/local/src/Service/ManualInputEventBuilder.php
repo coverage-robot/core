@@ -117,7 +117,7 @@ final class ManualInputEventBuilder implements EventBuilderInterface
             case DateTime::class:
             case DateTimeImmutable::class:
                 $question->setValidator(
-                    static function (string $value) {
+                    static function (string $value): string {
                         try {
                             new DateTimeImmutable($value);
                             return $value;
