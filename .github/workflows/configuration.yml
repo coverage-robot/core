@@ -54,7 +54,7 @@ jobs:
                 run: composer validate
 
             -   name: Install Composer dependencies
-                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative --no-dev --no-scripts
+                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative
                 env:
                     COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
