@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70b7d1131d98fffdbea7f36c5ac916ea",
+    "content-hash": "86a11aa715d077a3bf2da8057dfae214",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -589,16 +589,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "3e051bac721a95ec0b121e6f1872e60c82034d9d"
+                "reference": "09c798bf8d3b6dd0f76cac27d67ba574f6d861e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/3e051bac721a95ec0b121e6f1872e60c82034d9d",
-                "reference": "3e051bac721a95ec0b121e6f1872e60c82034d9d",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/09c798bf8d3b6dd0f76cac27d67ba574f6d861e4",
+                "reference": "09c798bf8d3b6dd0f76cac27d67ba574f6d861e4",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -612,6 +612,7 @@
                 "knplabs/github-api": "^3.13",
                 "lcobucci/jwt": "^5.2",
                 "nyholm/psr7": "^1.8",
+                "php": ">=8.3",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-client": "^7.0",
@@ -644,23 +645,23 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/clients/tree/v1.5.8",
                 "issues": "https://github.com/coverage-robot/clients/issues"
             },
-            "time": "2024-07-14T16:41:50+00:00"
+            "time": "2024-07-14T17:33:59+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925"
+                "reference": "2134a99b214cd868417bc8a27f88aa1ab6415216"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/8085da123e0f35ed0dcaf9ecd04b120232dc9925",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/2134a99b214cd868417bc8a27f88aa1ab6415216",
+                "reference": "2134a99b214cd868417bc8a27f88aa1ab6415216",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -673,6 +674,7 @@
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
                 "coverage-robot/contracts": "1.5.6",
+                "php": ">=8.3",
                 "psr/log": "^3.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-kernel": "^7.0",
@@ -708,10 +710,10 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.8",
                 "issues": "https://github.com/coverage-robot/configuration/issues"
             },
-            "time": "2024-07-14T16:41:41+00:00"
+            "time": "2024-07-14T17:33:59+00:00"
         },
         {
             "name": "coverage-robot/contracts",
@@ -751,16 +753,16 @@
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "de808392c21deca55c6021677491ef54bf82fb33"
+                "reference": "5049953b4e1311d932712889a8b0ce0b6003b06e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/de808392c21deca55c6021677491ef54bf82fb33",
-                "reference": "de808392c21deca55c6021677491ef54bf82fb33",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/5049953b4e1311d932712889a8b0ce0b6003b06e",
+                "reference": "5049953b4e1311d932712889a8b0ce0b6003b06e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -776,6 +778,7 @@
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "1.5.6",
                 "coverage-robot/telemetry": "1.5.6",
+                "php": ">=8.3",
                 "psr/log": "^3.0",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
@@ -809,10 +812,10 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.8",
                 "issues": "https://github.com/coverage-robot/event/issues"
             },
-            "time": "2024-07-14T16:41:41+00:00"
+            "time": "2024-07-14T17:34:01+00:00"
         },
         {
             "name": "coverage-robot/message",

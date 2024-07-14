@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47ad5645ee5b96a9134d0d767a1c2f7c",
+    "content-hash": "aadc3a81857358f2c99eb6c08b6cd727",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -642,16 +642,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925"
+                "reference": "2134a99b214cd868417bc8a27f88aa1ab6415216"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/8085da123e0f35ed0dcaf9ecd04b120232dc9925",
-                "reference": "8085da123e0f35ed0dcaf9ecd04b120232dc9925",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/2134a99b214cd868417bc8a27f88aa1ab6415216",
+                "reference": "2134a99b214cd868417bc8a27f88aa1ab6415216",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -664,6 +664,7 @@
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
                 "coverage-robot/contracts": "1.5.6",
+                "php": ">=8.3",
                 "psr/log": "^3.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-kernel": "^7.0",
@@ -699,10 +700,10 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.8",
                 "issues": "https://github.com/coverage-robot/configuration/issues"
             },
-            "time": "2024-07-14T16:41:41+00:00"
+            "time": "2024-07-14T17:33:59+00:00"
         },
         {
             "name": "coverage-robot/contracts",
@@ -742,16 +743,16 @@
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.7",
+            "version": "v1.5.8",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "de808392c21deca55c6021677491ef54bf82fb33"
+                "reference": "5049953b4e1311d932712889a8b0ce0b6003b06e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/de808392c21deca55c6021677491ef54bf82fb33",
-                "reference": "de808392c21deca55c6021677491ef54bf82fb33",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/5049953b4e1311d932712889a8b0ce0b6003b06e",
+                "reference": "5049953b4e1311d932712889a8b0ce0b6003b06e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -767,6 +768,7 @@
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "1.5.6",
                 "coverage-robot/telemetry": "1.5.6",
+                "php": ">=8.3",
                 "psr/log": "^3.0",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
@@ -800,10 +802,10 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.7",
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.8",
                 "issues": "https://github.com/coverage-robot/event/issues"
             },
-            "time": "2024-07-14T16:41:41+00:00"
+            "time": "2024-07-14T17:34:01+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
