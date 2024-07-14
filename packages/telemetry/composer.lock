@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5fd6afd7e90f2c40bf39aa3bca267fa",
+    "content-hash": "1b4470d3cb245e003005e686f815f224",
     "packages": [
         {
             "name": "coverage-robot/contracts",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4"
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
-                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -38,9 +38,9 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.3"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.6"
             },
-            "time": "2024-07-14T14:31:45+00:00"
+            "time": "2024-07-14T16:20:05+00:00"
         },
         {
             "name": "monolog/monolog",
