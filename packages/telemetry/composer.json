@@ -40,9 +40,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../contracts"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ]
 }

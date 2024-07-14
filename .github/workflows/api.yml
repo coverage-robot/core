@@ -15,12 +15,6 @@ on:
         paths:
             - '.github/workflows/api.yml'
             - 'services/api/**'
-            - '.github/workflows/api.yml'
-            - 'packages/configuration/**'
-            - 'packages/contracts/**'
-            - 'packages/event/**'
-            - 'packages/message/**'
-            - 'packages/telemetry/**'
             - 'rector.php'
 
     pull_request:
@@ -29,12 +23,6 @@ on:
         paths:
             - '.github/workflows/api.yml'
             - 'services/api/**'
-            - '.github/workflows/api.yml'
-            - 'packages/configuration/**'
-            - 'packages/contracts/**'
-            - 'packages/event/**'
-            - 'packages/message/**'
-            - 'packages/telemetry/**'
             - 'rector.php'
 
     workflow_dispatch:
@@ -87,6 +75,8 @@ jobs:
 
             -   name: Install Composer dependencies
                 run: composer install --prefer-dist --no-progress
+                env:
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
                 # For Psalm's symfony plugin, which requires the test containers
             -   name: Warm testing environment cache
@@ -303,7 +293,7 @@ jobs:
             -   name: Install Composer dependencies
                 run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative --no-dev --no-scripts
                 env:
-                    COMPOSER_MIRROR_PATH_REPOS: 1
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
             -   name: Clear platform cache
                 run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}

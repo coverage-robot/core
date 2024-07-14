@@ -97,22 +97,7 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {
-            "type": "path",
-            "url": "../../packages/event"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/telemetry"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/contracts"
-        },
-        {
-            "type": "path",
-            "url": "../../packages/configuration"
-        }
+        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "extra": {
         "symfony": {
