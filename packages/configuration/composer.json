@@ -2,7 +2,6 @@
     "name": "coverage-robot/configuration",
     "description": "Tooling to access user-defined configuration settings",
     "type": "symfony-bundle",
-    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
