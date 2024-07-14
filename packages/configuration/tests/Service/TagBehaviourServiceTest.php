@@ -3,9 +3,9 @@
 namespace Packages\Configuration\Tests\Service;
 
 use Packages\Configuration\Enum\SettingKey;
-use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Model\DefaultTagBehaviour;
 use Packages\Configuration\Model\IndividualTagBehaviour;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Configuration\Service\TagBehaviourService;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -19,13 +19,23 @@ final class TagBehaviourServiceTest extends TestCase
         array $individualTagBehaviours,
         bool $expectedCarryforwardBehaviour
     ): void {
-        $mockSettingService = MockSettingServiceFactory::createMock(
-            $this,
-            [
-                SettingKey::DEFAULT_TAG_BEHAVIOUR->value => $defaultTagBehaviour,
-                SettingKey::INDIVIDUAL_TAG_BEHAVIOURS->value => $individualTagBehaviours
-            ]
-        );
+        $settings = [
+            SettingKey::DEFAULT_TAG_BEHAVIOUR->value => $defaultTagBehaviour,
+            SettingKey::INDIVIDUAL_TAG_BEHAVIOURS->value => $individualTagBehaviours
+        ];
+
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
+
+        $mockSettingService->expects($this->atMost(2))
+            ->method('get')
+            ->willReturnCallback(
+                static fn (
+                    Provider $provider,
+                    string $owner,
+                    string $repository,
+                    SettingKey $key
+                ) => $settings[$key->value] ?? null
+            );
 
         $tagBehaviourService = new TagBehaviourService($mockSettingService);
 
