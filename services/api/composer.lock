@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8019f74910fdf2734f5a9245aa87abaf",
+    "content-hash": "5687993a414ffc10d0b9b7a8bfbafab6",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -641,16 +641,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "9bec8a8c4bce8e65009af7fd9947539d75c8af85"
+                "reference": "aa552b759413458c73f0ae164d569feb4bbf1300"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/9bec8a8c4bce8e65009af7fd9947539d75c8af85",
-                "reference": "9bec8a8c4bce8e65009af7fd9947539d75c8af85",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/aa552b759413458c73f0ae164d569feb4bbf1300",
+                "reference": "aa552b759413458c73f0ae164d569feb4bbf1300",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -698,23 +698,23 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.6",
                 "issues": "https://github.com/coverage-robot/configuration/issues"
             },
-            "time": "2024-07-14T14:36:11+00:00"
+            "time": "2024-07-14T16:20:11+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4"
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
-                "reference": "b30dd26a999e557e1639e1e4a7d2ed773ca8eab4",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/e2fd8d83a3817d037c6e7ca148028667a56ca966",
+                "reference": "e2fd8d83a3817d037c6e7ca148028667a56ca966",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -735,22 +735,22 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.3"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.6"
             },
-            "time": "2024-07-14T14:31:45+00:00"
+            "time": "2024-07-14T16:20:05+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "8432a1af3fc281beac7ec5baaa4ee8b557886def"
+                "reference": "604021faf122c9bd23a5643e1887ffc59b10242a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/8432a1af3fc281beac7ec5baaa4ee8b557886def",
-                "reference": "8432a1af3fc281beac7ec5baaa4ee8b557886def",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/604021faf122c9bd23a5643e1887ffc59b10242a",
+                "reference": "604021faf122c9bd23a5643e1887ffc59b10242a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -799,23 +799,23 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.6",
                 "issues": "https://github.com/coverage-robot/event/issues"
             },
-            "time": "2024-07-14T14:36:09+00:00"
+            "time": "2024-07-14T16:20:04+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
-                "reference": "a869d2c626bc499f4315fe48c9ae571d95673357"
+                "reference": "5dd77c5880e2b96854b5864b14def375a1db0ca2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/message/zipball/a869d2c626bc499f4315fe48c9ae571d95673357",
-                "reference": "a869d2c626bc499f4315fe48c9ae571d95673357",
+                "url": "https://api.github.com/repos/coverage-robot/message/zipball/5dd77c5880e2b96854b5864b14def375a1db0ca2",
+                "reference": "5dd77c5880e2b96854b5864b14def375a1db0ca2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -860,23 +860,23 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.6",
                 "issues": "https://github.com/coverage-robot/message/issues"
             },
-            "time": "2024-07-14T14:36:12+00:00"
+            "time": "2024-07-14T16:20:03+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "67ed2028e1796404356abbec2611f13a14fe4dcc"
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/67ed2028e1796404356abbec2611f13a14fe4dcc",
-                "reference": "67ed2028e1796404356abbec2611f13a14fe4dcc",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
+                "reference": "5cb0f59250a37c6d10ef4837d0f4240fa0b2cd7b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -925,10 +925,10 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.6",
                 "issues": "https://github.com/coverage-robot/telemetry/issues"
             },
-            "time": "2024-07-14T14:36:12+00:00"
+            "time": "2024-07-14T16:20:07+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -7032,16 +7032,16 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "1.0.0",
+            "version": "v1.5.6",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
-                "reference": "817047b0ca8c8f8335b89d6795ca01199a1fdee7"
+                "reference": "9c71ee13d921cc253d56b634b9e3718754b7d1b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/local/zipball/817047b0ca8c8f8335b89d6795ca01199a1fdee7",
-                "reference": "817047b0ca8c8f8335b89d6795ca01199a1fdee7",
+                "url": "https://api.github.com/repos/coverage-robot/local/zipball/9c71ee13d921cc253d56b634b9e3718754b7d1b6",
+                "reference": "9c71ee13d921cc253d56b634b9e3718754b7d1b6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -7088,10 +7088,10 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/local/tree/v1.5.6",
                 "issues": "https://github.com/coverage-robot/local/issues"
             },
-            "time": "2024-07-14T14:36:09+00:00"
+            "time": "2024-07-14T16:20:05+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
