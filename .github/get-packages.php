@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This script allows us to dynamically retrieve the package namespace
  * and directory from our composer file. This is then used by our GitHub
@@ -14,7 +15,12 @@ function getPackageNameFromComposerFile(string $composerFile)
     $composer = json_decode(file_get_contents($composerFile), true);
 
     if (!isset($composer['name'])) {
-        throw new UnexpectedValueException('The referenced package is invalid because it is missing a name: ' . $composerFile);
+        throw new UnexpectedValueException(
+            sprintf(
+                'The referenced package is invalid because it is missing a name: %s',
+                $composerFile
+            )
+        );
     }
 
     return str_replace('coverage-robot/', '', $composer['name']);
