@@ -9,6 +9,7 @@ registries:
 
 updates:
     -   package-ecosystem: "composer"
+        registries: "*"
         directories:
             - "services/ingest"
             - "services/api"
