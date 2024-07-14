@@ -6,7 +6,6 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
-use Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector;
 use Rector\Set\ValueObject\SetList;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -31,22 +30,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(AddOverrideAttributeToOverriddenMethodsRector::class);
 
     $rectorConfig->skip([
-        /**
-         * Ignore as there are genuine use cases for mock builders over `createMock`,
-         * because that method is protected.
-         *
-         * For example, static helpers for creating mocks:
-         * ```php
-         * private static function getMockUpload(TestCase $test): Upload
-         * {
-         *      return $test->getMockBuilder(Upload::class)
-         *          ->disableOriginalConstructor()
-         *          ->getMock();
-         * }
-         * ```
-         */
-        GetMockBuilderGetMockToCreateMockRector::class,
-
         /**
          * Ignore as, although this is a good pattern in most cases, theres genuine use cases for
          * a variable name which _doesn't_ match the type being instantiated.

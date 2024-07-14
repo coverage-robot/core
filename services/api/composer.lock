@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca1e018b4368bdb49a45910eb76c13ee",
+    "content-hash": "e10c288b14e02d7874e983bccaedf960",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -641,16 +641,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0"
+                "reference": "c24fb006f358a6e254c6ecaee0aa703323adcf9e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0",
-                "reference": "82ef2e61eb0c84af794cbf0f070bfc1048dbd0b0",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/c24fb006f358a6e254c6ecaee0aa703323adcf9e",
+                "reference": "c24fb006f358a6e254c6ecaee0aa703323adcf9e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -674,7 +674,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^10.5",
-                "rector/rector": "^0.19.5"
+                "rector/rector": "^1.2"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -699,23 +699,23 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.12",
                 "issues": "https://github.com/coverage-robot/configuration/issues"
             },
-            "time": "2024-07-14T18:34:06+00:00"
+            "time": "2024-07-14T20:32:48+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "bdd758ab123951a98b368ad94f89a557f39779e9"
+                "reference": "b12dcdd8c2d8bda7e169f16b3ad904184f4a80d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/bdd758ab123951a98b368ad94f89a557f39779e9",
-                "reference": "bdd758ab123951a98b368ad94f89a557f39779e9",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/b12dcdd8c2d8bda7e169f16b3ad904184f4a80d2",
+                "reference": "b12dcdd8c2d8bda7e169f16b3ad904184f4a80d2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -728,6 +728,9 @@
                 "php": ">=8.3",
                 "symfony/validator": "^7.0"
             },
+            "require-dev": {
+                "rector/rector": "^1.2"
+            },
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -737,22 +740,22 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.10"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.12"
             },
-            "time": "2024-07-14T17:34:00+00:00"
+            "time": "2024-07-14T20:32:48+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "309966fd13b3c58b8833948248d9b26e33b9b9a7"
+                "reference": "8a1df63da2918ef89faa0920d4c8b99bcaee99e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/309966fd13b3c58b8833948248d9b26e33b9b9a7",
-                "reference": "309966fd13b3c58b8833948248d9b26e33b9b9a7",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/8a1df63da2918ef89faa0920d4c8b99bcaee99e5",
+                "reference": "8a1df63da2918ef89faa0920d4c8b99bcaee99e5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -777,7 +780,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^10.3",
-                "rector/rector": "^0.19.4"
+                "rector/rector": "^1.2"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -802,23 +805,23 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.12",
                 "issues": "https://github.com/coverage-robot/event/issues"
             },
-            "time": "2024-07-14T18:37:11+00:00"
+            "time": "2024-07-14T20:32:51+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
-                "reference": "0a15f1d92fc7a222ed205d621f3dc3fe1d344a05"
+                "reference": "729f1b13bcce6c4e3f830947d24b8d38064037b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/message/zipball/0a15f1d92fc7a222ed205d621f3dc3fe1d344a05",
-                "reference": "0a15f1d92fc7a222ed205d621f3dc3fe1d344a05",
+                "url": "https://api.github.com/repos/coverage-robot/message/zipball/729f1b13bcce6c4e3f830947d24b8d38064037b6",
+                "reference": "729f1b13bcce6c4e3f830947d24b8d38064037b6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -839,7 +842,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^10.5",
-                "rector/rector": "^0.19.5"
+                "rector/rector": "^1.2"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -864,23 +867,23 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.12",
                 "issues": "https://github.com/coverage-robot/message/issues"
             },
-            "time": "2024-07-14T18:37:08+00:00"
+            "time": "2024-07-14T20:32:47+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950"
+                "reference": "a698ca5752d1efb92a27d9519f8fa476038a2dc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/33644db8e4b396c51b467b0b5c3448e8e8dad950",
-                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/a698ca5752d1efb92a27d9519f8fa476038a2dc7",
+                "reference": "a698ca5752d1efb92a27d9519f8fa476038a2dc7",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -904,7 +907,7 @@
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^10.4",
-                "rector/rector": "^0.19.5",
+                "rector/rector": "^1.2",
                 "symfony/property-access": "^7.1"
             },
             "type": "symfony-bundle",
@@ -930,10 +933,10 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.12",
                 "issues": "https://github.com/coverage-robot/telemetry/issues"
             },
-            "time": "2024-07-14T18:34:09+00:00"
+            "time": "2024-07-14T20:32:44+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -7037,16 +7040,16 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.5.10",
+            "version": "v1.5.12",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
-                "reference": "44dc1757c477761d824ac85e8c912bab89a8a7e8"
+                "reference": "d12af7eb09a6ebe50c98c5593c5e012e948d3d7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/local/zipball/44dc1757c477761d824ac85e8c912bab89a8a7e8",
-                "reference": "44dc1757c477761d824ac85e8c912bab89a8a7e8",
+                "url": "https://api.github.com/repos/coverage-robot/local/zipball/d12af7eb09a6ebe50c98c5593c5e012e948d3d7b",
+                "reference": "d12af7eb09a6ebe50c98c5593c5e012e948d3d7b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -7069,7 +7072,7 @@
             "require-dev": {
                 "bref/bref": "^2.1",
                 "phpunit/phpunit": "^10.4",
-                "rector/rector": "^0.19.5"
+                "rector/rector": "^1.2"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -7094,10 +7097,10 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.5.10",
+                "source": "https://github.com/coverage-robot/local/tree/v1.5.12",
                 "issues": "https://github.com/coverage-robot/local/issues"
             },
-            "time": "2024-07-14T18:34:08+00:00"
+            "time": "2024-07-14T20:32:52+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
