@@ -74,7 +74,7 @@
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.8",
+            "version": "v1.5.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -105,22 +105,22 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.9"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.10"
             },
             "time": "2024-07-14T17:34:00+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.9",
+            "version": "v1.5.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "637adf4d11a4f9a9826ad67bc65467f2509bae46"
+                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/637adf4d11a4f9a9826ad67bc65467f2509bae46",
-                "reference": "637adf4d11a4f9a9826ad67bc65467f2509bae46",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/33644db8e4b396c51b467b0b5c3448e8e8dad950",
+                "reference": "33644db8e4b396c51b467b0b5c3448e8e8dad950",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -130,7 +130,7 @@
                 ]
             },
             "require": {
-                "coverage-robot/contracts": "1.5.8",
+                "coverage-robot/contracts": "^1.5",
                 "monolog/monolog": "^3.5",
                 "php": ">=8.3",
                 "psr/log": "^3.0",
@@ -170,10 +170,10 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.9",
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.10",
                 "issues": "https://github.com/coverage-robot/telemetry/issues"
             },
-            "time": "2024-07-14T17:47:39+00:00"
+            "time": "2024-07-14T18:34:09+00:00"
         },
         {
             "name": "knplabs/github-api",

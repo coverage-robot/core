@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.9",
+            "version": "v1.5.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -39,7 +39,7 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.9"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.10"
             },
             "time": "2024-07-14T17:34:00+00:00"
         },
