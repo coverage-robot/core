@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ca348b6924b1a9465638f34c57ba3aa",
+    "content-hash": "66866dfcf7b76a3db0a71b2ad1258d83",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -237,7 +237,7 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.6"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.7"
             },
             "time": "2024-07-14T16:20:05+00:00"
         },
@@ -4454,7 +4454,9 @@
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=8.3"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
