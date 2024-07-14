@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.12.0",
+            "version": "1.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb"
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
-                "reference": "ed4cf648f4ed7975095a785ae0cf3c1ff49aeafb",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c",
                 "shasum": ""
             },
             "require": {
@@ -28,12 +28,12 @@
                 "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
-                "async-aws/s3": "^1.0",
+                "async-aws/s3": "^1.0 || ^2.0",
                 "async-aws/ses": "^1.0",
-                "async-aws/sqs": "^1.0",
-                "async-aws/ssm": "^1.0",
-                "matthiasnoback/symfony-config-test": "^4.1",
-                "nyholm/symfony-bundle-test": "^2.0",
+                "async-aws/sqs": "^1.0 || ^2.0",
+                "async-aws/ssm": "^1.0 || ^2.0",
+                "matthiasnoback/symfony-config-test": "^4.1 || ^5.0",
+                "nyholm/symfony-bundle-test": "^3.0",
                 "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "type": "symfony-bundle",
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.0"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.2"
             },
             "funding": [
                 {
@@ -73,20 +73,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T20:00:50+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/core",
-            "version": "1.20.1",
+            "version": "1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11"
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/7e079d52ac27b8c5a2036df8daea567c9728ee11",
-                "reference": "7e079d52ac27b8c5a2036df8daea567c9728ee11",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/cbd7012890a35a9b21f7235817a627488709551b",
+                "reference": "cbd7012890a35a9b21f7235817a627488709551b",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +108,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.20-dev"
+                    "dev-master": "1.22-dev"
                 }
             },
             "autoload": {
@@ -129,7 +129,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.20.1"
+                "source": "https://github.com/async-aws/core/tree/1.22.0"
             },
             "funding": [
                 {
@@ -141,20 +141,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/event-bridge",
-            "version": "1.5.2",
+            "version": "1.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/event-bridge.git",
-                "reference": "fd913e11ac462713bed4eb7f2cc15f4015831ba4"
+                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/fd913e11ac462713bed4eb7f2cc15f4015831ba4",
-                "reference": "fd913e11ac462713bed4eb7f2cc15f4015831ba4",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/844f8745fc69d3efe6c3c391982befd336066a1f",
+                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f",
                 "shasum": ""
             },
             "require": {
@@ -186,7 +186,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/event-bridge/tree/1.5.2"
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.4"
             },
             "funding": [
                 {
@@ -198,20 +198,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "async-aws/scheduler",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/scheduler.git",
-                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8"
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/64c983b65237e3f332af016e48213a29f4b06ae8",
-                "reference": "64c983b65237e3f332af016e48213a29f4b06ae8",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
+                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
                 "shasum": ""
             },
             "require": {
@@ -245,7 +245,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/scheduler/tree/1.1.1"
+                "source": "https://github.com/async-aws/scheduler/tree/1.1.2"
             },
             "funding": [
                 {
@@ -257,20 +257,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-13T20:52:19+00:00"
+            "time": "2024-07-03T17:28:59+00:00"
         },
         {
             "name": "bref/bref",
-            "version": "2.1.10",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "9670734dc60f18207f7d8c02ac74871d1a6e7819"
+                "reference": "4b13acad9187b1486f8c549d0ffd26e3d50c1f46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/9670734dc60f18207f7d8c02ac74871d1a6e7819",
-                "reference": "9670734dc60f18207f7d8c02ac74871d1a6e7819",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/4b13acad9187b1486f8c549d0ffd26e3d50c1f46",
+                "reference": "4b13acad9187b1486f8c549d0ffd26e3d50c1f46",
                 "shasum": ""
             },
             "require": {
@@ -283,7 +283,7 @@
                 "psr/container": "^1.0|^2.0",
                 "psr/http-message": "^1.0|^2.0",
                 "psr/http-server-handler": "^1.0",
-                "riverline/multipart-parser": "^2.0.6",
+                "riverline/multipart-parser": "^2.1.2",
                 "symfony/process": "^4.4|^5.0|^6.0|^7.0"
             },
             "require-dev": {
@@ -324,7 +324,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.1.10"
+                "source": "https://github.com/brefphp/bref/tree/2.3.0"
             },
             "funding": [
                 {
@@ -336,7 +336,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-22T17:16:07+00:00"
+            "time": "2024-07-11T07:34:32+00:00"
         },
         {
             "name": "coverage-robot/contracts",
@@ -928,20 +928,20 @@
         },
         {
             "name": "psr/http-factory",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-factory.git",
-                "reference": "e616d01114759c4c489f93b099585439f795fe35"
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/e616d01114759c4c489f93b099585439f795fe35",
-                "reference": "e616d01114759c4c489f93b099585439f795fe35",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.0",
+                "php": ">=7.1",
                 "psr/http-message": "^1.0 || ^2.0"
             },
             "type": "library",
@@ -965,7 +965,7 @@
                     "homepage": "https://www.php-fig.org/"
                 }
             ],
-            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "description": "PSR-17: Common interfaces for PSR-7 HTTP message factories",
             "keywords": [
                 "factory",
                 "http",
@@ -977,9 +977,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-factory/tree/1.0.2"
+                "source": "https://github.com/php-fig/http-factory"
             },
-            "time": "2023-04-10T20:10:41+00:00"
+            "time": "2024-04-15T12:06:14+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1142,16 +1142,16 @@
         },
         {
             "name": "riverline/multipart-parser",
-            "version": "2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Riverline/multipart-parser.git",
-                "reference": "2418bdfc2eab01e39bcffee808b1a365c166292a"
+                "reference": "7a9f4646db5181516c61b8e0225a343189beedcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Riverline/multipart-parser/zipball/2418bdfc2eab01e39bcffee808b1a365c166292a",
-                "reference": "2418bdfc2eab01e39bcffee808b1a365c166292a",
+                "url": "https://api.github.com/repos/Riverline/multipart-parser/zipball/7a9f4646db5181516c61b8e0225a343189beedcd",
+                "reference": "7a9f4646db5181516c61b8e0225a343189beedcd",
                 "shasum": ""
             },
             "require": {
@@ -1192,9 +1192,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Riverline/multipart-parser/issues",
-                "source": "https://github.com/Riverline/multipart-parser/tree/2.1.1"
+                "source": "https://github.com/Riverline/multipart-parser/tree/2.1.2"
             },
-            "time": "2023-04-28T18:53:59+00:00"
+            "time": "2024-03-12T16:46:05+00:00"
         },
         {
             "name": "symfony/clock",
@@ -2389,16 +2389,16 @@
         },
         {
             "name": "symfony/polyfill-uuid",
-            "version": "v1.29.0",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-uuid.git",
-                "reference": "3abdd21b0ceaa3000ee950097bc3cf9efc137853"
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/3abdd21b0ceaa3000ee950097bc3cf9efc137853",
-                "reference": "3abdd21b0ceaa3000ee950097bc3cf9efc137853",
+                "url": "https://api.github.com/repos/symfony/polyfill-uuid/zipball/2ba1f33797470debcda07fe9dce20a0003df18e9",
+                "reference": "2ba1f33797470debcda07fe9dce20a0003df18e9",
                 "shasum": ""
             },
             "require": {
@@ -2448,7 +2448,7 @@
                 "uuid"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.29.0"
+                "source": "https://github.com/symfony/polyfill-uuid/tree/v1.30.0"
             },
             "funding": [
                 {
@@ -2464,7 +2464,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-29T20:11:03+00:00"
+            "time": "2024-05-31T15:07:36+00:00"
         },
         {
             "name": "symfony/process",
