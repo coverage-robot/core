@@ -15,5 +15,8 @@
     },
     "repositories": [
         {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
-    ]
+    ],
+    "require-dev": {
+        "rector/rector": "^1.2"
+    }
 }
