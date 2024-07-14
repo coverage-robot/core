@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a0d351a07efd6e92589f577b23ab43e",
+    "content-hash": "026113f7baaf4dba9b151ed0bccca2f1",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -492,7 +492,7 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.3",
+                "source": "https://github.com/coverage-robot/event/tree/v1.0.0",
                 "issues": "https://github.com/coverage-robot/event/issues"
             },
             "time": "2024-07-14T14:36:09+00:00"
