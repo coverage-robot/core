@@ -16,6 +16,39 @@ updates:
             - "services/analyse"
             - "services/orchestrator"
             - "services/publish"
+        schedule:
+            interval: "weekly"
+        reviewers:
+            - "ryanmab"
+        labels:
+            - "dependencies"
+            - "php"
+            - "chore"
+            - "bump-patch"
+        groups:
+            services-production:
+                dependency-type: "production"
+                exclude-patterns:
+                    - "coverage-robot/*"
+                    - "symfony/*"
+
+            services-development:
+                dependency-type: "development"
+                exclude-patterns:
+                    - "coverage-robot/*"
+                    - "symfony/*"
+
+            services-packages:
+                patterns:
+                    - "coverage-robot/*"
+
+            services-symfony:
+                patterns:
+                    - "symfony/*"
+
+    -   package-ecosystem: "composer"
+        registries: "*"
+        directories:
             - "packages/clients"
             - "packages/message"
             - "packages/configuration"
@@ -31,23 +64,23 @@ updates:
             - "chore"
             - "bump-patch"
         groups:
-            production-dependencies:
+            packages-production:
                 dependency-type: "production"
                 exclude-patterns:
                     - "coverage-robot/*"
                     - "symfony/*"
 
-            dev-dependencies:
+            packages-development:
                 dependency-type: "development"
                 exclude-patterns:
                     - "coverage-robot/*"
                     - "symfony/*"
 
-            coverage-robot-dependencies:
+            packages-packages:
                 patterns:
                     - "coverage-robot/*"
 
-            symfony-dependencies:
+            packages-symfony:
                 patterns:
                     - "symfony/*"
 
@@ -69,10 +102,10 @@ updates:
             - "chore"
             - "bump-patch"
         groups:
-            production-dependencies:
+            production:
                 dependency-type: "production"
 
-            dev-dependencies:
+            development:
                 dependency-type: "development"
 
     -   package-ecosystem: "github-actions"
@@ -89,5 +122,4 @@ updates:
         groups:
             dependencies:
                 patterns:
-                    - "coverage-robot/*"
                     - "*"
