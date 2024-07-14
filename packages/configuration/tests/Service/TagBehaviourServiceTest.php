@@ -34,7 +34,7 @@ final class TagBehaviourServiceTest extends TestCase
                     string $owner,
                     string $repository,
                     SettingKey $key
-                ) => $settings[$key->value] ?? null
+                ): DefaultTagBehaviour|array|null => $settings[$key->value] ?? null
             );
 
         $tagBehaviourService = new TagBehaviourService($mockSettingService);
