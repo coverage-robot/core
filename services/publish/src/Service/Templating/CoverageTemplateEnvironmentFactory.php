@@ -22,8 +22,7 @@ final class CoverageTemplateEnvironmentFactory
         private readonly ContainerInterface $container,
         private readonly CoverageTemplateSecurityPolicy $securityPolicy,
         private readonly CoverageTemplateExtension $coverageTemplateExtension
-    ) {
-    }
+    ) {}
 
     /**
      * Create an extremely limited templating environment for rendering pull request

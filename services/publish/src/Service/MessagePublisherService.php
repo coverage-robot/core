@@ -16,12 +16,7 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
      * @param iterable<int, MessagePublisherService> $publishers
      */
     public function __construct(
-        #[
-            AutowireIterator(
-                'app.publisher_service',
-                defaultPriorityMethod: 'getPriority'
-            )
-        ]
+        #[AutowireIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
         private readonly LoggerInterface $publisherServiceLogger,
         private readonly MetricServiceInterface $metricService
@@ -32,9 +27,8 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
      * Publish the message with _all_ publishers which support it.
      */
     #[Override]
-    public function publish(
-        PublishableMessageInterface $publishableMessage
-    ): bool {
+    public function publish(PublishableMessageInterface $publishableMessage): bool
+    {
         $successful = true;
 
         foreach ($this->publishers as $publisher) {
