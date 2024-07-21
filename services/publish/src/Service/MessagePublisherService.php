@@ -12,6 +12,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class MessagePublisherService implements MessagePublisherServiceInterface
 {
+    /**
+     * @param iterable<int, MessagePublisherService> $publishers
+     */
     public function __construct(
         #[AutowireIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $publishers,
@@ -33,7 +36,7 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
                 $this->publisherServiceLogger->critical(
                     'Publisher does not implement the correct interface.',
                     [
-                        'persistService' => $publisher::class
+                        'persistService' => $publisher::class,
                     ]
                 );
 
@@ -43,7 +46,7 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
             $this->publisherServiceLogger->info(
                 sprintf(
                     'Publishing %s using %s',
-                    (string)$publishableMessage,
+                    (string) $publishableMessage,
                     $publisher::class
                 )
             );
@@ -53,7 +56,7 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
                     sprintf(
                         'Not publishing using %s, as it does not support %s',
                         $publisher::class,
-                        (string)$publishableMessage,
+                        (string) $publishableMessage
                     )
                 );
 
@@ -67,15 +70,10 @@ final class MessagePublisherService implements MessagePublisherServiceInterface
                     metric: 'PublishedResults',
                     value: 1,
                     unit: Unit::COUNT,
-                    dimensions: [
-                        ['owner'],
-                        ['owner', 'type']
-                    ],
+                    dimensions: [['owner'], ['owner', 'type']],
                     properties: [
-                        'owner' => $publishableMessage->getEvent()
-                            ?->getOwner(),
-                        'type' => $publishableMessage->getType()
-                            ->value
+                        'owner' => $publishableMessage->getEvent()?->getOwner(),
+                        'type' => $publishableMessage->getType()->value,
                     ]
                 );
             }
