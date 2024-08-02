@@ -3,6 +3,8 @@
 namespace Packages\Configuration\Mock;
 
 use Packages\Configuration\Service\SettingServiceInterface;
+use Packages\Configuration\Enum\SettingKey;
+use Packages\Contracts\Provider\Provider;
 use Override;
 
 class MockSettingService implements SettingServiceInterface
@@ -43,7 +45,7 @@ class MockSettingService implements SettingServiceInterface
         SettingKey $key
     ): bool {
         unset($this->settings[$key]);
-        
+
         return true;
     }
 
