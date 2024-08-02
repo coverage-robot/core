@@ -42,7 +42,6 @@ final class DynamoDbClientTest extends KernelTestCase
         $client = new DynamoDbClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
@@ -133,7 +132,6 @@ final class DynamoDbClientTest extends KernelTestCase
         $client = new DynamoDbClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
@@ -249,7 +247,6 @@ final class DynamoDbClientTest extends KernelTestCase
         $client = new DynamoDbClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'

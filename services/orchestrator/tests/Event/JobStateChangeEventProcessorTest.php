@@ -40,7 +40,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
@@ -85,7 +84,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app'
@@ -141,7 +139,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
@@ -213,7 +210,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
@@ -316,7 +312,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
@@ -422,7 +417,6 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'

@@ -86,7 +86,7 @@ final class S3PersistServiceTest extends KernelTestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::createMock($this, Environment::DEVELOPMENT),
+            MockEnvironmentServiceFactory::createMock(Environment::DEVELOPMENT),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );

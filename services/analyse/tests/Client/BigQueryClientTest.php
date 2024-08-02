@@ -14,7 +14,6 @@ final class BigQueryClientTest extends TestCase
     {
         $client = new BigQueryClient(
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
@@ -31,7 +30,6 @@ final class BigQueryClientTest extends TestCase
     {
         $client = new BigQueryClient(
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',

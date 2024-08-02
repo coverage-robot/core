@@ -50,7 +50,6 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
             MockTagBehaviourServiceFactory::createMock(
-                $this,
                 [
                     'tag-1' => true,
                     'tag-2' => true
@@ -127,7 +126,6 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
             MockTagBehaviourServiceFactory::createMock(
-                $this,
                 [
                     'tag-1' => true,
                     'tag-2' => true
@@ -232,7 +230,6 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
             MockTagBehaviourServiceFactory::createMock(
-                $this,
                 [
                     'tag-1' => true,
                     'tag-2' => false
@@ -340,7 +337,6 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
             MockTagBehaviourServiceFactory::createMock(
-                $this,
                 [
                     'tag-1' => true,
                     'tag-2' => true
@@ -489,7 +485,6 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTagService = new CarryforwardTagService(
             $mockQueryService,
             MockTagBehaviourServiceFactory::createMock(
-                $this,
                 [
                     'tag-1' => true,
                     'tag-2' => true

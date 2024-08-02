@@ -25,7 +25,6 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         return new UploadedTagsQuery(
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-table'

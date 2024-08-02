@@ -31,7 +31,6 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING
             ),
             new NullLogger()
@@ -64,7 +63,6 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
@@ -142,7 +140,6 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'

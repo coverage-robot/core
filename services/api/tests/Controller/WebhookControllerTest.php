@@ -175,7 +175,6 @@ final class WebhookControllerTest extends WebTestCase
                 Provider::GITHUB->value => new GithubWebhookSignatureService(
                     new NullLogger(),
                     MockEnvironmentServiceFactory::createMock(
-                        $this,
                         Environment::TESTING,
                         [
                             EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
