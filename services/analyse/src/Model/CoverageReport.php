@@ -54,6 +54,7 @@ final class CoverageReport implements CoverageReportInterface
         return $this->waypoint;
     }
 
+    #[Override]
     public function getSize(): int
     {
         if (is_callable($this->size)) {
