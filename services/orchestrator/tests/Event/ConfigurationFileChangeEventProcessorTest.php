@@ -81,9 +81,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         $configurationFileChangeEventProcessor = new ConfigurationFileChangeEventProcessor(
             new NullLogger(),
             $mockGithubClient,
-            new ConfigurationFileService(
-                MockSettingServiceFactory::createMock($this)
-            )
+            new ConfigurationFileService(MockSettingServiceFactory::createMock([]))
         );
 
         $this->assertTrue(
