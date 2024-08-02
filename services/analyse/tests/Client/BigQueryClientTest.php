@@ -4,8 +4,8 @@ namespace App\Tests\Client;
 
 use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 final class BigQueryClientTest extends TestCase
@@ -20,9 +20,8 @@ final class BigQueryClientTest extends TestCase
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset',
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
                 ]
-            );
-
-        $client = new BigQueryClient($mockEnvironmentService);
+            )
+        );
 
         $this->assertEquals('mock-project.mock-dataset.mock-line-coverage-table', $client->getTable());
     }
@@ -36,9 +35,8 @@ final class BigQueryClientTest extends TestCase
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset'
                 ]
-            );
-
-        $client = new BigQueryClient($mockEnvironmentService);
+            )
+        );
 
         $this->assertEquals('mock-dataset', $client->getEnvironmentDataset()->id());
     }
