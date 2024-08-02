@@ -32,6 +32,7 @@ final class CoverageReportTest extends TestCase
                 diff: []
             ),
             static fn(): TotalUploadsQueryResult => $totalUploads,
+            static fn(): int => 12,
             static fn(): int => 1,
             static fn(): int => 2,
             static fn(): int => 3,

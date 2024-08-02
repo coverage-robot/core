@@ -29,6 +29,7 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 
 abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServiceInterface
 {

@@ -47,6 +47,7 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
+            size: 200,
             uploads: static fn(): null => null,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
@@ -55,7 +56,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
-            diffUncoveredLines: static fn(): null => 0,
+            diffUncoveredLines: static fn(): int => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -113,6 +114,7 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
+            size: 200,
             uploads: static fn(): null => null,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
@@ -121,7 +123,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
-            diffUncoveredLines: static fn(): null => 0,
+            diffUncoveredLines: static fn(): int => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -180,6 +182,7 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
+            size: 200,
             uploads: static fn(): null => null,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
@@ -188,7 +191,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
-            diffUncoveredLines: static fn(): null => 0,
+            diffUncoveredLines: static fn(): int => 0,
             diffLineCoverage: static fn(): null => null,
         );
 
@@ -243,6 +246,7 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
+            size: 200,
             uploads: static fn(): null => null,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
@@ -251,7 +255,7 @@ final class CoverageComparisonServiceTest extends TestCase
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
-            diffUncoveredLines: static fn(): null => 0,
+            diffUncoveredLines: static fn(): int => 0,
             diffLineCoverage: static fn(): null => null,
         );
 

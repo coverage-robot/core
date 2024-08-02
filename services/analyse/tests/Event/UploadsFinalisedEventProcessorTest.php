@@ -83,6 +83,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 0,
                 0,
                 0,
+                0,
                 0.0,
                 new TagCoverageCollectionQueryResult([]),
                 0.0,
@@ -93,6 +94,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             headReport: new CoverageReport(
                 $headWaypoint,
                 new TotalUploadsQueryResult([], [], []),
+                0,
                 0,
                 0,
                 0,
@@ -210,6 +212,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         $mockReport = new CoverageReport(
             $headWaypoint,
             new TotalUploadsQueryResult([], [], []),
+            0,
             0,
             0,
             0,
