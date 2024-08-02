@@ -112,12 +112,6 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getWaypointFromEvent')
             ->with($uploadsFinalised)
             ->willReturn($headWaypoint);
-        $mockCoverageAnalyserService->expects($this->exactly(2))
-            ->method('getCarryforwardTags')
-            ->willReturnMap([
-                [$headWaypoint, [new CarryforwardTag('', '', [100], [])]],
-                [$baseWaypoint, [new CarryforwardTag('', '', [101], [])]],
-            ]);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
             ->willReturn($reportComparison->getHeadReport());
@@ -227,11 +221,6 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             ->method('getWaypointFromEvent')
             ->with($uploadsFinalised)
             ->willReturn($headWaypoint);
-        $mockCoverageAnalyserService->expects($this->once())
-            ->method('getCarryforwardTags')
-            ->willReturnMap([
-                [$headWaypoint, [new CarryforwardTag('', '', [100], [])]]
-            ]);
         $mockCoverageAnalyserService->expects($this->once())
             ->method('analyse')
             ->with($headWaypoint)
