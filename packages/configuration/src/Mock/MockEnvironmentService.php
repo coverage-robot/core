@@ -4,21 +4,23 @@ namespace Packages\Configuration\Mock;
 
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Override;
 
 class MockEnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(
-        private readonly Environment $environment,
-        private readonly array $variables = []
+        private readonly Environment $environment
     ) {    
     }
 
-	public function getEnvironment(): Environment
+	#[Override]
+    public function getEnvironment(): Environment
 	{
         return $this->environment;
 	}
 
-	public function getVariable($name): string
+	#[Override]
+    public function getVariable($name): string
 	{
         return $variables[$name] ?? "";
 	}

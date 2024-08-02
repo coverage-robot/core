@@ -3,6 +3,7 @@
 namespace Packages\Configuration\Mock;
 
 use Packages\Configuration\Service\SettingServiceInterface;
+use Override;
 
 class MockSettingService implements SettingServiceInterface
 {
@@ -11,6 +12,7 @@ class MockSettingService implements SettingServiceInterface
     ) {
     }
 
+    #[Override]
     public function get(
         Provider $provider,
         string $owner,
@@ -20,6 +22,7 @@ class MockSettingService implements SettingServiceInterface
         return $this->settings[$key] ?? null;
     }
 
+    #[Override]
     public function set(
         Provider $provider,
         string $owner,
@@ -32,6 +35,7 @@ class MockSettingService implements SettingServiceInterface
         return true;
     }
 
+    #[Override]
     public function delete(
         Provider $provider,
         string $owner,
@@ -43,6 +47,7 @@ class MockSettingService implements SettingServiceInterface
         return true;
     }
 
+    #[Override]
     public function deserialize(
         SettingKey $key,
         mixed $value
