@@ -17,12 +17,12 @@ use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Event\EventSource;
-use Packages\Contracts\Tag\Tag;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\CoverageFailed;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
+use Packages\Event\Model\UtilisationAmendment;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
 use Packages\Message\Client\SqsClientInterface;
@@ -71,6 +71,8 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         try {
             [$coverageReport, $comparison] = $this->generateCoverageReport($event);
 
+            $totalReportSize = $this->getAndRecordReportSize($comparison ?? $coverageReport);
+
             $successful = $this->queueCoverageReport(
                 $event,
                 $coverageReport,
@@ -78,6 +80,27 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             );
 
             if ($successful) {
+                /**
+                 * Broadcast a new amendment to the utilisation data for the project.
+                 *
+                 * This will let any services know that the project's utilisation has increased
+                 */
+                $this->eventBusClient->fireEvent(
+                    EventSource::ANALYSE,
+                    new UtilisationAmendment(
+                        provider: $event->getProvider(),
+                        owner: $event->getOwner(),
+                        repository: $event->getRepository(),
+                        ref: $event->getRef(),
+                        commit: $event->getCommit(),
+                        pullRequest: $event->getPullRequest(),
+                        analysedCoverage: $totalReportSize,
+                    )
+                );
+
+                /**
+                 * Broadcast the finalised coverage event so that other services can act on it.
+                 */
                 $this->eventBusClient->fireEvent(
                     EventSource::ANALYSE,
                     new CoverageFinalised(
@@ -211,80 +234,32 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             $event
         );
 
-        $this->recordReportSize($headReport, $comparison);
-
         return [$headReport, $comparison];
     }
 
     /**
      * Record the total size (aka the total number of lines uploaded to each report) as a metric.
-     *
-     * This uses the sum of the total number of lines of the uploads used to generate the report (or multiple in
-     * the case of a comparison, _both_ reports). This allows us to accurately track the total amount of data analysed
-     * to build the final report result.
-     *
-     * The coverage reports 'total number of lines' isn't necessarily comparable, as that represents the unique number
-     * of lines of a codebase - i.e. two uploads with coverage for the same line will only return 1 line on the
-     * coverage report which vastly under values the effort used to compile results.
      */
-    private function recordReportSize(
-        CoverageReportInterface $coverageReport,
-        ?CoverageReportComparison $comparison
-    ): void {
-        $headUploadedLines = array_reduce(
-            [
-                ...$coverageReport->getUploads()->getSuccessfulTags(),
+    private function getAndRecordReportSize(CoverageReportInterface|CoverageReportComparison $coverageReport): int
+    {
+        $waypoint = $coverageReport instanceof CoverageReportComparison ?
+            $coverageReport->getHeadReport()->getWaypoint() :
+            $coverageReport->getWaypoint();
 
-                // Include the carried forward tags from the report, so that previous coverage is still
-                // factored into the report size analysis
-                ...$this->coverageAnalyserService->getCarryforwardTags($coverageReport->getWaypoint())
-            ],
-            static fn(int $total, Tag $tag): int => $total + array_sum($tag->getSuccessfullyUploadedLines()),
-            0
-        );
+        $totalReportSize = $coverageReport->getSize();
 
-        if ($comparison instanceof CoverageReportComparison) {
-            // We generated a report comparison, which means we also need to include the fact we've
-            // compiled a base report to compare against.
-            $baseUploadedLines = array_reduce(
-                [
-                    ...$comparison->getBaseReport()->getUploads()->getSuccessfulTags(),
-
-                    // Include the carried forward tags from the report, so that previous coverage is still
-                    // factored into the report size analysis
-                    ...$this->coverageAnalyserService->getCarryforwardTags($comparison->getBaseReport()->getWaypoint())
-                ],
-                static fn(int $total, Tag $tag): int => $total + array_sum($tag->getSuccessfullyUploadedLines()),
-                0
-            );
-            $this->metricService->increment(
-                metric: 'CoverageReportSize',
-                value: $headUploadedLines + $baseUploadedLines,
-                dimensions: [['provider', 'owner'], ['provider', 'owner', 'repository']],
-                properties: [
-                    'provider' => $coverageReport->getWaypoint()
-                        ->getProvider(),
-                    'owner' => $coverageReport->getWaypoint()
-                        ->getOwner(),
-                    'repository' => $coverageReport->getWaypoint()
-                        ->getRepository()
-                ]
-            );
-
-            return;
-        }
-
-        // No comparison, just count the head report.
         $this->metricService->increment(
             metric: 'CoverageReportSize',
-            value: $headUploadedLines,
+            value: $totalReportSize,
             dimensions: [['provider', 'owner'], ['provider', 'owner', 'repository']],
             properties: [
-                'provider' => $coverageReport->getWaypoint()->getProvider(),
-                'owner' => $coverageReport->getWaypoint()->getOwner(),
-                'repository' => $coverageReport->getWaypoint()->getRepository()
+                'provider' => $waypoint->getProvider(),
+                'owner' => $waypoint->getOwner(),
+                'repository' => $waypoint->getRepository()
             ]
         );
+
+        return $totalReportSize;
     }
 
     private function buildPullRequestMessage(

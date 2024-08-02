@@ -92,6 +92,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         try {
             return new CoverageReport(
                 waypoint: $waypoint,
+                size: fn(): int => $this->getReportSize($waypoint),
                 uploads:  fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
                 totalLines: fn(): int => $this->getTotalLines($waypoint),
                 atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
@@ -127,6 +128,31 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         );
 
         return $totalUploads;
+    }
+
+    /**
+     * Get the total size of the report (aka the total number of lines uploaded to each report)
+     *
+     * This uses the sum of the total number of lines of the uploads used to generate the report, and
+     * allows us to accurately track the total amount of data analysed to build the final report result.
+     *
+     * The coverage report's 'total number of lines' isn't necessarily comparable, as that represents
+     * the unique number of lines of a codebase - i.e. two uploads with coverage for the same line will
+     * only return 1 line on the coverage report which vastly under values the effort used to compile results.
+     */
+    public function getReportSize(ReportWaypoint $waypoint): int
+    {
+        return array_reduce(
+            [
+                ...$this->getUploads($waypoint)->getSuccessfulTags(),
+
+                // Include the carried forward tags from the report, so that previous coverage is still
+                // factored into the report size analysis
+                ...$this->getCarryforwardTags($waypoint)
+            ],
+            static fn(int $total, Tag $tag): int => $total + array_sum($tag->getSuccessfullyUploadedLines()),
+            0
+        );
     }
 
     /**
