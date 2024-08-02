@@ -745,7 +745,7 @@
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.16",
+            "version": "v1.5.17",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
@@ -804,13 +804,13 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.16"
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.17"
             },
             "time": "2024-08-02T00:38:13+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.5.16",
+            "version": "v1.5.17",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
@@ -865,13 +865,13 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.5.16"
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.17"
             },
             "time": "2024-07-14T20:43:58+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.16",
+            "version": "v1.5.17",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
@@ -930,7 +930,7 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.16"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.17"
             },
             "time": "2024-07-14T20:43:58+00:00"
         },
