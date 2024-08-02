@@ -10,18 +10,18 @@ class MockEnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(
         private readonly Environment $environment
-    ) {    
+    ) {
     }
 
-	#[Override]
+    #[Override]
     public function getEnvironment(): Environment
-	{
+    {
         return $this->environment;
-	}
+    }
 
-	#[Override]
+    #[Override]
     public function getVariable($name): string
-	{
-        return $variables[$name] ?? "";
-	}
+    {
+        return $variables[$name] ?? '';
+    }
 }
