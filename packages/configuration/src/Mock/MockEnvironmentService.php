@@ -9,7 +9,8 @@ use Override;
 class MockEnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(
-        private readonly Environment $environment
+        private readonly Environment $environment,
+        private readonly array $variables = []
     ) {
     }
 
@@ -22,6 +23,6 @@ class MockEnvironmentService implements EnvironmentServiceInterface
     #[Override]
     public function getVariable($name): string
     {
-        return $variables[$name] ?? '';
+        return $variables[$name->value] ?? '';
     }
 }
