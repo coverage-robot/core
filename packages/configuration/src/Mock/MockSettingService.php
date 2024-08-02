@@ -21,7 +21,7 @@ class MockSettingService implements SettingServiceInterface
         string $repository,
         SettingKey $key
     ): mixed {
-        return $this->settings[$key] ?? null;
+        return $this->settings[$key->value] ?? null;
     }
 
     #[Override]
@@ -32,7 +32,7 @@ class MockSettingService implements SettingServiceInterface
         SettingKey $key,
         mixed $value
     ): bool {
-        $this->settings[$key] = $value;
+        $this->settings[$key->value] = $value;
 
         return true;
     }
@@ -44,7 +44,7 @@ class MockSettingService implements SettingServiceInterface
         string $repository,
         SettingKey $key
     ): bool {
-        unset($this->settings[$key]);
+        unset($this->settings[$key->value]);
 
         return true;
     }
@@ -54,6 +54,6 @@ class MockSettingService implements SettingServiceInterface
         SettingKey $key,
         mixed $value
     ): mixed {
-        return $this->settings[$key] ?? null;
+        return $this->settings[$key->value] ?? null;
     }
 }
