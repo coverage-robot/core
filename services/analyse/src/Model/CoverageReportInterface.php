@@ -18,6 +18,12 @@ interface CoverageReportInterface extends Stringable
     public function getWaypoint(): ReportWaypoint;
 
     /**
+     * The size of the coverage report. Specifically, the number of lines of code coverage
+     * the report consists of.
+     */
+    public function getSize(): int;
+
+    /**
      * The list of uploads that were provided.
      */
     public function getUploads(): TotalUploadsQueryResult;

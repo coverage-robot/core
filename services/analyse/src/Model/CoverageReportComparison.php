@@ -35,6 +35,17 @@ final class CoverageReportComparison implements Stringable
     }
 
     /**
+     * The size of the comparison.
+     *
+     * This is the sum of the size of the head report, and the size of the base
+     * report.
+     */
+    public function getSize(): int
+    {
+        return $this->headReport->getSize() + $this->baseReport->getSize();
+    }
+
+    /**
      * The change in coverage percentage between the base and head reports.
      */
     public function getCoverageChange(): float

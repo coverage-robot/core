@@ -20,7 +20,7 @@ final class BigQueryClientTest extends TestCase
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset',
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
                 ]
-            ),
+            )
         );
 
         $this->assertEquals('mock-project.mock-dataset.mock-line-coverage-table', $client->getTable());
@@ -35,7 +35,7 @@ final class BigQueryClientTest extends TestCase
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset'
                 ]
-            ),
+            )
         );
 
         $this->assertEquals('mock-dataset', $client->getEnvironmentDataset()->id());

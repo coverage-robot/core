@@ -21,6 +21,7 @@ final class CoverageReport implements CoverageReportInterface
 {
     /**
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
+     * @param int|Closure():int $size
      * @param int|Closure():int $totalLines
      * @param int|Closure():int $atLeastPartiallyCoveredLines
      * @param int|Closure():int $uncoveredLines
@@ -34,6 +35,7 @@ final class CoverageReport implements CoverageReportInterface
     public function __construct(
         private readonly ReportWaypoint $waypoint,
         private Closure|TotalUploadsQueryResult $uploads,
+        private Closure|int $size,
         private Closure|int $totalLines,
         private Closure|int $atLeastPartiallyCoveredLines,
         private Closure|int $uncoveredLines,
@@ -50,6 +52,16 @@ final class CoverageReport implements CoverageReportInterface
     public function getWaypoint(): ReportWaypoint
     {
         return $this->waypoint;
+    }
+
+    #[Override]
+    public function getSize(): int
+    {
+        if (is_callable($this->size)) {
+            $this->size = ($this->size)();
+        }
+
+        return $this->size;
     }
 
     #[Override]
