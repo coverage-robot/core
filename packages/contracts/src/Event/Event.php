@@ -55,4 +55,13 @@ enum Event: string
      * The Coverage Robot configuration file has changed in a push to the repository.
      */
     case CONFIGURATION_FILE_CHANGE = 'CONFIGURATION_FILE_CHANGE';
+
+    /**
+     * The utilisation of a project's quota should be amended.
+     *
+     * This will generally be an increase in the utilisation when new analysis is performed.
+     *
+     * But in case of error, this could also be a decrease in the quota utilisation too.
+     */
+    case UTILISATION_AMENDMENT = 'UTILISATION_AMENDMENT';
 }
