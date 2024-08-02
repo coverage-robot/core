@@ -33,7 +33,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             $this->createMock(GithubAppInstallationClientInterface::class),
-            MockEnvironmentServiceFactory::createMock( Environment::TESTING),
+            MockEnvironmentServiceFactory::createMock(Environment::TESTING),
             new NullLogger()
         );
 
