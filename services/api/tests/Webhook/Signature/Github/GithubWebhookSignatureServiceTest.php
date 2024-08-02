@@ -31,7 +31,6 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         $githubWebhookSignatureService = new GithubWebhookSignatureService(
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
@@ -51,7 +50,6 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         $githubWebhookSignatureService = new GithubWebhookSignatureService(
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
@@ -73,7 +71,6 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         $githubWebhookSignatureService = new GithubWebhookSignatureService(
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
@@ -92,7 +89,6 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         $githubWebhookSignatureService = new GithubWebhookSignatureService(
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => $secret

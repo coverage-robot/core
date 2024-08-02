@@ -26,7 +26,6 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         return new TagAvailabilityQuery(
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-table'

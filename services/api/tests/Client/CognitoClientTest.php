@@ -66,7 +66,6 @@ final class CognitoClientTest extends TestCase
         $cognitoClient = new CognitoClient(
             $client,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',
@@ -142,7 +141,6 @@ final class CognitoClientTest extends TestCase
         $cognitoClient = new CognitoClient(
             $client,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',
@@ -205,7 +203,6 @@ final class CognitoClientTest extends TestCase
         $cognitoClient = new CognitoClient(
             $client,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',

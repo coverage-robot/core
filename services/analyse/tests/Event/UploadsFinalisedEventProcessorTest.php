@@ -176,7 +176,6 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockCoverageComparisonService,
             new LineGroupingService(new NullLogger()),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => true
                 ]
@@ -287,7 +286,6 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             $mockCoverageComparisonService,
             new LineGroupingService(new NullLogger()),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => true
                 ]

@@ -33,7 +33,6 @@ final class NewProjectCommandTest extends KernelTestCase
         $mockCognitoClient = new CognitoClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-project-pool-id',

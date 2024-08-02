@@ -83,7 +83,6 @@ final class GcsPersistServiceTest extends KernelTestCase
             $mockBigQueryClient,
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::DEVELOPMENT,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
@@ -174,7 +173,6 @@ final class GcsPersistServiceTest extends KernelTestCase
             $mockBigQueryClient,
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::DEVELOPMENT,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'

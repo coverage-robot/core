@@ -34,14 +34,12 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::REVIEW_COMMENT
                 ]
             ),
             $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING
             ),
             new NullLogger()
@@ -81,14 +79,12 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::REVIEW_COMMENT
                 ]
             ),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING
             ),
             new NullLogger()
@@ -149,14 +145,12 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::REVIEW_COMMENT
                 ]
             ),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'

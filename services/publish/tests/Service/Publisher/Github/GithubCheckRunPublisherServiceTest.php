@@ -33,7 +33,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             $this->createMock(GithubAppInstallationClientInterface::class),
-            MockEnvironmentServiceFactory::createMock($this, Environment::TESTING),
+            MockEnvironmentServiceFactory::createMock( Environment::TESTING),
             new NullLogger()
         );
 
@@ -59,7 +59,6 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
                 ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
@@ -129,7 +128,6 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
                 ->get(TemplateRenderingService::class),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'

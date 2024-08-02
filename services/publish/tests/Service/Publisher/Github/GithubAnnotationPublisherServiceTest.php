@@ -35,14 +35,12 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::ANNOTATION
                 ]
             ),
             $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING
             ),
             new NullLogger()
@@ -82,14 +80,12 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockSettingServiceFactory::createMock(
-                $this,
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::ANNOTATION
                 ]
             ),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
