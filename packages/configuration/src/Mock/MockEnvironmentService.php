@@ -23,6 +23,6 @@ class MockEnvironmentService implements EnvironmentServiceInterface
     #[Override]
     public function getVariable($name): string
     {
-        return $variables[$name->value] ?? '';
+        return $this->variables[$name->value] ?? '';
     }
 }
