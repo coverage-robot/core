@@ -59,7 +59,6 @@ final class DynamoDbClientTest extends TestCase
         $dynamoDbClient = new DynamoDbClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::QUERY_CACHE_TABLE_NAME->value => 'mock-query-cache-table-name'
@@ -133,7 +132,6 @@ final class DynamoDbClientTest extends TestCase
         $dynamoDbClient = new DynamoDbClient(
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::TESTING,
                 [
                     EnvironmentVariable::QUERY_CACHE_TABLE_NAME->value => 'mock-query-cache-table-name'

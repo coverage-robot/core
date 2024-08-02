@@ -132,7 +132,7 @@ final class UploadServiceTest extends KernelTestCase
 
         $uploadService = new UploadService(
             $mockUploadSignerService,
-            MockEnvironmentServiceFactory::createMock($this, Environment::PRODUCTION),
+            MockEnvironmentServiceFactory::createMock(Environment::PRODUCTION),
             $mockUniqueIdGeneratorService,
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()

@@ -9,6 +9,7 @@ use Github\Api\Repository\Contents;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Service\ConfigurationFileService;
+use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -49,7 +50,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             ->method('authenticateAsRepositoryOwner')
             ->with($event->getOwner());
 
-        $mockSettingService = MockSettingServiceFactory::createMock($this);
+        $mockSettingService = $this->createMock(SettingServiceInterface::class);
         $mockSettingService->method('set')
             ->willReturn($isProcessable);
         $mockSettingService->method('delete')
@@ -80,9 +81,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         $configurationFileChangeEventProcessor = new ConfigurationFileChangeEventProcessor(
             new NullLogger(),
             $mockGithubClient,
-            new ConfigurationFileService(
-                MockSettingServiceFactory::createMock($this)
-            )
+            new ConfigurationFileService(MockSettingServiceFactory::createMock([]))
         );
 
         $this->assertTrue(

@@ -28,7 +28,6 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         return new TotalTagCoverageQuery(
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'

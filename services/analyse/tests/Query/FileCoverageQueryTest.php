@@ -28,7 +28,6 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         return new FileCoverageQuery(
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                $this,
                 Environment::PRODUCTION,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
