@@ -641,16 +641,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "965ba9da67d1abc80c6168e94ca6c233ba3ace39"
+                "reference": "abe9ec3ee97784cf148522f7470b5ec88e2eb76a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/965ba9da67d1abc80c6168e94ca6c233ba3ace39",
-                "reference": "965ba9da67d1abc80c6168e94ca6c233ba3ace39",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/abe9ec3ee97784cf148522f7470b5ec88e2eb76a",
+                "reference": "abe9ec3ee97784cf148522f7470b5ec88e2eb76a",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -699,13 +699,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.16"
             },
-            "time": "2024-08-02T01:43:09+00:00"
+            "time": "2024-08-02T02:10:46+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -739,13 +739,13 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.16"
             },
             "time": "2024-08-02T00:38:17+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
@@ -804,13 +804,13 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.16"
             },
             "time": "2024-08-02T00:38:13+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
@@ -865,13 +865,13 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.16"
             },
             "time": "2024-07-14T20:43:58+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
@@ -930,7 +930,7 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.16"
             },
             "time": "2024-07-14T20:43:58+00:00"
         },
@@ -7036,7 +7036,7 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.5.15",
+            "version": "v1.5.16",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
@@ -7093,7 +7093,7 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.5.15"
+                "source": "https://github.com/coverage-robot/local/tree/v1.5.16"
             },
             "time": "2024-07-14T20:32:52+00:00"
         },
