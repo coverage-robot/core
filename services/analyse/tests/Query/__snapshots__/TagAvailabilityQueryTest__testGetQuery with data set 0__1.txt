@@ -1,31 +1,31 @@
 WITH
   availability AS (
     SELECT
-      COMMIT,
+      commit,
       tag,
-      ARRAY_AGG(totalLines) AS successfullyUploadedLines,
+      ARRAY_AGG(totalLines) as successfullyUploadedLines,
       ARRAY_AGG(
         STRING(ingestTime)
-      ) AS ingestTimes
+      ) as ingestTimes
     FROM
       `mock-table`
     WHERE
       provider = @PROVIDER
       AND owner = @OWNER
       AND repository = @REPOSITORY
-      AND COMMIT IN UNNEST(@COMMIT)
+      AND commit IN UNNEST(@COMMIT)
     GROUP BY
-      COMMIT,
+      commit,
       tag
   )
 SELECT
-  availability.tag AS tagName,
+  availability.tag as tagName,
   ARRAY_AGG(
     STRUCT(
-      COMMIT AS `commit`, tag AS name, successfullyUploadedLines AS successfullyUploadedLines,
-      ingestTimes AS ingestTimes
+      commit as `commit`, tag as name, successfullyUploadedLines as successfullyUploadedLines,
+      ingestTimes as ingestTimes
     )
-  ) AS carryforwardTags,
+  ) as carryforwardTags,
 FROM
   availability
 GROUP BY

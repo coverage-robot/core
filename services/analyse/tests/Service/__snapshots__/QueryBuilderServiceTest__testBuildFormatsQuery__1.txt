@@ -3,5 +3,5 @@ SELECT
 FROM
   `mock-table`
 WHERE
-  COMMIT = "mock-commit"
+  commit = "mock-commit"
   AND provider = "github"
