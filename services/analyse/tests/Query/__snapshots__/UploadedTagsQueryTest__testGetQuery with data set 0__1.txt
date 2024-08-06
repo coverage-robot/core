@@ -1,5 +1,5 @@
 SELECT
-  DISTINCT tag AS tagName
+  DISTINCT tag as tagName
 FROM
   `mock-table`
 WHERE
