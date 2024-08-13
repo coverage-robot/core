@@ -5,6 +5,7 @@ resource "aws_sqs_queue" "publish_queue" {
   visibility_timeout_seconds  = 120
   deduplication_scope         = "messageGroup"
   fifo_throughput_limit       = "perMessageGroupId"
+  sqs_managed_sse_enabled     = true
 
   # The queue is going to spend a fair amount of time providing empty receives, so switching
   # to long polling will reduce the number of requests made to SQS.
@@ -18,6 +19,7 @@ resource "aws_sqs_queue" "webhooks_queue" {
   visibility_timeout_seconds  = 120
   deduplication_scope         = "messageGroup"
   fifo_throughput_limit       = "perMessageGroupId"
+  sqs_managed_sse_enabled     = true
 
   # The queue is going to spend a fair amount of time providing empty receives, so switching
   # to long polling will reduce the number of requests made to SQS.
