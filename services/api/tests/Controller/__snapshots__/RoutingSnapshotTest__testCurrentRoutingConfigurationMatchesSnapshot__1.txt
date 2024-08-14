@@ -12,6 +12,17 @@
             "GET"
         ]
     },
+    "health": {
+        "path": "\/health",
+        "requirements": [],
+        "defaults": {
+            "_format": "json",
+            "_controller": "App\\Controller\\HealthController::health"
+        },
+        "methods": [
+            "GET"
+        ]
+    },
     "upload": {
         "path": "\/upload",
         "requirements": [],
