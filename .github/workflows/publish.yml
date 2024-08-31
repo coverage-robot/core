@@ -41,7 +41,7 @@ env:
     target-php-version: "8.3"
 
     # PHP versions to ensure compatibility with during linting and testing
-    supported-php-versions: ["8.3", "8.4"]
+    supported-php-versions: "[\"8.3\", \"8.4\"]"
 
     working-directory: './services/publish'
     workspace: 'prod'

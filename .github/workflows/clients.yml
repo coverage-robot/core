@@ -36,7 +36,7 @@ defaults:
 
 env:
     # PHP versions to ensure compatibility with during linting and testing
-    supported-php-versions: ["8.3", "8.4"]
+    supported-php-versions: "[\"8.3\", \"8.4\"]"
 
     working-directory: './packages/clients/'
 
