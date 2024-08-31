@@ -35,7 +35,11 @@ defaults:
         working-directory: './packages/clients/'
 
 env:
-    php-version: "8.3"
+    # PHP versions to ensure compatibility with during linting and testing
+    supported-php-versions:
+        - "8.3"
+        - "8.4"
+
     working-directory: './packages/clients/'
 
 jobs:
@@ -43,12 +47,16 @@ jobs:
         name: "Client Tests"
         runs-on: ubuntu-latest
 
+        strategy:
+            matrix:
+                php-version: ${{ env.supported-php-versions }}
+
         steps:
             -   uses: actions/checkout@v4
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.php-version }}
+                    php-version: ${{ matrix.php-version }}
 
             -   name: Validate Composer configuration
                 run: composer validate

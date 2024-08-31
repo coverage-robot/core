@@ -37,7 +37,14 @@ defaults:
         working-directory: './services/publish'
 
 env:
-    php-version: "8.3"
+    # PHP version to use for deploying - this should be included in the supported versions
+    target-php-version: "8.3"
+
+    # PHP versions to ensure compatibility with during linting and testing
+    supported-php-versions:
+        - "8.3"
+        - "8.4"
+
     working-directory: './services/publish'
     workspace: 'prod'
     sentry-dsn: 'https://7cc94608ee5bbb4ab4dafdd5c711136c@o4506265435176960.ingest.sentry.io/4506265501040640'
@@ -46,12 +53,17 @@ jobs:
     build:
         name: "Build"
         runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                php-version: ${{ env.supported-php-versions }}
+
         steps:
             -   uses: actions/checkout@v4
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{env.php-version}}
+                    php-version: ${{ matrix.php-version }}
 
             -   name: Validate Composer configuration
                 run: composer validate
@@ -96,7 +108,7 @@ jobs:
             -   name: Upload build package to artifact storage
                 uses: actions/upload-artifact@v4
                 with:
-                    name: build
+                    name: build-php-${{ matrix.php-version }}
                     if-no-files-found: error
                     path: ${{ env.working-directory }}/build.zip
                     retention-days: 1
@@ -106,6 +118,10 @@ jobs:
         runs-on: ubuntu-latest
         needs: build
 
+        strategy:
+            matrix:
+                php-version: ${{ env.supported-php-versions }}
+
         steps:
             -   name: Make services folder structure
                 working-directory: "./"
@@ -114,7 +130,7 @@ jobs:
             -   name: Download build from artifact storage
                 uses: actions/download-artifact@v4
                 with:
-                    name: build
+                    name: build-php-${{ matrix.php-version }}
                     path: ${{ env.working-directory }}
 
             -   name: Extract build package
@@ -130,7 +146,7 @@ jobs:
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.php-version }}
+                    php-version: ${{ matrix.php-version }}
 
             -   name: Run PHP_CodeSniffer
                 run: composer lint:style
@@ -164,6 +180,10 @@ jobs:
         runs-on: ubuntu-latest
         needs: lint
 
+        strategy:
+            matrix:
+                php-version: ${{ env.supported-php-versions }}
+
         steps:
             -   name: Make services folder structure
                 working-directory: "./"
@@ -172,7 +192,7 @@ jobs:
             -   name: Download build from artifact storage
                 uses: actions/download-artifact@v4
                 with:
-                    name: build
+                    name: build-php-${{ matrix.php-version }}
                     path: ${{ env.working-directory }}
 
             -   name: Extract build package
@@ -188,7 +208,7 @@ jobs:
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.php-version }}
+                    php-version: ${{ matrix.php-version }}
 
             -   name: Run PHPUnit
                 run: |
@@ -223,7 +243,7 @@ jobs:
             -   name: Download build from artifact storage
                 uses: actions/download-artifact@v4
                 with:
-                    name: build
+                    name: build-php-${{ matrix.php-version }}
                     path: ${{ env.working-directory }}
 
             -   name: Extract build package
@@ -268,7 +288,7 @@ jobs:
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.php-version }}
+                    php-version: ${{ env.target-php-version }}
 
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
