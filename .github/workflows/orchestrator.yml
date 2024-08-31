@@ -39,7 +39,6 @@ defaults:
 env:
     # PHP version to use for deploying - this should be included in the supported versions
     # defined in the build/lint/test jobs
-    # defined in the build/lint/test jobs
     target-php-version: "8.3"
 
     working-directory: './services/orchestrator'
