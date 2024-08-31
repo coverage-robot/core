@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Handler;
+namespace Packages\Event\Tests\Handler;
 
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
@@ -8,7 +8,6 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
-use Packages\Event\Model\Upload;
 use Packages\Event\Service\EventProcessorServiceInterface;
 use Packages\Event\Service\EventValidationService;
 use PHPUnit\Framework\TestCase;
