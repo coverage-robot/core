@@ -36,6 +36,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
+            fail-fast: false
             matrix:
                 package: ${{ fromJson(needs.get-packages.outputs.matrix) }}
 

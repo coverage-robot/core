@@ -51,6 +51,7 @@ jobs:
         runs-on: ubuntu-latest
 
         strategy:
+            fail-fast: false
             matrix:
                 php-version: ["8.3", "8.4"]
 
@@ -115,6 +116,7 @@ jobs:
         needs: build
 
         strategy:
+            fail-fast: false
             matrix:
                 php-version: ["8.3", "8.4"]
 
@@ -174,6 +176,7 @@ jobs:
         needs: lint
 
         strategy:
+            fail-fast: false
             matrix:
                 php-version: ["8.3", "8.4"]
 
