@@ -199,6 +199,90 @@ final class GithubDiffParserServiceTest extends TestCase
         $mockRepoApi->expects($this->once())
             ->method('show')
             ->willReturn([
+                'files' => [
+                    [
+                        'filename' => 'file-1.php',
+                        'patch' => <<<DIFF
+                        @@ -170,7 +170,7 @@
+                                             line-1
+                                         line-2
+
+                        -            line-3.
+                        +            line-3
+                                         line-4
+                                             line-5
+                                                 line-6
+                        DIFF
+                    ],
+                    [
+                        'filename' => 'some-binary-file.jpeg'
+                    ],
+                    [
+                        'filename' => 'file-3.php',
+                        'patch' => <<<DIFF
+                        @@ -170,7 +170,7 @@
+                                     line-1
+                                 line-2
+
+                        -            line-3
+                        +            line-3.
+                                         line-4
+                                             line-5
+                                                 line-6
+                        @@ -180,5 +182,7 @@
+                                     line-1
+                                 line-2
+
+                        -            line-3
+                        +            line-3.
+                        +            line-4.
+                        +            line-5.
+                                         line-6
+                                             line-7
+                                                 line-8
+                        DIFF
+                    ]
+                ]
+            ]);
+
+        $addedLines = $parser->get($mockWaypoint);
+
+        $this->assertEquals(
+            [
+                'file-1.php' => [173],
+                // Notice no file is returned for the binary file with no patch
+                'file-3.php' => [173, 185, 186, 187],
+            ],
+            $addedLines
+        );
+    }
+
+    public function testGetDiffFromCommitWithBinaryFiles(): void
+    {
+        $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
+        $mockRepoApi = $this->createMock(Repo::class);
+
+        $parser = new GithubDiffParserService(
+            $mockApiClient,
+            new Parser(),
+            new NullLogger(),
+            $this->createMock(MetricServiceInterface::class)
+        );
+
+        $mockWaypoint = $this->getMockWaypoint();
+
+        $mockApiClient->expects($this->once())
+            ->method('authenticateAsRepositoryOwner')
+            ->with('mock-owner');
+        $mockApiClient->expects($this->once())
+            ->method('repo')
+            ->willReturn($mockRepoApi);
+        $mockRepoApi->expects($this->once())
+            ->method('commits')
+            ->willReturn($mockRepoApi);
+        $mockRepoApi->expects($this->once())
+            ->method('show')
+            ->willReturn([
                 'files' => []
             ]);
 

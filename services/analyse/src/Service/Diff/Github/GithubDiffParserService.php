@@ -188,6 +188,8 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
                  * as there'll be no coverage information related to these lines.
                  *
                  * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+                 *
+                 * @var array{filename: string, patch?: string} $file
                  */
                 $patch = $file['patch'] ?? '';
 
