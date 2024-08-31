@@ -176,17 +176,30 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
                 $sha
             );
 
-        /** @var array<array-key, array> $files */
+        /** @var array<array-key, array{filename: string, patch?: string}> $files */
         $files = $commit['files'] ?? [];
 
         return array_reduce(
             $files,
-            static fn(string $diff, array $file): string => <<<DIFF
+            static function (string $diff, array $file): string {
+                /**
+                 * Default files without a patch to show as empty. These will be binary files or similar
+                 * where the patch isn't available. In these cases, we're not interested in the diff anyway
+                 * as there'll be no coverage information related to these lines.
+                 *
+                 * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+                 *
+                 * @var array{filename: string, patch?: string} $file
+                 */
+                $patch = $file['patch'] ?? '';
+
+                return <<<DIFF
                 $diff
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}
-                {$file['patch']}
-                DIFF,
+                {$patch}
+                DIFF;
+            },
             ''
         );
     }
