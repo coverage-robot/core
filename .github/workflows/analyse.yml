@@ -38,10 +38,8 @@ defaults:
 
 env:
     # PHP version to use for deploying - this should be included in the supported versions
+    # defined in the build/lint/test jobs
     target-php-version: "8.3"
-
-    # PHP versions to ensure compatibility with during linting and testing
-    supported-php-versions: "[\"8.3\", \"8.4\"]"
 
     working-directory: './services/analyse'
     workspace: 'prod'
@@ -54,7 +52,7 @@ jobs:
 
         strategy:
             matrix:
-                php-version: ${{ fromJSON(env.supported-php-versions) }}
+                php-version: ["8.3", "8.4"]
 
         steps:
             -   uses: actions/checkout@v4
@@ -118,7 +116,7 @@ jobs:
 
         strategy:
             matrix:
-                php-version: ${{ fromJSON(env.supported-php-versions) }}
+                php-version: ["8.3", "8.4"]
 
         steps:
             -   name: Make services folder structure
@@ -177,7 +175,7 @@ jobs:
 
         strategy:
             matrix:
-                php-version: ${{ fromJSON(env.supported-php-versions) }}
+                php-version: ["8.3", "8.4"]
 
         steps:
             -   name: Make services folder structure

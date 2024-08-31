@@ -35,9 +35,6 @@ defaults:
         working-directory: './packages/message/'
 
 env:
-    # PHP versions to ensure compatibility with during linting and testing
-    supported-php-versions: "[\"8.3\", \"8.4\"]"
-
     working-directory: './packages/message/'
 
 jobs:
@@ -47,7 +44,7 @@ jobs:
 
         strategy:
             matrix:
-                php-version: ${{ fromJSON(env.supported-php-versions) }}
+                php-version: ["8.3", "8.4"]
 
         steps:
             -   uses: actions/checkout@v4
