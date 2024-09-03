@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": "~8.3.0 || ~8.4.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/cognito-identity-provider": "^1.7",
