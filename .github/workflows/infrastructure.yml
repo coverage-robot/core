@@ -17,8 +17,6 @@ on:
             - '.github/workflows/infrastructure.yml'
 
     pull_request:
-        branches:
-            - main
         paths:
             - 'infrastructure/**'
             - '.github/workflows/infrastructure.yml'
