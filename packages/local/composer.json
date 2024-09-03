@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": "^8.3 || ^8.4",
         "psr/log": "^3.0",
         "symfony/serializer": "^7.0",
         "symfony/http-kernel": "^7.0",

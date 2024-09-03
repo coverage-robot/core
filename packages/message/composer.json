@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": "^8.3 || ^8.4",
         "coverage-robot/event": "^1.5",
         "async-aws/sqs": "^2.0",
         "symfony/http-kernel": "^7.0",
