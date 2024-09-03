@@ -184,7 +184,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     ): bool {
         $paginator = $this->client->pagination(100);
 
-        /** @var array{ id: int, performed_via_github_app?: array{ id: string }}[] $existingReviewComments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: int }}[] $existingReviewComments */
         $existingReviewComments = $paginator->fetchAllLazy(
             $this->client->pullRequest()
                 ->comments(),
@@ -214,7 +214,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $existingId = $existingReviewComment['id'];
             $reviewCommentAppId = $existingReviewComment['performed_via_github_app']['id'] ?? null;
 
-            if ($reviewCommentAppId !== $appId) {
+            if ((string)$reviewCommentAppId !== $appId) {
                 // Review comment wasn't created by us, so we can skip it.
                 continue;
             }
