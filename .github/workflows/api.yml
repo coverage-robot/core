@@ -53,7 +53,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.3", "8.4"]
+                php-version: [
+                    "8.3",
+                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                ]
 
         steps:
             -   uses: actions/checkout@v4
@@ -118,7 +121,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.3", "8.4"]
+                php-version: [
+    "8.3",
+    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+ ]
 
         steps:
             -   name: Make services folder structure
@@ -181,7 +187,10 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.3", "8.4"]
+                php-version: [
+    "8.3",
+    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+ ]
 
         steps:
             -   name: Make services folder structure
