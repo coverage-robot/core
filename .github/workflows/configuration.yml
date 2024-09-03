@@ -17,8 +17,6 @@ on:
             - 'packages/configuration/**'
 
     pull_request:
-        branches:
-            - main
         paths:
             - '.github/workflows/configuration.yml'
             - 'packages/configuration/**'
