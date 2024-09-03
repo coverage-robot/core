@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.3",
+        "php": "^8.3 || ^8.4",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
         "async-aws/dynamo-db": "^3.0",
