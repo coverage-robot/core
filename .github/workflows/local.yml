@@ -35,7 +35,10 @@ defaults:
         working-directory: './packages/local/'
 
 env:
-    php-version: "8.3"
+    # PHP version to use for deploying - this should be included in the supported versions
+    # defined in the build/lint/test jobs
+    target-php-version: "8.3"
+
     working-directory: './packages/local/'
 
 jobs:
@@ -43,12 +46,20 @@ jobs:
         name: "Local Tests"
         runs-on: ubuntu-latest
 
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    "8.3",
+                    "8.4"
+                ]
+
         steps:
             -   uses: actions/checkout@v4
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: ${{ env.php-version }}
+                    php-version: ${{ matrix.php-version }}
 
             -   name: Validate Composer configuration
                 run: composer validate
@@ -62,12 +73,16 @@ jobs:
                 run: composer lint:rector
 
             -   name: Run PHPUnit
+                id: tests
                 run: |
                     composer test:unit -- --coverage-clover='./coverage.xml'
+                    echo "php-version=${{ matrix.php-version }}" >> $GITHUB_OUTPUT
                 shell: bash
 
             -   uses: coverage-robot/action@v1.0.7
-                if: always()
+                # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
+                # tests are run on multiple PHP versions
+                if: always() && steps.tests.outputs.php-version == env.target-php-version
                 with:
                     token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
