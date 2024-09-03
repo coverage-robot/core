@@ -17,8 +17,6 @@ on:
             - 'packages/event/**'
 
     pull_request:
-        branches:
-            - main
         paths:
             - '.github/workflows/event.yml'
             - 'packages/event/**'

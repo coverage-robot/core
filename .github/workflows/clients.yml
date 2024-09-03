@@ -17,8 +17,6 @@ on:
             - '.github/workflows/clients.yml'
 
     pull_request:
-        branches:
-            - main
         paths:
             - 'packages/clients/**'
             - '.github/workflows/clients.yml'
