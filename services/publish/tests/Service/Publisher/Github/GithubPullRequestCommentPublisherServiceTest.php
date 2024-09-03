@@ -96,15 +96,13 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             ->willReturn([
                 [
                     'id' => 1,
-                    'user' => [
-                        'node_id' => 'node-1'
+                    'performed_via_github_app' => [
+                        'id' => 'mock'
                     ]
                 ],
                 [
-                    'id' => 2,
-                    'user' => [
-                        'node_id' => 'node-2'
-                    ]
+                    'id' => 2
+                    // Comment wasn't performed by an app
                 ]
             ]);
 
@@ -177,8 +175,8 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             ->willReturn([
                 [
                     'id' => 1,
-                    'user' => [
-                        'node_id' => 'node-1'
+                    'performed_via_github_app' => [
+                        'id' => 'mock-github-app-id'
                     ]
                 ],
                 [
