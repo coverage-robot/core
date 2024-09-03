@@ -153,7 +153,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 [
-                    EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
             ),
             new NullLogger()

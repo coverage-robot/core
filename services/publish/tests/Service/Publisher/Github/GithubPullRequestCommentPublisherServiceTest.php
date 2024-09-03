@@ -65,7 +65,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 [
-                    EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
             ),
             new NullLogger()
@@ -142,7 +142,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 [
-                    EnvironmentVariable::GITHUB_BOT_ID->value => 'mock-github-bot-id'
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
             ),
             new NullLogger()
@@ -182,9 +182,13 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                     ]
                 ],
                 [
+                    'id' => 8,
+                    // Comment wasn't performed by an app
+                ],
+                [
                     'id' => 2,
-                    'user' => [
-                        'node_id' => 'mock-github-bot-id'
+                    'performed_via_github_app' => [
+                        'id' => 'mock-github-app-id'
                     ]
                 ]
             ]);
