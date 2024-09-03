@@ -4,6 +4,7 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
+use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
 use Github\Exception\ExceptionInterface;
@@ -47,12 +48,12 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     #[Override]
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
-//        if (!$this->supports($publishableMessage)) {
-//            throw new PublishingNotSupportedException(
-//                self::class,
-//                $publishableMessage
-//            );
-//        }
+        if (!$this->supports($publishableMessage)) {
+            throw new PublishingNotSupportedException(
+                self::class,
+                $publishableMessage
+            );
+        }
 
         /** @var PublishablePullRequestMessage $publishableMessage */
         $pullRequest = (int)$publishableMessage->getEvent()->getPullRequest();
