@@ -4,7 +4,6 @@ namespace App\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
-use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
 use App\Service\Templating\TemplateRenderingService;
 use Github\Exception\ExceptionInterface;
@@ -48,12 +47,12 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     #[Override]
     public function publish(PublishableMessageInterface $publishableMessage): bool
     {
-        if (!$this->supports($publishableMessage)) {
-            throw new PublishingNotSupportedException(
-                self::class,
-                $publishableMessage
-            );
-        }
+//        if (!$this->supports($publishableMessage)) {
+//            throw new PublishingNotSupportedException(
+//                self::class,
+//                $publishableMessage
+//            );
+//        }
 
         /** @var PublishablePullRequestMessage $publishableMessage */
         $pullRequest = (int)$publishableMessage->getEvent()->getPullRequest();
@@ -165,11 +164,11 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         $api = $this->client->issue();
         $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
 
-        /** @var array{ id: int, performed_via_github_app?: array{ id: string } }[] $comments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: int } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
             static fn(array $comment): bool => isset($comment['id'], $comment['performed_via_github_app']['id']) &&
-                $comment['performed_via_github_app']['id'] === $appId
+                (string)$comment['performed_via_github_app']['id'] === $appId
         );
 
         if (!empty($comments)) {

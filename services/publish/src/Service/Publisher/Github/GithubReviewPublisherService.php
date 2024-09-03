@@ -184,7 +184,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     ): bool {
         $paginator = $this->client->pagination(100);
 
-        /** @var array{ id: int, performed_via_github_app?: array{ id: string }}[] $existingReviewComments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: int }}[] $existingReviewComments */
         $existingReviewComments = $paginator->fetchAllLazy(
             $this->client->pullRequest()
                 ->comments(),
