@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b68b8a00739cbf8a0e645f7b0337209",
+    "content-hash": "5a17395e60c309eb6e0223172dd6f94e",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -9548,7 +9548,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.3",
+        "php": "~8.3.0",
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
