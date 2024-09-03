@@ -55,7 +55,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
@@ -123,7 +123,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
@@ -189,7 +189,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
