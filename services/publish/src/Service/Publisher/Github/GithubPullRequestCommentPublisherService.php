@@ -165,11 +165,11 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
         $api = $this->client->issue();
         $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
 
-        /** @var array{ id: int, performed_via_github_app?: array{ id: string } }[] $comments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: int } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
             static fn(array $comment): bool => isset($comment['id'], $comment['performed_via_github_app']['id']) &&
-                $comment['performed_via_github_app']['id'] === $appId
+                (string)$comment['performed_via_github_app']['id'] === $appId
         );
 
         if (!empty($comments)) {
