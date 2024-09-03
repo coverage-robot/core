@@ -163,13 +163,13 @@ final class GithubPullRequestCommentPublisherService implements PublisherService
     private function getExistingCommentId(string $owner, string $repository, int $pullRequest): ?int
     {
         $api = $this->client->issue();
-        $botId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID);
+        $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
 
-        /** @var array{ id: int, user: array{ node_id: string } }[] $comments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: string } }[] $comments */
         $comments = array_filter(
             $api->comments()->all($owner, $repository, $pullRequest),
-            static fn(array $comment): bool => isset($comment['id'], $comment['user']['node_id']) &&
-                $comment['user']['node_id'] === $botId
+            static fn(array $comment): bool => isset($comment['id'], $comment['performed_via_github_app']['id']) &&
+                $comment['performed_via_github_app']['id'] === $appId
         );
 
         if (!empty($comments)) {

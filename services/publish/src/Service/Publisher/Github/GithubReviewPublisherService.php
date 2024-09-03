@@ -184,7 +184,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
     ): bool {
         $paginator = $this->client->pagination(100);
 
-        /** @var array{ id: int, user: array{ node_id: string }}[] $existingReviewComments */
+        /** @var array{ id: int, performed_via_github_app?: array{ id: string }}[] $existingReviewComments */
         $existingReviewComments = $paginator->fetchAllLazy(
             $this->client->pullRequest()
                 ->comments(),
@@ -208,13 +208,13 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
         $successful = true;
 
-        $botId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_BOT_ID);
+        $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
 
         foreach ($existingReviewComments as $existingReviewComment) {
             $existingId = $existingReviewComment['id'];
-            $existingUserNodeId = $existingReviewComment['user']['node_id'];
+            $reviewCommentAppId = $existingReviewComment['performed_via_github_app']['id'] ?? null;
 
-            if ($existingUserNodeId !== $botId) {
+            if ($reviewCommentAppId !== $appId) {
                 // Review comment wasn't created by us, so we can skip it.
                 continue;
             }
