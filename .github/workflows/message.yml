@@ -35,6 +35,10 @@ defaults:
         working-directory: './packages/message/'
 
 env:
+    # PHP version to use for deploying - this should be included in the supported versions
+    # defined in the build/lint/test jobs
+    target-php-version: "8.3"
+
     working-directory: './packages/message/'
 
 jobs:
@@ -71,7 +75,9 @@ jobs:
                 shell: bash
 
             -   uses: coverage-robot/action@v1.0.6
-                if: always()
+                # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
+                # tests are run on multiple PHP versions
+                if: always() && matrix.php-vesion == env.target-php-version
                 with:
                     token: ${{ secrets.COVERAGE_TOKEN }}
                     files: |
