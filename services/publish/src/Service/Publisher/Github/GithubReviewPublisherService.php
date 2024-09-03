@@ -214,7 +214,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $existingId = $existingReviewComment['id'];
             $reviewCommentAppId = $existingReviewComment['performed_via_github_app']['id'] ?? null;
 
-            if ($reviewCommentAppId !== $appId) {
+            if ((string)$reviewCommentAppId !== $appId) {
                 // Review comment wasn't created by us, so we can skip it.
                 continue;
             }
