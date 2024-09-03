@@ -176,7 +176,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 [
                     'id' => 1,
                     'performed_via_github_app' => [
-                        'id' => 'mock-github-app-id'
+                        'id' => 'mock'
                     ]
                 ],
                 [
