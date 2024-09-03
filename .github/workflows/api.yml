@@ -253,7 +253,7 @@ jobs:
             -   name: Download build from artifact storage
                 uses: actions/download-artifact@v4
                 with:
-                    name: build-php-${{ matrix.php-version }}
+                    name: build-php-${{ env.target-php-version }}
                     path: ${{ env.working-directory }}
 
             -   name: Extract build package
