@@ -77,7 +77,7 @@ jobs:
                     composer test:unit -- --coverage-clover='./coverage.xml'
                 shell: bash
 
-            -   uses: coverage-robot/action@v1.0.6
+            -   uses: coverage-robot/action@v1.0.7
                 # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
                 # tests are run on multiple PHP versions
                 if: always() && matrix.php-vesion == env.target-php-version
