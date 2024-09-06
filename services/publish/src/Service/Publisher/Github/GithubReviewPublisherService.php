@@ -247,13 +247,14 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $didAuthor = $existingReviewComment['viewerDidAuthor'];
             $canDelete = $existingReviewComment['viewerCanDelete'];
 
-            if (!$didAuthor || !$canDelete) {
-                /**
-                 * We can't delete this review, so we should skip.
-                 *
-                 * In practice, the only reason we wouldn't be able to delete a review is if we didn't author is
-                 * as, in theory, any review we authored should be deletable by us.
-                 */
+            if (!$didAuthor) {
+                // The review wasn't authored by us, so we can safely skip.
+                continue;
+            }
+
+            if (!$canDelete) {
+                // The review was authored by us, but can't be deleted. In theory, this should never
+                // happen. But regardless, if it does, theres nothing we can do.
                 continue;
             }
 
