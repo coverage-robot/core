@@ -2,7 +2,6 @@
 
 namespace App\Service\Publisher\Github;
 
-use App\Enum\EnvironmentVariable;
 use App\Enum\TemplateVariant;
 use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\PublisherServiceInterface;
@@ -182,53 +181,161 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         string $repository,
         int $pullRequest,
     ): bool {
-        $paginator = $this->client->pagination(100);
-
-        /** @var array{ id: int, performed_via_github_app?: array{ id: int }}[] $existingReviewComments */
-        $existingReviewComments = $paginator->fetchAllLazy(
-            $this->client->pullRequest()
-                ->comments(),
-            'all',
-            [
-                $owner,
-                $repository,
-                $pullRequest
-            ]
-        );
-
-        if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_OK) {
-            $this->reviewPublisherLogger->critical(
-                sprintf(
-                    '%s status code returned while attempting to list all review.',
-                    (string)$this->client->getLastResponse()?->getStatusCode()
-                )
+        /** @var array{
+         *     data: array{
+         *          repository: array{
+         *              pullRequest: array{
+         *                  reviews: array{
+         *                      nodes: list<array{
+         *                          fullDatabaseId: string,
+         *                          viewerDidAuthor: bool,
+         *                          viewerCanDelete: bool
+         *                      }>
+         *                  }
+         *              }
+         *          }
+         *     }
+         * } $response
+         */
+        $response = $this->client->graphql()
+            ->execute(
+                query: <<<GQL
+                query getReviewComments(\$owner: String!, \$repository: String!, \$pullRequest: Int!) {
+                    repository(owner: \$owner, name: \$repository) {
+                        pullRequest(number: \$pullRequest) {
+                            reviews(last: 100, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+                                nodes {
+                                    fullDatabaseId
+                                    viewerDidAuthor
+                                    viewerCanDelete
+                                    comments(first: 100) {
+                                        totalCount
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                GQL,
+                variables: [
+                    'owner' => $owner,
+                    'repository' => $repository,
+                    'pullRequest' => $pullRequest
+                ]
             );
-            return false;
+
+        if (!isset($response['data']['repository']['pullRequest']['reviews']['nodes'])) {
+            $this->reviewPublisherLogger->info(
+                'No reviews found for pull request.',
+                [
+                    'response' => $response
+                ]
+            );
+
+            return true;
         }
 
         $successful = true;
 
-        $appId = $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID);
+        foreach ($response['data']['repository']['pullRequest']['reviews']['nodes'] as $existingReviewComment) {
+            // The GitHub GraphQL API uses different native IDs than the REST API - meaning we explicitly
+            // need to use the fullDatabaseId, as opposed to just the ID, to delete the review.
+            $reviewId = $existingReviewComment['fullDatabaseId'];
 
-        foreach ($existingReviewComments as $existingReviewComment) {
-            $existingId = $existingReviewComment['id'];
-            $reviewCommentAppId = $existingReviewComment['performed_via_github_app']['id'] ?? null;
+            $didAuthor = $existingReviewComment['viewerDidAuthor'];
+            $canDelete = $existingReviewComment['viewerCanDelete'];
 
-            if ((string)$reviewCommentAppId !== $appId) {
-                // Review comment wasn't created by us, so we can skip it.
+            if (!$didAuthor || !$canDelete) {
+                /**
+                 * We can't delete this review, so we should skip.
+                 *
+                 * In practice, the only reason we wouldn't be able to delete a review is if we didn't author is
+                 * as, in theory, any review we authored should be deletable by us.
+                 */
                 continue;
             }
 
+            $hasDeleted = $this->deleteAllPullRequestComments(
+                $owner,
+                $repository,
+                $pullRequest,
+                (int)$reviewId
+            );
+
+            if (!$hasDeleted) {
+                $this->reviewPublisherLogger->critical(
+                    sprintf(
+                        'Failed to delete review with ID: %s',
+                        $reviewId
+                    ),
+                    [
+                        'response' => $response
+                    ]
+                );
+
+                $successful = false;
+            }
+        }
+
+        return $successful;
+    }
+
+    /**
+     * Delete all comments on a pull request review.
+     *
+     * There are options to delete or dismiss a review. However:
+     * 1. Dismissing a review will not remove the comments - leaving a section in the PR for a
+     *    previous (now outdated review)
+     * 2. Deleting a review only works for pending reviews (i.e. submitted ones cannot be
+     *    deleted)
+     *
+     * @param int $reviewId If using the GraphQL API this must be the fullDatabaseId
+     */
+    private function deleteAllPullRequestComments(
+        string $owner,
+        string $repository,
+        int $pullRequest,
+        int $reviewId
+    ): bool {
+        $paginator = $this->client->pagination(100);
+
+        $comments = $paginator->fetchAllLazy(
+            $this->client->pullRequest()
+                ->reviews(),
+            'comments',
+            [
+                $owner,
+                $repository,
+                $pullRequest,
+                $reviewId
+            ]
+        );
+
+        $successful = true;
+
+        /** @var list<array{ id: string }> $comments */
+        foreach ($comments as $comment) {
             $this->client->pullRequest()
                 ->comments()
                 ->remove(
                     $owner,
                     $repository,
-                    $existingId
+                    (int)$comment['id']
                 );
 
-            $successful = $successful &&
-                $this->client->getLastResponse()?->getStatusCode() === Response::HTTP_NO_CONTENT;
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+                $this->reviewPublisherLogger->error(
+                    sprintf(
+                        '%s status code returned while attempting to delete a review on a pull request.',
+                        (string)$this->client->getLastResponse()?->getStatusCode()
+                    ),
+                    [
+                        'response' => $this->client->getLastResponse()
+                    ]
+                );
+
+                $successful = false;
+            }
         }
 
         return $successful;
