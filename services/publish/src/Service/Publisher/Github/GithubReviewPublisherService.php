@@ -242,6 +242,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             // need to use the fullDatabaseId, as opposed to just the ID, to delete the review.
             $reviewId = $existingReviewComment['fullDatabaseId'];
 
+            // To retrieve this information we need to use the GraphQL API, as the REST equivalent won't
+            // provide explicit author data, outside of the basic user entity
             $didAuthor = $existingReviewComment['viewerDidAuthor'];
             $canDelete = $existingReviewComment['viewerCanDelete'];
 
