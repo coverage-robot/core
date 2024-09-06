@@ -6,7 +6,7 @@ use App\Enum\EnvironmentVariable;
 use App\Service\Publisher\Github\GithubReviewPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
-use Github\Api\Issue\Comments;
+use Github\Api\GraphQL;
 use Github\Api\PullRequest;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
@@ -180,6 +180,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ->willReturn([
                 'id' => 1
             ]);
+
         $mockPullRequestApi = $this->createMock(PullRequest::class);
         $mockPullRequestApi->expects($this->once())
             ->method('show')
@@ -189,14 +190,17 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                 ]
             ]);
         $mockPullRequestApi->expects($this->once())
-            ->method('comments')
-            ->willReturn($this->createMock(Comments::class));
-        $mockPullRequestApi->expects($this->once())
             ->method('reviews')
             ->willReturn($mockReviewApi);
-
         $mockGithubAppInstallationClient->method('pullRequest')
             ->willReturn($mockPullRequestApi);
+
+        $mockGraphApi = $this->createMock(GraphQL::class);
+        $mockGraphApi->expects($this->once())
+            ->method('execute')
+            ->willReturn([]);
+        $mockGithubAppInstallationClient->method('graphql')
+            ->willReturn($mockGraphApi);
 
         $mockGithubAppInstallationClient->method('getLastResponse')
             ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_OK));
