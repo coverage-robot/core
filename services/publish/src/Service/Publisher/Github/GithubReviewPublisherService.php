@@ -189,7 +189,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
          *                      nodes: list<array{
          *                          fullDatabaseId: string,
          *                          viewerDidAuthor: bool,
-         *                          viewerCanDelete: bool
+         *                          viewerCanDelete: bool,
+         *                          comments: array{ totalCount: int }
          *                      }>
          *                  }
          *              }
@@ -208,7 +209,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                                     fullDatabaseId
                                     viewerDidAuthor
                                     viewerCanDelete
-                                    comments(first: 100) {
+                                    comments(first: 1) {
                                         totalCount
                                     }
                                 }
@@ -246,6 +247,12 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             // provide explicit author data, outside of the basic user entity
             $didAuthor = $existingReviewComment['viewerDidAuthor'];
             $canDelete = $existingReviewComment['viewerCanDelete'];
+            $totalComments = $existingReviewComment['comments']['totalCount'];
+
+            if ($totalComments === 0) {
+                // No comments on this review, so we can safely skip.
+                continue;
+            }
 
             if (!$didAuthor) {
                 // The review wasn't authored by us, so we can safely skip.
