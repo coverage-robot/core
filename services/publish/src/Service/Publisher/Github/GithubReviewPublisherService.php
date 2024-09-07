@@ -249,7 +249,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $canDelete = $existingReviewComment['viewerCanDelete'];
             $totalComments = $existingReviewComment['comments']['totalCount'];
 
-            if ($totalComments == 0) {
+            if ($totalComments === 0) {
                 // No comments on this review, so we can safely skip.
                 continue;
             }
