@@ -144,6 +144,17 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         EventInterface $event,
         array $lineComments
     ): bool {
+        if ($lineComments === []) {
+            $this->reviewPublisherLogger->info(
+                'No comments to publish for review.',
+                [
+                    'event' => $event
+                ]
+            );
+
+            return true;
+        }
+
         $this->client->pullRequest()
             ->reviews()
             ->create(

@@ -273,8 +273,10 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
             coveragePercentage: $coverageReport->getCoveragePercentage(),
             diffCoveragePercentage: $coverageReport->getDiffCoveragePercentage(),
             diffUncoveredLines: $coverageReport->getDiffUncoveredLines(),
-            successfulUploads: count($coverageReport->getUploads()
-                ->getSuccessfulUploads()),
+            successfulUploads: count(
+                $coverageReport->getUploads()
+                    ->getSuccessfulUploads()
+            ),
             tagCoverage: (array)$this->serializer->normalize(
                 $coverageReport->getTagCoverage()
                     ->getTags()
@@ -324,6 +326,14 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         );
 
         if ($lineCommentType !== LineCommentType::HIDDEN) {
+            /**
+             * Built a set of line comments for the uncovered lines in the diff. Be aware, theres a
+             * possibility there will be no uncovered lines, meaning this might not return anything.
+             *
+             * However, we still want to let the publish service know that there are no comments to
+             * write, in case it needs to do anything with that information (i.e. clear existing
+             * comments).
+             */
             $lineComments = $this->lineGroupingService->generateComments(
                 $uploadsFinalised,
                 $coverageReport->getWaypoint()
@@ -332,10 +342,6 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                     ->getLines(),
                 $validUntil
             );
-
-            if ($lineComments === []) {
-                return null;
-            }
 
             return new PublishableLineCommentMessageCollection(
                 $uploadsFinalised,
