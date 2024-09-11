@@ -410,6 +410,16 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         $api = $this->client->graphql();
 
         foreach ($threadIds as $threadId) {
+            /** @var array{
+             *     data: array{
+             *          resolveReviewThread: array{
+             *              thread: array{
+             *                  id: string
+             *              }
+             *          }
+             *     }
+             * } $response
+             */
             $response = $api->execute(
                 query: <<<GQL
                 mutation resolveThread(\$threadId: ID!) {
