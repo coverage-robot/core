@@ -3,6 +3,7 @@
 namespace Packages\Message\PublishableMessage;
 
 use Countable;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
@@ -16,12 +17,26 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
      */
     public function __construct(
         private readonly EventInterface $event,
-        #[Assert\NotBlank]
         #[Assert\All([
             new Assert\Type(type: PublishableLineCommentInterface::class)
         ])]
         private readonly array $messages,
+        private ?DateTimeImmutable $validUntil = null
     ) {
+        if ($this->validUntil !== null) {
+            return;
+        }
+
+        if ($this->messages === []) {
+            $this->validUntil = new DateTimeImmutable();
+        } else {
+            $this->validUntil = max(
+                array_map(
+                    static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
+                    $this->messages
+                )
+            );
+        }
     }
 
     /**
@@ -41,12 +56,7 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
     #[Override]
     public function getValidUntil(): DateTimeInterface
     {
-        return max(
-            array_map(
-                static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
-                $this->messages
-            )
-        );
+        return $this->validUntil;
     }
 
     #[Override]
