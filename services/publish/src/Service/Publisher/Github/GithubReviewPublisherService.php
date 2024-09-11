@@ -101,10 +101,10 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 return true;
             }
 
-            $clearedSuccessfully = $this->clearExistingReviews(
+            $clearedSuccessfully = $this->updateExistingReviews(
                 $event->getOwner(),
                 $event->getRepository(),
-                (int)$event->getPullRequest()
+                (int)$event->getPullRequest(),
             );
 
             return $clearedSuccessfully &&
@@ -187,21 +187,62 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
      *
      * @throws ExceptionInterface
      */
-    private function clearExistingReviews(
+    private function updateExistingReviews(
         string $owner,
         string $repository,
         int $pullRequest,
+        bool $shouldPreserveInteractedWithComments = true
+    ): bool {
+        $hasUpdated = $this->updateExistingPullRequestComments(
+            $owner,
+            $repository,
+            $pullRequest,
+            $shouldPreserveInteractedWithComments
+        );
+
+        if (!$hasUpdated) {
+            $this->reviewPublisherLogger->critical('Failed to update all existing reviews.');
+        }
+
+        return $hasUpdated;
+    }
+
+    /**
+     * Delete all comments on a pull request review.
+     *
+     * There are options to delete or dismiss a review. However:
+     * 1. Dismissing a review will not remove the comments - leaving a section in the PR for a
+     *    previous (now outdated review)
+     * 2. Deleting a review only works for pending reviews (i.e. submitted ones cannot be
+     *    deleted)
+     *
+     * @param int[] $reviewIds If using the GraphQL API this must be an array of integers from fullDatabaseId
+     */
+    private function updateExistingPullRequestComments(
+        string $owner,
+        string $repository,
+        int $pullRequest,
+        bool $shouldPreserveInteractedWithComments
     ): bool {
         /** @var array{
          *     data: array{
          *          repository: array{
          *              pullRequest: array{
-         *                  reviews: array{
+         *                  reviewThreads: array{
          *                      nodes: list<array{
-         *                          fullDatabaseId: string,
-         *                          viewerDidAuthor: bool,
-         *                          viewerCanDelete: bool,
-         *                          comments: array{ totalCount: int }
+         *                          id: string,
+         *                          viewerCanResolve: bool,
+         *                          comments: array{
+         *                              nodes: list<array{
+         *                                  fullDatabaseId: int,
+         *                                  reactions: array{ totalCount: int },
+         *                                  pullRequestReview: array{
+         *                                      viewerDidAuthor: bool,
+         *                                      viewerCanDelete: bool
+         *                                  }
+         *                              }>,
+         *                              totalCount: int
+         *                          }
          *                      }>
          *                  }
          *              }
@@ -212,21 +253,30 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         $response = $this->client->graphql()
             ->execute(
                 query: <<<GQL
-                query getReviewComments(\$owner: String!, \$repository: String!, \$pullRequest: Int!) {
-                    repository(owner: \$owner, name: \$repository) {
-                        pullRequest(number: \$pullRequest) {
-                            reviews(last: 100, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
-                                nodes {
-                                    fullDatabaseId
-                                    viewerDidAuthor
-                                    viewerCanDelete
-                                    comments(first: 1) {
-                                        totalCount
-                                    }
-                                }
+                query getReviewThreads(\$owner: String!, \$repository: String!, \$pullRequest: Int!) {
+                  repository(owner: \$owner, name: \$repository) {
+                    pullRequest(number: \$pullRequest) {
+                      reviewThreads(last: 100) {
+                        nodes {
+                          id
+                          viewerCanResolve
+                          comments(first: 1) {
+                            nodes {
+                              fullDatabaseId
+                              reactions {
+                                totalCount
+                              }
+                              pullRequestReview {
+                                viewerDidAuthor
+                                viewerCanDelete
+                              }
                             }
+                            totalCount
+                          }
                         }
+                      }
                     }
+                  }
                 }
                 GQL,
                 variables: [
@@ -236,7 +286,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 ]
             );
 
-        if (!isset($response['data']['repository']['pullRequest']['reviews']['nodes'])) {
+        if (!isset($response['data']['repository']['pullRequest']['reviewThreads']['nodes'])) {
             $this->reviewPublisherLogger->info(
                 'No reviews found for pull request.',
                 [
@@ -247,23 +297,21 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             return true;
         }
 
-        $successful = true;
+        $commentsToDelete = [];
+        $threadsToResolve = [];
 
-        foreach ($response['data']['repository']['pullRequest']['reviews']['nodes'] as $existingReviewComment) {
-            // The GitHub GraphQL API uses different native IDs than the REST API - meaning we explicitly
-            // need to use the fullDatabaseId, as opposed to just the ID, to delete the review.
-            $reviewId = $existingReviewComment['fullDatabaseId'];
+        foreach ($response['data']['repository']['pullRequest']['reviewThreads']['nodes'] as $thread) {
+            $leadingComment = $thread['comments']['nodes'][0] ?? null;
+            $review = $leadingComment['pullRequestReview'] ?? null;
+
+            if ($review === null || $leadingComment === null) {
+                continue;
+            }
 
             // To retrieve this information we need to use the GraphQL API, as the REST equivalent won't
             // provide explicit author data, outside of the basic user entity
-            $didAuthor = $existingReviewComment['viewerDidAuthor'];
-            $canDelete = $existingReviewComment['viewerCanDelete'];
-            $totalComments = $existingReviewComment['comments']['totalCount'];
-
-            if ($totalComments === 0) {
-                // No comments on this review, so we can safely skip.
-                continue;
-            }
+            $didAuthor = $review['viewerDidAuthor'];
+            $canDelete = $review['viewerCanDelete'];
 
             if (!$didAuthor) {
                 // The review wasn't authored by us, so we can safely skip.
@@ -276,73 +324,45 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 continue;
             }
 
-            $hasDeleted = $this->deleteAllPullRequestComments(
-                $owner,
-                $repository,
-                $pullRequest,
-                (int)$reviewId
-            );
+            $threadId = $thread['id'];
+            $leadingCommentId = $leadingComment['fullDatabaseId'];
 
-            if (!$hasDeleted) {
-                $this->reviewPublisherLogger->critical(
-                    sprintf(
-                        'Failed to delete review with ID: %s',
-                        $reviewId
-                    ),
-                    [
-                        'response' => $response
-                    ]
-                );
+            $canResolve = $thread['viewerCanResolve'];
 
-                $successful = false;
+            $hasBeenInteractedWith = $thread['comments']['totalCount'] > 1 ||
+                $leadingComment['reactions']['totalCount'] > 0;
+
+            if (!$hasBeenInteractedWith || !$shouldPreserveInteractedWithComments) {
+                $commentsToDelete[] = $leadingCommentId;
+            } elseif ($canResolve) {
+                $threadsToResolve[] = $threadId;
             }
         }
 
-        return $successful;
+        $commentsDeleted = $this->deleteReviewThreadComments(
+            $owner,
+            $repository,
+            $commentsToDelete
+        );
+        $threadsResolved = $this->resolveReviewThreads($threadsToResolve);
+
+        return $commentsDeleted && $threadsResolved;
     }
 
     /**
-     * Delete all comments on a pull request review.
-     *
-     * There are options to delete or dismiss a review. However:
-     * 1. Dismissing a review will not remove the comments - leaving a section in the PR for a
-     *    previous (now outdated review)
-     * 2. Deleting a review only works for pending reviews (i.e. submitted ones cannot be
-     *    deleted)
-     *
-     * @param int $reviewId If using the GraphQL API this must be the fullDatabaseId
+     * @param int[] $commentIds
      */
-    private function deleteAllPullRequestComments(
+    private function deleteReviewThreadComments(
         string $owner,
         string $repository,
-        int $pullRequest,
-        int $reviewId
+        array $commentIds
     ): bool {
-        $paginator = $this->client->pagination(100);
-
-        $comments = $paginator->fetchAllLazy(
-            $this->client->pullRequest()
-                ->reviews(),
-            'comments',
-            [
-                $owner,
-                $repository,
-                $pullRequest,
-                $reviewId
-            ]
-        );
-
         $successful = true;
+        $comments = $this->client->pullRequest()
+            ->comments();
 
-        /** @var list<array{ id: string }> $comments */
-        foreach ($comments as $comment) {
-            $this->client->pullRequest()
-                ->comments()
-                ->remove(
-                    $owner,
-                    $repository,
-                    (int)$comment['id']
-                );
+        foreach ($commentIds as $commentId) {
+            $comments->remove($owner, $repository, $commentId);
 
             if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 $this->reviewPublisherLogger->error(
@@ -359,7 +379,75 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             }
         }
 
-        return $successful;
+        if (!$successful) {
+            return false;
+        }
+
+        $this->reviewPublisherLogger->info(
+            sprintf(
+                'Successfully resolved all %s of the threads.',
+                count($commentIds)
+            ),
+            [
+                'commentIds' => $commentIds
+            ]
+        );
+
+        return true;
+    }
+
+    /**
+     * @param string[] $threadIds
+     */
+    private function resolveReviewThreads(array $threadIds): bool
+    {
+        $successful = true;
+
+        $api = $this->client->graphql();
+
+        foreach ($threadIds as $threadId) {
+            $response = $api->execute(
+                query: <<<GQL
+                mutation resolveThread(\$threadId: ID!) {
+                    resolveReviewThread(input: {threadId: \$threadId}) {
+                        thread {
+                            id
+                        }
+                   }
+                }
+                GQL,
+                variables: [
+                    'threadId' => $threadId
+                ]
+            );
+
+            $successful = $successful &&
+                isset($response['data']['resolveReviewThread']['thread']['id']) &&
+                $response['data']['resolveReviewThread']['thread']['id'] === $threadId;
+        }
+
+        if (!$successful) {
+            $this->reviewPublisherLogger->info(
+                'Not all threads were deleted successfully.',
+                [
+                    'threadIds' => $threadIds
+                ]
+            );
+
+            return false;
+        }
+
+        $this->reviewPublisherLogger->info(
+            sprintf(
+                'Successfully resolved all %s of the threads.',
+                count($threadIds)
+            ),
+            [
+                'threadIds' => $threadIds
+            ]
+        );
+
+        return true;
     }
 
     /**
