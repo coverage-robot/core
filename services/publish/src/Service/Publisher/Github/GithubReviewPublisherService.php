@@ -304,7 +304,11 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $leadingComment = $thread['comments']['nodes'][0] ?? null;
             $review = $leadingComment['pullRequestReview'] ?? null;
 
-            if ($review === null || $leadingComment === null) {
+            if ($review === null) {
+                continue;
+            }
+
+            if ($leadingComment === null) {
                 continue;
             }
 
