@@ -23,7 +23,7 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
         private readonly array $messages,
         private ?DateTimeImmutable $validUntil = null
     ) {
-        if ($this->validUntil !== null) {
+        if ($this->validUntil instanceof DateTimeImmutable) {
             return;
         }
 
@@ -81,7 +81,7 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
     #[Override]
     public function __toString(): string
     {
-        return 'PublishableLineCommentMessageCollection#' . $this->getValidUntil()->format(DateTimeInterface::ATOM);
+        return 'PublishableLineCommentMessageCollection#' . $this->validUntil->format(DateTimeInterface::ATOM);
     }
 
     #[Override]
