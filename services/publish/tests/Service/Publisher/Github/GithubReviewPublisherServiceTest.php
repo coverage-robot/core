@@ -20,6 +20,7 @@ use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
+use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
@@ -174,7 +175,14 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                     'commit_id' => $event->getCommit(),
                     'body' => '',
                     'event' => 'COMMENT',
-                    'comments' => []
+                    'comments' => [
+                        [
+                            'path' => 'mock-file',
+                            'line' => 1,
+                            'side' => 'RIGHT',
+                            'body' => '50% of these branches are not covered by any tests.'
+                        ]
+                    ]
                 ]
             )
             ->willReturn([
@@ -206,9 +214,18 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_OK));
 
         $publisher->publish(
-            new PublishableLineCommentMessageCollection(
+            publishableMessage: new PublishableLineCommentMessageCollection(
                 event: $event,
-                messages: []
+                messages: [
+                    new PublishablePartialBranchLineCommentMessage(
+                        event: $event,
+                        fileName: 'mock-file',
+                        startLineNumber: 1,
+                        endLineNumber: 2,
+                        totalBranches: 2,
+                        coveredBranches: 1
+                    )
+                ]
             )
         );
     }
