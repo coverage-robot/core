@@ -191,7 +191,6 @@ final class GcsPersistService implements PersistServiceInterface
                         'info' => $job->info()
                     ]
                 );
-
             }
         } catch (GoogleException $e) {
             $this->gcsPersistServiceLogger->error(
