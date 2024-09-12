@@ -192,14 +192,14 @@ final class GcsPersistService implements PersistServiceInterface
                     ]
                 );
             }
-        } catch (GoogleException $e) {
+        } catch (GoogleException $googleException) {
             $this->gcsPersistServiceLogger->error(
                 sprintf(
                     'Unable to load data from GCS object for %s',
                     (string)$upload
                 ),
                 [
-                    'exception' => $e
+                    'exception' => $googleException
                 ]
             );
 
