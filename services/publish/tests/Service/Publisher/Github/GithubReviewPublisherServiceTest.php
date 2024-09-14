@@ -468,7 +468,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $matcher = $this->exactly(2);
         $mockGithubAppInstallationClient->expects($matcher)
             ->method('getLastResponse')
-            ->willReturnCallback(function () use ($matcher) {
+            ->willReturnCallback(function () use ($matcher): \Nyholm\Psr7\Response {
                 return match ($matcher->numberOfInvocations()) {
                     // The call to delete the first comment should return a 204
                     2 => new \Nyholm\Psr7\Response(Response::HTTP_NO_CONTENT),
