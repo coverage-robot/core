@@ -353,8 +353,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
         foreach ($commentIds as $commentId) {
             $comments->remove($owner, $repository, $commentId);
-$a = $this->client->getLastResponse();
-            if ($a?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+
+            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 $this->reviewPublisherLogger->error(
                     sprintf(
                         '%s status code returned while attempting to delete a review on a pull request.',
