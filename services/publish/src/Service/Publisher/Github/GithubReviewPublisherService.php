@@ -108,8 +108,14 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 true,
             );
 
-            return $clearedSuccessfully &&
-                $this->createReviewWithComments($event, $messages);
+            $newReviewCreated = $this->createReviewWithComments(
+                $event,
+                $messages
+            );
+
+            // We still want to create the review, even if we failed to clear the
+            // existing comments. But, if either fail, we should tell the caller.
+            return $clearedSuccessfully && $newReviewCreated;
         } catch (ExceptionInterface $exception) {
             $this->reviewPublisherLogger->error(
                 sprintf(
@@ -347,8 +353,8 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
         foreach ($commentIds as $commentId) {
             $comments->remove($owner, $repository, $commentId);
-
-            if ($this->client->getLastResponse()?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
+$a = $this->client->getLastResponse();
+            if ($a?->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 $this->reviewPublisherLogger->error(
                     sprintf(
                         '%s status code returned while attempting to delete a review on a pull request.',

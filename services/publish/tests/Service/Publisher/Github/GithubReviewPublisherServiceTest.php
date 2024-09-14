@@ -115,10 +115,12 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $mockGithubAppInstallationClient->method('getLastResponse')
             ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_OK));
 
-        $publisher->publish(
-            new PublishableLineCommentMessageCollection(
-                event: $event,
-                messages: []
+        $this->assertTrue(
+            $publisher->publish(
+                new PublishableLineCommentMessageCollection(
+                    event: $event,
+                    messages: []
+                )
             )
         );
     }
@@ -213,19 +215,21 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $mockGithubAppInstallationClient->method('getLastResponse')
             ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_OK));
 
-        $publisher->publish(
-            publishableMessage: new PublishableLineCommentMessageCollection(
-                event: $event,
-                messages: [
-                    new PublishablePartialBranchLineCommentMessage(
-                        event: $event,
-                        fileName: 'mock-file',
-                        startLineNumber: 1,
-                        endLineNumber: 2,
-                        totalBranches: 2,
-                        coveredBranches: 1
-                    )
-                ]
+        $this->assertTrue(
+            $publisher->publish(
+                publishableMessage: new PublishableLineCommentMessageCollection(
+                    event: $event,
+                    messages: [
+                        new PublishablePartialBranchLineCommentMessage(
+                            event: $event,
+                            fileName: 'mock-file',
+                            startLineNumber: 1,
+                            endLineNumber: 2,
+                            totalBranches: 2,
+                            coveredBranches: 1
+                        )
+                    ]
+                )
             )
         );
     }
@@ -424,7 +428,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                         [
                             'data' => [
                                 'resolveReviewThread' => [
-                                    'reviewThread' => [
+                                    'thread' => [
                                         'id' => 'mock-review-thread-id-2'
                                     ]
                                 ]
@@ -448,7 +452,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                         [
                             'data' => [
                                 'resolveReviewThread' => [
-                                    'reviewThread' => [
+                                    'thread' => [
                                         'id' => 'mock-review-thread-id-3'
                                     ]
                                 ]
@@ -461,13 +465,23 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $mockGithubAppInstallationClient->method('graphql')
             ->willReturn($mockGraphApi);
 
-        $mockGithubAppInstallationClient->method('getLastResponse')
-            ->willReturn(new \Nyholm\Psr7\Response(Response::HTTP_OK));
+        $matcher = $this->exactly(2);
+        $mockGithubAppInstallationClient->expects($matcher)
+            ->method('getLastResponse')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->numberOfInvocations()) {
+                    // The call to delete the first comment should return a 204
+                    2 => new \Nyholm\Psr7\Response(Response::HTTP_NO_CONTENT),
+                    default => new \Nyholm\Psr7\Response(Response::HTTP_OK),
+                };
+            });
 
-        $publisher->publish(
-            publishableMessage: new PublishableLineCommentMessageCollection(
-                event: $event,
-                messages: []
+        $this->assertTrue(
+            $publisher->publish(
+                publishableMessage: new PublishableLineCommentMessageCollection(
+                    event: $event,
+                    messages: []
+                )
             )
         );
     }
