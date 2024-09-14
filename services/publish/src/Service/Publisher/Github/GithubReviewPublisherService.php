@@ -214,7 +214,6 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
          *                  reviewThreads: array{
          *                      nodes: list<array{
          *                          id: string,
-         *                          viewerCanResolve: bool,
          *                          comments: array{
          *                              nodes: list<array{
          *                                  fullDatabaseId: int,
@@ -242,7 +241,6 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                             reviewThreads(last: 100) {
                                 nodes {
                                     id
-                                    viewerCanResolve
                                     comments(first: 1) {
                                         nodes {
                                             fullDatabaseId
@@ -317,14 +315,12 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
             $threadId = $thread['id'];
             $leadingCommentId = $leadingComment['fullDatabaseId'];
 
-            $canResolve = $thread['viewerCanResolve'];
-
             $hasBeenInteractedWith = $thread['comments']['totalCount'] > 1 ||
                 $leadingComment['reactions']['totalCount'] > 0;
 
             if (!$hasBeenInteractedWith || !$shouldPreserveInteractedWithComments) {
                 $commentsToDelete[] = $leadingCommentId;
-            } elseif ($canResolve) {
+            } else {
                 $threadsToResolve[] = $threadId;
             }
         }

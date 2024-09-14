@@ -311,7 +311,6 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                                     reviewThreads(last: 100) {
                                         nodes {
                                             id
-                                            viewerCanResolve
                                             comments(first: 1) {
                                                 nodes {
                                                     fullDatabaseId
@@ -345,7 +344,6 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                                             'nodes' => [
                                                 [
                                                     'id' => 'mock-review-thread-id',
-                                                    'viewerCanResolve' => true,
                                                     'comments' => [
                                                         'nodes' => [
                                                             [
@@ -364,7 +362,6 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                                                 ],
                                                 [
                                                     'id' => 'mock-review-thread-id-2',
-                                                    'viewerCanResolve' => true,
                                                     'comments' => [
                                                         'nodes' => [
                                                             [
@@ -385,7 +382,6 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                                                 ],
                                                 [
                                                     'id' => 'mock-review-thread-id-3',
-                                                    'viewerCanResolve' => true,
                                                     'comments' => [
                                                         'nodes' => [
                                                             [
