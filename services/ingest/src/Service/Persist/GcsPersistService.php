@@ -12,6 +12,7 @@ use App\Model\Coverage;
 use App\Model\File;
 use App\Service\BigQueryMetadataBuilderService;
 use Exception;
+use Google\Cloud\BigQuery\Exception\JobException;
 use Google\Cloud\BigQuery\Job;
 use Google\Cloud\Core\Exception\GoogleException;
 use Google\Cloud\Core\Exception\ServiceException;
@@ -149,9 +150,9 @@ final class GcsPersistService implements PersistServiceInterface
              * Occasionally BigQuery may through some kind of transient service exception
              * which we want to try and handle as gracefully as possible.
              *
-             * @var Job $job
+             * @var Job|null $job
              */
-            $job = $backoff->execute(function () use ($loadJob, $upload): Job {
+            $job = $backoff->execute(function () use ($loadJob, $upload): ?Job {
                 $this->gcsPersistServiceLogger->info(
                     sprintf(
                         'Attempting to execute and wait for load job to ingest %s.',
@@ -159,10 +160,37 @@ final class GcsPersistService implements PersistServiceInterface
                     )
                 );
 
-                // Run the job and, assuming the job is successfully created, wait for 5
-                // retires (approximately 60 seconds) before failing.
-                return $this->bigQueryClient->runJob($loadJob, ['maxRetries' => 5]);
+                try {
+                    // Run the job and, assuming the job is successfully created, wait for 5
+                    // retries (approximately 60 seconds) before failing.
+                    $job = $this->bigQueryClient->runJob($loadJob, ['maxRetries' => 5]);
+                } catch (JobException $jobException) {
+                    /**
+                     * If we get back a JobException, we know the job is still running, but hasn't
+                     * completed yet. As a result, we can't throw the exception as we'll backoff
+                     * and retry the job - which will fail because of duplication.
+                     *
+                     * In reality, if we get here, we should increase the number of retries as
+                     * we're not waiting long enough for the job to complete.
+                     */
+                    $this->gcsPersistServiceLogger->critical(
+                        sprintf(
+                            'Load job is still running for %s',
+                            (string)$upload
+                        ),
+                        [
+                            'exception' => $jobException
+                        ]
+                    );
+                    return null;
+                }
+
+                return $job;
             });
+
+            if ($job === null) {
+                return false;
+            }
 
             if (isset($job->info()['status']['errorResult'])) {
                 $this->gcsPersistServiceLogger->error(
