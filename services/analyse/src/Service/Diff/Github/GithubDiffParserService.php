@@ -165,7 +165,7 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
             ]
         );
 
-        /** @var array<array-key, object{ files?: list{ array{filename: string, patch?: string} } }> $commit */
+        /** @var array{ files?: list{ array{filename: string, patch?: string} } } $commit */
         $commit = $this->client->repo()
             ->commits()
             ->show(
