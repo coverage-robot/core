@@ -5,6 +5,7 @@ namespace App\Service\Diff\Github;
 use App\Exception\CommitDiffException;
 use App\Model\ReportWaypoint;
 use App\Service\Diff\DiffParserServiceInterface;
+use Generator;
 use Github\Exception\ExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
@@ -119,9 +120,6 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
 
     /**
      * Retrieve the unified diff from a particular pull request in GitHub.
-     *
-     * This request is fairly straightforward as the full diff can be fetched (e.g. it's not
-     * just the patch between each file).
      */
     private function getPullRequestDiff(string $owner, string $repository, int $pullRequest): string
     {
@@ -136,23 +134,23 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
             ]
         );
 
-        /** @var string $diff */
-        $diff = $this->client->pullRequest()
-            ->configure('diff')
-            ->show(
-                $owner,
-                $repository,
-                $pullRequest
+        /** @var Generator<array{filename: string, patch?: string}> $files */
+        $files = $this->client->pagination(100)
+            ->fetchAllLazy(
+                $this->client->pullRequest(),
+                'files',
+                [
+                    $owner,
+                    $repository,
+                    $pullRequest
+                ]
             );
 
-        return $diff;
+        return $this->mergePatchesIntoUnifiedDiff($files);
     }
 
     /**
      * Retrieve the unified diff from a particular commit in GitHub.
-     *
-     * This request is slightly more tricky as the API only provides patch diffs
-     * for each file, which means the patches needs to be joined together.
      */
     private function getCommitDiff(string $owner, string $repository, string $sha): string
     {
@@ -167,7 +165,7 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
             ]
         );
 
-        /** @var array<array-key, object{ files: array }> $commit */
+        /** @var array<array-key, object{ files?: list{ array{filename: string, patch?: string} } }> $commit */
         $commit = $this->client->repo()
             ->commits()
             ->show(
@@ -176,32 +174,7 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
                 $sha
             );
 
-        /** @var array<array-key, array{filename: string, patch?: string}> $files */
-        $files = $commit['files'] ?? [];
-
-        return array_reduce(
-            $files,
-            static function (string $diff, array $file): string {
-                /**
-                 * Default files without a patch to show as empty. These will be binary files or similar
-                 * where the patch isn't available. In these cases, we're not interested in the diff anyway
-                 * as there'll be no coverage information related to these lines.
-                 *
-                 * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
-                 *
-                 * @var array{filename: string, patch?: string} $file
-                 */
-                $patch = $file['patch'] ?? '';
-
-                return <<<DIFF
-                $diff
-                --- a/{$file['filename']}
-                +++ b/{$file['filename']}
-                {$patch}
-                DIFF;
-            },
-            ''
-        );
+        return $this->mergePatchesIntoUnifiedDiff($commit['files'] ?? []);
     }
 
     /**
@@ -217,5 +190,36 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
         }
 
         return $path;
+    }
+
+    /**
+     * @param Generator<array{ filename: string, patch?: string }>|list{ array{ filename: string, patch?: string } } $files
+     * @return string
+     */
+    private function mergePatchesIntoUnifiedDiff(Generator|array $files): string
+    {
+        $diff = '';
+
+        foreach ($files as $file) {
+            /**
+             * Default files without a patch to show as empty. These will be binary files or similar
+             * where the patch isn't available. In these cases, we're not interested in the diff anyway
+             * as there'll be no coverage information related to these lines.
+             *
+             * @see https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#get-a-commit
+             *
+             * @var array{filename: string, patch?: string} $file
+             */
+            $patch = $file['patch'] ?? '';
+
+            $diff = <<<DIFF
+                $diff
+                --- a/{$file['filename']}
+                +++ b/{$file['filename']}
+                {$patch}
+                DIFF;
+        }
+
+        return $diff;
     }
 }
