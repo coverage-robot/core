@@ -6,6 +6,9 @@ use App\Model\ReportWaypoint;
 use App\Service\Diff\Github\GithubDiffParserService;
 use Github\Api\PullRequest;
 use Github\Api\Repo;
+use Github\Client;
+use Github\ResultPager;
+use Nyholm\Psr7\Response;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -17,7 +20,17 @@ final class GithubDiffParserServiceTest extends TestCase
 {
     public function testGetDiffFromPullRequest(): void
     {
+        $mockClient = $this->createMock(Client::class);
+        $mockClient->expects($this->once())
+            ->method('getLastResponse')
+            ->willReturn(new Response());
+
         $mockApiClient = $this->createMock(GithubAppInstallationClientInterface::class);
+        $mockApiClient->expects($this->once())
+            ->method('pagination')
+            ->with(100)
+            ->willReturn(new ResultPager($mockClient));
+
         $mockPullRequestApi = $this->createMock(PullRequest::class);
 
         $parser = new GithubDiffParserService(
@@ -36,36 +49,38 @@ final class GithubDiffParserServiceTest extends TestCase
             ->method('pullRequest')
             ->willReturn($mockPullRequestApi);
         $mockPullRequestApi->expects($this->once())
-            ->method('configure')
-            ->willReturn($mockPullRequestApi);
-        $mockPullRequestApi->expects($this->once())
-            ->method('show')
-            ->willReturn(
-                <<<DIFF
-                --- a/file-1.php
-                +++ b/file-1.php
-                @@ -162,7 +162,7 @@
-                                     line-1
-                                 line-2
+            ->method('files')
+            ->with('mock-owner', 'mock-repository', 1)
+            ->willReturn([
+                [
+                    'filename' => 'file-1.php',
+                    'patch' => <<<DIFF
+                        @@ -162,7 +162,7 @@
+                                             line-1
+                                         line-2
 
-                -            line-3.
-                +            line-3
-                                 line-4
-                                     line-5
-                                         line-6
-                --- a/file-2.php
-                +++ b/file-2.php
-                @@ -162,7 +162,7 @@
-                                     line-1
-                                 line-2
+                        -            line-3.
+                        +            line-3
+                                         line-4
+                                             line-5
+                                                 line-6
+                        DIFF
+                ],
+                [
+                    'filename' => 'file-2.php',
+                    'patch' => <<<DIFF
+                        @@ -162,7 +162,7 @@
+                                             line-1
+                                         line-2
 
-                -            line-3
-                +            line-3.
-                                 line-4
-                                     line-5
-                                         line-6
-                DIFF
-            );
+                        -            line-3
+                        +            line-3.
+                                         line-4
+                                             line-5
+                                                 line-6
+                        DIFF
+                ]
+            ]);
 
         $addedLines = $parser->get($mockWaypoint);
 
