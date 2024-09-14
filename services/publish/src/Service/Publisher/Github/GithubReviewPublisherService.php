@@ -105,6 +105,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
                 $event->getOwner(),
                 $event->getRepository(),
                 (int)$event->getPullRequest(),
+                true,
             );
 
             return $clearedSuccessfully &&
@@ -182,30 +183,6 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
         return true;
     }
 
-    /**
-     * Remove any existing reviews, and review comments, from the pull request.
-     *
-     * @throws ExceptionInterface
-     */
-    private function updateExistingReviews(
-        string $owner,
-        string $repository,
-        int $pullRequest,
-        bool $shouldPreserveInteractedWithComments = true
-    ): bool {
-        $hasUpdated = $this->updateExistingPullRequestComments(
-            $owner,
-            $repository,
-            $pullRequest,
-            $shouldPreserveInteractedWithComments
-        );
-
-        if (!$hasUpdated) {
-            $this->reviewPublisherLogger->critical('Failed to update all existing reviews.');
-        }
-
-        return $hasUpdated;
-    }
 
     /**
      * Delete all comments on a pull request review.
@@ -218,7 +195,7 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
      *
      * @param int[] $reviewIds If using the GraphQL API this must be an array of integers from fullDatabaseId
      */
-    private function updateExistingPullRequestComments(
+    private function updateExistingReviews(
         string $owner,
         string $repository,
         int $pullRequest,
@@ -252,34 +229,34 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
          */
         $response = $this->client->graphql()
             ->execute(
-                query: <<<GQL
+                <<<GQL
                 query getReviewThreads(\$owner: String!, \$repository: String!, \$pullRequest: Int!) {
-                  repository(owner: \$owner, name: \$repository) {
-                    pullRequest(number: \$pullRequest) {
-                      reviewThreads(last: 100) {
-                        nodes {
-                          id
-                          viewerCanResolve
-                          comments(first: 1) {
-                            nodes {
-                              fullDatabaseId
-                              reactions {
-                                totalCount
-                              }
-                              pullRequestReview {
-                                viewerDidAuthor
-                                viewerCanDelete
-                              }
+                    repository(owner: \$owner, name: \$repository) {
+                        pullRequest(number: \$pullRequest) {
+                            reviewThreads(last: 100) {
+                                nodes {
+                                    id
+                                    viewerCanResolve
+                                    comments(first: 1) {
+                                        nodes {
+                                            fullDatabaseId
+                                            reactions {
+                                                totalCount
+                                            }
+                                            pullRequestReview {
+                                                viewerDidAuthor
+                                                viewerCanDelete
+                                            }
+                                        }
+                                        totalCount
+                                    }
+                                }
                             }
-                            totalCount
-                          }
                         }
-                      }
                     }
-                  }
                 }
                 GQL,
-                variables: [
+                [
                     'owner' => $owner,
                     'repository' => $repository,
                     'pullRequest' => $pullRequest
@@ -288,7 +265,10 @@ final class GithubReviewPublisherService implements PublisherServiceInterface
 
         if (!isset($response['data']['repository']['pullRequest']['reviewThreads']['nodes'])) {
             $this->reviewPublisherLogger->info(
-                'No reviews found for pull request.',
+                sprintf(
+                    'No reviews found for pull request %s.',
+                    $pullRequest
+                ),
                 [
                     'response' => $response
                 ]
