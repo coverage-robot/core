@@ -164,7 +164,7 @@ final class GcsPersistService implements PersistServiceInterface
                     // Run the job and, assuming the job is successfully created, wait for 5
                     // retries (approximately 60 seconds) before failing.
                     $job = $this->bigQueryClient->runJob($loadJob, ['maxRetries' => 5]);
-                } catch (JobException) {
+                } catch (JobException $jobException) {
                     /**
                      * If we get back a JobException, we know the job is still running, but hasn't
                      * completed yet. As a result, we can't throw the exception as we'll backoff
@@ -179,7 +179,7 @@ final class GcsPersistService implements PersistServiceInterface
                             (string)$upload
                         ),
                         [
-                            'exception' => $e
+                            'exception' => $jobException
                         ]
                     );
                     return null;
