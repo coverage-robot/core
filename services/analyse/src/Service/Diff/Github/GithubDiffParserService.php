@@ -193,8 +193,7 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
     }
 
     /**
-     * @param Generator<array{ filename: string, patch?: string }>|list{ array{ filename: string, patch?: string } } $files
-     * @return string
+     * @param Generator<array{filename: string, patch?: string}>|list<array{filename: string, patch?: string}> $files
      */
     private function mergePatchesIntoUnifiedDiff(Generator|array $files): string
     {
