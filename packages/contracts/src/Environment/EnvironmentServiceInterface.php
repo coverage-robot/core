@@ -9,7 +9,7 @@ interface EnvironmentServiceInterface
      */
     public function getEnvironment(): Environment;
 
-   /**
+    /**
      * Get the value of an environment variable.
      */
     public function getVariable($variable): string;
