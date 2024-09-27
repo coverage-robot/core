@@ -10,6 +10,11 @@ interface EnvironmentServiceInterface
     public function getEnvironment(): Environment;
 
     /**
+     * Get the name of the service which the code is running in.
+     */
+    public function getService(): Service;
+
+    /**
      * Get the value of an environment variable.
      */
     public function getVariable($variable): string;
