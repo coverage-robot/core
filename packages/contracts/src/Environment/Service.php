@@ -6,7 +6,7 @@ enum Service: string
 {
     case API = 'api';
     case ANALYSE = 'analyse';
-    case PUBLUSH = 'publish';
+    case PUBLISH = 'publish';
     case ORCHESTRATOR = 'orchestrator';
     case INGEST = 'ingest';
 }
