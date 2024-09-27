@@ -4,6 +4,7 @@ namespace Packages\Configuration\Tests\Service;
 
 use Packages\Configuration\Service\EnvironmentService;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -20,7 +21,7 @@ final class EnvironmentServiceTest extends TestCase
             ->method('getEnvironment')
             ->willReturn($environmentValue);
 
-        $environmentService = new EnvironmentService($mockKernel);
+        $environmentService = new EnvironmentService($mockKernel, Service::API);
         $this->assertEquals(
             $expectedEnvironment,
             $environmentService->getEnvironment()
