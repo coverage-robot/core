@@ -1,2 +1,2 @@
 configuration:
-    service: publish
+    service: !php/const Packages\Contracts\Environment\Service::PUBLISH

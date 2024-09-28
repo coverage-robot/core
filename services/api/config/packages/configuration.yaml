@@ -1,2 +1,2 @@
 configuration:
-    service: api
+    service: !php/const Packages\Contracts\Environment\Service::API
