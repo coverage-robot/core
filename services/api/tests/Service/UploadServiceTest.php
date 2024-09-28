@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Packages\Contracts\Environment\Service;
 
 final class UploadServiceTest extends KernelTestCase
 {
@@ -132,7 +133,10 @@ final class UploadServiceTest extends KernelTestCase
 
         $uploadService = new UploadService(
             $mockUploadSignerService,
-            MockEnvironmentServiceFactory::createMock(Environment::PRODUCTION),
+            MockEnvironmentServiceFactory::createMock(
+                Environment::PRODUCTION,
+                Service::API
+            ),
             $mockUniqueIdGeneratorService,
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()

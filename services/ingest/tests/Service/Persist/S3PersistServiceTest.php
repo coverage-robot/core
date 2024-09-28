@@ -24,6 +24,7 @@ use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
+use Packages\Contracts\Environment\Service;
 
 final class S3PersistServiceTest extends KernelTestCase
 {
@@ -86,7 +87,10 @@ final class S3PersistServiceTest extends KernelTestCase
 
         $S3PersistService = new S3PersistService(
             $mockS3Client,
-            MockEnvironmentServiceFactory::createMock(Environment::DEVELOPMENT),
+            MockEnvironmentServiceFactory::createMock(
+                Environment::DEVELOPMENT,
+                Service::INGEST
+            ),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
         );

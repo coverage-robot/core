@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Packages\Contracts\Environment\Service;
 
 final class WebhookControllerTest extends WebTestCase
 {
@@ -176,6 +177,7 @@ final class WebhookControllerTest extends WebTestCase
                     new NullLogger(),
                     MockEnvironmentServiceFactory::createMock(
                         Environment::TESTING,
+                        Service::API,
                         [
                             EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                         ]

@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
+use Packages\Contracts\Environment\Service;
 
 final class GithubWebhookSignatureServiceTest extends TestCase
 {
@@ -32,6 +33,7 @@ final class GithubWebhookSignatureServiceTest extends TestCase
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::API,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
@@ -51,6 +53,7 @@ final class GithubWebhookSignatureServiceTest extends TestCase
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::API,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
@@ -72,6 +75,7 @@ final class GithubWebhookSignatureServiceTest extends TestCase
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::API,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => 'mock-webhook-secret'
                 ]
@@ -90,6 +94,7 @@ final class GithubWebhookSignatureServiceTest extends TestCase
             new NullLogger(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::API,
                 [
                     EnvironmentVariable::WEBHOOK_SECRET->value => $secret
                 ]

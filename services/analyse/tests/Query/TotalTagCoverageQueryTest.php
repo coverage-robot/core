@@ -19,6 +19,7 @@ use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
+use Packages\Contracts\Environment\Service;
 
 final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -29,6 +30,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ANALYSE,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
                 ]

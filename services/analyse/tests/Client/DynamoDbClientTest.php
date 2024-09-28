@@ -6,6 +6,7 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\TotalUploadsQueryResult;
+use Packages\Contracts\Environment\Service;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Response;
 use AsyncAws\DynamoDb\Input\GetItemInput;
@@ -60,6 +61,7 @@ final class DynamoDbClientTest extends TestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ANALYSE,
                 [
                     EnvironmentVariable::QUERY_CACHE_TABLE_NAME->value => 'mock-query-cache-table-name'
                 ]
@@ -133,6 +135,7 @@ final class DynamoDbClientTest extends TestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ANALYSE,
                 [
                     EnvironmentVariable::QUERY_CACHE_TABLE_NAME->value => 'mock-query-cache-table-name'
                 ]

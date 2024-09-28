@@ -15,6 +15,7 @@ use Google\Cloud\BigQuery\LoadJobConfiguration;
 use Google\Cloud\BigQuery\Table;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use Packages\Contracts\Environment\Service;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Format\CoverageFormat;
@@ -81,6 +82,7 @@ final class GcsPersistServiceTest extends KernelTestCase
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::DEVELOPMENT,
+                Service::INGEST,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table',
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-upload-table'
@@ -174,6 +176,7 @@ final class GcsPersistServiceTest extends KernelTestCase
             $this->getContainer()->get(BigQueryMetadataBuilderService::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::DEVELOPMENT,
+                Service::INGEST,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
                 ]
