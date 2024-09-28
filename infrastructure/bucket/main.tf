@@ -85,3 +85,11 @@ resource "aws_s3_bucket_lifecycle_configuration" "output_lifecycle" {
     aws_s3_bucket.coverage_output
   ]
 }
+
+resource "aws_s3_bucket" "service_object_references" {
+  bucket = format("coverage-object-reference-%s", var.environment)
+
+  tags = {
+    environment = var.environment
+  }
+}
