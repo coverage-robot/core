@@ -75,7 +75,7 @@ final class EventBusClientTest extends TestCase
                     $event = $request->getEntries()[0];
 
                     $this->assertEquals(
-                        Service::ANALYSE,
+                        Service::ANALYSE->value,
                         $event->getSource()
                     );
                     $this->assertEquals(
@@ -168,13 +168,18 @@ final class EventBusClientTest extends TestCase
             ->method('validate')
             ->with($mockEvent);
 
+        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->expects($this->once())
+            ->method('getService')
+            ->willReturn(Service::ANALYSE);
+
         $eventBusClient = new EventBusClient(
             'mock-event-bus',
             'mock-event-bus-arn',
             'mock-scheduler-role-arn',
             $this->createMock(EventBridgeClient::class),
             $mockScheduler,
-            $this->createMock(EnvironmentServiceInterface::class),
+            $mockEnvironmentService,
             $mockSerializer,
             new EventValidationService($mockValidator),
             new NullLogger()
