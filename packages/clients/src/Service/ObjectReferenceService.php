@@ -3,12 +3,16 @@
 namespace Packages\Clients\Service;
 
 use AsyncAws\S3\Input\GetObjectRequest;
+use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\S3Client;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use Packages\Clients\Model\Object\Reference;
+use Packages\Clients\Tests\Client\ObjectReferenceClient;
+use Packages\Clients\Tests\Client\ObjectReferenceClientInterface;
+use Packages\Clients\Tests\Client\S3ClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Psr\Log\LoggerInterface;
@@ -20,7 +24,8 @@ class ObjectReferenceService
     public function __construct(
         #[Autowire(value: '%object_reference_store.name%')]
         private readonly string $objectReferenceStoreName,
-        private readonly S3Client $client,
+        #[Autowire(service: ObjectReferenceClient::class)]
+        private readonly ObjectReferenceClientInterface $client,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $objectReferenceLogger
     ) {
@@ -73,12 +78,14 @@ class ObjectReferenceService
             'created_at' => (new DateTime())->format(DateTimeInterface::ATOM),
         ];
 
-        $object =  $this->client->putObject([
+        $object =  $this->client->putObject(
+            new PutObjectRequest([
             'Bucket' => $this->objectReferenceStoreName,
             'Key' => $key,
             'Body' => $content,
             'Metadata' => $metadata
-        ]);
+            ])
+        );
 
         $expiration = new DateTimeImmutable('+1 day');
 
