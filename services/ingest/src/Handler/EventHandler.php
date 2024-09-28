@@ -127,7 +127,6 @@ final class EventHandler extends S3Handler
                 );
 
                 $this->eventBusClient->fireEvent(
-                    EventSource::INGEST,
                     new IngestFailure(
                         $upload,
                         new DateTimeImmutable()
@@ -215,7 +214,6 @@ final class EventHandler extends S3Handler
     private function triggerIngestionStartedEvent(Upload $upload): bool
     {
         return $this->eventBusClient->fireEvent(
-            EventSource::INGEST,
             new IngestStarted(
                 $upload,
                 new DateTimeImmutable()
@@ -243,7 +241,6 @@ final class EventHandler extends S3Handler
         );
 
         return $this->eventBusClient->fireEvent(
-            EventSource::INGEST,
             new IngestSuccess(
                 $upload,
                 new DateTimeImmutable()

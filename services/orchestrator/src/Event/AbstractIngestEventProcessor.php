@@ -89,7 +89,6 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             );
 
             $this->eventBusClient->fireEvent(
-                EventSource::ORCHESTRATOR,
                 new UploadsStarted(
                     $currentState->getProvider(),
                     $currentState->getOwner(),
@@ -134,7 +133,6 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                 $this->publishClient->dispatch(new PublishableCoverageRunningJobMessage($event));
 
                 $this->eventBusClient->fireEvent(
-                    EventSource::ORCHESTRATOR,
                     new UploadsFinalised(
                         $finalisedEvent->getProvider(),
                         $finalisedEvent->getOwner(),
