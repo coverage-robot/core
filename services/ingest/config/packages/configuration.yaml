@@ -1,2 +1,2 @@
 configuration:
-    service: ingest
+    service: !php/const Packages\Contracts\Environment\Service::INGEST

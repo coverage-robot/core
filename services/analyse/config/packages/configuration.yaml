@@ -1,2 +1,2 @@
 configuration:
-    service: analyse
+    service: !php/const Packages\Contracts\Environment\Service::ANALYSE
