@@ -186,7 +186,6 @@ final class EventHandler extends SqsHandler
         }
 
         $this->eventBusClient->fireEvent(
-            EventSource::PUBLISH,
             new CoverageFailed(
                 provider: $event->getProvider(),
                 owner: $event->getOwner(),

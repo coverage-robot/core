@@ -243,7 +243,6 @@ final class EventHandler extends S3Handler
         );
 
         return $this->eventBusClient->fireEvent(
-            EventSource::INGEST,
             new IngestSuccess(
                 $upload,
                 new DateTimeImmutable()

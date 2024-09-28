@@ -24,10 +24,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->exactly((int)$shouldSendConfigurationFileChangeEvent))
             ->method('fireEvent')
-            ->with(
-                EventSource::API,
-                $this->isInstanceOf(ConfigurationFileChange::class)
-            );
+            ->with($this->isInstanceOf(ConfigurationFileChange::class));
 
         $processor = new CommitsPushedWebhookProcessor(
             new NullLogger(),
