@@ -40,6 +40,6 @@ final class ConfigurationBundle extends AbstractBundle
      */
     private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
     {
-        $container->parameters()->set('configuration.service', Service::from($config['service']));
+        $container->parameters()->set('configuration.service', $config['service']);
     }
 }
