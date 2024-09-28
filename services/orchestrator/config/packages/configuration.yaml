@@ -1,2 +1,2 @@
 configuration:
-    service: !php/const Packages\Contracts\Environment\Service::ORCHESTATOR
+    service: !php/const Packages\Contracts\Environment\Service::ORCHESTRATOR
