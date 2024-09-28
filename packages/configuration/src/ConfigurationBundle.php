@@ -28,7 +28,9 @@ final class ConfigurationBundle extends AbstractBundle
     {
         $definition->rootNode()
             ->children()
-                ->scalarNode('service')->end()
+                ->enumNode('service')
+                    ->values(Service::cases())
+                ->end()
             ->end()
         ;
     }
