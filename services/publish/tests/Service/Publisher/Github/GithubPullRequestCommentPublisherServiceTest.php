@@ -19,6 +19,7 @@ use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
+use Packages\Contracts\Environment\Service;
 
 final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
@@ -31,7 +32,8 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
-                Environment::TESTING
+                Environment::TESTING,
+                Service::PUBLISH,
             ),
             new NullLogger()
         );
@@ -64,6 +66,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
@@ -139,6 +142,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]

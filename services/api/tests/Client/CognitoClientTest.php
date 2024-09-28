@@ -6,6 +6,7 @@ use App\Client\CognitoClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\TokenType;
 use App\Model\Tokens;
+use Packages\Contracts\Environment\Service;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use AsyncAws\CognitoIdentityProvider\Input\AdminConfirmSignUpRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminGetUserRequest;
@@ -67,6 +68,7 @@ final class CognitoClientTest extends TestCase
             $client,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::API,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',
                     EnvironmentVariable::PROJECT_POOL_CLIENT_ID->value => 'mock-client-id',
@@ -142,6 +144,7 @@ final class CognitoClientTest extends TestCase
             $client,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::API,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',
                     EnvironmentVariable::PROJECT_POOL_CLIENT_ID->value => 'mock-client-id',
@@ -204,6 +207,7 @@ final class CognitoClientTest extends TestCase
             $client,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::API,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-pool-id',
                     EnvironmentVariable::PROJECT_POOL_CLIENT_ID->value => 'mock-client-id',

@@ -6,6 +6,7 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Model\Job;
+use Packages\Contracts\Environment\Service;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -43,6 +44,7 @@ final class DynamoDbClientTest extends KernelTestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]
@@ -133,6 +135,7 @@ final class DynamoDbClientTest extends KernelTestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]
@@ -248,6 +251,7 @@ final class DynamoDbClientTest extends KernelTestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]

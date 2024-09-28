@@ -17,6 +17,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
+use Packages\Contracts\Environment\Service;
 
 final class NewProjectCommandTest extends KernelTestCase
 {
@@ -34,6 +35,7 @@ final class NewProjectCommandTest extends KernelTestCase
             $mockClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::API,
                 [
                     EnvironmentVariable::PROJECT_POOL_ID->value => 'mock-project-pool-id',
                     EnvironmentVariable::PROJECT_POOL_CLIENT_ID->value => 'mock-project-pool-client-id',

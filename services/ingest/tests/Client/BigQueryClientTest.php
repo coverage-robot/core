@@ -6,6 +6,7 @@ use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use PHPUnit\Framework\TestCase;
 
 final class BigQueryClientTest extends TestCase
@@ -15,6 +16,7 @@ final class BigQueryClientTest extends TestCase
         $client = new BigQueryClient(
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::INGEST,
                 [
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset',
@@ -31,6 +33,7 @@ final class BigQueryClientTest extends TestCase
         $client = new BigQueryClient(
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::INGEST,
                 [
                     EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'mock-dataset'

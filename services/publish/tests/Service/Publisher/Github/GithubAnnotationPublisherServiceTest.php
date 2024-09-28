@@ -24,6 +24,7 @@ use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessa
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
+use Packages\Contracts\Environment\Service;
 
 final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
@@ -41,7 +42,8 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             ),
             $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                Environment::TESTING
+                Environment::TESTING,
+                Service::PUBLISH,
             ),
             new NullLogger()
         );
@@ -87,6 +89,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
