@@ -15,11 +15,13 @@ final class ObjectReferenceClient implements ObjectReferenceClientInterface
     ) {
     }
 
+    #[\Override]
     public function presign(Input $input, ?DateTimeImmutable $expires = null): string
     {
         return $this->client->presign($input, $expires);
     }
 
+    #[\Override]
     public function putObject(PutObjectRequest $input): PutObjectOutput
     {
         return $this->client->putObject($input);

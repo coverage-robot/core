@@ -25,7 +25,7 @@ class ObjectReferenceServiceTest extends TestCase
         $mockS3Client = $this->createMock(ObjectReferenceClientInterface::class);
         $mockS3Client->expects($this->once())
         ->method('putObject')
-        ->with($this->callback(function (PutObjectRequest $input) {
+        ->with($this->callback(function (PutObjectRequest $input): bool {
             return $input->getBucket() === 'object_reference_store_name'
                 && $input->getKey() !== null
                 && $input->getBody() !== null
@@ -35,7 +35,7 @@ class ObjectReferenceServiceTest extends TestCase
 
         $mockS3Client->expects($this->once())
         ->method('presign')
-        ->with($this->callback(function ($input) {
+        ->with($this->callback(function ($input): bool {
             return $input->getBucket() === 'object_reference_store_name'
                     && $input->getKey() !== null;
         }))
@@ -73,7 +73,7 @@ class ObjectReferenceServiceTest extends TestCase
             new DateTimeImmutable('+1 day')
         );
         print_r($reference);
-        $reference = $objectReferenceService->resolveReference($reference);
+        $objectReferenceService->resolveReference($reference);
     }
 
 

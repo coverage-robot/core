@@ -32,6 +32,7 @@ class Reference implements Stringable
         return $this->expiration;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return sprintf(
