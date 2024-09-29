@@ -9,6 +9,7 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
+use Http\Message\Authentication\Wsse;
 use Packages\Clients\Model\Object\Reference;
 use Packages\Clients\Tests\Client\ObjectReferenceClient;
 use Packages\Clients\Tests\Client\ObjectReferenceClientInterface;
@@ -16,6 +17,7 @@ use Packages\Clients\Tests\Client\S3ClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
@@ -39,7 +41,7 @@ class ObjectReferenceService
     public function resolveReference(Reference $reference): mixed
     {
         if ($reference->getExpiration() < new DateTime()) {
-            throw new Exception(
+            throw new RuntimeException(
                 sprintf(
                     'Cannot resolve %s as it expired at %s',
                     (string) $reference,
@@ -78,12 +80,12 @@ class ObjectReferenceService
             'created_at' => (new DateTime())->format(DateTimeInterface::ATOM),
         ];
 
-        $object =  $this->client->putObject(
+        $this->client->putObject(
             new PutObjectRequest([
-            'Bucket' => $this->objectReferenceStoreName,
-            'Key' => $key,
-            'Body' => $content,
-            'Metadata' => $metadata
+                'Bucket' => $this->objectReferenceStoreName,
+                'Key' => $key,
+                'Body' => $content,
+                'Metadata' => $metadata
             ])
         );
 
