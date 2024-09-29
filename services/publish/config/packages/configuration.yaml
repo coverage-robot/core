@@ -1,3 +1,2 @@
 configuration:
     service: !php/const Packages\Contracts\Environment\Service::PUBLISH
-    object_reference_store: '%env(OBJECT_REFERENCE_STORE_BUCKET_NAME)%'

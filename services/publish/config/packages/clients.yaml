@@ -1,0 +1,3 @@
+configuration:
+    object_reference_store:
+        name: '%env(OBJECT_REFERENCE_STORE_BUCKET_NAME)%'
