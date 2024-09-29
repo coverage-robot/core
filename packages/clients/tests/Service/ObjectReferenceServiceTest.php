@@ -72,8 +72,7 @@ class ObjectReferenceServiceTest extends TestCase
             'php://temp',
             new DateTimeImmutable('+1 day')
         );
-        print_r($reference);
-        $objectReferenceService->resolveReference($reference);
+        $this->assertIsResource($objectReferenceService->resolveReference($reference));
     }
 
 
