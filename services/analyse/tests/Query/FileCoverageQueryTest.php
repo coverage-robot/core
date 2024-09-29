@@ -13,6 +13,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
+use Packages\Contracts\Environment\Service;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -29,6 +30,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ANALYSE,
                 [
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
                 ]

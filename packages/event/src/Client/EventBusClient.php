@@ -18,7 +18,6 @@ use DateTimeInterface;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Exception\InvalidEventException;
 use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
@@ -75,7 +74,7 @@ final class EventBusClient implements EventBusClientInterface
      * @throws HttpException
      */
     #[Override]
-    public function fireEvent(EventSource $source, EventInterface $event): bool
+    public function fireEvent(EventInterface $event): bool
     {
         try {
             $this->eventValidationService->validate($event);
@@ -96,7 +95,7 @@ final class EventBusClient implements EventBusClientInterface
 
         $request = [
             'EventBusName' => $this->eventBusName,
-            'Source' => $source->value,
+            'Source' => $this->environmentService->getService()->value,
             'DetailType' => $event->getType()->value,
             'Detail' => $this->serializer->serialize($event, 'json'),
         ];
@@ -134,7 +133,6 @@ final class EventBusClient implements EventBusClientInterface
      */
     #[Override]
     public function scheduleEvent(
-        EventSource $source,
         EventInterface $event,
         DateTimeInterface $fireAt
     ): bool {
@@ -162,7 +160,7 @@ final class EventBusClient implements EventBusClientInterface
                     'Arn' => $this->eventBusArn,
                     'RoleArn' => $this->schedulerRoleArn,
                     'EventBridgeParameters' => new EventBridgeParameters([
-                        'Source' => $source->value,
+                        'Source' => $this->environmentService->getService()->value,
                         'DetailType' => $event->getType()->value,
                     ]),
                     'Input' => $this->serializer->serialize($event, 'json')

@@ -22,6 +22,7 @@ use Packages\Message\PublishableMessage\PublishableCheckRunStatus;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
+use Packages\Contracts\Environment\Service;
 
 final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
@@ -33,7 +34,10 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             $this->createMock(GithubAppInstallationClientInterface::class),
-            MockEnvironmentServiceFactory::createMock(Environment::TESTING),
+            MockEnvironmentServiceFactory::createMock(
+                Environment::TESTING,
+                Service::PUBLISH
+            ),
             new NullLogger()
         );
 
@@ -60,6 +64,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
@@ -129,6 +134,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]

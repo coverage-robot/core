@@ -86,7 +86,6 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                  * This will let any services know that the project's utilisation has increased
                  */
                 $this->eventBusClient->fireEvent(
-                    EventSource::ANALYSE,
                     new UtilisationAmendment(
                         provider: $event->getProvider(),
                         owner: $event->getOwner(),
@@ -102,7 +101,6 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                  * Broadcast the finalised coverage event so that other services can act on it.
                  */
                 $this->eventBusClient->fireEvent(
-                    EventSource::ANALYSE,
                     new CoverageFinalised(
                         provider: $event->getProvider(),
                         owner: $event->getOwner(),
@@ -147,7 +145,6 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         // If we've reached this point, we've failed to publish the coverage report. We should broadcast that
         // in case any services are subscribed to the event.
         $this->eventBusClient->fireEvent(
-            EventSource::ANALYSE,
             new CoverageFailed(
                 provider: $event->getProvider(),
                 owner: $event->getOwner(),

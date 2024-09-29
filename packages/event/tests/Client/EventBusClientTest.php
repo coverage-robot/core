@@ -14,9 +14,9 @@ use AsyncAws\Scheduler\SchedulerClient;
 use DateTimeImmutable;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Enum\EnvironmentVariable;
@@ -42,7 +42,10 @@ final class EventBusClientTest extends TestCase
             ->with($mockEvent, 'json')
             ->willReturn('mock-serialized-json');
 
-        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService  = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->expects($this->once())
+            ->method('getService')
+            ->willReturn(Service::ANALYSE);
         $mockEnvironmentService->expects($this->exactly(2))
             ->method('getVariable')
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
@@ -72,7 +75,7 @@ final class EventBusClientTest extends TestCase
                     $event = $request->getEntries()[0];
 
                     $this->assertEquals(
-                        EventSource::ANALYSE->value,
+                        Service::ANALYSE->value,
                         $event->getSource()
                     );
                     $this->assertEquals(
@@ -102,7 +105,6 @@ final class EventBusClientTest extends TestCase
 
         $this->assertTrue(
             $eventBusClient->fireEvent(
-                EventSource::ANALYSE,
                 $mockEvent
             )
         );
@@ -166,13 +168,18 @@ final class EventBusClientTest extends TestCase
             ->method('validate')
             ->with($mockEvent);
 
+        $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
+        $mockEnvironmentService->expects($this->once())
+            ->method('getService')
+            ->willReturn(Service::ANALYSE);
+
         $eventBusClient = new EventBusClient(
             'mock-event-bus',
             'mock-event-bus-arn',
             'mock-scheduler-role-arn',
             $this->createMock(EventBridgeClient::class),
             $mockScheduler,
-            $this->createMock(EnvironmentServiceInterface::class),
+            $mockEnvironmentService,
             $mockSerializer,
             new EventValidationService($mockValidator),
             new NullLogger()
@@ -180,7 +187,6 @@ final class EventBusClientTest extends TestCase
 
         $this->assertTrue(
             $eventBusClient->scheduleEvent(
-                EventSource::ANALYSE,
                 $mockEvent,
                 $fireAt
             )

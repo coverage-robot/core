@@ -15,6 +15,7 @@ use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\EventInterface;
@@ -41,7 +42,8 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ),
             $this->createMock(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
-                Environment::TESTING
+                Environment::TESTING,
+                Service::PUBLISH,
             ),
             new NullLogger()
         );
@@ -86,7 +88,8 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ),
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
-                Environment::TESTING
+                Environment::TESTING,
+                Service::PUBLISH,
             ),
             new NullLogger()
         );
@@ -155,6 +158,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]
@@ -264,6 +268,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             $mockGithubAppInstallationClient,
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::PUBLISH,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app-id'
                 ]

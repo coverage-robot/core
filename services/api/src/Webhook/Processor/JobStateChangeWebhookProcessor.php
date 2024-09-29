@@ -71,10 +71,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     private function fireEvent(JobStateChange $jobStateChange): void
     {
         try {
-            $this->eventBusClient->fireEvent(
-                EventSource::API,
-                $jobStateChange
-            );
+            $this->eventBusClient->fireEvent($jobStateChange);
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(

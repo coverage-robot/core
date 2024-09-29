@@ -101,7 +101,6 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
             );
 
             $this->eventBusClient->fireEvent(
-                EventSource::ORCHESTRATOR,
                 new UploadsStarted(
                     $newState->getProvider(),
                     $newState->getOwner(),
@@ -146,7 +145,6 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
                 $this->publishClient->dispatch(new PublishableCoverageRunningJobMessage($event));
 
                 $this->eventBusClient->fireEvent(
-                    EventSource::ORCHESTRATOR,
                     new UploadsFinalised(
                         $finalisedEvent->getProvider(),
                         $finalisedEvent->getOwner(),

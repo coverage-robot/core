@@ -138,10 +138,7 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
     private function publishEvent(ConfigurationFileChange $configurationFileChange): void
     {
         try {
-            $this->eventBusClient->fireEvent(
-                EventSource::API,
-                $configurationFileChange
-            );
+            $this->eventBusClient->fireEvent($configurationFileChange);
         } catch (HttpException | JsonException $e) {
             $this->webhookProcessorLogger->error(
                 sprintf(

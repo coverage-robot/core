@@ -232,10 +232,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent')
-            ->with(
-                EventSource::ANALYSE,
-                $this->isInstanceOf(CoverageFailed::class)
-            )
+            ->with($this->isInstanceOf(CoverageFailed::class))
             ->willReturn(true);
 
         $mockPublishClient = $this->createMock(SqsClientInterface::class);
