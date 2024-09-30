@@ -4,16 +4,12 @@ namespace Packages\Clients\Service;
 
 use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\Input\PutObjectRequest;
-use AsyncAws\S3\S3Client;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Exception;
-use Http\Message\Authentication\Wsse;
+use Packages\Clients\Client\ObjectReferenceClient;
+use Packages\Clients\Client\ObjectReferenceClientInterface;
 use Packages\Clients\Model\Object\Reference;
-use Packages\Clients\Tests\Client\ObjectReferenceClient;
-use Packages\Clients\Tests\Client\ObjectReferenceClientInterface;
-use Packages\Clients\Tests\Client\S3ClientInterface;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Event\EventInterface;
 use Psr\Log\LoggerInterface;

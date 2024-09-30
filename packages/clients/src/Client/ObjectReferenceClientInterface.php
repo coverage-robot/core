@@ -1,6 +1,6 @@
 <?php
 
-namespace Packages\Clients\Tests\Client;
+namespace Packages\Clients\Client;
 
 use AsyncAws\Core\Input;
 use AsyncAws\S3\Input\PutObjectRequest;
