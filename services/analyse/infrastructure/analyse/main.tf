@@ -100,6 +100,16 @@ resource "aws_iam_policy" "analyse_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.configuration_table.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+        ]
+        Resource = [
+          data.terraform_remote_state.core.outputs.object_reference_bucket.arn
+        ]
       }
     ]
   })
