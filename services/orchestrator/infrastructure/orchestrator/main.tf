@@ -141,8 +141,9 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
-      "EVENT_STORE"    = var.event_store_name
-      "AWS_ACCOUNT_ID" = data.aws_caller_identity.current.account_id
+      "EVENT_STORE"                        = var.event_store_name
+      "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
+      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.name,
     }
   }
 }
@@ -186,3 +187,4 @@ resource "aws_lambda_permission" "lambda_permissions" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.service.arn
 }
+
