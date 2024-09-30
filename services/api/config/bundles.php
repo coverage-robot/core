@@ -13,4 +13,5 @@ return [
     Packages\Message\MessageBundle::class => ['all' => true],
     Packages\Local\LocalBundle::class => ['dev' => true],
     Phpro\ApiProblemBundle\ApiProblemBundle::class => ['all' => true],
+    Packages\Clients\ClientsBundle::class => ['all' => true],
 ];

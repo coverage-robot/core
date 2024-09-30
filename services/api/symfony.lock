@@ -23,6 +23,9 @@
             "./serverless.yml"
         ]
     },
+    "coverage-robot/clients": {
+        "version": "v1.5.30"
+    },
     "coverage-robot/configuration": {
         "version": "1.0.0"
     },
@@ -38,6 +41,15 @@
     "coverage-robot/telemetry": {
         "version": "1.0.0"
     },
+    "knplabs/github-api": {
+        "version": "3.15",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.6",
+            "ref": "a7d5781e4a8e84f1c238c43e4c9bb806f01d8a3f"
+        }
+    },
     "nyholm/psr7": {
         "version": "1.8",
         "recipe": {
@@ -48,6 +60,18 @@
         },
         "files": [
             "./config/packages/nyholm_psr7.yaml"
+        ]
+    },
+    "php-http/discovery": {
+        "version": "1.19",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.18",
+            "ref": "f45b5dd173a27873ab19f5e3180b2f661c21de02"
+        },
+        "files": [
+            "config/packages/http_discovery.yaml"
         ]
     },
     "phpro/api-problem-bundle": {
