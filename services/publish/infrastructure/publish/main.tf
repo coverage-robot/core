@@ -117,7 +117,7 @@ resource "aws_lambda_function" "service" {
   environment {
     variables = {
       "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
-      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.name,
+      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }
