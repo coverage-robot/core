@@ -707,16 +707,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.5.30",
+            "version": "v1.5.31",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "8e50a0e1f051fe1bd24132133051484b33ac08cd"
+                "reference": "eba78ccf7e51a48bf396d3dd97b335b3df40687b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/8e50a0e1f051fe1bd24132133051484b33ac08cd",
-                "reference": "8e50a0e1f051fe1bd24132133051484b33ac08cd",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/eba78ccf7e51a48bf396d3dd97b335b3df40687b",
+                "reference": "eba78ccf7e51a48bf396d3dd97b335b3df40687b",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -765,9 +765,9 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.5.30"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.5.31"
             },
-            "time": "2024-09-29T17:09:24+00:00"
+            "time": "2024-09-30T23:55:34+00:00"
         },
         {
             "name": "coverage-robot/configuration",
