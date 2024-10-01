@@ -101,7 +101,7 @@ resource "aws_iam_policy" "api_service_policy" {
           "s3:GetObject",
         ]
         Resource = [
-          data.terraform_remote_state.core.outputs.object_reference_bucket.arn
+          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
         ]
       }
     ]
