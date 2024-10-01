@@ -93,8 +93,6 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
                     'webhook' => $webhook
                 ]
             );
-
-            return false;
         }
 
         return $this->dispatchWithTraceHeader($request);
