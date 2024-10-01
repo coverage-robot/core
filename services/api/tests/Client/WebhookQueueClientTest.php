@@ -14,6 +14,7 @@ use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\Result\GetQueueUrlResult;
 use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
+use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
@@ -60,7 +61,8 @@ final class WebhookQueueClientTest extends TestCase
             $mockSqsClient,
             $mockEnvironmentService,
             $mockSerializer,
-            new NullLogger()
+            new NullLogger(),
+            $this->createMock(ObjectReferenceService::class)
         );
 
         $mockSqsClient->expects($this->once())
