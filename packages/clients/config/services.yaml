@@ -10,3 +10,6 @@ services:
 
     Packages\Clients\Client\Github\GithubAppInstallationClientInterface:
         class: Packages\Clients\Client\Github\GithubAppInstallationClient
+
+    Packages\Clients\Client\ObjectReferenceClientInterface:
+        class: Packages\Clients\Client\ObjectReferenceClient

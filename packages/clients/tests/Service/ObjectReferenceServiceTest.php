@@ -4,9 +4,9 @@ namespace Packages\Clients\Tests\Service;
 
 use AsyncAws\S3\Input\PutObjectRequest;
 use AsyncAws\S3\Result\PutObjectOutput;
+use Packages\Clients\Client\ObjectReferenceClientInterface;
 use Packages\Clients\Model\Object\Reference;
 use Packages\Clients\Service\ObjectReferenceService;
-use Packages\Clients\Tests\Client\ObjectReferenceClientInterface;
 use PHPUnit\Framework\TestCase;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Environment\Service;
