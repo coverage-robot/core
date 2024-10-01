@@ -82,20 +82,21 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
                     'reference' => $reference
                 ]
             );
-        } catch (RuntimeException $exception) {
+        } catch (RuntimeException $runtimeException) {
             $this->webhookQueueClientLogger->error(
                 sprintf(
                     'Unable to create object reference for %s.',
                     (string)$webhook
                 ),
                 [
-                    'exception' => $exception,
+                    'exception' => $runtimeException,
                     'webhook' => $webhook
                 ]
             );
 
             return false;
         }
+
         return $this->dispatchWithTraceHeader($request);
     }
 
