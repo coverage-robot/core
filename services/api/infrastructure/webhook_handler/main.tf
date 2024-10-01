@@ -93,6 +93,8 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.project_pool.arn
         ]
+<<<<<<< Updated upstream
+=======
       },
       {
         Effect = "Allow"
@@ -103,6 +105,7 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
         ]
+>>>>>>> Stashed changes
       }
     ]
   })

@@ -70,6 +70,8 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           var.ref_metadata_table.arn
         ]
+<<<<<<< Updated upstream
+=======
       },
       {
         Effect = "Allow"
@@ -80,6 +82,7 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
         ]
+>>>>>>> Stashed changes
       }
     ]
   })
@@ -151,4 +154,3 @@ resource "aws_lambda_permission" "lambda_permissions" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.event_listener.arn
 }
-

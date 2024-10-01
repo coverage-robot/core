@@ -103,6 +103,8 @@ resource "aws_iam_policy" "api_policy" {
         Resource = [
           var.ref_metadata_table.arn
         ]
+<<<<<<< Updated upstream
+=======
       },
       {
         Effect = "Allow"
@@ -113,6 +115,7 @@ resource "aws_iam_policy" "api_policy" {
         Resource = [
           "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
         ]
+>>>>>>> Stashed changes
       }
     ]
   })
@@ -188,4 +191,3 @@ resource "aws_apigatewayv2_route" "route" {
 
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
-
