@@ -60,16 +60,9 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
             return false;
         }
 
-        $serializedWebhook = $this->serializer->serialize($webhook, 'json');
-
-        $request = [
-            'QueueUrl' => $this->getQueueUrl($this->getWebhooksQueueName()),
-            'MessageBody' => $serializedWebhook,
-            'MessageGroupId' => $webhook->getMessageGroup(),
-        ];
 
         try {
-            $reference = $this->objectReferenceService->createReference($serializedWebhook);
+            $reference = $this->objectReferenceService->createReference($this->serializer->serialize($webhook, 'json'));
 
             $this->webhookQueueClientLogger->info(
                 sprintf(
@@ -80,6 +73,14 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
                 [
                     'webhook' => $webhook,
                     'reference' => $reference
+                ]
+            );
+
+            return $this->dispatchWithTraceHeader(
+                [
+                    'QueueUrl' => $this->getQueueUrl($this->getWebhooksQueueName()),
+                    'MessageBody' => $this->serializer->serialize($reference, 'json'),
+                    'MessageGroupId' => $webhook->getMessageGroup(),
                 ]
             );
         } catch (RuntimeException $runtimeException) {
@@ -95,7 +96,7 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
             );
         }
 
-        return $this->dispatchWithTraceHeader($request);
+        return false;
     }
 
     /**
