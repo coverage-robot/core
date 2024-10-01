@@ -103,6 +103,16 @@ resource "aws_iam_policy" "api_policy" {
         Resource = [
           var.ref_metadata_table.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+        ]
+        Resource = [
+          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
+        ]
       }
     ]
   })
@@ -178,3 +188,4 @@ resource "aws_apigatewayv2_route" "route" {
 
   target = "integrations/${aws_apigatewayv2_integration.integration.id}"
 }
+

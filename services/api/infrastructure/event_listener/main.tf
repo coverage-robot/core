@@ -70,6 +70,16 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           var.ref_metadata_table.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+        ]
+        Resource = [
+          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
+        ]
       }
     ]
   })
@@ -141,3 +151,4 @@ resource "aws_lambda_permission" "lambda_permissions" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.event_listener.arn
 }
+
