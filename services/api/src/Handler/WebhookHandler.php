@@ -90,7 +90,7 @@ final class WebhookHandler extends SqsHandler
 
             try {
                 $webhook = $this->serializer->deserialize(
-                    $sqsRecord->getBody(),
+                    $webhook,
                     WebhookInterface::class,
                     'json'
                 );
