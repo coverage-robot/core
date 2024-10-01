@@ -63,7 +63,7 @@ final class WebhookHandlerTest extends KernelTestCase
         $mockSerializer->expects($this->exactly(2))
             ->method('deserialize')
             ->willReturnCallback(
-                function (string $data, string $type) use ($webhook) {
+                function (string $data, string $type) use ($webhook): GithubCheckRunWebhook {
                     if ($type === Reference::class) {
                         throw new UnexpectedValueException('Unexpected value');
                     }
@@ -157,7 +157,7 @@ final class WebhookHandlerTest extends KernelTestCase
         $mockSerializer->expects($this->exactly(2))
             ->method('deserialize')
             ->willReturnCallback(
-                function (string $data, string $type) use ($webhook, $reference) {
+                function (string $data, string $type) use ($webhook, $reference): Reference|GithubCheckRunWebhook {
                     if ($type === Reference::class) {
                         return $reference;
                     }
