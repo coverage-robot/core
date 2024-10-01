@@ -170,7 +170,15 @@ final class WebhookHandlerTest extends KernelTestCase
         $objectReferenceService->expects($this->once())
             ->method('resolveReference')
             ->with($reference)
-            ->willReturn('mock-payload');
+            ->willReturnCallback(
+                function () {
+                    $stream = fopen('php://temp', 'r+');
+                    fwrite($stream, 'mock-payload');
+                    rewind($stream);
+
+                    return $stream;
+                }
+            );
 
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
@@ -212,9 +220,31 @@ final class WebhookHandlerTest extends KernelTestCase
         );
     }
 
-    #[DataProvider('webhookDataProvider')]
-    public function testHandleSqsWithNoProject(WebhookInterface $webhook): void
+    public function testHandleSqsWithNoProject(): void
     {
+        $reference = new Reference(
+            'fake-path',
+            '',
+            new DateTimeImmutable('+1 year')
+        );
+
+        $webhook = new GithubCheckRunWebhook(
+            'mock-signature',
+            'mock-owner',
+            'mock-repository',
+            'mock-external-id',
+            'mock-app-id',
+            'mock-ref',
+            'mock-commit',
+            'mock-parent-commit',
+            'mock-pull-request',
+            'mock-base-ref',
+            'mock-base-commit',
+            JobState::COMPLETED,
+            new DateTimeImmutable(),
+            new DateTimeImmutable()
+        );
+
         $mockWebhookProcessor = $this->createMock(WebhookProcessorServiceInterface::class);
         $mockWebhookProcessor->expects($this->never())
             ->method('process');
@@ -229,28 +259,44 @@ final class WebhookHandlerTest extends KernelTestCase
             )
             ->willReturn(false);
 
+        $mockSerializer = $this->createMock(SerializerInterface::class);
+        $mockSerializer->expects($this->exactly(2))
+            ->method('deserialize')
+            ->willReturnCallback(
+                function (string $data, string $type) use ($webhook, $reference): Reference|GithubCheckRunWebhook {
+                    if ($type === Reference::class) {
+                        return $reference;
+                    }
+
+                    return $webhook;
+                }
+            );
+
+        $objectReferenceService = $this->createMock(ObjectReferenceService::class);
+        $objectReferenceService->expects($this->once())
+            ->method('resolveReference')
+            ->with($reference)
+            ->willReturnCallback(
+                function () {
+                    $stream = fopen('php://temp', 'r+');
+                    fwrite($stream, 'mock-payload');
+                    rewind($stream);
+
+                    return $stream;
+                }
+            );
+
         $handler = new WebhookHandler(
             $mockWebhookProcessor,
             new NullLogger(),
             $mockCognitoClient,
-            MockSerializerFactory::getMock(
-                $this,
-                deserializeMap: [
-                    [
-                        'mock-payload',
-                        WebhookInterface::class,
-                        'json',
-                        [],
-                        $webhook
-                    ]
-                ]
-            ),
+            $mockSerializer,
             new WebhookValidationService(
                 Validation::createValidatorBuilder()
                     ->getValidator()
             ),
             $this->createMock(MetricServiceInterface::class),
-            $this->createMock(ObjectReferenceService::class)
+            $objectReferenceService
         );
 
         $sqsEvent = new SqsEvent(
