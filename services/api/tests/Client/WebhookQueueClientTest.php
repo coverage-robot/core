@@ -14,6 +14,8 @@ use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\Result\GetQueueUrlResult;
 use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
+use DateTimeImmutable;
+use Packages\Clients\Model\Object\Reference;
 use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -29,6 +31,8 @@ final class WebhookQueueClientTest extends TestCase
 {
     public function testPublishMessage(): void
     {
+        $reference = new Reference('mock-path', '', new DateTimeImmutable('+1 day'));
+
         $mockWebhook = $this->createMock(WebhookInterface::class);
         $mockWebhook->method('getType')
             ->willReturn(WebhookType::GITHUB_PUSH);
@@ -39,10 +43,12 @@ final class WebhookQueueClientTest extends TestCase
         $mockSqsClient = $this->createMock(SqsClient::class);
 
         $mockSerializer = $this->createMock(SerializerInterface::class);
-        $mockSerializer->expects($this->once())
+        $mockSerializer->expects($this->exactly(2))
             ->method('serialize')
-            ->with($mockWebhook, 'json')
-            ->willReturn('mock-serialized-json');
+            ->willReturnMap([
+                [$mockWebhook, 'json', [], 'mock-serialized-webhook'],
+                [$reference, 'json', [], 'mock-serialized-reference'],
+            ]);
 
         $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
         $mockEnvironmentService->expects($this->once())
@@ -53,6 +59,11 @@ final class WebhookQueueClientTest extends TestCase
             ->with(EnvironmentVariable::X_AMZN_TRACE_ID)
             ->willReturn('mock-trace-id');
 
+        $mockObjectReferenceService = $this->createMock(ObjectReferenceService::class);
+        $mockObjectReferenceService->expects($this->once())
+            ->method('createReference')
+            ->willReturn($reference);
+
         $webhookQueueClient = new WebhookQueueClient(
             new WebhookValidationService(
                 Validation::createValidatorBuilder()
@@ -62,7 +73,7 @@ final class WebhookQueueClientTest extends TestCase
             $mockEnvironmentService,
             $mockSerializer,
             new NullLogger(),
-            $this->createMock(ObjectReferenceService::class)
+            $mockObjectReferenceService
         );
 
         $mockSqsClient->expects($this->once())
@@ -112,7 +123,7 @@ final class WebhookQueueClientTest extends TestCase
                             ->getStringValue()
                     );
                     $this->assertEquals(
-                        'mock-serialized-json',
+                        'mock-serialized-reference',
                         $request->getMessageBody()
                     );
 
