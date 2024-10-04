@@ -67,13 +67,9 @@ final class WebhookHandler extends SqsHandler
                     'json'
                 );
 
-                $webhook = $this->serializer->deserialize(
-                    stream_get_contents($this->objectReferenceService->resolveReference($reference)),
-                    WebhookInterface::class,
-                    'json'
-                );
-
-                $this->webhookValidationService->validate($webhook);
+                $webhook = stream_get_contents($this->objectReferenceService->resolveReference($reference));
+            } catch (ExceptionInterface $e) {
+                $webhook = $sqsRecord->getBody();
             } catch (RuntimeException $e) {
                 $this->webhookLogger->critical(
                     'Failed to resolve reference to webhook object.',
@@ -84,6 +80,16 @@ final class WebhookHandler extends SqsHandler
                 );
 
                 continue;
+            }
+
+            try {
+                $webhook = $this->serializer->deserialize(
+                    $webhook,
+                    WebhookInterface::class,
+                    'json'
+                );
+
+                $this->webhookValidationService->validate($webhook);
             } catch (ExceptionInterface $e) {
                 $this->webhookLogger->error(
                     'Failed to deserialize webhook payload.',
