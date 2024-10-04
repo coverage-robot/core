@@ -69,12 +69,6 @@ final class WebhookHandler extends SqsHandler
 
                 $webhook = stream_get_contents($this->objectReferenceService->resolveReference($reference));
             } catch (ExceptionInterface $e) {
-                /**
-                 * The message is an old style webhook where the payload is passed directly into the SQS message body.
-                 *
-                 * After all of the old messages have been processed, this can be removed as only references should be
-                 * queued from now on
-                 */
                 $webhook = $sqsRecord->getBody();
             } catch (RuntimeException $e) {
                 $this->webhookLogger->critical(
