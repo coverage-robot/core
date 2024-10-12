@@ -41,7 +41,6 @@ final class WebhookHandler extends SqsHandler
         private readonly SerializerInterface $serializer,
         private readonly WebhookValidationService $webhookValidationService,
         private readonly MetricServiceInterface $metricService,
-        private readonly ObjectReferenceService $objectReferenceService
     ) {
     }
 
@@ -61,36 +60,8 @@ final class WebhookHandler extends SqsHandler
 
         foreach ($event->getRecords() as $sqsRecord) {
             try {
-                $reference = $this->serializer->deserialize(
-                    $sqsRecord->getBody(),
-                    Reference::class,
-                    'json'
-                );
-
-                $webhook = stream_get_contents($this->objectReferenceService->resolveReference($reference));
-            } catch (ExceptionInterface $e) {
-                /**
-                 * The message is an old style webhook where the payload is passed directly into the SQS message body.
-                 *
-                 * After all of the old messages have been processed, this can be removed as only references should be
-                 * queued from now on
-                 */
-                $webhook = $sqsRecord->getBody();
-            } catch (RuntimeException $e) {
-                $this->webhookLogger->critical(
-                    'Failed to resolve reference to webhook object.',
-                    [
-                        'exception' => $e,
-                        'payload' => $sqsRecord->getBody()
-                    ]
-                );
-
-                continue;
-            }
-
-            try {
                 $webhook = $this->serializer->deserialize(
-                    $webhook,
+                    $sqsRecord->getBody(),
                     WebhookInterface::class,
                     'json'
                 );
