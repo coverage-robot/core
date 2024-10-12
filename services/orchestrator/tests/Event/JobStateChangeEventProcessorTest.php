@@ -242,6 +242,78 @@ final class JobStateChangeEventProcessorTest extends TestCase
         );
     }
 
+    public function testStateChangeIsDroppedForRegressionInStateTypeEvents(): void
+    {
+        $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
+
+        $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
+        $mockEventStoreService->expects($this->once())
+            ->method('reduceStateChangesToEvent')
+            ->willReturn(new Job(
+                provider: Provider::GITHUB,
+                owner: 'owner',
+                repository: 'repository',
+                commit: 'commit',
+                state: OrchestratedEventState::SUCCESS,
+                eventTime: $eventTime,
+                externalId: 'external-id'
+            ));
+        $mockEventStoreService->expects($this->once())
+            ->method('getAllStateChangesForEvent')
+            ->willReturn(
+                new EventStateChangeCollection([
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        ['mock' => 'x'],
+                        null
+                    )
+                ])
+            );
+        $mockEventStoreService->expects($this->never())
+            ->method('storeStateChange');
+
+        $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
+            $mockEventStoreService,
+            $this->createMock(EventBusClientInterface::class),
+            new NullLogger(),
+            new FakeBackoffStrategy(),
+            MockEnvironmentServiceFactory::createMock(
+                Environment::TESTING,
+                [
+                    EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
+                ]
+            ),
+            $this->createMock(SqsClientInterface::class)
+        );
+
+        // Ensure any backoff which occurs when waiting to finalise the coverage
+        // is skipped.
+        $jobStateChangeEventProcessor->withReadyToFinaliseBackoffStrategy(
+            new FakeBackoffStrategy(ReadyToFinaliseBackoffStrategy::class)
+        );
+
+        $this->assertFalse(
+            $jobStateChangeEventProcessor->process(
+                new JobStateChange(
+                    provider: Provider::GITHUB,
+                    owner: 'owner',
+                    repository: 'repository',
+                    ref: 'ref',
+                    commit: 'commit',
+                    parent: ['parent-1'],
+                    externalId: 'external-id',
+                    triggeredByExternalId: 'mock-github-app',
+                    state: JobState::IN_PROGRESS,
+                    eventTime: $eventTime->add(new DateInterval('PT10S'))
+                )
+            )
+        );
+    }
+
     public function testGetEvent(): void
     {
         $this->assertEquals(

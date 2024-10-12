@@ -2,6 +2,7 @@
 
 namespace App\Event;
 
+use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\BackoffStrategyInterface;
 use App\Exception\OutOfOrderEventException;
 use App\Model\OrchestratedEventInterface;
@@ -84,6 +85,38 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
             );
 
             throw new OutOfOrderEventException('Event is older than the current state.');
+        }
+
+        if (
+            $previousState instanceof OrchestratedEventInterface &&
+            in_array($previousState->getState(), [OrchestratedEventState::SUCCESS, OrchestratedEventState::FAILURE]) &&
+            $currentState->getState() === OrchestratedEventState::ONGOING
+        ) {
+            /**
+             * This helps to catch potentially out-of-order events, where an event is moved from a finished
+             * state (i.e. success or failure) to an ongoing state.
+             *
+             * This is, most likely a webhook which was delayed from the provider, and is now being processed
+             * out of order (i.e. the current state is newer).
+             *
+             * If we recorded this event in the store, we'd likely wind up with a permanently ongoing
+             * event, which would prevent the job from finishing.
+             *
+             * What you'll likely find is the event time of both events is **exactly** the same (to the
+             * millisecond), which is why it wasn't caught by the previous check (a more reliable check).
+             */
+            $this->eventProcessorLogger->info(
+                sprintf(
+                    'Dropping change for %s as it moves the events state from a finished state to an ongoing state.',
+                    (string)$currentState
+                ),
+                [
+                    'current' => $previousState,
+                    'new' => $currentState,
+                ]
+            );
+
+            throw new OutOfOrderEventException('Event is an earlier state type than that of the current event state.');
         }
 
         $this->eventProcessorLogger->info(

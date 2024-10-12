@@ -70,9 +70,6 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockJob = $this->createMock(Job::class);
         $mockJob->method('id')
             ->willReturn('mock-job-id');
-        $mockJob->expects($this->once())
-            ->method('isComplete')
-            ->willReturn(true);
 
         $mockBigQueryClient->expects($this->once())
             ->method('runJob')
@@ -158,9 +155,12 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockJob = $this->createMock(Job::class);
         $mockJob->method('id')
             ->willReturn('mock-job-id');
-        $mockJob->expects($this->once())
+
+        // Should only be called if the line coverage upload is successful
+        $mockJob->expects($this->never())
             ->method('isComplete')
             ->willReturn(true);
+
         $mockJob->method('info')
             ->willReturn(['status' => ['errorResult' => ['message' => 'mock-error-message']]]);
 

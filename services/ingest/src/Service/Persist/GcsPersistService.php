@@ -12,6 +12,10 @@ use App\Model\Coverage;
 use App\Model\File;
 use App\Service\BigQueryMetadataBuilderService;
 use Exception;
+use Google\Cloud\BigQuery\Exception\JobException;
+use Google\Cloud\BigQuery\Job;
+use Google\Cloud\Core\Exception\GoogleException;
+use Google\Cloud\Core\Exception\ServiceException;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageObject;
 use Override;
@@ -132,36 +136,113 @@ final class GcsPersistService implements PersistServiceInterface
             ]
         );
 
-        $job = $this->bigQueryClient->runJob($loadJob);
+        /**
+         * Retry the load process up to 3 times - which will take approximately 15 seconds. In theory,
+         * during normal use we shouldn't ever have to retry as this will only be triggered if BigQuery
+         * fails to load the job, or the data hasn't been loaded after the maximum number of retries.
+         */
+        $backoff = new ExponentialBackoff(3);
 
-        $backoff = new ExponentialBackoff(10);
-        $backoff->execute(function () use ($job, $upload): void {
-            $this->gcsPersistServiceLogger->info(
-                sprintf(
-                    'Waiting for load job %s to complete for %s',
-                    $job->id(),
-                    (string)$upload
-                )
-            );
+        try {
+            /**
+             * Exponentially retry the job until it completes successfully.
+             *
+             * Occasionally BigQuery may through some kind of transient service exception
+             * which we want to try and handle as gracefully as possible.
+             *
+             * @var Job|null $job
+             */
+            $job = $backoff->execute(function () use ($loadJob, $upload): ?Job {
+                $this->gcsPersistServiceLogger->info(
+                    sprintf(
+                        'Attempting to execute and wait for load job to ingest %s.',
+                        (string)$upload
+                    )
+                );
 
-            $job->reload();
-            if (!$job->isComplete()) {
-                throw new Exception('Job has not yet completed', 500);
+                try {
+                    // Run the job and, assuming the job is successfully created, wait for 5
+                    // retries (approximately 60 seconds) before failing.
+                    $job = $this->bigQueryClient->runJob($loadJob, ['maxRetries' => 5]);
+                } catch (JobException $jobException) {
+                    /**
+                     * If we get back a JobException, we know the job is still running, but hasn't
+                     * completed yet. As a result, we can't throw the exception as we'll backoff
+                     * and retry the job - which will fail because of duplication.
+                     *
+                     * In reality, if we get here, we should increase the number of retries as
+                     * we're not waiting long enough for the job to complete.
+                     */
+                    $this->gcsPersistServiceLogger->critical(
+                        sprintf(
+                            'Load job is still running for %s',
+                            (string)$upload
+                        ),
+                        [
+                            'exception' => $jobException
+                        ]
+                    );
+                    return null;
+                }
+
+                return $job;
+            });
+
+            if ($job === null) {
+                return false;
             }
-        });
 
-        if (isset($job->info()['status']['errorResult'])) {
+            if (isset($job->info()['status']['errorResult'])) {
+                $this->gcsPersistServiceLogger->error(
+                    sprintf(
+                        'Unable to load data from GCS object for %s',
+                        (string)$upload
+                    ),
+                    [
+                        'info' => $job->info()
+                    ]
+                );
+
+                return false;
+            }
+
+            if (!$job->isComplete()) {
+                // In theory, as runJob should wait for the job to complete, we shouldn't ever hit
+                // this. But if we do, we know for sure the data isn't available, but we can't reliably
+                // wait any longer as retries should have been exercised.
+                $this->gcsPersistServiceLogger->error(
+                    sprintf(
+                        'Coverage data has not been loaded into BigQuery still for %s',
+                        (string)$upload
+                    ),
+                    [
+                        'info' => $job->info()
+                    ]
+                );
+            }
+        } catch (GoogleException $googleException) {
             $this->gcsPersistServiceLogger->error(
                 sprintf(
                     'Unable to load data from GCS object for %s',
                     (string)$upload
                 ),
                 [
-                    'info' => $job->info()
+                    'exception' => $googleException
                 ]
             );
+
             return false;
         }
+
+        $this->gcsPersistServiceLogger->info(
+            sprintf(
+                'Coverage data loaded into BigQuery successfully for %s',
+                (string)$upload
+            ),
+            [
+                'info' => $job->info()
+            ]
+        );
 
         return true;
     }

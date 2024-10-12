@@ -3,7 +3,6 @@
 namespace App\Tests\Event;
 
 use App\Event\UploadsFinalisedEventProcessor;
-use App\Model\CarryforwardTag;
 use App\Model\CoverageReport;
 use App\Model\CoverageReportComparison;
 use App\Model\ReportWaypoint;
@@ -22,7 +21,6 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFailed;
-use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\Client\SqsClientInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessage;
@@ -140,7 +138,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
@@ -251,7 +249,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getEvent()
                         );
                         $this->assertEquals(
-                            2,
+                            3,
                             $message->count()
                         );
                         $this->assertInstanceOf(
