@@ -40,7 +40,8 @@ WITH
             )
           ) AS branchHits
         WITH
-          OFFSET AS branchIndex
+        OFFSET
+          AS branchIndex
         GROUP BY
           branchIndex,
           branchHits
@@ -90,7 +91,8 @@ WITH
         )
       ) AS branchHit
     WITH
-      OFFSET AS branchIndex
+    OFFSET
+      AS branchIndex
     GROUP BY
       fileName,
       lineNumber,
