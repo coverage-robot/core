@@ -16,6 +16,7 @@ use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
+use Packages\Contracts\Environment\Service;
 
 final class UploadedTagsQueryTest extends AbstractQueryTestCase
 {
@@ -26,6 +27,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
             $this->getContainer()->get(SerializerInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::PRODUCTION,
+                Service::ANALYSE,
                 [
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-table'
                 ]

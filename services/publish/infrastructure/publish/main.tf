@@ -80,7 +80,18 @@ resource "aws_iam_policy" "publish_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.configuration_table.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+        ]
+        Resource = [
+          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
+        ]
       }
+
     ]
   })
 }
@@ -116,7 +127,8 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
-      "AWS_ACCOUNT_ID" = data.aws_caller_identity.current.account_id
+      "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
+      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }
@@ -132,3 +144,4 @@ resource "aws_lambda_event_source_mapping" "event_source_mapping" {
   enabled          = true
   function_name    = aws_lambda_function.service.arn
 }
+

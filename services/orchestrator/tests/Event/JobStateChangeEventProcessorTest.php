@@ -29,6 +29,7 @@ use Packages\Event\Model\Upload;
 use Packages\Message\Client\SqsClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Packages\Contracts\Environment\Service;
 
 final class JobStateChangeEventProcessorTest extends TestCase
 {
@@ -41,6 +42,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
@@ -85,6 +87,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app'
                 ]
@@ -140,6 +143,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
@@ -211,6 +215,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
@@ -283,6 +288,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
@@ -385,6 +391,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
@@ -490,6 +497,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
+                Service::ORCHESTRATOR,
                 [
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]

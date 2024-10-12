@@ -100,6 +100,16 @@ resource "aws_iam_policy" "analyse_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.configuration_table.arn
         ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+        ]
+        Resource = [
+          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
+        ]
       }
     ]
   })
@@ -139,12 +149,13 @@ resource "aws_lambda_function" "analyse" {
 
   environment {
     variables = {
-      "BIGQUERY_PROJECT"             = data.terraform_remote_state.core.outputs.environment_dataset.project,
-      "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
-      "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
-      "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload_table.table_id,
-      "AWS_ACCOUNT_ID"               = data.aws_caller_identity.current.account_id
-      "QUERY_CACHE_TABLE_NAME"       = var.query_cache_name
+      "BIGQUERY_PROJECT"                   = data.terraform_remote_state.core.outputs.environment_dataset.project,
+      "BIGQUERY_ENVIRONMENT_DATASET"       = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
+      "BIGQUERY_LINE_COVERAGE_TABLE"       = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
+      "BIGQUERY_UPLOAD_TABLE"              = data.terraform_remote_state.core.outputs.upload_table.table_id,
+      "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
+      "QUERY_CACHE_TABLE_NAME"             = var.query_cache_name
+      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }
@@ -184,3 +195,4 @@ resource "aws_lambda_function_event_invoke_config" "service_invoke_config" {
 
   maximum_retry_attempts = 0
 }
+

@@ -85,3 +85,39 @@ resource "aws_s3_bucket_lifecycle_configuration" "output_lifecycle" {
     aws_s3_bucket.coverage_output
   ]
 }
+
+resource "aws_s3_bucket" "service_object_references" {
+  bucket = format("coverage-object-reference-%s", var.environment)
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "reference_lifecycle" {
+  bucket = aws_s3_bucket.service_object_references.id
+
+  rule {
+    id = "delete-old-references"
+
+    expiration {
+      # Presigned requests only last 1 hour, so 1 day is more than enough time to
+      # ensure that the reference is no longer needed.
+      days = 1
+    }
+
+    noncurrent_version_expiration {
+      noncurrent_days = 1
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+
+    status = "Enabled"
+  }
+
+  depends_on = [
+    aws_s3_bucket.service_object_references
+  ]
+}

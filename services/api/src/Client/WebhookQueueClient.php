@@ -11,6 +11,7 @@ use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
 use Override;
+use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
@@ -33,7 +34,8 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
         private readonly SqsClient $sqsClient,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly SerializerInterface $serializer,
-        private readonly LoggerInterface $webhookQueueClientLogger
+        private readonly LoggerInterface $webhookQueueClientLogger,
+        private readonly ObjectReferenceService $objectReferenceService
     ) {
     }
 
@@ -58,13 +60,43 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
             return false;
         }
 
-        $request = [
-            'QueueUrl' => $this->getQueueUrl($this->getWebhooksQueueName()),
-            'MessageBody' => $this->serializer->serialize($webhook, 'json'),
-            'MessageGroupId' => $webhook->getMessageGroup(),
-        ];
 
-        return $this->dispatchWithTraceHeader($request);
+        try {
+            $reference = $this->objectReferenceService->createReference($this->serializer->serialize($webhook, 'json'));
+
+            $this->webhookQueueClientLogger->info(
+                sprintf(
+                    'Stored %s in %s reference.',
+                    (string)$webhook,
+                    $reference
+                ),
+                [
+                    'webhook' => $webhook,
+                    'reference' => $reference
+                ]
+            );
+
+            return $this->dispatchWithTraceHeader(
+                [
+                    'QueueUrl' => $this->getQueueUrl($this->getWebhooksQueueName()),
+                    'MessageBody' => $this->serializer->serialize($reference, 'json'),
+                    'MessageGroupId' => $webhook->getMessageGroup(),
+                ]
+            );
+        } catch (RuntimeException $runtimeException) {
+            $this->webhookQueueClientLogger->error(
+                sprintf(
+                    'Unable to create object reference for %s.',
+                    (string)$webhook
+                ),
+                [
+                    'exception' => $runtimeException,
+                    'webhook' => $webhook
+                ]
+            );
+        }
+
+        return false;
     }
 
     /**

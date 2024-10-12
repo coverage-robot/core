@@ -6,6 +6,10 @@ output "output_bucket" {
   value = module.bucket.output_bucket
 }
 
+output "object_reference_bucket" {
+  value = module.bucket.object_reference_bucket
+}
+
 output "publish_queue" {
   value = module.queue.publish_queue
 }

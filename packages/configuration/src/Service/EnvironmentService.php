@@ -24,6 +24,7 @@ final class EnvironmentService implements EnvironmentServiceInterface
         return Environment::from($this->kernel->getEnvironment());
     }
 
+    #[Override]
     public function getService(): Service
     {
         return $this->service;
