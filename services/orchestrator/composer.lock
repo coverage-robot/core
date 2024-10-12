@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.12.2",
+            "version": "1.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c"
+                "reference": "9a89d9eeb04835f62110c1ff0647d01c54e90c5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/5daf60484a595180b10f8e8c7b82dc75e0c6620c",
-                "reference": "5daf60484a595180b10f8e8c7b82dc75e0c6620c",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/9a89d9eeb04835f62110c1ff0647d01c54e90c5b",
+                "reference": "9a89d9eeb04835f62110c1ff0647d01c54e90c5b",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.2"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.3"
             },
             "funding": [
                 {
@@ -73,20 +73,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/core",
-            "version": "1.22.0",
+            "version": "1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "cbd7012890a35a9b21f7235817a627488709551b"
+                "reference": "63295bdfa8ed7084964fa18f5e234ddddb609f78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/cbd7012890a35a9b21f7235817a627488709551b",
-                "reference": "cbd7012890a35a9b21f7235817a627488709551b",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/63295bdfa8ed7084964fa18f5e234ddddb609f78",
+                "reference": "63295bdfa8ed7084964fa18f5e234ddddb609f78",
                 "shasum": ""
             },
             "require": {
@@ -129,7 +129,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.22.0"
+                "source": "https://github.com/async-aws/core/tree/1.22.1"
             },
             "funding": [
                 {
@@ -141,20 +141,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "f6174e95384a3739554e5f574c407338cb169ed5"
+                "reference": "5ba694bbbff8fa209c45b1f989a957118008ab79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/f6174e95384a3739554e5f574c407338cb169ed5",
-                "reference": "f6174e95384a3739554e5f574c407338cb169ed5",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/5ba694bbbff8fa209c45b1f989a957118008ab79",
+                "reference": "5ba694bbbff8fa209c45b1f989a957118008ab79",
                 "shasum": ""
             },
             "require": {
@@ -191,7 +191,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.2.1"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.2.2"
             },
             "funding": [
                 {
@@ -203,20 +203,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/event-bridge",
-            "version": "1.5.4",
+            "version": "1.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/event-bridge.git",
-                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f"
+                "reference": "72414c7d393837af47037570db5bc28afe15c2e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/844f8745fc69d3efe6c3c391982befd336066a1f",
-                "reference": "844f8745fc69d3efe6c3c391982befd336066a1f",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/72414c7d393837af47037570db5bc28afe15c2e3",
+                "reference": "72414c7d393837af47037570db5bc28afe15c2e3",
                 "shasum": ""
             },
             "require": {
@@ -248,7 +248,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/event-bridge/tree/1.5.4"
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.5"
             },
             "funding": [
                 {
@@ -260,20 +260,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/s3",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "a09f7258ee6f09dffcd57b612d72aefea7783649"
+                "reference": "1c2f7a69e49f84048b9fe0cb788a81821d6474cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/a09f7258ee6f09dffcd57b612d72aefea7783649",
-                "reference": "a09f7258ee6f09dffcd57b612d72aefea7783649",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/1c2f7a69e49f84048b9fe0cb788a81821d6474cd",
+                "reference": "1c2f7a69e49f84048b9fe0cb788a81821d6474cd",
                 "shasum": ""
             },
             "require": {
@@ -287,7 +287,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -308,7 +308,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.3.0"
+                "source": "https://github.com/async-aws/s3/tree/2.4.0"
             },
             "funding": [
                 {
@@ -320,20 +320,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/scheduler",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/scheduler.git",
-                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b"
+                "reference": "be2af3d66f187d51c02897e637d4d4bde2d170c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
-                "reference": "bb37d53eac5a6fbf819e7fbe6dd7b17787cae11b",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/be2af3d66f187d51c02897e637d4d4bde2d170c9",
+                "reference": "be2af3d66f187d51c02897e637d4d4bde2d170c9",
                 "shasum": ""
             },
             "require": {
@@ -367,7 +367,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/scheduler/tree/1.1.2"
+                "source": "https://github.com/async-aws/scheduler/tree/1.1.3"
             },
             "funding": [
                 {
@@ -379,20 +379,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "async-aws/sqs",
-            "version": "2.1.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/sqs.git",
-                "reference": "6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2"
+                "reference": "319801ac2760e54bfabcad6a968868a54730905f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/sqs/zipball/6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2",
-                "reference": "6b26da9ac2b54c64b6a9d0501ce5eee099ac3bf2",
+                "url": "https://api.github.com/repos/async-aws/sqs/zipball/319801ac2760e54bfabcad6a968868a54730905f",
+                "reference": "319801ac2760e54bfabcad6a968868a54730905f",
                 "shasum": ""
             },
             "require": {
@@ -404,7 +404,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "2.2-dev"
                 }
             },
             "autoload": {
@@ -425,7 +425,7 @@
                 "sqs"
             ],
             "support": {
-                "source": "https://github.com/async-aws/sqs/tree/2.1.1"
+                "source": "https://github.com/async-aws/sqs/tree/2.2.0"
             },
             "funding": [
                 {
@@ -437,7 +437,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-03T17:28:59+00:00"
+            "time": "2024-10-09T08:09:09+00:00"
         },
         {
             "name": "bref/bref",
@@ -649,16 +649,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "eba78ccf7e51a48bf396d3dd97b335b3df40687b"
+                "reference": "c62fa93153e4477aeb1e98a5d0aa579d9e9c95d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/eba78ccf7e51a48bf396d3dd97b335b3df40687b",
-                "reference": "eba78ccf7e51a48bf396d3dd97b335b3df40687b",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/c62fa93153e4477aeb1e98a5d0aa579d9e9c95d8",
+                "reference": "c62fa93153e4477aeb1e98a5d0aa579d9e9c95d8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -673,7 +673,7 @@
                 "knplabs/github-api": "^3.13",
                 "lcobucci/jwt": "^5.2",
                 "nyholm/psr7": "^1.8",
-                "php": "~8.3.0",
+                "php": "~8.3.0 || ~8.4.0",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-client": "^7.0",
@@ -707,13 +707,13 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.5.32"
             },
-            "time": "2024-09-30T23:55:34+00:00"
+            "time": "2024-10-12T10:31:56+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
@@ -771,13 +771,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.32"
             },
             "time": "2024-09-28T16:17:53+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -811,13 +811,13 @@
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.32"
             },
             "time": "2024-09-28T17:00:39+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
@@ -876,13 +876,13 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.32"
             },
             "time": "2024-09-28T17:00:36+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
@@ -937,13 +937,13 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/message/tree/v1.5.32"
             },
             "time": "2024-09-11T17:36:32+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
@@ -1002,7 +1002,7 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.32"
             },
             "time": "2024-09-03T15:13:26+00:00"
         },
@@ -1425,38 +1425,38 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "5.3.0",
+            "version": "5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "08071d8d2c7f4b00222cc4b1fb6aa46990a80f83"
+                "reference": "aac4fd512681fd5cb4b77d2105ab7ec700c72051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/08071d8d2c7f4b00222cc4b1fb6aa46990a80f83",
-                "reference": "08071d8d2c7f4b00222cc4b1fb6aa46990a80f83",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/aac4fd512681fd5cb4b77d2105ab7ec700c72051",
+                "reference": "aac4fd512681fd5cb4b77d2105ab7ec700c72051",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
-                "infection/infection": "^0.27.0",
-                "lcobucci/clock": "^3.0",
+                "infection/infection": "^0.29",
+                "lcobucci/clock": "^3.2",
                 "lcobucci/coding-standard": "^11.0",
-                "phpbench/phpbench": "^1.2.9",
+                "phpbench/phpbench": "^1.2",
                 "phpstan/extension-installer": "^1.2",
                 "phpstan/phpstan": "^1.10.7",
                 "phpstan/phpstan-deprecation-rules": "^1.1.3",
                 "phpstan/phpstan-phpunit": "^1.3.10",
                 "phpstan/phpstan-strict-rules": "^1.5.0",
-                "phpunit/phpunit": "^10.2.6"
+                "phpunit/phpunit": "^11.1"
             },
             "suggest": {
-                "lcobucci/clock": ">= 3.0"
+                "lcobucci/clock": ">= 3.2"
             },
             "type": "library",
             "autoload": {
@@ -1482,7 +1482,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/5.3.0"
+                "source": "https://github.com/lcobucci/jwt/tree/5.4.0"
             },
             "funding": [
                 {
@@ -1494,7 +1494,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2024-04-11T23:07:54+00:00"
+            "time": "2024-10-08T22:06:45+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -1677,16 +1677,16 @@
         },
         {
             "name": "php-http/cache-plugin",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/cache-plugin.git",
-                "reference": "539b2d1ea0dc1c2f141c8155f888197d4ac5635b"
+                "reference": "5c591e9e04602cec12307e3e1be3abefeb005e29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/539b2d1ea0dc1c2f141c8155f888197d4ac5635b",
-                "reference": "539b2d1ea0dc1c2f141c8155f888197d4ac5635b",
+                "url": "https://api.github.com/repos/php-http/cache-plugin/zipball/5c591e9e04602cec12307e3e1be3abefeb005e29",
+                "reference": "5c591e9e04602cec12307e3e1be3abefeb005e29",
                 "shasum": ""
             },
             "require": {
@@ -1726,9 +1726,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/cache-plugin/issues",
-                "source": "https://github.com/php-http/cache-plugin/tree/2.0.0"
+                "source": "https://github.com/php-http/cache-plugin/tree/2.0.1"
             },
-            "time": "2024-02-19T17:02:14+00:00"
+            "time": "2024-10-02T11:25:38+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -1801,16 +1801,16 @@
         },
         {
             "name": "php-http/discovery",
-            "version": "1.19.4",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/discovery.git",
-                "reference": "0700efda8d7526335132360167315fdab3aeb599"
+                "reference": "82fe4c73ef3363caed49ff8dd1539ba06044910d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/discovery/zipball/0700efda8d7526335132360167315fdab3aeb599",
-                "reference": "0700efda8d7526335132360167315fdab3aeb599",
+                "url": "https://api.github.com/repos/php-http/discovery/zipball/82fe4c73ef3363caed49ff8dd1539ba06044910d",
+                "reference": "82fe4c73ef3363caed49ff8dd1539ba06044910d",
                 "shasum": ""
             },
             "require": {
@@ -1874,9 +1874,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/discovery/issues",
-                "source": "https://github.com/php-http/discovery/tree/1.19.4"
+                "source": "https://github.com/php-http/discovery/tree/1.20.0"
             },
-            "time": "2024-03-29T13:00:05+00:00"
+            "time": "2024-10-02T11:20:13+00:00"
         },
         {
             "name": "php-http/httplug",
@@ -1937,16 +1937,16 @@
         },
         {
             "name": "php-http/message",
-            "version": "1.16.1",
+            "version": "1.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/message.git",
-                "reference": "5997f3289332c699fa2545c427826272498a2088"
+                "reference": "06dd5e8562f84e641bf929bfe699ee0f5ce8080a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/message/zipball/5997f3289332c699fa2545c427826272498a2088",
-                "reference": "5997f3289332c699fa2545c427826272498a2088",
+                "url": "https://api.github.com/repos/php-http/message/zipball/06dd5e8562f84e641bf929bfe699ee0f5ce8080a",
+                "reference": "06dd5e8562f84e641bf929bfe699ee0f5ce8080a",
                 "shasum": ""
             },
             "require": {
@@ -2000,9 +2000,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/message/issues",
-                "source": "https://github.com/php-http/message/tree/1.16.1"
+                "source": "https://github.com/php-http/message/tree/1.16.2"
             },
-            "time": "2024-03-07T13:22:09+00:00"
+            "time": "2024-10-02T11:34:13+00:00"
         },
         {
             "name": "php-http/multipart-stream-builder",
@@ -7314,7 +7314,7 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.5.31",
+            "version": "v1.5.32",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
@@ -7371,7 +7371,7 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.5.31"
+                "source": "https://github.com/coverage-robot/local/tree/v1.5.32"
             },
             "time": "2024-09-03T15:13:19+00:00"
         },
