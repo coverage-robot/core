@@ -441,16 +441,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "62a6391c63a017c7361f88df7826758d1ac7aa61"
+                "reference": "6bdb1bb0f129bac8b4f81700d483fae50de7c314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/62a6391c63a017c7361f88df7826758d1ac7aa61",
-                "reference": "62a6391c63a017c7361f88df7826758d1ac7aa61",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/6bdb1bb0f129bac8b4f81700d483fae50de7c314",
+                "reference": "6bdb1bb0f129bac8b4f81700d483fae50de7c314",
                 "shasum": ""
             },
             "require": {
@@ -504,7 +504,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.3.7"
+                "source": "https://github.com/brefphp/bref/tree/2.3.8"
             },
             "funding": [
                 {
@@ -516,7 +516,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-27T16:11:15+00:00"
+            "time": "2024-10-17T10:30:46+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -1172,16 +1172,16 @@
         },
         {
             "name": "doctrine/sql-formatter",
-            "version": "1.5.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "16ca9e39877369d664f06dacde468548298bdc40"
+                "reference": "b784cbde727cf806721451dde40eff4fec3bbe86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/16ca9e39877369d664f06dacde468548298bdc40",
-                "reference": "16ca9e39877369d664f06dacde468548298bdc40",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/b784cbde727cf806721451dde40eff4fec3bbe86",
+                "reference": "b784cbde727cf806721451dde40eff4fec3bbe86",
                 "shasum": ""
             },
             "require": {
@@ -1222,9 +1222,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
-                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.0"
+                "source": "https://github.com/doctrine/sql-formatter/tree/1.5.1"
             },
-            "time": "2024-09-11T07:29:40+00:00"
+            "time": "2024-10-21T18:21:57+00:00"
         },
         {
             "name": "firebase/php-jwt",
