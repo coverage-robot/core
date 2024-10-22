@@ -43,8 +43,9 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 resource "aws_apigatewayv2_api" "api_gateway" {
-  name          = "coverage-${var.environment}"
-  protocol_type = "HTTP"
+  name                         = "coverage-${var.environment}"
+  protocol_type                = "HTTP"
+  disable_execute_api_endpoint = true
 }
 
 resource "aws_apigatewayv2_stage" "api_gateway_stage" {
