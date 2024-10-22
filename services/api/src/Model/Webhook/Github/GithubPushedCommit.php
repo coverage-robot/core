@@ -20,10 +20,10 @@ final class GithubPushedCommit implements PushedCommitInterface
      * @param string[] $deletedFiles
      */
     public function __construct(
-        protected readonly string $commit,
-        protected readonly array $addedFiles,
-        protected readonly array $modifiedFiles,
-        protected readonly array $deletedFiles,
+        private readonly string $commit,
+        private readonly array $addedFiles,
+        private readonly array $modifiedFiles,
+        private readonly array $deletedFiles,
         private readonly DateTimeImmutable $committedAt
     ) {
     }

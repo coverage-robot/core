@@ -27,11 +27,11 @@ final class GithubPushWebhook extends AbstractWebhook implements
      */
     public function __construct(
         private readonly ?string $signature,
-        protected readonly string $owner,
-        protected readonly string $repository,
-        protected readonly string $ref,
-        protected readonly string $headCommit,
-        protected readonly array $commits
+        private readonly string $owner,
+        private readonly string $repository,
+        private readonly string $ref,
+        private readonly string $headCommit,
+        private readonly array $commits
     ) {
     }
 
