@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Handler;
 
 use App\Handler\EventHandler;
@@ -56,7 +58,10 @@ final class EventHandlerTest extends KernelTestCase
                 successfullyUploadedLines: [0]
             ),
             pullRequest: 1,
-            eventTime: new DateTimeImmutable('2023-09-18 01:15:37')
+            eventTime: DateTimeImmutable::createFromFormat(
+                DateTimeInterface::ATOM,
+                '2023-08-30T01:15:37+00:00'
+            )
         );
 
         $collection = $serializer->serialize(
@@ -84,7 +89,10 @@ final class EventHandlerTest extends KernelTestCase
                         ],
                         leastCoveredDiffFiles: [],
                         uncoveredLinesChange: 2,
-                        validUntil: new DateTimeImmutable('2023-08-30 12:00:78'),
+                        validUntil: DateTimeImmutable::createFromFormat(
+                            DateTimeInterface::ATOM,
+                            '2023-08-30T12:00:78+00:00'
+                        ),
                     )
                 ]
             ),

@@ -7,6 +7,7 @@ use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
 use Rector\Set\ValueObject\SetList;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
@@ -28,6 +29,14 @@ return static function (RectorConfig $rectorConfig): void {
      * Make sure all overridden methods have the `#[Override]` attribute.
      */
     $rectorConfig->rule(AddOverrideAttributeToOverriddenMethodsRector::class);
+
+    /**
+     * Ensure strict type declarations are present in all files.
+     *
+     * This is also enforced by PHP CodeSniffer, but this offers a simple way to apply
+     * the declaration to files very quickly.
+     */
+    $rectorConfig->rule(IncreaseDeclareStrictTypesRector::class);
 
     $rectorConfig->skip([
         /**

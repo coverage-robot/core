@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Strategy\Clover;
 
 use App\Service\PathFixingService;

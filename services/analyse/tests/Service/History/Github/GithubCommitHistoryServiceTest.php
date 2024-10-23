@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\History\Github;
 
 use App\Service\History\Github\GithubCommitHistoryService;

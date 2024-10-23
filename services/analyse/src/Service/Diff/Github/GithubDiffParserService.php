@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Diff\Github;
 
 use App\Exception\CommitDiffException;

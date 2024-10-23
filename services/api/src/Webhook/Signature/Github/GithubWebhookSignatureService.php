@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Webhook\Signature\Github;
 
 use App\Enum\EnvironmentVariable;
