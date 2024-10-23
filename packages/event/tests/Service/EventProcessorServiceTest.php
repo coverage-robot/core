@@ -7,11 +7,11 @@ namespace Packages\Event\Tests\Service;
 use DateTimeImmutable;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
+use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\IngestSuccess;
 use Packages\Event\Model\Upload;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Event\Service\EventProcessorService;
-use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use RuntimeException;
@@ -24,6 +24,7 @@ final class EventProcessorServiceTest extends TestCase
             new Upload(
                 uploadId: 'mock-upload-id',
                 provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 commit: 'mock-commit',
@@ -63,6 +64,7 @@ final class EventProcessorServiceTest extends TestCase
             new Upload(
                 uploadId: 'mock-upload-id',
                 provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 commit: 'mock-commit',
