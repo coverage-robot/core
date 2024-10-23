@@ -338,34 +338,11 @@ final class CognitoClient implements CognitoClientInterface
     }
 
     /**
-     * Get the attributes for a project from Cognito.
-     *
-     * @throws HttpException
-     * @throws AuthenticationException
-     */
-    private function getGraphToken(
-        Provider $provider,
-        string $owner,
-        string $repository
-    ): string {
-        $project = $this->getProject(
-            $provider,
-            $owner,
-            $repository
-        );
-
-        if (!$project instanceof Project) {
-            throw AuthenticationException::invalidGraphToken();
-        }
-
-        return $project->getGraphToken();
-    }
-
-    /**
      * @inheritDoc
      *
      * @throws HttpException
      */
+    #[Override]
     public function getProject(
         Provider $provider,
         string $owner,
@@ -389,7 +366,7 @@ final class CognitoClient implements CognitoClientInterface
 
             $attributes = array_reduce(
                 $project->getUserAttributes(),
-                function (array $attributes, AttributeType $attributeType) {
+                function (array $attributes, AttributeType $attributeType): array {
                     return array_merge(
                         $attributes,
                         [

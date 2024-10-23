@@ -152,7 +152,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
             $parameters->getRepository()
         );
 
-        if ($project === null) {
+        if (!$project instanceof Project) {
             return false;
         }
 
@@ -180,7 +180,7 @@ final class AuthTokenService implements AuthTokenServiceInterface
             $parameters->getRepository()
         );
 
-        if ($project === null) {
+        if (!$project instanceof Project) {
             return false;
         }
 

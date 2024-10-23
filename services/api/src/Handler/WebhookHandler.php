@@ -7,6 +7,7 @@ namespace App\Handler;
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Exception\InvalidWebhookException;
+use App\Model\Project;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookProcessorService;
 use App\Service\WebhookProcessorServiceInterface;
@@ -108,7 +109,7 @@ final class WebhookHandler extends SqsHandler
             $webhook->getRepository()
         );
 
-        if ($project === null) {
+        if (!$project instanceof Project) {
             $this->metricService->put(
                 metric: 'InvalidWebhooks',
                 value: 1,
