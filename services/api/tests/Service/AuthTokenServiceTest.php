@@ -8,6 +8,7 @@ use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
 use App\Exception\AuthenticationException;
 use App\Model\GraphParameters;
+use App\Model\Project;
 use App\Model\SigningParameters;
 use App\Service\AuthTokenService;
 use Override;
@@ -48,6 +49,15 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testValidateUploadTokenWithEnabledProject(): void
     {
+        $project = new Project(
+            Provider::GITHUB,
+            'mock-project-id',
+            'mock-owner',
+            'mock-repository',
+            'mock-email',
+            'mock-graph-token',
+        );
+
         $parameters = new SigningParameters(
             owner: 'mock-owner',
             repository: 'mock-repository',
@@ -73,6 +83,14 @@ final class AuthTokenServiceTest extends TestCase
                 'mock-token'
             )
             ->willReturn(true);
+        $this->cognitoClient->expects($this->once())
+            ->method('getProject')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository'
+            )
+            ->willReturn($project);
 
         $authTokenService = new AuthTokenService(
             $this->cognitoClient,
@@ -80,10 +98,13 @@ final class AuthTokenServiceTest extends TestCase
             new NullLogger()
         );
 
-        $this->assertTrue($authTokenService->validateParametersWithUploadToken(
-            $parameters,
-            'mock-token'
-        ));
+        $this->assertEquals(
+            $project,
+            $authTokenService->getProjectUsingUploadToken(
+                $parameters,
+                'mock-token'
+            )
+        );
     }
 
     public function testValidateUploadTokenWithDisabledProject(): void
@@ -113,6 +134,8 @@ final class AuthTokenServiceTest extends TestCase
                 'mock-token'
             )
             ->willReturn(false);
+        $this->cognitoClient->expects($this->never())
+            ->method('getProject');
 
         $authTokenService = new AuthTokenService(
             $this->cognitoClient,
@@ -120,7 +143,7 @@ final class AuthTokenServiceTest extends TestCase
             new NullLogger()
         );
 
-        $this->assertFalse($authTokenService->validateParametersWithUploadToken(
+        $this->assertFalse($authTokenService->getProjectUsingUploadToken(
             $parameters,
             'mock-token'
         ));
@@ -175,6 +198,15 @@ final class AuthTokenServiceTest extends TestCase
 
     public function testValidateGraphTokenWithEnabledProject(): void
     {
+        $project = new Project(
+            Provider::GITHUB,
+            'mock-project-id',
+            'mock-owner',
+            'mock-repository',
+            'mock-email',
+            'mock-graph-token',
+        );
+
         $parameters = new GraphParameters(
             owner: 'mock-owner',
             repository: 'mock-repository',
@@ -192,16 +224,28 @@ final class AuthTokenServiceTest extends TestCase
             )
             ->willReturn(true);
 
+        $this->cognitoClient->expects($this->once())
+            ->method('getProject')
+            ->with(
+                Provider::GITHUB,
+                'mock-owner',
+                'mock-repository'
+            )
+            ->willReturn($project);
+
         $authTokenService = new AuthTokenService(
             $this->cognitoClient,
             new Randomizer(),
             new NullLogger()
         );
 
-        $this->assertTrue($authTokenService->validateParametersWithGraphToken(
-            $parameters,
-            'mock-token'
-        ));
+        $this->assertEquals(
+            $project,
+            $authTokenService->getProjectUsingGraphToken(
+                $parameters,
+                'mock-token'
+            )
+        );
     }
 
     public function testValidateGraphTokenWithDisabledProject(): void
@@ -222,6 +266,8 @@ final class AuthTokenServiceTest extends TestCase
                 'mock-token'
             )
             ->willReturn(false);
+        $this->cognitoClient->expects($this->never())
+            ->method('getProject');
 
         $authTokenService = new AuthTokenService(
             $this->cognitoClient,
@@ -229,7 +275,7 @@ final class AuthTokenServiceTest extends TestCase
             new NullLogger()
         );
 
-        $this->assertFalse($authTokenService->validateParametersWithGraphToken(
+        $this->assertFalse($authTokenService->getProjectUsingGraphToken(
             $parameters,
             'mock-token'
         ));

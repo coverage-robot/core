@@ -131,12 +131,30 @@ final class CognitoClientTest extends TestCase
                         AdminGetUserResponse::class,
                         [
                             'userAttributes' => [
-                                new AttributeType(
-                                    [
-                                        'Name' => 'custom:graph_token',
-                                        'Value' => 'graph-token'
-                                    ]
-                                )
+                                new AttributeType([
+                                    'Name' => 'email',
+                                    'Value' => 'mock-email'
+                                ]),
+                                new AttributeType([
+                                    'Name' => 'custom:provider',
+                                    'Value' => Provider::GITHUB->value
+                                ]),
+                                new AttributeType([
+                                    'Name' => 'custom:owner',
+                                    'Value' => 'mock-owner'
+                                ]),
+                                new AttributeType([
+                                    'Name' => 'custom:repository',
+                                    'Value' => 'mock-repository'
+                                ]),
+                                new AttributeType([
+                                    'Name' => 'custom:project_id',
+                                    'Value' => 'mock-project-id'
+                                ]),
+                                new AttributeType([
+                                    'Name' => 'custom:graph_token',
+                                    'Value' => 'graph-token'
+                                ])
                             ]
                         ]
                     )
