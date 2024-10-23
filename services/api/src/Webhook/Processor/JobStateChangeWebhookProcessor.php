@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Webhook\Processor;
 
+use App\Client\CognitoClientInterface;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
 use Override;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\JobStateChange;
@@ -23,7 +23,9 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient
+        private readonly EventBusClientInterface $eventBusClient,
+        #[Autowire(service: CognitoClient::class)]
+        private readonly CognitoClientInterface $cognitoClient
     ) {
     }
 
@@ -51,9 +53,16 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             )
         );
 
+        $project = $this->cognitoClient->getProject(
+            $webhook->getProvider(),
+            $webhook->getOwner(),
+            $webhook->getRepository()
+        );
+
         $this->fireEvent(
             new JobStateChange(
                 provider: $webhook->getProvider(),
+                projectId: $project->getProjectId(),
                 owner: $webhook->getOwner(),
                 repository: $webhook->getRepository(),
                 ref: $webhook->getRef(),

@@ -43,6 +43,13 @@ final class IngestFailure implements EventInterface, ParentAwareEventInterface, 
 
     #[Ignore]
     #[Override]
+    public function getProjectId(): ?string
+    {
+        return $this->upload->getProjectId();
+    }
+
+    #[Ignore]
+    #[Override]
     public function getOwner(): string
     {
         return $this->upload->getOwner();
