@@ -77,6 +77,18 @@ resource "aws_cognito_user_pool" "project_pool" {
     }
   }
 
+  schema {
+    attribute_data_type      = "String"
+    developer_only_attribute = false
+    mutable                  = true
+    name                     = "project_id"
+    required                 = false
+
+    string_attribute_constraints {
+      min_length = 0
+    }
+  }
+
   lifecycle {
     ignore_changes = [
       password_policy,
