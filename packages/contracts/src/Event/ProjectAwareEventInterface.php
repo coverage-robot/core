@@ -9,7 +9,7 @@ interface ProjectAwareEventInterface
 {
     public function getProvider(): Provider;
 
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(allowNull: true)]
     #[Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])]
     public function getProjectId(): ?string;
 
