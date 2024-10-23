@@ -28,6 +28,7 @@ use Psr\Log\LoggerInterface;
 final class CognitoClient implements CognitoClientInterface
 {
     private const string PROJECT_ID_ATTRIBUTE = 'custom:projectId';
+
     private const string PROVIDER_ATTRIBUTE = 'custom:provider';
 
     private const string OWNER_ATTRIBUTE = 'custom:owner';
