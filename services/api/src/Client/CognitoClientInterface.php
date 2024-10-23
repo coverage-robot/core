@@ -6,6 +6,7 @@ namespace App\Client;
 
 use App\Enum\TokenType;
 use App\Exception\AuthenticationException;
+use App\Model\Project;
 use App\Model\Tokens;
 use Packages\Contracts\Provider\Provider;
 
@@ -21,15 +22,6 @@ interface CognitoClientInterface
         string $projectId,
         string $email,
         Tokens $tokens
-    ): bool;
-
-    /**
-     * Check if the project exists in Cognito.
-     */
-    public function doesProjectExist(
-        Provider $provider,
-        string $owner,
-        string $repository
     ): bool;
 
     /**
@@ -74,4 +66,13 @@ interface CognitoClientInterface
         string $repository,
         string $graphToken
     ): bool;
+
+    /**
+     * Get a project and its attributes from Cognito.
+     */
+    public function getProject(
+        Provider $provider,
+        string $owner,
+        string $repository
+    ): ?Project;
 }

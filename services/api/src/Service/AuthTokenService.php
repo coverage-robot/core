@@ -8,6 +8,7 @@ use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
 use App\Model\GraphParameters;
+use App\Model\Project;
 use App\Model\SigningParameters;
 use Override;
 use Psr\Log\LoggerInterface;
@@ -131,27 +132,59 @@ final class AuthTokenService implements AuthTokenServiceInterface
      * Validate a potential upload using a user-provided upload token.
      */
     #[Override]
-    public function validateParametersWithUploadToken(SigningParameters $parameters, string $token): bool
+    public function getProjectUsingUploadToken(SigningParameters $parameters, string $token): Project|false
     {
-        return $this->cognitoClient->authenticate(
+        $isValidated = $this->cognitoClient->authenticate(
             $parameters->getProvider(),
             $parameters->getOwner(),
             $parameters->getRepository(),
             TokenType::UPLOAD,
             $token
         );
+
+        if (!$isValidated) {
+            return false;
+        }
+
+        $project = $this->cognitoClient->getProject(
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository()
+        );
+
+        if (!$project instanceof Project) {
+            return false;
+        }
+
+        return $project;
     }
 
     #[Override]
-    public function validateParametersWithGraphToken(GraphParameters $parameters, string $token): bool
+    public function getProjectUsingGraphToken(GraphParameters $parameters, string $token): Project|false
     {
-        return $this->cognitoClient->authenticate(
+        $isValidated = $this->cognitoClient->authenticate(
             $parameters->getProvider(),
             $parameters->getOwner(),
             $parameters->getRepository(),
             TokenType::GRAPH,
             $token
         );
+
+        if (!$isValidated) {
+            return false;
+        }
+
+        $project = $this->cognitoClient->getProject(
+            $parameters->getProvider(),
+            $parameters->getOwner(),
+            $parameters->getRepository()
+        );
+
+        if (!$project instanceof Project) {
+            return false;
+        }
+
+        return $project;
     }
 
     /**

@@ -7,6 +7,7 @@ namespace App\Client;
 use App\Enum\EnvironmentVariable;
 use App\Enum\TokenType;
 use App\Exception\AuthenticationException;
+use App\Model\Project;
 use App\Model\Tokens;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use AsyncAws\CognitoIdentityProvider\Enum\AuthFlowType;
@@ -17,7 +18,6 @@ use AsyncAws\CognitoIdentityProvider\Input\AdminInitiateAuthRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminSetUserPasswordRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminUpdateUserAttributesRequest;
 use AsyncAws\CognitoIdentityProvider\Input\SignUpRequest;
-use AsyncAws\CognitoIdentityProvider\Result\AdminGetUserResponse;
 use AsyncAws\CognitoIdentityProvider\ValueObject\AttributeType;
 use AsyncAws\Core\Exception\Http\HttpException;
 use Override;
@@ -27,7 +27,7 @@ use Psr\Log\LoggerInterface;
 
 final class CognitoClient implements CognitoClientInterface
 {
-    private const string PROJECT_ID_ATTRIBUTE = 'custom:projectId';
+    private const string PROJECT_ID_ATTRIBUTE = 'custom:project_id';
 
     private const string PROVIDER_ATTRIBUTE = 'custom:provider';
 
@@ -126,19 +126,6 @@ final class CognitoClient implements CognitoClientInterface
         }
 
         return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    #[Override]
-    public function doesProjectExist(Provider $provider, string $owner, string $repository): bool
-    {
-        try {
-            return $this->getUser($provider, $owner, $repository) instanceof AdminGetUserResponse;
-        } catch (HttpException) {
-            return false;
-        }
     }
 
     /**
@@ -328,7 +315,7 @@ final class CognitoClient implements CognitoClientInterface
         string $token
     ): bool {
         try {
-            $graphToken = $this->getGraphToken(
+            $project = $this->getProject(
                 $provider,
                 $owner,
                 $repository
@@ -347,61 +334,24 @@ final class CognitoClient implements CognitoClientInterface
             return false;
         }
 
-        return $graphToken === $token;
+        return $project?->getGraphToken() === $token;
     }
 
     /**
-     * Get the attributes for a project from Cognito.
-     *
-     * @throws HttpException
-     * @throws AuthenticationException
-     */
-    private function getGraphToken(
-        Provider $provider,
-        string $owner,
-        string $repository
-    ): string {
-        $project = $this->getUser(
-            $provider,
-            $owner,
-            $repository
-        );
-
-        if (!$project instanceof AdminGetUserResponse) {
-            throw AuthenticationException::invalidGraphToken();
-        }
-
-        foreach ($project->getUserAttributes() as $attributeType) {
-            if ($attributeType->getName() !== self::GRAPH_TOKEN_ATTRIBUTE) {
-                continue;
-            }
-
-            $graphToken = $attributeType->getValue();
-
-            if ($graphToken === null) {
-                throw AuthenticationException::invalidGraphToken();
-            }
-
-            return $graphToken;
-        }
-
-        throw AuthenticationException::invalidGraphToken();
-    }
-
-    /**
-     * Get the project from Cognito.
+     * @inheritDoc
      *
      * @throws HttpException
      */
-    private function getUser(
+    #[Override]
+    public function getProject(
         Provider $provider,
         string $owner,
         string $repository
-    ): ?AdminGetUserResponse {
+    ): ?Project {
         $userPoolId = $this->environmentService->getVariable(EnvironmentVariable::PROJECT_POOL_ID);
 
         try {
-            return $this->cognitoClient->adminGetUser(
+            $project = $this->cognitoClient->adminGetUser(
                 new AdminGetUserRequest(
                     [
                         'Username' => $this->getUsername(
@@ -412,6 +362,39 @@ final class CognitoClient implements CognitoClientInterface
                         'UserPoolId' => $userPoolId
                     ]
                 )
+            );
+
+            $attributes = array_reduce(
+                $project->getUserAttributes(),
+                function (array $attributes, AttributeType $attributeType): array {
+                    return array_merge(
+                        $attributes,
+                        [
+                            $attributeType->getName() => $attributeType->getValue()
+                        ]
+                    );
+                },
+                []
+            );
+
+            if (
+                !isset($attributes[self::PROVIDER_ATTRIBUTE]) ||
+                !isset($attributes[self::PROJECT_ID_ATTRIBUTE]) ||
+                !isset($attributes[self::REPOSITORY_ATTRIBUTE]) ||
+                !isset($attributes[self::OWNER_ATTRIBUTE]) ||
+                !isset($attributes[self::GRAPH_TOKEN_ATTRIBUTE]) ||
+                !isset($attributes['email'])
+            ) {
+                return null;
+            }
+
+            return new Project(
+                Provider::from((string)$attributes[self::PROVIDER_ATTRIBUTE]),
+                (string)$attributes[self::PROJECT_ID_ATTRIBUTE],
+                (string)$attributes[self::OWNER_ATTRIBUTE],
+                (string)$attributes[self::REPOSITORY_ATTRIBUTE],
+                (string)$attributes['email'],
+                (string)$attributes[self::GRAPH_TOKEN_ATTRIBUTE],
             );
         } catch (UserNotFoundException) {
             return null;

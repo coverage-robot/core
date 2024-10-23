@@ -7,6 +7,7 @@ namespace App\Handler;
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Exception\InvalidWebhookException;
+use App\Model\Project;
 use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookProcessorService;
 use App\Service\WebhookProcessorServiceInterface;
@@ -16,13 +17,10 @@ use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use Override;
-use Packages\Clients\Model\Object\Reference;
-use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -105,13 +103,13 @@ final class WebhookHandler extends SqsHandler
      */
     private function processWebhookEvent(WebhookInterface $webhook): void
     {
-        if (
-            !$this->cognitoClient->doesProjectExist(
-                $webhook->getProvider(),
-                $webhook->getOwner(),
-                $webhook->getRepository()
-            )
-        ) {
+        $project = $this->cognitoClient->getProject(
+            $webhook->getProvider(),
+            $webhook->getOwner(),
+            $webhook->getRepository()
+        );
+
+        if (!$project instanceof Project) {
             $this->metricService->put(
                 metric: 'InvalidWebhooks',
                 value: 1,

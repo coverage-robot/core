@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\SigningException;
+use App\Model\Project;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use AsyncAws\S3\Input\PutObjectRequest;
@@ -85,7 +86,7 @@ final class UploadService implements UploadServiceInterface
     }
 
     #[Override]
-    public function buildSignedUploadUrl(SigningParameters $signingParameters): SignedUrl
+    public function buildSignedUploadUrl(Project $project, SigningParameters $signingParameters): SignedUrl
     {
         $uploadId = $this->uniqueIdGeneratorService->generate();
 
@@ -105,6 +106,7 @@ final class UploadService implements UploadServiceInterface
             ),
             $uploadKey,
             $uploadId,
+            $project->getProjectId(),
             $signingParameters
         );
 
@@ -117,12 +119,14 @@ final class UploadService implements UploadServiceInterface
         string $bucket,
         string $key,
         string $uploadId,
+        string $projectId,
         SigningParameters $signingParameters
     ): PutObjectRequest {
         /** @var array<string, string> $metadata */
         $metadata = [
             ...(array)$this->serializer->normalize($signingParameters),
             'uploadId' => $uploadId,
+            'projectId' => $projectId,
             'parent' => $this->serializer->serialize(
                 $signingParameters->getParent(),
                 'json'
