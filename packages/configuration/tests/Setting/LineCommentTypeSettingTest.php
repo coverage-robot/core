@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Tests\Setting;
 
 use Packages\Configuration\Client\DynamoDbClientInterface;

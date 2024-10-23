@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Client;
 
 use AsyncAws\Core\Exception\Http\HttpException;

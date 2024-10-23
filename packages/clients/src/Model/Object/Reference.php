@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Clients\Model\Object;
 
 use DateTimeInterface;

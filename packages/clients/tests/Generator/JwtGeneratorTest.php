@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Clients\Tests\Generator;
 
 use Packages\Clients\Exception\ClientException;

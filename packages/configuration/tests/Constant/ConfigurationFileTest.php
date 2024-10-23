@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Tests\Constant;
 
 use Packages\Configuration\Constant\ConfigurationFile;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Enum;
 
 use Packages\Configuration\Model\LineCommentType;
