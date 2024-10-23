@@ -58,7 +58,7 @@ final class MetricService implements MetricServiceInterface
                     self::NAMESPACE,
                     $metric,
                     $value,
-                    $this->clock->now()
+                    (int)$this->clock->now()
                         ->format("Uv"),
                     $unit,
                     $resolution,
