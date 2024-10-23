@@ -389,7 +389,7 @@ final class CognitoClient implements CognitoClientInterface
             }
 
             return new Project(
-                Provider::from($attributes[self::PROVIDER_ATTRIBUTE]),
+                Provider::from((string)$attributes[self::PROVIDER_ATTRIBUTE]),
                 (string)$attributes[self::PROJECT_ID_ATTRIBUTE],
                 (string)$attributes[self::OWNER_ATTRIBUTE],
                 (string)$attributes[self::REPOSITORY_ATTRIBUTE],
