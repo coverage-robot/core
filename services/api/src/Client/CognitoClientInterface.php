@@ -18,6 +18,7 @@ interface CognitoClientInterface
         Provider $provider,
         string $owner,
         string $repository,
+        string $projectId,
         string $email,
         Tokens $tokens
     ): bool;

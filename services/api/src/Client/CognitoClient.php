@@ -27,6 +27,8 @@ use Psr\Log\LoggerInterface;
 
 final class CognitoClient implements CognitoClientInterface
 {
+    private const string PROJECT_ID_ATTRIBUTE = 'custom:projectId';
+
     private const string PROVIDER_ATTRIBUTE = 'custom:provider';
 
     private const string OWNER_ATTRIBUTE = 'custom:owner';
@@ -50,6 +52,7 @@ final class CognitoClient implements CognitoClientInterface
         Provider $provider,
         string $owner,
         string $repository,
+        string $projectId,
         string $email,
         Tokens $tokens
     ): bool {
@@ -81,6 +84,10 @@ final class CognitoClient implements CognitoClientInterface
                             new AttributeType([
                                 'Name' => self::REPOSITORY_ATTRIBUTE,
                                 'Value' => $repository
+                            ]),
+                            new AttributeType([
+                                'Name' => self::PROJECT_ID_ATTRIBUTE,
+                                'Value' => $projectId
                             ]),
                             new AttributeType([
                                 'Name' => self::GRAPH_TOKEN_ATTRIBUTE,

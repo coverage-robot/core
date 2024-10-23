@@ -8,7 +8,6 @@ use App\Client\CognitoClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\TokenType;
 use App\Model\Tokens;
-use Packages\Contracts\Environment\Service;
 use AsyncAws\CognitoIdentityProvider\CognitoIdentityProviderClient;
 use AsyncAws\CognitoIdentityProvider\Input\AdminConfirmSignUpRequest;
 use AsyncAws\CognitoIdentityProvider\Input\AdminGetUserRequest;
@@ -22,6 +21,7 @@ use AsyncAws\CognitoIdentityProvider\ValueObject\AuthenticationResultType;
 use AsyncAws\Core\Test\ResultMockFactory;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -85,6 +85,7 @@ final class CognitoClientTest extends TestCase
                 Provider::GITHUB,
                 'owner',
                 'repository',
+                'mock-project-id',
                 'mock-email@example.com',
                 new Tokens('upload-token', 'graph-token')
             )
