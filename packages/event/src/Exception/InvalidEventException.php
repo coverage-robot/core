@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Event\Exception;
 
 use Packages\Contracts\Event\EventInterface;

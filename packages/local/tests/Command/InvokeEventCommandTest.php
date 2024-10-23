@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Local\Tests\Command;
 
 use Bref\Event\EventBridge\EventBridgeEvent;

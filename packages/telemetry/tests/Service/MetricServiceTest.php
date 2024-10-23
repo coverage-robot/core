@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Telemetry\Tests\Service;
 
 use DateTimeImmutable;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Event\Processor;
 
 use Packages\Contracts\Event\Event;

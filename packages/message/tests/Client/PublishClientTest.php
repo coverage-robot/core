@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Message\Tests\Client;
 
 use AsyncAws\Core\Response;

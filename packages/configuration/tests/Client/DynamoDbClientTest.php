@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Tests\Client;
 
 use AsyncAws\Core\Test\ResultMockFactory;
