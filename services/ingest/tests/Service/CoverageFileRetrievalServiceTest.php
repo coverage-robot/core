@@ -63,7 +63,7 @@ final class CoverageFileRetrievalServiceTest extends TestCase
             ->willThrowException(
                 new NoSuchKeyException(
                     $mockResponse,
-                    new AwsError(404, null, null, null)
+                    new AwsError('404', null, null, null)
                 )
             );
 
