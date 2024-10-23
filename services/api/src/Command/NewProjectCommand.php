@@ -8,6 +8,7 @@ use App\Client\CognitoClient;
 use App\Exception\AuthenticationException;
 use App\Model\Tokens;
 use App\Service\AuthTokenServiceInterface;
+use App\Service\UniqueIdGeneratorService;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -21,7 +22,8 @@ final class NewProjectCommand extends Command
 {
     public function __construct(
         private readonly CognitoClient $cognitoClient,
-        private readonly AuthTokenServiceInterface $authTokenService
+        private readonly AuthTokenServiceInterface $authTokenService,
+        private readonly UniqueIdGeneratorService $uniqueIdGeneratorService
     ) {
         parent::__construct();
     }
@@ -60,6 +62,7 @@ final class NewProjectCommand extends Command
             Provider::from($provider),
             $owner,
             $repository,
+            $this->uniqueIdGeneratorService->generate(),
             $email,
             new Tokens(
                 $uploadToken,
