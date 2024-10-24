@@ -143,8 +143,7 @@ resource "google_bigquery_table" "upload" {
   deletion_protection = true
   clustering = [
     "provider",
-    "owner",
-    "repository",
+    "projectId",
     "commit",
   ]
 
