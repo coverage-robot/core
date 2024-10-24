@@ -19,7 +19,7 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
      */
     public function __construct(
         private readonly Provider $provider,
-        private readonly ?string $projectId,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
@@ -45,7 +45,7 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
     }
 
     #[Override]
-    public function getProjectId(): ?string
+    public function getProjectId(): string
     {
         return $this->projectId;
     }
