@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Webhook\Processor;
 
+use App\Client\CognitoClient;
+use App\Client\CognitoClientInterface;
 use App\Enum\WebhookProcessorEvent;
 use App\Model\Webhook\CommitsPushedWebhookInterface;
 use App\Model\Webhook\PushedCommitInterface;
@@ -25,7 +27,9 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient
+        private readonly EventBusClientInterface $eventBusClient,
+        #[Autowire(service: CognitoClient::class)]
+        private readonly CognitoClientInterface $cognitoClient
     ) {
     }
 
@@ -87,6 +91,22 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
             return;
         }
 
+        $project = $this->cognitoClient->getProject(
+            provider: $webhook->getProvider(),
+            owner: $webhook->getOwner(),
+            repository: $webhook->getRepository()
+        );
+
+        if ($project === null) {
+            $this->webhookProcessorLogger->error(
+                sprintf(
+                    'Unable to process webhook as there was no related project: %s',
+                    (string)$webhook
+                )
+            );
+            return;
+        }
+
         $this->webhookProcessorLogger->info(
             sprintf(
                 'Configuration file has been effected by commits in %s',
@@ -116,6 +136,7 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
         $this->publishEvent(
             new ConfigurationFileChange(
                 provider: $webhook->getProvider(),
+                projectId: $project->getProjectId(),
                 owner: $webhook->getOwner(),
                 repository: $webhook->getRepository(),
                 ref: $ref,
