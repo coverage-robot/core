@@ -25,7 +25,8 @@ final class CoverageFailedEventProcessorTest extends TestCase
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'main',
-            commit: 'mock-commit'
+            commit: 'mock-commit',
+            projectId: null
         );
 
         $mockPublishClient = $this->createMock(SqsClientInterface::class);

@@ -523,6 +523,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',

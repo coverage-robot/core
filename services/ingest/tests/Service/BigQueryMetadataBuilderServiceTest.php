@@ -38,6 +38,7 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
             new Upload(
                 uploadId: 'mock-uuid',
                 provider: Provider::GITHUB,
+                projectId: null,
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 commit: 'mock-commit',

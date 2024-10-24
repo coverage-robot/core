@@ -42,6 +42,7 @@ final class CoverageFilePersistServiceTest extends TestCase
                 new Upload(
                     uploadId: 'mock-upload-id',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -87,6 +88,7 @@ final class CoverageFilePersistServiceTest extends TestCase
                 new Upload(
                     uploadId: 'mock-upload-id',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',

@@ -107,6 +107,7 @@ final class S3PersistServiceTest extends KernelTestCase
         $upload = new Upload(
             uploadId: Uuid::uuid4()->toString(),
             provider: Provider::GITHUB,
+            projectId: null,
             owner: '',
             repository: '',
             commit: '',
