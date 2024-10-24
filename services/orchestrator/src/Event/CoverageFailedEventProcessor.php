@@ -56,7 +56,7 @@ final class CoverageFailedEventProcessor extends AbstractOrchestratorEventRecord
 
         $finalisedEvent = new Finalised(
             $event->getProvider(),
-            $event->getProjectId(),
+            (string)$event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),
