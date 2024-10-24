@@ -48,6 +48,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
     {
         $mockIngestion = new Ingestion(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -131,6 +132,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
     {
         $mockIngestion = new Ingestion(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -140,6 +142,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
         );
         $mockFinalised = new Finalised(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

@@ -8,7 +8,6 @@ use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Model\Job;
-use Packages\Contracts\Environment\Service;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\DynamoDb\Enum\ComparisonOperator;
 use AsyncAws\DynamoDb\Enum\ReturnValuesOnConditionCheckFailure;
@@ -21,6 +20,7 @@ use AsyncAws\DynamoDb\ValueObject\Condition;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -32,6 +32,7 @@ final class DynamoDbClientTest extends KernelTestCase
     {
         $mockEvent = new Job(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repository',
             'mock-commit',
@@ -123,6 +124,7 @@ final class DynamoDbClientTest extends KernelTestCase
     {
         $mockEvent = new Job(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repository',
             'mock-commit',
@@ -239,6 +241,7 @@ final class DynamoDbClientTest extends KernelTestCase
     {
         $mockEvent = new Job(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repository',
             'mock-commit',

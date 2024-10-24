@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Client\DynamoDbClient;
 use App\Client\DynamoDbClientInterface;
 use App\Enum\OrchestratedEvent;
 use App\Enum\OrchestratedEventState;
@@ -62,6 +61,7 @@ final class EventStoreServiceTest extends KernelTestCase
         $eventStoreService->getStateChangesBetweenEvent(
             new Ingestion(
                 Provider::GITHUB,
+                'mock-project-id',
                 'mock-owner',
                 'mock-repo',
                 '1',
@@ -71,6 +71,7 @@ final class EventStoreServiceTest extends KernelTestCase
             ),
             new Job(
                 Provider::GITHUB,
+                'mock-project-id',
                 'mock-owner',
                 'mock-repo',
                 '1',
@@ -155,6 +156,7 @@ final class EventStoreServiceTest extends KernelTestCase
 
         $event = new Ingestion(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repo',
             '1',
@@ -201,6 +203,7 @@ final class EventStoreServiceTest extends KernelTestCase
 
         $ongoingEvent = new Ingestion(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repo',
             '1',
@@ -211,6 +214,7 @@ final class EventStoreServiceTest extends KernelTestCase
 
         $completeEvent = new Ingestion(
             Provider::GITHUB,
+            'mock-project-id',
             'mock-owner',
             'mock-repo',
             '1',
@@ -357,6 +361,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 null,
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -366,6 +371,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 ),
                 [
                     'provider' => Provider::GITHUB->value,
+                    'projectId' => 'mock-project-id',
                     'owner' => 'mock-owner',
                     'repository' => 'mock-repo',
                     'commit' => '1',
@@ -378,6 +384,7 @@ final class EventStoreServiceTest extends KernelTestCase
             [
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -387,6 +394,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 ),
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -401,6 +409,7 @@ final class EventStoreServiceTest extends KernelTestCase
             [
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -410,6 +419,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 ),
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',
@@ -442,6 +452,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             1,
                             [
                                 'provider' => Provider::GITHUB->value,
+                                'projectId' => 'mock-project-id',
                                 'owner' => 'mock-owner',
                                 'repository' => 'mock-repo',
                                 'commit' => '1',
@@ -490,6 +501,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 ),
                 new Ingestion(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '2',
@@ -509,6 +521,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             1,
                             [
                                 'provider' => Provider::GITHUB->value,
+                                'projectId' => 'mock-project-id',
                                 'owner' => 'mock-owner',
                                 'repository' => 'mock-repo',
                                 'commit' => '1',
@@ -547,6 +560,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 ),
                 new Job(
                     Provider::GITHUB,
+                    'mock-project-id',
                     'mock-owner',
                     'mock-repo',
                     '1',

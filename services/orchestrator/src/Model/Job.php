@@ -13,6 +13,7 @@ final class Job extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
@@ -27,6 +28,12 @@ final class Job extends AbstractOrchestratedEvent
     public function getProvider(): Provider
     {
         return $this->provider;
+    }
+
+    #[Override]
+    public function getProjectId(): string
+    {
+        return $this->projectId;
     }
 
     #[Override]

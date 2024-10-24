@@ -125,6 +125,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $mockIngestion = new Ingestion(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',

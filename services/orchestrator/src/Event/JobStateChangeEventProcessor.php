@@ -82,6 +82,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
 
         $newState = new Job(
             $event->getProvider(),
+            (string)$event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
@@ -105,7 +106,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
             $this->eventBusClient->fireEvent(
                 new UploadsStarted(
                     provider: $newState->getProvider(),
-                    projectId: null,
+                    projectId: $newState->getProjectId(),
                     owner: $newState->getOwner(),
                     repository: $newState->getRepository(),
                     ref: $event->getRef(),
@@ -135,6 +136,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
 
             $finalisedEvent = new Finalised(
                 $newState->getProvider(),
+                $newState->getProjectId(),
                 $newState->getOwner(),
                 $newState->getRepository(),
                 $event->getRef(),
@@ -150,7 +152,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
                 $this->eventBusClient->fireEvent(
                     new UploadsFinalised(
                         provider: $finalisedEvent->getProvider(),
-                        projectId: null,
+                        projectId: $finalisedEvent->getProjectId(),
                         owner: $finalisedEvent->getOwner(),
                         repository: $finalisedEvent->getRepository(),
                         ref: $finalisedEvent->getRef(),
