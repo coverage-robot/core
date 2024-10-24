@@ -175,6 +175,11 @@ final class EventHandler extends S3Handler
                 ($output->getMetadata()['uploadid'] ?? '') !== '' => $output->getMetadata()['uploadid'],
                 default => null
             },
+            'projectId' => match (true) {
+                ($output->getMetadata()['projectId'] ?? '') !== '' => $output->getMetadata()['projectId'],
+                ($output->getMetadata()['projectid'] ?? '') !== '' => $output->getMetadata()['projectid'],
+                default => null
+            },
             'projectRoot' => match (true) {
                 ($output->getMetadata()['projectRoot'] ?? '') !== '' => $output->getMetadata()['projectRoot'],
                 ($output->getMetadata()['projectroot'] ?? '') !== '' => $output->getMetadata()['projectroot'],
