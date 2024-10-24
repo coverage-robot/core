@@ -68,6 +68,7 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
         $coverageFinalisedEventProcessor->process(
             new CoverageFinalised(
                 provider: Provider::GITHUB,
+                projectId: null,
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',

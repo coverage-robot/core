@@ -20,6 +20,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -31,7 +32,6 @@ use Packages\Event\Model\Upload;
 use Packages\Message\Client\SqsClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Packages\Contracts\Environment\Service;
 
 final class JobStateChangeEventProcessorTest extends TestCase
 {
@@ -64,6 +64,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     new Upload(
                         uploadId: 'mock-upload-id',
                         provider: Provider::GITHUB,
+                        projectId: null,
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -107,6 +108,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -163,6 +165,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -235,6 +238,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -308,6 +312,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -411,6 +416,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
