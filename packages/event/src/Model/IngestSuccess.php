@@ -43,7 +43,7 @@ final class IngestSuccess implements EventInterface, ParentAwareEventInterface, 
 
     #[Ignore]
     #[Override]
-    public function getProjectId(): ?string
+    public function getProjectId(): string
     {
         return $this->upload->getProjectId();
     }

@@ -21,7 +21,7 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
     public function __construct(
         private readonly string $uploadId,
         private readonly Provider $provider,
-        private readonly ?string $projectId,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
@@ -53,7 +53,7 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
     }
 
     #[Override]
-    public function getProjectId(): ?string
+    public function getProjectId(): string
     {
         return $this->projectId;
     }
