@@ -42,6 +42,7 @@ final class S3PersistServiceTest extends KernelTestCase
             'parent' => json_encode($upload->getParent(), JSON_THROW_ON_ERROR),
             'uploadId' => $upload->getUploadId(),
             'provider' => $upload->getProvider()->value,
+            'projectId' => null,
             'owner' => $upload->getOwner(),
             'repository' => $upload->getRepository(),
             'ref' => $upload->getRef(),
