@@ -66,6 +66,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -135,6 +136,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -245,6 +247,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -501,6 +504,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -516,6 +520,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',

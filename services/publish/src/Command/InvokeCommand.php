@@ -86,6 +86,7 @@ final class InvokeCommand extends Command
             $upload = new Upload(
                 uploadId: 'mock-uuid',
                 provider: Provider::GITHUB,
+                projectId: null,
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 commit: 'mock-commit',

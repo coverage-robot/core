@@ -190,6 +190,7 @@ final class EventHandler extends SqsHandler
         $this->eventBusClient->fireEvent(
             new CoverageFailed(
                 provider: $event->getProvider(),
+                projectId: null,
                 owner: $event->getOwner(),
                 repository: $event->getRepository(),
                 ref: $event->getRef(),
