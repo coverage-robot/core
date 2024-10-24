@@ -41,6 +41,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
         $mockUpload = new Upload(
             uploadId: 'mock-upload-id',
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'uploaded-commit',

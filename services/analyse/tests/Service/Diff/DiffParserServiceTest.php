@@ -40,9 +40,9 @@ final class DiffParserServiceTest extends TestCase
                     repository: 'repository',
                     ref: 'ref',
                     commit: 'commit',
-                    pullRequest: 12,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 12
                 )
             )
         );
