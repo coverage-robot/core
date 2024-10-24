@@ -227,7 +227,7 @@ resource "google_bigquery_table" "upload" {
     "type": "STRING",
     "mode": "NULLABLE",
     "description": "The internal id of the project uploaded to."
-  },
+  }
 ]
 EOF
 }
