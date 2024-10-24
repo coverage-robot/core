@@ -14,10 +14,10 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Message\PublishableMessage\PublishableCoverageFailedJobMessage;
 use Packages\Event\Model\CoverageFailed;
 use Packages\Message\Client\PublishClient;
 use Packages\Message\Client\SqsClientInterface;
+use Packages\Message\PublishableMessage\PublishableCoverageFailedJobMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -56,6 +56,7 @@ final class CoverageFailedEventProcessor extends AbstractOrchestratorEventRecord
 
         $finalisedEvent = new Finalised(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),

@@ -23,6 +23,8 @@ interface OrchestratedEventInterface extends Stringable
 {
     public function getProvider(): Provider;
 
+    public function getProjectId(): string;
+
     public function getOwner(): string;
 
     public function getRepository(): string;

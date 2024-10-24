@@ -14,7 +14,6 @@ use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
@@ -69,6 +68,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
         $currentState = new Ingestion(
             $event->getProvider(),
+            (string)$event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
@@ -93,7 +93,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
             $this->eventBusClient->fireEvent(
                 new UploadsStarted(
                     provider: $currentState->getProvider(),
-                    projectId: null,
+                    projectId: $currentState->getProjectId(),
                     owner: $currentState->getOwner(),
                     repository: $currentState->getRepository(),
                     ref: $event->getRef(),
@@ -123,6 +123,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
             $finalisedEvent = new Finalised(
                 $currentState->getProvider(),
+                $currentState->getProjectId(),
                 $currentState->getOwner(),
                 $currentState->getRepository(),
                 $event->getRef(),
@@ -138,7 +139,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
                 $this->eventBusClient->fireEvent(
                     new UploadsFinalised(
                         provider: $finalisedEvent->getProvider(),
-                        projectId: null,
+                        projectId: $finalisedEvent->getProjectId(),
                         owner: $finalisedEvent->getOwner(),
                         repository: $finalisedEvent->getRepository(),
                         ref: $finalisedEvent->getRef(),

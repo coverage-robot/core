@@ -22,11 +22,11 @@ final class CoverageFailedEventProcessorTest extends TestCase
     {
         $event = new CoverageFailed(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'main',
-            commit: 'mock-commit',
-            projectId: null
+            commit: 'mock-commit'
         );
 
         $mockPublishClient = $this->createMock(SqsClientInterface::class);

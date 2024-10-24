@@ -54,6 +54,7 @@ final class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRec
 
         $currentState = new Finalised(
             $event->getProvider(),
+            (string)$event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),
