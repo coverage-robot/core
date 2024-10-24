@@ -14,6 +14,7 @@ use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\EventInterface;
@@ -21,7 +22,6 @@ use Packages\Event\Model\Upload;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
-use Packages\Contracts\Environment\Service;
 
 final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
@@ -227,6 +227,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -244,6 +245,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',

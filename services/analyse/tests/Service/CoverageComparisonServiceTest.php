@@ -64,6 +64,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -131,6 +132,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -199,6 +201,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -263,6 +266,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',

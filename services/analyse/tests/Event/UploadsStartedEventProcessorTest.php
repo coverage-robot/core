@@ -28,6 +28,7 @@ final class UploadsStartedEventProcessorTest extends TestCase
     {
         $uploadsStarted = new UploadsStarted(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

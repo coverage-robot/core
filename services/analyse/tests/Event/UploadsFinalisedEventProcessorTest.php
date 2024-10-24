@@ -47,6 +47,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
     {
         $uploadsFinalised = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -185,6 +186,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
     {
         $uploadsFinalised = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: null,
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

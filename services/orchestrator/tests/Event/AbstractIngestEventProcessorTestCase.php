@@ -53,6 +53,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             $ingestEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: null,
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -101,6 +102,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: null,
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -122,11 +124,11 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
 
         $mockIngestion = new Ingestion(
-            uploadId: 'mock-upload-id',
             provider: Provider::GITHUB,
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
+            uploadId: 'mock-upload-id',
             state: OrchestratedEventState::SUCCESS,
             eventTime: $eventTime
         );
@@ -165,6 +167,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: null,
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',

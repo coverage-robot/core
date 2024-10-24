@@ -104,15 +104,16 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
 
             $this->eventBusClient->fireEvent(
                 new UploadsStarted(
-                    $newState->getProvider(),
-                    $newState->getOwner(),
-                    $newState->getRepository(),
-                    $event->getRef(),
-                    $newState->getCommit(),
-                    $event->getPullRequest(),
-                    $event->getBaseRef(),
-                    $event->getBaseCommit(),
-                    new DateTimeImmutable()
+                    provider: $newState->getProvider(),
+                    projectId: null,
+                    owner: $newState->getOwner(),
+                    repository: $newState->getRepository(),
+                    ref: $event->getRef(),
+                    commit: $newState->getCommit(),
+                    pullRequest: $event->getPullRequest(),
+                    baseRef: $event->getBaseRef(),
+                    baseCommit: $event->getBaseCommit(),
+                    eventTime: new DateTimeImmutable()
                 )
             );
         }
@@ -148,16 +149,17 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
 
                 $this->eventBusClient->fireEvent(
                     new UploadsFinalised(
-                        $finalisedEvent->getProvider(),
-                        $finalisedEvent->getOwner(),
-                        $finalisedEvent->getRepository(),
-                        $finalisedEvent->getRef(),
-                        $finalisedEvent->getCommit(),
-                        $event->getParent(),
-                        $finalisedEvent->getPullRequest(),
-                        $event->getBaseCommit(),
-                        $event->getBaseRef(),
-                        $finalisedEvent->getEventTime()
+                        provider: $finalisedEvent->getProvider(),
+                        projectId: null,
+                        owner: $finalisedEvent->getOwner(),
+                        repository: $finalisedEvent->getRepository(),
+                        ref: $finalisedEvent->getRef(),
+                        commit: $finalisedEvent->getCommit(),
+                        parent: $event->getParent(),
+                        pullRequest: $finalisedEvent->getPullRequest(),
+                        baseCommit: $event->getBaseCommit(),
+                        baseRef: $event->getBaseRef(),
+                        eventTime: $finalisedEvent->getEventTime()
                     )
                 );
             }
