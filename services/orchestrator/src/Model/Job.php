@@ -75,10 +75,8 @@ final class Job extends AbstractOrchestratedEvent
     public function __toString(): string
     {
         return sprintf(
-            'Job#%s-%s-%s-%s',
-            $this->provider->value,
-            $this->owner,
-            $this->repository,
+            'Job#%s-%s',
+            $this->projectId,
             (string) $this->externalId
         );
     }

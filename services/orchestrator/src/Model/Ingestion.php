@@ -75,10 +75,8 @@ final class Ingestion extends AbstractOrchestratedEvent
     public function __toString(): string
     {
         return sprintf(
-            'Ingestion#%s-%s-%s-%s',
-            $this->provider->value,
-            $this->owner,
-            $this->repository,
+            'Ingestion#%s-%s',
+            $this->projectId,
             $this->uploadId
         );
     }
