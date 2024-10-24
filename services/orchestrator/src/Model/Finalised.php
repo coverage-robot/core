@@ -81,10 +81,8 @@ final class Finalised extends AbstractOrchestratedEvent
     public function __toString(): string
     {
         return sprintf(
-            'Finalised#%s-%s-%s-%s',
-            $this->provider->value,
-            $this->owner,
-            $this->repository,
+            'Finalised#%s-%s',
+            $this->projectId,
             $this->commit
         );
     }
