@@ -84,7 +84,7 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
     }
 
     #[Override]
-    public function getPullRequest(): ?string
+    public function getPullRequest(): string|int|null
     {
         return $this->pullRequest;
     }
