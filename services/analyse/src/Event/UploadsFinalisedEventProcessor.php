@@ -90,7 +90,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $this->eventBusClient->fireEvent(
                     new UtilisationAmendment(
                         provider: $event->getProvider(),
-                        projectId: null,
+                        projectId: $event->getProjectId(),
                         owner: $event->getOwner(),
                         repository: $event->getRepository(),
                         ref: $event->getRef(),
@@ -106,7 +106,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $this->eventBusClient->fireEvent(
                     new CoverageFinalised(
                         provider: $event->getProvider(),
-                        projectId: null,
+                        projectId: $event->getProjectId(),
                         owner: $event->getOwner(),
                         repository: $event->getRepository(),
                         ref: $event->getRef(),
@@ -151,7 +151,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $this->eventBusClient->fireEvent(
             new CoverageFailed(
                 provider: $event->getProvider(),
-                projectId: null,
+                projectId: $event->getProjectId(),
                 owner: $event->getOwner(),
                 repository: $event->getRepository(),
                 ref: $event->getRef(),
