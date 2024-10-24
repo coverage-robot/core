@@ -82,7 +82,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
 
         $newState = new Job(
             $event->getProvider(),
-            (string)$event->getProjectId(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
