@@ -68,7 +68,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
         $currentState = new Ingestion(
             $event->getProvider(),
-            (string)$event->getProjectId(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
