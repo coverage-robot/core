@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Webhook\Processor;
 
+use App\Client\CognitoClientInterface;
+use App\Model\Project;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Webhook\Processor\JobStateChangeWebhookProcessor;
 use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\TestCase;
@@ -20,9 +23,22 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
 
+        $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
+        $mockCognitoClient->expects($this->once())
+            ->method('getProject')
+            ->willReturn(new Project(
+                provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                email: 'mock-email',
+                graphToken: 'mock-graph-token',
+            ));
+
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
-            $mockEventBusClient
+            $mockEventBusClient,
+            $mockCognitoClient
         );
 
         $jobStateChangeWebhookProcessor->process(
@@ -51,9 +67,22 @@ final class JobStateChangeWebhookProcessorTest extends TestCase
         $mockEventBusClient->expects($this->once())
             ->method('fireEvent');
 
+        $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
+        $mockCognitoClient->expects($this->once())
+            ->method('getProject')
+            ->willReturn(new Project(
+                provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                email: 'mock-email',
+                graphToken: 'mock-graph-token',
+            ));
+
         $jobStateChangeWebhookProcessor = new JobStateChangeWebhookProcessor(
             new NullLogger(),
-            $mockEventBusClient
+            $mockEventBusClient,
+            $mockCognitoClient
         );
 
         $jobStateChangeWebhookProcessor->process(

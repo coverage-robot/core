@@ -7,6 +7,7 @@ namespace App\Webhook\Processor;
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Enum\WebhookProcessorEvent;
+use App\Model\Project;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
@@ -53,7 +54,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             repository: $webhook->getRepository()
         );
 
-        if ($project === null) {
+        if (!$project instanceof Project) {
             $this->webhookProcessorLogger->error(
                 sprintf(
                     'Unable to process webhook as there was no related project: %s',

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Webhook\Processor;
 
+use App\Client\CognitoClientInterface;
+use App\Model\Project;
 use App\Model\Webhook\Github\GithubPushedCommit;
 use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Webhook\Processor\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\ConfigurationFileChange;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -28,9 +31,22 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             ->method('fireEvent')
             ->with($this->isInstanceOf(ConfigurationFileChange::class));
 
+        $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
+        $mockCognitoClient->expects($this->exactly((int)$shouldSendConfigurationFileChangeEvent))
+            ->method('getProject')
+            ->willReturn(new Project(
+                provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                email: 'mock-email',
+                graphToken: 'mock-graph-token',
+            ));
+
         $processor = new CommitsPushedWebhookProcessor(
             new NullLogger(),
-            $mockEventBusClient
+            $mockEventBusClient,
+            $mockCognitoClient
         );
 
         $processor->process($webhook);

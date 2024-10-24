@@ -7,6 +7,7 @@ namespace App\Webhook\Processor;
 use App\Client\CognitoClient;
 use App\Client\CognitoClientInterface;
 use App\Enum\WebhookProcessorEvent;
+use App\Model\Project;
 use App\Model\Webhook\CommitsPushedWebhookInterface;
 use App\Model\Webhook\PushedCommitInterface;
 use App\Model\Webhook\WebhookInterface;
@@ -97,7 +98,7 @@ final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
             repository: $webhook->getRepository()
         );
 
-        if ($project === null) {
+        if (!$project instanceof Project) {
             $this->webhookProcessorLogger->error(
                 sprintf(
                     'Unable to process webhook as there was no related project: %s',
