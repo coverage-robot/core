@@ -99,7 +99,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 new Upload(
                     uploadId: Uuid::uuid4()->toString(),
                     provider: Provider::GITHUB,
-                    projectId: null,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: '',
                     repository: '',
                     commit: '',
@@ -193,7 +193,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 new Upload(
                     uploadId: Uuid::uuid4()->toString(),
                     provider: Provider::GITHUB,
-                    projectId: null,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: '',
                     repository: '',
                     commit: '',
