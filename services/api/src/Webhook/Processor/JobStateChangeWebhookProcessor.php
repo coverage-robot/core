@@ -54,6 +54,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         $this->fireEvent(
             new JobStateChange(
                 provider: $webhook->getProvider(),
+                projectId: null,
                 owner: $webhook->getOwner(),
                 repository: $webhook->getRepository(),
                 ref: $webhook->getRef(),
