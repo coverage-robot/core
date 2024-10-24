@@ -9,9 +9,9 @@ interface ProjectAwareEventInterface
 {
     public function getProvider(): Provider;
 
-    #[Assert\NotBlank(allowNull: true)]
+    #[Assert\NotBlank]
     #[Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])]
-    public function getProjectId(): ?string;
+    public function getProjectId(): string;
 
     #[Assert\NotBlank]
     #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
