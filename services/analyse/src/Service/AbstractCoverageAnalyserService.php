@@ -78,6 +78,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         return $this->getWaypoint(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),
