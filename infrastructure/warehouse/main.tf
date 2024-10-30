@@ -219,6 +219,12 @@ resource "google_bigquery_table" "upload" {
     "type": "DATETIME",
     "mode": "NULLABLE",
     "description": "The time the coverage was generated."
+  },
+  {
+    "name": "projectId",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The internal id of the project uploaded to."
   }
 ]
 EOF
