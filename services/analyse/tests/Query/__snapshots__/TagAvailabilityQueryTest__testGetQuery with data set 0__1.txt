@@ -10,9 +10,7 @@ WITH
     FROM
       `mock-table`
     WHERE
-      provider = @PROVIDER
-      AND owner = @OWNER
-      AND repository = @REPOSITORY
+      projectId = @PROJECT_ID
       AND commit IN UNNEST(@COMMIT)
     GROUP BY
       commit,

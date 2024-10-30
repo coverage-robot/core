@@ -53,9 +53,7 @@ WITH
       (
         (
           1 = 1
-          AND upload.provider = @PROVIDER
-          AND upload.owner = @OWNER
-          AND upload.repository = @REPOSITORY
+          AND upload.projectId = @PROJECT_ID
           AND upload.commit = @COMMIT
           AND upload.uploadId IN UNNEST(@UPLOADS)
         )
