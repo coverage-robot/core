@@ -75,9 +75,7 @@ trait CarryforwardAwareTrait
                 (
                     {$filtering}
                 )
-                AND {$uploadsTableAlias}provider = {$this->getAlias(QueryParameter::PROVIDER)}
-                AND {$uploadsTableAlias}owner = {$this->getAlias(QueryParameter::OWNER)}
-                AND {$uploadsTableAlias}repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+                AND {$uploadsTableAlias}projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
             )
             SQL;
         }
