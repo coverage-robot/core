@@ -23,6 +23,7 @@ final class CachingDiffParserServiceTest extends TestCase
 
         $mockWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'owner',
             repository: 'repository',
             ref: 'ref',

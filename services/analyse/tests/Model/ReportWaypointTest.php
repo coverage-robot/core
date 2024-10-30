@@ -15,12 +15,13 @@ final class ReportWaypointTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-            history: static fn (): array => [],
-            diff: static fn (): array => []
+            history: static fn(): array => [],
+            diff: static fn(): array => []
         );
 
         $this->assertEquals(Provider::GITHUB, $waypoint->getProvider());

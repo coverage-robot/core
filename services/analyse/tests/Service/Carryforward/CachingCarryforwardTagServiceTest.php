@@ -27,6 +27,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
 
         $mockWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

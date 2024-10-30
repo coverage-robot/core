@@ -17,6 +17,7 @@ final class CommitHistoryServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'owner',
             repository: 'repository',
             ref: 'ref',

@@ -18,10 +18,10 @@ use Google\Cloud\BigQuery\QueryResults;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
-use Packages\Contracts\Environment\Service;
 
 final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -45,6 +45,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -54,7 +55,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         );
 
         $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
                 [
@@ -83,7 +84,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 
 
         $carryforwardAndUploadParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
                 [
@@ -202,6 +203,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -217,17 +219,17 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1','2']),
+                    ->set(QueryParameter::UPLOADS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1','2']),
+                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1','2'])
+                    ->set(QueryParameter::UPLOADS, ['1', '2'])
                     ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [
