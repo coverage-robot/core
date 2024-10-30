@@ -81,6 +81,17 @@ enum QueryParameter: string
     case OWNER = 'OWNER';
 
     /**
+     * The ID of the project.
+     *
+     * ```php
+     * Provider::GITHUB
+     * ```
+     *
+     * @see \Packages\Contracts\Provider\Provider
+     */
+    case PROJECT_ID = 'PROJECT_ID';
+
+    /**
      * A repository provider.
      *
      * ```php
@@ -103,6 +114,7 @@ enum QueryParameter: string
             QueryParameter::COMMIT,
             QueryParameter::OWNER,
             QueryParameter::REPOSITORY,
+            QueryParameter::PROJECT_ID,
             QueryParameter::PROVIDER,
             QueryParameter::INGEST_PARTITIONS,
             QueryParameter::UPLOADS,
