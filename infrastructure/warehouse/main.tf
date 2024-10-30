@@ -142,9 +142,7 @@ resource "google_bigquery_table" "upload" {
   table_id            = "upload"
   deletion_protection = true
   clustering = [
-    "provider",
-    "owner",
-    "repository",
+    "projectId",
     "commit",
   ]
 
@@ -224,8 +222,8 @@ resource "google_bigquery_table" "upload" {
   },
   {
     "name": "projectId",
-    "type": "STRING",
     "mode": "NULLABLE",
+    "type": "STRING",
     "description": "The internal id of the project uploaded to."
   }
 ]
