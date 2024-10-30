@@ -76,9 +76,7 @@ WITH
               AND upload.tag = "4"
             )
           )
-          AND upload.provider = @PROVIDER
-          AND upload.owner = @OWNER
-          AND upload.repository = @REPOSITORY
+          AND upload.projectId = @PROJECT_ID
         )
       )
       AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
