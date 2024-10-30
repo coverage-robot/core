@@ -142,7 +142,6 @@ resource "google_bigquery_table" "upload" {
   table_id            = "upload"
   deletion_protection = true
   clustering = [
-    "provider",
     "projectId",
     "commit",
   ]
@@ -220,12 +219,6 @@ resource "google_bigquery_table" "upload" {
     "type": "DATETIME",
     "mode": "NULLABLE",
     "description": "The time the coverage was generated."
-  },
-  {
-    "name": "projectId",
-    "type": "STRING",
-    "mode": "NULLABLE",
-    "description": "The internal id of the project uploaded to."
   }
 ]
 EOF
