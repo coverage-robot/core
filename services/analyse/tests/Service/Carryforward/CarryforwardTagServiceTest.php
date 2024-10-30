@@ -63,6 +63,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',
@@ -139,6 +140,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',
@@ -243,6 +245,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',
@@ -350,6 +353,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',
@@ -403,7 +407,7 @@ final class CarryforwardTagServiceTest extends TestCase
                             [
                                 'commit' => 'mock-commit-99',
                                 'ref' => 'non-main-branch',
-                                        'merged' => false
+                                'merged' => false
                             ]
                         )
                     ],
@@ -498,6 +502,7 @@ final class CarryforwardTagServiceTest extends TestCase
         $carryforwardTags = $carryforwardTagService->getTagsToCarryforward(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',

@@ -52,6 +52,7 @@ final class CachingDiffParserServiceTest extends TestCase
             $cachingDiffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref-2',
@@ -67,6 +68,7 @@ final class CachingDiffParserServiceTest extends TestCase
             $cachingDiffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',

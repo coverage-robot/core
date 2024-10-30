@@ -74,6 +74,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -90,6 +91,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',

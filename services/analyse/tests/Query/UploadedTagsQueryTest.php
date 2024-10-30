@@ -15,10 +15,10 @@ use Google\Cloud\BigQuery\QueryResults;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
-use Packages\Contracts\Environment\Service;
 
 final class UploadedTagsQueryTest extends AbstractQueryTestCase
 {
@@ -72,6 +72,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -111,6 +112,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
                 QueryParameterBag::fromWaypoint(
                     new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
