@@ -83,8 +83,8 @@ enum QueryParameter: string
     /**
      * The ID of the project.
      *
-     * ```php
-     * Provider::GITHUB
+     * ```
+     * 0192bb77-1234-1234-abc4-43f3pdc015c2
      * ```
      *
      * @see \Packages\Contracts\Provider\Provider
