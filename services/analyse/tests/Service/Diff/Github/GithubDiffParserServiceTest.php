@@ -330,6 +330,7 @@ final class GithubDiffParserServiceTest extends TestCase
     {
         return new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

@@ -147,6 +147,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
 
                     return $this->coverageAnalyserService->getWaypoint(
                         $headWaypoint->getProvider(),
+                        $headWaypoint->getProjectId(),
                         $headWaypoint->getOwner(),
                         $headWaypoint->getRepository(),
                         $commit['ref'] ?? $baseRef,
@@ -197,6 +198,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
         // a parent commit (i.e. it could be newer, and this include more coverage).
         return $this->coverageAnalyserService->getWaypoint(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $baseRef,
@@ -229,6 +231,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
         // provided in any other means
         return $this->coverageAnalyserService->getWaypoint(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),

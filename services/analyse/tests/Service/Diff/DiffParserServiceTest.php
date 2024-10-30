@@ -36,6 +36,7 @@ final class DiffParserServiceTest extends TestCase
             $diffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -65,6 +66,7 @@ final class DiffParserServiceTest extends TestCase
         $diffParser->get(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'owner',
                 repository: 'repository',
                 ref: 'ref',

@@ -81,6 +81,15 @@ enum QueryParameter: string
     case OWNER = 'OWNER';
 
     /**
+     * The ID of the project.
+     *
+     * ```
+     * 0192bb77-1234-1234-abc4-43f3pdc015c2
+     * ```
+     */
+    case PROJECT_ID = 'PROJECT_ID';
+
+    /**
      * A repository provider.
      *
      * ```php
@@ -103,6 +112,7 @@ enum QueryParameter: string
             QueryParameter::COMMIT,
             QueryParameter::OWNER,
             QueryParameter::REPOSITORY,
+            QueryParameter::PROJECT_ID,
             QueryParameter::PROVIDER,
             QueryParameter::INGEST_PARTITIONS,
             QueryParameter::UPLOADS,

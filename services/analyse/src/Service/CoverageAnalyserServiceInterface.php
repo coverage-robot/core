@@ -24,6 +24,7 @@ interface CoverageAnalyserServiceInterface
      */
     public function getWaypoint(
         Provider $provider,
+        string $projectId,
         string $owner,
         string $repository,
         string $ref,

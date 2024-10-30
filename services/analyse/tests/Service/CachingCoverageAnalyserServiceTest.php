@@ -39,6 +39,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -53,7 +54,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             ->method('get')
             ->with($waypoint)
             ->willReturn([
-                'mock-file' => [1,2,3]
+                'mock-file' => [1, 2, 3]
             ]);
 
         $mockQueryService = $this->getMockedQueryService();
@@ -144,6 +145,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -181,6 +183,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -195,14 +198,14 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             ->method('get')
             ->with($waypoint)
             ->willReturn([
-                'mock-file' => [1,2]
+                'mock-file' => [1, 2]
             ]);
 
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturn(
-                // No uploads on waypoint means no diff coverage possible
+            // No uploads on waypoint means no diff coverage possible
                 new TotalUploadsQueryResult(
                     [],
                     [],
@@ -228,6 +231,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

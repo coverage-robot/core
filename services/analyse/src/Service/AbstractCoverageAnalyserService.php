@@ -49,6 +49,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     #[Override]
     public function getWaypoint(
         Provider $provider,
+        string $projectId,
         string $owner,
         string $repository,
         string $ref,
@@ -57,6 +58,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     ): ReportWaypoint {
         return new ReportWaypoint(
             provider: $provider,
+            projectId: $projectId,
             owner: $owner,
             repository: $repository,
             ref: $ref,
@@ -76,6 +78,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     {
         return $this->getWaypoint(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),
