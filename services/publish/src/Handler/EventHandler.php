@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Handler;
 
 use App\Service\MessagePublisherService;
@@ -188,6 +190,7 @@ final class EventHandler extends SqsHandler
         $this->eventBusClient->fireEvent(
             new CoverageFailed(
                 provider: $event->getProvider(),
+                projectId: $event->getProjectId(),
                 owner: $event->getOwner(),
                 repository: $event->getRepository(),
                 ref: $event->getRef(),

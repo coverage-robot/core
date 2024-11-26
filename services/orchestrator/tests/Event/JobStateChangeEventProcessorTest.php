@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
@@ -18,6 +20,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -29,7 +32,6 @@ use Packages\Event\Model\Upload;
 use Packages\Message\Client\SqsClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Packages\Contracts\Environment\Service;
 
 final class JobStateChangeEventProcessorTest extends TestCase
 {
@@ -62,6 +64,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     new Upload(
                         uploadId: 'mock-upload-id',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -105,6 +108,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -161,6 +165,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -183,6 +188,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             ->method('reduceStateChangesToEvent')
             ->willReturn(new Job(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
                 owner: 'owner',
                 repository: 'repository',
                 commit: 'commit',
@@ -233,6 +239,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -256,6 +263,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             ->method('reduceStateChangesToEvent')
             ->willReturn(new Job(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
                 owner: 'owner',
                 repository: 'repository',
                 commit: 'commit',
@@ -306,6 +314,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -332,6 +341,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
     {
         $mockJob = new Job(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'owner',
             repository: 'repository',
             commit: 'commit',
@@ -409,6 +419,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -426,6 +437,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
     {
         $mockJob = new Job(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'owner',
             repository: 'repository',
             commit: 'commit',
@@ -435,6 +447,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
         );
         $mockFinalised = new Finalised(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'owner',
             repository: 'repository',
             ref: 'ref',
@@ -515,6 +528,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
             $jobStateChangeEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',

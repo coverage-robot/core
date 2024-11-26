@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Telemetry\Model\Metric;
 
 use Packages\Telemetry\Enum\Resolution;

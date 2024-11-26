@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Closure;
-use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Stringable;
@@ -25,6 +26,7 @@ final class ReportWaypoint implements Stringable
      */
     public function __construct(
         private readonly Provider $provider,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
@@ -38,6 +40,11 @@ final class ReportWaypoint implements Stringable
     public function getProvider(): Provider
     {
         return $this->provider;
+    }
+
+    public function getProjectId(): string
+    {
+        return $this->projectId;
     }
 
     public function getOwner(): string

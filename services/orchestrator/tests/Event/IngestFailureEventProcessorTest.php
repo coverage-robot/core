@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
@@ -46,6 +48,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
     {
         $mockIngestion = new Ingestion(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -110,6 +113,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -128,6 +132,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
     {
         $mockIngestion = new Ingestion(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -137,12 +142,13 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
         );
         $mockFinalised = new Finalised(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
-            commit: 'mock-commit',
             ref: 'mock-ref',
-            pullRequest: null,
+            commit: 'mock-commit',
             state: OrchestratedEventState::SUCCESS,
+            pullRequest: null,
             eventTime: new DateTimeImmutable()
         );
 
@@ -204,6 +210,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',

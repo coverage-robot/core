@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\Enum\OrchestratedEvent;
@@ -20,6 +22,8 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 interface OrchestratedEventInterface extends Stringable
 {
     public function getProvider(): Provider;
+
+    public function getProjectId(): string;
 
     public function getOwner(): string;
 

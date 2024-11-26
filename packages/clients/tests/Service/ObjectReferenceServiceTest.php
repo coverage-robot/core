@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Clients\Tests\Service;
 
 use AsyncAws\S3\Input\PutObjectRequest;

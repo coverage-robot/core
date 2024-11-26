@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\Enum\QueryParameter;
@@ -57,6 +59,7 @@ final class QueryParameterBag implements JsonSerializable
             ->set(QueryParameter::COMMIT, $waypoint->getCommit())
             ->set(QueryParameter::OWNER, $waypoint->getOwner())
             ->set(QueryParameter::REPOSITORY, $waypoint->getRepository())
+            ->set(QueryParameter::PROJECT_ID, $waypoint->getProjectId())
             ->set(QueryParameter::PROVIDER, $waypoint->getProvider());
     }
 

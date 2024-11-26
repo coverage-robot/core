@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Client\DynamoDbClient;
 use App\Client\DynamoDbClientInterface;
 use App\Model\GraphParameters;
+use App\Model\Project;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeServiceInterface;
 use Override;
@@ -40,7 +43,7 @@ final class GraphControllerTest extends WebTestCase
             ->with($this->isInstanceOf(Request::class))
             ->willReturn('mock-graph-token');
         $mockAuthTokenService->expects($this->once())
-            ->method('validateParametersWithGraphToken')
+            ->method('getProjectUsingGraphToken')
             ->with(
                 self::callback(
                     static fn(GraphParameters $parameters): bool => $parameters->getOwner() === 'owner' &&
@@ -49,7 +52,14 @@ final class GraphControllerTest extends WebTestCase
                 ),
                 'mock-graph-token'
             )
-            ->willReturn(true);
+            ->willReturn(new Project(
+                Provider::GITHUB,
+                'mock-project-id',
+                'owner',
+                'repository',
+                'mock-email',
+                'mock-graph-token',
+            ));
 
         $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
 
@@ -93,7 +103,7 @@ final class GraphControllerTest extends WebTestCase
             ->with($this->isInstanceOf(Request::class))
             ->willReturn('mock-graph-token');
         $mockAuthTokenService->expects($this->once())
-            ->method('validateParametersWithGraphToken')
+            ->method('getProjectUsingGraphToken')
             ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
             ->willReturn(false);
 
@@ -140,7 +150,7 @@ final class GraphControllerTest extends WebTestCase
             ->with($this->isInstanceOf(Request::class))
             ->willReturn(null);
         $mockAuthTokenService->expects($this->never())
-            ->method('validateParametersWithGraphToken');
+            ->method('getProjectUsingGraphToken');
 
         $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
 

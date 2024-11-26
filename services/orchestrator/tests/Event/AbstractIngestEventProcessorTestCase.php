@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
@@ -51,6 +53,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             $ingestEventProcessor->process(
                 new JobStateChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
@@ -99,6 +102,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -120,11 +124,12 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00Z');
 
         $mockIngestion = new Ingestion(
-            uploadId: 'mock-upload-id',
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
+            uploadId: 'mock-upload-id',
             state: OrchestratedEventState::SUCCESS,
             eventTime: $eventTime
         );
@@ -163,6 +168,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',

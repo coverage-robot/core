@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Message\Client;
 
 use AsyncAws\Core\Exception\Http\HttpException;
@@ -29,11 +31,11 @@ final class PublishClient implements SqsClientInterface
     private const string PUBLISH_QUEUE_NAME = 'coverage-publish-%s.fifo';
 
     public function __construct(
-        protected readonly SqsClient $sqsClient,
-        protected readonly EnvironmentServiceInterface $environmentService,
-        protected readonly SerializerInterface $serializer,
-        protected readonly MessageValidationService $messageValidationService,
-        protected readonly LoggerInterface $publishClientLogger
+        private readonly SqsClient $sqsClient,
+        private readonly EnvironmentServiceInterface $environmentService,
+        private readonly SerializerInterface $serializer,
+        private readonly MessageValidationService $messageValidationService,
+        private readonly LoggerInterface $publishClientLogger
     ) {
     }
 

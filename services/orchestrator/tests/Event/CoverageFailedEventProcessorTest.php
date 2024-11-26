@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Event\Backoff\EventStoreRecorderBackoffStrategy;
@@ -20,6 +22,7 @@ final class CoverageFailedEventProcessorTest extends TestCase
     {
         $event = new CoverageFailed(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'main',

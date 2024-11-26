@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Query;
 
 use App\Enum\QueryParameter;
@@ -48,9 +50,7 @@ final class TotalUploadsQuery implements QueryInterface
         FROM
             `{$table}`
         WHERE
-            provider = {$this->getAlias(QueryParameter::PROVIDER)}
-            AND owner = {$this->getAlias(QueryParameter::OWNER)}
-            AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+            projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
             AND commit = {$this->getAlias(QueryParameter::COMMIT)}
         SQL;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Exception\AnalysisException;
@@ -22,6 +24,7 @@ interface CoverageAnalyserServiceInterface
      */
     public function getWaypoint(
         Provider $provider,
+        string $projectId,
         string $owner,
         string $repository,
         string $ref,

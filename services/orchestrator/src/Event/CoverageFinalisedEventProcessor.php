@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Event;
 
 use App\Enum\OrchestratedEventState;
@@ -52,6 +54,7 @@ final class CoverageFinalisedEventProcessor extends AbstractOrchestratorEventRec
 
         $currentState = new Finalised(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getRef(),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Event;
 
 use App\Enum\OrchestratedEventState;
@@ -12,7 +14,6 @@ use App\Service\EventStoreServiceInterface;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\IngestFailure;
@@ -67,6 +68,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
         $currentState = new Ingestion(
             $event->getProvider(),
+            $event->getProjectId(),
             $event->getOwner(),
             $event->getRepository(),
             $event->getCommit(),
@@ -90,15 +92,16 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
             $this->eventBusClient->fireEvent(
                 new UploadsStarted(
-                    $currentState->getProvider(),
-                    $currentState->getOwner(),
-                    $currentState->getRepository(),
-                    $event->getRef(),
-                    $currentState->getCommit(),
-                    $event->getPullRequest(),
-                    $event->getBaseRef(),
-                    $event->getBaseCommit(),
-                    new DateTimeImmutable()
+                    provider: $currentState->getProvider(),
+                    projectId: $currentState->getProjectId(),
+                    owner: $currentState->getOwner(),
+                    repository: $currentState->getRepository(),
+                    ref: $event->getRef(),
+                    commit: $currentState->getCommit(),
+                    pullRequest: $event->getPullRequest(),
+                    baseRef: $event->getBaseRef(),
+                    baseCommit: $event->getBaseCommit(),
+                    eventTime: new DateTimeImmutable()
                 )
             );
         }
@@ -120,6 +123,7 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
             $finalisedEvent = new Finalised(
                 $currentState->getProvider(),
+                $currentState->getProjectId(),
                 $currentState->getOwner(),
                 $currentState->getRepository(),
                 $event->getRef(),
@@ -134,16 +138,17 @@ abstract class AbstractIngestEventProcessor extends AbstractOrchestratorEventRec
 
                 $this->eventBusClient->fireEvent(
                     new UploadsFinalised(
-                        $finalisedEvent->getProvider(),
-                        $finalisedEvent->getOwner(),
-                        $finalisedEvent->getRepository(),
-                        $finalisedEvent->getRef(),
-                        $finalisedEvent->getCommit(),
-                        $event->getParent(),
-                        $finalisedEvent->getPullRequest(),
-                        $event->getBaseCommit(),
-                        $event->getBaseRef(),
-                        $finalisedEvent->getEventTime()
+                        provider: $finalisedEvent->getProvider(),
+                        projectId: $finalisedEvent->getProjectId(),
+                        owner: $finalisedEvent->getOwner(),
+                        repository: $finalisedEvent->getRepository(),
+                        ref: $finalisedEvent->getRef(),
+                        commit: $finalisedEvent->getCommit(),
+                        parent: $event->getParent(),
+                        pullRequest: $finalisedEvent->getPullRequest(),
+                        baseCommit: $event->getBaseCommit(),
+                        baseRef: $event->getBaseRef(),
+                        eventTime: $finalisedEvent->getEventTime()
                     )
                 );
             }

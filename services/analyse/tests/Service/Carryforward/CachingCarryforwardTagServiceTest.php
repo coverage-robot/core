@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\Carryforward;
 
 use App\Model\ReportWaypoint;
@@ -25,6 +27,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
 
         $mockWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -71,6 +74,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -87,6 +91,7 @@ final class CachingCarryforwardTagServiceTest extends TestCase
             $cachingCarryforwardTagService->getTagsToCarryforward(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',

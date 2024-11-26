@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Client\DynamoDbClient;
@@ -47,7 +49,7 @@ final class GraphController extends AbstractController
 
         $token = $this->authTokenService->getGraphTokenFromRequest($request);
 
-        if ($token === null || !$this->authTokenService->validateParametersWithGraphToken($parameters, $token)) {
+        if ($token === null || !$this->authTokenService->getProjectUsingGraphToken($parameters, $token)) {
             throw AuthenticationException::invalidGraphToken();
         }
 

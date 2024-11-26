@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Query;
 
 use App\Enum\EnvironmentVariable;
@@ -125,9 +127,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         ) {
             return <<<SQL
             1=1
-            AND {$uploadsTableAlias}.provider = {$this->getAlias(QueryParameter::PROVIDER)}
-            AND {$uploadsTableAlias}.owner = {$this->getAlias(QueryParameter::OWNER)}
-            AND {$uploadsTableAlias}.repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+            AND {$uploadsTableAlias}.projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
             AND {$uploadsTableAlias}.commit = {$this->getAlias(QueryParameter::COMMIT)}
             AND {$uploadsTableAlias}.uploadId IN UNNEST({$this->getAlias(QueryParameter::UPLOADS)})
             AND DATE({$linesTableAlias}.ingestTime) IN UNNEST({$this->getAlias(QueryParameter::INGEST_PARTITIONS)})
@@ -139,9 +139,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         (
             (
                 1=1
-                AND {$uploadsTableAlias}.provider = {$this->getAlias(QueryParameter::PROVIDER)}
-                AND {$uploadsTableAlias}.owner = {$this->getAlias(QueryParameter::OWNER)}
-                AND {$uploadsTableAlias}.repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+                AND {$uploadsTableAlias}.projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
                 AND {$uploadsTableAlias}.commit = {$this->getAlias(QueryParameter::COMMIT)}
                 AND {$uploadsTableAlias}.uploadId IN UNNEST({$this->getAlias(QueryParameter::UPLOADS)})
             )

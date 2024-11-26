@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Enum\OrchestratedEventState;
@@ -39,6 +41,7 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
             ->with(
                 new Finalised(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -66,6 +69,7 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
         $coverageFinalisedEventProcessor->process(
             new CoverageFinalised(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project-id',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',

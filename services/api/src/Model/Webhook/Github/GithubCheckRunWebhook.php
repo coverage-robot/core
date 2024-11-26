@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model\Webhook\Github;
 
 use App\Enum\WebhookProcessorEvent;
@@ -29,19 +31,19 @@ final class GithubCheckRunWebhook extends AbstractWebhook implements
 
     public function __construct(
         private readonly ?string $signature,
-        protected readonly string $owner,
-        protected readonly string $repository,
-        protected readonly string|int $externalId,
-        protected readonly string|int $appId,
-        protected readonly string $ref,
-        protected readonly string $commit,
-        protected readonly ?string $parent,
-        protected readonly string|int|null $pullRequest,
-        protected readonly ?string $baseRef,
-        protected readonly ?string $baseCommit,
-        protected readonly JobState $jobState,
-        protected readonly DateTimeImmutable $startedAt,
-        protected readonly ?DateTimeImmutable $completedAt,
+        private readonly string $owner,
+        private readonly string $repository,
+        private readonly string|int $externalId,
+        private readonly string|int $appId,
+        private readonly string $ref,
+        private readonly string $commit,
+        private readonly ?string $parent,
+        private readonly string|int|null $pullRequest,
+        private readonly ?string $baseRef,
+        private readonly ?string $baseCommit,
+        private readonly JobState $jobState,
+        private readonly DateTimeImmutable $startedAt,
+        private readonly ?DateTimeImmutable $completedAt,
     ) {
     }
 

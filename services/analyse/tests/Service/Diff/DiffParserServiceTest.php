@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\Diff;
 
 use App\Exception\CommitDiffException;
@@ -34,13 +36,14 @@ final class DiffParserServiceTest extends TestCase
             $diffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'ref',
                     commit: 'commit',
-                    pullRequest: 12,
                     history: [],
-                    diff: []
+                    diff: [],
+                    pullRequest: 12
                 )
             )
         );
@@ -63,6 +66,7 @@ final class DiffParserServiceTest extends TestCase
         $diffParser->get(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'owner',
                 repository: 'repository',
                 ref: 'ref',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Handler;
 
 use App\Exception\DeletionException;
@@ -242,6 +244,7 @@ final class EventHandlerTest extends KernelTestCase
             ->willReturn([
                 'uploadid' => 'mock-uuid',
                 'provider' => Provider::GITHUB->value,
+                'projectid' => '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                 'projectroot' => 'mock/project/root/',
                 'commit' => '1',
                 'parent' => '["2"]',

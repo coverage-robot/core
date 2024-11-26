@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Model\CoverageReport;
@@ -21,6 +23,7 @@ final class CoverageComparisonServiceTest extends TestCase
     {
         $headWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -62,6 +65,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -104,6 +108,7 @@ final class CoverageComparisonServiceTest extends TestCase
     {
         $headWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -129,6 +134,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -172,6 +178,7 @@ final class CoverageComparisonServiceTest extends TestCase
     {
         $headWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -197,6 +204,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',
@@ -237,6 +245,7 @@ final class CoverageComparisonServiceTest extends TestCase
     {
         $headWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -261,6 +270,7 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $event = new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-branch',

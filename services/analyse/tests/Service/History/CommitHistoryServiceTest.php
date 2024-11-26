@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\History;
 
 use App\Exception\CommitHistoryException;
@@ -15,6 +17,7 @@ final class CommitHistoryServiceTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'owner',
             repository: 'repository',
             ref: 'ref',
@@ -61,6 +64,7 @@ final class CommitHistoryServiceTest extends TestCase
         $historyService->getPrecedingCommits(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'owner',
                 repository: 'repository',
                 ref: 'ref',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\Diff\Github;
 
 use App\Model\ReportWaypoint;
@@ -328,6 +330,7 @@ final class GithubDiffParserServiceTest extends TestCase
     {
         return new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

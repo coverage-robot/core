@@ -1,23 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Handler;
 
 use App\Client\CognitoClientInterface;
 use App\Handler\WebhookHandler;
+use App\Model\Project;
 use App\Model\Webhook\Github\GithubCheckRunWebhook;
-use App\Model\Webhook\WebhookInterface;
 use App\Service\WebhookProcessorServiceInterface;
 use App\Service\WebhookValidationService;
-use App\Tests\Mock\Factory\MockSerializerFactory;
 use Bref\Context\Context;
 use Bref\Event\Sqs\SqsEvent;
 use DateTimeImmutable;
+use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 use Packages\Telemetry\Service\MetricServiceInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validation;
 
@@ -49,13 +49,22 @@ final class WebhookHandlerTest extends KernelTestCase
 
         $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
         $mockCognitoClient->expects($this->once())
-            ->method('doesProjectExist')
+            ->method('getProject')
             ->with(
                 $webhook->getProvider(),
                 $webhook->getOwner(),
                 $webhook->getRepository(),
             )
-            ->willReturn(true);
+            ->willReturn(
+                new Project(
+                    Provider::GITHUB,
+                    'mock-project-id',
+                    'owner',
+                    'repository',
+                    'mock-email',
+                    'mock-graph-token',
+                )
+            );
 
         $mockSerializer = $this->createMock(SerializerInterface::class);
         $mockSerializer->expects($this->once())
@@ -126,13 +135,13 @@ final class WebhookHandlerTest extends KernelTestCase
 
         $mockCognitoClient = $this->createMock(CognitoClientInterface::class);
         $mockCognitoClient->expects($this->once())
-            ->method('doesProjectExist')
+            ->method('getProject')
             ->with(
                 $webhook->getProvider(),
                 $webhook->getOwner(),
                 $webhook->getRepository(),
             )
-            ->willReturn(false);
+            ->willReturn(null);
 
         $mockSerializer = $this->createMock(SerializerInterface::class);
         $mockSerializer->expects($this->once())

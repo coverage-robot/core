@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Exception\AuthenticationException;
@@ -38,14 +40,19 @@ final class UploadController extends AbstractController
     public function handleUpload(Request $request): JsonResponse
     {
         $parameters = $this->uploadService->getSigningParametersFromRequest($request);
-
         $token = $this->authTokenService->getUploadTokenFromRequest($request);
 
-        if ($token === null || !$this->authTokenService->validateParametersWithUploadToken($parameters, $token)) {
+        if ($token === null) {
             throw AuthenticationException::invalidUploadToken();
         }
 
-        $signedUrl = $this->uploadService->buildSignedUploadUrl($parameters);
+        $project = $this->authTokenService->getProjectUsingUploadToken($parameters, $token);
+
+        if ($project === false) {
+            throw AuthenticationException::invalidUploadToken();
+        }
+
+        $signedUrl = $this->uploadService->buildSignedUploadUrl($project, $parameters);
 
         $this->uploadLogger->info(
             'Successfully generated signed url for upload request.',

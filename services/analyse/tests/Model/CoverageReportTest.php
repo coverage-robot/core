@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Model;
 
 use App\Model\CoverageReport;
@@ -24,6 +26,7 @@ final class CoverageReportTest extends TestCase
         $report = new CoverageReport(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',

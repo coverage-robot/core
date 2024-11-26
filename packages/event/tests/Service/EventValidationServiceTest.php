@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Event\Tests\Service;
 
 use Packages\Contracts\Event\EventInterface;
@@ -41,6 +43,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e8-2249-768c-8b88-70592c698d4f',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'dd1100c9409de748590abfac1036e383a3e4de37',
@@ -58,6 +61,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e8-64ff-75b7-a92a-f45719e2b559',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: '',
                     repository: 'mock-repository',
                     commit: 'dd1100c9409de748590abfac1036e383a3e4de37',
@@ -75,6 +79,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e8-8f64-722b-ba88-cf1992aff368',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: '',
                     commit: 'dd1100c9409de748590abfac1036e383a3e4de37',
@@ -92,6 +97,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e8-e5c3-7bbf-8e35-79fa251c7856',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'dd1100c9409de748590abfac1036e383a3e4de37',
@@ -109,6 +115,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e9-1e8f-7b03-8168-41cac329238a',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: '395df8f7c51f007019cb30201c49e884b46b92fa',
@@ -126,6 +133,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e9-4ce2-7748-bea9-15e497cd4b5a',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: '395df8f7c51f007019cb30201c49e884b46b92fa',
@@ -143,6 +151,7 @@ final class EventValidationServiceTest extends TestCase
                 new Upload(
                     uploadId: '019060e9-9f4f-754d-9de2-3b6106eb91d4',
                     provider: Provider::GITHUB,
+                    projectId: '019060e8-2249-768c-8b88-70592c698d4f',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: '395df8f7c51f007019cb30201c49e884b46b92fa',

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Controller;
 
 use App\Exception\SigningException;
+use App\Model\Project;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use App\Service\AuthTokenServiceInterface;
@@ -37,13 +40,22 @@ final class UploadControllerTest extends WebTestCase
     #[DataProvider('validPayloadDataProvider')]
     public function testHandleSuccessfulUpload(SigningParameters $parameters): void
     {
+        $project = new Project(
+            Provider::GITHUB,
+            'mock-project-id',
+            'owner',
+            'repository',
+            'mock-email',
+            'mock-graph-token',
+        );
+
         $uploadService = $this->createMock(UploadServiceInterface::class);
         $uploadService->expects($this->once())
             ->method('getSigningParametersFromRequest')
             ->willReturn($parameters);
         $uploadService->expects($this->once())
             ->method('buildSignedUploadUrl')
-            ->with($parameters)
+            ->with($project, $parameters)
             ->willReturn(
                 new SignedUrl(
                     'mock-upload-id',
@@ -60,9 +72,9 @@ final class UploadControllerTest extends WebTestCase
             ->method('getUploadTokenFromRequest')
             ->willReturn('mock-project-token');
         $authTokenService->expects($this->once())
-            ->method('validateParametersWithUploadToken')
+            ->method('getProjectUsingUploadToken')
             ->with($parameters, 'mock-project-token')
-            ->willReturn(true);
+            ->willReturn($project);
 
         $this->getContainer()
             ->set(AuthTokenServiceInterface::class, $authTokenService);
@@ -107,7 +119,7 @@ final class UploadControllerTest extends WebTestCase
         $authTokenService->expects($this->never())
             ->method('getUploadTokenFromRequest');
         $authTokenService->expects($this->never())
-            ->method('validateParametersWithUploadToken');
+            ->method('getProjectUsingUploadToken');
 
         $this->getContainer()
             ->set(AuthTokenServiceInterface::class, $authTokenService);
@@ -154,7 +166,7 @@ final class UploadControllerTest extends WebTestCase
             ->method('getUploadTokenFromRequest')
             ->willReturn(null);
         $authTokenService->expects($this->never())
-            ->method('validateParametersWithUploadToken');
+            ->method('getProjectUsingUploadToken');
 
         $this->getContainer()
             ->set(AuthTokenServiceInterface::class, $authTokenService);
@@ -201,7 +213,7 @@ final class UploadControllerTest extends WebTestCase
             ->method('getUploadTokenFromRequest')
             ->willReturn('mock-token');
         $authTokenService->expects($this->once())
-            ->method('validateParametersWithUploadToken')
+            ->method('getProjectUsingUploadToken')
             ->willReturn(false);
 
         $this->getContainer()

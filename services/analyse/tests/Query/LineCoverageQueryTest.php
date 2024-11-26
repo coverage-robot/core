@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Query;
 
 use App\Enum\EnvironmentVariable;
@@ -16,11 +18,11 @@ use Google\Cloud\BigQuery\QueryResults;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
-use Packages\Contracts\Environment\Service;
 
 final class LineCoverageQueryTest extends AbstractQueryTestCase
 {
@@ -44,6 +46,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -53,7 +56,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         );
 
         $scopedParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -80,7 +83,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             );
 
         $carryforwardAndUploadsParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -188,6 +191,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -203,17 +207,17 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1','2']),
+                    ->set(QueryParameter::UPLOADS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1','2']),
+                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1','2'])
+                    ->set(QueryParameter::UPLOADS, ['1', '2'])
                     ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [

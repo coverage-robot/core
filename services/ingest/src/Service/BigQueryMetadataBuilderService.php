@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Exception\PersistException;
@@ -59,6 +61,7 @@ final class BigQueryMetadataBuilderService
             'uploadId' => $upload->getUploadId(),
             'ingestTime' => $upload->getEventTime()->format('Y-m-d H:i:s'),
             'provider' => $upload->getProvider(),
+            'projectId' => $upload->getProjectId(),
             'owner' => $upload->getOwner(),
             'repository' => $upload->getRepository(),
             'commit' => $upload->getCommit(),

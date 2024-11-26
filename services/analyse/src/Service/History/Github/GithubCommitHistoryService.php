@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\History\Github;
 
 use App\Exception\CommitHistoryException;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Handler;
 
 use App\Exception\DeletionException;
@@ -171,6 +173,11 @@ final class EventHandler extends S3Handler
             'uploadId' => match (true) {
                 ($output->getMetadata()['uploadId'] ?? '') !== '' => $output->getMetadata()['uploadId'],
                 ($output->getMetadata()['uploadid'] ?? '') !== '' => $output->getMetadata()['uploadid'],
+                default => null
+            },
+            'projectId' => match (true) {
+                ($output->getMetadata()['projectId'] ?? '') !== '' => $output->getMetadata()['projectId'],
+                ($output->getMetadata()['projectid'] ?? '') !== '' => $output->getMetadata()['projectid'],
                 default => null
             },
             'projectRoot' => match (true) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Handler\EventHandler;
@@ -84,6 +86,7 @@ final class InvokeCommand extends Command
             $upload = new Upload(
                 uploadId: 'mock-uuid',
                 provider: Provider::GITHUB,
+                projectId: 'mock-uuid',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 commit: 'mock-commit',

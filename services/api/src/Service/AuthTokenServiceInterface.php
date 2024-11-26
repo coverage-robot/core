@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Model\GraphParameters;
+use App\Model\Project;
 use App\Model\SigningParameters;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,9 +29,9 @@ interface AuthTokenServiceInterface
     /**
      * Validate a potential upload using a user-provided upload token.
      */
-    public function validateParametersWithUploadToken(SigningParameters $parameters, string $token): bool;
+    public function getProjectUsingUploadToken(SigningParameters $parameters, string $token): Project|false;
 
-    public function validateParametersWithGraphToken(GraphParameters $parameters, string $token): bool;
+    public function getProjectUsingGraphToken(GraphParameters $parameters, string $token): Project|false;
 
     /**
      * Create a new unique upload token.

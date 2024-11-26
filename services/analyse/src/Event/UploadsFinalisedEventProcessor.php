@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Event;
 
 use App\Exception\AnalysisException;
@@ -88,12 +90,13 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $this->eventBusClient->fireEvent(
                     new UtilisationAmendment(
                         provider: $event->getProvider(),
+                        projectId: $event->getProjectId(),
                         owner: $event->getOwner(),
                         repository: $event->getRepository(),
                         ref: $event->getRef(),
                         commit: $event->getCommit(),
-                        pullRequest: $event->getPullRequest(),
                         analysedCoverage: $totalReportSize,
+                        pullRequest: $event->getPullRequest(),
                     )
                 );
 
@@ -103,6 +106,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $this->eventBusClient->fireEvent(
                     new CoverageFinalised(
                         provider: $event->getProvider(),
+                        projectId: $event->getProjectId(),
                         owner: $event->getOwner(),
                         repository: $event->getRepository(),
                         ref: $event->getRef(),
@@ -147,6 +151,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
         $this->eventBusClient->fireEvent(
             new CoverageFailed(
                 provider: $event->getProvider(),
+                projectId: $event->getProjectId(),
                 owner: $event->getOwner(),
                 repository: $event->getRepository(),
                 ref: $event->getRef(),

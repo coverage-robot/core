@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Model;
 
 use App\Model\CoverageReport;
@@ -56,6 +58,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -78,6 +81,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -103,6 +107,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -125,6 +130,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -150,6 +156,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -172,6 +179,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -197,6 +205,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -219,6 +228,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -250,6 +260,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -272,6 +283,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -297,6 +309,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -319,6 +332,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -344,6 +358,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
@@ -366,6 +381,7 @@ final class CoverageReportComparisonTest extends TestCase
                 new CoverageReport(
                     waypoint: new ReportWaypoint(
                         provider: Provider::GITHUB,
+                        projectId: 'mock-project',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',

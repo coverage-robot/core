@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Query;
 
 use App\Enum\EnvironmentVariable;
@@ -13,10 +15,10 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
-use Packages\Contracts\Environment\Service;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -43,6 +45,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -54,7 +57,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
 
         $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
             ->set(QueryParameter::LIMIT, 50)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -83,7 +86,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
 
         $carryforwardAndUploadsParameters = QueryParameterBag::fromWaypoint($waypoint)
             ->set(QueryParameter::LIMIT, 20)
-            ->set(QueryParameter::UPLOADS, ['1','2'])
+            ->set(QueryParameter::UPLOADS, ['1', '2'])
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -175,6 +178,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
@@ -191,18 +195,18 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             [
                 QueryParameterBag::fromWaypoint($waypoint)
                     ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1','2']),
+                    ->set(QueryParameter::UPLOADS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
                     ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1','2']),
+                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
                 false
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1','2'])
+                    ->set(QueryParameter::UPLOADS, ['1', '2'])
                     ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [
@@ -215,7 +219,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             [
                 QueryParameterBag::fromWaypoint($waypoint)
                     ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1','2'])
+                    ->set(QueryParameter::UPLOADS, ['1', '2'])
                     ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [

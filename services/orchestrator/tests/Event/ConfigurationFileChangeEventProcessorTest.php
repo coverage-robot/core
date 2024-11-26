@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Event\ConfigurationFileChangeEventProcessor;
@@ -88,6 +90,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             $configurationFileChangeEventProcessor->process(
                 new ConfigurationFileChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'not-main-ref',
@@ -111,6 +114,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             [
                 new ConfigurationFileChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'main',
@@ -121,6 +125,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             [
                 new ConfigurationFileChange(
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
                     ref: 'master',
@@ -133,6 +138,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
                     new Upload(
                         uploadId: 'uploadId',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'owner',
                         repository: 'repository',
                         commit: 'commit',

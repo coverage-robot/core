@@ -40,7 +40,8 @@ WITH
             )
           ) AS branchHits
         WITH
-          OFFSET AS branchIndex
+        OFFSET
+          AS branchIndex
         GROUP BY
           branchIndex,
           branchHits
@@ -68,9 +69,7 @@ WITH
             AND upload.tag = "4"
           )
         )
-        AND upload.provider = @PROVIDER
-        AND upload.owner = @OWNER
-        AND upload.repository = @REPOSITORY
+        AND upload.projectId = @PROJECT_ID
       )
       AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
   ),
@@ -94,7 +93,8 @@ WITH
         )
       ) AS branchHit
     WITH
-      OFFSET AS branchIndex
+    OFFSET
+      AS branchIndex
     GROUP BY
       fileName,
       lineNumber,

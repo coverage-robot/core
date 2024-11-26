@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
@@ -37,6 +39,13 @@ final class IngestSuccess implements EventInterface, ParentAwareEventInterface, 
     public function getProvider(): Provider
     {
         return $this->upload->getProvider();
+    }
+
+    #[Ignore]
+    #[Override]
+    public function getProjectId(): string
+    {
+        return $this->upload->getProjectId();
     }
 
     #[Ignore]

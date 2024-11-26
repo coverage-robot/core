@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Webhook\Processor;
 
+use App\Client\CognitoClient;
+use App\Client\CognitoClientInterface;
 use App\Enum\WebhookProcessorEvent;
+use App\Model\Project;
 use App\Model\Webhook\PipelineStateChangeWebhookInterface;
 use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
@@ -21,7 +26,9 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
     public function __construct(
         private readonly LoggerInterface $webhookProcessorLogger,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient
+        private readonly EventBusClientInterface $eventBusClient,
+        #[Autowire(service: CognitoClient::class)]
+        private readonly CognitoClientInterface $cognitoClient
     ) {
     }
 
@@ -41,6 +48,22 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
             );
         }
 
+        $project = $this->cognitoClient->getProject(
+            provider: $webhook->getProvider(),
+            owner: $webhook->getOwner(),
+            repository: $webhook->getRepository()
+        );
+
+        if (!$project instanceof Project) {
+            $this->webhookProcessorLogger->error(
+                sprintf(
+                    'Unable to process webhook as there was no related project: %s',
+                    (string)$webhook
+                )
+            );
+            return;
+        }
+
         $this->webhookProcessorLogger->info(
             sprintf(
                 'Processing pipeline state change (%s). Current state of the job is: %s',
@@ -52,6 +75,7 @@ final class JobStateChangeWebhookProcessor implements WebhookProcessorInterface
         $this->fireEvent(
             new JobStateChange(
                 provider: $webhook->getProvider(),
+                projectId: $project->getProjectId(),
                 owner: $webhook->getOwner(),
                 repository: $webhook->getRepository(),
                 ref: $webhook->getRef(),

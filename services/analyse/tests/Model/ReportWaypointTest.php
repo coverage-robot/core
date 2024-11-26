@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Model;
 
 use App\Model\ReportWaypoint;
@@ -13,12 +15,13 @@ final class ReportWaypointTest extends TestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-            history: static fn (): array => [],
-            diff: static fn (): array => []
+            history: static fn(): array => [],
+            diff: static fn(): array => []
         );
 
         $this->assertEquals(Provider::GITHUB, $waypoint->getProvider());
@@ -48,6 +51,7 @@ final class ReportWaypointTest extends TestCase
             'Waypoints on same ref' => [
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -58,6 +62,7 @@ final class ReportWaypointTest extends TestCase
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -71,6 +76,7 @@ final class ReportWaypointTest extends TestCase
             'Waypoints on different refs' => [
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -80,6 +86,7 @@ final class ReportWaypointTest extends TestCase
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref-2',
@@ -92,6 +99,7 @@ final class ReportWaypointTest extends TestCase
             'Waypoints on same commit' => [
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -102,6 +110,7 @@ final class ReportWaypointTest extends TestCase
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -115,6 +124,7 @@ final class ReportWaypointTest extends TestCase
             'Waypoints on different owners' => [
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner-1',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -124,6 +134,7 @@ final class ReportWaypointTest extends TestCase
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner-2',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -136,6 +147,7 @@ final class ReportWaypointTest extends TestCase
             'Waypoints on different repositories' => [
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository-1',
                     ref: 'mock-ref',
@@ -145,6 +157,7 @@ final class ReportWaypointTest extends TestCase
                 ),
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository-2',
                     ref: 'mock-ref',

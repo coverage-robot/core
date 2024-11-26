@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Exception\SigningException;
+use App\Model\Project;
 use App\Model\SignedUrl;
 use App\Model\SigningParameters;
 use App\Service\UniqueIdGeneratorService;
@@ -14,6 +17,7 @@ use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
@@ -22,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Packages\Contracts\Environment\Service;
 
 final class UploadServiceTest extends KernelTestCase
 {
@@ -117,6 +120,7 @@ final class UploadServiceTest extends KernelTestCase
                         'baseRef' => 'main',
                         'baseCommit' => 'mock-base-commit',
                         'uploadId' => 'mock-uuid',
+                        'projectId' => 'mock-project-id',
                         'ref' => 'mock-branch-reference',
                         'projectRoot' => 'some/root/'
                     ]
@@ -143,6 +147,14 @@ final class UploadServiceTest extends KernelTestCase
         );
 
         $uploadService->buildSignedUploadUrl(
+            new Project(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repository',
+                'mock-email',
+                'mock-graph-token',
+            ),
             new SigningParameters(
                 owner: '1',
                 repository: 'a',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\Publisher\Github;
 
 use App\Enum\EnvironmentVariable;
@@ -64,6 +66,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -133,6 +136,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -243,6 +247,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         $event = new Upload(
             uploadId: 'mock-uuid',
             provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
@@ -499,6 +504,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -514,6 +520,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                 new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',

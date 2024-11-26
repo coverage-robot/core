@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\Diff;
 
 use App\Model\ReportWaypoint;
@@ -21,6 +23,7 @@ final class CachingDiffParserServiceTest extends TestCase
 
         $mockWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'owner',
             repository: 'repository',
             ref: 'ref',
@@ -49,6 +52,7 @@ final class CachingDiffParserServiceTest extends TestCase
             $cachingDiffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref-2',
@@ -64,6 +68,7 @@ final class CachingDiffParserServiceTest extends TestCase
             $cachingDiffParser->get(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',

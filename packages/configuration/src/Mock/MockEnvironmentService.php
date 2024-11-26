@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Configuration\Mock;
 
 use Packages\Contracts\Environment\Environment;

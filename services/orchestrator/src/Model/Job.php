@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use App\Enum\OrchestratedEventState;
@@ -11,6 +13,7 @@ final class Job extends AbstractOrchestratedEvent
 {
     public function __construct(
         private readonly Provider $provider,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $commit,
@@ -25,6 +28,12 @@ final class Job extends AbstractOrchestratedEvent
     public function getProvider(): Provider
     {
         return $this->provider;
+    }
+
+    #[Override]
+    public function getProjectId(): string
+    {
+        return $this->projectId;
     }
 
     #[Override]
@@ -66,10 +75,8 @@ final class Job extends AbstractOrchestratedEvent
     public function __toString(): string
     {
         return sprintf(
-            'Job#%s-%s-%s-%s',
-            $this->provider->value,
-            $this->owner,
-            $this->repository,
+            'Job#%s-%s',
+            $this->projectId,
             (string) $this->externalId
         );
     }

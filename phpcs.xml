@@ -5,4 +5,7 @@
     <rule ref="Squiz.Strings.DoubleQuoteUsage">
         <type>warning</type>
     </rule>
+    <rule ref="Generic.PHP.RequireStrictTypes">
+        <type>error</type>
+    </rule>
 </ruleset>

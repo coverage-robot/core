@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Query\Trait;
 
 use App\Enum\QueryParameter;
@@ -73,9 +75,7 @@ trait CarryforwardAwareTrait
                 (
                     {$filtering}
                 )
-                AND {$uploadsTableAlias}provider = {$this->getAlias(QueryParameter::PROVIDER)}
-                AND {$uploadsTableAlias}owner = {$this->getAlias(QueryParameter::OWNER)}
-                AND {$uploadsTableAlias}repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+                AND {$uploadsTableAlias}projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
             )
             SQL;
         }

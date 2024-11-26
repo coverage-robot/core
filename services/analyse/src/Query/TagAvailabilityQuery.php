@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Query;
 
 use App\Enum\QueryParameter;
@@ -41,9 +43,7 @@ final class TagAvailabilityQuery implements QueryInterface
             FROM
                 `{$table}`
             WHERE
-                provider = {$this->getAlias(QueryParameter::PROVIDER)}
-                AND owner = {$this->getAlias(QueryParameter::OWNER)}
-                AND repository = {$this->getAlias(QueryParameter::REPOSITORY)}
+                projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
                 AND commit IN UNNEST({$this->getAlias(QueryParameter::COMMIT)})
             GROUP BY
                 commit,

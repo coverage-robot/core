@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Client\DynamoDbClientInterface;
@@ -25,6 +27,7 @@ final class CoverageFinalisedEventProcessorTest extends TestCase
         $eventProcessor->process(
             new CoverageFinalised(
                 provider: Provider::GITHUB,
+                projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'main',

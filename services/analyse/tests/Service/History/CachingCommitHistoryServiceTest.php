@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service\History;
 
 use App\Model\ReportWaypoint;
@@ -317,6 +319,7 @@ final class CachingCommitHistoryServiceTest extends TestCase
     {
         return new ReportWaypoint(
             provider: Provider::GITHUB,
+            projectId: 'mock-project',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

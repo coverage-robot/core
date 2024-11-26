@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Message\PublishableMessage;
 
 use Packages\Contracts\PublishableMessage\PublishableMessage;

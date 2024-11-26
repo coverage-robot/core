@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Query\Result\LineCoverageQueryResult;
@@ -45,16 +47,17 @@ final class LineGroupingServiceTest extends TestCase
         $date = new DateTimeImmutable();
 
         $event = new UploadsFinalised(
-            Provider::GITHUB,
-            'mock-owner',
-            'mock-repository',
-            '',
-            '',
-            ['mock-parent-1'],
-            1,
-            'mock-base-commit',
-            'mock-base-ref',
-            $date
+            provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: '',
+            commit: '',
+            parent: ['mock-parent-1'],
+            pullRequest: 1,
+            baseCommit: 'mock-base-commit',
+            baseRef: 'mock-base-ref',
+            eventTime: $date
         );
 
         return [

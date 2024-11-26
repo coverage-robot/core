@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Event\Model;
 
 use DateTimeImmutable;
@@ -12,6 +14,7 @@ final class UploadsStarted implements EventInterface, BaseAwareEventInterface
 {
     public function __construct(
         private readonly Provider $provider,
+        private readonly string $projectId,
         private readonly string $owner,
         private readonly string $repository,
         private readonly string $ref,
@@ -30,6 +33,12 @@ final class UploadsStarted implements EventInterface, BaseAwareEventInterface
     public function getProvider(): Provider
     {
         return $this->provider;
+    }
+
+    #[Override]
+    public function getProjectId(): string
+    {
+        return $this->projectId;
     }
 
     #[Override]

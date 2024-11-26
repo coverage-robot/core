@@ -40,7 +40,8 @@ WITH
             )
           ) AS branchHits
         WITH
-          OFFSET AS branchIndex
+        OFFSET
+          AS branchIndex
         GROUP BY
           branchIndex,
           branchHits
@@ -50,9 +51,7 @@ WITH
       INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       1 = 1
-      AND upload.provider = @PROVIDER
-      AND upload.owner = @OWNER
-      AND upload.repository = @REPOSITORY
+      AND upload.projectId = @PROJECT_ID
       AND upload.commit = @COMMIT
       AND upload.uploadId IN UNNEST(@UPLOADS)
       AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
@@ -90,7 +89,8 @@ WITH
         )
       ) AS branchHit
     WITH
-      OFFSET AS branchIndex
+    OFFSET
+      AS branchIndex
     GROUP BY
       fileName,
       lineNumber,

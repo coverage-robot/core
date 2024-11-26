@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Service;
 
 use App\Enum\QueryParameter;
@@ -31,6 +33,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
         $queryParameters = QueryParameterBag::fromWaypoint(
             new ReportWaypoint(
                 provider: Provider::GITHUB,
+                projectId: 'mock-project',
                 owner: 'mock-owner',
                 repository: 'mock-repository',
                 ref: 'mock-ref',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\Event;
 
 use App\Client\EventBridgeEventClient;
@@ -45,11 +47,12 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
     public function testHandlingEventWhenOthersOngoing(): void
     {
         $mockIngestion = new Ingestion(
-            uploadId: 'mock-upload-id',
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
+            uploadId: 'mock-upload-id',
             state: OrchestratedEventState::ONGOING,
             eventTime: new DateTimeImmutable(),
         );
@@ -110,6 +113,7 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
@@ -127,22 +131,24 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
     public function testNotFinalisingWhenAlreadyBeenFinalised(): void
     {
         $mockIngestion = new Ingestion(
-            uploadId: 'mock-upload-id',
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             commit: 'mock-commit',
+            uploadId: 'mock-upload-id',
             state: OrchestratedEventState::SUCCESS,
             eventTime: new DateTimeImmutable(),
         );
         $mockFinalised = new Finalised(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
-            commit: 'mock-commit',
             ref: 'mock-ref',
-            pullRequest: null,
+            commit: 'mock-commit',
             state: OrchestratedEventState::SUCCESS,
+            pullRequest: null,
             eventTime: new DateTimeImmutable(),
         );
 
@@ -204,6 +210,7 @@ final class IngestSuccessEventProcessorTest extends AbstractIngestEventProcessor
                     new Upload(
                         uploadId: 'mock-upload',
                         provider: Provider::GITHUB,
+                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         commit: 'mock-commit',
