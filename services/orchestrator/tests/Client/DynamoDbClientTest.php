@@ -145,13 +145,13 @@ final class DynamoDbClientTest extends KernelTestCase
                 ]
             ),
             $this->getContainer()->get(SerializerInterface::class),
-            new NullLogger()
         );
 
         $mockOutput = ResultMockFactory::create(
             QueryOutput::class,
             [
-                'input' => new QueryInput(),
+                'lastEvaluatedKey' => null, // There are no more items to fetch
+                'input' => new QueryInput(['TableName' => 'event-store']),
                 'Items' => [
                     [
                         'provider' => new AttributeValue(
@@ -261,13 +261,13 @@ final class DynamoDbClientTest extends KernelTestCase
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]
             ),
-            $this->getContainer()->get(SerializerInterface::class),
-            new NullLogger()
+            $this->getContainer()->get(SerializerInterface::class)
         );
 
         $mockOutput = ResultMockFactory::create(
             QueryOutput::class,
             [
+                'lastEvaluatedKey' => null, // There are no more items to fetch
                 'input' => new QueryInput(),
                 'Items' => [
                     [
