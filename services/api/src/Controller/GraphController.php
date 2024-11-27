@@ -33,13 +33,26 @@ final class GraphController extends AbstractController
      * @throws AuthenticationException
      */
     #[Route(
-        '/graph/{provider}/{owner}/{repository}/{type}',
+        [
+            'default' => '/graph/{provider}/{owner}/{repository}/{ref}/{type}',
+
+            /**
+             * Legacy route which is maintained for backwards compatibility. When using this route
+             * the ref is assumed to be `main`.
+             *
+             * This has been replaced by the new route which allows the ref to be specified
+             * as a path parameter in the URL.
+             *
+             * For example: `graph/github/coverage-robot/core/some-ref/badge.svg`
+             */
+            'compat' => '/graph/{provider}/{owner}/{repository}/{type}',
+        ],
         name: 'badge',
-        requirements: ['type' => '(.+)\.svg'],
-        defaults: ['_format' => 'json'],
+        requirements: ['type' => 'badge.svg'],
+        defaults: ['_format' => 'json', 'ref' => 'main'],
         methods: ['GET']
     )]
-    public function badge(string $provider, string $owner, string $repository, Request $request): Response
+    public function badge(string $provider, string $owner, string $repository, string $ref, Request $request): Response
     {
         $parameters = new GraphParameters(
             $owner,
@@ -57,8 +70,7 @@ final class GraphController extends AbstractController
             $parameters->getProvider(),
             $parameters->getOwner(),
             $parameters->getRepository(),
-            // TODO(RM): Support different refs being passed through the URI.
-            'main'
+            $ref
         );
 
         return new Response(

@@ -1,12 +1,33 @@
 {
-    "badge": {
-        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{type}",
+    "badge.default": {
+        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{ref}\/{type}",
         "requirements": {
-            "type": "(.+)\\.svg"
+            "type": "badge.svg",
+            "_locale": "default"
         },
         "defaults": {
             "_format": "json",
-            "_controller": "App\\Controller\\GraphController::badge"
+            "ref": "main",
+            "_controller": "App\\Controller\\GraphController::badge",
+            "_locale": "default",
+            "_canonical_route": "badge"
+        },
+        "methods": [
+            "GET"
+        ]
+    },
+    "badge.compat": {
+        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{type}",
+        "requirements": {
+            "type": "badge.svg",
+            "_locale": "compat"
+        },
+        "defaults": {
+            "_format": "json",
+            "ref": "main",
+            "_controller": "App\\Controller\\GraphController::badge",
+            "_locale": "compat",
+            "_canonical_route": "badge"
         },
         "methods": [
             "GET"
