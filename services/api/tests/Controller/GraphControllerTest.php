@@ -126,7 +126,7 @@ final class GraphControllerTest extends WebTestCase
         $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
         $mockDynamoDbClient->expects($this->once())
             ->method('getCoveragePercentage')
-            ->with(Provider::GITHUB, 'owner', 'repository', 'custom-ref')
+            ->with(Provider::GITHUB, 'owner', 'repository', 'chore/custom-ref')
             ->willReturn(20.0);
 
         $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
@@ -142,7 +142,7 @@ final class GraphControllerTest extends WebTestCase
 
         $this->client->request(
             Request::METHOD_GET,
-            '/graph/' . Provider::GITHUB->value . '/owner/repository/custom-ref/badge.svg'
+            '/graph/' . Provider::GITHUB->value . '/owner/repository/chore/custom-ref/badge.svg'
         );
 
         $this->assertResponseIsSuccessful();

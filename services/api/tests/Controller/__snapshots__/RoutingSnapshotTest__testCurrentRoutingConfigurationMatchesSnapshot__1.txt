@@ -1,8 +1,11 @@
 {
     "badge.default": {
-        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{ref}\/{type}",
+        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{ref}\/badge.svg",
         "requirements": {
-            "type": "badge.svg",
+            "provider": "github",
+            "owner": "[A-Za-z0-9-_.]+",
+            "repository": "[A-Za-z0-9-_.]+",
+            "ref": ".+",
             "_locale": "default"
         },
         "defaults": {
@@ -17,9 +20,12 @@
         ]
     },
     "badge.compat": {
-        "path": "\/graph\/{provider}\/{owner}\/{repository}\/{type}",
+        "path": "\/graph\/{provider}\/{owner}\/{repository}\/badge.svg",
         "requirements": {
-            "type": "badge.svg",
+            "provider": "github",
+            "owner": "[A-Za-z0-9-_.]+",
+            "repository": "[A-Za-z0-9-_.]+",
+            "ref": ".+",
             "_locale": "compat"
         },
         "defaults": {
