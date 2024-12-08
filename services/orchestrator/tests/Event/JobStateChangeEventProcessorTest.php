@@ -352,11 +352,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
-            ->method('reduceStateChangesToEvent')
-            ->willReturnOnConsecutiveCalls(
-                $mockJob,
-                $mockJob,
-            );
+            ->method('reduceStateChangesToEvent')->willReturn($mockJob);
         $mockEventStoreService->expects($this->atLeastOnce())
             ->method('getAllStateChangesForCommit')
             ->willReturn(

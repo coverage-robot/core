@@ -186,7 +186,7 @@ final class EventStoreServiceTest extends KernelTestCase
 
         $stateChange = $eventStoreService->storeStateChange($event);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $stateChange->getEvent()
         );
@@ -252,11 +252,11 @@ final class EventStoreServiceTest extends KernelTestCase
 
         $stateChange = $eventStoreService->storeStateChange($completeEvent);
 
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $stateChange->getVersion()
         );
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'state' => OrchestratedEventState::SUCCESS->value,
             ],
@@ -352,223 +352,217 @@ final class EventStoreServiceTest extends KernelTestCase
         );
     }
 
-    public static function orchestratedEventsDataProvider(): array
+    public static function orchestratedEventsDataProvider(): \Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
-
-        return [
+        yield [
+            null,
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                'mock-upload-id',
+                OrchestratedEventState::ONGOING,
+                $eventTime
+            ),
             [
-                null,
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    'mock-upload-id',
-                    OrchestratedEventState::ONGOING,
-                    $eventTime
-                ),
-                [
-                    'provider' => Provider::GITHUB->value,
-                    'projectId' => 'mock-project-id',
-                    'owner' => 'mock-owner',
-                    'repository' => 'mock-repo',
-                    'commit' => '1',
-                    'uploadId' => 'mock-upload-id',
-                    'state' => OrchestratedEventState::ONGOING->value,
-                    'type' => OrchestratedEvent::INGESTION->value,
-                    'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
-                ]
-            ],
+                'provider' => Provider::GITHUB->value,
+                'projectId' => 'mock-project-id',
+                'owner' => 'mock-owner',
+                'repository' => 'mock-repo',
+                'commit' => '1',
+                'uploadId' => 'mock-upload-id',
+                'state' => OrchestratedEventState::ONGOING->value,
+                'type' => OrchestratedEvent::INGESTION->value,
+                'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
+            ]
+        ];
+        yield [
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                'mock-upload-id',
+                OrchestratedEventState::ONGOING,
+                $eventTime
+            ),
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                'mock-upload-id',
+                OrchestratedEventState::SUCCESS,
+                $eventTime
+            ),
             [
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    'mock-upload-id',
-                    OrchestratedEventState::ONGOING,
-                    $eventTime
-                ),
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    'mock-upload-id',
-                    OrchestratedEventState::SUCCESS,
-                    $eventTime
-                ),
-                [
-                    'state' => OrchestratedEventState::SUCCESS->value
-                ]
-            ],
+                'state' => OrchestratedEventState::SUCCESS->value
+            ]
+        ];
+        yield [
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                'mock-upload-id',
+                OrchestratedEventState::ONGOING,
+                $eventTime
+            ),
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                'mock-upload-id',
+                OrchestratedEventState::SUCCESS,
+                $eventTime->add(new DateInterval('PT1S'))
+            ),
             [
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    'mock-upload-id',
-                    OrchestratedEventState::ONGOING,
-                    $eventTime
-                ),
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    'mock-upload-id',
-                    OrchestratedEventState::SUCCESS,
-                    $eventTime->add(new DateInterval('PT1S'))
-                ),
-                [
-                    'state' => OrchestratedEventState::SUCCESS->value,
-                    'eventTime' => $eventTime->add(new DateInterval('PT1S'))
-                        ->format(DateTimeImmutable::ATOM)
-                ]
+                'state' => OrchestratedEventState::SUCCESS->value,
+                'eventTime' => $eventTime->add(new DateInterval('PT1S'))
+                    ->format(DateTimeImmutable::ATOM)
             ]
         ];
     }
 
-    public static function stateChangesDataProvider(): array
+    public static function stateChangesDataProvider(): \Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
-
-        return [
-            [
-                new EventStateChangeCollection(
-                    [
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            1,
-                            [
-                                'provider' => Provider::GITHUB->value,
-                                'projectId' => 'mock-project-id',
-                                'owner' => 'mock-owner',
-                                'repository' => 'mock-repo',
-                                'commit' => '1',
-                                'uploadId' => 'mock-upload-id',
-                                'state' => OrchestratedEventState::ONGOING->value,
-                                'type' => OrchestratedEvent::INGESTION->value,
-                                'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
-                            ],
-                            null
-                        ),
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            2,
-                            [
-                                'state' => OrchestratedEventState::SUCCESS->value,
-                            ],
-                            null
-                        ),
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            3,
-                            [
-                                'state' => OrchestratedEventState::ONGOING->value,
-                            ],
-                            null
-                        ),
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            4,
-                            [
-                                'commit' => '2',
-                                'state' => OrchestratedEventState::FAILURE->value,
-                            ],
-                            null
-                        )
-                    ]
-                ),
-                new Ingestion(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '2',
-                    'mock-upload-id',
-                    OrchestratedEventState::FAILURE,
-                    $eventTime
-                )
-            ],
-            [
-                new EventStateChangeCollection(
-                    [
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            1,
-                            [
-                                'provider' => Provider::GITHUB->value,
-                                'projectId' => 'mock-project-id',
-                                'owner' => 'mock-owner',
-                                'repository' => 'mock-repo',
-                                'commit' => '1',
-                                'state' => OrchestratedEventState::ONGOING->value,
-                                'type' => OrchestratedEvent::JOB->value,
-                                'eventTime' => $eventTime->format(DateTimeImmutable::ATOM),
-                                'externalId' => 'mock-external-id'
-                            ],
-                            null
-                        ),
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            2,
-                            [
-                                'state' => OrchestratedEventState::FAILURE->value,
-                                'eventTime' => $eventTime->add(new DateInterval('PT1S'))
-                                    ->format(DateTimeImmutable::ATOM),
-                            ],
-                            null
-                        ),
-                        new EventStateChange(
-                            Provider::GITHUB,
-                            'mock-identifier',
-                            'mock-owner',
-                            'mock-repository',
-                            3,
-                            [
-                                'state' => OrchestratedEventState::SUCCESS->value,
-                            ],
-                            null
-                        )
-                    ]
-                ),
-                new Job(
-                    Provider::GITHUB,
-                    'mock-project-id',
-                    'mock-owner',
-                    'mock-repo',
-                    '1',
-                    OrchestratedEventState::SUCCESS,
-                    $eventTime->add(new DateInterval('PT1S')),
-                    'mock-external-id'
-                )
-            ]
+        yield [
+            new EventStateChangeCollection(
+                [
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        [
+                            'provider' => Provider::GITHUB->value,
+                            'projectId' => 'mock-project-id',
+                            'owner' => 'mock-owner',
+                            'repository' => 'mock-repo',
+                            'commit' => '1',
+                            'uploadId' => 'mock-upload-id',
+                            'state' => OrchestratedEventState::ONGOING->value,
+                            'type' => OrchestratedEvent::INGESTION->value,
+                            'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
+                        ],
+                        null
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        2,
+                        [
+                            'state' => OrchestratedEventState::SUCCESS->value,
+                        ],
+                        null
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        3,
+                        [
+                            'state' => OrchestratedEventState::ONGOING->value,
+                        ],
+                        null
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        4,
+                        [
+                            'commit' => '2',
+                            'state' => OrchestratedEventState::FAILURE->value,
+                        ],
+                        null
+                    )
+                ]
+            ),
+            new Ingestion(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '2',
+                'mock-upload-id',
+                OrchestratedEventState::FAILURE,
+                $eventTime
+            )
+        ];
+        yield [
+            new EventStateChangeCollection(
+                [
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        1,
+                        [
+                            'provider' => Provider::GITHUB->value,
+                            'projectId' => 'mock-project-id',
+                            'owner' => 'mock-owner',
+                            'repository' => 'mock-repo',
+                            'commit' => '1',
+                            'state' => OrchestratedEventState::ONGOING->value,
+                            'type' => OrchestratedEvent::JOB->value,
+                            'eventTime' => $eventTime->format(DateTimeImmutable::ATOM),
+                            'externalId' => 'mock-external-id'
+                        ],
+                        null
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        2,
+                        [
+                            'state' => OrchestratedEventState::FAILURE->value,
+                            'eventTime' => $eventTime->add(new DateInterval('PT1S'))
+                                ->format(DateTimeImmutable::ATOM),
+                        ],
+                        null
+                    ),
+                    new EventStateChange(
+                        Provider::GITHUB,
+                        'mock-identifier',
+                        'mock-owner',
+                        'mock-repository',
+                        3,
+                        [
+                            'state' => OrchestratedEventState::SUCCESS->value,
+                        ],
+                        null
+                    )
+                ]
+            ),
+            new Job(
+                Provider::GITHUB,
+                'mock-project-id',
+                'mock-owner',
+                'mock-repo',
+                '1',
+                OrchestratedEventState::SUCCESS,
+                $eventTime->add(new DateInterval('PT1S')),
+                'mock-external-id'
+            )
         ];
     }
 }
