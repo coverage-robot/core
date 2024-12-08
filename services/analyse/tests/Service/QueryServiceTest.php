@@ -302,56 +302,54 @@ final class QueryServiceTest extends KernelTestCase
         $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
-    public static function queryDataProvider(): array
+    public static function queryDataProvider(): \Iterator
     {
-        return [
-            'Total coverage query' => [
-                TotalCoverageQuery::class,
-                [
-                    'coveragePercentage' => 0.0,
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3
-                ],
-                new TotalCoverageQueryResult(
-                    0,
-                    6,
-                    1,
-                    2,
-                    3
-                )
+        yield 'Total coverage query' => [
+            TotalCoverageQuery::class,
+            [
+                'coveragePercentage' => 0.0,
+                'lines' => 6,
+                'covered' => 1,
+                'partial' => 2,
+                'uncovered' => 3
             ],
-            'Total commit uploads query' => [
-                TotalUploadsQuery::class,
-                [
-                    'successfulUploads' => ['1', '2'],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [1],
-                        ],
-                        [
-                            'name' => 'tag-2',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [1],
-                        ]
+            new TotalCoverageQueryResult(
+                0,
+                6,
+                1,
+                2,
+                3
+            )
+        ];
+        yield 'Total commit uploads query' => [
+            TotalUploadsQuery::class,
+            [
+                'successfulUploads' => ['1', '2'],
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [1],
                     ],
-                    'successfulIngestTimes' => [
-                        '2021-01-01T00:00:00+0000',
-                        '2021-01-01T00:00:00+0000'
+                    [
+                        'name' => 'tag-2',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [1],
                     ]
                 ],
-                new TotalUploadsQueryResult(
-                    [1, 2],
-                    [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
-                    [
-                        new Tag('tag-1', 'mock-commit', [1]),
-                        new Tag('tag-2', 'mock-commit', [1])
-                    ]
-                )
-            ]
+                'successfulIngestTimes' => [
+                    '2021-01-01T00:00:00+0000',
+                    '2021-01-01T00:00:00+0000'
+                ]
+            ],
+            new TotalUploadsQueryResult(
+                [1, 2],
+                [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
+                [
+                    new Tag('tag-1', 'mock-commit', [1]),
+                    new Tag('tag-2', 'mock-commit', [1])
+                ]
+            )
         ];
     }
 }

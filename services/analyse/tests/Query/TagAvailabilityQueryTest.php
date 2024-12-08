@@ -85,78 +85,76 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
                 [
-                    [
-                        'tagName' => 'mock-tag',
-                        'carryforwardTags' => [
-                            [
-                                'name' => 'mock-tag',
-                                'commit' => 'mock-commit-1',
-                                'successfullyUploadedLines' => [100],
-                                'ingestTimes' => [
-                                    '2023-09-09T12:00:00+0000'
-                                ]
-                            ],
-                            [
-                                'name' => 'mock-tag',
-                                'commit' => 'mock-commit-2',
-                                'successfullyUploadedLines' => [100],
-                                'ingestTimes' => [
-                                    '2023-09-11T12:00:00+0000',
-                                    '2023-09-11T12:00:00+0000'
-                                ]
+                    'tagName' => 'mock-tag',
+                    'carryforwardTags' => [
+                        [
+                            'name' => 'mock-tag',
+                            'commit' => 'mock-commit-1',
+                            'successfullyUploadedLines' => [100],
+                            'ingestTimes' => [
+                                '2023-09-09T12:00:00+0000'
+                            ]
+                        ],
+                        [
+                            'name' => 'mock-tag',
+                            'commit' => 'mock-commit-2',
+                            'successfullyUploadedLines' => [100],
+                            'ingestTimes' => [
+                                '2023-09-11T12:00:00+0000',
+                                '2023-09-11T12:00:00+0000'
                             ]
                         ]
                     ]
                 ]
-            ],
+            ]
+        ];
+        yield [
             [
                 [
-                    [
-                        'tagName' => 'mock-tag',
-                        'carryforwardTags' => [
-                            [
-                                'name' => 'mock-tag',
-                                'commit' => 'mock-commit-1',
-                                'successfullyUploadedLines' => [100],
-                                'ingestTimes' => [
-                                    '2023-09-09T12:00:00+0000'
-                                ]
-                            ],
-                            [
-                                'name' => 'mock-tag',
-                                'commit' => 'mock-commit-2',
-                                'successfullyUploadedLines' => [2, 100],
-                                'ingestTimes' => [
-                                    '2023-09-11T12:00:00+0000',
-                                    '2023-09-11T12:00:00+0000'
-                                ]
+                    'tagName' => 'mock-tag',
+                    'carryforwardTags' => [
+                        [
+                            'name' => 'mock-tag',
+                            'commit' => 'mock-commit-1',
+                            'successfullyUploadedLines' => [100],
+                            'ingestTimes' => [
+                                '2023-09-09T12:00:00+0000'
+                            ]
+                        ],
+                        [
+                            'name' => 'mock-tag',
+                            'commit' => 'mock-commit-2',
+                            'successfullyUploadedLines' => [2, 100],
+                            'ingestTimes' => [
+                                '2023-09-11T12:00:00+0000',
+                                '2023-09-11T12:00:00+0000'
                             ]
                         ]
-                    ],
-                    [
-                        'tagName' => 'mock-tag-2',
-                        'carryforwardTags' => [
-                            [
-                                'name' => 'mock-tag-2',
-                                'commit' => 'mock-commit-3',
-                                'successfullyUploadedLines' => [100, 200],
-                                'ingestTimes' => [
-                                    '2023-09-09T12:00:00+0000'
-                                ]
-                            ],
-                            [
-                                'name' => 'mock-tag-2',
-                                'commit' => 'mock-commit-4',
-                                'successfullyUploadedLines' => [100, 1],
-                                'ingestTimes' => [
-                                    '2023-09-11T12:00:00+0000',
-                                    '2023-09-11T12:00:00+0000'
-                                ]
+                    ]
+                ],
+                [
+                    'tagName' => 'mock-tag-2',
+                    'carryforwardTags' => [
+                        [
+                            'name' => 'mock-tag-2',
+                            'commit' => 'mock-commit-3',
+                            'successfullyUploadedLines' => [100, 200],
+                            'ingestTimes' => [
+                                '2023-09-09T12:00:00+0000'
+                            ]
+                        ],
+                        [
+                            'name' => 'mock-tag-2',
+                            'commit' => 'mock-commit-4',
+                            'successfullyUploadedLines' => [100, 1],
+                            'ingestTimes' => [
+                                '2023-09-11T12:00:00+0000',
+                                '2023-09-11T12:00:00+0000'
                             ]
                         ]
                     ]
@@ -165,43 +163,41 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): \Iterator
     {
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint(
-                    new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    )
-                ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint(
-                    new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    )
-                )->set(QueryParameter::COMMIT, ['1', '2']),
-                true
-            ],
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint(
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                )
+            ),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint(
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                )
+            )->set(QueryParameter::COMMIT, ['1', '2']),
+            true
         ];
     }
 }

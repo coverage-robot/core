@@ -55,27 +55,24 @@ final class CoverageReportTest extends TestCase
             new DateTimeImmutable('2024-01-05 00:00:00'),
             $report->getLatestSuccessfulUpload()
         );
-        $this->assertEquals(
+        $this->assertSame(
             1,
             $report->getTotalLines()
         );
-        $this->assertEquals(
+        $this->assertSame(
             2,
             $report->getAtLeastPartiallyCoveredLines()
         );
-        $this->assertEquals(
+        $this->assertSame(
             3,
             $report->getUncoveredLines()
         );
-        $this->assertEquals(
-            99.9,
-            $report->getCoveragePercentage()
-        );
+        $this->assertEqualsWithDelta(99.9, $report->getCoveragePercentage(), PHP_FLOAT_EPSILON);
         $this->assertEquals(
             $tagCoverage,
             $report->getTagCoverage()
         );
-        $this->assertEquals(
+        $this->assertSame(
             95,
             $report->getDiffCoveragePercentage()
         );

@@ -71,108 +71,104 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'successfulUploads' => ['1'],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ]
-                    ],
-                    'successfulIngestTimes' => [
-                        '2023-09-09T12:00:00+0000'
-                    ]
-                ]
-            ],
-            [
-                [
-                    'successfulUploads' => ['1', '2'],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ],
-                        [
-                            'name' => 'tag-2',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ]
-                    ],
-                    'successfulIngestTimes' => [
-                        '2023-09-09T12:00:00+0000',
-                        '2024-01-03T12:19:30'
-                    ]
-                ]
-            ],
-            [
-                [
-                    'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ]
-                    ],
-                    'successfulIngestTimes' => [
-                        '2023-09-09T12:00:00+0000'
+                'successfulUploads' => ['1'],
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
                     ]
                 ],
-            ],
-            [
-                [
-                    'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ]
-                    ],
-                    'successfulIngestTimes' => [
-                        '2023-09-09T12:00:00+0000'
-                    ]
+                'successfulIngestTimes' => [
+                    '2023-09-09T12:00:00+0000'
                 ]
-            ],
+            ]
+        ];
+        yield [
             [
-                [
-                    'commit' => 'mock-commit',
-                    'successfulUploads' => [],
-                    'successfulIngestTimes' => [],
-                    'successfulTags' => []
+                'successfulUploads' => ['1', '2'],
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
+                    ],
+                    [
+                        'name' => 'tag-2',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
+                    ]
+                ],
+                'successfulIngestTimes' => [
+                    '2023-09-09T12:00:00+0000',
+                    '2024-01-03T12:19:30'
+                ]
+            ]
+        ];
+        yield [
+            [
+                'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
+                    ]
+                ],
+                'successfulIngestTimes' => [
+                    '2023-09-09T12:00:00+0000'
                 ]
             ],
         ];
+        yield [
+            [
+                'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
+                    ]
+                ],
+                'successfulIngestTimes' => [
+                    '2023-09-09T12:00:00+0000'
+                ]
+            ]
+        ];
+        yield [
+            [
+                'commit' => 'mock-commit',
+                'successfulUploads' => [],
+                'successfulIngestTimes' => [],
+                'successfulTags' => []
+            ]
+        ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): \Iterator
     {
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint(
-                    new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    )
-                ),
-                true
-            ],
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint(
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                )
+            ),
+            true
         ];
     }
 

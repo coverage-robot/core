@@ -137,69 +137,67 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
                 [
-                    [
-                        'tag' => [
-                            'name' => '1',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [110],
-                        ],
-                        'lines' => 1,
-                        'covered' => 1,
-                        'partial' => 0,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 100.0
+                    'tag' => [
+                        'name' => '1',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [110],
                     ],
+                    'lines' => 1,
+                    'covered' => 1,
+                    'partial' => 0,
+                    'uncovered' => 0,
+                    'coveragePercentage' => 100.0
                 ],
             ],
+        ];
+        yield [
             [
                 [
-                    [
-                        'tag' => [
-                            'name' => '2',
-                            'commit' => 'mock-commit',
-                            'successfullyUploadedLines' => [100],
-                        ],
-                        'lines' => 1,
-                        'covered' => 0,
-                        'partial' => 1,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 0.0
+                    'tag' => [
+                        'name' => '2',
+                        'commit' => 'mock-commit',
+                        'successfullyUploadedLines' => [100],
                     ],
-                    [
-                        'tag' => [
-                            'name' => '3',
-                            'commit' => 'mock-commit-2',
-                            'successfullyUploadedLines' => [90],
-                        ],
-                        'lines' => 1,
-                        'covered' => 0,
-                        'partial' => 0,
-                        'uncovered' => 1,
-                        'coveragePercentage' => 0.0
-                    ],
-                    [
-                        'tag' => [
-                            'name' => '4',
-                            'commit' => 'mock-commit-2',
-                            'successfullyUploadedLines' => [80],
-                        ],
-                        'lines' => 1,
-                        'covered' => 0,
-                        'partial' => 0,
-                        'uncovered' => 1,
-                        'coveragePercentage' => 0.0
-                    ]
+                    'lines' => 1,
+                    'covered' => 0,
+                    'partial' => 1,
+                    'uncovered' => 0,
+                    'coveragePercentage' => 0.0
                 ],
-            ]
+                [
+                    'tag' => [
+                        'name' => '3',
+                        'commit' => 'mock-commit-2',
+                        'successfullyUploadedLines' => [90],
+                    ],
+                    'lines' => 1,
+                    'covered' => 0,
+                    'partial' => 0,
+                    'uncovered' => 1,
+                    'coveragePercentage' => 0.0
+                ],
+                [
+                    'tag' => [
+                        'name' => '4',
+                        'commit' => 'mock-commit-2',
+                        'successfullyUploadedLines' => [80],
+                    ],
+                    'lines' => 1,
+                    'covered' => 0,
+                    'partial' => 0,
+                    'uncovered' => 1,
+                    'coveragePercentage' => 0.0
+                ]
+            ],
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): \Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
@@ -211,49 +209,46 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             history: [],
             diff: []
         );
-
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'mock-commit',
-                                [110],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, ['1', '2']),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, ['1', '2'])
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            true
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
+                    QueryParameter::CARRYFORWARD_TAGS,
+                    [
+                        new CarryforwardTag(
+                            '1',
+                            'mock-commit',
+                            [110],
+                            [new DateTimeImmutable('2024-01-03 00:00:00')]
+                        )
+                    ]
+                ),
+            true
         ];
     }
 }

@@ -84,56 +84,56 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                 CoverageReportInterface::class,
                 $coverageReport
             );
-            $this->assertEquals(
+            $this->assertSame(
                 [
                     '1'
                 ],
                 $coverageReport->getUploads()
                     ->getSuccessfulUploads()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 100,
                 $coverageReport->getCoveragePercentage()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 $coverageReport->getTotalLines()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 1,
                 $coverageReport->getAtLeastPartiallyCoveredLines()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 $coverageReport->getUncoveredLines()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 100,
                 $coverageReport->getTagCoverage()
                     ->getTags()[0]
                     ->getCoveragePercentage()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 100,
                 $coverageReport->getDiffCoveragePercentage()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 0,
                 $coverageReport->getDiffUncoveredLines()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 'mock-file',
                 $coverageReport->getLeastCoveredDiffFiles()
                     ->getFiles()[0]
                     ->getFileName()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 LineState::COVERED,
                 $coverageReport->getDiffLineCoverage()
                     ->getLines()[0]
                     ->getState()
             );
-            $this->assertEquals(
+            $this->assertSame(
                 ['1'],
                 $coverageReport->getUploads()
                     ->getSuccessfulUploads()
@@ -259,8 +259,8 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
 
         $coverageReport = $coverageAnalyserService->analyse($waypoint);
 
-        $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
-        $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
+        $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
+        $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
 
         $this->assertEquals(
             new FileCoverageCollectionQueryResult([]),

@@ -84,7 +84,7 @@ final class CachingCarryforwardTagService implements CarryforwardTagServiceInter
                     $cacheValue[self::EXISTING_TAGS_CACHE_PARAM],
                     $existingTags,
                     static fn(Tag $a, Tag $b): int => $a->getName() <=> $b->getName()
-                )
+                ) !== []
             ) {
                 continue;
             }

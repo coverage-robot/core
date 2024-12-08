@@ -133,61 +133,59 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lineNumber' => 1,
-                        'state' => LineState::COVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
+                    'fileName' => 'mock-file',
+                    'lineNumber' => 1,
+                    'state' => LineState::COVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
                 ],
             ],
+        ];
+        yield [
             [
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lineNumber' => 1,
-                        'state' => LineState::COVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                    [
-                        'fileName' => 'mock-file-2',
-                        'lineNumber' => 2,
-                        'state' => LineState::UNCOVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                    [
-                        'fileName' => 'mock-file-3',
-                        'lineNumber' => 3,
-                        'state' => LineState::PARTIAL->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                ]
+                    'fileName' => 'mock-file',
+                    'lineNumber' => 1,
+                    'state' => LineState::COVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
+                [
+                    'fileName' => 'mock-file-2',
+                    'lineNumber' => 2,
+                    'state' => LineState::UNCOVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
+                [
+                    'fileName' => 'mock-file-3',
+                    'lineNumber' => 3,
+                    'state' => LineState::PARTIAL->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
             ]
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): \Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
@@ -199,55 +197,52 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             history: [],
             diff: []
         );
-
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, [])
-                    ->set(QueryParameter::INGEST_PARTITIONS, []),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'mock-commit',
-                                [1],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, ['1', '2']),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, ['1', '2'])
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            true
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, [])
+                ->set(QueryParameter::INGEST_PARTITIONS, []),
+            false
+        ];
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
+                    QueryParameter::CARRYFORWARD_TAGS,
+                    [
+                        new CarryforwardTag(
+                            '1',
+                            'mock-commit',
+                            [1],
+                            [new DateTimeImmutable('2024-01-03 00:00:00')]
+                        )
+                    ]
+                ),
+            true
         ];
     }
 }
