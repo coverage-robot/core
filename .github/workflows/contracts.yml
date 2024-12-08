@@ -1,4 +1,4 @@
-name: Contacts Package
+name: Contracts Package
 
 on:
     merge_group:
