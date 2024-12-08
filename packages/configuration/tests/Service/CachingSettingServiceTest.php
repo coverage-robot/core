@@ -127,7 +127,7 @@ final class CachingSettingServiceTest extends TestCase
 
         $cachingSettingService = new CachingSettingService($mockSettingService);
 
-        $this->assertEquals(
+        $this->assertSame(
             LineCommentType::ANNOTATION,
             $cachingSettingService->deserialize(
                 SettingKey::LINE_COMMENT_TYPE,

@@ -44,6 +44,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -71,6 +72,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -98,6 +100,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -125,6 +128,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -152,6 +156,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
@@ -179,6 +184,7 @@ final class MessageValidationServiceTest extends TestCase
                 event: new Upload(
                     uploadId: 'mock-uuid',
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     commit: 'mock-commit',
