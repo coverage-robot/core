@@ -22,6 +22,7 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
@@ -274,7 +275,7 @@ final class EventHandlerTest extends KernelTestCase
     /**
      * @throws InvalidLambdaEvent
      */
-    public static function validS3EventDataProvider(): \Iterator
+    public static function validS3EventDataProvider(): Iterator
     {
         yield 'Single valid file (Lcov)' => [
             new S3Event([

@@ -13,6 +13,7 @@ use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalUploadsQuery;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -71,7 +72,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             [
@@ -149,7 +150,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         yield [
             new QueryParameterBag(),

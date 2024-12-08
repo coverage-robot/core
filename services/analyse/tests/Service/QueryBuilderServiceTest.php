@@ -16,6 +16,7 @@ use App\Tests\Mock\Factory\MockQueryFactory;
 use DateTimeImmutable;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -136,7 +137,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
         $this->assertSame($expectedHash, $hash);
     }
 
-    public static function hashProvider(): \Iterator
+    public static function hashProvider(): Iterator
     {
         yield [
             'some-class',

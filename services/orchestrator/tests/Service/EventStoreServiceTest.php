@@ -17,6 +17,7 @@ use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use DateInterval;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
@@ -352,7 +353,7 @@ final class EventStoreServiceTest extends KernelTestCase
         );
     }
 
-    public static function orchestratedEventsDataProvider(): \Iterator
+    public static function orchestratedEventsDataProvider(): Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
         yield [
@@ -433,7 +434,7 @@ final class EventStoreServiceTest extends KernelTestCase
         ];
     }
 
-    public static function stateChangesDataProvider(): \Iterator
+    public static function stateChangesDataProvider(): Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
         yield [

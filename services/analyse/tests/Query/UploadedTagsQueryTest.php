@@ -12,6 +12,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\UploadedTagsQuery;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -84,7 +85,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             []
@@ -99,7 +100,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         yield [
             new QueryParameterBag(),

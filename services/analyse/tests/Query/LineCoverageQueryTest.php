@@ -15,6 +15,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -133,7 +134,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             [
@@ -185,7 +186,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,

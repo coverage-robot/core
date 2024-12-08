@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PathFixingService;
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingServiceInterface;
@@ -44,7 +45,7 @@ final class PathFixingServiceTest extends TestCase
         $this->assertSame($expectedPath, $fixedPath);
     }
 
-    public static function configurationDataProvider(): \Iterator
+    public static function configurationDataProvider(): Iterator
     {
         yield [
             'project-root/src/path/to/file',

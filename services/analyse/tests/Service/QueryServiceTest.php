@@ -22,6 +22,7 @@ use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -146,16 +147,18 @@ final class QueryServiceTest extends KernelTestCase
         $mockValidator = $this->createMock(ValidatorInterface::class);
         $mockValidator->expects($this->once())
             ->method('validate')
-            ->willReturn(new ConstraintViolationList([
-                new ConstraintViolation(
-                    'mock-message',
-                    'mock-template',
-                    [],
-                    'mock-root',
-                    'mock-property-path',
-                    'mock-invalid-value'
-                )
-            ]));
+            ->willReturn(
+                new ConstraintViolationList([
+                    new ConstraintViolation(
+                        'mock-message',
+                        'mock-template',
+                        [],
+                        'mock-root',
+                        'mock-property-path',
+                        'mock-invalid-value'
+                    )
+                ])
+            );
 
         $queryService = new QueryService(
             $mockBigQueryService,
@@ -302,7 +305,7 @@ final class QueryServiceTest extends KernelTestCase
         $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
-    public static function queryDataProvider(): \Iterator
+    public static function queryDataProvider(): Iterator
     {
         yield 'Total coverage query' => [
             TotalCoverageQuery::class,

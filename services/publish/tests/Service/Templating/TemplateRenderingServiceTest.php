@@ -7,6 +7,7 @@ namespace App\Tests\Service\Templating;
 use App\Enum\TemplateVariant;
 use App\Service\Templating\TemplateRenderingService;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Contracts\Tag\Tag;
@@ -46,7 +47,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
         $this->assertMatchesSnapshot($markdown);
     }
 
-    public static function messageDataProvider(): \Iterator
+    public static function messageDataProvider(): Iterator
     {
         $event = new Upload(
             uploadId: 'mock-upload-id',

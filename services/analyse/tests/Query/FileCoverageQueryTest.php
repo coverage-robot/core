@@ -15,6 +15,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -136,7 +137,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         $this->assertInstanceOf(FileCoverageCollectionQueryResult::class, $result);
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             [
@@ -172,7 +173,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\ReportWaypoint;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +46,7 @@ final class ReportWaypointTest extends TestCase
         );
     }
 
-    public static function waypointProvider(): \Iterator
+    public static function waypointProvider(): Iterator
     {
         yield 'Waypoints on same ref' => [
             new ReportWaypoint(

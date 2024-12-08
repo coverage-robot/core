@@ -10,6 +10,7 @@ use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\Repo;
 use Github\Api\Repository\Checks\CheckRuns;
+use Iterator;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Enum\SettingKey;
@@ -177,7 +178,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
     }
 
     #[Override]
-    public static function supportsDataProvider() : \Iterator
+    public static function supportsDataProvider(): Iterator
     {
         yield [
             new Upload(

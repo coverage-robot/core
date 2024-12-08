@@ -6,6 +6,7 @@ namespace App\Tests\Service\History\Github;
 
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
+use Iterator;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -116,7 +117,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
         );
     }
 
-    public static function commitDataProvider(): \Iterator
+    public static function commitDataProvider(): Iterator
     {
         yield 'First page' => [
             1,

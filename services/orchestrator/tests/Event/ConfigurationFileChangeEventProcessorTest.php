@@ -8,6 +8,7 @@ use App\Event\ConfigurationFileChangeEventProcessor;
 use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Contents;
+use Iterator;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Service\ConfigurationFileService;
@@ -108,7 +109,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         );
     }
 
-    public static function eventDataProvider(): \Iterator
+    public static function eventDataProvider(): Iterator
     {
         yield [
             new ConfigurationFileChange(

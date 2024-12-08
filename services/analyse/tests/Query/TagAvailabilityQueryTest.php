@@ -13,6 +13,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\TagAvailabilityQuery;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -85,7 +86,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             [
@@ -163,7 +164,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         yield [
             new QueryParameterBag(),

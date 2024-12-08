@@ -7,6 +7,7 @@ namespace App\Tests\Service;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\EventInterface;
@@ -42,7 +43,7 @@ final class LineGroupingServiceTest extends TestCase
         );
     }
 
-    public static function diffDataProvider(): \Iterator
+    public static function diffDataProvider(): Iterator
     {
         $date = new DateTimeImmutable();
 

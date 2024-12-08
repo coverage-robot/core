@@ -11,6 +11,7 @@ use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -51,7 +52,7 @@ final class CoverageReportComparisonTest extends TestCase
         );
     }
 
-    public static function coverageChangesDataProvider(): \Iterator
+    public static function coverageChangesDataProvider(): Iterator
     {
         yield 'No change in total coverage' => [
             new CoverageReport(
@@ -251,7 +252,7 @@ final class CoverageReportComparisonTest extends TestCase
         ];
     }
 
-    public static function uncoveredLineChangesDataProvider(): \Iterator
+    public static function uncoveredLineChangesDataProvider(): Iterator
     {
         yield '+2 change in uncovered lines' => [
             new CoverageReport(

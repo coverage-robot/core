@@ -17,6 +17,7 @@ use App\Query\TotalCoverageQuery;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -146,7 +147,7 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
         $this->getQueryClass()->validateParameters($parameters);
     }
 
-    public static function resultsDataProvider(): \Iterator
+    public static function resultsDataProvider(): Iterator
     {
         yield [
             [
@@ -159,7 +160,7 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): \Iterator
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
