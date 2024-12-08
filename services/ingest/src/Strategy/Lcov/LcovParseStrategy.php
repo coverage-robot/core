@@ -75,7 +75,7 @@ final class LcovParseStrategy implements ParseStrategyInterface
             }
 
             // Match the record type and its data
-            if (in_array(preg_match(self::LINE_STRUCTURE, $record, $matches), [0, false], true)) {
+            if (preg_match(self::LINE_STRUCTURE, $record, $matches) !== 1) {
                 $this->parseStrategyLogger->error(
                     'Unable to validate structure of line in Lcov file.',
                     [
@@ -86,7 +86,7 @@ final class LcovParseStrategy implements ParseStrategyInterface
                 return false;
             }
 
-            if (in_array(preg_match($this->getLineValidation($matches['type']), $matches['data']), [0, false], true)) {
+            if (preg_match($this->getLineValidation($matches['type']), $matches['data']) !== 1) {
                 $this->parseStrategyLogger->error(
                     'Unable to validate data of line in Lcov file.',
                     [
