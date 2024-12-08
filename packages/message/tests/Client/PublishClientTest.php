@@ -70,7 +70,7 @@ final class PublishClientTest extends TestCase
             ->method('getQueueUrl')
             ->with(
                 self::callback(function (GetQueueUrlRequest $request): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()
                     );
@@ -99,20 +99,20 @@ final class PublishClientTest extends TestCase
             ->method('sendMessage')
             ->with(
                 self::callback(function (SendMessageRequest $request): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-url',
                         $request->getQueueUrl()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-message-group-value',
                         $request->getMessageGroupId()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-trace-id',
                         $request->getMessageSystemAttributes()[MessageSystemAttributeNameForSends::AWSTRACE_HEADER]
                             ->getStringValue()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-serialized-json',
                         $request->getMessageBody()
                     );
@@ -149,7 +149,7 @@ final class PublishClientTest extends TestCase
             ->method('getQueueUrl')
             ->with(
                 self::callback(function (GetQueueUrlRequest $request): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'coverage-publish-test.fifo',
                         $request->getQueueName()
                     );
@@ -166,7 +166,7 @@ final class PublishClientTest extends TestCase
                 )
             );
 
-        $this->assertEquals(
+        $this->assertSame(
             'mock-url',
             $publishClient->getQueueUrl('coverage-publish-test.fifo')
         );

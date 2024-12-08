@@ -156,7 +156,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     #[Override]
     public function validateParameters(?QueryParameterBag $parameterBag = null): void
     {
-        if (!$parameterBag?->has(QueryParameter::COMMIT)) {
+        if ($parameterBag?->has(QueryParameter::COMMIT) !== true) {
             throw QueryException::invalidParameters(QueryParameter::COMMIT);
         }
 

@@ -26,7 +26,7 @@ final class CoverageTemplateEnvironmentFactoryTest extends KernelTestCase
 
         $paths = $loader->getPaths();
 
-        $this->assertEquals(['templates/coverage'], $paths);
+        $this->assertSame(['templates/coverage'], $paths);
     }
 
     public function testEnvironmentIsSandboxed(): void

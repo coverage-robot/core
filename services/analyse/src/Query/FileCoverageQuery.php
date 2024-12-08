@@ -70,7 +70,7 @@ final class FileCoverageQuery extends AbstractLineCoverageQuery
     {
         parent::validateParameters($parameterBag);
 
-        if (!$parameterBag?->has(QueryParameter::LIMIT)) {
+        if ($parameterBag?->has(QueryParameter::LIMIT) !== true) {
             throw QueryException::invalidParameters(QueryParameter::LIMIT);
         }
     }

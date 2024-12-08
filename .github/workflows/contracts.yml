@@ -1,0 +1,71 @@
+name: Contracts Package
+
+on:
+    merge_group:
+        types:
+            - checks_requested
+        branches:
+            - main
+
+        # Path filtering isn't supported on merge queues, so we're forced to run all services
+
+    push:
+        branches:
+            - main
+        paths:
+            - '.github/workflows/contracts.yml'
+            - 'packages/contracts/**'
+
+    pull_request:
+        paths:
+            - '.github/workflows/contracts.yml'
+            - 'packages/contracts/**'
+
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
+
+defaults:
+    run:
+        shell: bash
+        working-directory: './packages/contracts/'
+
+env:
+    # PHP version to use for deploying - this should be included in the supported versions
+    # defined in the build/lint/test jobs
+    target-php-version: "8.3"
+
+    working-directory: './packages/contracts/'
+
+jobs:
+    contracts-tests:
+        name: "Contracts Tests"
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    "8.3",
+                    "8.4"
+                ]
+
+        steps:
+            -   uses: actions/checkout@v4
+
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+
+            -   name: Validate Composer configuration
+                run: composer validate
+
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative
+                env:
+                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
+
+            -   name: Run Rector
+                run: composer lint:rector

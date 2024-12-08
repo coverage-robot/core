@@ -59,11 +59,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
 
         $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
         $mockEventStoreService->expects($this->exactly(2))
-            ->method('reduceStateChangesToEvent')
-            ->willReturnOnConsecutiveCalls(
-                $mockIngestion,
-                $mockIngestion,
-            );
+            ->method('reduceStateChangesToEvent')->willReturn($mockIngestion);
         $mockEventStoreService->expects($this->atLeastOnce())
             ->method('getAllStateChangesForCommit')
             ->willReturn(
@@ -153,12 +149,14 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
         );
 
         $mockEventStoreService = $this->createMock(EventStoreServiceInterface::class);
-        $mockEventStoreService->method('reduceStateChangesToEvent')
+        $mockEventStoreService->expects($this->exactly(5))
+            ->method('reduceStateChangesToEvent')
             ->willReturnOnConsecutiveCalls(
                 $mockIngestion,
                 $mockFinalised,
                 $mockIngestion,
-                $mockFinalised
+                $mockFinalised,
+                $mockIngestion
             );
         $mockEventStoreService->expects($this->atLeastOnce())
             ->method('getAllStateChangesForCommit')

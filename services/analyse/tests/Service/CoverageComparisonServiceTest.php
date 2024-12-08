@@ -90,17 +90,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-commit-3',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-commit-3'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-ref',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-base-ref'
+                ->getRef()
         );
     }
 
@@ -160,17 +160,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-commit',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-base-commit'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-ref',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-base-ref'
+                ->getRef()
         );
     }
 
@@ -227,17 +227,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-merge-commit-parent-1',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-merge-commit-parent-1'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-branch',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-branch'
+                ->getRef()
         );
     }
 

@@ -16,8 +16,6 @@ use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\Result\GetQueueUrlResult;
 use AsyncAws\Sqs\Result\SendMessageResult;
 use AsyncAws\Sqs\SqsClient;
-use DateTimeImmutable;
-use Packages\Clients\Model\Object\Reference;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
@@ -70,7 +68,7 @@ final class WebhookQueueClientTest extends TestCase
             ->method('getQueueUrl')
             ->with(
                 self::callback(function (GetQueueUrlRequest $request): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'coverage-webhooks-test.fifo',
                         $request->getQueueName()
                     );
@@ -99,20 +97,20 @@ final class WebhookQueueClientTest extends TestCase
             ->method('sendMessage')
             ->with(
                 self::callback(function (SendMessageRequest $request): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-url',
                         $request->getQueueUrl()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-message-group-value',
                         $request->getMessageGroupId()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-trace-id',
                         $request->getMessageSystemAttributes()[MessageSystemAttributeNameForSends::AWSTRACE_HEADER]
                             ->getStringValue()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-serialized-reference',
                         $request->getMessageBody()
                     );

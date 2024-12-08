@@ -31,7 +31,7 @@ final class DiffParserServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $diff,
             $diffParser->get(
                 new ReportWaypoint(

@@ -35,6 +35,7 @@ final class InvokeEventCommandTest extends TestCase
             ->with(
                 new UploadsFinalised(
                     provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
@@ -70,7 +71,7 @@ final class InvokeEventCommandTest extends TestCase
             'event' => Event::UPLOADS_FINALISED->value
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             Command::SUCCESS,
             $outcome
         );

@@ -38,12 +38,12 @@ final class DynamoDbClientTest extends TestCase
             ->with(
                 self::callback(
                     function (array $parameters): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'mock-query-cache-table-name',
                             $parameters['TableName']
                         );
-                        $this->assertEquals($parameters['Item']['cacheKey']['S'], 'mock-cache-key');
-                        $this->assertEquals($parameters['Item']['result']['S'], 'mock-serialized-result');
+                        $this->assertSame('mock-cache-key', $parameters['Item']['cacheKey']['S']);
+                        $this->assertSame('mock-serialized-result', $parameters['Item']['result']['S']);
                         $this->assertIsNumeric($parameters['Item']['expiry']['N']);
                         return true;
                     }
@@ -114,11 +114,11 @@ final class DynamoDbClientTest extends TestCase
             ->with(
                 self::callback(
                     function (GetItemInput $input): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'mock-query-cache-table-name',
                             $input->getTableName()
                         );
-                        $this->assertEquals($input->getKey()['cacheKey']->getS(), 'mock-cache-key');
+                        $this->assertSame('mock-cache-key', $input->getKey()['cacheKey']->getS());
                         return true;
                     }
                 )

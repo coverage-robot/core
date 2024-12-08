@@ -34,8 +34,8 @@ final class CarryforwardTagServiceTest extends TestCase
                 UploadedTagsQuery::class,
                 self::callback(
                     function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        $this->assertSame('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertSame('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
                     }
                 )
@@ -77,7 +77,7 @@ final class CarryforwardTagServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals([], $carryforwardTags);
+        $this->assertSame([], $carryforwardTags);
     }
 
     public function testTagToCarryforwardFromRecentCommit(): void
@@ -277,7 +277,7 @@ final class CarryforwardTagServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $carryforwardTags
         );

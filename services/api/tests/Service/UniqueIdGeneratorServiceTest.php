@@ -15,6 +15,6 @@ final class UniqueIdGeneratorServiceTest extends TestCase
 
         $uuid = $uniqueIdGeneratorService->generate();
 
-        $this->assertNotEquals($uniqueIdGeneratorService->generate(), $uuid);
+        $this->assertNotSame($uniqueIdGeneratorService->generate(), $uuid);
     }
 }

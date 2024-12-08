@@ -40,6 +40,7 @@ final class FakeEventBuilder implements EventBuilderInterface
     ): EventInterface {
         return new UploadsFinalised(
             provider: Provider::GITHUB,
+            projectId: 'mock-project-id',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',

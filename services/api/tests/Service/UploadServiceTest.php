@@ -14,6 +14,7 @@ use App\Service\UploadService;
 use App\Service\UploadSignerServiceInterface;
 use AsyncAws\S3\Input\PutObjectRequest;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -172,148 +173,152 @@ final class UploadServiceTest extends KernelTestCase
         );
     }
 
-    public static function signingParametersDataProvider(): array
+    public static function signingParametersDataProvider(): Iterator
     {
-        return [
-            'With pull request' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => '2',
-                    'pullRequest' => '12',
-                    'baseRef' => 'main',
-                    'baseCommit' => 'mock-base-commit',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ],
-                new SigningParameters(
-                    owner: 'mock-owner-id',
-                    repository: 'mock-repository-name',
-                    provider: Provider::GITHUB,
-                    fileName: 'test.xml',
-                    projectRoot: 'some/root/',
-                    tag: 'frontend',
-                    commit: '2',
-                    parent: ['mock-parent-hash'],
-                    ref: 'mock-branch-reference',
-                    pullRequest: '12',
-                    baseRef: 'main',
-                    baseCommit: 'mock-base-commit'
-                )
+        yield 'With pull request' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'commit' => '2',
+                'pullRequest' => '12',
+                'baseRef' => 'main',
+                'baseCommit' => 'mock-base-commit',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml',
+                'tag' => 'frontend'
             ],
-            'Without to pull request' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => '2',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'backend'
-                ],
-                new SigningParameters(
-                    owner: 'mock-owner-id',
-                    repository: 'mock-repository-name',
-                    provider: Provider::GITHUB,
-                    fileName: 'test.xml',
-                    projectRoot: 'some/root/',
-                    tag: 'backend',
-                    commit: '2',
-                    parent: ['mock-parent-hash'],
-                    ref: 'mock-branch-reference',
-                    pullRequest: null,
-                    baseRef: null,
-                    baseCommit: null
-                )
+            new SigningParameters(
+                owner: 'mock-owner-id',
+                repository: 'mock-repository-name',
+                provider: Provider::GITHUB,
+                fileName: 'test.xml',
+                projectRoot: 'some/root/',
+                tag: 'frontend',
+                commit: '2',
+                parent: ['mock-parent-hash'],
+                ref: 'mock-branch-reference',
+                pullRequest: '12',
+                baseRef: 'main',
+                baseCommit: 'mock-base-commit'
+            )
+        ];
+
+        yield 'Without to pull request' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'commit' => '2',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml',
+                'tag' => 'backend'
             ],
-            'Without commit' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ],
-                null
+            new SigningParameters(
+                owner: 'mock-owner-id',
+                repository: 'mock-repository-name',
+                provider: Provider::GITHUB,
+                fileName: 'test.xml',
+                projectRoot: 'some/root/',
+                tag: 'backend',
+                commit: '2',
+                parent: ['mock-parent-hash'],
+                ref: 'mock-branch-reference',
+                pullRequest: null,
+                baseRef: null,
+                baseCommit: null
+            )
+        ];
+
+        yield 'Without commit' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml',
+                'tag' => 'frontend'
             ],
-            'Without to file name' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => '2',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'tag' => 'backend'
-                ],
-                null
+            null
+        ];
+
+        yield 'Without to file name' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'commit' => '2',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'tag' => 'backend'
             ],
-            'Without owner or repository' => [
-                [
-                    'commit' => '2',
-                    'projectRoot' => 'some/root/',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ],
-                null
+            null
+        ];
+
+        yield 'Without owner or repository' => [
+            [
+                'commit' => '2',
+                'projectRoot' => 'some/root/',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml',
+                'tag' => 'frontend'
             ],
-            'Without tag' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => '2',
-                    'pullRequest' => '12',
-                    'parent' => ['mock-parent-hash'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml'
-                ],
-                null
+            null
+        ];
+
+        yield 'Without tag' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'commit' => '2',
+                'pullRequest' => '12',
+                'parent' => ['mock-parent-hash'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml'
             ],
-            'Multiple parents' => [
-                [
-                    'owner' => 'mock-owner-id',
-                    'repository' => 'mock-repository-name',
-                    'projectRoot' => 'some/root/',
-                    'commit' => '2',
-                    'pullRequest' => '12',
-                    'baseRef' => 'main',
-                    'baseCommit' => 'mock-base-commit',
-                    'parent' => ['mock-parent-hash', 'e'],
-                    'ref' => 'mock-branch-reference',
-                    'provider' => 'github',
-                    'fileName' => 'test.xml',
-                    'tag' => 'frontend'
-                ],
-                new SigningParameters(
-                    owner: 'mock-owner-id',
-                    repository: 'mock-repository-name',
-                    provider: Provider::GITHUB,
-                    fileName: 'test.xml',
-                    projectRoot: 'some/root/',
-                    tag: 'frontend',
-                    commit: '2',
-                    parent: ['mock-parent-hash', 'e'],
-                    ref: 'mock-branch-reference',
-                    pullRequest: '12',
-                    baseRef: 'main',
-                    baseCommit: 'mock-base-commit'
-                )
+            null
+        ];
+
+        yield 'Multiple parents' => [
+            [
+                'owner' => 'mock-owner-id',
+                'repository' => 'mock-repository-name',
+                'projectRoot' => 'some/root/',
+                'commit' => '2',
+                'pullRequest' => '12',
+                'baseRef' => 'main',
+                'baseCommit' => 'mock-base-commit',
+                'parent' => ['mock-parent-hash', 'e'],
+                'ref' => 'mock-branch-reference',
+                'provider' => 'github',
+                'fileName' => 'test.xml',
+                'tag' => 'frontend'
             ],
+            new SigningParameters(
+                owner: 'mock-owner-id',
+                repository: 'mock-repository-name',
+                provider: Provider::GITHUB,
+                fileName: 'test.xml',
+                projectRoot: 'some/root/',
+                tag: 'frontend',
+                commit: '2',
+                parent: ['mock-parent-hash', 'e'],
+                ref: 'mock-branch-reference',
+                pullRequest: '12',
+                baseRef: 'main',
+                baseCommit: 'mock-base-commit'
+            )
         ];
     }
 }

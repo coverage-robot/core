@@ -15,7 +15,7 @@ final class TraceContextTest extends TestCase
     {
         TraceContext::setTraceHeaderFromEnvironment();
 
-        $this->assertEquals('fake-trace-id', getenv(EnvironmentVariable::X_AMZN_TRACE_ID->value));
+        $this->assertSame('fake-trace-id', getenv(EnvironmentVariable::X_AMZN_TRACE_ID->value));
     }
 
     public function testSetTraceHeaderFromContext(): void
@@ -27,6 +27,6 @@ final class TraceContextTest extends TestCase
 
         TraceContext::setTraceHeaderFromContext($context);
 
-        $this->assertEquals('fake-context-trace-id', getenv(EnvironmentVariable::X_AMZN_TRACE_ID->value));
+        $this->assertSame('fake-context-trace-id', getenv(EnvironmentVariable::X_AMZN_TRACE_ID->value));
     }
 }

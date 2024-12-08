@@ -12,6 +12,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\UploadedTagsQuery;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -84,45 +85,43 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): Iterator
     {
-        return [
+        yield [
+            []
+        ];
+
+        yield [
             [
-                []
-            ],
-            [
-                [
-                    ['tagName' => 'mock-tag-1'],
-                    ['tagName' => 'mock-tag-2'],
-                    ['tagName' => 'mock-tag-3'],
-                    ['tagName' => 'mock-tag-4'],
-                ]
-            ],
+                ['tagName' => 'mock-tag-1'],
+                ['tagName' => 'mock-tag-2'],
+                ['tagName' => 'mock-tag-3'],
+                ['tagName' => 'mock-tag-4'],
+            ]
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): Iterator
     {
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint(
-                    new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    )
-                ),
-                true
-            ],
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint(
+                new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                )
+            ),
+            true
         ];
     }
 }

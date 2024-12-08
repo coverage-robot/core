@@ -15,6 +15,7 @@ use App\Query\QueryInterface;
 use App\Query\Result\FileCoverageCollectionQueryResult;
 use DateTimeImmutable;
 use Google\Cloud\BigQuery\QueryResults;
+use Iterator;
 use Override;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
@@ -136,45 +137,44 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         $this->assertInstanceOf(FileCoverageCollectionQueryResult::class, $result);
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): Iterator
     {
-        return [
+        yield [
             [
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lines' => 1,
-                        'covered' => 1,
-                        'partial' => 0,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 100.0
-                    ],
+                    'fileName' => 'mock-file',
+                    'lines' => 1,
+                    'covered' => 1,
+                    'partial' => 0,
+                    'uncovered' => 0,
+                    'coveragePercentage' => 100.0
                 ],
             ],
+        ];
+
+        yield [
             [
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lines' => 1,
-                        'covered' => 1,
-                        'partial' => 0,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 100.0
-                    ],
-                    [
-                        'fileName' => 'mock-file-2',
-                        'lines' => 10,
-                        'covered' => 5,
-                        'partial' => 0,
-                        'uncovered' => 5,
-                        'coveragePercentage' => 50.0
-                    ]
+                    'fileName' => 'mock-file',
+                    'lines' => 1,
+                    'covered' => 1,
+                    'partial' => 0,
+                    'uncovered' => 0,
+                    'coveragePercentage' => 100.0
+                ],
+                [
+                    'fileName' => 'mock-file-2',
+                    'lines' => 10,
+                    'covered' => 5,
+                    'partial' => 0,
+                    'uncovered' => 5,
+                    'coveragePercentage' => 50.0
                 ]
             ]
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
@@ -186,72 +186,75 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             history: [],
             diff: []
         );
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
 
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, [])
-                    ->set(QueryParameter::INGEST_PARTITIONS, []),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'mock-commit',
-                                [12],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(QueryParameter::UPLOADS, ['1', '2']),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, ['1', '2'])
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(QueryParameter::UPLOADS, ['1', '2'])
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            true
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(QueryParameter::UPLOADS, [])
+                ->set(QueryParameter::INGEST_PARTITIONS, []),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(
+                    QueryParameter::CARRYFORWARD_TAGS,
+                    [
+                        new CarryforwardTag(
+                            '1',
+                            'mock-commit',
+                            [12],
+                            [new DateTimeImmutable('2024-01-03 00:00:00')]
+                        )
+                    ]
+                ),
+            true
         ];
     }
 }
