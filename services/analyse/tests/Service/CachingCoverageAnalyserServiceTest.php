@@ -92,7 +92,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                     ->getSuccessfulUploads()
             );
             $this->assertSame(
-                100,
+                100.0,
                 $coverageReport->getCoveragePercentage()
             );
             $this->assertSame(
@@ -108,13 +108,13 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                 $coverageReport->getUncoveredLines()
             );
             $this->assertSame(
-                100,
+                100.0,
                 $coverageReport->getTagCoverage()
                     ->getTags()[0]
                     ->getCoveragePercentage()
             );
             $this->assertSame(
-                100,
+                100.0,
                 $coverageReport->getDiffCoveragePercentage()
             );
             $this->assertSame(

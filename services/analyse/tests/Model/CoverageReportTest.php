@@ -73,7 +73,7 @@ final class CoverageReportTest extends TestCase
             $report->getTagCoverage()
         );
         $this->assertSame(
-            95,
+            95.0,
             $report->getDiffCoveragePercentage()
         );
         $this->assertEquals(

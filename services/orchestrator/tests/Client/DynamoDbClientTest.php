@@ -94,7 +94,7 @@ final class DynamoDbClientTest extends KernelTestCase
                             $item['repository']->getS()
                         );
                         $this->assertSame(
-                            2,
+                            '2',
                             $item['version']->getN()
                         );
                         $this->assertSame(
@@ -144,8 +144,7 @@ final class DynamoDbClientTest extends KernelTestCase
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]
             ),
-            $this->getContainer()->get(SerializerInterface::class),
-            new NullLogger()
+            $this->getContainer()->get(SerializerInterface::class)
         );
 
         $mockOutput = ResultMockFactory::create(

@@ -155,7 +155,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $message->getMessages()[1]
                         );
                         $this->assertSame(
-                            1,
+                            1.0,
                             $message->getMessages()[1]
                                 ->getCoverageChange()
                         );

@@ -191,7 +191,9 @@ final class LcovParseStrategy implements ParseStrategyInterface
                     $latestFile->setLine(
                         new Method(
                             lineNumber: $line->getLineNumber(),
-                            lineHits: (int)$extractedData['lineHits'] !== 0 ? (int)$extractedData['lineHits'] : $line->getLineHits(),
+                            lineHits: (int)$extractedData['lineHits'] !== 0 ?
+                                (int)$extractedData['lineHits'] :
+                                $line->getLineHits(),
                             name: $extractedData['name']
                         )
                     );

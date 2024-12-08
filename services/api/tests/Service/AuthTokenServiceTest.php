@@ -43,7 +43,7 @@ final class AuthTokenServiceTest extends TestCase
 
         $token = $authTokenService->getUploadTokenFromRequest(
             new Request(
-                server: $authHeader !== null && $authHeader !== '' && $authHeader !== '0' ? ['HTTP_AUTHORIZATION' => $authHeader] : [],
+                server: $authHeader !== null ? ['HTTP_AUTHORIZATION' => $authHeader] : [],
                 content: '{}'
             )
         );

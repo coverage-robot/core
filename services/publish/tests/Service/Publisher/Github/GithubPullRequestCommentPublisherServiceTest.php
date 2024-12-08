@@ -10,6 +10,7 @@ use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\Issue;
+use Iterator;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
@@ -220,7 +221,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
     }
 
     #[Override]
-    public static function supportsDataProvider() : \Iterator
+    public static function supportsDataProvider() : Iterator
     {
         yield [
             new Upload(
