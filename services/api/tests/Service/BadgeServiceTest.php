@@ -113,7 +113,7 @@ final class BadgeServiceTest extends KernelTestCase
     public static function projectCoverageWithIconsDataProvider(): array
     {
         return array_reduce(
-            self::projectCoverageDataProvider(),
+            iterator_to_array(self::projectCoverageDataProvider()),
             static fn (array $carry, array $item): array => [
                 ...$carry,
                 sprintf('%s with icons', $item[0] ? $item[0] . '%' : 'null') => [
