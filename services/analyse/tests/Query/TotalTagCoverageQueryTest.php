@@ -156,6 +156,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 ],
             ],
         ];
+
         yield [
             [
                 [
@@ -214,16 +215,19 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, ['1', '2'])
@@ -236,6 +240,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 ),
             true
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(

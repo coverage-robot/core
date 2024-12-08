@@ -89,6 +89,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                 ]
             ]
         ];
+
         yield [
             [
                 'successfulUploads' => ['1', '2'],
@@ -110,6 +111,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                 ]
             ]
         ];
+
         yield [
             [
                 'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
@@ -125,6 +127,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                 ]
             ],
         ];
+
         yield [
             [
                 'successfulUploads' => ['1', '2', '3', '4', '5', '6', '7', '8'],
@@ -140,6 +143,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
                 ]
             ]
         ];
+
         yield [
             [
                 'commit' => 'mock-commit',
@@ -156,6 +160,7 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(

@@ -114,6 +114,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                 ]
             ]
         ];
+
         yield [
             [
                 [
@@ -170,6 +171,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(
@@ -185,6 +187,7 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
             ),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(

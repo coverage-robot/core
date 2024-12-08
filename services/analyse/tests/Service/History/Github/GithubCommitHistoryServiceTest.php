@@ -175,6 +175,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                 )
             ],
         ];
+
         yield 'Second page' => [
             2,
             [
@@ -226,6 +227,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                 )
             ]
         ];
+
         yield 'Tenth page' => [
             10,
             [

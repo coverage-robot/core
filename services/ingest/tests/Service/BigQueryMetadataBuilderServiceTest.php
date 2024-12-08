@@ -141,6 +141,7 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 ],
             ]
         ];
+
         yield LineType::STATEMENT->value => [
             new Statement(
                 lineNumber: 1,
@@ -161,6 +162,7 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
                 ]
             ]
         ];
+
         yield LineType::METHOD->value => [
             new Method(
                 lineNumber: 1,

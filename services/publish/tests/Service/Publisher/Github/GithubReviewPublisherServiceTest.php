@@ -516,6 +516,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ),
             false
         ];
+
         yield [
             new Upload(
                 uploadId: 'mock-uuid',

@@ -380,6 +380,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
             ]
         ];
+
         yield [
             new Ingestion(
                 Provider::GITHUB,
@@ -405,6 +406,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 'state' => OrchestratedEventState::SUCCESS->value
             ]
         ];
+
         yield [
             new Ingestion(
                 Provider::GITHUB,
@@ -506,6 +508,7 @@ final class EventStoreServiceTest extends KernelTestCase
                 $eventTime
             )
         ];
+
         yield [
             new EventStateChangeCollection(
                 [

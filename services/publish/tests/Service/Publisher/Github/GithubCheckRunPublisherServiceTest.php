@@ -220,6 +220,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             ),
             true
         ];
+
         yield [
             new Upload(
                 uploadId: 'mock-uuid',

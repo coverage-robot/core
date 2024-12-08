@@ -147,6 +147,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Statements modified inside method' => [
             $event,
             $date,
@@ -230,6 +231,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'New method and modified method' => [
             $event,
             $date,
@@ -313,6 +315,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Modified method with partial branch' => [
             $event,
             $date,
@@ -419,6 +422,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Completely uncovered branch' => [
             $event,
             $date,
@@ -449,6 +453,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Completely uncovered branch and overlapping uncovered statements' => [
             $event,
             $date,
@@ -517,6 +522,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Multiple files' => [
             $event,
             $date,
@@ -595,6 +601,7 @@ final class LineGroupingServiceTest extends TestCase
                 )
             ]
         ];
+
         yield 'Uncovered blocks split by covered blocks' => [
             $event,
             $date,
@@ -682,6 +689,7 @@ final class LineGroupingServiceTest extends TestCase
                 )
             ]
         ];
+
         yield 'Method signature change only' => [
             $event,
             $date,
@@ -743,6 +751,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Bridging uncovered diff with empty lines' => [
             $event,
             $date,
@@ -821,6 +830,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Method signature changed as last line of diff' => [
             $event,
             $date,
@@ -850,6 +860,7 @@ final class LineGroupingServiceTest extends TestCase
                 ),
             ]
         ];
+
         yield 'Block starting with uncoverable lines' => [
             $event,
             $date,

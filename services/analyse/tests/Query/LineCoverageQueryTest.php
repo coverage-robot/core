@@ -150,6 +150,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
                 ],
             ],
         ];
+
         yield [
             [
                 [
@@ -202,16 +203,19 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, ['1', '2'])
@@ -224,12 +228,14 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
                 ),
             true
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, [])
                 ->set(QueryParameter::INGEST_PARTITIONS, []),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(

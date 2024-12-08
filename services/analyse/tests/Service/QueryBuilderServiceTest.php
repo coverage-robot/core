@@ -149,6 +149,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'c8ad0013c06e2553ae33233c1e5a2179'
         ];
+
         yield [
             'some-class',
             [
@@ -159,6 +160,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'c8ad0013c06e2553ae33233c1e5a2179'
         ];
+
         yield [
             'some-class',
             [
@@ -169,6 +171,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'bfaa256befa76c5cffa4e6f6273fa4df'
         ];
+
         yield [
             'some-class',
             [
@@ -179,6 +182,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'bfaa256befa76c5cffa4e6f6273fa4df'
         ];
+
         yield [
             'some-class-2',
             [
@@ -189,6 +193,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'be703085c2b224acf1fecc205c134239'
         ];
+
         yield [
             'some-class-3',
             [
@@ -202,6 +207,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             '107509417c5920a4e7f1636581f039b9'
         ];
+
         yield [
             'some-class-3',
             [
@@ -215,6 +221,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             '107509417c5920a4e7f1636581f039b9'
         ];
+
         yield [
             'some-class-4',
             [
@@ -227,6 +234,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'dab8bb5fa43a6477071e0106decec937'
         ];
+
         yield [
             'some-class-4',
             [
@@ -239,6 +247,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             ],
             'dab8bb5fa43a6477071e0106decec937'
         ];
+
         yield [
             'some-class-4',
             [

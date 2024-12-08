@@ -123,6 +123,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::FULL_PULL_REQUEST_COMMENT
         ];
+
         yield [
             new PublishablePullRequestMessage(
                 event: $event,
@@ -178,6 +179,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::FULL_PULL_REQUEST_COMMENT
         ];
+
         yield [
             new PublishablePullRequestMessage(
                 event: $event,
@@ -216,6 +218,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::FULL_PULL_REQUEST_COMMENT
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: $event,
@@ -226,6 +229,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::WAITING_CHECK_RUN
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: new UploadsFinalised(
@@ -245,6 +249,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::COMPLETE_CHECK_RUN
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: new UploadsFinalised(
@@ -265,6 +270,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::COMPLETE_CHECK_RUN
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: $event,
@@ -275,6 +281,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::COMPLETE_CHECK_RUN
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: $event,
@@ -284,6 +291,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::COMPLETE_CHECK_RUN
         ];
+
         yield [
             new PublishableCheckRunMessage(
                 event: $event,
@@ -293,6 +301,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::COMPLETE_CHECK_RUN
         ];
+
         yield [
             new PublishableMissingCoverageLineCommentMessage(
                 event: $event,
@@ -304,6 +313,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishableMissingCoverageLineCommentMessage(
                 event: $event,
@@ -315,6 +325,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishableMissingCoverageLineCommentMessage(
                 event: $event,
@@ -326,6 +337,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishablePartialBranchLineCommentMessage(
                 event: $event,
@@ -338,6 +350,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishablePartialBranchLineCommentMessage(
                 event: $event,
@@ -350,6 +363,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishablePartialBranchLineCommentMessage(
                 event: $event,
@@ -362,6 +376,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishableMissingCoverageLineCommentMessage(
                 event: $event,
@@ -373,6 +388,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishableMissingCoverageLineCommentMessage(
                 event: $event,
@@ -384,6 +400,7 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::LINE_COMMENT_BODY
         ];
+
         yield [
             new PublishablePullRequestMessage(
                 event: $event,
@@ -399,12 +416,14 @@ final class TemplateRenderingServiceTest extends KernelTestCase
             ),
             TemplateVariant::FULL_PULL_REQUEST_COMMENT
         ];
+
         yield [
             new PublishableCoverageFailedJobMessage(
                 event: $event
             ),
             TemplateVariant::FAILED_CHECK_RUN
         ];
+
         yield [
             new PublishableCoverageRunningJobMessage(
                 event: $event

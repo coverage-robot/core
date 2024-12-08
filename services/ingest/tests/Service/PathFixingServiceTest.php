@@ -53,6 +53,7 @@ final class PathFixingServiceTest extends TestCase
             [],
             'src/path/to/file'
         ];
+
         yield [
             'path-replacement/src/path/to/file',
             '',
@@ -64,6 +65,7 @@ final class PathFixingServiceTest extends TestCase
             ],
             'src/path/to/file'
         ];
+
         yield [
             'path/some-value/replacement/src/path/to/file',
             '',
@@ -75,6 +77,7 @@ final class PathFixingServiceTest extends TestCase
             ],
             'a-replacement/src/path/to/file'
         ];
+
         yield [
             'project-root/path/some-value/replacement/src/path/to/file',
             'project-root/',

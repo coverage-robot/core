@@ -103,6 +103,7 @@ final class CoverageReportComparisonTest extends TestCase
             ),
             0
         ];
+
         yield '-10% change in total coverage' => [
             new CoverageReport(
                 waypoint: new ReportWaypoint(
@@ -152,6 +153,7 @@ final class CoverageReportComparisonTest extends TestCase
             ),
             -10
         ];
+
         yield '-0.33% change in total coverage' => [
             new CoverageReport(
                 waypoint: new ReportWaypoint(
@@ -201,6 +203,7 @@ final class CoverageReportComparisonTest extends TestCase
             ),
             -0.33
         ];
+
         yield '+5.3% change in total coverage' => [
             new CoverageReport(
                 waypoint: new ReportWaypoint(
@@ -303,6 +306,7 @@ final class CoverageReportComparisonTest extends TestCase
             ),
             2
         ];
+
         yield '-2 change in uncovered lines' => [
             new CoverageReport(
                 waypoint: new ReportWaypoint(
@@ -352,6 +356,7 @@ final class CoverageReportComparisonTest extends TestCase
             ),
             -2
         ];
+
         yield 'No change in uncovered lines' => [
             new CoverageReport(
                 waypoint: new ReportWaypoint(

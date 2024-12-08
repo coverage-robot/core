@@ -241,6 +241,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             ),
             true
         ];
+
         yield [
             new Upload(
                 uploadId: 'mock-uuid',

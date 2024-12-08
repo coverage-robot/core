@@ -78,26 +78,31 @@ final class BadgeServiceTest extends KernelTestCase
             '05ff00',
             24.44921875
         ];
+
         yield [
             1,
             'ff0500',
             17.45068359375
         ];
+
         yield [
             100,
             '00ff00',
             31.44775390625
         ];
+
         yield [
             null,
             'ff0000',
             49.9833984375
         ];
+
         yield [
             34.64,
             'ffb100',
             41.94287109375
         ];
+
         yield [
             34.60,
             'ffb000',

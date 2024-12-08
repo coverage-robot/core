@@ -302,6 +302,7 @@ final class EventHandlerTest extends KernelTestCase
                 'some-path/mock-uuid.json'
             ]
         ];
+
         yield 'Single valid file (Clover)' => [
             new S3Event([
                 'Records' => [
@@ -327,6 +328,7 @@ final class EventHandlerTest extends KernelTestCase
                 'mock-uuid.json'
             ]
         ];
+
         yield 'Multiple valid files (Lcov and Clover)' => [
             new S3Event([
                 'Records' => [
@@ -367,6 +369,7 @@ final class EventHandlerTest extends KernelTestCase
                 'much/longer/nested/path/mock-uuid.json'
             ]
         ];
+
         yield 'Valid and invalid files (Lcov)' => [
             new S3Event([
                 'Records' => [
@@ -406,6 +409,7 @@ final class EventHandlerTest extends KernelTestCase
                 'mock-uuid.json'
             ]
         ];
+
         yield 'Empty files (Lcov and Clover)' => [
             new S3Event([
                 'Records' => [

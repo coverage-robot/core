@@ -90,6 +90,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         yield [
             []
         ];
+
         yield [
             [
                 ['tagName' => 'mock-tag-1'],
@@ -106,6 +107,7 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(

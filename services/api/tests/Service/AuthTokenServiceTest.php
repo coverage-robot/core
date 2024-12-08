@@ -308,14 +308,17 @@ final class AuthTokenServiceTest extends TestCase
             null,
             null
         ];
+
         yield 'Basic Authorization with username' => [
             sprintf('Basic %s', base64_encode('mock-token:')),
             'mock-token'
         ];
+
         yield 'Basic Authorization with password' => [
             sprintf('Basic %s', base64_encode(':mock-token')),
             'mock-token'
         ];
+
         yield 'Bearer Authorization' => [
             sprintf('Bearer %s', base64_encode('some-invalid-bearer-token')),
             null

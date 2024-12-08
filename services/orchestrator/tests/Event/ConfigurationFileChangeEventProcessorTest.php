@@ -122,6 +122,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             ),
             true
         ];
+
         yield [
             new ConfigurationFileChange(
                 provider: Provider::GITHUB,
@@ -133,6 +134,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             ),
             true
         ];
+
         yield [
             new IngestFailure(
                 new Upload(

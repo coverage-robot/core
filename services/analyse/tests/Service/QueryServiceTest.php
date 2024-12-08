@@ -324,6 +324,7 @@ final class QueryServiceTest extends KernelTestCase
                 3
             )
         ];
+
         yield 'Total commit uploads query' => [
             TotalUploadsQuery::class,
             [

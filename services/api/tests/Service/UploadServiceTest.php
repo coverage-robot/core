@@ -205,6 +205,7 @@ final class UploadServiceTest extends KernelTestCase
                 baseCommit: 'mock-base-commit'
             )
         ];
+
         yield 'Without to pull request' => [
             [
                 'owner' => 'mock-owner-id',
@@ -232,6 +233,7 @@ final class UploadServiceTest extends KernelTestCase
                 baseCommit: null
             )
         ];
+
         yield 'Without commit' => [
             [
                 'owner' => 'mock-owner-id',
@@ -245,6 +247,7 @@ final class UploadServiceTest extends KernelTestCase
             ],
             null
         ];
+
         yield 'Without to file name' => [
             [
                 'owner' => 'mock-owner-id',
@@ -258,6 +261,7 @@ final class UploadServiceTest extends KernelTestCase
             ],
             null
         ];
+
         yield 'Without owner or repository' => [
             [
                 'commit' => '2',
@@ -270,6 +274,7 @@ final class UploadServiceTest extends KernelTestCase
             ],
             null
         ];
+
         yield 'Without tag' => [
             [
                 'owner' => 'mock-owner-id',
@@ -284,6 +289,7 @@ final class UploadServiceTest extends KernelTestCase
             ],
             null
         ];
+
         yield 'Multiple parents' => [
             [
                 'owner' => 'mock-owner-id',

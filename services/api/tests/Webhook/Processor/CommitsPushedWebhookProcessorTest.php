@@ -74,6 +74,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             ),
             false
         ];
+
         yield 'No configuration file push (multiple commits)' => [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -104,6 +105,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             ),
             false
         ];
+
         yield 'ConfigurationFile file push (single commits)' => [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -134,6 +136,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             ),
             true
         ];
+
         yield 'ConfigurationFile file push (multiple commits)' => [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -164,6 +167,7 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
             ),
             true
         ];
+
         yield 'ConfigurationFile file push (in tag)' => [
             new GithubPushWebhook(
                 signature: 'mock-signature',

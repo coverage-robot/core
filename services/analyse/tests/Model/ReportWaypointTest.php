@@ -73,6 +73,7 @@ final class ReportWaypointTest extends TestCase
             ),
             true
         ];
+
         yield 'Waypoints on different refs' => [
             new ReportWaypoint(
                 provider: Provider::GITHUB,
@@ -96,6 +97,7 @@ final class ReportWaypointTest extends TestCase
             ),
             true
         ];
+
         yield 'Waypoints on same commit' => [
             new ReportWaypoint(
                 provider: Provider::GITHUB,
@@ -121,6 +123,7 @@ final class ReportWaypointTest extends TestCase
             ),
             true
         ];
+
         yield 'Waypoints on different owners' => [
             new ReportWaypoint(
                 provider: Provider::GITHUB,
@@ -144,6 +147,7 @@ final class ReportWaypointTest extends TestCase
             ),
             false
         ];
+
         yield 'Waypoints on different repositories' => [
             new ReportWaypoint(
                 provider: Provider::GITHUB,

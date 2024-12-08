@@ -58,6 +58,7 @@ final class WebhookValidationServiceTest extends TestCase
             ),
             true
         ];
+
         yield [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -84,6 +85,7 @@ final class WebhookValidationServiceTest extends TestCase
             ),
             true
         ];
+
         yield [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -103,6 +105,7 @@ final class WebhookValidationServiceTest extends TestCase
             ),
             false
         ];
+
         yield [
             new GithubPushWebhook(
                 signature: 'mock-signature',
@@ -116,6 +119,7 @@ final class WebhookValidationServiceTest extends TestCase
             // wont have any commits associated with them
             true
         ];
+
         yield [
             new GithubPushWebhook(
                 signature: 'mock-signature',

@@ -196,6 +196,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             ),
             true
         ];
+
         yield [
             new Upload(
                 uploadId: 'mock-uuid',

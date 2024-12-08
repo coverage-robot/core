@@ -153,9 +153,11 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         yield [
             sprintf('%s=', SignedWebhookInterface::SIGNATURE_ALGORITHM),
         ];
+
         yield [
             'mock-signature',
         ];
+
         yield [
             '',
         ];

@@ -151,6 +151,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                 ],
             ],
         ];
+
         yield [
             [
                 [
@@ -189,18 +190,21 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             new QueryParameterBag(),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::LIMIT, 50)
                 ->set(QueryParameter::UPLOADS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::LIMIT, 50)
                 ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::UPLOADS, ['1', '2'])
@@ -213,6 +217,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                 ),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::LIMIT, 50)
@@ -226,6 +231,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                 ),
             true
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::LIMIT, 50)
@@ -233,6 +239,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                 ->set(QueryParameter::INGEST_PARTITIONS, []),
             false
         ];
+
         yield [
             QueryParameterBag::fromWaypoint($waypoint)
                 ->set(QueryParameter::LIMIT, 50)

@@ -262,6 +262,7 @@ final class UploadControllerTest extends WebTestCase
                 baseCommit: 'mock-base-commit'
             )
         ];
+
         yield 'Without to pull request' => [
             new SigningParameters(
                 owner: 'mock-owner-id',
