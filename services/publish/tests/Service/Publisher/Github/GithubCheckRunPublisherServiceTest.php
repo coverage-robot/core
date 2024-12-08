@@ -201,43 +201,41 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
     }
 
     #[Override]
-    public static function supportsDataProvider(): array
+    public static function supportsDataProvider() : \Iterator
     {
-        return [
-            [
-                new Upload(
-                    uploadId: 'mock-uuid',
-                    provider: Provider::GITHUB,
-                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    commit: 'mock-commit',
-                    parent: ['mock-parent'],
-                    ref: 'mock-ref',
-                    projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit', [2]),
-                    baseCommit: 'mock-base-commit'
-                ),
-                true
-            ],
-            [
-                new Upload(
-                    uploadId: 'mock-uuid',
-                    provider: Provider::GITHUB,
-                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    commit: 'mock-commit',
-                    parent: ['mock-parent'],
-                    ref: 'mock-ref',
-                    projectRoot: 'mock-project-root',
-                    tag: new Tag('mock-tag', 'mock-commit', [2]),
-                    pullRequest: '1234',
-                    baseCommit: 'mock-base-commit',
-                    baseRef: 'main',
-                ),
-                true
-            ]
+        yield [
+            new Upload(
+                uploadId: 'mock-uuid',
+                provider: Provider::GITHUB,
+                projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: ['mock-parent'],
+                ref: 'mock-ref',
+                projectRoot: 'mock-project-root',
+                tag: new Tag('mock-tag', 'mock-commit', [2]),
+                baseCommit: 'mock-base-commit'
+            ),
+            true
+        ];
+        yield [
+            new Upload(
+                uploadId: 'mock-uuid',
+                provider: Provider::GITHUB,
+                projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                commit: 'mock-commit',
+                parent: ['mock-parent'],
+                ref: 'mock-ref',
+                projectRoot: 'mock-project-root',
+                tag: new Tag('mock-tag', 'mock-commit', [2]),
+                pullRequest: '1234',
+                baseCommit: 'mock-base-commit',
+                baseRef: 'main',
+            ),
+            true
         ];
     }
 }
