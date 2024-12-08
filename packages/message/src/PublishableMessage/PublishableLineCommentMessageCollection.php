@@ -75,7 +75,9 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
                 $this->event->getProvider()->value,
                 $this->event->getOwner(),
                 $this->event->getRepository(),
-                $this->event->getPullRequest() !== 0 && ($this->event->getPullRequest() !== '' && $this->event->getPullRequest() !== '0') ? $this->event->getPullRequest() : $this->event->getCommit()
+                $this->event->getPullRequest() !== null ?
+                    $this->event->getPullRequest() :
+                    $this->event->getCommit()
             ])
         );
     }
