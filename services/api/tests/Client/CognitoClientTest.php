@@ -19,6 +19,7 @@ use AsyncAws\CognitoIdentityProvider\Result\SignUpResponse;
 use AsyncAws\CognitoIdentityProvider\ValueObject\AttributeType;
 use AsyncAws\CognitoIdentityProvider\ValueObject\AuthenticationResultType;
 use AsyncAws\Core\Test\ResultMockFactory;
+use Iterator;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\Service;
@@ -37,8 +38,8 @@ final class CognitoClientTest extends TestCase
             ->with(
                 $this->callback(
                     function (SignUpRequest $request): bool {
-                        $this->assertEquals('owner-github-repository', $request->getUsername());
-                        $this->assertEquals('upload-token', $request->getPassword());
+                        $this->assertSame('owner-github-repository', $request->getUsername());
+                        $this->assertSame('upload-token', $request->getPassword());
 
                         return true;
                     }
@@ -58,7 +59,7 @@ final class CognitoClientTest extends TestCase
             ->with(
                 $this->callback(
                     function (AdminConfirmSignUpRequest $request): bool {
-                        $this->assertEquals('owner-github-repository', $request->getUsername());
+                        $this->assertSame('owner-github-repository', $request->getUsername());
 
                         return true;
                     }
@@ -120,7 +121,7 @@ final class CognitoClientTest extends TestCase
                 ->with(
                     $this->callback(
                         function (AdminGetUserRequest $request): bool {
-                            $this->assertEquals('owner-github-repository', $request->getUsername());
+                            $this->assertSame('owner-github-repository', $request->getUsername());
 
                             return true;
                         }
@@ -208,7 +209,7 @@ final class CognitoClientTest extends TestCase
                 ->with(
                     $this->callback(
                         function (AdminGetUserRequest $request): bool {
-                            $this->assertEquals('owner-github-repository', $request->getUsername());
+                            $this->assertSame('owner-github-repository', $request->getUsername());
 
                             return true;
                         }
@@ -249,19 +250,15 @@ final class CognitoClientTest extends TestCase
         );
     }
 
-    public static function successfulTokenDataProvider(): array
+    public static function successfulTokenDataProvider(): Iterator
     {
-        return [
-            'Valid upload token' => [TokenType::UPLOAD, 'upload-token'],
-            'Valid graph token' => [TokenType::GRAPH, 'graph-token'],
-        ];
+        yield 'Valid upload token' => [TokenType::UPLOAD, 'upload-token'];
+        yield 'Valid graph token' => [TokenType::GRAPH, 'graph-token'];
     }
 
-    public static function invalidTokenDataProvider(): array
+    public static function invalidTokenDataProvider(): Iterator
     {
-        return [
-            'Invalid upload token' => [TokenType::UPLOAD, 'invalid-upload-token'],
-            'Invalid graph token' => [TokenType::GRAPH, 'invalid-graph-token'],
-        ];
+        yield 'Invalid upload token' => [TokenType::UPLOAD, 'invalid-upload-token'];
+        yield 'Invalid graph token' => [TokenType::GRAPH, 'invalid-graph-token'];
     }
 }

@@ -11,6 +11,7 @@ use App\Model\GraphParameters;
 use App\Model\Project;
 use App\Model\SigningParameters;
 use App\Service\AuthTokenService;
+use Iterator;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -41,7 +42,10 @@ final class AuthTokenServiceTest extends TestCase
         );
 
         $token = $authTokenService->getUploadTokenFromRequest(
-            new Request(server: $authHeader ? ['HTTP_AUTHORIZATION' => $authHeader] : [], content: '{}')
+            new Request(
+                server: $authHeader !== null && $authHeader !== '' && $authHeader !== '0' ? ['HTTP_AUTHORIZATION' => $authHeader] : [],
+                content: '{}'
+            )
         );
 
         $this->assertEquals($expectedResponse, $token);
@@ -163,7 +167,7 @@ final class AuthTokenServiceTest extends TestCase
         $generatedToken = $authTokenService->createNewUploadToken();
 
         $this->assertIsString($generatedToken);
-        $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
+        $this->assertSame(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
     }
 
     public function testGetGraphTokenFromRequest(): void
@@ -178,7 +182,7 @@ final class AuthTokenServiceTest extends TestCase
             new Request(query: ['token' => '1234'], content: '{}')
         );
 
-        $this->assertEquals('1234', $token);
+        $this->assertSame('1234', $token);
     }
 
     public function testGetMissingGraphTokenFromRequest(): void
@@ -295,28 +299,26 @@ final class AuthTokenServiceTest extends TestCase
         $generatedToken = $authTokenService->createNewGraphToken();
 
         $this->assertIsString($generatedToken);
-        $this->assertEquals(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
+        $this->assertSame(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
     }
 
-    public static function authorizationHeaderDataProvider(): array
+    public static function authorizationHeaderDataProvider(): Iterator
     {
-        return [
-        'No Authorization' => [
+        yield 'No Authorization' => [
             null,
             null
-        ],
-        'Basic Authorization with username' => [
+        ];
+        yield 'Basic Authorization with username' => [
             sprintf('Basic %s', base64_encode('mock-token:')),
             'mock-token'
-        ],
-        'Basic Authorization with password' => [
+        ];
+        yield 'Basic Authorization with password' => [
             sprintf('Basic %s', base64_encode(':mock-token')),
             'mock-token'
-        ],
-        'Bearer Authorization' => [
+        ];
+        yield 'Bearer Authorization' => [
             sprintf('Bearer %s', base64_encode('some-invalid-bearer-token')),
             null
-        ],
         ];
     }
 }

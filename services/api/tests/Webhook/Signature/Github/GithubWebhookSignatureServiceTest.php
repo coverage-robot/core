@@ -9,14 +9,15 @@ use App\Model\Webhook\Github\GithubCheckRunWebhook;
 use App\Model\Webhook\SignedWebhookInterface;
 use App\Webhook\Signature\Github\GithubWebhookSignatureService;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use Packages\Event\Enum\JobState;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Request;
-use Packages\Contracts\Environment\Service;
 
 final class GithubWebhookSignatureServiceTest extends TestCase
 {
@@ -44,7 +45,7 @@ final class GithubWebhookSignatureServiceTest extends TestCase
 
         $signature = $githubWebhookSignatureService->getPayloadSignatureFromRequest($request);
 
-        $this->assertEquals('mock-signature', $signature);
+        $this->assertSame('mock-signature', $signature);
     }
 
     public function testGetMissingPayloadSignatureFromRequest(): void
@@ -147,18 +148,16 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         }
     }
 
-    public static function invalidPayloadSignatureHeaderDataProvider(): array
+    public static function invalidPayloadSignatureHeaderDataProvider(): Iterator
     {
-        return [
-            [
-                sprintf('%s=', SignedWebhookInterface::SIGNATURE_ALGORITHM),
-            ],
-            [
-                'mock-signature',
-            ],
-            [
-                '',
-            ],
+        yield [
+            sprintf('%s=', SignedWebhookInterface::SIGNATURE_ALGORITHM),
+        ];
+        yield [
+            'mock-signature',
+        ];
+        yield [
+            '',
         ];
     }
 }

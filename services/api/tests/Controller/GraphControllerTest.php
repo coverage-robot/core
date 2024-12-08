@@ -87,7 +87,7 @@ final class GraphControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $this->assertEquals(
+        $this->assertSame(
             <<<HTML
             <svg></svg>
             HTML,
@@ -147,7 +147,7 @@ final class GraphControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $this->assertEquals(
+        $this->assertSame(
             <<<HTML
             <svg></svg>
             HTML,

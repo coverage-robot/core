@@ -42,8 +42,8 @@ final class UploadSignerServiceTest extends TestCase
 
         $this->assertInstanceOf(SignedUrl::class, $signedUpload);
 
-        $this->assertEquals('mock-upload-id', $signedUpload->getUploadId());
+        $this->assertSame('mock-upload-id', $signedUpload->getUploadId());
         $this->assertEquals($expiry, $signedUpload->getExpiration());
-        $this->assertEquals('https://mock-signed-url.com', $signedUpload->getSignedUrl());
+        $this->assertSame('https://mock-signed-url.com', $signedUpload->getSignedUrl());
     }
 }

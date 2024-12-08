@@ -16,7 +16,7 @@ final class EventProcessorServiceTest extends KernelTestCase
         $eventProcessorService = $this->getContainer()
             ->get(EventProcessorService::class);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 Event::COVERAGE_FINALISED->value,
             ],
