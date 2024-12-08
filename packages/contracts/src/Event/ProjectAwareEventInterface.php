@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Contracts\Event;
 
 use Packages\Contracts\Provider\Provider;

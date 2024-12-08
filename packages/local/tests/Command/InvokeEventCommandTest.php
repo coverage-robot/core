@@ -70,7 +70,7 @@ final class InvokeEventCommandTest extends TestCase
             'event' => Event::UPLOADS_FINALISED->value
         ]);
 
-        $this->assertEquals(
+        $this->assertSame(
             Command::SUCCESS,
             $outcome
         );

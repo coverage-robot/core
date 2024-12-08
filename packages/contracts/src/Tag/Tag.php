@@ -2,6 +2,7 @@
 
 namespace Packages\Contracts\Tag;
 
+use Override;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,6 +44,7 @@ class Tag implements Stringable
         return $this->successfullyUploadedLines;
     }
 
+    #[Override]
     public function __toString(): string
     {
         return sprintf("Tag#%s-%s", $this->name, $this->commit);

@@ -16,8 +16,6 @@ interface PublishableMessageInterface extends Stringable
      * Its not always the case that a message is associated to a specific upload - for
      * example, a collection of messages ({@see PublishableMessageCollection}) might be
      * for different ones.
-     *
-     * @return EventInterface|null
      */
     public function getEvent(): EventInterface|null;
 

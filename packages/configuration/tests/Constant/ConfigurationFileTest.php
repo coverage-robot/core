@@ -11,7 +11,7 @@ final class ConfigurationFileTest extends TestCase
 {
     public function testPath(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             'coveragerobot.yml',
             ConfigurationFile::PATH
         );

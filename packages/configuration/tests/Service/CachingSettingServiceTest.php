@@ -136,21 +136,22 @@ final class CachingSettingServiceTest extends TestCase
         );
     }
 
-    public static function settingValueDataProvider(): array
+    public static function settingValueDataProvider(): \Iterator
     {
-        return [
-            [
-                'some-string'
-            ],
-            [
-                'true'
-            ],
-            [
-                true
-            ],
-            [
-                false
-            ]
+        yield [
+            'some-string'
+        ];
+
+        yield [
+            'true'
+        ];
+
+        yield [
+            true
+        ];
+
+        yield [
+            false
         ];
     }
 }

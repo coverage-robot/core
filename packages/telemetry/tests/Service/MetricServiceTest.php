@@ -213,30 +213,29 @@ final class MetricServiceTest extends TestCase
         );
     }
 
-    public static function putMetricDataProvider(): array
+    public static function putMetricDataProvider(): \Iterator
     {
-        return [
+        yield [
+            'mock-metric',
+            1,
+            Unit::COUNT,
+            Resolution::LOW,
+            [],
+            []
+        ];
+
+        yield [
+            'mock-metric-2',
+            1000,
+            Unit::MILLISECONDS,
+            Resolution::HIGH,
             [
-                'mock-metric',
-                1,
-                Unit::COUNT,
-                Resolution::LOW,
-                [],
-                []
+                ['owner'],
+                ['owner', 'repository']
             ],
             [
-                'mock-metric-2',
-                1000,
-                Unit::MILLISECONDS,
-                Resolution::HIGH,
-                [
-                    ['owner'],
-                    ['owner', 'repository']
-                ],
-                [
-                    'owner' => 1,
-                    'repository' => 2
-                ]
+                'owner' => 1,
+                'repository' => 2
             ]
         ];
     }

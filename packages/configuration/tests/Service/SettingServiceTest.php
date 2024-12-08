@@ -76,7 +76,7 @@ final class SettingServiceTest extends TestCase
         );
 
         if ($isValidateSuccessful) {
-            $this->assertEquals(
+            $this->assertSame(
                 'value',
                 $value
             );
@@ -143,29 +143,29 @@ final class SettingServiceTest extends TestCase
         );
     }
 
-    public static function trueFalseDataProvider(): array
+    public static function trueFalseDataProvider(): \Iterator
     {
-        return [
-            'True' => [true],
-            'False' => [false]
-        ];
+        yield 'True' => [true];
+
+        yield 'False' => [false];
     }
 
-    public static function settingValueDataProvider(): array
+    public static function settingValueDataProvider(): \Iterator
     {
-        return [
-            [
-                'some-string'
-            ],
-            [
-                'true'
-            ],
-            [
-                true
-            ],
-            [
-                false
-            ]
+        yield [
+            'some-string'
+        ];
+
+        yield [
+            'true'
+        ];
+
+        yield [
+            true
+        ];
+
+        yield [
+            false
         ];
     }
 }
