@@ -11,6 +11,7 @@ use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
 use DateTimeImmutable;
 use DateTimeInterface;
+use InvalidArgumentException;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -79,6 +80,10 @@ final class InvokeCommand extends Command
                 DateTimeInterface::ATOM,
                 '2023-08-30T12:00:00+00:00'
             );
+
+            if ($validUntil === false) {
+                throw new InvalidArgumentException('Invalid date format for message validity');
+            }
 
             $upload = new Upload(
                 uploadId: 'mock-uuid',
