@@ -9,8 +9,8 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\Sqs\SqsEvent;
 use Bref\Event\Sqs\SqsHandler;
+use DateTimeImmutable;
 use DateTimeInterface;
-use Monolog\DateTimeImmutable;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -75,9 +75,6 @@ final class InvokeCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            /**
-             * @var DateTimeImmutable $validUntil
-             */
             $validUntil = DateTimeImmutable::createFromFormat(
                 DateTimeInterface::ATOM,
                 '2023-08-30T12:00:00+00:00'
