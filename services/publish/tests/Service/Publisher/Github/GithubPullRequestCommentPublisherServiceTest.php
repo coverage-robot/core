@@ -221,7 +221,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
     }
 
     #[Override]
-    public static function supportsDataProvider() : Iterator
+    public static function supportsDataProvider(): Iterator
     {
         yield [
             new Upload(

@@ -91,9 +91,10 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                 $coverageReport->getUploads()
                     ->getSuccessfulUploads()
             );
-            $this->assertSame(
+            $this->assertEqualsWithDelta(
                 100.0,
-                $coverageReport->getCoveragePercentage()
+                $coverageReport->getCoveragePercentage(),
+                PHP_FLOAT_EPSILON
             );
             $this->assertSame(
                 1,
@@ -107,15 +108,17 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                 0,
                 $coverageReport->getUncoveredLines()
             );
-            $this->assertSame(
+            $this->assertEqualsWithDelta(
                 100.0,
                 $coverageReport->getTagCoverage()
                     ->getTags()[0]
-                    ->getCoveragePercentage()
+                    ->getCoveragePercentage(),
+                PHP_FLOAT_EPSILON
             );
-            $this->assertSame(
+            $this->assertEqualsWithDelta(
                 100.0,
-                $coverageReport->getDiffCoveragePercentage()
+                $coverageReport->getDiffCoveragePercentage(),
+                PHP_FLOAT_EPSILON
             );
             $this->assertSame(
                 0,

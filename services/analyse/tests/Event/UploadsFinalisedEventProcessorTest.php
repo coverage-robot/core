@@ -154,10 +154,11 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             PublishableCheckRunMessage::class,
                             $message->getMessages()[1]
                         );
-                        $this->assertSame(
+                        $this->assertEqualsWithDelta(
                             1.0,
                             $message->getMessages()[1]
-                                ->getCoverageChange()
+                                ->getCoverageChange(),
+                            PHP_FLOAT_EPSILON
                         );
                         return true;
                     }

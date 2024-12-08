@@ -67,14 +67,19 @@ final class CoverageReportTest extends TestCase
             3,
             $report->getUncoveredLines()
         );
-        $this->assertEqualsWithDelta(99.9, $report->getCoveragePercentage(), PHP_FLOAT_EPSILON);
+        $this->assertEqualsWithDelta(
+            99.9,
+            $report->getCoveragePercentage(),
+            PHP_FLOAT_EPSILON
+        );
         $this->assertEquals(
             $tagCoverage,
             $report->getTagCoverage()
         );
-        $this->assertSame(
+        $this->assertEqualsWithDelta(
             95.0,
-            $report->getDiffCoveragePercentage()
+            $report->getDiffCoveragePercentage(),
+            PHP_FLOAT_EPSILON
         );
         $this->assertEquals(
             $leastCoveredDiffFiles,
