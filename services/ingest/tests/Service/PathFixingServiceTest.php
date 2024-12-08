@@ -41,51 +41,49 @@ final class PathFixingServiceTest extends TestCase
             $projectRoot,
         );
 
-        $this->assertEquals($expectedPath, $fixedPath);
+        $this->assertSame($expectedPath, $fixedPath);
     }
 
-    public static function configurationDataProvider(): array
+    public static function configurationDataProvider(): \Iterator
     {
-        return [
+        yield [
+            'project-root/src/path/to/file',
+            'project-root/',
+            [],
+            'src/path/to/file'
+        ];
+        yield [
+            'path-replacement/src/path/to/file',
+            '',
             [
-                'project-root/src/path/to/file',
-                'project-root/',
-                [],
-                'src/path/to/file'
+                new PathReplacement(
+                    'path-replacement/',
+                    ''
+                )
             ],
+            'src/path/to/file'
+        ];
+        yield [
+            'path/some-value/replacement/src/path/to/file',
+            '',
             [
-                'path-replacement/src/path/to/file',
-                '',
-                [
-                    new PathReplacement(
-                        'path-replacement/',
-                        ''
-                    )
-                ],
-                'src/path/to/file'
+                new PathReplacement(
+                    'path/.*/replacement/',
+                    'a-replacement/'
+                )
             ],
+            'a-replacement/src/path/to/file'
+        ];
+        yield [
+            'project-root/path/some-value/replacement/src/path/to/file',
+            'project-root/',
             [
-                'path/some-value/replacement/src/path/to/file',
-                '',
-                [
-                    new PathReplacement(
-                        'path/.*/replacement/',
-                        'a-replacement/'
-                    )
-                ],
-                'a-replacement/src/path/to/file'
+                new PathReplacement(
+                    '^path/.*/replacement/',
+                    'a-replacement/'
+                )
             ],
-            [
-                'project-root/path/some-value/replacement/src/path/to/file',
-                'project-root/',
-                [
-                    new PathReplacement(
-                        '^path/.*/replacement/',
-                        'a-replacement/'
-                    )
-                ],
-                'path/some-value/replacement/src/path/to/file'
-            ]
+            'path/some-value/replacement/src/path/to/file'
         ];
     }
 }

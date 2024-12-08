@@ -27,7 +27,7 @@ final class BigQueryClientTest extends TestCase
             )
         );
 
-        $this->assertEquals('mock-project.mock-dataset.mock-line-coverage-table', $client->getTable());
+        $this->assertSame('mock-project.mock-dataset.mock-line-coverage-table', $client->getTable());
     }
 
     public function testDatasetIsCorrectlyConstructed(): void
@@ -43,6 +43,6 @@ final class BigQueryClientTest extends TestCase
             )
         );
 
-        $this->assertEquals('mock-dataset', $client->getEnvironmentDataset()->id());
+        $this->assertSame('mock-dataset', $client->getEnvironmentDataset()->id());
     }
 }

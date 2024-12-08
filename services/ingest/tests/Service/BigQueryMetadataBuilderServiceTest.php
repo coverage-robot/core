@@ -113,79 +113,77 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
         $this->assertEquals($expectedMetadata, $metadata);
     }
 
-    public static function lineDataProvider(): array
+    public static function lineDataProvider(): \Iterator
     {
-        return [
-            LineType::BRANCH->value => [
-                new Branch(
-                    lineNumber: 1,
-                    lineHits: 1,
-                    branchHits: [0 => 0, 1 => 1]
-                ),
+        yield LineType::BRANCH->value => [
+            new Branch(
+                lineNumber: 1,
+                lineHits: 1,
+                branchHits: [0 => 0, 1 => 1]
+            ),
+            [
                 [
-                    [
-                        'key' => 'branchHits',
-                        'value' => '[0,1]'
-                    ],
-                    [
-                        'key' => 'type',
-                        'value' => LineType::BRANCH->value
-                    ],
-                    [
-                        'key' => 'lineNumber',
-                        'value' => 1
-                    ],
-                    [
-                        'key' => 'lineHits',
-                        'value' => 1
-                    ],
-                ]
-            ],
-            LineType::STATEMENT->value => [
-                new Statement(
-                    lineNumber: 1,
-                    lineHits: 10
-                ),
+                    'key' => 'branchHits',
+                    'value' => '[0,1]'
+                ],
                 [
-                    [
-                        'key' => 'type',
-                        'value' => LineType::STATEMENT->value
-                    ],
-                    [
-                        'key' => 'lineNumber',
-                        'value' => 1
-                    ],
-                    [
-                        'key' => 'lineHits',
-                        'value' => 10
-                    ]
-                ]
-            ],
-            LineType::METHOD->value => [
-                new Method(
-                    lineNumber: 1,
-                    lineHits: 10,
-                    name: 'some-method'
-                ),
+                    'key' => 'type',
+                    'value' => LineType::BRANCH->value
+                ],
                 [
-                    [
-                        'key' => 'name',
-                        'value' => 'some-method'
-                    ],
-                    [
-                        'key' => 'type',
-                        'value' => LineType::METHOD->value
-                    ],
-                    [
-                        'key' => 'lineNumber',
-                        'value' => 1
-                    ],
-                    [
-                        'key' => 'lineHits',
-                        'value' => 10
-                    ],
+                    'key' => 'lineNumber',
+                    'value' => 1
+                ],
+                [
+                    'key' => 'lineHits',
+                    'value' => 1
+                ],
+            ]
+        ];
+        yield LineType::STATEMENT->value => [
+            new Statement(
+                lineNumber: 1,
+                lineHits: 10
+            ),
+            [
+                [
+                    'key' => 'type',
+                    'value' => LineType::STATEMENT->value
+                ],
+                [
+                    'key' => 'lineNumber',
+                    'value' => 1
+                ],
+                [
+                    'key' => 'lineHits',
+                    'value' => 10
                 ]
-            ],
+            ]
+        ];
+        yield LineType::METHOD->value => [
+            new Method(
+                lineNumber: 1,
+                lineHits: 10,
+                name: 'some-method'
+            ),
+            [
+                [
+                    'key' => 'name',
+                    'value' => 'some-method'
+                ],
+                [
+                    'key' => 'type',
+                    'value' => LineType::METHOD->value
+                ],
+                [
+                    'key' => 'lineNumber',
+                    'value' => 1
+                ],
+                [
+                    'key' => 'lineHits',
+                    'value' => 10
+                ],
+            ]
         ];
     }
 }
