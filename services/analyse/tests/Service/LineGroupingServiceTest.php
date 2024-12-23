@@ -409,7 +409,8 @@ final class LineGroupingServiceTest extends TestCase
                         0,
                         0
                     ),
-                ]), 7,
+                ]),
+                7,
                 static fn(QueryResultInterface $result): QueryResultInterface => $result
             ),
             [
@@ -526,7 +527,6 @@ final class LineGroupingServiceTest extends TestCase
                     ),
                 ]),
                 4,
-
                 static fn(QueryResultInterface $result): QueryResultInterface => $result
             ),
             [
