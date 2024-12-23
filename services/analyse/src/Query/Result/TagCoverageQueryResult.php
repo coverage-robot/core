@@ -55,6 +55,7 @@ final class TagCoverageQueryResult implements QueryResultInterface
         return $this->uncovered;
     }
 
+    #[\Override]
     public function getTimeToLive(): int|false
     {
         return self::DEFAULT_QUERY_CACHE_TTL;

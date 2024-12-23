@@ -9,7 +9,6 @@ use App\Model\ReportWaypoint;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\UploadedTagsQuery;
 use ArrayIterator;
-use Iterator;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
@@ -40,7 +39,8 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function getQueryResults(): Iterator
+    #[Override]
+    public static function getQueryResults(): array
     {
         return [
             new ArrayIterator([]),
@@ -50,30 +50,6 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
                 ['tagName' => 'mock-tag-3'],
                 ['tagName' => 'mock-tag-4'],
             ]),
-        ];
-    }
-
-    public static function parametersDataProvider(): Iterator
-    {
-        yield [
-            new QueryParameterBag(),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint(
-                new ReportWaypoint(
-                    provider: Provider::GITHUB,
-                    projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'mock-ref',
-                    commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                    history: [],
-                    diff: []
-                )
-            ),
-            true
         ];
     }
 }

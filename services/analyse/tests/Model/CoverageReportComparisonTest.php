@@ -13,6 +13,7 @@ use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use ArrayIterator;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -75,70 +76,70 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 3,
                 coveragePercentage: 80,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 80,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                0
-            ];
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 80,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            0
+        ];
 
         yield '-10% change in total coverage' => [
             new CoverageReport(
@@ -159,70 +160,70 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 3,
                 coveragePercentage: 80,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 70,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                -10
-            ];
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 70,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            -10
+        ];
 
         yield '-0.33% change in total coverage' => [
             new CoverageReport(
@@ -243,70 +244,70 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 3,
                 coveragePercentage: 56.67,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 56.34,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                -0.33
-            ];
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 56.34,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            -0.33
+        ];
 
         yield '+5.3% change in total coverage' => [
             new CoverageReport(
@@ -327,69 +328,69 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 3,
                 coveragePercentage: 56.67,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 61.97,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                5.3
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 61.97,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+            ),
+            5.3
 
         ];
     }
@@ -415,70 +416,70 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 4,
                 coveragePercentage: 56.67,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 6,
-                    coveragePercentage: 56.34,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                2
-            ];
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 6,
+                coveragePercentage: 56.34,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            2
+        ];
 
         yield '-2 change in uncovered lines' => [
             new CoverageReport(
@@ -499,70 +500,70 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 4,
                 coveragePercentage: 56.67,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 2,
-                    coveragePercentage: 56.34,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                -2
-            ];
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 2,
+                coveragePercentage: 56.34,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            -2
+        ];
 
         yield 'No change in uncovered lines' => [
             new CoverageReport(
@@ -583,69 +584,69 @@ final class CoverageReportComparisonTest extends TestCase
                 uncoveredLines: 4,
                 coveragePercentage: 56.67,
                 fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    )
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 4,
-                    coveragePercentage: 61.97,
-                    fileCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    tagCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffCoveragePercentage: 95,
-                    leastCoveredDiffFiles: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
-                    diffUncoveredLines: static fn(): int => 0,
-                    diffLineCoverage: new QueryResultIterator(
-                        new ArrayIterator([]),
-                        0,
-                        static fn(): never => throw new RuntimeException('Should never be called')
-                    ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
                 ),
-                0
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
+            ),
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 4,
+                coveragePercentage: 61.97,
+                fileCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                tagCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffCoveragePercentage: 95,
+                leastCoveredDiffFiles: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                diffUncoveredLines: static fn(): int => 0,
+                diffLineCoverage: new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+            ),
+            0
 
         ];
     }

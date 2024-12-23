@@ -49,7 +49,7 @@ final class CarryforwardTagServiceTest extends TestCase
                         new UploadedTagsQueryResult('tag-2'),
                     ]),
                     2,
-                    fn(UploadedTagsQueryResult $result) => $result
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 )
             );
 
@@ -96,7 +96,7 @@ final class CarryforwardTagServiceTest extends TestCase
                         new UploadedTagsQueryResult('tag-2'),
                     ]),
                     2,
-                    fn(UploadedTagsQueryResult $result) => $result
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -203,7 +203,7 @@ final class CarryforwardTagServiceTest extends TestCase
                         new UploadedTagsQueryResult('tag-2'),
                     ]),
                     2,
-                    fn(UploadedTagsQueryResult $result) => $result
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -303,7 +303,7 @@ final class CarryforwardTagServiceTest extends TestCase
                         new UploadedTagsQueryResult('tag-2'),
                     ]),
                     2,
-                    fn(UploadedTagsQueryResult $result) => $result
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -477,7 +477,7 @@ final class CarryforwardTagServiceTest extends TestCase
                         new UploadedTagsQueryResult('tag-2'),
                     ]),
                     2,
-                    fn(UploadedTagsQueryResult $result) => $result
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Query\Result;
 
 use App\Model\CarryforwardTag;
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class TagAvailabilityQueryResult implements QueryResultInterface
@@ -35,6 +36,7 @@ final class TagAvailabilityQueryResult implements QueryResultInterface
         return $this->carryforwardTags;
     }
 
+    #[Override]
     public function getTimeToLive(): int|false
     {
         /**

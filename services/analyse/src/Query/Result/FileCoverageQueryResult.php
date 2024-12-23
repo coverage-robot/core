@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class FileCoverageQueryResult implements QueryResultInterface
@@ -67,6 +68,7 @@ final class FileCoverageQueryResult implements QueryResultInterface
         return $this->uncoveredLines;
     }
 
+    #[Override]
     public function getTimeToLive(): int|false
     {
         return self::DEFAULT_QUERY_CACHE_TTL;

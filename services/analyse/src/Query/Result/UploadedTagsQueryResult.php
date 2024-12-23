@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class UploadedTagsQueryResult implements QueryResultInterface
@@ -20,6 +21,7 @@ final class UploadedTagsQueryResult implements QueryResultInterface
         return $this->tagName;
     }
 
+    #[Override]
     public function getTimeToLive(): int|false
     {
         /**

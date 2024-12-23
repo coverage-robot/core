@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  *
- * @template Value of array|int|string|Provider
+ * @template Value of array|int|string|Provider|null
  *
  * @template-implements Iterator<QueryParameter, Value>
  */
@@ -33,6 +33,7 @@ final class QueryParameterBag implements JsonSerializable, Iterator
      */
     #[Ignore]
     private array $keys;
+
     private int $position = 0;
 
     public function __construct()
@@ -155,26 +156,31 @@ final class QueryParameterBag implements JsonSerializable, Iterator
     /**
      * @return Value
      */
+    #[Override]
     public function current(): mixed
     {
         return $this->get($this->key());
     }
 
+    #[Override]
     public function next(): void
     {
         ++$this->position;
     }
 
+    #[Override]
     public function key(): QueryParameter
     {
         return $this->keys[$this->position];
     }
 
+    #[Override]
     public function valid(): bool
     {
         return isset($this->keys[$this->position]);
     }
 
+    #[Override]
     public function rewind(): void
     {
         $this->position = 0;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Query\Result;
 
 use DateTimeImmutable;
+use Override;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -57,6 +58,7 @@ final class TotalUploadsQueryResult implements QueryResultInterface
         return $this->successfulIngestTimes;
     }
 
+    #[Override]
     public function getTimeToLive(): int|false
     {
         /**

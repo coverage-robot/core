@@ -176,9 +176,10 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function getQueryResults(): Iterator
+    #[Override]
+    public static function getQueryResults(): array
     {
-        yield [
+        return [
             new ArrayIterator([
                 [
                     'fileName' => 'mock-file',
@@ -189,9 +190,6 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                     'coveragePercentage' => 100.0
                 ],
             ]),
-        ];
-
-        yield [
             new ArrayIterator([
                 [
                     'fileName' => 'mock-file',
@@ -210,102 +208,6 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                     'coveragePercentage' => 50.0
                 ]
             ])
-        ];
-    }
-
-    public static function parametersDataProvider(): Iterator
-    {
-        $waypoint = new ReportWaypoint(
-            provider: Provider::GITHUB,
-            projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            ref: 'mock-ref',
-            commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-            history: [],
-            diff: []
-        );
-        yield [
-            new QueryParameterBag(),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::LIMIT, 50)
-                ->set(
-                        QueryParameter::UPLOADS,
-                        ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
-                    ),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::LIMIT, 50)
-                ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [new DateTimeImmutable(), new DateTimeImmutable()]
-                    ),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(
-                        QueryParameter::UPLOADS,
-                        ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
-                    )
-                ->set(
-                    QueryParameter::INGEST_PARTITIONS,
-                    [
-                        new DateTimeImmutable('2024-01-03 00:00:00'),
-                        new DateTimeImmutable('2024-01-03 00:00:00')
-                    ]
-                ),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::LIMIT, 50)
-                ->set(
-                        QueryParameter::UPLOADS,
-                        ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
-                    )
-                ->set(
-                    QueryParameter::INGEST_PARTITIONS,
-                    [
-                        new DateTimeImmutable('2024-01-03 00:00:00'),
-                        new DateTimeImmutable('2024-01-03 00:00:00')
-                    ]
-                ),
-            true
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::LIMIT, 50)
-                ->set(QueryParameter::UPLOADS, [])
-                ->set(QueryParameter::INGEST_PARTITIONS, []),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::LIMIT, 50)
-                ->set(
-                    QueryParameter::CARRYFORWARD_TAGS,
-                    [
-                        new CarryforwardTag(
-                            '1',
-                            'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                            [12],
-                            [new DateTimeImmutable('2024-01-03 00:00:00')]
-                        )
-                    ]
-                ),
-            true
         ];
     }
 }

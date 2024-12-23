@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Query\Result;
 
 use Closure;
 use Countable;
 use Iterator;
+use Override;
 
 /**
  * @template T of QueryResultInterface
@@ -26,6 +29,7 @@ final class QueryResultIterator implements QueryResultInterface, Iterator, Count
     /**
      * @return T|null
      */
+    #[Override]
     public function current(): ?QueryResultInterface
     {
         /** @var mixed $current */
@@ -38,31 +42,37 @@ final class QueryResultIterator implements QueryResultInterface, Iterator, Count
         return ($this->parser)($current);
     }
 
+    #[Override]
     public function key(): mixed
     {
         return $this->rows->key();
     }
 
+    #[Override]
     public function valid(): bool
     {
         return $this->rows->valid();
     }
 
+    #[Override]
     public function rewind(): void
     {
         $this->rows->rewind();
     }
 
+    #[Override]
     public function next(): void
     {
         $this->rows->next();
     }
 
+    #[Override]
     public function count(): int
     {
         return $this->count;
     }
 
+    #[Override]
     public function getTimeToLive(): int|false
     {
         if ($this->count === 0) {

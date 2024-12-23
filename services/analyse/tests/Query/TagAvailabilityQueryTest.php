@@ -41,9 +41,10 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function getQueryResults(): Iterator
+    #[Override]
+    public static function getQueryResults(): array
     {
-        yield [
+        return [
             [
                 [
                     'tagName' => 'mock-tag',
@@ -116,49 +117,6 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
                     ]
                 ]
             ]
-        ];
-    }
-
-    public static function parametersDataProvider(): Iterator
-    {
-        yield [
-            new QueryParameterBag(),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint(
-                new ReportWaypoint(
-                    provider: Provider::GITHUB,
-                    projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'mock-ref',
-                    commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                    history: [],
-                    diff: []
-                )
-            ),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint(
-                new ReportWaypoint(
-                    provider: Provider::GITHUB,
-                    projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'mock-ref',
-                    commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                    history: [],
-                    diff: []
-                )
-            )->set(
-                    QueryParameter::COMMIT,
-                    ['a6e3cc3cc23c066de8ece76216127df1bd273d9f', 'b8e3cc3cc23c066ec8ece76214227df1ae188d9f']
-                ),
-            true
         ];
     }
 }

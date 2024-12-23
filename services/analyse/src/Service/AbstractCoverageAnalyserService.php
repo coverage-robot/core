@@ -103,7 +103,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
                 atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
                 uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),
                 coveragePercentage: fn(): float => $this->getCoveragePercentage($waypoint),
-                fileCoverage: fn() => $this->getFileCoverage($waypoint),
+                fileCoverage: fn(): QueryResultIterator => $this->getFileCoverage($waypoint),
                 tagCoverage: fn(): QueryResultIterator => $this->getTagCoverage($waypoint),
                 diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
                 leastCoveredDiffFiles: fn(): QueryResultIterator => $this->getLeastCoveredDiffFiles(
@@ -395,7 +395,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             $carryforwardTags === []
         ) {
             // Theres no point in checking for tag coverage as theres no files to check against
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -442,7 +442,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -575,7 +575,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         $diff = $this->getDiff($waypoint);
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -587,7 +587,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -685,7 +685,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         $diff = $this->getDiff($waypoint);
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -697,7 +697,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)

@@ -320,7 +320,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                             ]
                         ),
                         1,
-                        static fn(QueryResultInterface $result) => $result
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
                     FileCoverageQuery::class =>
                     new QueryResultIterator(
@@ -335,7 +335,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                             )
                         ]),
                         1,
-                        static fn(QueryResultInterface $result) => $result
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
                     LineCoverageQuery::class =>
                     new QueryResultIterator(
@@ -352,7 +352,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                             )
                         ]),
                         1,
-                        static fn(QueryResultInterface $result) => $result
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
                     default => null,
                 }
