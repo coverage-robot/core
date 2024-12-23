@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\LineCoverageSummaryCollectionQueryResult;
 use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use Closure;
 use DateTimeImmutable;
@@ -21,17 +24,21 @@ use Override;
 final class CoverageReport implements CoverageReportInterface
 {
     /**
+     * @codingStandardsIgnoreStart
+     *
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
      * @param int|Closure():int $size
      * @param int|Closure():int $totalLines
      * @param int|Closure():int $atLeastPartiallyCoveredLines
      * @param int|Closure():int $uncoveredLines
      * @param float|Closure():float $coveragePercentage
-     * @param QueryResultIterator|Closure():QueryResultIterator $tagCoverage
+     * @param QueryResultIterator<TagCoverageQueryResult>|Closure():QueryResultIterator<TagCoverageQueryResult> $tagCoverage
      * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
-     * @param QueryResultIterator|Closure():QueryResultIterator $leastCoveredDiffFiles
+     * @param QueryResultIterator<FileCoverageQueryResult>|Closure():QueryResultIterator<FileCoverageQueryResult> $leastCoveredDiffFiles
      * @param int|Closure():int $diffUncoveredLines
-     * @param QueryResultIterator|Closure():QueryResultIterator $diffLineCoverage
+     * @param QueryResultIterator<LineCoverageQueryResult>|Closure():QueryResultIterator<LineCoverageQueryResult> $diffLineCoverage
+     *
+     * @codingStandardsIgnoreEnd
      */
     public function __construct(
         private readonly ReportWaypoint $waypoint,

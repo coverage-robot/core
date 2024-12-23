@@ -8,7 +8,9 @@ use App\Exception\AnalysisException;
 use App\Model\CarryforwardTag;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
+use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
@@ -70,12 +72,16 @@ interface CoverageAnalyserServiceInterface
     /**
      * Get the total coverage percentage, split by tag (both tags which had uploads
      * on the waypoint, and those which were carried forward from previous commits)
+     *
+     * @return QueryResultIterator<TagCoverageQueryResult>
      */
     public function getTagCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 
     /**
      * Get the line coverage split by file, in any of the uploads or carried forward from
      * previous commits.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
     public function getFileCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 
@@ -95,6 +101,8 @@ interface CoverageAnalyserServiceInterface
 
     /**
      * Get the individual lines and their associated coverage for the diff of the waypoint.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
     public function getDiffLineCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 
