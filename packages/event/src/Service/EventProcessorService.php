@@ -10,7 +10,7 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class EventProcessorService implements EventProcessorServiceInterface
 {
@@ -19,7 +19,7 @@ final class EventProcessorService implements EventProcessorServiceInterface
      */
     public function __construct(
         private readonly LoggerInterface $eventProcessorLogger,
-        #[TaggedIterator('event.processor', defaultIndexMethod: 'getEvent')]
+        #[AutowireIterator('event.processor', defaultIndexMethod: 'getEvent')]
         private readonly iterable $eventProcessors
     ) {
     }

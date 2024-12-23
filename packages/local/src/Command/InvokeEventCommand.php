@@ -17,7 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -35,7 +35,7 @@ final class InvokeEventCommand extends Command
         private readonly SerializerInterface&NormalizerInterface $serializer,
         #[Autowire(service: EventHandler::class)]
         private readonly EventBridgeHandler $eventHandler,
-        #[TaggedIterator('package.local.event_builder', defaultPriorityMethod: 'getPriority')]
+        #[AutowireIterator('package.local.event_builder', defaultPriorityMethod: 'getPriority')]
         private readonly iterable $eventBuilders,
     ) {
         parent::__construct();
