@@ -11,7 +11,6 @@ use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class EventProcessorService implements EventProcessorServiceInterface
 {

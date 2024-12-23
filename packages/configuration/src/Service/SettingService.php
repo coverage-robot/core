@@ -11,7 +11,6 @@ use Packages\Configuration\Setting\SettingInterface;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class SettingService implements SettingServiceInterface
 {
