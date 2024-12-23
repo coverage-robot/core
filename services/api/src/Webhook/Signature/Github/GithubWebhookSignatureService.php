@@ -61,8 +61,8 @@ class GithubWebhookSignatureService implements ProviderWebhookSignatureServiceIn
 
         if (
             !isset($payloadSignature['signature'], $payloadSignature['algorithm']) ||
-            !$payloadSignature['signature'] ||
-            !$payloadSignature['algorithm'] == SignedWebhookInterface::SIGNATURE_ALGORITHM
+            ($payloadSignature['signature'] === '' || $payloadSignature['signature'] === '0') ||
+            $payloadSignature['algorithm'] !== SignedWebhookInterface::SIGNATURE_ALGORITHM
         ) {
             $this->webhookSignatureLogger->info(
                 'Payload signature provided in an unsupported format.',

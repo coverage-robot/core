@@ -37,165 +37,174 @@ final class MessageValidationServiceTest extends TestCase
         }
     }
 
-    public static function messageDataProvider(): array
+    public static function messageDataProvider(): \Iterator
     {
-        return [
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [11]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: 99,
-                    diffCoveragePercentage: null,
-                    diffUncoveredLines: 10,
-                    successfulUploads: 1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [11]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                true
-            ],
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [12]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: -1,
-                    diffCoveragePercentage: null,
-                    diffUncoveredLines: 10,
-                    successfulUploads: 1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+                coveragePercentage: 99,
+                diffCoveragePercentage: null,
+                diffUncoveredLines: 10,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            true
+        ];
+
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [12]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                false
-            ],
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [13]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: 99,
-                    diffCoveragePercentage: null,
-                    diffUncoveredLines: 10,
-                    successfulUploads: -1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+                coveragePercentage: -1,
+                diffCoveragePercentage: null,
+                diffUncoveredLines: 10,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            false
+        ];
+
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [13]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                false
-            ],
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [14]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: 100,
-                    diffCoveragePercentage: -1,
-                    diffUncoveredLines: 10,
-                    successfulUploads: 1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+                coveragePercentage: 99,
+                diffCoveragePercentage: null,
+                diffUncoveredLines: 10,
+                successfulUploads: -1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            false
+        ];
+
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [14]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                false
-            ],
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [15]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: 200,
-                    diffCoveragePercentage: null,
-                    diffUncoveredLines: 10,
-                    successfulUploads: 1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+                coveragePercentage: 100,
+                diffCoveragePercentage: -1,
+                diffUncoveredLines: 10,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            false
+        ];
+
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [15]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                false
-            ],
-            [
-                new PublishablePullRequestMessage(
-                    event: new Upload(
-                        uploadId: 'mock-uuid',
-                        provider: Provider::GITHUB,
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        commit: 'mock-commit',
-                        parent: [],
-                        ref: 'mock-ref',
-                        projectRoot: '',
-                        tag: new Tag('1', 'mock-commit', [16]),
-                        pullRequest: null,
-                        baseCommit: null,
-                        baseRef: null
-                    ),
-                    coveragePercentage: 100,
-                    diffCoveragePercentage: 200,
-                    diffUncoveredLines: 10,
-                    successfulUploads: 1,
-                    tagCoverage: [],
-                    leastCoveredDiffFiles: [],
-                    uncoveredLinesChange: 0,
+                coveragePercentage: 200,
+                diffCoveragePercentage: null,
+                diffUncoveredLines: 10,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            false
+        ];
+
+        yield [
+            new PublishablePullRequestMessage(
+                event: new Upload(
+                    uploadId: 'mock-uuid',
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project-id',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    commit: 'mock-commit',
+                    parent: [],
+                    ref: 'mock-ref',
+                    projectRoot: '',
+                    tag: new Tag('1', 'mock-commit', [16]),
+                    pullRequest: null,
+                    baseCommit: null,
+                    baseRef: null
                 ),
-                false
-            ]
+                coveragePercentage: 100,
+                diffCoveragePercentage: 200,
+                diffUncoveredLines: 10,
+                successfulUploads: 1,
+                tagCoverage: [],
+                leastCoveredDiffFiles: [],
+                uncoveredLinesChange: 0,
+            ),
+            false
         ];
     }
 }

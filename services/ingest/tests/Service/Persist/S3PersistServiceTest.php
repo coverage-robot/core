@@ -65,7 +65,7 @@ final class S3PersistServiceTest extends KernelTestCase
                 self::callback(
                     function ($body) use ($expectedWrittenLines): bool {
                         rewind($body);
-                        $this->assertEquals(
+                        $this->assertSame(
                             implode(
                                 '',
                                 $expectedWrittenLines

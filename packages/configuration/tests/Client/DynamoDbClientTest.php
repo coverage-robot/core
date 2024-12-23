@@ -47,13 +47,13 @@ final class DynamoDbClientTest extends TestCase
             ->with(
                 self::callback(
                     function (PutItemInput $input): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'coverage-configuration-test',
                             $input->getTableName()
                         );
 
                         $item = $input->getItem();
-                        $this->assertEquals(
+                        $this->assertSame(
                             'github-mock-owner-mock-repository',
                             $item[DynamoDbClient::REPOSITORY_IDENTIFIER_COLUMN]->getS()
                         );
@@ -103,15 +103,15 @@ final class DynamoDbClientTest extends TestCase
             ->with(
                 self::callback(
                     function (QueryInput $input): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'coverage-configuration-test',
                             $input->getTableName()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             Select::SPECIFIC_ATTRIBUTES,
                             $input->getSelect()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             [DynamoDbClient::VALUE_COLUMN],
                             $input->getAttributesToGet()
                         );
@@ -194,7 +194,7 @@ final class DynamoDbClientTest extends TestCase
             ->with(
                 self::callback(
                     function (DeleteItemInput $input): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'coverage-configuration-test',
                             $input->getTableName()
                         );

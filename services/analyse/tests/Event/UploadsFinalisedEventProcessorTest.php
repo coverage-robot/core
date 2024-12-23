@@ -175,9 +175,9 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $uploadsFinalised,
                             $message->getEvent()
                         );
-                        $this->assertEquals(
+                        $this->assertCount(
                             3,
-                            $message->count()
+                            $message
                         );
                         $this->assertInstanceOf(
                             PublishablePullRequestMessage::class,
@@ -187,10 +187,11 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             PublishableCheckRunMessage::class,
                             $message->getMessages()[1]
                         );
-                        $this->assertEquals(
-                            1,
+                        $this->assertEqualsWithDelta(
+                            1.0,
                             $message->getMessages()[1]
-                                ->getCoverageChange()
+                                ->getCoverageChange(),
+                            PHP_FLOAT_EPSILON
                         );
                         return true;
                     }
@@ -302,9 +303,9 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                             $uploadsFinalised,
                             $message->getEvent()
                         );
-                        $this->assertEquals(
+                        $this->assertCount(
                             3,
-                            $message->count()
+                            $message
                         );
                         $this->assertInstanceOf(
                             PublishablePullRequestMessage::class,

@@ -48,11 +48,11 @@ final class CachingEventStoreServiceTest extends TestCase
 
         $cachingEventStoreService = new CachingEventStoreService($mockEventStoreService);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingEventStoreService->getStateChangesBetweenEvent(null, $mockOrchestratedEvent)
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingEventStoreService->getStateChangesBetweenEvent(null, $mockOrchestratedEvent)
         );
@@ -88,11 +88,11 @@ final class CachingEventStoreServiceTest extends TestCase
 
         $cachingEventStoreService = new CachingEventStoreService($mockEventStoreService);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingEventStoreService->getAllStateChangesForCommit('', '')
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingEventStoreService->getAllStateChangesForCommit('', '')
         );

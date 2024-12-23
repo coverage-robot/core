@@ -6,6 +6,7 @@ namespace App\Tests\Service\History\Github;
 
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
+use Iterator;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -25,7 +26,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
             $this->createMock(MetricServiceInterface::class)
         );
 
-        $this->assertEquals(Provider::GITHUB->value, $service->getProvider());
+        $this->assertSame(Provider::GITHUB->value, $service->getProvider());
     }
 
     #[DataProvider('commitDataProvider')]
@@ -62,7 +63,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
             ->method('execute')
             ->with(
                 self::callback(function (string $query) use ($expectedOffset): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         <<<GQL
                         {
                             repository(owner: "mock-owner", name: "mock-repository") {
@@ -116,142 +117,142 @@ final class GithubCommitHistoryServiceTest extends TestCase
         );
     }
 
-    public static function commitDataProvider(): array
+    public static function commitDataProvider(): Iterator
     {
-        return [
-            'First page' => [
-                1,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '11111111',
-                            'associatedPullRequests' => [
-                                'nodes' => [
-                                    [
-                                        'merged' => false,
-                                        'headRefName' => 'mock-ref-2'
-                                    ]
+        yield 'First page' => [
+            1,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'oid' => '11111111',
+                        'associatedPullRequests' => [
+                            'nodes' => [
+                                [
+                                    'merged' => false,
+                                    'headRefName' => 'mock-ref-2'
                                 ]
                             ]
                         ]
-                    ),
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '11111111',
-                            'associatedPullRequests' => [
-                                'nodes' => [
-                                    [
-                                        'merged' => true,
-                                        'headRefName' => 'mock-ref'
-                                    ]
+                    ]
+                ),
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'oid' => '11111111',
+                        'associatedPullRequests' => [
+                            'nodes' => [
+                                [
+                                    'merged' => true,
+                                    'headRefName' => 'mock-ref'
                                 ]
                             ]
                         ]
-                    )
-                ],
-                101,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '11111111',
-                            'merged' => false,
-                            'ref' => 'mock-ref-2'
-                        ]
-                    ),
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '11111111',
-                            'merged' => true,
-                            'ref' => 'mock-ref'
-                        ]
-                    )
-                ],
+                    ]
+                )
             ],
-            'Second page' => [
-                2,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '222222222',
-                            'associatedPullRequests' => [
-                                'nodes' => [
-                                    [
-                                        'merged' => true,
-                                        'headRefName' => 'mock-ref'
-                                    ]
+            101,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'commit' => '11111111',
+                        'merged' => false,
+                        'ref' => 'mock-ref-2'
+                    ]
+                ),
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'commit' => '11111111',
+                        'merged' => true,
+                        'ref' => 'mock-ref'
+                    ]
+                )
+            ],
+        ];
+
+        yield 'Second page' => [
+            2,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'oid' => '222222222',
+                        'associatedPullRequests' => [
+                            'nodes' => [
+                                [
+                                    'merged' => true,
+                                    'headRefName' => 'mock-ref'
                                 ]
                             ]
                         ]
-                    ),
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '222222222',
-                            'associatedPullRequests' => [
-                                'nodes' => []
-                            ]
+                    ]
+                ),
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'oid' => '222222222',
+                        'associatedPullRequests' => [
+                            'nodes' => []
                         ]
-                    )
-                ],
-                201,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '222222222',
-                            'ref' => 'mock-ref',
-                            'merged' => true
-                        ]
-                    ),
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '222222222',
-                            'ref' => null,
-                            'merged' => true
-                        ]
-                    )
-                ]
+                    ]
+                )
             ],
-            'Tenth page' => [
-                10,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'oid' => '9999999999',
-                            'associatedPullRequests' => [
-                                'nodes' => []
-                            ]
+            201,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'commit' => '222222222',
+                        'ref' => 'mock-ref',
+                        'merged' => true
+                    ]
+                ),
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'commit' => '222222222',
+                        'ref' => null,
+                        'merged' => true
+                    ]
+                )
+            ]
+        ];
+
+        yield 'Tenth page' => [
+            10,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'oid' => '9999999999',
+                        'associatedPullRequests' => [
+                            'nodes' => []
                         ]
-                    )
-                ],
-                1001,
-                [
-                    ...array_fill(
-                        0,
-                        50,
-                        [
-                            'commit' => '9999999999',
-                            'ref' => null,
-                            'merged' => true
-                        ]
-                    )
-                ]
+                    ]
+                )
+            ],
+            1001,
+            [
+                ...array_fill(
+                    0,
+                    50,
+                    [
+                        'commit' => '9999999999',
+                        'ref' => null,
+                        'merged' => true
+                    ]
+                )
             ]
         ];
     }

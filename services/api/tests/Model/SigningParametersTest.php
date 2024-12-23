@@ -27,17 +27,17 @@ final class SigningParametersTest extends TestCase
             baseCommit: 'baseCommit'
         );
 
-        $this->assertEquals('owner', $parameters->getOwner());
-        $this->assertEquals('repository', $parameters->getRepository());
-        $this->assertEquals(Provider::GITHUB, $parameters->getProvider());
-        $this->assertEquals('fileName', $parameters->getFileName());
-        $this->assertEquals('projectRoot', $parameters->getProjectRoot());
-        $this->assertEquals('tag', $parameters->getTag());
-        $this->assertEquals('commit', $parameters->getCommit());
-        $this->assertEquals(['parent'], $parameters->getParent());
-        $this->assertEquals('ref', $parameters->getRef());
-        $this->assertEquals('pullRequest', $parameters->getPullRequest());
-        $this->assertEquals('baseCommit', $parameters->getBaseCommit());
-        $this->assertEquals('baseRef', $parameters->getBaseRef());
+        $this->assertSame('owner', $parameters->getOwner());
+        $this->assertSame('repository', $parameters->getRepository());
+        $this->assertSame(Provider::GITHUB, $parameters->getProvider());
+        $this->assertSame('fileName', $parameters->getFileName());
+        $this->assertSame('projectRoot', $parameters->getProjectRoot());
+        $this->assertSame('tag', $parameters->getTag());
+        $this->assertSame('commit', $parameters->getCommit());
+        $this->assertSame(['parent'], $parameters->getParent());
+        $this->assertSame('ref', $parameters->getRef());
+        $this->assertSame('pullRequest', $parameters->getPullRequest());
+        $this->assertSame('baseCommit', $parameters->getBaseCommit());
+        $this->assertSame('baseRef', $parameters->getBaseRef());
     }
 }

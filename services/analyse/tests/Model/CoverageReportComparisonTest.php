@@ -31,7 +31,7 @@ final class CoverageReportComparisonTest extends TestCase
             $headReport
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedPercentageChange,
             $comparison->getCoverageChange()
         );
@@ -48,34 +48,33 @@ final class CoverageReportComparisonTest extends TestCase
             $headReport
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedUncoveredLineChange,
             $comparison->getUncoveredLinesChange()
         );
     }
 
-    public static function coverageChangesDataProvider(): array
+    public static function coverageChangesDataProvider(): Iterator
     {
-        return [
-            'No change in total coverage' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 80,
-                    fileCoverage: new QueryResultIterator(
+        yield 'No change in total coverage' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 80,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -139,26 +138,27 @@ final class CoverageReportComparisonTest extends TestCase
                     )
                 ),
                 0
-            ],
-            '-10% change in total coverage' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 80,
-                    fileCoverage: new QueryResultIterator(
+            ];
+
+        yield '-10% change in total coverage' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 80,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -222,26 +222,27 @@ final class CoverageReportComparisonTest extends TestCase
                     )
                 ),
                 -10
-            ],
-            '-0.33% change in total coverage' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 56.67,
-                    fileCoverage: new QueryResultIterator(
+            ];
+
+        yield '-0.33% change in total coverage' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 56.67,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -305,26 +306,27 @@ final class CoverageReportComparisonTest extends TestCase
                     )
                 ),
                 -0.33
-            ],
-            '+5.3% change in total coverage' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 3,
-                    coveragePercentage: 56.67,
-                    fileCoverage: new QueryResultIterator(
+            ];
+
+        yield '+5.3% change in total coverage' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 3,
+                coveragePercentage: 56.67,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -388,32 +390,31 @@ final class CoverageReportComparisonTest extends TestCase
                     ),
                 ),
                 5.3
-            ],
+
         ];
     }
 
-    public static function uncoveredLineChangesDataProvider(): array
+    public static function uncoveredLineChangesDataProvider(): Iterator
     {
-        return [
-            '+2 change in uncovered lines' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 4,
-                    coveragePercentage: 56.67,
-                    fileCoverage: new QueryResultIterator(
+        yield '+2 change in uncovered lines' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 4,
+                coveragePercentage: 56.67,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -477,26 +478,27 @@ final class CoverageReportComparisonTest extends TestCase
                     )
                 ),
                 2
-            ],
-            '-2 change in uncovered lines' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 4,
-                    coveragePercentage: 56.67,
-                    fileCoverage: new QueryResultIterator(
+            ];
+
+        yield '-2 change in uncovered lines' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 4,
+                coveragePercentage: 56.67,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -560,26 +562,27 @@ final class CoverageReportComparisonTest extends TestCase
                     )
                 ),
                 -2
-            ],
-            'No change in uncovered lines' => [
-                new CoverageReport(
-                    waypoint: new ReportWaypoint(
-                        provider: Provider::GITHUB,
-                        projectId: 'mock-project',
-                        owner: 'mock-owner',
-                        repository: 'mock-repository',
-                        ref: 'mock-ref',
-                        commit: 'mock-commit',
-                        history: [],
-                        diff: []
-                    ),
-                    uploads: new TotalUploadsQueryResult(['1'], [], []),
-                    size: 2,
-                    totalLines: 1,
-                    atLeastPartiallyCoveredLines: 2,
-                    uncoveredLines: 4,
-                    coveragePercentage: 56.67,
-                    fileCoverage: new QueryResultIterator(
+            ];
+
+        yield 'No change in uncovered lines' => [
+            new CoverageReport(
+                waypoint: new ReportWaypoint(
+                    provider: Provider::GITHUB,
+                    projectId: 'mock-project',
+                    owner: 'mock-owner',
+                    repository: 'mock-repository',
+                    ref: 'mock-ref',
+                    commit: 'mock-commit',
+                    history: [],
+                    diff: []
+                ),
+                uploads: new TotalUploadsQueryResult(['1'], [], []),
+                size: 2,
+                totalLines: 1,
+                atLeastPartiallyCoveredLines: 2,
+                uncoveredLines: 4,
+                coveragePercentage: 56.67,
+                fileCoverage: new QueryResultIterator(
                         new ArrayIterator([]),
                         0,
                         static fn(): never => throw new RuntimeException('Should never be called')
@@ -643,7 +646,7 @@ final class CoverageReportComparisonTest extends TestCase
                     ),
                 ),
                 0
-            ],
+
         ];
     }
 }

@@ -52,7 +52,7 @@ final class InvokeCommandTest extends KernelTestCase
             'key' => 'mock-file.xml',
         ]);
 
-        $this->assertEquals(Command::FAILURE, $commandTester->getStatusCode());
+        $this->assertSame(Command::FAILURE, $commandTester->getStatusCode());
 
         $output = $commandTester->getDisplay();
         $this->assertStringContainsString('Instead, the handler was invoked with invalid event data: null', $output);

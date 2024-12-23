@@ -137,9 +137,9 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
         return TotalCoverageQuery::class;
     }
 
-    public static function getQueryResults(): array
+    public static function getQueryResults(): Iterator
     {
-        return [
+        yield [
             new ArrayIterator([
                 [
                     'lines' => 1,
@@ -152,7 +152,7 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
@@ -164,61 +164,63 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
             history: [],
             diff: []
         );
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
 
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
                         QueryParameter::UPLOADS,
                         ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
                     ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
                         QueryParameter::UPLOADS,
                         ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
                     )
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, [])
-                    ->set(QueryParameter::INGEST_PARTITIONS, []),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                                [1],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            true
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::UPLOADS, [])
+                ->set(QueryParameter::INGEST_PARTITIONS, []),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
+                    QueryParameter::CARRYFORWARD_TAGS,
+                    [
+                        new CarryforwardTag(
+                            '1',
+                            'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                            [1],
+                            [new DateTimeImmutable('2024-01-03 00:00:00')]
+                        )
+                    ]
+                ),
+            true
         ];
     }
 }

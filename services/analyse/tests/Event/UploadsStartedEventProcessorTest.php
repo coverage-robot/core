@@ -41,7 +41,7 @@ final class UploadsStartedEventProcessorTest extends TestCase
             ->with(
                 self::callback(
                     function (PublishableCheckRunMessage $message) use ($uploadsStarted): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             PublishableCheckRunStatus::IN_PROGRESS,
                             $message->getStatus()
                         );

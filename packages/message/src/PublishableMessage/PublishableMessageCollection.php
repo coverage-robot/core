@@ -62,7 +62,9 @@ final class PublishableMessageCollection implements PublishableMessageInterface,
                 $this->event->getProvider()->value,
                 $this->event->getOwner(),
                 $this->event->getRepository(),
-                $this->event->getPullRequest() ?: $this->event->getCommit()
+                $this->event->getPullRequest() !== null ?
+                    $this->event->getPullRequest() :
+                    $this->event->getCommit()
             ])
         );
     }

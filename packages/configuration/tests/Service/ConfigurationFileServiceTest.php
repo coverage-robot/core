@@ -116,57 +116,60 @@ final class ConfigurationFileServiceTest extends TestCase
         );
     }
 
-    public static function configurationFileDataProvider(): array
+    public static function configurationFileDataProvider(): \Iterator
     {
-        return [
-            [
-                <<<YAML
+        yield [
+            <<<YAML
                 line_comment:
                     type: annotation
                 YAML,
-                [
-                    'line_comment.type' => LineCommentType::ANNOTATION
-                ]
-            ],
             [
-                <<<YAML
+                'line_comment.type' => LineCommentType::ANNOTATION
+            ]
+        ];
+
+        yield [
+            <<<YAML
                 line_comment:
                     type: hidden
                 YAML,
-                [
-                    'line_comment.type' => LineCommentType::HIDDEN
-                ]
-            ],
             [
-                <<<YAML
+                'line_comment.type' => LineCommentType::HIDDEN
+            ]
+        ];
+
+        yield [
+            <<<YAML
                 line_comment:
                     type: review_comment
                 YAML,
-                [
-                    'line_comment.type' => LineCommentType::REVIEW_COMMENT
-                ]
-            ],
             [
-                <<<YAML
+                'line_comment.type' => LineCommentType::REVIEW_COMMENT
+            ]
+        ];
+
+        yield [
+            <<<YAML
                 line_comment:
                     type: some-other-value
                 YAML,
-                []
-            ],
-            [
-                <<<YAML
+            []
+        ];
+
+        yield [
+            <<<YAML
                 line_comment:
                     type:
                         - a
                         - b
                         - c
                 YAML,
-                []
-            ],
-            [
-                '',
-                []
-            ]
+            []
+        ];
+
+        yield [
+            '',
+            []
         ];
     }
 }

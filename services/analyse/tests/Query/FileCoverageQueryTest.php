@@ -9,7 +9,6 @@ use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
-use App\Query\Result\FileCoverageCollectionQueryResult;
 use ArrayIterator;
 use DateTimeImmutable;
 use Override;
@@ -177,9 +176,9 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function getQueryResults(): array
+    public static function getQueryResults(): Iterator
     {
-        return [
+        yield [
             new ArrayIterator([
                 [
                     'fileName' => 'mock-file',
@@ -190,6 +189,9 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                     'coveragePercentage' => 100.0
                 ],
             ]),
+        ];
+
+        yield [
             new ArrayIterator([
                 [
                     'fileName' => 'mock-file',
@@ -211,7 +213,7 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function parametersDataProvider(): array
+    public static function parametersDataProvider(): Iterator
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
@@ -223,84 +225,87 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             history: [],
             diff: []
         );
+        yield [
+            new QueryParameterBag(),
+            false
+        ];
 
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(
                         QueryParameter::UPLOADS,
                         ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
                     ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [new DateTimeImmutable(), new DateTimeImmutable()]
                     ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(
                         QueryParameter::UPLOADS,
                         ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
                     )
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(
                         QueryParameter::UPLOADS,
                         ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
                     )
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, [])
-                    ->set(QueryParameter::INGEST_PARTITIONS, []),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
-                                [12],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+                ->set(
+                    QueryParameter::INGEST_PARTITIONS,
+                    [
+                        new DateTimeImmutable('2024-01-03 00:00:00'),
+                        new DateTimeImmutable('2024-01-03 00:00:00')
+                    ]
+                ),
+            true
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(QueryParameter::UPLOADS, [])
+                ->set(QueryParameter::INGEST_PARTITIONS, []),
+            false
+        ];
+
+        yield [
+            QueryParameterBag::fromWaypoint($waypoint)
+                ->set(QueryParameter::LIMIT, 50)
+                ->set(
+                    QueryParameter::CARRYFORWARD_TAGS,
+                    [
+                        new CarryforwardTag(
+                            '1',
+                            'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                            [12],
+                            [new DateTimeImmutable('2024-01-03 00:00:00')]
+                        )
+                    ]
+                ),
+            true
         ];
     }
 }

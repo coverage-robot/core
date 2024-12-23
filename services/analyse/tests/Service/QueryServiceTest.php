@@ -22,6 +22,7 @@ use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Google\Cloud\Core\Iterator\ItemIterator;
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Telemetry\Service\MetricServiceInterface;
@@ -229,59 +230,58 @@ final class QueryServiceTest extends KernelTestCase
         $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
-    public static function queryDataProvider(): array
+    public static function queryDataProvider(): Iterator
     {
-        return [
-            'Total coverage query' => [
-                TotalCoverageQuery::class,
-                [
-                    'coveragePercentage' => 0.0,
-                    'lines' => 6,
-                    'covered' => 1,
-                    'partial' => 2,
-                    'uncovered' => 3
-                ],
-                new TotalCoverageQueryResult(
-                    0,
-                    6,
-                    1,
-                    2,
-                    3
-                )
+        yield 'Total coverage query' => [
+            TotalCoverageQuery::class,
+            [
+                'coveragePercentage' => 0.0,
+                'lines' => 6,
+                'covered' => 1,
+                'partial' => 2,
+                'uncovered' => 3
             ],
-            'Total commit uploads query' => [
-                TotalUploadsQuery::class,
-                [
-                    'successfulUploads' => [
+            new TotalCoverageQueryResult(
+                0,
+                6,
+                1,
+                2,
+                3
+            )
+        ];
+
+        yield 'Total commit uploads query' => [
+            TotalUploadsQuery::class,
+            [
+                'successfulUploads' => [
                         '0193ea3e-64b2-751e-ad50-817e4083c212',
                         '0193ea3e-e1fe-78c0-88ed-d87af4a687fa'
                     ],
-                    'successfulTags' => [
-                        [
-                            'name' => 'tag-1',
-                            'commit' => 'f49a3e9068189f392acc51885b839a028efa4677',
-                            'successfullyUploadedLines' => [1],
-                        ],
-                        [
-                            'name' => 'tag-2',
-                            'commit' => 'f49a3e9068189f392acc51885b839a028efa4677',
-                            'successfullyUploadedLines' => [1],
-                        ]
+                'successfulTags' => [
+                    [
+                        'name' => 'tag-1',
+                        'commit' => 'f49a3e9068189f392acc51885b839a028efa4677',
+                        'successfullyUploadedLines' => [1],
                     ],
-                    'successfulIngestTimes' => [
-                        '2021-01-01T00:00:00+0000',
-                        '2021-01-01T00:00:00+0000'
+                    [
+                        'name' => 'tag-2',
+                        'commit' => 'f49a3e9068189f392acc51885b839a028efa4677',
+                        'successfullyUploadedLines' => [1],
                     ]
                 ],
-                new TotalUploadsQueryResult(
-                    ['0193ea3e-64b2-751e-ad50-817e4083c212', '0193ea3e-e1fe-78c0-88ed-d87af4a687fa'],
-                    [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
-                    [
-                        new Tag('tag-1', 'f49a3e9068189f392acc51885b839a028efa4677', [1]),
-                        new Tag('tag-2', 'f49a3e9068189f392acc51885b839a028efa4677', [1])
-                    ]
-                )
-            ]
+                'successfulIngestTimes' => [
+                    '2021-01-01T00:00:00+0000',
+                    '2021-01-01T00:00:00+0000'
+                ]
+            ],
+            new TotalUploadsQueryResult(
+                ['0193ea3e-64b2-751e-ad50-817e4083c212', '0193ea3e-e1fe-78c0-88ed-d87af4a687fa'],
+                [new DateTimeImmutable('2021-01-01'), new DateTimeImmutable('2021-01-01')],
+                [
+                    new Tag('tag-1', 'f49a3e9068189f392acc51885b839a028efa4677', [1]),
+                    new Tag('tag-2', 'f49a3e9068189f392acc51885b839a028efa4677', [1])
+                ]
+            )
         ];
     }
 }

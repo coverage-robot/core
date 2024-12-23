@@ -10,6 +10,7 @@ use App\Query\Result\QueryResultIterator;
 use App\Service\LineGroupingService;
 use ArrayIterator;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\EventInterface;
@@ -45,7 +46,7 @@ final class LineGroupingServiceTest extends TestCase
         );
     }
 
-    public static function diffDataProvider(): array
+    public static function diffDataProvider(): Iterator
     {
         $date = new DateTimeImmutable();
 
@@ -62,15 +63,13 @@ final class LineGroupingServiceTest extends TestCase
             baseRef: 'mock-base-ref',
             eventTime: $date
         );
-
-        return [
-            'Two fully uncovered method' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(1, 16)
-                ],
-                new QueryResultIterator(
+        yield 'Two fully uncovered method' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(1, 16)
+            ],
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -154,20 +153,21 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
+            ];
+
+        yield 'Statements modified inside method' => [
+            $event,
+            $date,
+            [
+                'mock-file' => [
+                    3,
+                    4,
+                    7,
+                    8,
+                    9
+                ]
             ],
-            'Statements modified inside method' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => [
-                        3,
-                        4,
-                        7,
-                        8,
-                        9
-                    ]
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -241,20 +241,21 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
+            ];
+
+        yield 'New method and modified method' => [
+            $event,
+            $date,
+            [
+                'mock-file' => [
+                    3,
+                    4,
+                    7,
+                    8,
+                    9
+                ]
             ],
-            'New method and modified method' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => [
-                        3,
-                        4,
-                        7,
-                        8,
-                        9
-                    ]
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -309,33 +310,34 @@ final class LineGroupingServiceTest extends TestCase
                     ]),
                     5,
                     static fn(QueryResultInterface $result) => $result
+            ),
+            [
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    3,
+                    4,
+                    $date
                 ),
-                [
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        3,
-                        4,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        true,
-                        7,
-                        9,
-                        $date
-                    ),
-                ]
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    true,
+                    7,
+                    9,
+                    $date
+                ),
+            ]
+        ];
+
+        yield 'Modified method with partial branch' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(3, 10)
             ],
-            'Modified method with partial branch' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(3, 10)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -410,41 +412,42 @@ final class LineGroupingServiceTest extends TestCase
                     ]), 7,
                     static fn(QueryResultInterface $result) => $result
                 ),
-                [
-                    new PublishablePartialBranchLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        5,
-                        5,
-                        2,
-                        1,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        3,
-                        5,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        9,
-                        10,
-                        $date
-                    ),
-                ]
+            [
+                new PublishablePartialBranchLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    5,
+                    5,
+                    2,
+                    1,
+                    $date
+                ),
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    3,
+                    5,
+                    $date
+                ),
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    9,
+                    10,
+                    $date
+                ),
+            ]
+        ];
+
+        yield 'Completely uncovered branch' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(5, 10)
             ],
-            'Completely uncovered branch' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(5, 10)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -471,14 +474,15 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
+            ];
+
+        yield 'Completely uncovered branch and overlapping uncovered statements' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(1, 8)
             ],
-            'Completely uncovered branch and overlapping uncovered statements' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(1, 8)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -524,35 +528,36 @@ final class LineGroupingServiceTest extends TestCase
                     4,
 
                     static fn(QueryResultInterface $result) => $result
+            ),
+            [
+                new PublishablePartialBranchLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    5,
+                    5,
+                    2,
+                    0,
+                    $date
                 ),
-                [
-                    new PublishablePartialBranchLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        5,
-                        5,
-                        2,
-                        0,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        1,
-                        8,
-                        $date
-                    ),
-                ]
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    1,
+                    8,
+                    $date
+                ),
+            ]
+        ];
+
+        yield 'Multiple files' => [
+            $event,
+            $date,
+            [
+                'mock-file-1' => range(1, 2),
+                'mock-file-2' => range(10, 12)
             ],
-            'Multiple files' => [
-                $event,
-                $date,
-                [
-                    'mock-file-1' => range(1, 2),
-                    'mock-file-2' => range(10, 12)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file-1',
@@ -626,14 +631,15 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     )
                 ]
+            ];
+
+        yield 'Uncovered blocks split by covered blocks' => [
+            $event,
+            $date,
+            [
+                'mock-file-1' => range(1, 10),
             ],
-            'Uncovered blocks split by covered blocks' => [
-                $event,
-                $date,
-                [
-                    'mock-file-1' => range(1, 10),
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file-1',
@@ -717,18 +723,19 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     )
                 ]
+            ];
+
+        yield 'Method signature change only' => [
+            $event,
+            $date,
+            [
+                'mock-file-1' => [
+                    5,
+                    10,
+                    11
+                ]
             ],
-            'Method signature change only' => [
-                $event,
-                $date,
-                [
-                    'mock-file-1' => [
-                        5,
-                        10,
-                        11
-                    ]
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file-1',
@@ -763,33 +770,34 @@ final class LineGroupingServiceTest extends TestCase
                     ]),
                     3,
                     static fn(QueryResultInterface $result) => $result
+            ),
+            [
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file-1',
+                    true,
+                    5,
+                    5,
+                    $date
                 ),
-                [
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file-1',
-                        true,
-                        5,
-                        5,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file-1',
-                        false,
-                        10,
-                        11,
-                        $date
-                    ),
-                ]
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file-1',
+                    false,
+                    10,
+                    11,
+                    $date
+                ),
+            ]
+        ];
+
+        yield 'Bridging uncovered diff with empty lines' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(1, 11)
             ],
-            'Bridging uncovered diff with empty lines' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(1, 11)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -864,14 +872,15 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
+            ];
+
+        yield 'Method signature changed as last line of diff' => [
+            $event,
+            $date,
+            [
+                'mock-file' => range(10, 11)
             ],
-            'Method signature changed as last line of diff' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => range(10, 11)
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -897,19 +906,20 @@ final class LineGroupingServiceTest extends TestCase
                         $date
                     ),
                 ]
+            ];
+
+        yield 'Block starting with uncoverable lines' => [
+            $event,
+            $date,
+            [
+                'mock-file' => [
+                    185,
+                    240,
+                    241,
+                    242
+                ]
             ],
-            'Block starting with uncoverable lines' => [
-                $event,
-                $date,
-                [
-                    'mock-file' => [
-                        185,
-                        240,
-                        241,
-                        242
-                    ]
-                ],
-                new QueryResultIterator(
+            new QueryResultIterator(
                     new ArrayIterator([
                         new LineCoverageQueryResult(
                             'mock-file',
@@ -944,26 +954,25 @@ final class LineGroupingServiceTest extends TestCase
                     ]),
                     3,
                     static fn(QueryResultInterface $result) => $result
+            ),
+            [
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    185,
+                    185,
+                    $date
                 ),
-                [
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        185,
-                        185,
-                        $date
-                    ),
-                    new PublishableMissingCoverageLineCommentMessage(
-                        $event,
-                        'mock-file',
-                        false,
-                        241,
-                        242,
-                        $date
-                    ),
-                ]
-            ],
+                new PublishableMissingCoverageLineCommentMessage(
+                    $event,
+                    'mock-file',
+                    false,
+                    241,
+                    242,
+                    $date
+                ),
+            ]
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Packages\Contracts\PublishableMessage;
 
 enum PublishableMessage: string
