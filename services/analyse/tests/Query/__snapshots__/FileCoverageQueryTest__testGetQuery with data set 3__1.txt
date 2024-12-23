@@ -1,0 +1,192 @@
+WITH
+  unnested AS (
+    SELECT
+      upload.tag,
+      upload.totalLines,
+      upload.commit,
+      fileName,
+      lineNumber,
+      type = 'METHOD' as containsMethod,
+      type = 'BRANCH' as containsBranch,
+      type = 'STATEMENT' as containsStatement,
+      (
+        SELECT
+          IF (
+            value <> '',
+            CAST(value AS int),
+            0
+          )
+        FROM
+          UNNEST(metadata)
+        WHERE
+          key = "lineHits"
+      ) AS hits,
+      ARRAY(
+        SELECT
+          SUM(
+            CAST(branchHits AS INT64)
+          )
+        FROM
+          UNNEST(
+            JSON_VALUE_ARRAY(
+              (
+                SELECT
+                  value
+                FROM
+                  UNNEST(metadata)
+                WHERE
+                  KEY = "branchHits"
+              )
+            )
+          ) AS branchHits
+        WITH
+        OFFSET
+          AS branchIndex
+        GROUP BY
+          branchIndex,
+          branchHits
+      ) as branchHits
+    FROM
+      `mock-project-id.prod.mock-upload-table` as upload
+      INNER JOIN `mock-project-id.prod.mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+    WHERE
+      (
+        (
+          1 = 1
+          AND upload.projectId = @PROJECT_ID
+          AND upload.commit = @COMMIT
+          AND upload.uploadId IN UNNEST(@UPLOADS)
+        )
+        OR (
+          (
+            (
+              upload.commit = "f7e3cc3cc12c056ed8ece76216127ea1ae188d8a"
+              AND upload.tag = "1"
+            )
+            OR (
+              upload.commit = "f7e3cc3cc12c056ed8ece76216127ea1ae188d8a"
+              AND upload.tag = "2"
+            )
+            OR (
+              upload.commit = "a6e3dd3cc12d024ed8aef76216127aa2ae188d8a"
+              AND upload.tag = "3"
+            )
+            OR (
+              upload.commit = "a6e3dd3cc12d024ed8aef76216127aa2ae188d8a"
+              AND upload.tag = "4"
+            )
+          )
+          AND upload.projectId = @PROJECT_ID
+        )
+      )
+      AND DATE(lines.ingestTime) IN UNNEST(@INGEST_PARTITIONS)
+  ),
+  branchingLines AS (
+    SELECT
+      fileName,
+      lineNumber,
+      MAX(containsMethod) as containsMethod,
+      MAX(containsBranch) as containsBranch,
+      MAX(containsStatement) as containsStatement,
+      SUM(hits) as hits,
+      branchIndex,
+      SUM(branchHit) > 0 as isBranchedLineHit
+    FROM
+      unnested,
+      UNNEST(
+        IF(
+          ARRAY_LENGTH(branchHits) = 0,
+          [hits],
+          branchHits
+        )
+      ) AS branchHit
+    WITH
+    OFFSET
+      AS branchIndex
+    GROUP BY
+      fileName,
+      lineNumber,
+      branchIndex
+  ),
+  lines AS (
+    SELECT
+      fileName,
+      lineNumber,
+      MAX(containsMethod) as containsMethod,
+      MAX(containsBranch) as containsBranch,
+      MAX(containsStatement) as containsStatement,
+      COUNTIF(containsBranch = true) as totalBranches,
+      COUNTIF(
+        containsBranch = true
+        AND isBranchedLineHit = true
+      ) as coveredBranches,
+      IF(
+        -- Check that the line hits are 0 (i.e. not executed) and that, if theres a branch, it's
+        -- definitely not been covered at all (as we'll want to show that as a partial line)
+        SUM(hits) = 0
+        AND COUNTIF(
+          containsBranch = true
+          AND isBranchedLineHit = true
+        ) = 0,
+        "uncovered",
+        IF (
+          MIN(isBranchedLineHit) = false,
+          "partial",
+          "covered"
+        )
+      ) as state
+    FROM
+      branchingLines
+    GROUP BY
+      fileName,
+      lineNumber
+  )
+SELECT
+  fileName,
+  ARRAY_AGG(lineNumber) as `lines`,
+  ARRAY_AGG(
+    IF(
+      state = "covered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS coveredLines,
+  ARRAY_AGG(
+    IF(
+      state = "partial", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS partialLines,
+  ARRAY_AGG(
+    IF(
+      state = "uncovered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS uncoveredLines,
+  ROUND(
+    (
+      SUM(
+        IF(state = "covered", 1, 0)
+      ) + SUM(
+        IF(state = "partial", 1, 0)
+      )
+    ) / COUNT(*) * 100,
+    2
+  ) as coveragePercentage
+FROM
+  lines
+GROUP BY
+  fileName
+ORDER BY
+  ROUND(
+    (
+      SUM(
+        IF(state = "covered", 1, 0)
+      ) + SUM(
+        IF(state = "partial", 1, 0)
+      )
+    ) / COUNT(*) * 100,
+    2
+  ) ASC

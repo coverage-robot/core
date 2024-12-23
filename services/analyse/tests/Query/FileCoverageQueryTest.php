@@ -130,10 +130,50 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
                 ]
             );
 
+        $carryforwardAndUploadsParametersWithNoLimit = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
+            ->set(QueryParameter::INGEST_PARTITIONS, [
+                new DateTimeImmutable('2024-01-03 00:00:00'),
+                new DateTimeImmutable('2024-01-03 00:00:00')
+            ])
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                [
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '4',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    )
+                ]
+            );
+
         return [
             $lineScopedParameters,
             $carryforwardParameters,
-            $carryforwardAndUploadsParameters
+            $carryforwardAndUploadsParameters,
+            $carryforwardAndUploadsParametersWithNoLimit
         ];
     }
 
