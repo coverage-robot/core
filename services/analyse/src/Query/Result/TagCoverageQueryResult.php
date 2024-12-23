@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
+use Override;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -55,7 +56,7 @@ final class TagCoverageQueryResult implements QueryResultInterface
         return $this->uncovered;
     }
 
-    #[\Override]
+    #[Override]
     public function getTimeToLive(): int|false
     {
         return self::DEFAULT_QUERY_CACHE_TTL;
