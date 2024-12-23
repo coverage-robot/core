@@ -10,12 +10,13 @@ use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Setting\SettingInterface;
 use Packages\Contracts\Provider\Provider;
 use RuntimeException;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class SettingService implements SettingServiceInterface
 {
     public function __construct(
-        #[TaggedIterator(
+        #[AutowireIterator(
             'app.settings',
             defaultIndexMethod: 'getSettingKey'
         )]
