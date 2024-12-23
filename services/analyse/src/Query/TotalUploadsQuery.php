@@ -107,20 +107,8 @@ final class TotalUploadsQuery implements QueryInterface
                 new Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])
             ],
             QueryParameter::COMMIT->value => [
-                new Assert\AtLeastOneOf([
-                    new Assert\Sequentially([
-                        new Assert\Type(type: 'string'),
-                        new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
-                    ]),
-                    new Assert\Sequentially([
-                        new Assert\Type(type: 'array'),
-                        new Assert\Count(min: 1),
-                        new Assert\Sequentially([
-                            new Assert\Type(type: 'string'),
-                            new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
-                        ])
-                    ])
-                ])
+                new Assert\Type(type: 'string'),
+                new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
             ],
         ];
     }
