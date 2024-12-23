@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
@@ -11,12 +12,14 @@ use Doctrine\SqlFormatter\SqlFormatter;
 use Override;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class QueryBuilderService implements QueryBuilderServiceInterface
 {
     public function __construct(
         private readonly SqlFormatter $sqlFormatter,
-        private readonly SerializerInterface&NormalizerInterface $serializer
+        private readonly SerializerInterface&NormalizerInterface $serializer,
+        private readonly ValidatorInterface $validator
     ) {
     }
 
@@ -28,16 +31,26 @@ final class QueryBuilderService implements QueryBuilderServiceInterface
      * @throws QueryException
      */
     #[Override]
-    public function build(QueryInterface $query, string $table, ?QueryParameterBag $parameterBag = null): string
+    public function build(QueryInterface $query, ?QueryParameterBag $parameterBag = null): string
     {
-        $query->validateParameters($parameterBag);
+        if ($parameterBag instanceof QueryParameterBag) {
+            // We've got parameters to pass through into the query, so lets first make sure
+            // they're valid before we build the query
+            foreach ($query->getQueryParameterConstraints() as $parameter => $constraints) {
+                /** @var value-of<QueryParameterBag> $value */
+                $value = $parameterBag->get(QueryParameter::from($parameter));
 
-        return $this->sqlFormatter->format(
-            $query->getQuery(
-                $table,
-                $parameterBag
-            )
-        );
+                $errors = $this->validator->validate($value, $constraints);
+
+                if (count($errors) > 0) {
+                    throw new QueryException(
+                        'The query parameters are not suitable to execute the query: ' . $errors
+                    );
+                }
+            }
+        }
+
+        return $this->sqlFormatter->format($query->getQuery($parameterBag));
     }
 
     /**

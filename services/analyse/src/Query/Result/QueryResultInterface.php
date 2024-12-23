@@ -6,23 +6,22 @@ namespace App\Query\Result;
 
 use App\Enum\QueryResult;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[DiscriminatorMap(
     'type',
     [
-        QueryResult::FILE_COVERAGE_COLLECTION->value => FileCoverageCollectionQueryResult::class,
         QueryResult::FILE_COVERAGE->value => FileCoverageQueryResult::class,
 
-        QueryResult::LINE_COVERAGE_COLLECTION->value => LineCoverageCollectionQueryResult::class,
         QueryResult::LINE_COVERAGE->value => LineCoverageQueryResult::class,
 
-        QueryResult::TAG_COVERAGE_COLLECTION->value => TagCoverageCollectionQueryResult::class,
         QueryResult::TAG_COVERAGE->value => TagCoverageQueryResult::class,
 
         QueryResult::TOTAL_UPLOADS->value => TotalUploadsQueryResult::class,
 
-        QueryResult::TAG_AVAILABILITY_COLLECTION->value => TagAvailabilityCollectionQueryResult::class,
         QueryResult::TAG_AVAILABILITY->value => TagAvailabilityQueryResult::class,
+
+        QueryResult::UPLOADED_TAGS->value => UploadedTagsQueryResult::class,
 
         /**
          * The ordering of this map is **very** important, as this dictates what the serializer will output
@@ -45,4 +44,20 @@ use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 )]
 interface QueryResultInterface
 {
+    /**
+     * The default TTL for a query cache item, in seconds - currently 6 hours.
+     */
+    public const int DEFAULT_QUERY_CACHE_TTL = 21600;
+
+    /**
+     * The TTL of results (in seconds) before they are considered stale.
+     *
+     * This will be used to cache results of queries for faster lookups, and helps to reduce the load on
+     * the data warehouse.
+     *
+     * Results which tend to change frequently, and stale data is not acceptable should return a low TTL, and  which
+     * should not be cached at all must return false.
+     */
+    #[Ignore]
+    public function getTimeToLive(): int|false;
 }

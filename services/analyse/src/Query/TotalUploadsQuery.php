@@ -4,35 +4,44 @@ declare(strict_types=1);
 
 namespace App\Query;
 
+use App\Client\BigQueryClient;
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\Trait\ParameterAwareTrait;
-use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class TotalUploadsQuery implements QueryInterface
 {
-    use UploadTableAwareTrait;
     use ParameterAwareTrait;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService
+        private readonly ValidatorInterface $validator,
+        private readonly EnvironmentServiceInterface $environmentService,
+        private readonly BigQueryClient $bigQueryClient
     ) {
     }
 
     #[Override]
-    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(?QueryParameterBag $parameterBag = null): string
     {
+        $uploadTable = $this->bigQueryClient->getTable(
+            $this->environmentService->getVariable(
+                EnvironmentVariable::BIGQUERY_UPLOAD_TABLE
+            )
+        );
+
         return <<<SQL
         SELECT
             COALESCE(ARRAY_AGG(uploadId), []) as successfulUploads,
@@ -48,7 +57,7 @@ final class TotalUploadsQuery implements QueryInterface
                 []
             ) as successfulTags
         FROM
-            `{$table}`
+            `{$uploadTable}`
         WHERE
             projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
             AND commit = {$this->getAlias(QueryParameter::COMMIT)}
@@ -56,7 +65,7 @@ final class TotalUploadsQuery implements QueryInterface
     }
 
     #[Override]
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string
     {
         return '';
     }
@@ -80,59 +89,27 @@ final class TotalUploadsQuery implements QueryInterface
             'array'
         );
 
+        $errors = $this->validator->validate($results);
+
+        if (count($errors) > 0) {
+            throw QueryException::invalidResult($results, $errors);
+        }
+
         return $results;
     }
 
     #[Override]
-    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    public function getQueryParameterConstraints(): array
     {
-        if (!$parameterBag instanceof QueryParameterBag) {
-            throw new QueryException(
-                sprintf('Query %s requires parameters to be provided.', self::class)
-            );
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::COMMIT) ||
-            (
-                !is_array($parameterBag->get(QueryParameter::COMMIT)) &&
-                !is_string($parameterBag->get(QueryParameter::COMMIT))
-            ) ||
-            ($parameterBag->get(QueryParameter::COMMIT) === [] || $parameterBag->get(QueryParameter::COMMIT) === '')
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::COMMIT);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::REPOSITORY) ||
-            !is_string($parameterBag->get(QueryParameter::REPOSITORY))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::OWNER) ||
-            !is_string($parameterBag->get(QueryParameter::OWNER))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::OWNER);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::PROVIDER) ||
-            !$parameterBag->get(QueryParameter::PROVIDER) instanceof Provider
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::PROVIDER);
-        }
-    }
-
-    /**
-     * This can't be cached for extended periods of time, as its common (and very likely) the
-     * uploads on a particular commit will change over time, and we need to be able to respond
-     * to that.
-     */
-    #[Override]
-    public function isCachable(): bool
-    {
-        return false;
+        return [
+            QueryParameter::PROJECT_ID->value => [
+                new Assert\Type(type: 'string'),
+                new Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])
+            ],
+            QueryParameter::COMMIT->value => [
+                new Assert\Type(type: 'string'),
+                new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
+            ],
+        ];
     }
 }

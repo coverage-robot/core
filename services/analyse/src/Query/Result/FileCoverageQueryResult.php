@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class FileCoverageQueryResult implements QueryResultInterface
@@ -14,14 +15,26 @@ final class FileCoverageQueryResult implements QueryResultInterface
         #[Assert\GreaterThanOrEqual(0)]
         #[Assert\LessThanOrEqual(100)]
         private readonly float $coveragePercentage,
-        #[Assert\PositiveOrZero]
-        private readonly int $lines,
-        #[Assert\PositiveOrZero]
-        private readonly int $covered,
-        #[Assert\PositiveOrZero]
-        private readonly int $partial,
-        #[Assert\PositiveOrZero]
-        private readonly int $uncovered
+        #[Assert\All([
+            new Assert\Type('int'),
+            new Assert\Positive(),
+        ])]
+        private readonly array $lines,
+        #[Assert\All([
+            new Assert\Type('int'),
+            new Assert\Positive(),
+        ])]
+        private readonly array $coveredLines,
+        #[Assert\All([
+            new Assert\Type('int'),
+            new Assert\Positive(),
+        ])]
+        private readonly array $partialLines,
+        #[Assert\All([
+            new Assert\Type('int'),
+            new Assert\Positive(),
+        ])]
+        private readonly array $uncoveredLines,
     ) {
     }
 
@@ -35,23 +48,29 @@ final class FileCoverageQueryResult implements QueryResultInterface
         return $this->coveragePercentage;
     }
 
-    public function getLines(): int
+    public function getLines(): array
     {
         return $this->lines;
     }
 
-    public function getCovered(): int
+    public function getCoveredLines(): array
     {
-        return $this->covered;
+        return $this->coveredLines;
     }
 
-    public function getPartial(): int
+    public function getPartialLines(): array
     {
-        return $this->partial;
+        return $this->partialLines;
     }
 
-    public function getUncovered(): int
+    public function getUncoveredLines(): array
     {
-        return $this->uncovered;
+        return $this->uncoveredLines;
+    }
+
+    #[Override]
+    public function getTimeToLive(): int|false
+    {
+        return self::DEFAULT_QUERY_CACHE_TTL;
     }
 }

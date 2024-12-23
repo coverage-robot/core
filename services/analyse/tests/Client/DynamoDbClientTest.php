@@ -7,15 +7,17 @@ namespace App\Tests\Client;
 use App\Client\DynamoDbClient;
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
+use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
-use Packages\Contracts\Environment\Service;
 use App\Tests\Mock\Factory\MockSerializerFactory;
 use AsyncAws\Core\Response;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use AsyncAws\DynamoDb\Result\GetItemOutput;
 use AsyncAws\DynamoDb\Result\PutItemOutput;
+use InvalidArgumentException;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
+use Packages\Contracts\Environment\Service;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -29,7 +31,7 @@ final class DynamoDbClientTest extends TestCase
         $mockResponse->method('getInfo')
             ->willReturn(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
 
-        $queryResult = new TotalUploadsQueryResult([], [], []);
+        $queryResult = new TotalCoverageQueryResult(0, 0, 0, 0, 0);
 
         $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
 
@@ -162,6 +164,39 @@ final class DynamoDbClientTest extends TestCase
             $dynamoDbClient->tryFromQueryCache(
                 'mock-cache-key'
             )
+        );
+    }
+
+    public function testPuttingQueryResultWithoutTimeToLiveInCache(): void
+    {
+        $queryResult = $this->createMock(QueryResultInterface::class);
+        $queryResult->expects($this->once())
+            ->method('getTimeToLive')
+            ->willReturn(false);
+
+        $mockClient = $this->createMock(\AsyncAws\DynamoDb\DynamoDbClient::class);
+
+        $mockClient->expects($this->never())
+            ->method('putItem');
+
+        $dynamoDbClient = new DynamoDbClient(
+            $mockClient,
+            MockEnvironmentServiceFactory::createMock(
+                Environment::TESTING,
+                Service::ANALYSE,
+                [
+                    EnvironmentVariable::QUERY_CACHE_TABLE_NAME->value => 'mock-query-cache-table-name'
+                ]
+            ),
+            MockSerializerFactory::getMock($this),
+            new NullLogger()
+        );
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $dynamoDbClient->putQueryResultInCache(
+            'mock-cache-key',
+            $queryResult
         );
     }
 }

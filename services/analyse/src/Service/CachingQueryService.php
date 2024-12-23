@@ -42,40 +42,29 @@ final class CachingQueryService implements QueryServiceInterface
      * In the event of a cache miss, the query is passed through to the data warehouse, and the result is
      * cached for any subsequent queries.
      *
-     * @param class-string<QueryInterface> $queryClass
+     * @param class-string<QueryInterface> $class
+     *
+     * @throws GoogleException
+     * @throws QueryException
      */
     #[Override]
-    public function runQuery(string $queryClass, ?QueryParameterBag $parameterBag = null): QueryResultInterface
-    {
-        if (!$this->queryService->getQueryClass($queryClass)->isCachable()) {
-            // The query isn't cacheable, so just act as a direct pass-through,
-            // and run the query against the data warehouse.
-            $this->queryServiceLogger->info(
-                'Query is not cachable. Running query and not caching result.',
-                [
-                    'queryClass' => $queryClass,
-                    'parameterBag' => $parameterBag
-                ]
-            );
-
-            return $this->runUncachedQuery($queryClass, $parameterBag);
-        }
-
-        $cacheKey = $this->queryBuilderService->hash($queryClass, $parameterBag);
+    public function runQuery(
+        string $class,
+        ?QueryParameterBag $parameterBag = null
+    ): QueryResultInterface {
+        $cacheKey = $this->queryBuilderService->hash($class, $parameterBag);
 
         $result = $this->dynamoDbClient->tryFromQueryCache($cacheKey);
 
         if (!$result instanceof QueryResultInterface) {
             $this->queryServiceLogger->info(
-                'Cache miss. Running query and caching result.',
+                'Cache miss. Running query and caching result (if possible).',
                 [
                     'cacheKey' => $cacheKey,
-                    'queryClass' => $queryClass,
+                    'queryClass' => $class,
                     'parameterBag' => $parameterBag
                 ]
             );
-
-            $result = $this->runUncachedQuery($queryClass, $parameterBag);
 
             $this->metricService->put(
                 metric: 'QueryCacheMiss',
@@ -85,11 +74,16 @@ final class CachingQueryService implements QueryServiceInterface
                     ['query']
                 ],
                 properties: [
-                    'query' => $queryClass
+                    'query' => $class
                 ]
             );
 
-            $this->dynamoDbClient->putQueryResultInCache($cacheKey, $result);
+            $result = $this->runUncachedQuery($class, $parameterBag);
+
+            if ($result->getTimeToLive() !== false) {
+                // The query result has a TTL, meaning can cache it.
+                $this->dynamoDbClient->putQueryResultInCache($cacheKey, $result);
+            }
 
             return $result;
         }
@@ -99,7 +93,7 @@ final class CachingQueryService implements QueryServiceInterface
             [
                 'cacheKey' => $cacheKey,
                 'result' => $result,
-                'queryClass' => $queryClass,
+                'queryClass' => $class,
                 'parameterBag' => $parameterBag
             ]
         );
@@ -112,7 +106,7 @@ final class CachingQueryService implements QueryServiceInterface
                 ['query']
             ],
             properties: [
-                'query' => $queryClass
+                'query' => $class
             ]
         );
 
@@ -132,11 +126,5 @@ final class CachingQueryService implements QueryServiceInterface
         ?QueryParameterBag $parameterBag
     ): QueryResultInterface {
         return $this->queryService->runQuery($queryClass, $parameterBag);
-    }
-
-    #[Override]
-    public function getQueryClass(string $queryClass): QueryInterface
-    {
-        return $this->queryService->getQueryClass($queryClass);
     }
 }

@@ -4,35 +4,44 @@ declare(strict_types=1);
 
 namespace App\Query;
 
+use App\Client\BigQueryClient;
+use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Trait\ParameterAwareTrait;
-use App\Query\Trait\UploadTableAwareTrait;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
-use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class TagAvailabilityQuery implements QueryInterface
 {
-    use UploadTableAwareTrait;
     use ParameterAwareTrait;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly EnvironmentServiceInterface $environmentService
+        private readonly ValidatorInterface $validator,
+        private readonly EnvironmentServiceInterface $environmentService,
+        private readonly BigQueryClient $bigQueryClient
     ) {
     }
 
     #[Override]
-    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(?QueryParameterBag $parameterBag = null): string
     {
+        $uploadTable = $this->bigQueryClient->getTable(
+            $this->environmentService->getVariable(
+                EnvironmentVariable::BIGQUERY_UPLOAD_TABLE
+            )
+        );
+
         return <<<SQL
         WITH availability AS (
             SELECT
@@ -41,7 +50,7 @@ final class TagAvailabilityQuery implements QueryInterface
                 ARRAY_AGG(totalLines) as successfullyUploadedLines,
                 ARRAY_AGG(STRING(ingestTime)) as ingestTimes
             FROM
-                `{$table}`
+                `{$uploadTable}`
             WHERE
                 projectId = {$this->getAlias(QueryParameter::PROJECT_ID)}
                 AND commit IN UNNEST({$this->getAlias(QueryParameter::COMMIT)})
@@ -67,57 +76,30 @@ final class TagAvailabilityQuery implements QueryInterface
     }
 
     #[Override]
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string
     {
         return '';
     }
 
     #[Override]
-    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    public function getQueryParameterConstraints(): array
     {
-        if (!$parameterBag instanceof QueryParameterBag) {
-            throw new QueryException(
-                sprintf('Query %s requires parameters to be provided.', self::class)
-            );
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::REPOSITORY) ||
-            !is_string($parameterBag->get(QueryParameter::REPOSITORY))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::OWNER) ||
-            !is_string($parameterBag->get(QueryParameter::OWNER))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::OWNER);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::PROVIDER) ||
-            !$parameterBag->get(QueryParameter::PROVIDER) instanceof Provider
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::PROVIDER);
-        }
-
-        if (
-            !$parameterBag->has(QueryParameter::COMMIT) ||
-            !is_array($parameterBag->get(QueryParameter::COMMIT))
-        ) {
-            throw QueryException::invalidParameters(QueryParameter::COMMIT);
-        }
-    }
-
-    /**
-     * This query can't be cached, as it doesnt use any discernible parameters which will
-     * ensure the cached query is still up to date.
-     */
-    #[Override]
-    public function isCachable(): bool
-    {
-        return false;
+        return [
+            QueryParameter::PROJECT_ID->value => [
+                new Assert\Type(type: 'string'),
+                new Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])
+            ],
+            QueryParameter::COMMIT->value => [
+                new Assert\Sequentially([
+                    new Assert\Type(type: 'array'),
+                    new Assert\Count(min: 1),
+                    new Assert\All([
+                        new Assert\Type(type: 'string'),
+                        new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
+                    ])
+                ])
+            ],
+        ];
     }
 
     /**
@@ -136,6 +118,12 @@ final class TagAvailabilityQuery implements QueryInterface
             TagAvailabilityCollectionQueryResult::class,
             'array'
         );
+
+        $errors = $this->validator->validate($results);
+
+        if (count($errors) > 0) {
+            throw QueryException::invalidResult($results, $errors);
+        }
 
         return $results;
     }

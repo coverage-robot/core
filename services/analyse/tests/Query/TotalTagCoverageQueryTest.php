@@ -4,41 +4,23 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
-use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
-use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\QueryInterface;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\TotalTagCoverageQuery;
+use ArrayIterator;
 use DateTimeImmutable;
-use Google\Cloud\BigQuery\QueryResults;
-use Iterator;
 use Override;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
 {
     #[Override]
-    public function getQueryClass(): QueryInterface
+    public function getQueryClass(): string
     {
-        return new TotalTagCoverageQuery(
-            $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::createMock(
-                Environment::PRODUCTION,
-                Service::ANALYSE,
-                [
-                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
-                ]
-            )
-        );
+        return TotalTagCoverageQuery::class;
     }
 
     #[Override]
@@ -46,17 +28,20 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
-            projectId: 'mock-project',
+            projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
-            commit: 'mock-commit',
+            commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
             history: [],
             diff: []
         );
 
         $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
                 [
@@ -76,16 +61,38 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag('4', 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a', [110], [
+                        new DateTimeImmutable(
+                            '2024-01-01 02:00:00'
+                        )
+                    ])
                 ]
             );
 
 
         $carryforwardAndUploadParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(
                 QueryParameter::INGEST_PARTITIONS,
                 [
@@ -96,10 +103,29 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [110], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [110], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [110],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag('4', 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a', [110], [
+                        new DateTimeImmutable(
+                            '2024-01-01 02:00:00'
+                        )
+                    ])
                 ]
             );
 
@@ -110,42 +136,15 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    #[DataProvider('resultsDataProvider')]
     #[Override]
-    public function testParseResults(array $queryResult): void
+    public static function getQueryResults(): array
     {
-        $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('rows')
-            ->willReturn($queryResult);
-
-        $result = $this->getQueryClass()
-            ->parseResults($mockBigQueryResult);
-
-        $this->assertInstanceOf(TagCoverageCollectionQueryResult::class, $result);
-    }
-
-    #[DataProvider('parametersDataProvider')]
-    #[Override]
-    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
-    {
-        if (!$valid) {
-            $this->expectException(QueryException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $this->getQueryClass()->validateParameters($parameters);
-    }
-
-    public static function resultsDataProvider(): Iterator
-    {
-        yield [
-            [
+        return [
+            new ArrayIterator([
                 [
                     'tag' => [
                         'name' => '1',
-                        'commit' => 'mock-commit',
+                        'commit' => 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
                         'successfullyUploadedLines' => [110],
                     ],
                     'lines' => 1,
@@ -154,15 +153,12 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     'uncovered' => 0,
                     'coveragePercentage' => 100.0
                 ],
-            ],
-        ];
-
-        yield [
-            [
+            ]),
+            new ArrayIterator([
                 [
                     'tag' => [
                         'name' => '2',
-                        'commit' => 'mock-commit',
+                        'commit' => 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
                         'successfullyUploadedLines' => [100],
                     ],
                     'lines' => 1,
@@ -174,7 +170,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 [
                     'tag' => [
                         'name' => '3',
-                        'commit' => 'mock-commit-2',
+                        'commit' => 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
                         'successfullyUploadedLines' => [90],
                     ],
                     'lines' => 1,
@@ -186,7 +182,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                 [
                     'tag' => [
                         'name' => '4',
-                        'commit' => 'mock-commit-2',
+                        'commit' => 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
                         'successfullyUploadedLines' => [80],
                     ],
                     'lines' => 1,
@@ -195,66 +191,7 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
                     'uncovered' => 1,
                     'coveragePercentage' => 0.0
                 ]
-            ],
-        ];
-    }
-
-    public static function parametersDataProvider(): Iterator
-    {
-        $waypoint = new ReportWaypoint(
-            provider: Provider::GITHUB,
-            projectId: 'mock-project',
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            ref: 'mock-ref',
-            commit: 'mock-commit',
-            history: [],
-            diff: []
-        );
-        yield [
-            new QueryParameterBag(),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::UPLOADS, ['1', '2']),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-            false
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(QueryParameter::UPLOADS, ['1', '2'])
-                ->set(
-                    QueryParameter::INGEST_PARTITIONS,
-                    [
-                        new DateTimeImmutable('2024-01-03 00:00:00'),
-                        new DateTimeImmutable('2024-01-03 00:00:00')
-                    ]
-                ),
-            true
-        ];
-
-        yield [
-            QueryParameterBag::fromWaypoint($waypoint)
-                ->set(
-                    QueryParameter::CARRYFORWARD_TAGS,
-                    [
-                        new CarryforwardTag(
-                            '1',
-                            'mock-commit',
-                            [110],
-                            [new DateTimeImmutable('2024-01-03 00:00:00')]
-                        )
-                    ]
-                ),
-            true
+            ])
         ];
     }
 }

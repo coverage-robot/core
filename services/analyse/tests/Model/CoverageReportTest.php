@@ -6,22 +6,39 @@ namespace App\Tests\Model;
 
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TotalUploadsQueryResult;
+use ArrayIterator;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 final class CoverageReportTest extends TestCase
 {
     public function testReportLazyLoading(): void
     {
         $totalUploads = new TotalUploadsQueryResult(['1'], [new DateTimeImmutable('2024-01-05 00:00:00')], []);
-        $tagCoverage = new TagCoverageCollectionQueryResult([]);
-        $leastCoveredDiffFiles = new FileCoverageCollectionQueryResult([]);
-        $diffLineCoverage = new LineCoverageCollectionQueryResult([]);
+        $tagCoverage = new QueryResultIterator(
+            new ArrayIterator([]),
+            0,
+            static fn(): never => throw new RuntimeException('Should never be called')
+        );
+        $leastCoveredDiffFiles = new QueryResultIterator(
+            new ArrayIterator([]),
+            0,
+            static fn(): never => throw new RuntimeException('Should never be called')
+        );
+        $fileCoverage = new QueryResultIterator(
+            new ArrayIterator([]),
+            0,
+            static fn(): never => throw new RuntimeException('Should never be called')
+        );
+        $diffLineCoverage = new QueryResultIterator(
+            new ArrayIterator([]),
+            0,
+            static fn(): never => throw new RuntimeException('Should never be called')
+        );
 
         $report = new CoverageReport(
             new ReportWaypoint(
@@ -40,11 +57,12 @@ final class CoverageReportTest extends TestCase
             static fn(): int => 2,
             static fn(): int => 3,
             static fn(): float => 99.9,
-            static fn(): TagCoverageCollectionQueryResult => $tagCoverage,
+            static fn(): QueryResultIterator => $fileCoverage,
+            static fn(): QueryResultIterator => $tagCoverage,
             static fn(): int => 95,
-            static fn(): FileCoverageCollectionQueryResult => $leastCoveredDiffFiles,
+            static fn(): QueryResultIterator => $leastCoveredDiffFiles,
             static fn(): int => 10,
-            static fn(): LineCoverageCollectionQueryResult => $diffLineCoverage
+            static fn(): QueryResultIterator => $diffLineCoverage
         );
 
         $this->assertEquals(
@@ -71,6 +89,10 @@ final class CoverageReportTest extends TestCase
             99.9,
             $report->getCoveragePercentage(),
             PHP_FLOAT_EPSILON
+        );
+        $this->assertEquals(
+            $fileCoverage,
+            $report->getFileCoverage()
         );
         $this->assertEquals(
             $tagCoverage,

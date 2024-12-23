@@ -8,12 +8,10 @@ use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\FileCoverageQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -26,6 +24,7 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
 use App\Service\QueryServiceInterface;
+use ArrayIterator;
 use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
@@ -111,9 +110,15 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             $this->assertEqualsWithDelta(
                 100.0,
                 $coverageReport->getTagCoverage()
-                    ->getTags()[0]
+                    ->current()
                     ->getCoveragePercentage(),
                 PHP_FLOAT_EPSILON
+            );
+            $this->assertSame(
+                'mock-file',
+                $coverageReport->getFileCoverage()
+                    ->current()
+                    ->getFileName()
             );
             $this->assertEqualsWithDelta(
                 100.0,
@@ -127,13 +132,13 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             $this->assertSame(
                 'mock-file',
                 $coverageReport->getLeastCoveredDiffFiles()
-                    ->getFiles()[0]
+                    ->current()
                     ->getFileName()
             );
             $this->assertSame(
                 LineState::COVERED,
                 $coverageReport->getDiffLineCoverage()
-                    ->getLines()[0]
+                    ->current()
                     ->getState()
             );
             $this->assertSame(
@@ -265,21 +270,21 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
         $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
 
-        $this->assertEquals(
-            new FileCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getLeastCoveredDiffFiles()
         );
-        $this->assertEquals(
-            new FileCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getLeastCoveredDiffFiles()
         );
 
-        $this->assertEquals(
-            new LineCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getDiffLineCoverage()
         );
-        $this->assertEquals(
-            new LineCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getDiffLineCoverage()
         );
     }
@@ -304,42 +309,52 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                         0,
                         0
                     ),
-                    TotalTagCoverageQuery::class => new TagCoverageCollectionQueryResult(
-                        [
-                            new TagCoverageQueryResult(
-                                new Tag('mock-tag', 'mock-commit', [20]),
-                                100,
-                                1,
-                                0,
-                                0,
-                                0
-                            )
-                        ]
+                    TotalTagCoverageQuery::class => new QueryResultIterator(
+                        new ArrayIterator(
+                            [
+                                new TagCoverageQueryResult(
+                                    new Tag('mock-tag', 'mock-commit', [20]),
+                                    100,
+                                    1,
+                                    0,
+                                    0,
+                                    0
+                                )
+                            ]
+                        ),
+                        1,
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
-                    FileCoverageQuery::class => new FileCoverageCollectionQueryResult(
-                        [
+                    FileCoverageQuery::class => new QueryResultIterator(
+                        new ArrayIterator([
                             new FileCoverageQueryResult(
                                 'mock-file',
                                 100,
+                                [1],
+                                [1],
+                                [],
+                                []
+                            )
+                        ]),
+                        1,
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
+                    ),
+                    LineCoverageQuery::class => new QueryResultIterator(
+                        new ArrayIterator([
+                            new LineCoverageQueryResult(
+                                'mock-file',
                                 1,
-                                1,
+                                LineState::COVERED,
+                                false,
+                                false,
+                                true,
                                 0,
                                 0
                             )
-                        ]
+                        ]),
+                        1,
+                        static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
-                    LineCoverageQuery::class => new LineCoverageCollectionQueryResult([
-                        new LineCoverageQueryResult(
-                            'mock-file',
-                            1,
-                            LineState::COVERED,
-                            false,
-                            false,
-                            true,
-                            0,
-                            0
-                        )
-                    ]),
                     default => null,
                 }
             );

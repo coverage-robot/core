@@ -8,6 +8,7 @@ use App\Enum\QueryParameter;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
@@ -16,6 +17,7 @@ use App\Query\UploadedTagsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
+use ArrayIterator;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockTagBehaviourServiceFactory;
 use Packages\Contracts\Provider\Provider;
@@ -41,11 +43,13 @@ final class CarryforwardTagServiceTest extends TestCase
                 )
             )
             ->willReturn(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 )
             );
 
@@ -86,11 +90,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -191,11 +197,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -289,11 +297,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(4))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -461,11 +471,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(6))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [

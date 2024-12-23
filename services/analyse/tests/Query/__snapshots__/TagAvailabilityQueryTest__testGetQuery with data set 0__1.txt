@@ -8,7 +8,7 @@ WITH
         STRING(ingestTime)
       ) as ingestTimes
     FROM
-      `mock-table`
+      `mock-project-id.prod.mock-upload-table`
     WHERE
       projectId = @PROJECT_ID
       AND commit IN UNNEST(@COMMIT)

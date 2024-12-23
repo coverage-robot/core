@@ -47,8 +47,8 @@ WITH
           branchHits
       ) as branchHits
     FROM
-      `mock-table` as upload
-      INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+      `mock-project-id.prod.mock-upload-table` as upload
+      INNER JOIN `mock-project-id.prod.mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       1 = 1
       AND upload.projectId = @PROJECT_ID

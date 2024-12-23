@@ -24,6 +24,8 @@ use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class QueryBuilderServiceTest extends KernelTestCase
 {
@@ -60,19 +62,18 @@ final class QueryBuilderServiceTest extends KernelTestCase
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(Serializer::class)
+            $this->createMock(Serializer::class),
+            $this->createMock(ValidatorInterface::class)
         );
 
         $this->assertMatchesTextSnapshot(
             $queryBuilder->build(
                 MockQueryFactory::createMock(
                     $this,
-                    $this->getContainer(),
                     QueryInterface::class,
                     'SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"',
                     $this->createMock(QueryResultInterface::class)
                 ),
-                'mock-table',
                 $queryParameters
             )
         );
@@ -81,32 +82,33 @@ final class QueryBuilderServiceTest extends KernelTestCase
     public function testBuildValidatesQueryParameters(): void
     {
         $queryParameters = new QueryParameterBag();
+        $queryParameters->set(QueryParameter::PROVIDER, Provider::GITHUB);
 
         $queryBuilder = new QueryBuilderService(
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(Serializer::class)
+            $this->createMock(Serializer::class),
+            $this->getContainer()->get(ValidatorInterface::class)
         );
-
-        $this->expectException(QueryException::class);
 
         $mockQuery = MockQueryFactory::createMock(
             $this,
-            $this->getContainer(),
             QueryInterface::class,
             '',
             $this->createMock(QueryResultInterface::class)
         );
 
         $mockQuery->expects($this->once())
-            ->method('validateParameters')
-            ->with($queryParameters)
-            ->willThrowException(new QueryException('mock-message'));
+            ->method('getQueryParameterConstraints')
+            ->willReturn([
+                QueryParameter::PROVIDER->value => new Assert\IdenticalTo(value: 'not-a-provider')
+            ]);
+
+        $this->expectException(QueryException::class);
 
         $queryBuilder->build(
             $mockQuery,
-            'mock-table',
             $queryParameters
         );
     }
@@ -129,7 +131,8 @@ final class QueryBuilderServiceTest extends KernelTestCase
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->getContainer()->get(SerializerInterface::class)
+            $this->getContainer()->get(SerializerInterface::class),
+            $this->createMock(ValidatorInterface::class)
         );
 
         $hash = $queryBuilder->hash($queryClass, $parameterBag);

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\QueryResultInterface;
+use App\Query\Result\QueryResultIterator;
 use App\Service\LineGroupingService;
+use ArrayIterator;
 use DateTimeImmutable;
 use Iterator;
 use Packages\Contracts\Line\LineState;
@@ -25,7 +28,7 @@ final class LineGroupingServiceTest extends TestCase
         EventInterface $event,
         DateTimeImmutable $validUntil,
         array $diff,
-        array $lineCoverage,
+        QueryResultIterator $lineCoverage,
         array $expectedAnnotations
     ): void {
         $groupingService = new LineGroupingService(
@@ -66,68 +69,72 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(1, 16)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    1,
-                    LineState::UNCOVERED,
-                    true,
-                    false,
-                    false,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    2,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    3,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    6,
-                    LineState::UNCOVERED,
-                    true,
-                    false,
-                    false,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        1,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        2,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        3,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        6,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                6,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -160,58 +167,62 @@ final class LineGroupingServiceTest extends TestCase
                     9
                 ]
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    3,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    4,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    9,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        3,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        4,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        9,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                5,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -244,58 +255,62 @@ final class LineGroupingServiceTest extends TestCase
                     9
                 ]
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    3,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    4,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::UNCOVERED,
-                    true,
-                    false,
-                    false,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    9,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        3,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        4,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        9,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                5,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -322,78 +337,82 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(3, 10)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    3,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    4,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    5,
-                    LineState::PARTIAL,
-                    false,
-                    true,
-                    false,
-                    2,
-                    1
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    6,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    9,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    10,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        3,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        4,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        5,
+                        LineState::PARTIAL,
+                        false,
+                        true,
+                        false,
+                        2,
+                        1
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        6,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        9,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        10,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                7,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishablePartialBranchLineCommentMessage(
                     $event,
@@ -429,18 +448,22 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(5, 10)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    5,
-                    LineState::PARTIAL,
-                    false,
-                    true,
-                    false,
-                    2,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        5,
+                        LineState::PARTIAL,
+                        false,
+                        true,
+                        false,
+                        2,
+                        0
+                    ),
+                ]),
+                1,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishablePartialBranchLineCommentMessage(
                     $event,
@@ -460,48 +483,52 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(1, 8)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    1,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    5,
-                    LineState::PARTIAL,
-                    false,
-                    true,
-                    false,
-                    2,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        1,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        5,
+                        LineState::PARTIAL,
+                        false,
+                        true,
+                        false,
+                        2,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                4,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishablePartialBranchLineCommentMessage(
                     $event,
@@ -530,58 +557,62 @@ final class LineGroupingServiceTest extends TestCase
                 'mock-file-1' => range(1, 2),
                 'mock-file-2' => range(10, 12)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    1,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    2,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-2',
-                    10,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-2',
-                    11,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-2',
-                    12,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        1,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        2,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-2',
+                        10,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-2',
+                        11,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-2',
+                        12,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                5,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -608,68 +639,72 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file-1' => range(1, 10),
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    1,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    2,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    3,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    4,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    5,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    6,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        1,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        2,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        3,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        4,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        5,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        6,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                6,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -700,38 +735,42 @@ final class LineGroupingServiceTest extends TestCase
                     11
                 ]
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    5,
-                    LineState::UNCOVERED,
-                    true,
-                    false,
-                    false,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    10,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file-1',
-                    11,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        5,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        10,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file-1',
+                        11,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                3,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -758,59 +797,63 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(1, 11)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    1,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                // Theres 6 uncoverable lines - perhaps empty lines, or a long code comment
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    7,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    8,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    9,
-                    LineState::COVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    10,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        1,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    // Theres 6 uncoverable lines - perhaps empty lines, or a long code comment
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        7,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        8,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        9,
+                        LineState::COVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        10,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                5,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -837,18 +880,22 @@ final class LineGroupingServiceTest extends TestCase
             [
                 'mock-file' => range(10, 11)
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    11,
-                    LineState::UNCOVERED,
-                    true,
-                    false,
-                    false,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        11,
+                        LineState::UNCOVERED,
+                        true,
+                        false,
+                        false,
+                        0,
+                        0
+                    ),
+                ]),
+                1,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,
@@ -872,38 +919,42 @@ final class LineGroupingServiceTest extends TestCase
                     242
                 ]
             ],
-            [
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    185,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    241,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-                new LineCoverageQueryResult(
-                    'mock-file',
-                    242,
-                    LineState::UNCOVERED,
-                    false,
-                    false,
-                    true,
-                    0,
-                    0
-                ),
-            ],
+            new QueryResultIterator(
+                new ArrayIterator([
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        185,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        241,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                    new LineCoverageQueryResult(
+                        'mock-file',
+                        242,
+                        LineState::UNCOVERED,
+                        false,
+                        false,
+                        true,
+                        0,
+                        0
+                    ),
+                ]),
+                3,
+                static fn(QueryResultInterface $result): QueryResultInterface => $result
+            ),
             [
                 new PublishableMissingCoverageLineCommentMessage(
                     $event,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
+use Override;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -94,5 +95,11 @@ final class LineCoverageQueryResult implements QueryResultInterface
     public function getCoveredBranches(): int
     {
         return $this->coveredBranches;
+    }
+
+    #[Override]
+    public function getTimeToLive(): int|false
+    {
+        return self::DEFAULT_QUERY_CACHE_TTL;
     }
 }
