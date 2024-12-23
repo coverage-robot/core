@@ -6,10 +6,7 @@ namespace App\Tests\Model;
 
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\QueryResultIterator;
-use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use ArrayIterator;
 use DateTimeImmutable;
@@ -32,7 +29,7 @@ final class CoverageReportTest extends TestCase
             0,
             static fn(): never => throw new RuntimeException('Should never be called')
         );
-        $lineCoverage = new QueryResultIterator(
+        $fileCoverage = new QueryResultIterator(
             new ArrayIterator([]),
             0,
             static fn(): never => throw new RuntimeException('Should never be called')
@@ -60,7 +57,7 @@ final class CoverageReportTest extends TestCase
             static fn(): int => 2,
             static fn(): int => 3,
             static fn(): float => 99.9,
-            static fn(): QueryResultIterator => $lineCoverage,
+            static fn(): QueryResultIterator => $fileCoverage,
             static fn(): QueryResultIterator => $tagCoverage,
             static fn(): int => 95,
             static fn(): QueryResultIterator => $leastCoveredDiffFiles,
@@ -92,6 +89,10 @@ final class CoverageReportTest extends TestCase
             99.9,
             $report->getCoveragePercentage(),
             PHP_FLOAT_EPSILON
+        );
+        $this->assertEquals(
+            $fileCoverage,
+            $report->getFileCoverage()
         );
         $this->assertEquals(
             $tagCoverage,

@@ -160,10 +160,10 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
 
-        $tagCoverage = parent::getFileCoverage($waypoint);
-        $this->setCacheValue(__FUNCTION__, $waypoint, $tagCoverage);
+        $fileCoverage = parent::getFileCoverage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $fileCoverage);
 
-        return $tagCoverage;
+        return $fileCoverage;
     }
 
     #[Override]
