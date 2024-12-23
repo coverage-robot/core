@@ -449,8 +449,8 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         $carryforwardTags = $this->getCarryforwardTags($waypoint);
 
         if (
-            $uploads === [] ||
-            $ingestTimes === [] ||
+            $uploads === [] &&
+            $ingestTimes === [] &&
             $carryforwardTags === []
         ) {
             // Theres no point in checking diff coverage if theirs no uploads

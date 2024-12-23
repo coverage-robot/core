@@ -8,13 +8,10 @@ use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\FileCoverageCollectionQueryResult;
 use App\Query\Result\FileCoverageQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
 use App\Query\Result\QueryResultIterator;
-use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -116,6 +113,12 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                     ->current()
                     ->getCoveragePercentage(),
                 PHP_FLOAT_EPSILON
+            );
+            $this->assertSame(
+                'mock-file',
+                $coverageReport->getFileCoverage()
+                    ->current()
+                    ->getFileName()
             );
             $this->assertEqualsWithDelta(
                 100.0,
@@ -322,8 +325,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                         1,
                         static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
-                    FileCoverageQuery::class =>
-                    new QueryResultIterator(
+                    FileCoverageQuery::class => new QueryResultIterator(
                         new ArrayIterator([
                             new FileCoverageQueryResult(
                                 'mock-file',
@@ -337,8 +339,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                         1,
                         static fn(QueryResultInterface $result): QueryResultInterface => $result
                     ),
-                    LineCoverageQuery::class =>
-                    new QueryResultIterator(
+                    LineCoverageQuery::class => new QueryResultIterator(
                         new ArrayIterator([
                             new LineCoverageQueryResult(
                                 'mock-file',
