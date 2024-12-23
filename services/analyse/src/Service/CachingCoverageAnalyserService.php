@@ -7,7 +7,10 @@ namespace App\Service;
 use App\Exception\QueryException;
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
@@ -136,7 +139,7 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     {
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var QueryResultIterator
+             * @var QueryResultIterator<TagCoverageQueryResult>
              */
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
@@ -152,7 +155,7 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     {
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var QueryResultIterator
+             * @var QueryResultIterator<FileCoverageQueryResult>
              */
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
@@ -187,7 +190,7 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
         $cachedResults = [];
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var array<int, QueryResultIterator> $cachedResults
+             * @var array<int, QueryResultIterator<FileCoverageQueryResult>> $cachedResults
              */
             $cachedResults = $this->getCacheValue(__FUNCTION__, $waypoint);
 
@@ -232,7 +235,7 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     {
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var QueryResultIterator
+             * @var QueryResultIterator<LineCoverageQueryResult>
              */
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }

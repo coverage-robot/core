@@ -399,7 +399,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking for tag coverage as theres no files to check against
             /** @var QueryResultIterator<TagCoverageQueryResult> */
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -450,7 +456,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
             /** @var QueryResultIterator<FileCoverageQueryResult> */
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -585,7 +597,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
             /** @var QueryResultIterator<FileCoverageQueryResult> */
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -597,7 +615,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -696,7 +720,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
             /** @var QueryResultIterator<LineCoverageQueryResult> */
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -708,7 +738,13 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new QueryResultIterator(new ArrayIterator([]), 0, fn(): null => null);
+            return new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new QueryException(
+                    'Iterator should not call the parser as no results were returned'
+                )
+            );
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)

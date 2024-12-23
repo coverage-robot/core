@@ -118,6 +118,7 @@ final class LineGroupingService
      * method definitions.
      *
      * @param array<string, array<int, int>> $diff
+     * @param QueryResultIterator<LineCoverageQueryResult> $line
      *
      * @return PublishableMissingCoverageLineCommentMessage[]
      */

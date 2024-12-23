@@ -52,7 +52,7 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
     {
         $carryforwardTags = [];
 
-        /** @var QueryResultIterator $uploadedTags */
+        /** @var QueryResultIterator<UploadedTagsQueryResult> $uploadedTags */
         $uploadedTags = $this->queryService->runQuery(
             UploadedTagsQuery::class,
             QueryParameterBag::fromWaypoint($waypoint)

@@ -9,6 +9,7 @@ use App\Model\CarryforwardTag;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
@@ -93,6 +94,8 @@ interface CoverageAnalyserServiceInterface
     /**
      * Get the total number of lines, which were in the diff of the waypoint, that were hit by at least
      * one upload.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
@@ -102,7 +105,7 @@ interface CoverageAnalyserServiceInterface
     /**
      * Get the individual lines and their associated coverage for the diff of the waypoint.
      *
-     * @return QueryResultIterator<FileCoverageQueryResult>
+     * @return QueryResultIterator<LineCoverageQueryResult>
      */
     public function getDiffLineCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 

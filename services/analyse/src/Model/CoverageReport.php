@@ -32,6 +32,7 @@ final class CoverageReport implements CoverageReportInterface
      * @param int|Closure():int $atLeastPartiallyCoveredLines
      * @param int|Closure():int $uncoveredLines
      * @param float|Closure():float $coveragePercentage
+     * @param QueryResultIterator<FileCoverageQueryResult>|Closure():QueryResultIterator<FileCoverageQueryResult> $fileCoverage
      * @param QueryResultIterator<TagCoverageQueryResult>|Closure():QueryResultIterator<TagCoverageQueryResult> $tagCoverage
      * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
      * @param QueryResultIterator<FileCoverageQueryResult>|Closure():QueryResultIterator<FileCoverageQueryResult> $leastCoveredDiffFiles

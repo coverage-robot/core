@@ -10,14 +10,14 @@ use Iterator;
 use Override;
 
 /**
- * @template T of QueryResultInterface
+ * @template Item of QueryResultInterface
  *
- * @template-implements Iterator<int, T>
+ * @template-implements Iterator<int, Item>
  */
 final class QueryResultIterator implements QueryResultInterface, Iterator, Countable
 {
     /**
-     * @param Closure(mixed $row): ?T $parser
+     * @param Closure(mixed $row): Item $parser
      */
     public function __construct(
         private readonly Iterator $rows,
@@ -27,17 +27,13 @@ final class QueryResultIterator implements QueryResultInterface, Iterator, Count
     }
 
     /**
-     * @return T|null
+     * @return Item
      */
     #[Override]
-    public function current(): ?QueryResultInterface
+    public function current(): QueryResultInterface
     {
         /** @var mixed $current */
         $current = $this->rows->current();
-
-        if ($current === null) {
-            return null;
-        }
 
         return ($this->parser)($current);
     }
@@ -79,6 +75,6 @@ final class QueryResultIterator implements QueryResultInterface, Iterator, Count
             return false;
         }
 
-        return $this->current()?->getTimeToLive() ?? false;
+        return $this->current()->getTimeToLive();
     }
 }

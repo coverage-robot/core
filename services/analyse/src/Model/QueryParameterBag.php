@@ -6,7 +6,7 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use BackedEnum;
-use DateTimeImmutable;
+use DateTimeInterface;
 use Google\Cloud\BigQuery\Date;
 use Iterator;
 use JsonSerializable;
@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
  *
- * @template Value of array|int|string|Provider|null
+ * @template Value of array|int|string|BackedEnum|null
  *
  * @template-implements Iterator<QueryParameter, Value>
  */
@@ -117,10 +117,15 @@ final class QueryParameterBag implements JsonSerializable, Iterator
                 $value = $value->value;
             }
 
-            if ($parameter === QueryParameter::INGEST_PARTITIONS) {
-                $value = array_map(
-                    static fn(DateTimeImmutable $date): Date => new Date($date),
-                    $value
+            if (
+                $parameter === QueryParameter::INGEST_PARTITIONS &&
+                is_array($value)
+            ) {
+                $value = array_filter(
+                    array_map(
+                        static fn(mixed $date): ?Date => $date instanceof DateTimeInterface ? new Date($date) : null,
+                        $value
+                    )
                 );
             }
 

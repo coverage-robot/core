@@ -30,7 +30,7 @@ interface QueryInterface
      * Get the constraints in which the query parameters must adhere to in order for them
      * to be valid for the query.
      *
-     * @return array<value-of<QueryParameter>, list{Constraint}>
+     * @return array<value-of<QueryParameter>, array<Constraint>>
      */
     public function getQueryParameterConstraints(): array;
 
