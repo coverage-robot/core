@@ -9,8 +9,8 @@ use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
-use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\Result\UploadedTagsQueryResult;
 use App\Query\TagAvailabilityQuery;
 use App\Query\UploadedTagsQuery;
@@ -52,7 +52,7 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
     {
         $carryforwardTags = [];
 
-        /** @var UploadedTagsCollectionQueryResult $uploadedTags */
+        /** @var QueryResultIterator $uploadedTags */
         $uploadedTags = $this->queryService->runQuery(
             UploadedTagsQuery::class,
             QueryParameterBag::fromWaypoint($waypoint)
@@ -63,8 +63,8 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
          */
         $tagsNotSeen = array_filter(
             array_map(
-                static fn (UploadedTagsQueryResult $uploadedTag): string => $uploadedTag->getTagName(),
-                $uploadedTags->getUploadedTags()
+                static fn(UploadedTagsQueryResult $uploadedTag): string => $uploadedTag->getTagName(),
+                iterator_to_array($uploadedTags)
             ),
             fn(string $tagName): bool => $this->shouldTagBeCarriedForward($waypoint, $existingTags, $tagName)
         );

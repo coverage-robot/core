@@ -4,41 +4,24 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
-use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
-use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\LineCoverageQuery;
-use App\Query\QueryInterface;
 use App\Query\Result\LineCoverageCollectionQueryResult;
+use ArrayIterator;
 use DateTimeImmutable;
-use Google\Cloud\BigQuery\QueryResults;
 use Override;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class LineCoverageQueryTest extends AbstractQueryTestCase
 {
     #[Override]
-    public function getQueryClass(): QueryInterface
+    public function getQueryClass(): string
     {
-        return new LineCoverageQuery(
-            $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::createMock(
-                Environment::PRODUCTION,
-                Service::ANALYSE,
-                [
-                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
-                ]
-            )
-        );
+        return LineCoverageQuery::class;
     }
 
     #[Override]
@@ -46,17 +29,20 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
-            projectId: 'mock-project',
+            projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
-            commit: 'mock-commit',
+            commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
             history: [],
             diff: []
         );
 
         $scopedParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -75,15 +61,37 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag('4', 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a', [1], [
+                        new DateTimeImmutable(
+                            '2024-01-01 02:00:00'
+                        )
+                    ])
                 ]
             );
 
         $carryforwardAndUploadsParameters = QueryParameterBag::fromWaypoint($waypoint)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -91,10 +99,29 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag('4', 'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a', [1], [
+                        new DateTimeImmutable(
+                            '2024-01-01 02:00:00'
+                        )
+                    ])
                 ]
             );
 
@@ -105,85 +132,54 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    #[DataProvider('resultsDataProvider')]
-    #[Override]
-    public function testParseResults(array $queryResult): void
-    {
-        $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('rows')
-            ->willReturn($queryResult);
-
-        $result = $this->getQueryClass()
-            ->parseResults($mockBigQueryResult);
-
-        $this->assertInstanceOf(LineCoverageCollectionQueryResult::class, $result);
-    }
-
-    #[DataProvider('parametersDataProvider')]
-    #[Override]
-    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
-    {
-        if (!$valid) {
-            $this->expectException(QueryException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $this->getQueryClass()->validateParameters($parameters);
-    }
-
-    public static function resultsDataProvider(): array
+    public static function getQueryResults(): array
     {
         return [
-            [
+
+            new ArrayIterator([
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lineNumber' => 1,
-                        'state' => LineState::COVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
+                    'fileName' => 'mock-file',
+                    'lineNumber' => 1,
+                    'state' => LineState::COVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
                 ],
-            ],
-            [
+            ]),
+            new ArrayIterator([
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lineNumber' => 1,
-                        'state' => LineState::COVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                    [
-                        'fileName' => 'mock-file-2',
-                        'lineNumber' => 2,
-                        'state' => LineState::UNCOVERED->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                    [
-                        'fileName' => 'mock-file-3',
-                        'lineNumber' => 3,
-                        'state' => LineState::PARTIAL->value,
-                        'containsMethod' => false,
-                        'containsBranch' => false,
-                        'containsStatement' => true,
-                        'totalBranches' => 0,
-                        'coveredBranches' => 0,
-                    ],
-                ]
-            ]
+                    'fileName' => 'mock-file',
+                    'lineNumber' => 1,
+                    'state' => LineState::COVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
+                [
+                    'fileName' => 'mock-file-2',
+                    'lineNumber' => 2,
+                    'state' => LineState::UNCOVERED->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
+                [
+                    'fileName' => 'mock-file-3',
+                    'lineNumber' => 3,
+                    'state' => LineState::PARTIAL->value,
+                    'containsMethod' => false,
+                    'containsBranch' => false,
+                    'containsStatement' => true,
+                    'totalBranches' => 0,
+                    'coveredBranches' => 0,
+                ],
+            ])
         ];
     }
 
@@ -191,11 +187,11 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
-            projectId: 'mock-project',
+            projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
-            commit: 'mock-commit',
+            commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
             history: [],
             diff: []
         );
@@ -207,7 +203,10 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2']),
+                    ->set(
+                        QueryParameter::UPLOADS,
+                        ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+                    ),
                 false
             ],
             [
@@ -217,7 +216,10 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
             ],
             [
                 QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
+                    ->set(
+                        QueryParameter::UPLOADS,
+                        ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+                    )
                     ->set(
                         QueryParameter::INGEST_PARTITIONS,
                         [
@@ -240,7 +242,7 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
                         [
                             new CarryforwardTag(
                                 '1',
-                                'mock-commit',
+                                'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
                                 [1],
                                 [new DateTimeImmutable('2024-01-03 00:00:00')]
                             )

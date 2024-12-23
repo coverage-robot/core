@@ -4,65 +4,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
-use App\Enum\EnvironmentVariable;
-use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\QueryInterface;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\UploadedTagsQuery;
-use Google\Cloud\BigQuery\QueryResults;
+use ArrayIterator;
 use Override;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class UploadedTagsQueryTest extends AbstractQueryTestCase
 {
     #[Override]
-    public function getQueryClass(): QueryInterface
+    public function getQueryClass(): string
     {
-        return new UploadedTagsQuery(
-            $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::createMock(
-                Environment::PRODUCTION,
-                Service::ANALYSE,
-                [
-                    EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-table'
-                ]
-            )
-        );
-    }
-
-    #[DataProvider('resultsDataProvider')]
-    #[Override]
-    public function testParseResults(array $queryResult): void
-    {
-        $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('rows')
-            ->willReturn($queryResult);
-
-        $result = $this->getQueryClass()
-            ->parseResults($mockBigQueryResult);
-
-        $this->assertInstanceOf(UploadedTagsCollectionQueryResult::class, $result);
-    }
-
-    #[DataProvider('parametersDataProvider')]
-    #[Override]
-    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
-    {
-        if (!$valid) {
-            $this->expectException(QueryException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $this->getQueryClass()->validateParameters($parameters);
+        return UploadedTagsQuery::class;
     }
 
     #[Override]
@@ -72,11 +27,11 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
             QueryParameterBag::fromWaypoint(
                 new ReportWaypoint(
                     provider: Provider::GITHUB,
-                    projectId: 'mock-project',
+                    projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
                     owner: 'mock-owner',
                     repository: 'mock-repository',
                     ref: 'mock-ref',
-                    commit: 'mock-commit',
+                    commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
                     history: [],
                     diff: []
                 )
@@ -84,20 +39,16 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
-    public static function resultsDataProvider(): array
+    public static function getQueryResults(): array
     {
         return [
-            [
-                []
-            ],
-            [
-                [
-                    ['tagName' => 'mock-tag-1'],
-                    ['tagName' => 'mock-tag-2'],
-                    ['tagName' => 'mock-tag-3'],
-                    ['tagName' => 'mock-tag-4'],
-                ]
-            ],
+            new ArrayIterator([]),
+            new ArrayIterator([
+                ['tagName' => 'mock-tag-1'],
+                ['tagName' => 'mock-tag-2'],
+                ['tagName' => 'mock-tag-3'],
+                ['tagName' => 'mock-tag-4'],
+            ]),
         ];
     }
 
@@ -112,11 +63,11 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
                 QueryParameterBag::fromWaypoint(
                     new ReportWaypoint(
                         provider: Provider::GITHUB,
-                        projectId: 'mock-project',
+                        projectId: '0193f0cd-ad49-7e14-b6d2-e88545efc889',
                         owner: 'mock-owner',
                         repository: 'mock-repository',
                         ref: 'mock-ref',
-                        commit: 'mock-commit',
+                        commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
                         history: [],
                         diff: []
                     )

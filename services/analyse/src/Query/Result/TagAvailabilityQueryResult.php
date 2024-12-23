@@ -34,4 +34,13 @@ final class TagAvailabilityQueryResult implements QueryResultInterface
     {
         return $this->carryforwardTags;
     }
+
+    public function getTimeToLive(): int|false
+    {
+        /**
+         * This query can't be cached, as it doesnt use any discernible parameters which will
+         * ensure the cached query is still up to date.
+         */
+        return false;
+    }
 }

@@ -17,7 +17,7 @@ interface QueryBuilderServiceInterface
      *
      * @throws QueryException
      */
-    public function build(QueryInterface $query, string $table, ?QueryParameterBag $parameterBag = null): string;
+    public function build(QueryInterface $query, ?QueryParameterBag $parameterBag = null): string;
 
     /**
      * Hash the contents of a query, using its parameters and the class name of the query.

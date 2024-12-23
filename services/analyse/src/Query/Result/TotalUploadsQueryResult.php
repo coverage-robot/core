@@ -56,4 +56,13 @@ final class TotalUploadsQueryResult implements QueryResultInterface
     {
         return $this->successfulIngestTimes;
     }
+
+    public function getTimeToLive(): int|false
+    {
+        /**
+         * Only applying a 60 second cache to this query, as it's likely the results will
+         * change fairly frequently (new uploads to the same commit)
+         */
+        return 60;
+    }
 }

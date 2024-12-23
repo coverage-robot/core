@@ -13,6 +13,7 @@ use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageCollectionQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
 use App\Query\Result\QueryResultInterface;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageCollectionQueryResult;
 use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalCoverageQueryResult;
@@ -26,6 +27,7 @@ use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
 use App\Service\QueryService;
 use App\Service\QueryServiceInterface;
+use ArrayIterator;
 use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
@@ -110,7 +112,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             $this->assertEquals(
                 100,
                 $coverageReport->getTagCoverage()
-                    ->getTags()[0]
+                    ->current()
                     ->getCoveragePercentage()
             );
             $this->assertEquals(
@@ -124,13 +126,13 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
             $this->assertEquals(
                 'mock-file',
                 $coverageReport->getLeastCoveredDiffFiles()
-                    ->getFiles()[0]
+                    ->current()
                     ->getFileName()
             );
             $this->assertEquals(
                 LineState::COVERED,
                 $coverageReport->getDiffLineCoverage()
-                    ->getLines()[0]
+                    ->current()
                     ->getState()
             );
             $this->assertEquals(
@@ -262,21 +264,21 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
         $this->assertEquals(0, $coverageReport->getDiffUncoveredLines());
 
-        $this->assertEquals(
-            new FileCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getLeastCoveredDiffFiles()
         );
-        $this->assertEquals(
-            new FileCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getLeastCoveredDiffFiles()
         );
 
-        $this->assertEquals(
-            new LineCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getDiffLineCoverage()
         );
-        $this->assertEquals(
-            new LineCoverageCollectionQueryResult([]),
+        $this->assertCount(
+            0,
             $coverageReport->getDiffLineCoverage()
         );
     }
@@ -301,42 +303,54 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
                         0,
                         0
                     ),
-                    TotalTagCoverageQuery::class => new TagCoverageCollectionQueryResult(
-                        [
-                            new TagCoverageQueryResult(
-                                new Tag('mock-tag', 'mock-commit', [20]),
-                                100,
-                                1,
-                                0,
-                                0,
-                                0
-                            )
-                        ]
+                    TotalTagCoverageQuery::class => new QueryResultIterator(
+                        new ArrayIterator(
+                            [
+                                new TagCoverageQueryResult(
+                                    new Tag('mock-tag', 'mock-commit', [20]),
+                                    100,
+                                    1,
+                                    0,
+                                    0,
+                                    0
+                                )
+                            ]
+                        ),
+                        1,
+                        static fn(QueryResultInterface $result) => $result
                     ),
-                    FileCoverageQuery::class => new FileCoverageCollectionQueryResult(
-                        [
+                    FileCoverageQuery::class =>
+                    new QueryResultIterator(
+                        new ArrayIterator([
                             new FileCoverageQueryResult(
                                 'mock-file',
                                 100,
+                                [1],
+                                [1],
+                                [],
+                                []
+                            )
+                        ]),
+                        1,
+                        static fn(QueryResultInterface $result) => $result
+                    ),
+                    LineCoverageQuery::class =>
+                    new QueryResultIterator(
+                        new ArrayIterator([
+                            new LineCoverageQueryResult(
+                                'mock-file',
                                 1,
-                                1,
+                                LineState::COVERED,
+                                false,
+                                false,
+                                true,
                                 0,
                                 0
                             )
-                        ]
+                        ]),
+                        1,
+                        static fn(QueryResultInterface $result) => $result
                     ),
-                    LineCoverageQuery::class => new LineCoverageCollectionQueryResult([
-                        new LineCoverageQueryResult(
-                            'mock-file',
-                            1,
-                            LineState::COVERED,
-                            false,
-                            false,
-                            true,
-                            0,
-                            0
-                        )
-                    ]),
                     default => null,
                 }
             );

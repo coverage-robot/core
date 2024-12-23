@@ -95,4 +95,9 @@ final class LineCoverageQueryResult implements QueryResultInterface
     {
         return $this->coveredBranches;
     }
+
+    public function getTimeToLive(): int|false
+    {
+        return self::DEFAULT_QUERY_CACHE_TTL;
+    }
 }

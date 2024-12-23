@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Query\Result;
 
-use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class TotalCoverageQueryResult implements QueryResultInterface
@@ -47,5 +46,10 @@ final class TotalCoverageQueryResult implements QueryResultInterface
     public function getUncovered(): int
     {
         return $this->uncovered;
+    }
+
+    public function getTimeToLive(): int|false
+    {
+        return self::DEFAULT_QUERY_CACHE_TTL;
     }
 }

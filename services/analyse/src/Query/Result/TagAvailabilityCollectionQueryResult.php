@@ -34,11 +34,12 @@ final class TagAvailabilityCollectionQueryResult implements QueryResultInterface
         throw new OutOfBoundsException(sprintf('Tag %s is not available.', $name));
     }
 
-    public function getAvailableTagNames(): array
+    public function getTimeToLive(): int|false
     {
-        return array_map(
-            static fn(TagAvailabilityQueryResult $availability): string => $availability->getTagName(),
-            $this->tagAvailability
-        );
+        /**
+         * This query can't be cached, as it doesnt use any discernible parameters which will
+         * ensure the cached query is still up to date.
+         */
+        return false;
     }
 }

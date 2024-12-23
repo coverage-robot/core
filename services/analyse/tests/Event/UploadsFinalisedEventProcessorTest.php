@@ -8,20 +8,18 @@ use App\Event\UploadsFinalisedEventProcessor;
 use App\Model\CoverageReport;
 use App\Model\CoverageReportComparison;
 use App\Model\ReportWaypoint;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
+use ArrayIterator;
+use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Contracts\Event\Event;
-use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
-use Packages\Event\Model\AnalyseFailure;
 use Packages\Event\Model\CoverageFailed;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Message\Client\SqsClientInterface;
@@ -30,6 +28,7 @@ use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\NullLogger;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -88,11 +87,28 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 0,
                 0,
                 0.0,
-                new TagCoverageCollectionQueryResult([]),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
                 0.0,
-                new FileCoverageCollectionQueryResult([]),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
                 10,
-                new LineCoverageCollectionQueryResult([])
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
             ),
             headReport: new CoverageReport(
                 $headWaypoint,
@@ -102,11 +118,28 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
                 0,
                 0,
                 1.0,
-                new TagCoverageCollectionQueryResult([]),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
                 0.0,
-                new FileCoverageCollectionQueryResult([]),
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                ),
                 10,
-                new LineCoverageCollectionQueryResult([])
+                new QueryResultIterator(
+                    new ArrayIterator([]),
+                    0,
+                    static fn(): never => throw new RuntimeException('Should never be called')
+                )
             ),
         );
 
@@ -214,11 +247,28 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
             0,
             0,
             1.0,
-            new TagCoverageCollectionQueryResult([]),
+            new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new RuntimeException('Should never be called')
+            ),
+            new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new RuntimeException('Should never be called')
+            ),
             0.0,
-            new FileCoverageCollectionQueryResult([]),
+            new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new RuntimeException('Should never be called')
+            ),
             10,
-            new LineCoverageCollectionQueryResult([])
+            new QueryResultIterator(
+                new ArrayIterator([]),
+                0,
+                static fn(): never => throw new RuntimeException('Should never be called')
+            )
         );
 
         $mockCoverageAnalyserService = $this->createMock(CoverageAnalyserServiceInterface::class);

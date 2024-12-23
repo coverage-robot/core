@@ -10,7 +10,6 @@ use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
-use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Telemetry\Enum\Unit;
@@ -18,7 +17,6 @@ use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class QueryService implements QueryServiceInterface
 {
@@ -32,7 +30,6 @@ final class QueryService implements QueryServiceInterface
         private readonly iterable $queries,
         #[Autowire(service: QueryBuilderService::class)]
         private readonly QueryBuilderServiceInterface $queryBuilderService,
-        private readonly ValidatorInterface $validator,
         private readonly LoggerInterface $queryServiceLogger,
         private readonly MetricServiceInterface $metricService
     ) {
@@ -44,33 +41,13 @@ final class QueryService implements QueryServiceInterface
      */
     #[Override]
     public function runQuery(
-        string $queryClass,
+        string $class,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
         return $this->runQueryAndParseResult(
-            $this->getQueryClass($queryClass),
+            $this->getQuery($class),
             $parameterBag
         );
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @throws QueryException
-     */
-    #[Override]
-    public function getQueryClass(string $queryClass): QueryInterface
-    {
-        foreach ($this->queries as $query) {
-            if (
-                $query instanceof $queryClass &&
-                is_subclass_of($query, QueryInterface::class)
-            ) {
-                return $query;
-            }
-        }
-
-        throw new QueryException(sprintf('No query found with class name of %s.', $queryClass));
     }
 
     /**
@@ -81,11 +58,7 @@ final class QueryService implements QueryServiceInterface
         QueryInterface $query,
         ?QueryParameterBag $parameterBag = null
     ): QueryResultInterface {
-        $sql = $this->queryBuilderService->build(
-            $query,
-            $this->bigQueryClient->getTable($query->getTable()),
-            $parameterBag
-        );
+        $sql = $this->queryBuilderService->build($query, $parameterBag);
 
         try {
             $results = $this->bigQueryClient->runQuery(
@@ -108,10 +81,7 @@ final class QueryService implements QueryServiceInterface
                 ]
             );
 
-            return $this->parseAndValidateResults(
-                $query,
-                $results
-            );
+            return $query->parseResults($results);
         } catch (QueryException $e) {
             $this->queryServiceLogger->critical(
                 sprintf(
@@ -145,49 +115,23 @@ final class QueryService implements QueryServiceInterface
     }
 
     /**
-     * Parse the Query results from BigQuery into a model, and validate it.
+     * Get a fully instantiated query class from the query class string.
+     *
+     * @param class-string<QueryInterface> $class
      *
      * @throws QueryException
      */
-    private function parseAndValidateResults(
-        QueryInterface $query,
-        QueryResults $results
-    ): QueryResultInterface {
-        $results = $query->parseResults($results);
-
-        $errors = $this->validator->validate($results);
-
-        if ($errors->count() > 0) {
-            $this->queryServiceLogger->critical(
-                sprintf(
-                    'Query %s produced invalid results.',
-                    $query::class
-                ),
-                [
-                    'query' => $query,
-                    'errors' => $errors,
-                    'results' => $results
-                ]
-            );
-
-            throw new QueryException(
-                sprintf(
-                    'Query results for %s was invalid.',
-                    $query::class
-                )
-            );
+    private function getQuery(string $class): QueryInterface
+    {
+        foreach ($this->queries as $query) {
+            if (
+                $query instanceof $class &&
+                is_subclass_of($query, QueryInterface::class)
+            ) {
+                return $query;
+            }
         }
 
-        $this->queryServiceLogger->info(
-            sprintf(
-                'Results for query %s are valid and ready to be returned.',
-                $query::class
-            ),
-            [
-                'query' => $query,
-            ]
-        );
-
-        return $results;
+        throw new QueryException(sprintf('No query found with class name of %s.', $class));
     }
 }

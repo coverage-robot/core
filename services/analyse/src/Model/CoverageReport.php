@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\LineCoverageSummaryCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TotalUploadsQueryResult;
 use Closure;
 use DateTimeImmutable;
@@ -28,11 +27,11 @@ final class CoverageReport implements CoverageReportInterface
      * @param int|Closure():int $atLeastPartiallyCoveredLines
      * @param int|Closure():int $uncoveredLines
      * @param float|Closure():float $coveragePercentage
-     * @param TagCoverageCollectionQueryResult|Closure():TagCoverageCollectionQueryResult $tagCoverage
+     * @param QueryResultIterator|Closure():QueryResultIterator $tagCoverage
      * @param (float|null)|Closure():(float|null) $diffCoveragePercentage
-     * @param FileCoverageCollectionQueryResult|Closure():FileCoverageCollectionQueryResult $leastCoveredDiffFiles
+     * @param QueryResultIterator|Closure():QueryResultIterator $leastCoveredDiffFiles
      * @param int|Closure():int $diffUncoveredLines
-     * @param LineCoverageCollectionQueryResult|Closure():LineCoverageCollectionQueryResult $diffLineCoverage
+     * @param QueryResultIterator|Closure():QueryResultIterator $diffLineCoverage
      */
     public function __construct(
         private readonly ReportWaypoint $waypoint,
@@ -42,11 +41,12 @@ final class CoverageReport implements CoverageReportInterface
         private Closure|int $atLeastPartiallyCoveredLines,
         private Closure|int $uncoveredLines,
         private Closure|float $coveragePercentage,
-        private Closure|TagCoverageCollectionQueryResult $tagCoverage,
+        private Closure|QueryResultIterator $fileCoverage,
+        private Closure|QueryResultIterator $tagCoverage,
         private Closure|float|null $diffCoveragePercentage,
-        private Closure|FileCoverageCollectionQueryResult $leastCoveredDiffFiles,
+        private Closure|QueryResultIterator $leastCoveredDiffFiles,
         private Closure|int $diffUncoveredLines,
-        private Closure|LineCoverageCollectionQueryResult $diffLineCoverage,
+        private Closure|QueryResultIterator $diffLineCoverage,
     ) {
     }
 
@@ -131,7 +131,17 @@ final class CoverageReport implements CoverageReportInterface
     }
 
     #[Override]
-    public function getTagCoverage(): TagCoverageCollectionQueryResult
+    public function getFileCoverage(): QueryResultIterator
+    {
+        if (is_callable($this->fileCoverage)) {
+            $this->fileCoverage = ($this->fileCoverage)();
+        }
+
+        return $this->fileCoverage;
+    }
+
+    #[Override]
+    public function getTagCoverage(): QueryResultIterator
     {
         if (is_callable($this->tagCoverage)) {
             $this->tagCoverage = ($this->tagCoverage)();
@@ -153,7 +163,7 @@ final class CoverageReport implements CoverageReportInterface
     }
 
     #[Override]
-    public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult
+    public function getLeastCoveredDiffFiles(): QueryResultIterator
     {
         if (is_callable($this->leastCoveredDiffFiles)) {
             $this->leastCoveredDiffFiles = ($this->leastCoveredDiffFiles)();
@@ -173,7 +183,7 @@ final class CoverageReport implements CoverageReportInterface
     }
 
     #[Override]
-    public function getDiffLineCoverage(): LineCoverageCollectionQueryResult
+    public function getDiffLineCoverage(): QueryResultIterator
     {
         if (is_callable($this->diffLineCoverage)) {
             $this->diffLineCoverage = ($this->diffLineCoverage)();

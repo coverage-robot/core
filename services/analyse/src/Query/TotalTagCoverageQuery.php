@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Query;
 
+use App\Client\BigQueryClient;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
@@ -15,25 +17,28 @@ use Packages\Contracts\Line\LineState;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
-        EnvironmentServiceInterface $environmentService
+        private readonly ValidatorInterface $validator,
+        EnvironmentServiceInterface $environmentService,
+        BigQueryClient $bigQueryClient
     ) {
-        parent::__construct($environmentService);
+        parent::__construct($environmentService, $bigQueryClient);
     }
 
     #[Override]
-    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getQuery(?QueryParameterBag $parameterBag = null): string
     {
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
         $uncovered = LineState::UNCOVERED->value;
 
         return <<<SQL
-        {$this->getNamedQueries($table, $parameterBag)}
+        {$this->getNamedQueries($parameterBag)}
         SELECT
             tag as tagName,
             STRUCT(tag as name, commit as `commit`, [totalLines] as successfullyUploadedLines) as tag,
@@ -62,9 +67,9 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
     }
 
     #[Override]
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string
     {
-        $parent = parent::getNamedQueries($table, $parameterBag);
+        $parent = parent::getNamedQueries($parameterBag);
 
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;
@@ -142,17 +147,37 @@ final class TotalTagCoverageQuery extends AbstractUnnestedLineMetadataQuery
      * @throws ExceptionInterface
      */
     #[Override]
-    public function parseResults(QueryResults $results): TagCoverageCollectionQueryResult
+    public function parseResults(QueryResults $results): QueryResultIterator
     {
-        $tags = $results->rows();
+        $totalRows = $results->info()['totalRows'];
+        if (!is_numeric($totalRows)) {
+            throw new QueryException(
+                sprintf(
+                    'Invalid total rows count when parsing results as iterator for %s: %s',
+                    self::class,
+                    (string)$totalRows
+                )
+            );
+        }
 
-        /** @var TagCoverageCollectionQueryResult $results */
-        $results = $this->serializer->denormalize(
-            ['tags' => iterator_to_array($tags)],
-            TagCoverageCollectionQueryResult::class,
-            'array'
+        return new QueryResultIterator(
+            $results->rows(['maxResults' => 200]),
+            (int)$totalRows,
+            function (array $row) {
+                $row = $this->serializer->denormalize(
+                    $row,
+                    TagCoverageQueryResult::class,
+                    'json'
+                );
+
+                $errors = $this->validator->validate($row);
+
+                if (count($errors) > 0) {
+                    throw QueryException::invalidResult($row, $errors);
+                }
+
+                return $row;
+            }
         );
-
-        return $results;
     }
 }

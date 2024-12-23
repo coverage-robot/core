@@ -50,12 +50,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -119,12 +120,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -189,12 +191,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -255,12 +258,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,

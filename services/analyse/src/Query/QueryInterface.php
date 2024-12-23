@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Query;
 
+use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\QueryResultInterface;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\Validator\Constraint;
 
 #[AutoconfigureTag('app.coverage_query')]
 interface QueryInterface
@@ -17,29 +19,20 @@ interface QueryInterface
     /**
      * Get the names queries that are required to run the main query.
      */
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string;
-
-    /**
-     * Validate the parameters in the bag are sufficient to build the query in its entirety.
-     *
-     * @throws QueryException
-     */
-    public function validateParameters(?QueryParameterBag $parameterBag = null): void;
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string;
 
     /**
      * Get the fully built query to run against BigQuery.
      */
-    public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
+    public function getQuery(?QueryParameterBag $parameterBag = null): string;
 
     /**
-     * The name of the table to run the query against.
+     * Get the constraints in which the query parameters must adhere to in order for them
+     * to be valid for the query.
+     *
+     * @return array<value-of<QueryParameter>, list{Constraint}>
      */
-    public function getTable(): string;
-
-    /**
-     * Whether or not the query can be cached.
-     */
-    public function isCachable(): bool;
+    public function getQueryParameterConstraints(): array;
 
     /**
      * Parse the results of the query.

@@ -16,9 +16,7 @@ use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
 use App\Query\LineCoverageQuery;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;
@@ -27,6 +25,7 @@ use App\Query\TotalUploadsQuery;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
+use ArrayIterator;
 use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Event\EventInterface;
@@ -98,19 +97,20 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         try {
             return new CoverageReport(
                 waypoint: $waypoint,
+                uploads: fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
                 size: fn(): int => $this->getReportSize($waypoint),
-                uploads:  fn(): TotalUploadsQueryResult => $this->getUploads($waypoint),
                 totalLines: fn(): int => $this->getTotalLines($waypoint),
                 atLeastPartiallyCoveredLines: fn(): int => $this->getAtLeastPartiallyCoveredLines($waypoint),
                 uncoveredLines: fn(): int => $this->getUncoveredLines($waypoint),
                 coveragePercentage: fn(): float => $this->getCoveragePercentage($waypoint),
-                tagCoverage: fn(): TagCoverageCollectionQueryResult => $this->getTagCoverage($waypoint),
+                fileCoverage: fn() => $this->getFileCoverage($waypoint),
+                tagCoverage: fn(): QueryResultIterator => $this->getTagCoverage($waypoint),
                 diffCoveragePercentage: fn(): ?float => $this->getDiffCoveragePercentage($waypoint),
-                leastCoveredDiffFiles: fn(): FileCoverageCollectionQueryResult =>
-                    $this->getLeastCoveredDiffFiles($waypoint),
+                leastCoveredDiffFiles: fn(): QueryResultIterator => $this->getLeastCoveredDiffFiles(
+                    $waypoint
+                ),
                 diffUncoveredLines: fn(): int => $this->getDiffUncoveredLines($waypoint),
-                diffLineCoverage: fn(): LineCoverageCollectionQueryResult =>
-                    $this->getDiffLineCoverage($waypoint)
+                diffLineCoverage: fn(): QueryResultIterator => $this->getDiffLineCoverage($waypoint)
             );
         } catch (QueryException $queryException) {
             throw new AnalysisException(
@@ -145,6 +145,8 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * The coverage report's 'total number of lines' isn't necessarily comparable, as that represents
      * the unique number of lines of a codebase - i.e. two uploads with coverage for the same line will
      * only return 1 line on the coverage report which vastly under values the effort used to compile results.
+     *
+     * @throws QueryException
      */
     public function getReportSize(ReportWaypoint $waypoint): int
     {
@@ -381,7 +383,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @throws QueryException
      */
     #[Override]
-    public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
+    public function getTagCoverage(ReportWaypoint $waypoint): QueryResultIterator
     {
         $uploads = $this->getSuccessfulUploads($waypoint);
         $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
@@ -393,7 +395,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             $carryforwardTags === []
         ) {
             // Theres no point in checking for tag coverage as theres no files to check against
-            return new TagCoverageCollectionQueryResult([]);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -420,10 +422,59 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
                 $uploads
             );
 
-        /** @var TagCoverageCollectionQueryResult $tags */
+        /** @var QueryResultIterator $tags */
         $tags = $this->queryService->runQuery(TotalTagCoverageQuery::class, $params);
 
         return $tags;
+    }
+
+    #[Override]
+    public function getFileCoverage(ReportWaypoint $waypoint): QueryResultIterator
+    {
+        $uploads = $this->getSuccessfulUploads($waypoint);
+        $ingestTimes = $this->getSuccessfulIngestTimes($waypoint);
+        $carryforwardTags = $this->getCarryforwardTags($waypoint);
+
+        if (
+            $uploads === [] ||
+            $ingestTimes === [] ||
+            $carryforwardTags === []
+        ) {
+            // Theres no point in checking diff coverage if theirs no uploads
+            // from coverage with the up to date diff
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
+        }
+
+        $params = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::UPLOADS,
+                $uploads
+            )
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                $carryforwardTags
+            )
+            ->set(
+                QueryParameter::INGEST_PARTITIONS,
+                [
+                    ...$ingestTimes,
+                    ...array_reduce(
+                        $carryforwardTags,
+                        static fn(array $ingestTimes, CarryforwardTag $carryforwardTag): array => [
+                            ...$ingestTimes,
+                            ...$carryforwardTag->getIngestTimes()
+                        ],
+                        []
+                    )
+                ]
+            );
+
+        /**
+         * @var QueryResultIterator $files
+         */
+        $files = $this->queryService->runQuery(FileCoverageQuery::class, $params);
+
+        return $files;
     }
 
     /**
@@ -520,11 +571,11 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
-    ): FileCoverageCollectionQueryResult {
+    ): QueryResultIterator {
         $diff = $this->getDiff($waypoint);
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
-            return new FileCoverageCollectionQueryResult([]);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -536,7 +587,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new FileCoverageCollectionQueryResult([]);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -558,7 +609,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             );
 
         /**
-         * @var FileCoverageCollectionQueryResult $files
+         * @var QueryResultIterator $files
          */
         $files = $this->queryService->runQuery(FileCoverageQuery::class, $params);
 
@@ -629,12 +680,12 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
      * @throws AnalysisException
      */
     #[Override]
-    public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
+    public function getDiffLineCoverage(ReportWaypoint $waypoint): QueryResultIterator
     {
         $diff = $this->getDiff($waypoint);
         if ($diff == []) {
             // Theres no point in checking diff coverage if theirs no diff
-            return new LineCoverageCollectionQueryResult([]);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
         }
 
         $uploads = $this->getSuccessfulUploads($waypoint);
@@ -646,7 +697,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
         ) {
             // Theres no point in checking diff coverage if theirs no uploads
             // from coverage with the up to date diff
-            return new LineCoverageCollectionQueryResult([]);
+            return new QueryResultIterator(new ArrayIterator([]), 0, fn() => null);
         }
 
         $params = QueryParameterBag::fromWaypoint($waypoint)
@@ -664,7 +715,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             );
 
         /**
-         * @var LineCoverageCollectionQueryResult $lines
+         * @var QueryResultIterator $lines
          */
         $lines = $this->queryService->runQuery(LineCoverageQuery::class, $params);
 
