@@ -51,7 +51,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
             new NullLogger()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSupport,
             $publisher->supports(
                 new PublishableLineCommentMessageCollection(

@@ -40,7 +40,7 @@ final class ReportWaypointTest extends TestCase
         ReportWaypoint $waypoint2,
         bool $expected
     ): void {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $waypoint1->comparable($waypoint2)
         );
