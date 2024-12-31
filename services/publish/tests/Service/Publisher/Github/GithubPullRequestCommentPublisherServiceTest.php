@@ -56,7 +56,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             )
         );
 
-        $this->assertEquals($expectedSupport, $isSupported);
+        $this->assertSame($expectedSupport, $isSupported);
     }
 
     #[DataProvider('supportsDataProvider')]

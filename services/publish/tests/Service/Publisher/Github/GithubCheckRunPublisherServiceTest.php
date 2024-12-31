@@ -44,7 +44,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
             new NullLogger()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedSupport,
             $publisher->supports(
                 new PublishableCheckRunMessage(

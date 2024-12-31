@@ -19,7 +19,7 @@ abstract class AbstractParseStrategyTestCase extends TestCase
     public function testSupports(string $projectRoot, string $contents, bool $expectedSupport): void
     {
         $parser = $this->getParserStrategy();
-        $this->assertEquals($expectedSupport, $parser->supports($contents));
+        $this->assertSame($expectedSupport, $parser->supports($contents));
     }
 
     #[DataProvider('coverageFilesDataProvider')]

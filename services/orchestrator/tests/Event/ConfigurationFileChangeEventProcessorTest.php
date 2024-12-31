@@ -65,7 +65,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             new ConfigurationFileService($mockSettingService)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $isProcessable,
             $configurationFileChangeEventProcessor->process(
                 $event
