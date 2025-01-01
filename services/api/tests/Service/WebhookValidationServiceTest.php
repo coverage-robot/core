@@ -146,5 +146,28 @@ final class WebhookValidationServiceTest extends TestCase
             ),
             false
         ];
+
+        yield [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'mock-ref',
+                headCommit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'cbf2bc5ab608a72a1577379f1d51d28cc494ccf1',
+                        addedFiles: [],
+                        modifiedFiles: [],
+                        deletedFiles: [],
+                        // Notice that the commit was made **in the future**, this simulates
+                        // a occasional webhooks GitHub might send, where the timestamp is ahead
+                        // of the time we receive the webhook.
+                        committedAt: new DateTimeImmutable('+3 seconds')
+                    )
+                ]
+            ),
+            true
+        ];
     }
 }
