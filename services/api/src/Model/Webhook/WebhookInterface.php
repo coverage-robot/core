@@ -34,8 +34,8 @@ interface WebhookInterface extends Stringable
     public function getRepository(): string;
 
     /**
-     * **Note:** Its important that the validation constraint checks the event occurred less than 1
-     * minute in the future.
+     * **Note:** Its important that the validation constraint checks the event occurred less than
+     * 10 seconds in the future.
      *
      * Generally speaking, the event time should in the past (this before "now"), but GitHub appears to
      * occasionally send webhooks with an event time ahead of the time we process the webhook (presumably
