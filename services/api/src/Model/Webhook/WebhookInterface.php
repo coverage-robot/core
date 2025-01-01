@@ -37,9 +37,12 @@ interface WebhookInterface extends Stringable
      * **Note:** Its important that the validation constraint checks the event occurred less than
      * 10 seconds in the future.
      *
-     * Generally speaking, the event time should in the past (this before "now"), but GitHub appears to
+     * Generally speaking, the event time should in the past (e.g. before "now"), but GitHub appears to
      * occasionally send webhooks with an event time ahead of the time we process the webhook (presumably
      * due to clock skew).
+     *
+     * Its normally about 1 second ahead, but we allow up to 10 seconds to account for any potentially
+     * larger skew.
      *
      * @see WebhookValidationServiceTest
      */
