@@ -33,7 +33,17 @@ interface WebhookInterface extends Stringable
     #[Assert\Regex(pattern: '/^[\\w\-\.]+$/i')]
     public function getRepository(): string;
 
-    #[Assert\LessThanOrEqual('now')]
+    /**
+     * **Note:** Its important that the validation constraint checks the event occurred less than 1
+     * minute in the future.
+     *
+     * Generally speaking, the event time should in the past (this before "now"), but GitHub appears to
+     * occasionally send webhooks with an event time ahead of the time we process the webhook (presumably
+     * due to clock skew).
+     *
+     * @see WebhookValidationServiceTest
+     */
+    #[Assert\LessThanOrEqual('+10 seconds')]
     public function getEventTime(): DateTimeImmutable;
 
     public function getType(): WebhookType;
