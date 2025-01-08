@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace App\Query;
 
+use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
-use App\Exception\QueryException;
+use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ParameterAwareTrait;
-use App\Query\Trait\UploadTableAwareTrait;
+use DateTimeInterface;
 use Override;
+use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Line\LineType;
+use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
     use CarryforwardAwareTrait;
-    use UploadTableAwareTrait;
     use DiffAwareTrait;
     use ParameterAwareTrait;
 
@@ -26,23 +28,26 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 
     protected const string LINES_TABLE_ALIAS = 'lines';
 
-    #[Override]
-    abstract public function getQuery(string $table, ?QueryParameterBag $parameterBag = null): string;
+    public function __construct(
+        private readonly EnvironmentServiceInterface $environmentService,
+        private readonly BigQueryClient $bigQueryClient
+    ) {
+    }
 
     #[Override]
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    abstract public function getQuery(?QueryParameterBag $parameterBag = null): string;
+
+    #[Override]
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string
     {
-        // TODO(RM): We should do this better. We need to get line coverage table in the same
-        //  dataset as the upload table.
         $uploadTableAlias = self::UPLOAD_TABLE_ALIAS;
         $linesTableAlias = self::LINES_TABLE_ALIAS;
 
-        $lineCoverageTable = implode(
-            '.',
-            [
-                ...explode('.', $table, -1),
-                $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
-            ]
+        $uploadTable = $this->bigQueryClient->getTable(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
+        );
+        $lineCoverageTable = $this->bigQueryClient->getTable(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
         );
 
         $methodType = LineType::METHOD->value;
@@ -93,8 +98,8 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
                         branchHits
                 ) as branchHits
             FROM
-                `{$table}` as upload
-            INNER JOIN `{$lineCoverageTable}` as {$linesTableAlias} ON lines.uploadId = upload.uploadId
+                `{$uploadTable}` as {$uploadTableAlias}
+                INNER JOIN `{$lineCoverageTable}` as {$linesTableAlias} ON lines.uploadId = upload.uploadId
             WHERE
                 {$this->getUnnestQueryFiltering($parameterBag)}
         )
@@ -150,44 +155,62 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         SQL;
     }
 
-    /**
-     * @throws QueryException
-     */
+
     #[Override]
-    public function validateParameters(?QueryParameterBag $parameterBag = null): void
+    public function getQueryParameterConstraints(): array
     {
-        if (!$parameterBag?->has(QueryParameter::COMMIT)) {
-            throw QueryException::invalidParameters(QueryParameter::COMMIT);
-        }
+        return [
+            QueryParameter::PROJECT_ID->value => [
+                new Assert\Type(type: 'string'),
+                new Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])
+            ],
+            QueryParameter::COMMIT->value => [
+                new Assert\AtLeastOneOf([
+                    new Assert\Sequentially([
+                        new Assert\Type(type: 'string'),
+                        new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
+                    ]),
+                    new Assert\Sequentially([
+                        new Assert\Type(type: 'array'),
+                        new Assert\Count(min: 1),
+                        new Assert\All([
+                            new Assert\Type(type: 'string'),
+                            new Assert\Regex(pattern: '/^[a-f0-9]{40}$/')
+                        ])
+                    ])
+                ])
+            ],
 
-        if (!$parameterBag->has(QueryParameter::REPOSITORY)) {
-            throw QueryException::invalidParameters(QueryParameter::REPOSITORY);
-        }
-
-        if ($parameterBag->get(QueryParameter::INGEST_PARTITIONS) && $parameterBag->get(QueryParameter::UPLOADS)) {
-            return;
-        }
-
-        if ($parameterBag->get(QueryParameter::CARRYFORWARD_TAGS)) {
-            return;
-        }
-
-        throw new QueryException(
-            'You must provide either an ingest time scope and uploads scope, or carryforward tags.'
-        );
-    }
-
-    /**
-     * Anything which inherits this abstract class is generally a coverage analysis query
-     * (i.e. analysing line coverage using a set of tags/uploads), so therefore we should
-     * be fine to cache these for extended periods of time.
-     *
-     * These are also **by far** the most expensive queries we run, simply by way of the
-     * amount of data they're querying over (potentially multiple GBs).
-     */
-    #[Override]
-    public function isCachable(): bool
-    {
-        return true;
+            /**
+             * TODO(RM): Theres a link between the requirements of passing _at least_ ingest
+             *  partitions and uploads, or carryforward tags. This should be enforced in the
+             *  constraints.
+             */
+            QueryParameter::UPLOADS->value => [
+                new Assert\Sequentially([
+                    new Assert\Type(type: 'array'),
+                    new Assert\All([
+                        new Assert\Type(type: 'string'),
+                        new Assert\Uuid(versions: [Assert\Uuid::V7_MONOTONIC])
+                    ])
+                ])
+            ],
+            QueryParameter::INGEST_PARTITIONS->value => [
+                new Assert\Sequentially([
+                    new Assert\Type(type: 'array'),
+                    new Assert\All([
+                        new Assert\Type(type: DateTimeInterface::class)
+                    ])
+                ])
+            ],
+            QueryParameter::CARRYFORWARD_TAGS->value => [
+                new Assert\Sequentially([
+                    new Assert\Type(type: 'array'),
+                    new Assert\All([
+                        new Assert\Type(type: CarryforwardTag::class)
+                    ])
+                ])
+            ],
+        ];
     }
 }

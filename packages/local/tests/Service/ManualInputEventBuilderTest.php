@@ -96,7 +96,7 @@ final class ManualInputEventBuilderTest extends TestCase
                     OutputInterface $output,
                     Question $question
                 ): string {
-                    $this->assertEquals(
+                    $this->assertSame(
                         '<question>(1/1) Enter value for "some-field" (type: string):</question>',
                         $question->getQuestion()
                     );
@@ -122,43 +122,43 @@ final class ManualInputEventBuilderTest extends TestCase
 
     public function testGetPriority(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             -1000,
             ManualInputEventBuilder::getPriority()
         );
     }
 
-    public static function variedConsoleInputDataProvider(): array
+    public static function variedConsoleInputDataProvider(): \Iterator
     {
-        return [
-            [
-                new ArrayInput(
-                    ['--file' => 'some-path/'],
-                    new InputDefinition([
-                        new InputOption('file', null, InputOption::VALUE_REQUIRED)
-                    ])
-                ),
-                true
-            ],
-            [
-                new ArrayInput(
-                    ['--fixture' => true],
-                    new InputDefinition([
-                        new InputOption('fixture', null, InputOption::VALUE_NONE)
-                    ])
-                ),
-                true
-            ],
-            [
-                new ArrayInput(
-                    [],
-                    new InputDefinition([
-                        new InputOption('file', null, InputOption::VALUE_REQUIRED),
-                        new InputOption('fixture', null, InputOption::VALUE_NONE)
-                    ])
-                ),
-                true
-            ]
+        yield [
+            new ArrayInput(
+                ['--file' => 'some-path/'],
+                new InputDefinition([
+                    new InputOption('file', null, InputOption::VALUE_REQUIRED)
+                ])
+            ),
+            true
+        ];
+
+        yield [
+            new ArrayInput(
+                ['--fixture' => true],
+                new InputDefinition([
+                    new InputOption('fixture', null, InputOption::VALUE_NONE)
+                ])
+            ),
+            true
+        ];
+
+        yield [
+            new ArrayInput(
+                [],
+                new InputDefinition([
+                    new InputOption('file', null, InputOption::VALUE_REQUIRED),
+                    new InputOption('fixture', null, InputOption::VALUE_NONE)
+                ])
+            ),
+            true
         ];
     }
 }

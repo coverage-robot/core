@@ -7,9 +7,10 @@ namespace App\Service;
 use App\Exception\QueryException;
 use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Service\Carryforward\CachingCarryforwardTagService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
@@ -134,11 +135,11 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     }
 
     #[Override]
-    public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult
+    public function getTagCoverage(ReportWaypoint $waypoint): QueryResultIterator
     {
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var TagCoverageCollectionQueryResult
+             * @var QueryResultIterator<TagCoverageQueryResult>
              */
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }
@@ -147,6 +148,22 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
         $this->setCacheValue(__FUNCTION__, $waypoint, $tagCoverage);
 
         return $tagCoverage;
+    }
+
+    #[Override]
+    public function getFileCoverage(ReportWaypoint $waypoint): QueryResultIterator
+    {
+        if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
+            /**
+             * @var QueryResultIterator<FileCoverageQueryResult>
+             */
+            return $this->getCacheValue(__FUNCTION__, $waypoint);
+        }
+
+        $fileCoverage = parent::getFileCoverage($waypoint);
+        $this->setCacheValue(__FUNCTION__, $waypoint, $fileCoverage);
+
+        return $fileCoverage;
     }
 
     #[Override]
@@ -169,11 +186,11 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = AbstractCoverageAnalyserService::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
-    ): FileCoverageCollectionQueryResult {
+    ): QueryResultIterator {
         $cachedResults = [];
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var array<int, FileCoverageCollectionQueryResult> $cachedResults
+             * @var array<int, QueryResultIterator<FileCoverageQueryResult>> $cachedResults
              */
             $cachedResults = $this->getCacheValue(__FUNCTION__, $waypoint);
 
@@ -214,11 +231,11 @@ final class CachingCoverageAnalyserService extends AbstractCoverageAnalyserServi
     }
 
     #[Override]
-    public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult
+    public function getDiffLineCoverage(ReportWaypoint $waypoint): QueryResultIterator
     {
         if ($this->hasCacheValue(__FUNCTION__, $waypoint)) {
             /**
-             * @var LineCoverageCollectionQueryResult
+             * @var QueryResultIterator<LineCoverageQueryResult>
              */
             return $this->getCacheValue(__FUNCTION__, $waypoint);
         }

@@ -8,9 +8,10 @@ use App\Exception\AnalysisException;
 use App\Model\CarryforwardTag;
 use App\Model\CoverageReportInterface;
 use App\Model\ReportWaypoint;
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
@@ -72,8 +73,18 @@ interface CoverageAnalyserServiceInterface
     /**
      * Get the total coverage percentage, split by tag (both tags which had uploads
      * on the waypoint, and those which were carried forward from previous commits)
+     *
+     * @return QueryResultIterator<TagCoverageQueryResult>
      */
-    public function getTagCoverage(ReportWaypoint $waypoint): TagCoverageCollectionQueryResult;
+    public function getTagCoverage(ReportWaypoint $waypoint): QueryResultIterator;
+
+    /**
+     * Get the line coverage split by file, in any of the uploads or carried forward from
+     * previous commits.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
+     */
+    public function getFileCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 
     /**
      * Get the coverage percentage of just the diff associated with the waypoint.
@@ -83,16 +94,20 @@ interface CoverageAnalyserServiceInterface
     /**
      * Get the total number of lines, which were in the diff of the waypoint, that were hit by at least
      * one upload.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
     public function getLeastCoveredDiffFiles(
         ReportWaypoint $waypoint,
         int $limit = self::DEFAULT_LEAST_COVERED_DIFF_FILES_LIMIT
-    ): FileCoverageCollectionQueryResult;
+    ): QueryResultIterator;
 
     /**
      * Get the individual lines and their associated coverage for the diff of the waypoint.
+     *
+     * @return QueryResultIterator<LineCoverageQueryResult>
      */
-    public function getDiffLineCoverage(ReportWaypoint $waypoint): LineCoverageCollectionQueryResult;
+    public function getDiffLineCoverage(ReportWaypoint $waypoint): QueryResultIterator;
 
     /**
      * Get all of the tags which had no uploads on a waypoint, and should be carried forward from

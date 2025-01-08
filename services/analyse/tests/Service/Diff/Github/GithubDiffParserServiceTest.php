@@ -86,7 +86,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
         $addedLines = $parser->get($mockWaypoint);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'file-1.php' => [165],
                 'file-2.php' => [165],
@@ -180,7 +180,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
         $addedLines = $parser->get($mockWaypoint);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'file-1.php' => [173],
                 'file-2.php' => [173],
@@ -264,7 +264,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
         $addedLines = $parser->get($mockWaypoint);
 
-        $this->assertEquals(
+        $this->assertSame(
             [
                 'file-1.php' => [173],
                 // Notice no file is returned for the binary file with no patch
@@ -305,7 +305,7 @@ final class GithubDiffParserServiceTest extends TestCase
 
         $addedLines = $parser->get($mockWaypoint);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $addedLines
         );
@@ -320,7 +320,7 @@ final class GithubDiffParserServiceTest extends TestCase
             $this->createMock(MetricServiceInterface::class)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             Provider::GITHUB->value,
             $parser->getProvider()
         );

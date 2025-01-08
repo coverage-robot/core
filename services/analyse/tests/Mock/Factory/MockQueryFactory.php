@@ -9,7 +9,6 @@ use App\Query\Result\QueryResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 final class MockQueryFactory
@@ -20,11 +19,9 @@ final class MockQueryFactory
      */
     public static function createMock(
         TestCase $testCase,
-        ContainerInterface $container,
         string $queryClass,
         ?string $queryString,
-        QueryResultInterface $parsedResults,
-        bool $isCacheable = false
+        QueryResultInterface $parsedResults
     ): QueryInterface|MockObject {
         $mockQuery = $testCase->getMockBuilder($queryClass)
             ->disableOriginalConstructor()
@@ -36,9 +33,6 @@ final class MockQueryFactory
 
         $mockQuery->method('parseResults')
             ->willReturn($parsedResults);
-
-        $mockQuery->method('isCachable')
-            ->willReturn($isCacheable);
 
         return $mockQuery;
     }

@@ -38,7 +38,7 @@ final class CommitHistoryServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $historyService->getPrecedingCommits(
                 $waypoint,

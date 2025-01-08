@@ -11,9 +11,9 @@ use Packages\Contracts\Line\LineState;
 abstract class AbstractLineCoverageQuery extends AbstractUnnestedLineMetadataQuery
 {
     #[Override]
-    public function getNamedQueries(string $table, ?QueryParameterBag $parameterBag = null): string
+    public function getNamedQueries(?QueryParameterBag $parameterBag = null): string
     {
-        $parent = parent::getNamedQueries($table, $parameterBag);
+        $parent = parent::getNamedQueries($parameterBag);
 
         $covered = LineState::COVERED->value;
         $partial = LineState::PARTIAL->value;

@@ -33,8 +33,8 @@ final class CachingDiffParserServiceTest extends TestCase
             pullRequest: 12
         );
 
-        $this->assertEquals([], $cachingDiffParser->get($mockWaypoint));
-        $this->assertEquals([], $cachingDiffParser->get($mockWaypoint));
+        $this->assertSame([], $cachingDiffParser->get($mockWaypoint));
+        $this->assertSame([], $cachingDiffParser->get($mockWaypoint));
     }
 
     public function testDoesNotCacheDifferentUploads(): void
@@ -47,7 +47,7 @@ final class CachingDiffParserServiceTest extends TestCase
 
         $cachingDiffParser = new CachingDiffParserService($mockDiffParser);
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingDiffParser->get(
                 new ReportWaypoint(
@@ -63,7 +63,7 @@ final class CachingDiffParserServiceTest extends TestCase
                 )
             )
         );
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $cachingDiffParser->get(
                 new ReportWaypoint(

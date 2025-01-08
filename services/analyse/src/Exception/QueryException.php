@@ -4,29 +4,22 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use App\Enum\QueryParameter;
+use App\Query\Result\QueryResultInterface;
 use Exception;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 final class QueryException extends Exception
 {
-    public static function typeMismatch(string $receivedType, string $expectedType): self
-    {
+    public static function invalidResult(
+        QueryResultInterface $result,
+        ConstraintViolationListInterface $errors
+    ): self {
         return new self(
             sprintf(
-                'Expected query to return an %s but instead received %s.',
-                $expectedType,
-                $receivedType
+                'Invalid query result with type %s. Violations: %s',
+                get_class($result),
+                (string)$errors
             )
         );
-    }
-
-    public static function invalidParameters(QueryParameter $parameter): self
-    {
-        return new self(sprintf('Invalid parameter %s.', $parameter->name));
-    }
-
-    public static function invalidQueryResult(): self
-    {
-        return new self('Query result is invalid.');
     }
 }

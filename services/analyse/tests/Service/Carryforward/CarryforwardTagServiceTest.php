@@ -8,6 +8,7 @@ use App\Enum\QueryParameter;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
+use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
 use App\Query\Result\UploadedTagsCollectionQueryResult;
@@ -16,6 +17,7 @@ use App\Query\UploadedTagsQuery;
 use App\Service\Carryforward\CarryforwardTagService;
 use App\Service\History\CommitHistoryService;
 use App\Service\QueryServiceInterface;
+use ArrayIterator;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockTagBehaviourServiceFactory;
 use Packages\Contracts\Provider\Provider;
@@ -34,18 +36,20 @@ final class CarryforwardTagServiceTest extends TestCase
                 UploadedTagsQuery::class,
                 self::callback(
                     function (QueryParameterBag $queryParameterBag): bool {
-                        $this->assertEquals('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
-                        $this->assertEquals('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
+                        $this->assertSame('mock-owner', $queryParameterBag->get(QueryParameter::OWNER));
+                        $this->assertSame('mock-repository', $queryParameterBag->get(QueryParameter::REPOSITORY));
                         return true;
                     }
                 )
             )
             ->willReturn(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 )
             );
 
@@ -77,7 +81,7 @@ final class CarryforwardTagServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals([], $carryforwardTags);
+        $this->assertSame([], $carryforwardTags);
     }
 
     public function testTagToCarryforwardFromRecentCommit(): void
@@ -86,11 +90,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(2))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -191,11 +197,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->once())
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -277,7 +285,7 @@ final class CarryforwardTagServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             [],
             $carryforwardTags
         );
@@ -289,11 +297,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(4))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [
@@ -461,11 +471,13 @@ final class CarryforwardTagServiceTest extends TestCase
         $mockQueryService->expects($this->exactly(6))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
-                new UploadedTagsCollectionQueryResult(
-                    [
+                new QueryResultIterator(
+                    new ArrayIterator([
                         new UploadedTagsQueryResult('tag-1'),
                         new UploadedTagsQueryResult('tag-2'),
-                    ]
+                    ]),
+                    2,
+                    fn(UploadedTagsQueryResult $result): UploadedTagsQueryResult => $result
                 ),
                 new TagAvailabilityCollectionQueryResult(
                     [

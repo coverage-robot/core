@@ -80,7 +80,7 @@ final class EventBusClientTest extends TestCase
                         Service::ANALYSE->value,
                         $event->getSource()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-trace-id',
                         $event->getTraceHeader()
                     );
@@ -88,7 +88,7 @@ final class EventBusClientTest extends TestCase
                         Event::INGEST_SUCCESS->value,
                         $event->getDetailType()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-serialized-json',
                         $event->getDetail()
                     );
@@ -131,27 +131,27 @@ final class EventBusClientTest extends TestCase
             ->method('createSchedule')
             ->with(
                 $this->callback(function (CreateScheduleInput $input): bool {
-                    $this->assertEquals(
+                    $this->assertSame(
                         FlexibleTimeWindowMode::OFF,
                         $input->getFlexibleTimeWindow()->getMode()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'at(2055-01-01T00:00:00)',
                         $input->getScheduleExpression()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         ActionAfterCompletion::DELETE,
                         $input->getActionAfterCompletion()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-scheduler-role-arn',
                         $input->getTarget()->getRoleArn()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-event-bus-arn',
                         $input->getTarget()->getArn()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         'mock-serialized-json',
                         $input->getTarget()->getInput()
                     );

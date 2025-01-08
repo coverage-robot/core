@@ -29,9 +29,7 @@ trait CarryforwardAwareTrait
      * ```sql
      * WHERE
      * (
-     *      owner = @OWNER AND
-     *      repository = @REPOSITORY AND
-     *      provider = @PROVIDER AND
+     *      projectId = @PROJECT_ID AND
      *      (
      *           (commit = "commit-sha-1" AND tag = "tag-1" AND DATE(ingestTime) = '2021-01-01') OR
      *           (commit = "commit-sha-1" AND tag = "tag-2" AND DATE(ingestTime) = '2021-01-01') OR

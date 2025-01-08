@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\QueryResultIterator;
 use DateTimeImmutable;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Line\LineType;
@@ -31,14 +32,14 @@ final class LineGroupingService
      * 3. Partial branch coverage (i.e. annotating branches which are not fully covered)
      *
      * @param array<string, array<int, int>> $diff
-     * @param LineCoverageQueryResult[] $lineCoverage
+     * @param QueryResultIterator<LineCoverageQueryResult> $lineCoverage
      *
      * @return PublishableLineCommentInterface[]
      */
     public function generateComments(
         EventInterface $event,
         array $diff,
-        array $lineCoverage,
+        QueryResultIterator $lineCoverage,
         DateTimeImmutable $validUntil
     ): array {
         $annotations = [
@@ -48,10 +49,9 @@ final class LineGroupingService
 
         $this->lineGroupingLogger->info(
             sprintf(
-                'Generated %d comments for %s from %s lines of coverage.',
+                'Generated %d comments for %s.',
                 count($annotations),
-                (string)$event,
-                count($lineCoverage)
+                (string)$event
             ),
             $annotations
         );
@@ -63,13 +63,13 @@ final class LineGroupingService
      * Find all of the partial branches in the line coverage, and annotate them
      * using context from the diff.
      *
-     * @param LineCoverageQueryResult[] $lineCoverage
+     * @param QueryResultIterator<LineCoverageQueryResult> $lineCoverage
      *
      * @return PublishablePartialBranchLineCommentMessage[]
      */
     private function annotatePartialBranches(
         EventInterface $event,
-        array $lineCoverage,
+        QueryResultIterator $lineCoverage,
         DateTimeImmutable $validUntil
     ): array {
         $annotations = [];
@@ -118,14 +118,14 @@ final class LineGroupingService
      * method definitions.
      *
      * @param array<string, array<int, int>> $diff
-     * @param LineCoverageQueryResult[] $line
+     * @param QueryResultIterator<LineCoverageQueryResult> $line
      *
      * @return PublishableMissingCoverageLineCommentMessage[]
      */
     public function annotateBlocksOfMissingCoverage(
         EventInterface $event,
         array $diff,
-        array $line,
+        QueryResultIterator $line,
         DateTimeImmutable $validUntil
     ): array {
         $annotations = [];
@@ -259,13 +259,14 @@ final class LineGroupingService
      * Index the line coverage by file name and line number, so that lookups against the
      * diff are easier.
      *
-     * @param LineCoverageQueryResult[] $coverage
+     * @param QueryResultIterator<LineCoverageQueryResult> $coverage
+     *
      * @return array<string, array<int, LineCoverageQueryResult>>
      */
-    private function getIndexedLineCoverage(array $coverage): array
+    private function getIndexedLineCoverage(QueryResultIterator $coverage): array
     {
         return array_reduce(
-            $coverage,
+            iterator_to_array($coverage),
             static function (array $index, LineCoverageQueryResult $line) {
                 if (!isset($index[$line->getFileName()])) {
                     $index[$line->getFileName()] = [];

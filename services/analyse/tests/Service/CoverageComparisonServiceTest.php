@@ -50,12 +50,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -90,17 +91,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-commit-3',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-commit-3'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-ref',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-base-ref'
+                ->getRef()
         );
     }
 
@@ -119,12 +120,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -160,17 +162,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-commit',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-base-commit'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-base-ref',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-base-ref'
+                ->getRef()
         );
     }
 
@@ -189,12 +191,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,
@@ -227,17 +230,17 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-merge-commit-parent-1',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getCommit(),
-            'mock-merge-commit-parent-1'
+                ->getCommit()
         );
-        $this->assertEquals(
+        $this->assertSame(
+            'mock-branch',
             $comparison->getBaseReport()
                 ->getWaypoint()
-                ->getRef(),
-            'mock-branch'
+                ->getRef()
         );
     }
 
@@ -255,12 +258,13 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
-            size: 200,
             uploads: static fn(): null => null,
+            size: 200,
             totalLines: 100,
             atLeastPartiallyCoveredLines: 50,
             uncoveredLines: 50,
             coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
             tagCoverage: static fn(): null => null,
             diffCoveragePercentage: 50.0,
             leastCoveredDiffFiles: static fn(): null => null,

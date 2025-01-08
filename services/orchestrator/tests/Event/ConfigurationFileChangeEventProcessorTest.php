@@ -8,6 +8,7 @@ use App\Event\ConfigurationFileChangeEventProcessor;
 use DateTimeImmutable;
 use Github\Api\Repo;
 use Github\Api\Repository\Contents;
+use Iterator;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Configuration\Service\ConfigurationFileService;
@@ -64,7 +65,7 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
             new ConfigurationFileService($mockSettingService)
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $isProcessable,
             $configurationFileChangeEventProcessor->process(
                 $event
@@ -108,50 +109,50 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         );
     }
 
-    public static function eventDataProvider(): array
+    public static function eventDataProvider(): Iterator
     {
-        return [
-            [
-                new ConfigurationFileChange(
+        yield [
+            new ConfigurationFileChange(
+                provider: Provider::GITHUB,
+                projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+                owner: 'owner',
+                repository: 'repository',
+                ref: 'main',
+                commit: 'commit',
+            ),
+            true
+        ];
+
+        yield [
+            new ConfigurationFileChange(
+                provider: Provider::GITHUB,
+                projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+                owner: 'owner',
+                repository: 'repository',
+                ref: 'master',
+                commit: 'commit',
+            ),
+            true
+        ];
+
+        yield [
+            new IngestFailure(
+                new Upload(
+                    uploadId: 'uploadId',
                     provider: Provider::GITHUB,
                     projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
                     owner: 'owner',
                     repository: 'repository',
-                    ref: 'main',
                     commit: 'commit',
+                    parent: ['parent'],
+                    ref: 'ref',
+                    projectRoot: 'projectRoot',
+                    tag: new Tag('tag', 'value', [2]),
+                    eventTime: new DateTimeImmutable()
                 ),
-                true
-            ],
-            [
-                new ConfigurationFileChange(
-                    provider: Provider::GITHUB,
-                    projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
-                    owner: 'owner',
-                    repository: 'repository',
-                    ref: 'master',
-                    commit: 'commit',
-                ),
-                true
-            ],
-            [
-                new IngestFailure(
-                    new Upload(
-                        uploadId: 'uploadId',
-                        provider: Provider::GITHUB,
-                        projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
-                        owner: 'owner',
-                        repository: 'repository',
-                        commit: 'commit',
-                        parent: ['parent'],
-                        ref: 'ref',
-                        projectRoot: 'projectRoot',
-                        tag: new Tag('tag', 'value', [2]),
-                        eventTime: new DateTimeImmutable()
-                    ),
-                    new DateTimeImmutable()
-                ),
-                false
-            ]
+                new DateTimeImmutable()
+            ),
+            false
         ];
     }
 }

@@ -22,6 +22,7 @@ use Bref\Context\Context;
 use Bref\Event\InvalidLambdaEvent;
 use Bref\Event\S3\S3Event;
 use Exception;
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
@@ -274,178 +275,180 @@ final class EventHandlerTest extends KernelTestCase
     /**
      * @throws InvalidLambdaEvent
      */
-    public static function validS3EventDataProvider(): array
+    public static function validS3EventDataProvider(): Iterator
     {
-        return [
-            'Single valid file (Lcov)' => [
-                new S3Event([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'some-path/lcov.info'
-                                ]
+        yield 'Single valid file (Lcov)' => [
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'some-path/lcov.info'
                             ]
                         ]
                     ]
-                ]),
-                [
-                    file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info'),
-                ],
-                [
-                    'some-path/mock-uuid.json'
                 ]
+            ]),
+            [
+                file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info'),
             ],
-            'Single valid file (Clover)' => [
-                new S3Event([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'clover.xml'
-                                ]
+            [
+                'some-path/mock-uuid.json'
+            ]
+        ];
+
+        yield 'Single valid file (Clover)' => [
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'clover.xml'
                             ]
                         ]
                     ]
-                ]),
-                [
-                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml'),
-                ],
-                [
-                    'mock-uuid.json'
                 ]
+            ]),
+            [
+                file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml'),
             ],
-            'Multiple valid files (Lcov and Clover)' => [
-                new S3Event([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'clover.xml'
-                                ]
+            [
+                'mock-uuid.json'
+            ]
+        ];
+
+        yield 'Multiple valid files (Lcov and Clover)' => [
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'clover.xml'
                             ]
-                        ],
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'much/longer/nested/path/different-name.xml'
-                                ]
+                        ]
+                    ],
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'much/longer/nested/path/different-name.xml'
                             ]
                         ]
                     ]
-                ]),
-                [
-                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-php.xml'),
-                    file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml')
-                ],
-                [
-                    'mock-uuid.json',
-                    'much/longer/nested/path/mock-uuid.json'
                 ]
+            ]),
+            [
+                file_get_contents(__DIR__ . '/../Fixture/Clover/complex-php.xml'),
+                file_get_contents(__DIR__ . '/../Fixture/Clover/complex-jest.xml')
             ],
-            'Valid and invalid files (Lcov)' => [
-                new S3Event([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'some-invalid-file.xml'
-                                ]
+            [
+                'mock-uuid.json',
+                'much/longer/nested/path/mock-uuid.json'
+            ]
+        ];
+
+        yield 'Valid and invalid files (Lcov)' => [
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'some-invalid-file.xml'
                             ]
-                        ],
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'totally-valid-file.info'
-                                ]
+                        ]
+                    ],
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'totally-valid-file.info'
                             ]
                         ]
                     ]
-                ]),
-                [
-                    'mock-invalid-file',
-                    file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info')
-                ],
-                [
-                    'mock-uuid.json'
                 ]
+            ]),
+            [
+                'mock-invalid-file',
+                file_get_contents(__DIR__ . '/../Fixture/Lcov/complex.info')
             ],
-            'Empty files (Lcov and Clover)' => [
-                new S3Event([
-                    'Records' => [
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'some-path/lcov/empty.info'
-                                ]
+            [
+                'mock-uuid.json'
+            ]
+        ];
+
+        yield 'Empty files (Lcov and Clover)' => [
+            new S3Event([
+                'Records' => [
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'some-path/lcov/empty.info'
                             ]
-                        ],
-                        [
-                            'eventSource' => 'aws:s3',
-                            'eventTime' => '2023-05-02 12:00:00',
-                            's3' => [
-                                'bucket' => [
-                                    'name' => 'mock-bucket',
-                                    'arn' => 'mock-arn'
-                                ],
-                                'object' => [
-                                    'key' => 'some-path/clover/empty-jest.xml'
-                                ]
+                        ]
+                    ],
+                    [
+                        'eventSource' => 'aws:s3',
+                        'eventTime' => '2023-05-02 12:00:00',
+                        's3' => [
+                            'bucket' => [
+                                'name' => 'mock-bucket',
+                                'arn' => 'mock-arn'
+                            ],
+                            'object' => [
+                                'key' => 'some-path/clover/empty-jest.xml'
                             ]
                         ]
                     ]
-                ]),
-                [
-                    file_get_contents(__DIR__ . '/../Fixture/Lcov/empty.info'),
-                    file_get_contents(__DIR__ . '/../Fixture/Clover/empty-jest.xml'),
-                ],
-                [
-                    'some-path/lcov/mock-uuid.json',
-                    'some-path/clover/mock-uuid.json'
                 ]
+            ]),
+            [
+                file_get_contents(__DIR__ . '/../Fixture/Lcov/empty.info'),
+                file_get_contents(__DIR__ . '/../Fixture/Clover/empty-jest.xml'),
             ],
+            [
+                'some-path/lcov/mock-uuid.json',
+                'some-path/clover/mock-uuid.json'
+            ]
         ];
     }
 }

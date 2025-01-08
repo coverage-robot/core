@@ -47,8 +47,8 @@ WITH
           branchHits
       ) as branchHits
     FROM
-      `mock-table` as upload
-      INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+      `mock-project-id.prod.mock-upload-table` as upload
+      INNER JOIN `mock-project-id.prod.mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       (
         (
@@ -60,19 +60,19 @@ WITH
         OR (
           (
             (
-              upload.commit = "mock-commit"
+              upload.commit = "f7e3cc3cc12c056ed8ece76216127ea1ae188d8a"
               AND upload.tag = "1"
             )
             OR (
-              upload.commit = "mock-commit"
+              upload.commit = "f7e3cc3cc12c056ed8ece76216127ea1ae188d8a"
               AND upload.tag = "2"
             )
             OR (
-              upload.commit = "mock-commit-2"
+              upload.commit = "a6e3dd3cc12d024ed8aef76216127aa2ae188d8a"
               AND upload.tag = "3"
             )
             OR (
-              upload.commit = "mock-commit-2"
+              upload.commit = "a6e3dd3cc12d024ed8aef76216127aa2ae188d8a"
               AND upload.tag = "4"
             )
           )

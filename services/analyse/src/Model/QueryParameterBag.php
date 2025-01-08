@@ -6,38 +6,48 @@ namespace App\Model;
 
 use App\Enum\QueryParameter;
 use BackedEnum;
-use DateTimeImmutable;
+use DateTimeInterface;
 use Google\Cloud\BigQuery\Date;
+use Iterator;
 use JsonSerializable;
 use Override;
 use Packages\Contracts\Provider\Provider;
+use SplObjectStorage;
 use Symfony\Component\Serializer\Attribute\Ignore;
-use WeakMap;
 
 /**
  * @psalm-suppress MixedInferredReturnType
  * @psalm-suppress MixedReturnStatement
+ *
+ * @template Value of array|int|string|BackedEnum|null
+ *
+ * @template-implements Iterator<QueryParameter, Value>
  */
-final class QueryParameterBag implements JsonSerializable
+final class QueryParameterBag implements JsonSerializable, Iterator
 {
     #[Ignore]
-    private WeakMap $parameters;
+    private SplObjectStorage $parameters;
+
+    /**
+     * @var QueryParameter[]
+     */
+    #[Ignore]
+    private array $keys;
+
+    private int $position = 0;
 
     public function __construct()
     {
-        $this->parameters = new WeakMap();
+        $this->parameters = new SplObjectStorage();
     }
 
+    /**
+     * @return Value
+     */
     #[Ignore]
     public function get(QueryParameter $key): mixed
     {
         return $this->parameters[$key] ?? null;
-    }
-
-    #[Ignore]
-    public function getAll(): WeakMap
-    {
-        return clone $this->parameters;
     }
 
     public function has(QueryParameter $key): bool
@@ -47,9 +57,22 @@ final class QueryParameterBag implements JsonSerializable
 
     public function set(QueryParameter $key, array|int|string|Provider $value): self
     {
+        $this->keys[] = $key;
         $this->parameters[$key] = $value;
 
         return $this;
+    }
+
+    public function unset(QueryParameter $key): void
+    {
+        unset($this->parameters[$key]);
+
+        $this->keys = array_values(
+            array_filter(
+                $this->keys,
+                static fn(QueryParameter $k): bool => $k !== $key
+            )
+        );
     }
 
     #[Ignore]
@@ -68,11 +91,8 @@ final class QueryParameterBag implements JsonSerializable
     {
         $parameters = [];
 
-        /**
-         * @psalm-suppress all
-         */
-        foreach ($this->getAll() as $key => $weakMap) {
-            $parameters[$key->value] = $weakMap;
+        foreach ($this as $key => $value) {
+            $parameters[$key->value] = $value;
         }
 
         return $parameters;
@@ -88,22 +108,28 @@ final class QueryParameterBag implements JsonSerializable
     {
         $parameters = [];
 
-        /**
-         * @psalm-suppress all
-         */
-        foreach ($this->getAll() as $key => $weakMap) {
-            if (!in_array($key, QueryParameter::getSupportedBigQueryParameters(), true)) {
+        foreach ($this as $parameter => $value) {
+            if (!in_array($parameter, QueryParameter::getSupportedBigQueryParameters(), true)) {
                 continue;
             }
 
-            $parameters[$key->value] = match (true) {
-                $weakMap instanceof BackedEnum => $weakMap->value,
-                $key === QueryParameter::INGEST_PARTITIONS => array_map(
-                    static fn(DateTimeImmutable $dateTime): Date => new Date($dateTime),
-                    $weakMap
-                ),
-                default => $weakMap
-            };
+            if ($value instanceof BackedEnum) {
+                $value = $value->value;
+            }
+
+            if (
+                $parameter === QueryParameter::INGEST_PARTITIONS &&
+                is_array($value)
+            ) {
+                $value = array_filter(
+                    array_map(
+                        static fn(mixed $date): ?Date => $date instanceof DateTimeInterface ? new Date($date) : null,
+                        $value
+                    )
+                );
+            }
+
+            $parameters[$parameter->value] = $value;
         }
 
         return $parameters;
@@ -130,5 +156,38 @@ final class QueryParameterBag implements JsonSerializable
         }
 
         return $types;
+    }
+
+    /**
+     * @return Value
+     */
+    #[Override]
+    public function current(): mixed
+    {
+        return $this->get($this->key());
+    }
+
+    #[Override]
+    public function next(): void
+    {
+        ++$this->position;
+    }
+
+    #[Override]
+    public function key(): QueryParameter
+    {
+        return $this->keys[$this->position];
+    }
+
+    #[Override]
+    public function valid(): bool
+    {
+        return isset($this->keys[$this->position]);
+    }
+
+    #[Override]
+    public function rewind(): void
+    {
+        $this->position = 0;
     }
 }

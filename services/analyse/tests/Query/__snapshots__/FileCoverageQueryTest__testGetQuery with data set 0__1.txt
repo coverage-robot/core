@@ -47,8 +47,8 @@ WITH
           branchHits
       ) as branchHits
     FROM
-      `mock-table` as upload
-      INNER JOIN `mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
+      `mock-project-id.prod.mock-upload-table` as upload
+      INNER JOIN `mock-project-id.prod.mock-line-coverage-table` as lines ON lines.uploadId = upload.uploadId
     WHERE
       1 = 1
       AND upload.projectId = @PROJECT_ID
@@ -128,25 +128,28 @@ WITH
   )
 SELECT
   fileName,
-  COUNT(*) as `lines`,
-  COALESCE(
-    SUM(
-      IF(state = "covered", 1, 0)
-    ),
-    0
-  ) as covered,
-  COALESCE(
-    SUM(
-      IF(state = "partial", 1, 0)
-    ),
-    0
-  ) as `partial`,
-  COALESCE(
-    SUM(
-      IF(state = "uncovered", 1, 0)
-    ),
-    0
-  ) as uncovered,
+  ARRAY_AGG(lineNumber) as `lines`,
+  ARRAY_AGG(
+    IF(
+      state = "covered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS coveredLines,
+  ARRAY_AGG(
+    IF(
+      state = "partial", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS partialLines,
+  ARRAY_AGG(
+    IF(
+      state = "uncovered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS uncoveredLines,
   ROUND(
     (
       SUM(
@@ -173,4 +176,4 @@ ORDER BY
     2
   ) ASC
 LIMIT
-  @LIMIT
+  0

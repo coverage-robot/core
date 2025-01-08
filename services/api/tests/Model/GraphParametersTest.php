@@ -18,9 +18,9 @@ final class GraphParametersTest extends TestCase
             Provider::GITHUB
         );
 
-        $this->assertEquals('owner', $parameters->getOwner());
-        $this->assertEquals('repository', $parameters->getRepository());
-        $this->assertEquals(Provider::GITHUB, $parameters->getProvider());
+        $this->assertSame('owner', $parameters->getOwner());
+        $this->assertSame('repository', $parameters->getRepository());
+        $this->assertSame(Provider::GITHUB, $parameters->getProvider());
     }
 
     public static function missingParametersDataProvider(): array

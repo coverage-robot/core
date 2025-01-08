@@ -35,7 +35,7 @@ final class GraphControllerTest extends WebTestCase
         ]);
     }
 
-    public function testBadgeWithValidParameters(): void
+    public function testBackwardsCompatibleBadgeRouteWithValidParameters(): void
     {
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
         $mockAuthTokenService->expects($this->once())
@@ -87,7 +87,67 @@ final class GraphControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $this->assertEquals(
+        $this->assertSame(
+            <<<HTML
+            <svg></svg>
+            HTML,
+            $this->client->getResponse()->getContent()
+        );
+    }
+
+    public function testCustomisableRefBadgeRouteWithValidParameters(): void
+    {
+        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
+        $mockAuthTokenService->expects($this->once())
+            ->method('getGraphTokenFromRequest')
+            ->with($this->isInstanceOf(Request::class))
+            ->willReturn('mock-graph-token');
+        $mockAuthTokenService->expects($this->once())
+            ->method('getProjectUsingGraphToken')
+            ->with(
+                self::callback(
+                    static fn(GraphParameters $parameters): bool => $parameters->getOwner() === 'owner' &&
+                        $parameters->getRepository() === 'repository' &&
+                        $parameters->getProvider() === Provider::GITHUB
+                ),
+                'mock-graph-token'
+            )
+            ->willReturn(new Project(
+                Provider::GITHUB,
+                'mock-project-id',
+                'owner',
+                'repository',
+                'mock-email',
+                'mock-graph-token',
+            ));
+
+        $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
+
+        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
+        $mockDynamoDbClient->expects($this->once())
+            ->method('getCoveragePercentage')
+            ->with(Provider::GITHUB, 'owner', 'repository', 'chore/custom-ref')
+            ->willReturn(20.0);
+
+        $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
+
+        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
+        $mockBadgeService->expects($this->once())
+            ->method('renderCoveragePercentageBadge')
+            ->with(20.0)
+            ->willReturn('<svg></svg>');
+
+        $this->getContainer()
+            ->set(BadgeServiceInterface::class, $mockBadgeService);
+
+        $this->client->request(
+            Request::METHOD_GET,
+            '/graph/' . Provider::GITHUB->value . '/owner/repository/chore/custom-ref/badge.svg'
+        );
+
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSame(
             <<<HTML
             <svg></svg>
             HTML,

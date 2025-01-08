@@ -85,33 +85,32 @@ final class ExistingFixtureEventBuilderTest extends TestCase
 
     public function testGetPriority(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             0,
             ExistingFixtureEventBuilder::getPriority()
         );
     }
 
-    public static function variedConsoleInputDataProvider(): array
+    public static function variedConsoleInputDataProvider(): \Iterator
     {
-        return [
-            [
-                new ArrayInput(
-                    ['--fixture' => true],
-                    new InputDefinition([
-                        new InputOption('fixture', null, InputOption::VALUE_NONE)
-                    ])
-                ),
-                true
-            ],
-            [
-                new ArrayInput(
-                    [],
-                    new InputDefinition([
-                        new InputOption('fixture', null, InputOption::VALUE_NONE)
-                    ])
-                ),
-                false
-            ]
+        yield [
+            new ArrayInput(
+                ['--fixture' => true],
+                new InputDefinition([
+                    new InputOption('fixture', null, InputOption::VALUE_NONE)
+                ])
+            ),
+            true
+        ];
+
+        yield [
+            new ArrayInput(
+                [],
+                new InputDefinition([
+                    new InputOption('fixture', null, InputOption::VALUE_NONE)
+                ])
+            ),
+            false
         ];
     }
 }

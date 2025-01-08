@@ -11,6 +11,7 @@ use App\Model\SigningParameters;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
+use Iterator;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -243,41 +244,40 @@ final class UploadControllerTest extends WebTestCase
         );
     }
 
-    public static function validPayloadDataProvider(): array
+    public static function validPayloadDataProvider(): Iterator
     {
-        return [
-            'With pull request' => [
-                new SigningParameters(
-                    owner: 'mock-owner-id',
-                    repository: 'mock-repository-name',
-                    provider: Provider::GITHUB,
-                    fileName: 'some/root/test.xml',
-                    projectRoot: 'some/root/',
-                    tag: 'mock-tag',
-                    commit: 'mock-commit',
-                    parent: ['mock-parent-hash'],
-                    ref: 'mock-branch-reference',
-                    pullRequest: '12',
-                    baseRef: 'mock-base-ref',
-                    baseCommit: 'mock-base-commit'
-                )
-            ],
-            'Without to pull request' => [
-                new SigningParameters(
-                    owner: 'mock-owner-id',
-                    repository: 'mock-repository-name',
-                    provider: Provider::GITHUB,
-                    fileName: 'some/root/test.xml',
-                    projectRoot: 'some/root/',
-                    tag: 'mock-tag',
-                    commit: 'mock-commit',
-                    parent: [],
-                    ref: 'mock-branch-reference',
-                    pullRequest: null,
-                    baseRef: null,
-                    baseCommit: null
-                )
-            ]
+        yield 'With pull request' => [
+            new SigningParameters(
+                owner: 'mock-owner-id',
+                repository: 'mock-repository-name',
+                provider: Provider::GITHUB,
+                fileName: 'some/root/test.xml',
+                projectRoot: 'some/root/',
+                tag: 'mock-tag',
+                commit: 'mock-commit',
+                parent: ['mock-parent-hash'],
+                ref: 'mock-branch-reference',
+                pullRequest: '12',
+                baseRef: 'mock-base-ref',
+                baseCommit: 'mock-base-commit'
+            )
+        ];
+
+        yield 'Without to pull request' => [
+            new SigningParameters(
+                owner: 'mock-owner-id',
+                repository: 'mock-repository-name',
+                provider: Provider::GITHUB,
+                fileName: 'some/root/test.xml',
+                projectRoot: 'some/root/',
+                tag: 'mock-tag',
+                commit: 'mock-commit',
+                parent: [],
+                ref: 'mock-branch-reference',
+                pullRequest: null,
+                baseRef: null,
+                baseCommit: null
+            )
         ];
     }
 }

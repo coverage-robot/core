@@ -85,9 +85,6 @@ WITH
     SELECT
       fileName,
       lineNumber,
-      tag,
-      totalLines,
-      commit,
       MAX(containsMethod) as containsMethod,
       MAX(containsBranch) as containsBranch,
       MAX(containsStatement) as containsStatement,
@@ -109,18 +106,20 @@ WITH
     GROUP BY
       fileName,
       lineNumber,
-      tag,
-      totalLines,
-      commit,
       branchIndex
   ),
   lines AS (
     SELECT
-      tag,
-      totalLines,
-      commit,
       fileName,
       lineNumber,
+      MAX(containsMethod) as containsMethod,
+      MAX(containsBranch) as containsBranch,
+      MAX(containsStatement) as containsStatement,
+      COUNTIF(containsBranch = true) as totalBranches,
+      COUNTIF(
+        containsBranch = true
+        AND isBranchedLineHit = true
+      ) as coveredBranches,
       IF(
         -- Check that the line hits are 0 (i.e. not executed) and that, if theres a branch, it's
         -- definitely not been covered at all (as we'll want to show that as a partial line)
@@ -139,36 +138,33 @@ WITH
     FROM
       branchingLines
     GROUP BY
-      tag,
-      commit,
-      totalLines,
       fileName,
       lineNumber
   )
 SELECT
-  tag as tagName,
-  STRUCT(
-    tag as name, commit as `commit`, [totalLines] as successfullyUploadedLines
-  ) as tag,
-  COUNT(*) as `lines`,
-  COALESCE(
-    SUM(
-      IF(state = "covered", 1, 0)
-    ),
-    0
-  ) as covered,
-  COALESCE(
-    SUM(
-      IF(state = "partial", 1, 0)
-    ),
-    0
-  ) as `partial`,
-  COALESCE(
-    SUM(
-      IF(state = "uncovered", 1, 0)
-    ),
-    0
-  ) as uncovered,
+  fileName,
+  ARRAY_AGG(lineNumber) as `lines`,
+  ARRAY_AGG(
+    IF(
+      state = "covered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS coveredLines,
+  ARRAY_AGG(
+    IF(
+      state = "partial", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS partialLines,
+  ARRAY_AGG(
+    IF(
+      state = "uncovered", lineNumber, null
+    ) IGNORE NULLS
+    ORDER BY
+      lineNumber ASC
+  ) AS uncoveredLines,
   ROUND(
     (
       SUM(
@@ -182,8 +178,15 @@ SELECT
 FROM
   lines
 GROUP BY
-  tagName,
-  totalLines,
-  commit
+  fileName
 ORDER BY
-  tagName ASC
+  ROUND(
+    (
+      SUM(
+        IF(state = "covered", 1, 0)
+      ) + SUM(
+        IF(state = "partial", 1, 0)
+      )
+    ) / COUNT(*) * 100,
+    2
+  ) ASC

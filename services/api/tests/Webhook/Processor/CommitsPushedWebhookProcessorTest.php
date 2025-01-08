@@ -10,6 +10,7 @@ use App\Model\Webhook\Github\GithubPushedCommit;
 use App\Model\Webhook\Github\GithubPushWebhook;
 use App\Webhook\Processor\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
+use Iterator;
 use Packages\Configuration\Constant\ConfigurationFile;
 use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
@@ -52,137 +53,139 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
         $processor->process($webhook);
     }
 
-    public static function pushedCommitsDataProvider(): array
+    public static function pushedCommitsDataProvider(): Iterator
     {
-        return [
-            'No configuration file push (single commit)' => [
-                new GithubPushWebhook(
-                    signature: 'mock-signature',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'refs/heads/master',
-                    headCommit: 'mock-head-commit',
-                    commits: [
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-id',
-                            addedFiles: [],
-                            modifiedFiles: [],
-                            deletedFiles: [],
-                            committedAt: new DateTimeImmutable()
-                        )
-                    ]
-                ),
-                false
-            ],
-            'No configuration file push (multiple commits)' => [
-                new GithubPushWebhook(
-                    signature: 'mock-signature',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'refs/heads/master',
-                    headCommit: 'mock-head-commit',
-                    commits: [
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-1',
-                            addedFiles: [
-                                'some-file.yml'
-                            ],
-                            modifiedFiles: [],
-                            deletedFiles: [
-                                'a-different-file.txt'
-                            ],
-                            committedAt: new DateTimeImmutable()
-                        ),
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-2',
-                            addedFiles: [],
-                            modifiedFiles: ['another-file.php'],
-                            deletedFiles: [],
-                            committedAt: new DateTimeImmutable()
-                        )
-                    ]
-                ),
-                false
-            ],
-            'ConfigurationFile file push (single commits)' => [
-                new GithubPushWebhook(
-                    signature: 'mock-signature',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'refs/heads/master',
-                    headCommit: 'mock-head-commit',
-                    commits: [
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-1',
-                            addedFiles: [
-                                ConfigurationFile::PATH
-                            ],
-                            modifiedFiles: [],
-                            deletedFiles: [
-                                'a-different-file.txt'
-                            ],
-                            committedAt: new DateTimeImmutable()
-                        ),
-                        new GithubPushedCommit(
-                            commit: 'mock-head-commit',
-                            addedFiles: [],
-                            modifiedFiles: ['another-file.php'],
-                            deletedFiles: [],
-                            committedAt: new DateTimeImmutable()
-                        )
-                    ]
-                ),
-                true
-            ],
-            'ConfigurationFile file push (multiple commits)' => [
-                new GithubPushWebhook(
-                    signature: 'mock-signature',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'refs/heads/master',
-                    headCommit: 'mock-head-commit',
-                    commits: [
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-1',
-                            addedFiles: [],
-                            modifiedFiles: [
-                                ConfigurationFile::PATH
-                            ],
-                            deletedFiles: [],
-                            committedAt: new DateTimeImmutable()
-                        ),
-                        new GithubPushedCommit(
-                            commit: 'mock-head-commit',
-                            addedFiles: [],
-                            modifiedFiles: [],
-                            deletedFiles: [
-                                ConfigurationFile::PATH
-                            ],
-                            committedAt: new DateTimeImmutable()
-                        )
-                    ]
-                ),
-                true
-            ],
-            'ConfigurationFile file push (in tag)' => [
-                new GithubPushWebhook(
-                    signature: 'mock-signature',
-                    owner: 'mock-owner',
-                    repository: 'mock-repository',
-                    ref: 'refs/tag/v1.0',
-                    headCommit: 'mock-head-commit',
-                    commits: [
-                        new GithubPushedCommit(
-                            commit: 'mock-commit-id',
-                            addedFiles: [],
-                            modifiedFiles: [],
-                            deletedFiles: [],
-                            committedAt: new DateTimeImmutable()
-                        )
-                    ]
-                ),
-                false
-            ],
+        yield 'No configuration file push (single commit)' => [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'refs/heads/master',
+                headCommit: 'mock-head-commit',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-id',
+                        addedFiles: [],
+                        modifiedFiles: [],
+                        deletedFiles: [],
+                        committedAt: new DateTimeImmutable()
+                    )
+                ]
+            ),
+            false
+        ];
+
+        yield 'No configuration file push (multiple commits)' => [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'refs/heads/master',
+                headCommit: 'mock-head-commit',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-1',
+                        addedFiles: [
+                            'some-file.yml'
+                        ],
+                        modifiedFiles: [],
+                        deletedFiles: [
+                            'a-different-file.txt'
+                        ],
+                        committedAt: new DateTimeImmutable()
+                    ),
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-2',
+                        addedFiles: [],
+                        modifiedFiles: ['another-file.php'],
+                        deletedFiles: [],
+                        committedAt: new DateTimeImmutable()
+                    )
+                ]
+            ),
+            false
+        ];
+
+        yield 'ConfigurationFile file push (single commits)' => [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'refs/heads/master',
+                headCommit: 'mock-head-commit',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-1',
+                        addedFiles: [
+                            ConfigurationFile::PATH
+                        ],
+                        modifiedFiles: [],
+                        deletedFiles: [
+                            'a-different-file.txt'
+                        ],
+                        committedAt: new DateTimeImmutable()
+                    ),
+                    new GithubPushedCommit(
+                        commit: 'mock-head-commit',
+                        addedFiles: [],
+                        modifiedFiles: ['another-file.php'],
+                        deletedFiles: [],
+                        committedAt: new DateTimeImmutable()
+                    )
+                ]
+            ),
+            true
+        ];
+
+        yield 'ConfigurationFile file push (multiple commits)' => [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'refs/heads/master',
+                headCommit: 'mock-head-commit',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-1',
+                        addedFiles: [],
+                        modifiedFiles: [
+                            ConfigurationFile::PATH
+                        ],
+                        deletedFiles: [],
+                        committedAt: new DateTimeImmutable()
+                    ),
+                    new GithubPushedCommit(
+                        commit: 'mock-head-commit',
+                        addedFiles: [],
+                        modifiedFiles: [],
+                        deletedFiles: [
+                            ConfigurationFile::PATH
+                        ],
+                        committedAt: new DateTimeImmutable()
+                    )
+                ]
+            ),
+            true
+        ];
+
+        yield 'ConfigurationFile file push (in tag)' => [
+            new GithubPushWebhook(
+                signature: 'mock-signature',
+                owner: 'mock-owner',
+                repository: 'mock-repository',
+                ref: 'refs/tag/v1.0',
+                headCommit: 'mock-head-commit',
+                commits: [
+                    new GithubPushedCommit(
+                        commit: 'mock-commit-id',
+                        addedFiles: [],
+                        modifiedFiles: [],
+                        deletedFiles: [],
+                        committedAt: new DateTimeImmutable()
+                    )
+                ]
+            ),
+            false
         ];
     }
 }

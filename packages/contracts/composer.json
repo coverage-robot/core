@@ -13,6 +13,9 @@
             "Packages\\Contracts\\": "src/"
         }
     },
+    "scripts": {
+        "lint:rector": "rector process --dry-run"
+    },
     "repositories": [
         {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],

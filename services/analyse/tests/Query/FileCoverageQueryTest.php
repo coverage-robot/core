@@ -4,40 +4,22 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
-use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
-use App\Exception\QueryException;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
 use App\Query\FileCoverageQuery;
-use App\Query\QueryInterface;
-use App\Query\Result\FileCoverageCollectionQueryResult;
+use ArrayIterator;
 use DateTimeImmutable;
-use Google\Cloud\BigQuery\QueryResults;
 use Override;
-use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
-use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class FileCoverageQueryTest extends AbstractQueryTestCase
 {
     #[Override]
-    public function getQueryClass(): QueryInterface
+    public function getQueryClass(): string
     {
-        return new FileCoverageQuery(
-            $this->getContainer()->get(SerializerInterface::class),
-            MockEnvironmentServiceFactory::createMock(
-                Environment::PRODUCTION,
-                Service::ANALYSE,
-                [
-                    EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'
-                ]
-            )
-        );
+        return FileCoverageQuery::class;
     }
 
     #[Override]
@@ -45,11 +27,11 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
     {
         $waypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
-            projectId: 'mock-project',
+            projectId: '0193f0c7-c37f-7d9e-92b4-b06f00e2296a',
             owner: 'mock-owner',
             repository: 'mock-repository',
             ref: 'mock-ref',
-            commit: 'mock-commit',
+            commit: 'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
             history: [],
             diff: [],
             pullRequest: 12
@@ -57,7 +39,10 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
 
         $lineScopedParameters = QueryParameterBag::fromWaypoint($waypoint)
             ->set(QueryParameter::LIMIT, 50)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -77,16 +62,39 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '4',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    )
                 ]
             );
 
         $carryforwardAndUploadsParameters = QueryParameterBag::fromWaypoint($waypoint)
             ->set(QueryParameter::LIMIT, 20)
-            ->set(QueryParameter::UPLOADS, ['1', '2'])
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
             ->set(QueryParameter::INGEST_PARTITIONS, [
                 new DateTimeImmutable('2024-01-03 00:00:00'),
                 new DateTimeImmutable('2024-01-03 00:00:00')
@@ -94,164 +102,112 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
             ->set(
                 QueryParameter::CARRYFORWARD_TAGS,
                 [
-                    new CarryforwardTag('1', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('2', 'mock-commit', [1], [new DateTimeImmutable('2024-01-03 00:00:00')]),
-                    new CarryforwardTag('3', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')]),
-                    new CarryforwardTag('4', 'mock-commit-2', [1], [new DateTimeImmutable('2024-01-01 02:00:00')])
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '4',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    )
+                ]
+            );
+
+        $carryforwardAndUploadsParametersWithNoLimit = QueryParameterBag::fromWaypoint($waypoint)
+            ->set(
+                QueryParameter::UPLOADS,
+                ['0193f0c5-bae7-7b67-bb26-81e781146de8', '0193f0c5-d84f-7470-a008-97c2b9538933']
+            )
+            ->set(QueryParameter::INGEST_PARTITIONS, [
+                new DateTimeImmutable('2024-01-03 00:00:00'),
+                new DateTimeImmutable('2024-01-03 00:00:00')
+            ])
+            ->set(
+                QueryParameter::CARRYFORWARD_TAGS,
+                [
+                    new CarryforwardTag(
+                        '1',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '2',
+                        'f7e3cc3cc12c056ed8ece76216127ea1ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-03 00:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '3',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    ),
+                    new CarryforwardTag(
+                        '4',
+                        'a6e3dd3cc12d024ed8aef76216127aa2ae188d8a',
+                        [1],
+                        [new DateTimeImmutable('2024-01-01 02:00:00')]
+                    )
                 ]
             );
 
         return [
             $lineScopedParameters,
             $carryforwardParameters,
-            $carryforwardAndUploadsParameters
+            $carryforwardAndUploadsParameters,
+            $carryforwardAndUploadsParametersWithNoLimit
         ];
     }
 
-    #[DataProvider('parametersDataProvider')]
     #[Override]
-    public function testValidateParameters(QueryParameterBag $parameters, bool $valid): void
-    {
-        if (!$valid) {
-            $this->expectException(QueryException::class);
-        } else {
-            $this->expectNotToPerformAssertions();
-        }
-
-        $this->getQueryClass()->validateParameters($parameters);
-    }
-
-    #[DataProvider('resultsDataProvider')]
-    #[Override]
-    public function testParseResults(array $queryResult): void
-    {
-        $mockBigQueryResult = $this->createMock(QueryResults::class);
-        $mockBigQueryResult->expects($this->once())
-            ->method('rows')
-            ->willReturn($queryResult);
-
-        $result = $this->getQueryClass()
-            ->parseResults($mockBigQueryResult);
-
-        $this->assertInstanceOf(FileCoverageCollectionQueryResult::class, $result);
-    }
-
-    public static function resultsDataProvider(): array
+    public static function getQueryResults(): array
     {
         return [
-            [
+            new ArrayIterator([
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lines' => 1,
-                        'covered' => 1,
-                        'partial' => 0,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 100.0
-                    ],
+                    'fileName' => 'mock-file',
+                    'lines' => [1],
+                    'coveredLines' => [1],
+                    'partialLines' => [],
+                    'uncoveredLines' => [],
+                    'coveragePercentage' => 100.0
                 ],
-            ],
-            [
+            ]),
+            new ArrayIterator([
                 [
-                    [
-                        'fileName' => 'mock-file',
-                        'lines' => 1,
-                        'covered' => 1,
-                        'partial' => 0,
-                        'uncovered' => 0,
-                        'coveragePercentage' => 100.0
-                    ],
-                    [
-                        'fileName' => 'mock-file-2',
-                        'lines' => 10,
-                        'covered' => 5,
-                        'partial' => 0,
-                        'uncovered' => 5,
-                        'coveragePercentage' => 50.0
-                    ]
+                    'fileName' => 'mock-file',
+                    'lines' => [2],
+                    'coveredLines' => [2],
+                    'partialLines' => [],
+                    'uncoveredLines' => [],
+                    'coveragePercentage' => 100.0
+                ],
+                [
+                    'fileName' => 'mock-file-2',
+                    'lines' => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    'coveredLines' => [1, 4, 5, 6, 7],
+                    'partialLines' => [],
+                    'uncoveredLines' => [2, 3, 8, 9, 10],
+                    'coveragePercentage' => 50.0
                 ]
-            ]
-        ];
-    }
-
-    public static function parametersDataProvider(): array
-    {
-        $waypoint = new ReportWaypoint(
-            provider: Provider::GITHUB,
-            projectId: 'mock-project',
-            owner: 'mock-owner',
-            repository: 'mock-repository',
-            ref: 'mock-ref',
-            commit: 'mock-commit',
-            history: [],
-            diff: []
-        );
-
-        return [
-            [
-                new QueryParameterBag(),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::INGEST_PARTITIONS, ['1', '2']),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, ['1', '2'])
-                    ->set(
-                        QueryParameter::INGEST_PARTITIONS,
-                        [
-                            new DateTimeImmutable('2024-01-03 00:00:00'),
-                            new DateTimeImmutable('2024-01-03 00:00:00')
-                        ]
-                    ),
-                true
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(QueryParameter::UPLOADS, [])
-                    ->set(QueryParameter::INGEST_PARTITIONS, []),
-                false
-            ],
-            [
-                QueryParameterBag::fromWaypoint($waypoint)
-                    ->set(QueryParameter::LIMIT, 50)
-                    ->set(
-                        QueryParameter::CARRYFORWARD_TAGS,
-                        [
-                            new CarryforwardTag(
-                                '1',
-                                'mock-commit',
-                                [12],
-                                [new DateTimeImmutable('2024-01-03 00:00:00')]
-                            )
-                        ]
-                    ),
-                true
-            ],
+            ])
         ];
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Query\Result;
 
 use App\Model\CarryforwardTag;
+use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class TagAvailabilityQueryResult implements QueryResultInterface
@@ -33,5 +34,15 @@ final class TagAvailabilityQueryResult implements QueryResultInterface
     public function getCarryforwardTags(): array
     {
         return $this->carryforwardTags;
+    }
+
+    #[Override]
+    public function getTimeToLive(): int|false
+    {
+        /**
+         * This query can't be cached, as it doesnt use any discernible parameters which will
+         * ensure the cached query is still up to date.
+         */
+        return false;
     }
 }

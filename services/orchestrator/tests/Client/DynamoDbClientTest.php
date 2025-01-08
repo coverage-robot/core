@@ -61,47 +61,47 @@ final class DynamoDbClientTest extends KernelTestCase
             ->with(
                 self::callback(
                     function (PutItemInput $input) use ($mockEvent): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'event-store',
                             $input->getTableName()
                         );
                         // This is _very_ important, as its what will ensure that we don't overwrite
                         // existing state changes for the same event (i.e. contention between writes)
-                        $this->assertEquals(
+                        $this->assertSame(
                             'attribute_not_exists(version)',
                             $input->getConditionExpression()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             ReturnValuesOnConditionCheckFailure::ALL_OLD,
                             $input->getReturnValuesOnConditionCheckFailure()
                         );
 
                         $item = $input->getItem();
-                        $this->assertEquals(
+                        $this->assertSame(
                             (string)$mockEvent,
                             $item['identifier']->getS()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             Provider::GITHUB->value,
                             $item['provider']->getS()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             'mock-owner',
                             $item['owner']->getS()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             'mock-repository',
                             $item['repository']->getS()
                         );
-                        $this->assertEquals(
-                            2,
+                        $this->assertSame(
+                            '2',
                             $item['version']->getN()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             '{"mock":"change"}',
                             $item['event']->getS()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             $mockEvent->getEventTime()->format('U'),
                             $item['eventTime']->getN()
                         );
@@ -144,8 +144,7 @@ final class DynamoDbClientTest extends KernelTestCase
                     EnvironmentVariable::EVENT_STORE->value => 'event-store'
                 ]
             ),
-            $this->getContainer()->get(SerializerInterface::class),
-            new NullLogger()
+            $this->getContainer()->get(SerializerInterface::class)
         );
 
         $mockOutput = ResultMockFactory::create(
@@ -196,7 +195,7 @@ final class DynamoDbClientTest extends KernelTestCase
             ->with(
                 self::callback(
                     function (QueryInput $input) use ($mockEvent): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'event-store',
                             $input->getTableName()
                         );
@@ -323,11 +322,11 @@ final class DynamoDbClientTest extends KernelTestCase
             ->with(
                 self::callback(
                     function (QueryInput $input) use ($mockEvent): bool {
-                        $this->assertEquals(
+                        $this->assertSame(
                             'event-store',
                             $input->getTableName()
                         );
-                        $this->assertEquals(
+                        $this->assertSame(
                             'repositoryIdentifier-commit-index',
                             $input->getIndexName()
                         );

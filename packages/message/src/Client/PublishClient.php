@@ -120,7 +120,7 @@ final class PublishClient implements SqsClientInterface
 
         $queueUrl = $response->getQueueUrl();
 
-        if (!$queueUrl) {
+        if ($queueUrl === null || $queueUrl === '' || $queueUrl === '0') {
             throw new RuntimeException(
                 sprintf(
                     'Could not get queue url for %s',

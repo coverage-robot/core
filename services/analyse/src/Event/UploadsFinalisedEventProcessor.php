@@ -13,12 +13,13 @@ use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Override;
+use Packages\Clients\Model\Object\Reference;
+use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\CoverageFailed;
@@ -279,13 +280,9 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $coverageReport->getUploads()
                     ->getSuccessfulUploads()
             ),
-            tagCoverage: (array)$this->serializer->normalize(
-                $coverageReport->getTagCoverage()
-                    ->getTags()
-            ),
+            tagCoverage: (array)$this->serializer->normalize(iterator_to_array($coverageReport->getTagCoverage())),
             leastCoveredDiffFiles: (array)$this->serializer->normalize(
-                $coverageReport->getLeastCoveredDiffFiles()
-                    ->getFiles()
+                iterator_to_array($coverageReport->getLeastCoveredDiffFiles())
             ),
             baseCommit: $comparison?->getBaseReport()
                 ->getWaypoint()
@@ -340,8 +337,7 @@ final class UploadsFinalisedEventProcessor implements EventProcessorInterface
                 $uploadsFinalised,
                 $coverageReport->getWaypoint()
                     ->getDiff(),
-                $coverageReport->getDiffLineCoverage()
-                    ->getLines(),
+                $coverageReport->getDiffLineCoverage(),
                 $validUntil
             );
 

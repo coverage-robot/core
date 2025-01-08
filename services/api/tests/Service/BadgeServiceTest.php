@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\BadgeService;
+use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,7 +48,7 @@ final class BadgeServiceTest extends KernelTestCase
             'templates/'
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             '<svg></svg>',
             $badgeService->renderCoveragePercentageBadge($coveragePercentage)
         );
@@ -70,46 +71,49 @@ final class BadgeServiceTest extends KernelTestCase
         );
     }
 
-    public static function projectCoverageDataProvider(): array
+    public static function projectCoverageDataProvider(): Iterator
     {
-        return [
-            [
-                99,
-                '05ff00',
-                24.44921875
-            ],
-            [
-                1,
-                'ff0500',
-                17.45068359375
-            ],
-            [
-                100,
-                '00ff00',
-                31.44775390625
-            ],
-            [
-                null,
-                'ff0000',
-                49.9833984375
-            ],
-            [
-                34.64,
-                'ffb100',
-                41.94287109375
-            ],
-            [
-                34.60,
-                'ffb000',
-                41.94287109375
-            ]
+        yield [
+            99,
+            '05ff00',
+            24.44921875
+        ];
+
+        yield [
+            1,
+            'ff0500',
+            17.45068359375
+        ];
+
+        yield [
+            100,
+            '00ff00',
+            31.44775390625
+        ];
+
+        yield [
+            null,
+            'ff0000',
+            49.9833984375
+        ];
+
+        yield [
+            34.64,
+            'ffb100',
+            41.94287109375
+        ];
+
+        yield [
+            34.60,
+            'ffb000',
+            41.94287109375
         ];
     }
 
     public static function projectCoverageWithIconsDataProvider(): array
     {
         return array_reduce(
-            self::projectCoverageDataProvider(),
+            iterator_to_array(self::projectCoverageDataProvider()),
             static fn (array $carry, array $item): array => [
                 ...$carry,
                 sprintf('%s with icons', $item[0] ? $item[0] . '%' : 'null') => [

@@ -25,7 +25,14 @@ final class QueryParameterBagTest extends TestCase
             ->set(
                 QueryParameter::UPLOADS,
                 ''
+            )
+            ->set(
+                QueryParameter::COMMIT,
+                'mock-commit'
             );
+
+        // Remove the commit parameter and test it doesnt appear in the serialization
+        $queryParameterBag->unset(QueryParameter::COMMIT);
 
         $this->assertSame(
             [

@@ -52,55 +52,56 @@ final class TagBehaviourServiceTest extends TestCase
         );
     }
 
-    public static function behavioursDataProvider(): array
+    public static function behavioursDataProvider(): \Iterator
     {
-        return [
-            "Only default behaviour (turned off)" => [
-                new DefaultTagBehaviour(
-                    carryforward: false
+        yield "Only default behaviour (turned off)" => [
+            new DefaultTagBehaviour(
+                carryforward: false
+            ),
+            [],
+            false
+        ];
+
+        yield "Only default behaviour (turned on)" => [
+            new DefaultTagBehaviour(
+                carryforward: true
+            ),
+            [],
+            true
+        ];
+
+        yield "No matching individual tag behaviours" => [
+            new DefaultTagBehaviour(
+                carryforward: true
+            ),
+            [
+                new IndividualTagBehaviour(
+                    'not-related-tag',
+                    false
                 ),
-                [],
-                false
+                new IndividualTagBehaviour(
+                    'not-related-tag-2',
+                    false
+                )
             ],
-            "Only default behaviour (turned on)" => [
-                new DefaultTagBehaviour(
-                    carryforward: true
+            true
+        ];
+
+        yield "Matching individual tag behaviours" => [
+            new DefaultTagBehaviour(
+                carryforward: false
+            ),
+            [
+                new IndividualTagBehaviour(
+                    'not-related-tag',
+                    false
                 ),
-                [],
-                true
+                new IndividualTagBehaviour(
+                    'mock-tag',
+                    true
+                )
             ],
-            "No matching individual tag behaviours" => [
-                new DefaultTagBehaviour(
-                    carryforward: true
-                ),
-                [
-                    new IndividualTagBehaviour(
-                        'not-related-tag',
-                        false
-                    ),
-                    new IndividualTagBehaviour(
-                        'not-related-tag-2',
-                        false
-                    )
-                ],
-                true
-            ],
-            "Matching individual tag behaviours" => [
-                new DefaultTagBehaviour(
-                    carryforward: false
-                ),
-                [
-                    new IndividualTagBehaviour(
-                        'not-related-tag',
-                        false
-                    ),
-                    new IndividualTagBehaviour(
-                        'mock-tag',
-                        true
-                    )
-                ],
-                true
-            ],
+            true
         ];
     }
 }

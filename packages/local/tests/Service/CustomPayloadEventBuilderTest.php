@@ -64,33 +64,32 @@ final class CustomPayloadEventBuilderTest extends TestCase
 
     public function testGetPriority(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             0,
             CustomPayloadEventBuilder::getPriority()
         );
     }
 
-    public static function variedConsoleInputDataProvider(): array
+    public static function variedConsoleInputDataProvider(): \Iterator
     {
-        return [
-            [
-                new ArrayInput(
-                    ['--file' => "some-path/"],
-                    new InputDefinition([
-                        new InputOption('file', null, InputOption::VALUE_REQUIRED)
-                    ])
-                ),
-                true
-            ],
-            [
-                new ArrayInput(
-                    [],
-                    new InputDefinition([
-                        new InputOption('file', null, InputOption::VALUE_REQUIRED)
-                    ])
-                ),
-                false
-            ]
+        yield [
+            new ArrayInput(
+                ['--file' => "some-path/"],
+                new InputDefinition([
+                    new InputOption('file', null, InputOption::VALUE_REQUIRED)
+                ])
+            ),
+            true
+        ];
+
+        yield [
+            new ArrayInput(
+                [],
+                new InputDefinition([
+                    new InputOption('file', null, InputOption::VALUE_REQUIRED)
+                ])
+            ),
+            false
         ];
     }
 }

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use App\Query\Result\FileCoverageCollectionQueryResult;
-use App\Query\Result\LineCoverageCollectionQueryResult;
-use App\Query\Result\TagCoverageCollectionQueryResult;
+use App\Query\Result\FileCoverageQueryResult;
+use App\Query\Result\LineCoverageQueryResult;
+use App\Query\Result\LineCoverageSummaryCollectionQueryResult;
+use App\Query\Result\QueryResultIterator;
+use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use DateTimeImmutable;
 use Stringable;
@@ -59,9 +61,19 @@ interface CoverageReportInterface extends Stringable
     public function getCoveragePercentage(bool $rounded = true): float;
 
     /**
-     * The list of tags associated to uploads made, and their coverage.
+     * The line by line coverage split by file, in any of the uploads or carried forward
+     * tags.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
-    public function getTagCoverage(): TagCoverageCollectionQueryResult;
+    public function getFileCoverage(): QueryResultIterator;
+
+    /**
+     * The list of tags associated to uploads made, and their coverage.
+     *
+     * @return QueryResultIterator<TagCoverageQueryResult>
+     */
+    public function getTagCoverage(): QueryResultIterator;
 
     /**
      * The percentage of lines that were added in the diff, and were at least partially covered by
@@ -73,8 +85,10 @@ interface CoverageReportInterface extends Stringable
 
     /**
      * The list of the least covered files which were added to by the diff.
+     *
+     * @return QueryResultIterator<FileCoverageQueryResult>
      */
-    public function getLeastCoveredDiffFiles(): FileCoverageCollectionQueryResult;
+    public function getLeastCoveredDiffFiles(): QueryResultIterator;
 
     /**
      * The number of lines that were added in the diff, and were not at least partially covered by
@@ -88,6 +102,8 @@ interface CoverageReportInterface extends Stringable
      * This isn't an exhaustive list of the whole diff (i.e. code comments will **not** show up here). THis
      * is just the lines which were added that were coverable by tests (i.e. seen in at least one of the
      * uploads).
+     *
+     * @return QueryResultIterator<LineCoverageQueryResult>
      */
-    public function getDiffLineCoverage(): LineCoverageCollectionQueryResult;
+    public function getDiffLineCoverage(): QueryResultIterator;
 }
