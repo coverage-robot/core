@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.12.3",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "9a89d9eeb04835f62110c1ff0647d01c54e90c5b"
+                "reference": "f98676ad2085d8c774877303e6781c8a13cd2ee2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/9a89d9eeb04835f62110c1ff0647d01c54e90c5b",
-                "reference": "9a89d9eeb04835f62110c1ff0647d01c54e90c5b",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/f98676ad2085d8c774877303e6781c8a13cd2ee2",
+                "reference": "f98676ad2085d8c774877303e6781c8a13cd2ee2",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -61,7 +61,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.12.3"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.13.0"
             },
             "funding": [
                 {
@@ -73,20 +73,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-09T08:09:09+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/cognito-identity-provider",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/cognito-identity-provider.git",
-                "reference": "0635576d3394d2b75aa41e1134a711eb696ce904"
+                "reference": "4b9f7c9cb9882047b8407217dee19b61d6e7a3ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/0635576d3394d2b75aa41e1134a711eb696ce904",
-                "reference": "0635576d3394d2b75aa41e1134a711eb696ce904",
+                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/4b9f7c9cb9882047b8407217dee19b61d6e7a3ae",
+                "reference": "4b9f7c9cb9882047b8407217dee19b61d6e7a3ae",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "autoload": {
@@ -119,7 +119,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.10.0"
+                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.11.0"
             },
             "funding": [
                 {
@@ -131,20 +131,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-24T11:42:17+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/core",
-            "version": "1.23.0",
+            "version": "1.24.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "f2f40b895f1b2834a793c78d6c1ff8e1a1c39a12"
+                "reference": "241c8ab0e4cd4f47b2226a31a5132fb36a73a57b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/f2f40b895f1b2834a793c78d6c1ff8e1a1c39a12",
-                "reference": "f2f40b895f1b2834a793c78d6c1ff8e1a1c39a12",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/241c8ab0e4cd4f47b2226a31a5132fb36a73a57b",
+                "reference": "241c8ab0e4cd4f47b2226a31a5132fb36a73a57b",
                 "shasum": ""
             },
             "require": {
@@ -166,7 +166,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.23-dev"
+                    "dev-master": "1.24-dev"
                 }
             },
             "autoload": {
@@ -187,7 +187,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.23.0"
+                "source": "https://github.com/async-aws/core/tree/1.24.1"
             },
             "funding": [
                 {
@@ -199,20 +199,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-24T11:42:17+00:00"
+            "time": "2025-01-15T14:38:08+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "f909f85ce5631c72344fad109a3fe9238d105329"
+                "reference": "b8f7520147a715f1576d87f2afb785a2b9a608d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/f909f85ce5631c72344fad109a3fe9238d105329",
-                "reference": "f909f85ce5631c72344fad109a3fe9238d105329",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/b8f7520147a715f1576d87f2afb785a2b9a608d1",
+                "reference": "b8f7520147a715f1576d87f2afb785a2b9a608d1",
                 "shasum": ""
             },
             "require": {
@@ -228,7 +228,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -249,7 +249,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.3.1"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.4.0"
             },
             "funding": [
                 {
@@ -261,7 +261,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-26T15:43:58+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/event-bridge",
@@ -322,16 +322,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "6dc398db5f136bb23e736fb2b57099cd30670458"
+                "reference": "d6556d0088a2778e61e17ab71ca7336ad65d082b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/6dc398db5f136bb23e736fb2b57099cd30670458",
-                "reference": "6dc398db5f136bb23e736fb2b57099cd30670458",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/d6556d0088a2778e61e17ab71ca7336ad65d082b",
+                "reference": "d6556d0088a2778e61e17ab71ca7336ad65d082b",
                 "shasum": ""
             },
             "require": {
@@ -345,7 +345,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -366,7 +366,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.6.0"
+                "source": "https://github.com/async-aws/s3/tree/2.7.0"
             },
             "funding": [
                 {
@@ -378,7 +378,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-26T15:43:58+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/scheduler",
@@ -499,16 +499,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.3.12",
+            "version": "2.3.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "5a92388dfb654b4ca7ccda884353a00a1b8b0bc3"
+                "reference": "6fbc3d0b6d1f7a9ccf64d4f440f6397015ecc043"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/5a92388dfb654b4ca7ccda884353a00a1b8b0bc3",
-                "reference": "5a92388dfb654b4ca7ccda884353a00a1b8b0bc3",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/6fbc3d0b6d1f7a9ccf64d4f440f6397015ecc043",
+                "reference": "6fbc3d0b6d1f7a9ccf64d4f440f6397015ecc043",
                 "shasum": ""
             },
             "require": {
@@ -562,7 +562,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.3.12"
+                "source": "https://github.com/brefphp/bref/tree/2.3.13"
             },
             "funding": [
                 {
@@ -574,7 +574,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-20T13:00:03+00:00"
+            "time": "2025-01-18T15:13:23+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -4600,16 +4600,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.2.1",
+            "version": "v7.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "ff4df2b68d1c67abb9fef146e6540ea16b58d99e"
+                "reference": "339ba21476eb184290361542f732ad12c97591ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/ff4df2b68d1c67abb9fef146e6540ea16b58d99e",
-                "reference": "ff4df2b68d1c67abb9fef146e6540ea16b58d99e",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/339ba21476eb184290361542f732ad12c97591ec",
+                "reference": "339ba21476eb184290361542f732ad12c97591ec",
                 "shasum": ""
             },
             "require": {
@@ -4675,7 +4675,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.2.1"
+                "source": "https://github.com/symfony/http-client/tree/v7.2.2"
             },
             "funding": [
                 {
@@ -4691,7 +4691,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-07T08:50:44+00:00"
+            "time": "2024-12-30T18:35:15+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
