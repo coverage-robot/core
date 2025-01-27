@@ -145,16 +145,16 @@
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "f909f85ce5631c72344fad109a3fe9238d105329"
+                "reference": "b8f7520147a715f1576d87f2afb785a2b9a608d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/f909f85ce5631c72344fad109a3fe9238d105329",
-                "reference": "f909f85ce5631c72344fad109a3fe9238d105329",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/b8f7520147a715f1576d87f2afb785a2b9a608d1",
+                "reference": "b8f7520147a715f1576d87f2afb785a2b9a608d1",
                 "shasum": ""
             },
             "require": {
@@ -170,7 +170,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -191,7 +191,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.3.1"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.4.0"
             },
             "funding": [
                 {
@@ -203,7 +203,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-26T15:43:58+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/event-bridge",
@@ -264,16 +264,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "2.6.0",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "6dc398db5f136bb23e736fb2b57099cd30670458"
+                "reference": "d6556d0088a2778e61e17ab71ca7336ad65d082b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/6dc398db5f136bb23e736fb2b57099cd30670458",
-                "reference": "6dc398db5f136bb23e736fb2b57099cd30670458",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/d6556d0088a2778e61e17ab71ca7336ad65d082b",
+                "reference": "d6556d0088a2778e61e17ab71ca7336ad65d082b",
                 "shasum": ""
             },
             "require": {
@@ -287,7 +287,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -308,7 +308,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.6.0"
+                "source": "https://github.com/async-aws/s3/tree/2.7.0"
             },
             "funding": [
                 {
@@ -320,7 +320,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-26T15:43:58+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/scheduler",
