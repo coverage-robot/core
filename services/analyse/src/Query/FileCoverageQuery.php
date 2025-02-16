@@ -38,7 +38,7 @@ final class FileCoverageQuery extends AbstractLineCoverageQuery
         $uncovered = LineState::UNCOVERED->value;
 
         $limit = $parameterBag?->has(QueryParameter::LIMIT) === true ?
-            sprintf('LIMIT %d', $this->getAlias(QueryParameter::LIMIT)) :
+            sprintf('LIMIT %s', $this->getAlias(QueryParameter::LIMIT)) :
             null;
 
         return <<<SQL

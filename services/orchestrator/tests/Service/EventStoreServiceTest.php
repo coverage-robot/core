@@ -143,7 +143,7 @@ final class EventStoreServiceTest extends KernelTestCase
             )
         );
 
-        $this->assertNull($previousEvent);
+        $this->assertNotInstanceOf(OrchestratedEventInterface::class, $previousEvent);
     }
 
     public function testStoringEmptyStateChange(): void
