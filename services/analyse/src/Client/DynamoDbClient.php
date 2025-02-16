@@ -63,7 +63,10 @@ final class DynamoDbClient implements DynamoDbClientInterface
 
         $item = $response->getItem();
 
-        if (isset($item['result'])) {
+        if (
+            isset($item['result']) &&
+            is_string($item['result']->getS())
+        ) {
             try {
                 $result = json_decode(
                     $item['result']->getS(),
