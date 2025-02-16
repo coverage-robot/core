@@ -41,7 +41,7 @@ final class TagBehaviourServiceTest extends TestCase
 
         $tagBehaviourService = new TagBehaviourService($mockSettingService);
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectedCarryforwardBehaviour,
             $tagBehaviourService->shouldCarryforwardTag(
                 Provider::GITHUB,

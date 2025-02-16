@@ -34,7 +34,7 @@ final class SettingServiceTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $isSetSuccessful,
             $settingService->set(
                 Provider::GITHUB,
