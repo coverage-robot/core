@@ -6,13 +6,17 @@ namespace App\Client;
 
 use App\Enum\EnvironmentVariable;
 use App\Query\Result\QueryResultInterface;
+use App\Query\Result\QueryResultIterator;
+use ArrayIterator;
 use AsyncAws\Core\Exception\Http\HttpException;
 use AsyncAws\DynamoDb\Input\GetItemInput;
 use InvalidArgumentException;
+use JsonException;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class DynamoDbClient implements DynamoDbClientInterface
@@ -20,7 +24,7 @@ final class DynamoDbClient implements DynamoDbClientInterface
     public function __construct(
         private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
         private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer,
+        private readonly SerializerInterface&DenormalizerInterface $serializer,
         private readonly LoggerInterface $dynamoDbClientLogger
     ) {
     }
@@ -59,19 +63,59 @@ final class DynamoDbClient implements DynamoDbClientInterface
 
         $item = $response->getItem();
 
-        if (isset($item['result'])) {
+        if (
+            isset($item['result']) &&
+            is_string($item['result']->getS())
+        ) {
             try {
-                return $this->serializer->deserialize(
+                $result = json_decode(
                     $item['result']->getS(),
-                    QueryResultInterface::class,
-                    'json'
+                    true,
+                    512,
+                    JSON_THROW_ON_ERROR
+                );
+
+                if (
+                    !is_array($result) ||
+                    !array_is_list($result)
+                ) {
+                    return $this->serializer->denormalize(
+                        $result,
+                        QueryResultInterface::class,
+                        'json'
+                    );
+                }
+
+                /**
+                 * We've got a list of results, meaning this _must have been_ an iterator before it was
+                 * serialized into cache.
+                 *
+                 * Given we've already done the cheap(er) JSON decode, we can now denormalize each row
+                 * into the correct result type on-the-fly, before returning each result from the new iterator.
+                 */
+                return new QueryResultIterator(
+                    new ArrayIterator($result),
+                    count($result),
+                    fn(mixed $row): QueryResultInterface => $this->serializer->denormalize(
+                        $row,
+                        QueryResultInterface::class,
+                        'json'
+                    )
                 );
             } catch (ExceptionInterface $exception) {
                 $this->dynamoDbClientLogger->error(
-                    'Failed to deserialize query result from cache.',
+                    'Failed to denormalize query result from cache.',
                     [
                         'cacheKey' => $cacheKey,
                         'exception' => $exception
+                    ]
+                );
+            } catch (JsonException $e) {
+                $this->dynamoDbClientLogger->error(
+                    'Failed to decode query result from cache.',
+                    [
+                        'cacheKey' => $cacheKey,
+                        'exception' => $e
                     ]
                 );
             }
