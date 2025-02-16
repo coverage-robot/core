@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Model\CoverageReport;
+use App\Model\CoverageReportComparison;
 use App\Model\ReportWaypoint;
 use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
@@ -297,6 +298,6 @@ final class CoverageComparisonServiceTest extends TestCase
             $event
         );
 
-        $this->assertNull($comparison);
+        $this->assertNotInstanceOf(CoverageReportComparison::class, $comparison);
     }
 }
