@@ -270,23 +270,11 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
         $this->assertSame(0, $coverageReport->getDiffUncoveredLines());
 
-        $this->assertCount(
-            0,
-            $coverageReport->getLeastCoveredDiffFiles()
-        );
-        $this->assertCount(
-            0,
-            $coverageReport->getLeastCoveredDiffFiles()
-        );
+        $this->assertEmpty($coverageReport->getLeastCoveredDiffFiles());
+        $this->assertEmpty($coverageReport->getLeastCoveredDiffFiles());
 
-        $this->assertCount(
-            0,
-            $coverageReport->getDiffLineCoverage()
-        );
-        $this->assertCount(
-            0,
-            $coverageReport->getDiffLineCoverage()
-        );
+        $this->assertEmpty($coverageReport->getDiffLineCoverage());
+        $this->assertEmpty($coverageReport->getDiffLineCoverage());
     }
 
     private function getMockedQueryService(): MockObject|QueryService
