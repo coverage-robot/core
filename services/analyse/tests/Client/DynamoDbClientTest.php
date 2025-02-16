@@ -241,9 +241,9 @@ final class DynamoDbClientTest extends KernelTestCase
 
         $this->assertInstanceOf(QueryResultIterator::class, $result);
 
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            $result->count()
+            $result
         );
         $this->assertEquals(
             new TotalCoverageQueryResult(
