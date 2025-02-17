@@ -207,16 +207,16 @@
         },
         {
             "name": "async-aws/event-bridge",
-            "version": "1.5.5",
+            "version": "1.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/event-bridge.git",
-                "reference": "72414c7d393837af47037570db5bc28afe15c2e3"
+                "reference": "27f710cdcd489dadbf0a9f3b50e85a8f87237874"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/72414c7d393837af47037570db5bc28afe15c2e3",
-                "reference": "72414c7d393837af47037570db5bc28afe15c2e3",
+                "url": "https://api.github.com/repos/async-aws/event-bridge/zipball/27f710cdcd489dadbf0a9f3b50e85a8f87237874",
+                "reference": "27f710cdcd489dadbf0a9f3b50e85a8f87237874",
                 "shasum": ""
             },
             "require": {
@@ -248,7 +248,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/event-bridge/tree/1.5.5"
+                "source": "https://github.com/async-aws/event-bridge/tree/1.5.6"
             },
             "funding": [
                 {
@@ -260,7 +260,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-09T08:09:09+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/s3",
@@ -324,16 +324,16 @@
         },
         {
             "name": "async-aws/scheduler",
-            "version": "1.1.4",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/scheduler.git",
-                "reference": "779678f228130cabcc3ebce572ba6af0b843d608"
+                "reference": "d7a37865a4e59894c6104706cae25cee5412f56e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/779678f228130cabcc3ebce572ba6af0b843d608",
-                "reference": "779678f228130cabcc3ebce572ba6af0b843d608",
+                "url": "https://api.github.com/repos/async-aws/scheduler/zipball/d7a37865a4e59894c6104706cae25cee5412f56e",
+                "reference": "d7a37865a4e59894c6104706cae25cee5412f56e",
                 "shasum": ""
             },
             "require": {
@@ -346,7 +346,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -367,7 +367,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/scheduler/tree/1.1.4"
+                "source": "https://github.com/async-aws/scheduler/tree/1.2.0"
             },
             "funding": [
                 {
@@ -379,7 +379,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-24T11:42:17+00:00"
+            "time": "2025-01-15T09:28:33+00:00"
         },
         {
             "name": "async-aws/simple-s3",
@@ -642,16 +642,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.5.38",
+            "version": "v1.5.39",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "65e26fdeb55e6ba94607a49a0bc028fc7c232311"
+                "reference": "6fcad3d506818ebeada8971dc163d9ff526f44ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/65e26fdeb55e6ba94607a49a0bc028fc7c232311",
-                "reference": "65e26fdeb55e6ba94607a49a0bc028fc7c232311",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/6fcad3d506818ebeada8971dc163d9ff526f44ba",
+                "reference": "6fcad3d506818ebeada8971dc163d9ff526f44ba",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -674,7 +674,7 @@
                 "symfony/yaml": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^11.2",
+                "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0"
             },
             "type": "symfony-bundle",
@@ -700,13 +700,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.38"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.5.39"
             },
-            "time": "2024-12-23T21:16:52+00:00"
+            "time": "2025-02-16T02:55:06+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.5.38",
+            "version": "v1.5.39",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -745,22 +745,22 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.38"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.5.39"
             },
             "time": "2024-12-08T16:16:28+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.5.38",
+            "version": "v1.5.39",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "de8656fc6d99a87b063cd7ba0222332c77eaec92"
+                "reference": "08e40b1062a16db9646b9986056748697895efc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/de8656fc6d99a87b063cd7ba0222332c77eaec92",
-                "reference": "de8656fc6d99a87b063cd7ba0222332c77eaec92",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/08e40b1062a16db9646b9986056748697895efc8",
+                "reference": "08e40b1062a16db9646b9986056748697895efc8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -784,7 +784,7 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^11.2",
+                "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0"
             },
             "type": "symfony-bundle",
@@ -810,22 +810,22 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.5.38"
+                "source": "https://github.com/coverage-robot/event/tree/v1.5.39"
             },
-            "time": "2024-12-23T21:16:55+00:00"
+            "time": "2025-02-16T02:55:00+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.5.38",
+            "version": "v1.5.39",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "dbc28b3934eb64675511f951a69853092bc9dd48"
+                "reference": "4dfff9b9facb5b4471b1e85c337909776a6aa641"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/dbc28b3934eb64675511f951a69853092bc9dd48",
-                "reference": "dbc28b3934eb64675511f951a69853092bc9dd48",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/4dfff9b9facb5b4471b1e85c337909776a6aa641",
+                "reference": "4dfff9b9facb5b4471b1e85c337909776a6aa641",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -848,7 +848,7 @@
             "require-dev": {
                 "bref/bref": "^2.1",
                 "estahn/phpunit-json-assertions": "^4.0",
-                "phpunit/phpunit": "^11.2",
+                "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
                 "symfony/property-access": "^7.1"
             },
@@ -875,9 +875,9 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.38"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.5.39"
             },
-            "time": "2024-12-12T22:42:34+00:00"
+            "time": "2025-02-16T02:55:00+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -4634,16 +4634,16 @@
         },
         {
             "name": "symfony/http-client",
-            "version": "v7.2.2",
+            "version": "v7.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-client.git",
-                "reference": "339ba21476eb184290361542f732ad12c97591ec"
+                "reference": "7ce6078c79a4a7afff931c413d2959d3bffbfb8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-client/zipball/339ba21476eb184290361542f732ad12c97591ec",
-                "reference": "339ba21476eb184290361542f732ad12c97591ec",
+                "url": "https://api.github.com/repos/symfony/http-client/zipball/7ce6078c79a4a7afff931c413d2959d3bffbfb8d",
+                "reference": "7ce6078c79a4a7afff931c413d2959d3bffbfb8d",
                 "shasum": ""
             },
             "require": {
@@ -4709,7 +4709,7 @@
                 "http"
             ],
             "support": {
-                "source": "https://github.com/symfony/http-client/tree/v7.2.2"
+                "source": "https://github.com/symfony/http-client/tree/v7.2.3"
             },
             "funding": [
                 {
@@ -4725,7 +4725,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-30T18:35:15+00:00"
+            "time": "2025-01-28T15:51:35+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
