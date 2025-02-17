@@ -126,7 +126,13 @@ resource "aws_lambda_function" "analyse" {
 
   function_name = format("coverage-analyse-%s", var.environment)
   role          = aws_iam_role.analyse_role.arn
-  timeout       = 120
+
+  # Analyse coverage for a maximum of 3 minutes before timing out
+  #
+  # In theory, this should only apply in very extreme cases, such as long timeouts
+  # from GitHub http requests, etc.
+  timeout = 180
+
   memory_size   = 1024
   runtime       = "provided.al2"
   handler       = "Packages\\Event\\Handler\\EventHandler"

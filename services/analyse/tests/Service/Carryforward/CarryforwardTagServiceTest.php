@@ -468,7 +468,7 @@ final class CarryforwardTagServiceTest extends TestCase
     public function testTagsToCarryforwardOutOfRangeOfCommits(): void
     {
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
-        $mockQueryService->expects($this->exactly(6))
+        $mockQueryService->expects($this->exactly(11))
             ->method('runQuery')
             ->willReturnOnConsecutiveCalls(
                 new QueryResultIterator(
@@ -494,6 +494,12 @@ final class CarryforwardTagServiceTest extends TestCase
                         )
                     ]
                 ),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
+                new TagAvailabilityCollectionQueryResult([]),
                 new TagAvailabilityCollectionQueryResult([]),
                 new TagAvailabilityCollectionQueryResult([]),
                 new TagAvailabilityCollectionQueryResult([]),
@@ -650,6 +656,15 @@ final class CarryforwardTagServiceTest extends TestCase
                             ]
                         )
                     ],
+                    6, 7, 8, 9, 10 => array_fill(
+                        0,
+                        CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE,
+                        [
+                            'commit' => 'mock-commit-99',
+                            'ref' => 'non-main-branch',
+                            'merged' => false
+                        ]
+                    ),
                     default => [],
                 },
                 diff: []
