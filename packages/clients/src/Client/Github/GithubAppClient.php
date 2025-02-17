@@ -17,14 +17,26 @@ use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpClient\HttplugClient;
+use Symfony\Component\HttpClient\HttpOptions;
+use Symfony\Component\HttpClient\RetryableHttpClient;
 
 class GithubAppClient extends Client
 {
     private bool $isAuthenticated = false;
 
     /**
-     * @throws ClientException
+     * The maximum time to wait for a response from GitHub (in seconds).
+     *
+     * GitHub times out after 10 seconds, so theres no point waiting around any longer
+     * than that.
+     *
+     * @see https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api?apiVersion=2022-11-28#timeouts
+     * @see https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api#timeouts
      */
+    private const int TIMEOUT = 10;
+
     public function __construct(
         #[Autowire(env: 'GITHUB_APP_ID')]
         private readonly string $appId,
@@ -32,32 +44,34 @@ class GithubAppClient extends Client
         private readonly string $privateKeyFile,
         private readonly JwtGenerator $jwtGenerator,
         private readonly MetricServiceInterface $metricService,
-        ?Builder $httpClientBuilder = null,
-        ?string $apiVersion = null,
-        public readonly ?string $enterpriseUrl = null
     ) {
-        $builder = $httpClientBuilder ?? new Builder();
-
-        /**
-         * Retry requests up to 2 additional times when a failure occurs.
-         *
-         * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
-         * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
-         * response 1 or 2 more times.
-         *
-         * We're also doing this _before_ calling the constructor, so that we can apply the retry plugin _before_
-         * the GitHub client applies its own plugins. That way, we can be in front of the plugin which converts
-         * exceptions into GitHub-specific variants (which will stop the chain).
-         *
-         * @see GithubExceptionThrower
-         */
-        $builder->addPlugin(
-            new RetryPlugin([
-                'retries' => 2
-            ])
+        $httpClientBuilder = new Builder(
+            (new HttplugClient(
+                new RetryableHttpClient(
+                    HttpClient::create(),
+                    /**
+                     * Retry requests up to 2 additional times when a failure occurs.
+                     *
+                     * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
+                     * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
+                     * response 1 or 2 more times.
+                     *
+                     * We're also doing this _before_ calling the constructor, so that we can apply the retry plugin _before_
+                     * the GitHub client applies its own plugins. That way, we can be in front of the plugin which converts
+                     * exceptions into GitHub-specific variants (which will stop the chain).
+                     *
+                     * @see GithubExceptionThrower
+                     */
+                    maxRetries: 2
+                )))
+                ->withOptions(
+                    (new HttpOptions())
+                        ->setTimeout(self::TIMEOUT)
+                        ->toArray()
+                )
         );
 
-        parent::__construct($builder, $apiVersion, $this->enterpriseUrl);
+        parent::__construct($httpClientBuilder);
     }
 
     /**
