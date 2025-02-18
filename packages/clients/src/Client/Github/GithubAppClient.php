@@ -29,13 +29,13 @@ class GithubAppClient extends Client
     /**
      * The maximum time to wait for a response from GitHub (in seconds).
      *
-     * GitHub times out after 10 seconds, so theres no point waiting around any longer
+     * GitHub times out after 10 seconds, so theres no point waiting around much longer
      * than that.
      *
      * @see https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api?apiVersion=2022-11-28#timeouts
      * @see https://docs.github.com/en/graphql/overview/rate-limits-and-node-limits-for-the-graphql-api#timeouts
      */
-    private const int TIMEOUT = 10;
+    private const int TIMEOUT = 15;
 
     public function __construct(
         #[Autowire(env: 'GITHUB_APP_ID')]
@@ -50,19 +50,13 @@ class GithubAppClient extends Client
                 new RetryableHttpClient(
                     HttpClient::create(),
                     /**
-                     * Retry requests up to 2 additional times when a failure occurs.
+                     * Retry requests up to 3 additional times when a failure occurs.
                      *
                      * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
                      * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
-                     * response 1 or 2 more times.
-                     *
-                     * We're also doing this _before_ calling the constructor, so that we can apply the retry plugin _before_
-                     * the GitHub client applies its own plugins. That way, we can be in front of the plugin which converts
-                     * exceptions into GitHub-specific variants (which will stop the chain).
-                     *
-                     * @see GithubExceptionThrower
+                     * response 1, 2 or 3 more times.
                      */
-                    maxRetries: 2
+                    maxRetries: 3
                 )))
                 ->withOptions(
                     (new HttpOptions())
