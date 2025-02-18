@@ -84,7 +84,7 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
                 $waypoint->getCommit(),
                 $offset
             );
-        } catch (GitHubExceptionInterface|HttpClientExceptionInterface $exception) {
+        } catch (GitHubExceptionInterface | HttpClientExceptionInterface $exception) {
             /**
              * There are two types of exceptions we'd expect to see here:
              * 1. GitHub Exceptions - these are wrappers around types of responses that the GitHub API
