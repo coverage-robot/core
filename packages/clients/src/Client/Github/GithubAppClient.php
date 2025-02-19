@@ -45,19 +45,8 @@ class GithubAppClient extends Client
         private readonly JwtGenerator $jwtGenerator,
         private readonly MetricServiceInterface $metricService,
     ) {
-        $httpClientBuilder = new Builder(
-            (new HttplugClient(
-                new RetryableHttpClient(
-                    HttpClient::create(),
-                    /**
-                     * Retry requests up to 3 additional times when a failure occurs.
-                     *
-                     * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
-                     * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
-                     * response 1, 2 or 3 more times.
-                     */
-                    maxRetries: 3
-                )))
+        $builder = new Builder(
+            (new HttplugClient())
                 ->withOptions(
                     (new HttpOptions())
                         ->setTimeout(self::TIMEOUT)
@@ -65,7 +54,26 @@ class GithubAppClient extends Client
                 )
         );
 
-        parent::__construct($httpClientBuilder);
+        /**
+         * Retry requests up to 3 additional times when a failure occurs.
+         *
+         * GitHub fails occasionally, usually occurring at benign points in time, like when attempting to
+         * retrieve commit history. In this case, it's safe to retry the request and see if we can get a
+         * response 1, 2 or 3 more times.
+         *
+         * We're also doing this _before_ calling the constructor, so that we can apply the retry plugin _before_
+         * the GitHub client applies its own plugins. That way, we can be in front of the plugin which converts
+         * exceptions into GitHub-specific variants (which will stop the chain).
+         *
+         * @see GithubExceptionThrower
+         */
+        $builder->addPlugin(
+            new RetryPlugin([
+                'retries' => 3
+            ])
+        );
+
+        parent::__construct($builder);
     }
 
     /**
