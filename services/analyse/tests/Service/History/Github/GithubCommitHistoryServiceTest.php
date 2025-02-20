@@ -71,7 +71,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                                     ... on Commit {
                                         history(
                                             before: "uploaded-commit {$expectedOffset}",
-                                            last: 100
+                                            last: 50
                                         ) {
                                             nodes {
                                                 oid
@@ -153,7 +153,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                     ]
                 )
             ],
-            101,
+            51,
             [
                 ...array_fill(
                     0,
@@ -205,7 +205,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                     ]
                 )
             ],
-            201,
+            101,
             [
                 ...array_fill(
                     0,
@@ -242,7 +242,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
                     ]
                 )
             ],
-            1001,
+            501,
             [
                 ...array_fill(
                     0,

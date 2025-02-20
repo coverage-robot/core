@@ -18,6 +18,13 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class CoverageComparisonService implements CoverageComparisonServiceInterface
 {
+    /**
+     * The maximum number of pages of results to fetch from the commit history service.
+     *
+     * The number of commits per page is defined in {@see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE}.
+     */
+    private const int MAX_COMMIT_HISTORY_PAGES = 10;
+
     public function __construct(
         private readonly LoggerInterface $coverageComparisonServiceLogger,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
@@ -132,7 +139,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
 
         $headWaypoint = $headReport->getWaypoint();
 
-        for ($page = 1; $page <= 5; ++$page) {
+        for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
             $history = $headWaypoint->getHistory($page);
 
             foreach ($history as $commit) {

@@ -30,9 +30,9 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
      * The total number of pages to look back through in order to match the available tags we've seen
      * uploaded in the past, and the most recent commits in the tree.
      *
-     * @see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE
+     * The number of commits per page is defined in {@see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE}.
      */
-    private const int MAX_COMMIT_HISTORY_PAGES = 5;
+    private const int MAX_COMMIT_HISTORY_PAGES = 10;
 
     public function __construct(
         #[Autowire(service: CachingQueryService::class)]

@@ -8,37 +8,38 @@ use App\Exception\CommitHistoryException;
 use App\Model\ReportWaypoint;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
-use Github\Exception\ExceptionInterface;
+use Github\Exception\ExceptionInterface as GitHubExceptionInterface;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Provider\ProviderAwareInterface;
 use Packages\Telemetry\Service\MetricServiceInterface;
+use Psr\Http\Client\ClientExceptionInterface as HttpClientExceptionInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-type History = array{
  *     data: array{
  *          repository: array{
-*                  object: array{
-*                       history: array{
-*                           nodes: array{
-*                               oid: string,
-*                               associatedPullRequests: array{
-*                                   nodes: array{
-*                                       merged: bool,
-*                                       headRefName: string
-*                                   }[]
-*                               }
-*                           }[]
-*                       }
-*                   }
+ *                  object: array{
+ *                       history: array{
+ *                           nodes: array{
+ *                               oid: string,
+ *                               associatedPullRequests: array{
+ *                                   nodes: array{
+ *                                       merged: bool,
+ *                                       headRefName: string
+ *                                   }[]
+ *                               }
+ *                           }[]
+ *                       }
+ *                   }
  *              }
  *          }
  *     }
  *
- *  @psalm-type Refs = array{
+ * @psalm-type Refs = array{
  *      data: array{
  *           repository: array{
  *                   refs: array{
@@ -83,7 +84,14 @@ final class GithubCommitHistoryService implements CommitHistoryServiceInterface,
                 $waypoint->getCommit(),
                 $offset
             );
-        } catch (ExceptionInterface $exception) {
+        } catch (GitHubExceptionInterface | HttpClientExceptionInterface $exception) {
+            /**
+             * There are two types of exceptions we'd expect to see here:
+             * 1. GitHub Exceptions - these are wrappers around types of responses that the GitHub API
+             *    might return. For example, rate limits, SSO exceptions, etc.
+             * 2. HTTP Client Exceptions (PSR interface) - these are exceptions that are thrown by the HTTP
+             *    client when it fails to make a request to the GitHub API - for example, a timeout.
+             */
             throw new CommitHistoryException(
                 sprintf(
                     'Failed to retrieve commit history for %s',
