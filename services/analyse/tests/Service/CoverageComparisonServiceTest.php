@@ -91,6 +91,7 @@ final class CoverageComparisonServiceTest extends TestCase
             $mockCoverageReport,
             $event
         );
+        $this->assertInstanceof(CoverageReportComparison::class, $comparison);
 
         $this->assertSame(
             'mock-commit-3',
@@ -162,6 +163,7 @@ final class CoverageComparisonServiceTest extends TestCase
             $mockCoverageReport,
             $event
         );
+        $this->assertInstanceof(CoverageReportComparison::class, $comparison);
 
         $this->assertSame(
             'mock-base-commit',
@@ -230,6 +232,7 @@ final class CoverageComparisonServiceTest extends TestCase
             $mockCoverageReport,
             $event
         );
+        $this->assertInstanceof(CoverageReportComparison::class, $comparison);
 
         $this->assertSame(
             'mock-merge-commit-parent-1',
