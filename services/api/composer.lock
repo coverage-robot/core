@@ -77,16 +77,16 @@
         },
         {
             "name": "async-aws/cognito-identity-provider",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/cognito-identity-provider.git",
-                "reference": "8015c678edd75903be6578e7c878df947679ca31"
+                "reference": "4c13aa6873674807827e6d95d80637957231ffb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/8015c678edd75903be6578e7c878df947679ca31",
-                "reference": "8015c678edd75903be6578e7c878df947679ca31",
+                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/4c13aa6873674807827e6d95d80637957231ffb2",
+                "reference": "4c13aa6873674807827e6d95d80637957231ffb2",
                 "shasum": ""
             },
             "require": {
@@ -98,7 +98,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12-dev"
+                    "dev-master": "1.13-dev"
                 }
             },
             "autoload": {
@@ -119,7 +119,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.12.0"
+                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.13.0"
             },
             "funding": [
                 {
@@ -131,7 +131,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-05T20:41:02+00:00"
+            "time": "2025-03-31T07:35:56+00:00"
         },
         {
             "name": "async-aws/core",
@@ -499,16 +499,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.3.15",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "4bd591e8ad50009682baa7cdb8eb324528066fbd"
+                "reference": "55258b3c1cf9c763f1bf8ec7067d445b7bac63a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/4bd591e8ad50009682baa7cdb8eb324528066fbd",
-                "reference": "4bd591e8ad50009682baa7cdb8eb324528066fbd",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/55258b3c1cf9c763f1bf8ec7067d445b7bac63a4",
+                "reference": "55258b3c1cf9c763f1bf8ec7067d445b7bac63a4",
                 "shasum": ""
             },
             "require": {
@@ -562,7 +562,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.3.15"
+                "source": "https://github.com/brefphp/bref/tree/2.4.1"
             },
             "funding": [
                 {
@@ -574,7 +574,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-21T17:52:57+00:00"
+            "time": "2025-03-30T17:35:53+00:00"
         },
         {
             "name": "bref/symfony-bridge",
@@ -5585,16 +5585,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v7.2.4",
+            "version": "v7.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf"
+                "reference": "87b7c93e57df9d8e39a093d32587702380ff045d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf",
-                "reference": "d8f411ff3c7ddc4ae9166fb388d1190a2df5b5cf",
+                "url": "https://api.github.com/repos/symfony/process/zipball/87b7c93e57df9d8e39a093d32587702380ff045d",
+                "reference": "87b7c93e57df9d8e39a093d32587702380ff045d",
                 "shasum": ""
             },
             "require": {
@@ -5626,7 +5626,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v7.2.4"
+                "source": "https://github.com/symfony/process/tree/v7.2.5"
             },
             "funding": [
                 {
@@ -5642,7 +5642,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-05T08:33:46+00:00"
+            "time": "2025-03-13T12:21:46+00:00"
         },
         {
             "name": "symfony/property-access",
