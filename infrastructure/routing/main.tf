@@ -35,8 +35,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   viewer_certificate {
-    # The SSL certificate from ACM for CoverageRobot.com
-    acm_certificate_arn      = "arn:aws:acm:us-east-1:952005856579:certificate/c821b310-14cd-429b-9ca1-781cda3b84de"
+    acm_certificate_arn      = var.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
