@@ -7,7 +7,7 @@ namespace App\Exception;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use RuntimeException;
 
-class PublishingNotSupportedException extends RuntimeException
+final class PublishingNotSupportedException extends RuntimeException
 {
     public function __construct(string $publisher, PublishableMessageInterface $publishableMessage)
     {

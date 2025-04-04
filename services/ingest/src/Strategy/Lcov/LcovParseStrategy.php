@@ -61,11 +61,13 @@ final class LcovParseStrategy implements ParseStrategyInterface
     #[Override]
     public function supports(string $content): bool
     {
+        /** @var string[] $records */
         $records = preg_split('/\n|\r\n?/', $content);
 
         foreach ($records as $record) {
             $record = trim($record);
-// Skip empty lines and end-of-record markers
+
+            // Skip empty lines and end-of-record markers
             if ($record === '') {
                 continue;
             }
@@ -116,6 +118,7 @@ final class LcovParseStrategy implements ParseStrategyInterface
             throw ParseException::notSupportedException();
         }
 
+        /** @var string[] $records */
         $records = preg_split('/\n|\r\n?/', $content);
 
         $coverage = new Coverage(
@@ -125,7 +128,8 @@ final class LcovParseStrategy implements ParseStrategyInterface
 
         foreach ($records as $record) {
             $record = trim($record);
-// Skip empty lines and end-of-record markers
+
+            // Skip empty lines and end-of-record markers
             if ($record === '') {
                 continue;
             }

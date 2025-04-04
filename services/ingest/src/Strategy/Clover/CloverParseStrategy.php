@@ -210,7 +210,25 @@ final class CloverParseStrategy implements ParseStrategyInterface
                 };
 
                 if ($line !== null) {
-                    end($files)->setLine($line);
+                    $lastFile = end($files);
+
+                    if ($lastFile === false) {
+                        /**
+                         * This should never happen as by this point we should have encountered a
+                         * file, but just in case we haven't
+                         */
+                        $this->parseStrategyLogger->error(
+                            "Cannot add line to file, as we've not yet encountered a file.",
+                            [
+                                'file' => $reader->getAttribute('path'),
+                                'line' => $lineNumber,
+                                'type' => $type
+                            ]
+                        );
+                        break;
+                    }
+
+                    $lastFile->setLine($line);
                 }
 
                 break;

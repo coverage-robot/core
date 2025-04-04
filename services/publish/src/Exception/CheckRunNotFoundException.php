@@ -6,6 +6,6 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class CheckRunNotFoundException extends RuntimeException
+final class CheckRunNotFoundException extends RuntimeException
 {
 }

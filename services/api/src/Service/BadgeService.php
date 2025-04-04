@@ -68,16 +68,16 @@ final class BadgeService implements BadgeServiceInterface
      */
     private function getHexForCoveragePercentage(float $percentage): string
     {
-        $b = 0;
+        $b = 0.0;
         if ($percentage < 50) {
-            $r = 255;
+            $r = 255.0;
             $g = round(5.1 * $percentage);
         } else {
-            $r = round(510 - 5.1 * $percentage);
-            $g = 255;
+            $r = round(510.0 - 5.1 * $percentage);
+            $g = 255.0;
         }
 
-        $h = $r * 0x10000 + $g * 0x100 + $b;
+        $h = $r * 65536.0 + $g * 256.0 + $b;
 
         return substr('000000' . base_convert((string)$h, 10, 16), -6);
     }

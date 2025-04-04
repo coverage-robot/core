@@ -6,6 +6,6 @@ namespace App\Exception;
 
 use RuntimeException;
 
-class PullRequestNotFoundException extends RuntimeException
+final class PullRequestNotFoundException extends RuntimeException
 {
 }

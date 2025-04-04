@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.3.0",
+        "php": "~8.3.0 || ~8.4.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/async-aws-bundle": "^1.12",
@@ -38,10 +38,10 @@
     "require-dev": {
         "coverage-robot/local": "^1.5",
         "phpunit/phpunit": "^10.1",
-        "psalm/plugin-symfony": "^5.0",
+        "psalm/plugin-symfony": "^5.2.7",
         "rector/rector": "^2.0",
         "squizlabs/php_codesniffer": "^3.7",
-        "vimeo/psalm": "^5.15"
+        "vimeo/psalm": "^6.10"
     },
     "config": {
         "allow-plugins": {
@@ -99,7 +99,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*"
+            "require": "7.2.*"
         }
     }
 }

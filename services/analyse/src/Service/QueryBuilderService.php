@@ -44,7 +44,10 @@ final class QueryBuilderService implements QueryBuilderServiceInterface
 
                 if (count($errors) > 0) {
                     throw new QueryException(
-                        'The query parameters are not suitable to execute the query: ' . $errors
+                        sprintf(
+                            'The query parameters are not suitable to execute the query: %s',
+                            (string)$errors
+                        )
                     );
                 }
             }

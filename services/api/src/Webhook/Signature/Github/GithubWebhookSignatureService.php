@@ -15,7 +15,7 @@ use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class GithubWebhookSignatureService implements ProviderWebhookSignatureServiceInterface
+final class GithubWebhookSignatureService implements ProviderWebhookSignatureServiceInterface
 {
     public function __construct(
         private readonly LoggerInterface $webhookSignatureLogger,

@@ -53,7 +53,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
@@ -121,7 +121,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
@@ -157,7 +157,7 @@ jobs:
                 run: composer lint:rector
 
             -   name: Run Psalm
-                run: composer lint:static-analysis
+                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }} 
 
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
@@ -187,7 +187,7 @@ jobs:
             matrix:
                 php-version: [
                     "8.3",
-                    # "8.4" - Not all dependencies have support for PHP 8.4 yet.
+                    "8.4"
                 ]
 
         steps:
