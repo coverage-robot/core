@@ -218,7 +218,7 @@ final class CloverParseStrategy implements ParseStrategyInterface
                          * file, but just in case we haven't
                          */
                         $this->parseStrategyLogger->error(
-                            'Cannot add line to file, as we\'ve not yet encountered a file.',
+                            "Cannot add line to file, as we've not yet encountered a file.",
                             [
                                 'file' => $reader->getAttribute('path'),
                                 'line' => $lineNumber,
