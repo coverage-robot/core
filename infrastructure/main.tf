@@ -34,9 +34,15 @@ provider "google" {
   region  = var.gcp_region
 }
 
-module "routing" {
-  source      = "./routing"
+module "certificate" {
+  source      = "./certificate"
   environment = local.environment
+}
+
+module "routing" {
+  source          = "./routing"
+  environment     = local.environment
+  certificate_arn = module.certificate.acm_certificate.arn
 }
 
 module "events" {
