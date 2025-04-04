@@ -157,7 +157,7 @@ jobs:
                 run: composer lint:rector
 
             -   name: Run Psalm
-                run: composer lint:static-analysis
+                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }} 
 
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
