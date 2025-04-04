@@ -68,7 +68,7 @@ final class PathFixingService
                 $path
             );
 
-            if ($path !== $replacement) {
+            if (is_string($replacement) && $path !== $replacement) {
                 // The path replacement matched, and the string has been modified,
                 // so theres no need to apply any other path replacements.
                 $path = $replacement;

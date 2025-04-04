@@ -81,11 +81,12 @@ final class BigQueryMetadataBuilderService
      */
     public function buildMetadata(AbstractLine $line): array
     {
-        /** @var array<array-key, mixed> $line */
+        /** @var array<array-key, int|string> $line */
         $line = $this->serializer->normalize($line);
 
         $metadata = array_map(
-            fn(mixed $key, mixed $value): ?array => $this->mapMetadataRecord($key, $value),
+            fn(mixed $key, null|int|string|float|bool|object|array $value): ?array =>
+                $this->mapMetadataRecord($key, $value),
             array_keys($line),
             array_values($line)
         );
@@ -94,9 +95,8 @@ final class BigQueryMetadataBuilderService
     }
 
     /**
-     * @param (int|string) $key
-     *
-     * @psalm-param array-key $key
+     * @param array-key $key
+     * @param (array-key|null|int|float|string|bool|object|array) $value
      */
     private function mapMetadataRecord(mixed $key, mixed $value): ?array
     {
@@ -120,15 +120,17 @@ final class BigQueryMetadataBuilderService
 
     /**
      * @throws JsonException
+     *
+     * @param array-key|null|int|float|string|bool|object|array $value
      */
     private function stringifyDataType(mixed $value): string
     {
         return match (gettype($value)) {
+            'NULL' => '',
             'boolean' => $value ? 'true' : 'false',
             'integer', 'double' => (string)$value,
             'string' => $value,
             'array', 'object' => json_encode($value, JSON_THROW_ON_ERROR),
-            'NULL' => '',
             default => throw new PersistException(
                 sprintf(
                     'Unsupported type to stringify for BigQuery: %s',
