@@ -6,7 +6,7 @@ on:
         tags: [ '*' ]
 
 env:
-    php-version: "8.3"
+    php-version: "8.4"
     GITHUB_TOKEN: ${{ secrets.SPLIT_PACKAGES_GITHUB_TOKEN }}
 
 jobs:
