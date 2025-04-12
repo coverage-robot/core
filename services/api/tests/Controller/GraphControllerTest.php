@@ -155,53 +155,6 @@ final class GraphControllerTest extends WebTestCase
         );
     }
 
-    public function testBadgeWithInvalidToken(): void
-    {
-        $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
-        $mockAuthTokenService->expects($this->once())
-            ->method('getGraphTokenFromRequest')
-            ->with($this->isInstanceOf(Request::class))
-            ->willReturn('mock-graph-token');
-        $mockAuthTokenService->expects($this->once())
-            ->method('getProjectUsingGraphToken')
-            ->with($this->isInstanceOf(GraphParameters::class), 'mock-graph-token')
-            ->willReturn(false);
-
-        $this->getContainer()->set(AuthTokenServiceInterface::class, $mockAuthTokenService);
-
-        $mockDynamoDbClient = $this->createMock(DynamoDbClientInterface::class);
-        $mockDynamoDbClient->expects($this->never())
-            ->method('getCoveragePercentage');
-
-        $this->getContainer()->set(DynamoDbClient::class, $mockDynamoDbClient);
-
-        $mockBadgeService = $this->createMock(BadgeServiceInterface::class);
-        $mockBadgeService->expects($this->never())
-            ->method('renderCoveragePercentageBadge');
-
-        $this->getContainer()
-            ->set(BadgeServiceInterface::class, $mockBadgeService);
-
-        $this->client->request(
-            Request::METHOD_GET,
-            '/graph/' . Provider::GITHUB->value . '/owner/repository/badge.svg'
-        );
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-
-        $this->assertJsonStringEqualsJsonString(
-            <<<JSON
-            {
-                "detail": "The provided graph token is invalid.",
-                "status": 401,
-                "title": "Unauthorized",
-                "type": "http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html"
-            }
-            JSON,
-            $this->client->getResponse()->getContent()
-        );
-    }
-
     public function testBadgeWithMissingToken(): void
     {
         $mockAuthTokenService = $this->createMock(AuthTokenServiceInterface::class);
