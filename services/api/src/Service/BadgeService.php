@@ -60,6 +60,38 @@ final class BadgeService implements BadgeServiceInterface
     }
 
     /**
+     * Render the coverage badge with a "not found" message for badges which don't relate
+     * to a project we know about.
+     */
+    #[Override]
+    public function renderNotFoundCoveragePercentageBadge(bool $includeIcon = true): string
+    {
+        $font = FontList::ofFile($this->twigDefaultPath . '/' . self::FONT_FILE)
+            ->getById($this->getFontFamily(self::FONT_FILE_NAME));
+
+        $value = self::NO_PROJECT_FOUND_VALUE;
+
+        return $this->twig->render(
+            'badges/badge.svg.twig',
+            [
+                'fontFamily' => $this->getFontFamily(self::FONT_FILE_NAME),
+                'iconWidth' => $includeIcon ? 15 : 0,
+                'labelWidth' => $font->computeStringWidth(
+                    UnicodeString::of(self::BADGE_LABEL),
+                    self::FONT_SIZE
+                ),
+                'valueWidth' => $font->computeStringWidth(
+                    UnicodeString::of($value),
+                    self::FONT_SIZE
+                ),
+                'label' => self::BADGE_LABEL,
+                'value' => $value,
+                'color' => $this->getHexForCoveragePercentage(0),
+            ]
+        );
+    }
+
+    /**
      * Build an appropriate hex color code using a coverage percentage.
      *
      * This works on a scale of red to green, using the percentage as the point of reference.

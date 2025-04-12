@@ -73,8 +73,28 @@ final class GraphController extends AbstractController
 
         $token = $this->authTokenService->getGraphTokenFromRequest($request);
 
-        if ($token === null || !$this->authTokenService->getProjectUsingGraphToken($parameters, $token)) {
+        if ($token === null) {
+            /**
+             * No token was provided, we can throw a hard exception here as the token is required.
+             */
             throw AuthenticationException::invalidGraphToken();
+        }
+
+        if (!$this->authTokenService->getProjectUsingGraphToken($parameters, $token)) {
+            /**
+             * A token was provided, but it didn't relate to a project in Cognito.
+             *
+             * In this case, we want to fail a bit more gracefully and return a badge with
+             * an error message inside it, since the badge will have been embedded as an image
+             * and an exception won't show up.
+             */
+            return new Response(
+                $this->badgeService->renderNotFoundCoveragePercentageBadge(),
+                Response::HTTP_OK,
+                [
+                    'Content-Type' => 'image/svg+xml',
+                ]
+            );
         }
 
         $coveragePercentage = $this->dynamoDbClient->getCoveragePercentage(
