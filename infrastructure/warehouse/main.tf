@@ -238,6 +238,12 @@ resource "google_storage_bucket" "loadable_data_bucket" {
   # in the EU.
   location = "us-east1"
 
+  public_access_prevention = "enforced"
+
+  soft_delete_policy {
+    retention_duration_seconds = 0
+  }
+
   # Files can be deleted very quickly. Really they should be deleted
   # immediately, but a lifecycle for now should do.
   lifecycle_rule {
