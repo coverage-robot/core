@@ -52,7 +52,7 @@ trait GithubCheckRunAwareTrait
                 'head_sha' => $commit,
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'completed_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
                 'annotations' => [],
                 'output' => [
                     'title' => $this->templateRenderingService->render(
@@ -81,7 +81,7 @@ trait GithubCheckRunAwareTrait
                 'status' => 'completed',
                 'conclusion' => $publishableMessage->getStatus()->value,
                 'annotations' => [],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'completed_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
                 'output' => [
                     'title' => $this->templateRenderingService->render(
                         $publishableMessage,
@@ -157,7 +157,7 @@ trait GithubCheckRunAwareTrait
                     'summary' => '',
                     'annotations' => [],
                 ],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'completed_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
             ],
             $publishableMessage instanceof PublishableCoverageRunningJobMessage => [
                 'name' => 'Coverage Robot',
@@ -183,7 +183,7 @@ trait GithubCheckRunAwareTrait
                     'summary' => '',
                     'annotations' => [],
                 ],
-                'completed_at' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                'completed_at' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
             ]
         };
 

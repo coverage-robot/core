@@ -13,7 +13,7 @@ final class QueryParameterBagTest extends TestCase
 {
     public function testSerialize(): void
     {
-        $queryParameterBag = (new QueryParameterBag())
+        $queryParameterBag = new QueryParameterBag()
             ->set(
                 QueryParameter::PROVIDER,
                 Provider::GITHUB
@@ -46,7 +46,7 @@ final class QueryParameterBagTest extends TestCase
 
     public function testBigQueryParameterSerialization(): void
     {
-        $queryParameterBag = (new QueryParameterBag())
+        $queryParameterBag = new QueryParameterBag()
             ->set(
                 QueryParameter::PROVIDER,
                 Provider::GITHUB

@@ -84,7 +84,7 @@ final class QueryServiceTest extends KernelTestCase
 
         $result = $queryService->runQuery(
             $query,
-            (new QueryParameterBag())
+            new QueryParameterBag()
                 ->set(QueryParameter::REPOSITORY, 'mock-repository')
                 ->set(QueryParameter::OWNER, 'mock-owner')
                 ->set(QueryParameter::PROVIDER, Provider::GITHUB)

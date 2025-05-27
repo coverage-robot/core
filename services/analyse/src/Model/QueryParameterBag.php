@@ -78,7 +78,7 @@ final class QueryParameterBag implements JsonSerializable, Iterator
     #[Ignore]
     public static function fromWaypoint(ReportWaypoint $waypoint): self
     {
-        return (new QueryParameterBag())
+        return new QueryParameterBag()
             ->set(QueryParameter::COMMIT, $waypoint->getCommit())
             ->set(QueryParameter::OWNER, $waypoint->getOwner())
             ->set(QueryParameter::REPOSITORY, $waypoint->getRepository())
