@@ -13,12 +13,12 @@
         "async-aws/dynamo-db": "^3.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
-        "coverage-robot/clients": "^1.5",
-        "coverage-robot/configuration": "^1.5",
-        "coverage-robot/contracts": "^1.5",
-        "coverage-robot/event": "^1.5",
-        "coverage-robot/message": "^1.5",
-        "coverage-robot/telemetry": "^1.5",
+        "coverage-robot/clients": "^1.6",
+        "coverage-robot/configuration": "^1.6",
+        "coverage-robot/contracts": "^1.6",
+        "coverage-robot/event": "^1.6",
+        "coverage-robot/message": "^1.6",
+        "coverage-robot/telemetry": "^1.6",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^2.0",
         "sentry/sentry-symfony": "^5.0",
@@ -36,7 +36,7 @@
         "symfony/yaml": "7.2.*"
     },
     "require-dev": {
-        "coverage-robot/local": "^1.5",
+        "coverage-robot/local": "^1.6",
         "phpunit/phpunit": "^10.1",
         "psalm/plugin-symfony": "^5.2.7",
         "rector/rector": "^2.0",
@@ -94,7 +94,10 @@
         "symfony/symfony": "*"
     },
     "repositories": [
-        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
+        {
+            "type": "composer",
+            "url": "https://coverage-robot.repo.repman.io"
+        }
     ],
     "extra": {
         "symfony": {
