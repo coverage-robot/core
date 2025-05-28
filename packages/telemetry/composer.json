@@ -7,7 +7,7 @@
     "require": {
         "php": "~8.4.0",
         "psr/log": "^3.0",
-        "coverage-robot/contracts": "^1.5",
+        "coverage-robot/contracts": "^1.6",
         "symfony/serializer": "^7.0",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
@@ -40,6 +40,9 @@
         ]
     },
     "repositories": [
-        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
+        {
+            "type": "composer",
+            "url": "https://coverage-robot.repo.repman.io"
+        }
     ]
 }

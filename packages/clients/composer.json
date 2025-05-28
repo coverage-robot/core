@@ -13,7 +13,7 @@
         "symfony/http-kernel": "^7.0",
         "symfony/config": "^7.0",
         "symfony/dependency-injection": "^7.0",
-        "coverage-robot/telemetry": "^1.5",
+        "coverage-robot/telemetry": "^1.6",
         "symfony/uid": "^7.1",
         "async-aws/s3": "^2.3"
     },
@@ -44,6 +44,9 @@
         }
     },
     "repositories": [
-        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
+        {
+            "type": "composer",
+            "url": "https://coverage-robot.repo.repman.io"
+        }
     ]
 }
