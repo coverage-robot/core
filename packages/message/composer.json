@@ -6,11 +6,11 @@
     "prefer-stable": true,
     "require": {
         "php": "~8.4.0",
-        "coverage-robot/event": "^1.5",
+        "coverage-robot/event": "^1.6",
         "async-aws/sqs": "^2.0",
         "symfony/http-kernel": "^7.0",
         "symfony/dependency-injection": "^7.0",
-        "coverage-robot/telemetry": "^1.5",
+        "coverage-robot/telemetry": "^1.6",
         "symfony/validator": "^7.0",
         "async-aws/async-aws-bundle": "^1.12"
     },
@@ -36,6 +36,9 @@
         }
     },
     "repositories": [
-        {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
+        {
+            "type": "composer",
+            "url": "https://coverage-robot.repo.repman.io"
+        }
     ]
 }
