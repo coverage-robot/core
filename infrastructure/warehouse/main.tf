@@ -233,10 +233,11 @@ EOF
 resource "google_storage_bucket" "loadable_data_bucket" {
   name = format("coverage-loadable-data-%s", var.environment)
 
-  # GCP has a always-free tier which only applies to a handful of US
-  # regions. Meaning we can't use the free tier for our bucket if its
-  # in the EU.
-  location = "us-east1"
+  # Loading data into BigQuery from europe-west4 is considered free
+  # when being loaded into a multi-regional dataset in the EU.
+  #
+  # See "Data moves within the same location": https://cloud.google.com/storage/pricing#network-buckets
+  location = "europe-west4"
 
   public_access_prevention = "enforced"
 
