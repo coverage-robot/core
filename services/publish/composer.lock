@@ -649,16 +649,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "ccecdfacec317096d5ffb39452071d18e59bc9d0"
+                "reference": "0ea0881b16c825ec3ab282a68b73026938f878a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/ccecdfacec317096d5ffb39452071d18e59bc9d0",
-                "reference": "ccecdfacec317096d5ffb39452071d18e59bc9d0",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/0ea0881b16c825ec3ab282a68b73026938f878a3",
+                "reference": "0ea0881b16c825ec3ab282a68b73026938f878a3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -669,7 +669,7 @@
             },
             "require": {
                 "async-aws/s3": "^2.3",
-                "coverage-robot/telemetry": "^1.5",
+                "coverage-robot/telemetry": "^1.6",
                 "knplabs/github-api": "^3.13",
                 "lcobucci/jwt": "^5.2",
                 "nyholm/psr7": "^1.8",
@@ -707,22 +707,22 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.6.3"
             },
-            "time": "2025-04-04T18:56:02+00:00"
+            "time": "2025-05-28T23:43:53+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "9a818d25a108066062c98bd1f865f2bce022e633"
+                "reference": "9fc77d5bb5a9efb22f11d25a44290b2e9c128f3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/9a818d25a108066062c98bd1f865f2bce022e633",
-                "reference": "9a818d25a108066062c98bd1f865f2bce022e633",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/9fc77d5bb5a9efb22f11d25a44290b2e9c128f3c",
+                "reference": "9fc77d5bb5a9efb22f11d25a44290b2e9c128f3c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -734,7 +734,7 @@
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
-                "coverage-robot/contracts": "^1.5",
+                "coverage-robot/contracts": "^1.6",
                 "php": "~8.4.0",
                 "psr/log": "^3.0",
                 "symfony/dependency-injection": "^7.0",
@@ -771,13 +771,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.3"
             },
-            "time": "2025-04-04T18:56:03+00:00"
+            "time": "2025-05-28T23:43:51+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -816,22 +816,22 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.3"
             },
             "time": "2025-04-04T18:56:04+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "caf3fe6b1f94fc0d26afe5ea66fc3db8c3e5a416"
+                "reference": "600cdeb5acaba7cb3bf4154f2745397c249f83ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/caf3fe6b1f94fc0d26afe5ea66fc3db8c3e5a416",
-                "reference": "caf3fe6b1f94fc0d26afe5ea66fc3db8c3e5a416",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/600cdeb5acaba7cb3bf4154f2745397c249f83ad",
+                "reference": "600cdeb5acaba7cb3bf4154f2745397c249f83ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -845,8 +845,8 @@
                 "async-aws/event-bridge": "^1.5",
                 "async-aws/scheduler": "^1.1",
                 "bref/bref": "^2.1",
-                "coverage-robot/contracts": "^1.5",
-                "coverage-robot/telemetry": "^1.5",
+                "coverage-robot/contracts": "^1.6",
+                "coverage-robot/telemetry": "^1.6",
                 "php": "~8.4.0",
                 "psr/log": "^3.0",
                 "symfony/config": "^7.0",
@@ -881,22 +881,22 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/event/tree/v1.6.3"
             },
-            "time": "2025-04-04T18:56:02+00:00"
+            "time": "2025-05-28T23:43:49+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
-                "reference": "0bd94d6a8c55bbbd73adf3e45bc9d623670840e9"
+                "reference": "89cad1dd5960a5809e25084e86fbb8011a8ed7c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/message/zipball/0bd94d6a8c55bbbd73adf3e45bc9d623670840e9",
-                "reference": "0bd94d6a8c55bbbd73adf3e45bc9d623670840e9",
+                "url": "https://api.github.com/repos/coverage-robot/message/zipball/89cad1dd5960a5809e25084e86fbb8011a8ed7c3",
+                "reference": "89cad1dd5960a5809e25084e86fbb8011a8ed7c3",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -908,8 +908,8 @@
             "require": {
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/sqs": "^2.0",
-                "coverage-robot/event": "^1.5",
-                "coverage-robot/telemetry": "^1.5",
+                "coverage-robot/event": "^1.6",
+                "coverage-robot/telemetry": "^1.6",
                 "php": "~8.4.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-kernel": "^7.0",
@@ -942,22 +942,22 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/message/tree/v1.6.3"
             },
-            "time": "2025-04-04T18:56:02+00:00"
+            "time": "2025-05-28T23:43:51+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.6.1",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "cd1c15861a0893582eb5f9aef0295f14dd7adbf6"
+                "reference": "16aa4a1684821d7d93624a755b6b483ad89c8ece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/cd1c15861a0893582eb5f9aef0295f14dd7adbf6",
-                "reference": "cd1c15861a0893582eb5f9aef0295f14dd7adbf6",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/16aa4a1684821d7d93624a755b6b483ad89c8ece",
+                "reference": "16aa4a1684821d7d93624a755b6b483ad89c8ece",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -967,7 +967,7 @@
                 ]
             },
             "require": {
-                "coverage-robot/contracts": "^1.5",
+                "coverage-robot/contracts": "^1.6",
                 "monolog/monolog": "^3.5",
                 "php": "~8.4.0",
                 "psr/log": "^3.0",
@@ -1007,9 +1007,9 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.1"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.3"
             },
-            "time": "2025-04-04T18:56:03+00:00"
+            "time": "2025-05-28T23:43:50+00:00"
         },
         {
             "name": "crwlr/query-string",
