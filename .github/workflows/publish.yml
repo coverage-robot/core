@@ -164,13 +164,13 @@ jobs:
                 run: composer lint:coverage_templates
 
             -   name: Run Terraform Format
-                uses: dflook/terraform-fmt-check@v1
+                uses: dflook/terraform-fmt-check@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}/infrastructure
 
             -   name: Run Terraform Validate
-                uses: dflook/terraform-validate@v1
+                uses: dflook/terraform-validate@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}/infrastructure
@@ -271,7 +271,7 @@ jobs:
                     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
             -   name: Run Plan
-                uses: dflook/terraform-plan@v1
+                uses: dflook/terraform-plan@v2
                 with:
                     workspace: ${{ env.workspace }}
                     add_github_comment: true
@@ -337,7 +337,7 @@ jobs:
                     contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
             -   name: Run Apply
-                uses: dflook/terraform-apply@v1
+                uses: dflook/terraform-apply@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}/infrastructure
