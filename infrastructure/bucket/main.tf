@@ -64,6 +64,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "output_lifecycle" {
   rule {
     id = "delete-outputted-coverage-files"
 
+    filter {}
+
     expiration {
       # Delete the current version of objects after 7 days. These are the successfully
       # ingested coverage files which have an associated output model for debugging
@@ -101,6 +103,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "reference_lifecycle" {
 
   rule {
     id = "delete-old-references"
+
+    filter {}
 
     expiration {
       # Presigned requests only last 1 hour, so 1 day is more than enough time to
