@@ -47,13 +47,13 @@ jobs:
             -   uses: actions/checkout@v4
 
             -   name: Run Terraform Format
-                uses: dflook/terraform-fmt-check@v1
+                uses: dflook/terraform-fmt-check@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
 
             -   name: Run Terraform Validate
-                uses: dflook/terraform-validate@v1
+                uses: dflook/terraform-validate@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
@@ -90,7 +90,7 @@ jobs:
                     service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
 
             -   name: Run Plan
-                uses: dflook/terraform-plan@v1
+                uses: dflook/terraform-plan@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
@@ -123,7 +123,7 @@ jobs:
                     service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
 
             -   name: Run Apply
-                uses: dflook/terraform-apply@v1
+                uses: dflook/terraform-apply@v2
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}
