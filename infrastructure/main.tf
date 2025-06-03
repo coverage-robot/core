@@ -34,6 +34,11 @@ provider "google" {
   region  = var.gcp_region
 }
 
+# Manage the state bucket
+module "state" {
+  source = "./state"
+}
+
 module "certificate" {
   source      = "./certificate"
   environment = local.environment

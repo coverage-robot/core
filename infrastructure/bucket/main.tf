@@ -24,6 +24,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "ingest_lifecycle" {
   rule {
     id = "delete-ingested-coverage-files"
 
+    filter {}
+
     expiration {
       # Delete the current version of objects after 7 days. These are the files
       # which failed to be ingested correctly.
