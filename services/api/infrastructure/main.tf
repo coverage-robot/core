@@ -9,11 +9,11 @@ terraform {
   required_version = ">= 1.2.0"
 
   backend "s3" {
-    bucket         = "tf-coverage-state"
-    key            = "state/api/terraform.tfstate"
-    region         = "eu-west-2"
-    encrypt        = true
-    dynamodb_table = "tf-coverage-locks"
+    bucket       = "tf-coverage-state"
+    key          = "state/api/terraform.tfstate"
+    region       = "eu-west-2"
+    encrypt      = true
+    use_lockfile = true
   }
 }
 
@@ -31,11 +31,11 @@ data "terraform_remote_state" "core" {
   workspace = local.environment
 
   config = {
-    bucket         = "tf-coverage-state"
-    key            = "state/core/terraform.tfstate"
-    region         = "eu-west-2"
-    encrypt        = true
-    dynamodb_table = "tf-coverage-locks"
+    bucket       = "tf-coverage-state"
+    key          = "state/core/terraform.tfstate"
+    region       = "eu-west-2"
+    encrypt      = true
+    use_lockfile = true
   }
 }
 
@@ -89,3 +89,4 @@ module "webhook_handler" {
   environment = local.environment
   region      = var.region
 }
+
