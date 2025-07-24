@@ -7,6 +7,16 @@
 
 The core platform for ingesting, analysing, and publishing coverage data to Version Control platforms.
 
+## Description
+
+Coverage Robot is the only code coverage analysis solution specifically engineered for monorepos.
+
+Through [the GitHub Action](https://github.com/coverage-robot/action) coverage reports from automation tests can be
+analysed and results reported back on Pull Requests in seconds, and with support for intelligently carrying forward
+coverage data from previous commits, you never have to run tests for unchanged parts of your code again.
+
+Check out a real Pull Request with coverage analysis directly in [the monorepo](https://github.com/coverage-robot/core/pull/2218).
+
 ## Architecture
 
 ![architecture.jpg](resources%2Farchitecture.jpg)
@@ -33,4 +43,4 @@ Theres two key parts of the deployment model of the coverage platform, both of w
 Broadly those are:
 
 1. The _global_ infrastructure which exists outside of any particular service.
-2. The _service specific_ infrastructure, which is managed by the service itself, and deployed _alongside_ the service.
+2. The _service-specific_ infrastructure, which is managed by the service itself, and deployed _alongside_ the service.
