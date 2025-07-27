@@ -43,6 +43,10 @@ env:
     workspace: 'prod'
     sentry-dsn: 'https://6a792bd4106f38cbd9c195540f3a8147@o4506265435176960.ingest.sentry.io/4506265444220928'
 
+permissions:
+    id-token: write # For OIDC authentication with AWS
+    contents: read
+
 jobs:
     build:
         name: "Build"
@@ -264,8 +268,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   name: Run Plan
                 uses: dflook/terraform-plan@v2
@@ -297,8 +300,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   name: Setup environment variables
                 uses: SpicyPizza/create-envfile@v2.0
