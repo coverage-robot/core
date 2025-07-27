@@ -35,6 +35,10 @@ env:
     working-directory: './infrastructure'
     workspace: 'prod'
 
+permissions:
+    id-token: write # For OIDC authentication with AWS
+    contents: read
+
 jobs:
     lint:
         name: "Lint"
@@ -81,8 +85,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   uses: google-github-actions/auth@v2
                 with:
@@ -114,8 +117,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   uses: google-github-actions/auth@v2
                 with:

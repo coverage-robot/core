@@ -43,6 +43,10 @@ env:
     workspace: 'prod'
     sentry-dsn: 'https://3fe0ad1c28c3c5d75ce984a7135c45b3@o4506265435176960.ingest.sentry.io/4506265495732224'
 
+permissions:
+    id-token: write # For OIDC authentication with AWS
+    contents: read
+
 jobs:
     build:
         name: "Build"
@@ -155,7 +159,7 @@ jobs:
                 run: composer lint:rector
 
             -   name: Run Psalm
-                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }} 
+                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }}
 
             -   name: Run Psalm Security Analysis
                 run: composer lint:security
@@ -267,8 +271,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   name: Run Plan
                 uses: dflook/terraform-plan@v2
@@ -300,8 +303,7 @@ jobs:
             -   uses: aws-actions/configure-aws-credentials@v4
                 with:
                     aws-region: eu-west-2
-                    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             -   name: Setup environment variables
                 uses: SpicyPizza/create-envfile@v2.0
