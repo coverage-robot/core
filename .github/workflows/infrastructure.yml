@@ -82,12 +82,12 @@ jobs:
         steps:
             -   uses: actions/checkout@v5
 
-            -   uses: aws-actions/configure-aws-credentials@v4
+            -   uses: aws-actions/configure-aws-credentials@v5
                 with:
                     aws-region: eu-west-2
                     role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
-            -   uses: google-github-actions/auth@v2
+            -   uses: google-github-actions/auth@v3
                 with:
                     workload_identity_provider: ${{ secrets.GCP_TF_WORKLOAD_IDENTITY_PROVIDER }}
                     service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
@@ -114,12 +114,12 @@ jobs:
         steps:
             -   uses: actions/checkout@v5
 
-            -   uses: aws-actions/configure-aws-credentials@v4
+            -   uses: aws-actions/configure-aws-credentials@v5
                 with:
                     aws-region: eu-west-2
                     role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
-            -   uses: google-github-actions/auth@v2
+            -   uses: google-github-actions/auth@v3
                 with:
                     workload_identity_provider: ${{ secrets.GCP_TF_WORKLOAD_IDENTITY_PROVIDER }}
                     service_account: ${{ secrets.GCP_TF_SERVICE_ACCOUNT }}
