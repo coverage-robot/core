@@ -303,4 +303,83 @@ final class CoverageComparisonServiceTest extends TestCase
 
         $this->assertNotInstanceOf(CoverageReportComparison::class, $comparison);
     }
+
+    public function testGettingBaseWaypointFromWaypointHistoryWillAbideByMaxCommits(): void
+    {
+        $headWaypoint = new ReportWaypoint(
+            provider: Provider::GITHUB,
+            projectId: 'mock-project',
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-ref',
+            commit: 'mock-commit',
+            history: function (ReportWaypoint $waypoint, int $page) {
+                // We should never be requesting later than page 1, because we're
+                // providing the max commits in just one page.
+                $this->assertEquals(1, $page);
+
+                // Return all non-merged PRs, so that the history (before maxing out) does not
+                // resolve to a merge base.
+                return array_fill(
+                    0,
+                    CoverageComparisonService::MAX_COMMIT_HISTORY_COMMITS + 1,
+                    [
+                        'commit' => 'mock-commit-1',
+                        'ref' => 'mock-ref',
+                        'merged' => false
+                    ]
+                );
+            },
+            diff: [],
+            pullRequest: null
+        );
+        $mockCoverageReport = new CoverageReport(
+            waypoint: $headWaypoint,
+            uploads: static fn(): null => null,
+            size: 200,
+            totalLines: 100,
+            atLeastPartiallyCoveredLines: 50,
+            uncoveredLines: 50,
+            coveragePercentage: 50.0,
+            fileCoverage: static fn(): null => null,
+            tagCoverage: static fn(): null => null,
+            diffCoveragePercentage: 50.0,
+            leastCoveredDiffFiles: static fn(): null => null,
+            diffUncoveredLines: static fn(): int => 0,
+            diffLineCoverage: static fn(): null => null,
+        );
+
+        $event = new UploadsFinalised(
+            provider: Provider::GITHUB,
+            projectId: '0192c0b2-a63e-7c29-8636-beb65b9097ee',
+            owner: 'mock-owner',
+            repository: 'mock-repository',
+            ref: 'mock-branch',
+            commit: 'mock-commit',
+            parent: [],
+            baseCommit: 'mock-base-commit',
+            baseRef: 'mock-base-ref',
+        );
+
+        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+
+        $coverageComparisonService = new CoverageComparisonService(
+            new NullLogger(),
+            new CachingCoverageAnalyserService(
+                $this->createMock(QueryServiceInterface::class),
+                $this->createMock(DiffParserServiceInterface::class),
+                $mockCommitHistoryService,
+                $this->createMock(CarryforwardTagServiceInterface::class)
+            )
+        );
+
+        $comparison = $coverageComparisonService->getComparisonForCoverageReport(
+            $mockCoverageReport,
+            $event
+        );
+        $this->assertNull(
+            $comparison,
+            'The comparison should fail because it should reach the end of the allowed commit history size without reaching a base PR'
+        );
+    }
 }

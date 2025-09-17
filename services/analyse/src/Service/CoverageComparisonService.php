@@ -23,7 +23,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
      *
      * The number of commits per page is defined in {@see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE}.
      */
-    private const int MAX_COMMIT_HISTORY_COMMITS = 500;
+    public const int MAX_COMMIT_HISTORY_COMMITS = 500;
 
     public function __construct(
         private readonly LoggerInterface $coverageComparisonServiceLogger,
