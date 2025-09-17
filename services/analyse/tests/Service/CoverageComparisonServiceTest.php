@@ -379,7 +379,7 @@ final class CoverageComparisonServiceTest extends TestCase
         );
         $this->assertNull(
             $comparison,
-            'The comparison should fail because it should reach the end of the allowed commit history size without reaching a base PR'
+            'The comparison should not return a result as no base ref should have been reached'
         );
     }
 }
