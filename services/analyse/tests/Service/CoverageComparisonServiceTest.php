@@ -380,13 +380,14 @@ final class CoverageComparisonServiceTest extends TestCase
 
         // We should never be requesting more than page 2, because we're
         // providing the maximum number of commits by the second  page
-        $this->assertEquals(
+        $this->assertSame(
             [1, 2],
             $historyPagesRequested,
             'The only pages of commit history requested should be 1 and 2.'
         );
 
-        $this->assertNull(
+        $this->assertNotInstanceOf(
+            CoverageReportComparison::class,
             $comparison,
             'The comparison should not return a result as no base ref should have been reached'
         );
