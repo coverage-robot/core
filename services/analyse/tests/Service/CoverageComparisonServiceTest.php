@@ -306,6 +306,8 @@ final class CoverageComparisonServiceTest extends TestCase
 
     public function testGettingBaseWaypointFromWaypointHistoryWillAbideByMaxCommits(): void
     {
+        $historyPagesRequested = [];
+
         $headWaypoint = new ReportWaypoint(
             provider: Provider::GITHUB,
             projectId: 'mock-project',
@@ -313,16 +315,14 @@ final class CoverageComparisonServiceTest extends TestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-            history: function (ReportWaypoint $waypoint, int $page) {
-                // We should never be requesting later than page 1, because we're
-                // providing the max commits in just one page.
-                $this->assertEquals(1, $page);
+            history: function (ReportWaypoint $waypoint, int $page) use (&$historyPagesRequested) {
+                $historyPagesRequested[] = $page;
 
                 // Return all non-merged PRs, so that the history (before maxing out) does not
                 // resolve to a merge base.
                 return array_fill(
                     0,
-                    CoverageComparisonService::MAX_COMMIT_HISTORY_COMMITS + 1,
+                    (int)ceil(CoverageComparisonService::MAX_COMMIT_HISTORY_COMMITS / 2),
                     [
                         'commit' => 'mock-commit-1',
                         'ref' => 'mock-ref',
@@ -377,6 +377,15 @@ final class CoverageComparisonServiceTest extends TestCase
             $mockCoverageReport,
             $event
         );
+
+        // We should never be requesting more than page 2, because we're
+        // providing the maximum number of commits by the second  page
+        $this->assertEquals(
+            [1, 2],
+            $historyPagesRequested,
+            'The only pages of commit history requested should be 1 and 2.'
+        );
+
         $this->assertNull(
             $comparison,
             'The comparison should not return a result as no base ref should have been reached'
