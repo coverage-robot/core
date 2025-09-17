@@ -23,7 +23,7 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
      *
      * The number of commits per page is defined in {@see CommitHistoryService::COMMITS_TO_RETURN_PER_PAGE}.
      */
-    private const int MAX_COMMIT_HISTORY_PAGES = 10;
+    private const int MAX_COMMIT_HISTORY_COMMITS = 500;
 
     public function __construct(
         private readonly LoggerInterface $coverageComparisonServiceLogger,
@@ -139,8 +139,10 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
 
         $headWaypoint = $headReport->getWaypoint();
 
-        for ($page = 1; $page <= self::MAX_COMMIT_HISTORY_PAGES; ++$page) {
+        for ($page = 1, $commitCount = 0; $commitCount < self::MAX_COMMIT_HISTORY_COMMITS; ++$page) {
             $history = $headWaypoint->getHistory($page);
+
+            $commitCount += count($history);
 
             foreach ($history as $commit) {
                 if ($commit['ref'] !== $headWaypoint->getRef()) {
