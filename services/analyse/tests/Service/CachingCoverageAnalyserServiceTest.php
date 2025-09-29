@@ -22,7 +22,6 @@ use App\Service\CachingCoverageAnalyserService;
 use App\Service\Carryforward\CarryforwardTagServiceInterface;
 use App\Service\Diff\DiffParserServiceInterface;
 use App\Service\History\CommitHistoryServiceInterface;
-use App\Service\QueryService;
 use App\Service\QueryServiceInterface;
 use ArrayIterator;
 use DateTimeImmutable;
@@ -277,7 +276,7 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $this->assertEmpty($coverageReport->getDiffLineCoverage());
     }
 
-    private function getMockedQueryService(): MockObject|QueryService
+    private function getMockedQueryService(): MockObject
     {
         $mockQueryService = $this->createMock(QueryServiceInterface::class);
 
