@@ -9093,16 +9093,16 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.6.4",
+            "version": "v1.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
-                "reference": "6ea7fbe756cb013832d14a85356a0470a894ad70"
+                "reference": "00b2df7b5967ba8b30b936fee50b51b95bae311d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/local/zipball/6ea7fbe756cb013832d14a85356a0470a894ad70",
-                "reference": "6ea7fbe756cb013832d14a85356a0470a894ad70",
+                "url": "https://api.github.com/repos/coverage-robot/local/zipball/00b2df7b5967ba8b30b936fee50b51b95bae311d",
+                "reference": "00b2df7b5967ba8b30b936fee50b51b95bae311d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9124,8 +9124,8 @@
             },
             "require-dev": {
                 "bref/bref": "^2.1",
-                "phpunit/phpunit": "^10.4",
-                "rector/rector": "^1.2"
+                "phpunit/phpunit": "^12.0",
+                "rector/rector": "^2.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -9150,9 +9150,9 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.6.4"
+                "source": "https://github.com/coverage-robot/local/tree/v1.6.5"
             },
-            "time": "2025-05-28T23:43:53+00:00"
+            "time": "2025-09-30T17:22:44+00:00"
         },
         {
             "name": "danog/advanced-json-rpc",
