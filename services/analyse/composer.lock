@@ -763,7 +763,7 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.6.4",
+            "version": "v1.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
@@ -821,7 +821,7 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.6.4"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.6.5"
             },
             "time": "2025-05-28T23:43:53+00:00"
         },
