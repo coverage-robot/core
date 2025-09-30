@@ -222,7 +222,7 @@ final class GithubDiffParserService implements DiffParserServiceInterface, Provi
             $patch = $file['patch'] ?? '';
 
             $diff = <<<DIFF
-                $diff
+                {$diff}
                 --- a/{$file['filename']}
                 +++ b/{$file['filename']}
                 {$patch}

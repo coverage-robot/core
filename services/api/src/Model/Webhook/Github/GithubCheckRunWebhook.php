@@ -90,7 +90,7 @@ final class GithubCheckRunWebhook extends AbstractWebhook implements
     #[Override]
     public function getAppId(): int|string
     {
-        return (string)$this->appId;
+        return $this->appId;
     }
 
     #[SerializedPath('[check_run][status]')]

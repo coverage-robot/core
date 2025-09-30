@@ -12,6 +12,8 @@ interface BackoffStrategyInterface
     /**
      * Run a callable, and retry it if a failure occurs, based on a configured backoff strategy.
      *
+     * @param callable():mixed $callback
+     *
      * @throws Exception
      */
     public function run(callable $callback): mixed;

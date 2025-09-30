@@ -15,6 +15,7 @@ use Iterator;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Random\Randomizer;
@@ -22,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class AuthTokenServiceTest extends TestCase
 {
-    private CognitoClientInterface $cognitoClient;
+    private MockObject $cognitoClient;
 
     #[Override]
     protected function setUp(): void

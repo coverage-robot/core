@@ -315,7 +315,7 @@ final class CachingCommitHistoryServiceTest extends TestCase
         );
     }
 
-    private function getMockWaypoint(string $commit = 'mock-commit'): ReportWaypoint|MockObject
+    private function getMockWaypoint(string $commit = 'mock-commit'): ReportWaypoint
     {
         return new ReportWaypoint(
             provider: Provider::GITHUB,

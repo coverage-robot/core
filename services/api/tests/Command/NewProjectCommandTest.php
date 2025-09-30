@@ -59,8 +59,8 @@ final class NewProjectCommandTest extends KernelTestCase
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
-        static::getContainer()->set(AuthTokenService::class, $mockAuthTokenService);
-        static::getContainer()->set(CognitoClient::class, $mockCognitoClient);
+        self::getContainer()->set(AuthTokenService::class, $mockAuthTokenService);
+        self::getContainer()->set(CognitoClient::class, $mockCognitoClient);
 
         $command = $application->find('app:new_project');
         $commandTester = new CommandTester($command);
