@@ -109,7 +109,7 @@
         "psalm/plugin-symfony": "^5.2.7",
         "rector/rector": "^2.0",
         "spatie/phpunit-snapshot-assertions": "^5.1",
-        "squizlabs/php_codesniffer": "^3.7",
+        "squizlabs/php_codesniffer": "^4.0",
         "symfony/browser-kit": "7.3.*",
         "symfony/maker-bundle": "^1.48",
         "vimeo/psalm": "^6.13"
