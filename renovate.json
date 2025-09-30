@@ -61,12 +61,13 @@
         {
             "description": "Always group internal packages into a single PR",
             "matchPackageNames": [
-                "coverage-robot/*"
+                "coverage-robot/**"
             ],
             "matchFileNames": [
                 "**/composer.json",
                 "**/composer.lock"
             ],
+            "groupName": "internal packages",
             "additionalBranchPrefix": "internal-packages/"
         }
     ]
