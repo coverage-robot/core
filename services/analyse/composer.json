@@ -40,7 +40,7 @@
     },
     "require-dev": {
         "coverage-robot/local": "^1.6",
-        "phpunit/phpunit": "^10.1",
+        "phpunit/phpunit": "^12",
         "psalm/plugin-symfony": "^5.2.7",
         "rector/rector": "^2.0",
         "spatie/phpunit-snapshot-assertions": "^5.1",
