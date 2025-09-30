@@ -92,7 +92,7 @@ final class EventHandlerTest extends KernelTestCase
     }
 
     #[DataProvider('validS3EventDataProvider')]
-    public function testHandleS3FailsToRetrieve(S3Event $event): void
+    public function testHandleS3FailsToRetrieve(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
         $mockCoverageFileRetrievalService = $this->createMock(CoverageFileRetrievalServiceInterface::class);
         $mockCoverageFileRetrievalService->method('ingestFromS3')
