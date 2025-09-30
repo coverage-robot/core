@@ -767,7 +767,7 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.4",
+            "version": "v1.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
@@ -825,7 +825,7 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.4"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.5"
             },
             "time": "2025-05-28T23:43:51+00:00"
         },
