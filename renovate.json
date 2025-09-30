@@ -67,8 +67,7 @@
                 "**/composer.json",
                 "**/composer.lock"
             ],
-            "groupName": "internal packages",
-            "additionalBranchPrefix": "internal-packages/"
+            "groupName": "internal packages"
         }
     ]
 }
