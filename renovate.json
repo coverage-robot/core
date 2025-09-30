@@ -25,6 +25,24 @@
             "addLabels": [
                 "terraform"
             ]
+        },
+        {
+            "matchFileNames": [
+                "services/**"
+            ],
+            "additionalBranchPrefix": "services/"
+        },
+        {
+            "matchFileNames": [
+                "packages/**"
+            ],
+            "additionalBranchPrefix": "packages/"
+        },
+        {
+            "matchFileNames": [
+                "infrastructure/**"
+            ],
+            "additionalBranchPrefix": "infrastructure/"
         }
     ]
 }
