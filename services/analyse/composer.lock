@@ -891,16 +891,16 @@
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.4",
+            "version": "v1.6.5",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "e263b781425cc2c6e58e8876f26c40298bceb930"
+                "reference": "485562e84f1fb84d7123f4d5a325793b189f3a6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/e263b781425cc2c6e58e8876f26c40298bceb930",
-                "reference": "e263b781425cc2c6e58e8876f26c40298bceb930",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/485562e84f1fb84d7123f4d5a325793b189f3a6d",
+                "reference": "485562e84f1fb84d7123f4d5a325793b189f3a6d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -914,7 +914,7 @@
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
-                "rector/rector": "^1.2"
+                "rector/rector": "^2.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -930,9 +930,9 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.4"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.5"
             },
-            "time": "2025-04-04T18:56:04+00:00"
+            "time": "2025-09-30T17:22:22+00:00"
         },
         {
             "name": "coverage-robot/event",
