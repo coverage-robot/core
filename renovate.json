@@ -2,5 +2,29 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
         "config:recommended"
+    ],
+    "labels": [
+        "dependencies",
+        "bump-patch",
+        "chore"
+    ],
+    "packageRules": [
+        {
+            "matchFileNames": [
+                "**/composer.json",
+                "**/composer.lock"
+            ],
+            "addLabels": [
+                "php"
+            ]
+        },
+        {
+            "matchFileNames": [
+                "**/.terraform.lock.hcl"
+            ],
+            "addLabels": [
+                "terraform"
+            ]
+        }
     ]
 }
