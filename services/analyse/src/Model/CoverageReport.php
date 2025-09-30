@@ -24,7 +24,7 @@ use Override;
 final class CoverageReport implements CoverageReportInterface
 {
     /**
-     * @codingStandardsIgnoreStart
+     * phpcs:disable
      *
      * @param TotalUploadsQueryResult|Closure():TotalUploadsQueryResult $uploads
      * @param int|Closure():int $size
@@ -39,7 +39,7 @@ final class CoverageReport implements CoverageReportInterface
      * @param int|Closure():int $diffUncoveredLines
      * @param QueryResultIterator<LineCoverageQueryResult>|Closure():QueryResultIterator<LineCoverageQueryResult> $diffLineCoverage
      *
-     * @codingStandardsIgnoreEnd
+     * phpcs:enable
      */
     public function __construct(
         private readonly ReportWaypoint $waypoint,
