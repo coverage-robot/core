@@ -10,6 +10,7 @@
     ],
     "packageRules": [
         {
+            "description": "Add php label to php dependency updates",
             "matchFileNames": [
                 "**/composer.json",
                 "**/composer.lock"
@@ -19,6 +20,7 @@
             ]
         },
         {
+            "description": "Add terraform label to terraform dependency updates",
             "matchFileNames": [
                 "**/.terraform.lock.hcl"
             ],
@@ -27,22 +29,45 @@
             ]
         },
         {
+            "description": "Add github actions label to CI dependency updates",
+            "matchFileNames": [
+                ".github/workflows/**"
+            ],
+            "addLabels": [
+                "github-actions"
+            ]
+        },
+        {
+            "description": "Always group dependencies for services into a single PR",
             "matchFileNames": [
                 "services/**"
             ],
             "additionalBranchPrefix": "services/"
         },
         {
+            "description": "Always group dependencies for packages into a single PR",
             "matchFileNames": [
                 "packages/**"
             ],
             "additionalBranchPrefix": "packages/"
         },
         {
+            "description": "Always group infrastructure changes into a single PR",
             "matchFileNames": [
                 "infrastructure/**"
             ],
             "additionalBranchPrefix": "infrastructure/"
+        },
+        {
+            "description": "Always group internal packages into a single PR",
+            "matchPackageNames": [
+                "coverage-robot/*"
+            ],
+            "matchFileNames": [
+                "**/composer.json",
+                "**/composer.lock"
+            ],
+            "additionalBranchPrefix": "internal-packages/"
         }
     ]
 }
