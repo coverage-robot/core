@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\Publisher;
 
+use App\Exception\PublishingNotSupportedException;
 use App\Service\MessagePublisherService;
-use App\Tests\Mock\Factory\MockPublisherFactory;
+use App\Service\Publisher\PublisherServiceInterface;
 use Packages\Event\Model\EventInterface;
+use Packages\Message\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Packages\Telemetry\Service\MetricServiceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
@@ -16,8 +19,8 @@ final class CoveragePublisherServiceTest extends TestCase
 {
     public function testPublishToOnlySupportedPublishers(): void
     {
-        $supportedPublisher = MockPublisherFactory::getMockPublisher($this);
-        $unsupportedPublisher = MockPublisherFactory::getMockPublisher($this, false, false);
+        $supportedPublisher = $this->getMockPublisher();
+        $unsupportedPublisher = $this->getMockPublisher(false, false);
 
         $supportedPublisher->expects($this->once())
             ->method('publish');
@@ -45,5 +48,30 @@ final class CoveragePublisherServiceTest extends TestCase
         );
 
         $this->assertTrue($publisher->publish($message));
+    }
+
+    public function getMockPublisher(
+        bool $supported = true,
+        bool $publishSuccessfully = true
+    ): MockObject {
+        $mockPublisher = $this->createMock(PublisherServiceInterface::class);
+
+        $mockPublisher->method('supports')
+            ->willReturn($supported);
+
+        if ($supported) {
+            $mockPublisher->method('publish')
+                ->willReturn($publishSuccessfully);
+        } else {
+            $mockPublisher->method('publish')
+                ->willThrowException(
+                    new PublishingNotSupportedException(
+                        PublisherServiceInterface::class,
+                        $this->createMock(PublishableMessageInterface::class)
+                    )
+                );
+        }
+
+        return $mockPublisher;
     }
 }
