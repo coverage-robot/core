@@ -12,7 +12,6 @@ use App\Model\ReportWaypoint;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
 use App\Service\QueryBuilderService;
-use App\Tests\Mock\Factory\MockQueryFactory;
 use DateTimeImmutable;
 use Doctrine\SqlFormatter\NullHighlighter;
 use Doctrine\SqlFormatter\SqlFormatter;
@@ -58,6 +57,12 @@ final class QueryBuilderServiceTest extends KernelTestCase
                 ]
             );
 
+        $mockQuery = $this->createMock(QueryInterface::class);
+        $mockQuery->method('getQuery')
+            ->willReturn('SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"');
+        $mockQuery->method('parseResults')
+            ->willReturn($this->createMock(QueryResultInterface::class));
+
         $queryBuilder = new QueryBuilderService(
             new SqlFormatter(
                 new NullHighlighter()
@@ -68,12 +73,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
 
         $this->assertMatchesTextSnapshot(
             $queryBuilder->build(
-                MockQueryFactory::createMock(
-                    $this,
-                    QueryInterface::class,
-                    'SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"',
-                    $this->createMock(QueryResultInterface::class)
-                ),
+                $mockQuery,
                 $queryParameters
             )
         );
@@ -92,12 +92,11 @@ final class QueryBuilderServiceTest extends KernelTestCase
             $this->getContainer()->get(ValidatorInterface::class)
         );
 
-        $mockQuery = MockQueryFactory::createMock(
-            $this,
-            QueryInterface::class,
-            '',
-            $this->createMock(QueryResultInterface::class)
-        );
+        $mockQuery = $this->createMock(QueryInterface::class);
+        $mockQuery->method('getQuery')
+            ->willReturn('');
+        $mockQuery->method('parseResults')
+            ->willReturn($this->createMock(QueryResultInterface::class));
 
         $mockQuery->expects($this->once())
             ->method('getQueryParameterConstraints')
