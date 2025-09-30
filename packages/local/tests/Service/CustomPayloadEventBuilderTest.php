@@ -29,7 +29,7 @@ final class CustomPayloadEventBuilderTest extends TestCase
             Event::UPLOAD
         );
 
-        $this->assertEquals($expectedSupport, $isSupported);
+        $this->assertSame($expectedSupport, $isSupported);
     }
 
 

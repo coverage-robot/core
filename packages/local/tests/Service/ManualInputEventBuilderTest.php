@@ -38,7 +38,7 @@ final class ManualInputEventBuilderTest extends TestCase
             Event::UPLOAD
         );
 
-        $this->assertEquals($expectedSupport, $isSupported);
+        $this->assertSame($expectedSupport, $isSupported);
     }
 
     public function testBuild(): void
