@@ -67,7 +67,7 @@ final class JobStateChangeEventProcessor extends AbstractOrchestratorEventRecord
         }
 
         if (
-            $event->getTriggeredByExternalId() ===
+            (string) $event->getTriggeredByExternalId() ===
                 $this->environmentService->getVariable(EnvironmentVariable::GITHUB_APP_ID)
         ) {
             $this->eventProcessorLogger->info(
