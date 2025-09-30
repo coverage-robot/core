@@ -86,7 +86,8 @@ final class WebhookControllerTest extends WebTestCase
         Provider $provider,
         string $type,
         string $webhookInstance,
-        string $payload
+        string $payload,
+        string $signature
     ): void {
         $mockWebhookQueueClient = $this->createMock(WebhookQueueClientInterface::class);
         $mockWebhookQueueClient->expects($this->never())
