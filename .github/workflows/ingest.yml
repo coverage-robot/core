@@ -214,6 +214,16 @@ jobs:
                 with:
                     php-version: ${{ matrix.php-version }}
 
+            -   name: Add Mock BigQuery Service Account
+                uses: DamianReeves/write-file-action@v1.3
+                with:
+                    path: ${{ env.working-directory }}/config/bigquery.json
+                    write-mode: overwrite
+                    contents: |
+                        {
+                            "project_id": "mock-project"
+                        }
+
             -   name: Run PHPUnit
                 id: tests
                 run: |
