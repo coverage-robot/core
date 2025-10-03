@@ -125,7 +125,7 @@ resource "aws_lambda_function" "analyse" {
   source_code_hash = var.deployment_hash
 
   function_name = format("coverage-analyse-%s", var.environment)
-  role = aws_iam_role.analyse_role.arn
+  role          = aws_iam_role.analyse_role.arn
 
   # Analyse coverage for a maximum of 3 minutes before timing out
   #
@@ -133,9 +133,9 @@ resource "aws_lambda_function" "analyse" {
   # from GitHub http requests, etc.
   timeout = 180
 
-  memory_size = 1024
-  runtime     = "provided.al2"
-  handler     = "Packages\\Event\\Handler\\EventHandler"
+  memory_size   = 1024
+  runtime       = "provided.al2"
+  handler       = "Packages\\Event\\Handler\\EventHandler"
   architectures = ["arm64"]
 
   tracing_config {
