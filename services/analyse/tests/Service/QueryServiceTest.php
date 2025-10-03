@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Client\BigQueryClientInterface;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
@@ -18,6 +17,7 @@ use App\Service\QueryBuilderService;
 use App\Service\QueryBuilderServiceInterface;
 use App\Service\QueryService;
 use DateTimeImmutable;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\QueryJobConfiguration;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
@@ -38,7 +38,7 @@ final class QueryServiceTest extends KernelTestCase
         array $bigQueryResponse,
         QueryResultInterface $queryResult
     ): void {
-        $mockBigQueryService = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
 
         $queryService = new QueryService(
             $mockBigQueryService,
@@ -101,7 +101,7 @@ final class QueryServiceTest extends KernelTestCase
 
     public function testRunInvalidQuery(): void
     {
-        $mockBigQueryService = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
 
         $mockQueryBuilder = $this->createMock(QueryBuilderServiceInterface::class);
 
@@ -136,7 +136,7 @@ final class QueryServiceTest extends KernelTestCase
 
     public function testRunQueryWithExternalException(): void
     {
-        $mockBigQueryService = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
 
         $mockQueryBuilderService = $this->createMock(QueryBuilderServiceInterface::class);
 
@@ -184,7 +184,7 @@ final class QueryServiceTest extends KernelTestCase
 
     public function testRunQueryWithQueryException(): void
     {
-        $mockBigQueryService = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryService = $this->createMock(BigQueryClient::class);
 
         $mockQueryBuilderService = $this->createMock(QueryBuilderServiceInterface::class);
 
@@ -254,9 +254,9 @@ final class QueryServiceTest extends KernelTestCase
             TotalUploadsQuery::class,
             [
                 'successfulUploads' => [
-                        '0193ea3e-64b2-751e-ad50-817e4083c212',
-                        '0193ea3e-e1fe-78c0-88ed-d87af4a687fa'
-                    ],
+                    '0193ea3e-64b2-751e-ad50-817e4083c212',
+                    '0193ea3e-e1fe-78c0-88ed-d87af4a687fa'
+                ],
                 'successfulTags' => [
                     [
                         'name' => 'tag-1',

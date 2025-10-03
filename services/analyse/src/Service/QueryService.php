@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Client\BigQueryClientInterface;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
@@ -24,8 +23,7 @@ final class QueryService implements QueryServiceInterface
      * @param QueryInterface[] $queries
      */
     public function __construct(
-        #[Autowire(service: BigQueryClient::class)]
-        private readonly BigQueryClientInterface $bigQueryClient,
+        private readonly BigQueryClient $bigQueryClient,
         #[AutowireIterator('app.coverage_query')]
         private readonly iterable $queries,
         #[Autowire(service: QueryBuilderService::class)]
