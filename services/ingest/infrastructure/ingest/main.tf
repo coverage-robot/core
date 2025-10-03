@@ -134,11 +134,17 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
-      "BIGQUERY_PROJECT"             = data.terraform_remote_state.core.outputs.environment_dataset.project,
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
       "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload_table.table_id,
       "AWS_ACCOUNT_ID"               = data.aws_caller_identity.current.account_id
+
+      # Mounted into the working directory as part of the deployment workflow, and picked up by
+      # the GCP clients automatically.
+      #
+      # See: https://github.com/coverage-robot/core/blob/main/.github/workflows/ingest.yml#L333
+      "GOOGLE_CLOUD_PROJECT"           = data.terraform_remote_state.core.outputs.environment_dataset.project,
+      "GOOGLE_APPLICATION_CREDENTIALS" = "config/bigquery.json"
     }
   }
 }

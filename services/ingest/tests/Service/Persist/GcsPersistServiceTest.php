@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\Persist;
 
-use App\Client\BigQueryClientInterface;
-use App\Client\GoogleCloudStorageClientInterface;
 use App\Enum\EnvironmentVariable;
 use App\Model\Coverage;
 use App\Service\BigQueryMetadataBuilderService;
 use App\Service\Persist\GcsPersistService;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\Dataset;
 use Google\Cloud\BigQuery\InsertResponse;
 use Google\Cloud\BigQuery\Job;
 use Google\Cloud\BigQuery\LoadJobConfiguration;
 use Google\Cloud\BigQuery\Table;
 use Google\Cloud\Storage\Bucket;
+use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
 use Packages\Contracts\Environment\Service;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
@@ -36,7 +36,7 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockBucket = $this->createMock(Bucket::class);
         $mockStorageObject = $this->createMock(StorageObject::class);
 
-        $mockGcsClient = $this->createMock(GoogleCloudStorageClientInterface::class);
+        $mockGcsClient = $this->createMock(StorageClient::class);
         $mockGcsClient->expects($this->once())
             ->method('bucket')
             ->with(
@@ -65,9 +65,9 @@ final class GcsPersistServiceTest extends KernelTestCase
             ->method('insertRow')
             ->willReturn(new InsertResponse([], []));
 
-        $mockBigQueryClient = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
         $mockBigQueryClient->expects($this->exactly(2))
-            ->method('getEnvironmentDataset')
+            ->method('dataset')
             ->willReturn($mockDataset);
 
         $mockJob = $this->createMock(Job::class);
@@ -124,7 +124,7 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockBucket = $this->createMock(Bucket::class);
         $mockStorageObject = $this->createMock(StorageObject::class);
 
-        $mockGcsClient = $this->createMock(GoogleCloudStorageClientInterface::class);
+        $mockGcsClient = $this->createMock(StorageClient::class);
         $mockGcsClient->expects($this->once())
             ->method('bucket')
             ->with(
@@ -152,9 +152,9 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockTable->expects($this->never())
             ->method('insertRow');
 
-        $mockBigQueryClient = $this->createMock(BigQueryClientInterface::class);
+        $mockBigQueryClient = $this->createMock(BigQueryClient::class);
         $mockBigQueryClient->expects($this->once())
-            ->method('getEnvironmentDataset')
+            ->method('dataset')
             ->willReturn($mockDataset);
 
         $mockJob = $this->createMock(Job::class);

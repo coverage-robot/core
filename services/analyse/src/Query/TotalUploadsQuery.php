@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Query;
 
-use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\TotalUploadsQueryResult;
+use App\Query\Trait\BigQueryTableAwareTrait;
 use App\Query\Trait\ParameterAwareTrait;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final class TotalUploadsQuery implements QueryInterface
 {
     use ParameterAwareTrait;
+    use BigQueryTableAwareTrait;
 
     public function __construct(
         private readonly SerializerInterface&DenormalizerInterface $serializer,
@@ -36,7 +38,7 @@ final class TotalUploadsQuery implements QueryInterface
     #[Override]
     public function getQuery(?QueryParameterBag $parameterBag = null): string
     {
-        $uploadTable = $this->bigQueryClient->getTable(
+        $uploadTable = $this->getTable(
             $this->environmentService->getVariable(
                 EnvironmentVariable::BIGQUERY_UPLOAD_TABLE
             )

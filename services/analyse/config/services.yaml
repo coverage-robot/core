@@ -23,3 +23,5 @@ services:
     Doctrine\SqlFormatter\SqlFormatter:
         arguments:
             $highlighter: '@Doctrine\SqlFormatter\NullHighlighter'
+
+    Google\Cloud\BigQuery\BigQueryClient: ~

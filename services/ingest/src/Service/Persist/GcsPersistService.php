@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace App\Service\Persist;
 
-use App\Client\BigQueryClient;
-use App\Client\BigQueryClientInterface;
-use App\Client\GoogleCloudStorageClient;
-use App\Client\GoogleCloudStorageClientInterface;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PersistException;
 use App\Model\Coverage;
 use App\Model\File;
 use App\Service\BigQueryMetadataBuilderService;
-use Exception;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\Exception\JobException;
 use Google\Cloud\BigQuery\Job;
 use Google\Cloud\Core\Exception\GoogleException;
-use Google\Cloud\Core\Exception\ServiceException;
 use Google\Cloud\Core\ExponentialBackoff;
+use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -26,7 +22,6 @@ use Packages\Event\Model\Upload;
 use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final class GcsPersistService implements PersistServiceInterface
 {
@@ -35,10 +30,8 @@ final class GcsPersistService implements PersistServiceInterface
     private const string OUTPUT_KEY = '%s%s.json';
 
     public function __construct(
-        #[Autowire(service: GoogleCloudStorageClient::class)]
-        private readonly GoogleCloudStorageClientInterface $googleCloudStorageClient,
-        #[Autowire(service: BigQueryClient::class)]
-        private readonly BigQueryClientInterface $bigQueryClient,
+        private readonly StorageClient $googleCloudStorageClient,
+        private readonly BigQueryClient $bigQueryClient,
         private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
         private readonly EnvironmentServiceInterface $environmentService,
         private readonly LoggerInterface $gcsPersistServiceLogger,
@@ -122,10 +115,13 @@ final class GcsPersistService implements PersistServiceInterface
             )
         );
 
-        $table = $this->bigQueryClient->getEnvironmentDataset()
-            ->table(
-                $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
-            );
+        $dataset = $this->bigQueryClient->dataset(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET)
+        );
+
+        $table = $dataset->table(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
+        );
 
         $loadJob = $table->loadFromStorage(
             $object,
@@ -287,13 +283,16 @@ final class GcsPersistService implements PersistServiceInterface
 
     private function streamUploadRow(Upload $upload, Coverage $coverage, int $totalLines): bool
     {
-        $response = $this->bigQueryClient->getEnvironmentDataset()
-            ->table(
-                $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
-            )
-            ->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload, $coverage, $totalLines));
+        $dataset = $this->bigQueryClient->dataset(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET)
+        );
 
-        return $response->isSuccessful();
+        $table = $dataset->table(
+            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
+        );
+
+        return $table->insertRow($this->bigQueryMetadataBuilderService->buildUploadRow($upload, $coverage, $totalLines))
+            ->isSuccessful();
     }
 
     private function totalLines(Coverage $coverage): int

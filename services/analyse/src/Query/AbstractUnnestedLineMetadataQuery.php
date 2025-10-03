@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Query;
 
-use App\Client\BigQueryClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\QueryParameter;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
+use App\Query\Trait\BigQueryTableAwareTrait;
 use App\Query\Trait\CarryforwardAwareTrait;
 use App\Query\Trait\DiffAwareTrait;
 use App\Query\Trait\ParameterAwareTrait;
 use DateTimeInterface;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Line\LineType;
@@ -23,6 +24,7 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     use CarryforwardAwareTrait;
     use DiffAwareTrait;
     use ParameterAwareTrait;
+    use BigQueryTableAwareTrait;
 
     protected const string UPLOAD_TABLE_ALIAS = 'upload';
 
@@ -43,10 +45,10 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
         $uploadTableAlias = self::UPLOAD_TABLE_ALIAS;
         $linesTableAlias = self::LINES_TABLE_ALIAS;
 
-        $uploadTable = $this->bigQueryClient->getTable(
+        $uploadTable = $this->getTable(
             $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_UPLOAD_TABLE)
         );
-        $lineCoverageTable = $this->bigQueryClient->getTable(
+        $lineCoverageTable = $this->getTable(
             $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
         );
 

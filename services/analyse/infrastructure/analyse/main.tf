@@ -155,17 +155,22 @@ resource "aws_lambda_function" "analyse" {
 
   environment {
     variables = {
-      "BIGQUERY_PROJECT"                   = data.terraform_remote_state.core.outputs.environment_dataset.project,
       "BIGQUERY_ENVIRONMENT_DATASET"       = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE"       = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
       "BIGQUERY_UPLOAD_TABLE"              = data.terraform_remote_state.core.outputs.upload_table.table_id,
       "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
       "QUERY_CACHE_TABLE_NAME"             = var.query_cache_name
       "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
+
+      # Mounted into the working directory as part of the deployment workflow, and picked up by
+      # the GCP clients automatically.
+      #
+      # See: https://github.com/coverage-robot/core/blob/main/.github/workflows/analyse.yml#L333
+      GOOGLE_CLOUD_PROJECT           = data.terraform_remote_state.core.outputs.environment_dataset.project,
+      GOOGLE_APPLICATION_CREDENTIALS = "config/bigquery.json"
     }
   }
 }
-
 
 resource "aws_cloudwatch_event_rule" "service" {
   name           = "coverage-analyse-${var.environment}"
