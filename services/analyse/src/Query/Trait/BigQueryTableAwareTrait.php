@@ -14,13 +14,13 @@ trait BigQueryTableAwareTrait
     ) {
     }
 
-    public function getTable(?string $tableName = null): string
+    public function getTable(string $tableName): string
     {
         return sprintf(
             '%s.%s.%s',
             $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_PROJECT),
             $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET),
-            $tableName ?? $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE)
+            $tableName
         );
     }
 }
