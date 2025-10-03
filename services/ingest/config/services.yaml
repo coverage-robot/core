@@ -14,3 +14,7 @@ services:
         # The handler must be public so that Bref is able to run it through the Symfony
         # runtime
         public: true
+
+    Google\Cloud\Storage\StorageClient: ~
+
+    Google\Cloud\BigQuery\BigQueryClient: ~
