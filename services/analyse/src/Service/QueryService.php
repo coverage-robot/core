@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Client\BigQueryClient;
 use App\Client\BigQueryClientInterface;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
 use App\Query\Result\QueryResultInterface;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
 use Packages\Telemetry\Enum\Unit;

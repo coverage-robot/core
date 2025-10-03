@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Query;
 
-use App\Client\BigQueryClient;
 use App\Enum\QueryParameter;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\QueryResultIterator;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;

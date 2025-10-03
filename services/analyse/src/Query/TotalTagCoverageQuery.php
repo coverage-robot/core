@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Query;
 
-use App\Client\BigQueryClient;
 use App\Exception\QueryException;
 use App\Model\QueryParameterBag;
 use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageQueryResult;
+use Google\Cloud\BigQuery\BigQueryClient;
 use Google\Cloud\BigQuery\QueryResults;
 use Google\Cloud\Core\Exception\GoogleException;
 use Override;
