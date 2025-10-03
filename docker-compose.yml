@@ -43,7 +43,7 @@ services:
 
     localstack:
         container_name: "localstack"
-        image: localstack/localstack:4.8.1
+        image: localstack/localstack:4.9.1
         ports:
             - "4566:4566"
             - "4510-4559:4510-4559"
