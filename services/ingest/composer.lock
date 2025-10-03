@@ -696,7 +696,7 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.6",
+            "version": "v1.6.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
@@ -754,13 +754,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.6"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.7"
             },
             "time": "2025-05-28T23:43:51+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.6",
+            "version": "v1.6.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -799,13 +799,13 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.6"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.7"
             },
             "time": "2025-09-30T17:22:22+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.6.6",
+            "version": "v1.6.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
@@ -864,13 +864,13 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.6.6"
+                "source": "https://github.com/coverage-robot/event/tree/v1.6.7"
             },
             "time": "2025-05-28T23:43:49+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.6.6",
+            "version": "v1.6.7",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
@@ -929,7 +929,7 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.6"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.7"
             },
             "time": "2025-05-28T23:43:50+00:00"
         },
