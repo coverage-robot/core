@@ -108,7 +108,7 @@ final class PublishClient implements SqsClientInterface
      * Get the full SQS Queue URL for a queue (using its name).
      */
     #[Override]
-    public function getQueueUrl(string $queueName): ?string
+    public function getQueueUrl(string $queueName): string
     {
         $response = $this->sqsClient->getQueueUrl(
             new GetQueueUrlRequest(
