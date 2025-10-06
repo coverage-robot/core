@@ -10,24 +10,24 @@ use Packages\Contracts\Line\LineType;
 use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class LineCoverageQueryResult implements QueryResultInterface
+final readonly class LineCoverageQueryResult implements QueryResultInterface
 {
     /**
      * @param LineType[] $types
      */
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $fileName,
+        private string $fileName,
         #[Assert\GreaterThanOrEqual(1)]
-        private readonly int $lineNumber,
-        private readonly LineState $state,
-        private readonly bool $containsMethod,
-        private readonly bool $containsBranch,
-        private readonly bool $containsStatement,
+        private int $lineNumber,
+        private LineState $state,
+        private bool $containsMethod,
+        private bool $containsBranch,
+        private bool $containsStatement,
         #[Assert\GreaterThanOrEqual(0)]
-        private readonly int $totalBranches,
+        private int $totalBranches,
         #[Assert\GreaterThanOrEqual(0)]
-        private readonly int $coveredBranches,
+        private int $coveredBranches,
     ) {
     }
 

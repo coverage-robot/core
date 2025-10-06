@@ -17,15 +17,15 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\PublishableMessage\PublishableCheckRunMessageInterface;
 use Psr\Log\LoggerInterface;
 
-final class GithubCheckRunPublisherService implements PublisherServiceInterface
+final readonly class GithubCheckRunPublisherService implements PublisherServiceInterface
 {
     use GithubCheckRunAwareTrait;
 
     public function __construct(
-        private readonly TemplateRenderingService $templateRenderingService,
-        private readonly GithubAppInstallationClientInterface $client,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $checkPublisherLogger
+        private TemplateRenderingService $templateRenderingService,
+        private GithubAppInstallationClientInterface $client,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $checkPublisherLogger
     ) {
     }
 

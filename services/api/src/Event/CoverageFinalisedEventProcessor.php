@@ -14,12 +14,12 @@ use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CoverageFinalisedEventProcessor implements EventProcessorInterface
+final readonly class CoverageFinalisedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
-        private readonly LoggerInterface $eventHandlerLogger,
+        private LoggerInterface $eventHandlerLogger,
         #[Autowire(service: DynamoDbClient::class)]
-        private readonly DynamoDbClientInterface $dynamoDbClient,
+        private DynamoDbClientInterface $dynamoDbClient,
     ) {
     }
 

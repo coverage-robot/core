@@ -6,16 +6,16 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class Metadata
+final readonly class Metadata
 {
     /**
      * @param MetricDirective[] $directives
      */
     public function __construct(
         #[SerializedName('Timestamp')]
-        private readonly int $timestamp,
+        private int $timestamp,
         #[SerializedName('CloudWatchMetrics')]
-        private readonly array $directives,
+        private array $directives,
     ) {
     }
 

@@ -9,12 +9,12 @@ use Twig\Sandbox\SecurityPolicy;
 use Twig\Sandbox\SecurityPolicyInterface;
 use Twig\TwigFunction;
 
-final class CoverageTemplateSecurityPolicy implements SecurityPolicyInterface
+final readonly class CoverageTemplateSecurityPolicy implements SecurityPolicyInterface
 {
     private SecurityPolicyInterface $policy;
 
     public function __construct(
-        private readonly CoverageTemplateExtension $extension,
+        private CoverageTemplateExtension $extension,
         array $allowedTags = [],
         array $allowedFilters = [],
         array $allowedMethods = [],

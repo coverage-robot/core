@@ -51,12 +51,12 @@ use Psr\Log\LoggerInterface;
  *           }
  *      }
  */
-final class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
+final readonly class GithubCommitHistoryService implements CommitHistoryServiceInterface, ProviderAwareInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClientInterface $githubClient,
-        private readonly LoggerInterface $githubHistoryLogger,
-        private readonly MetricServiceInterface $metricService
+        private GithubAppInstallationClientInterface $githubClient,
+        private LoggerInterface $githubHistoryLogger,
+        private MetricServiceInterface $metricService
     ) {
     }
 

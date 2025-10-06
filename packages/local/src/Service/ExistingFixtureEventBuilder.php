@@ -15,11 +15,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ExistingFixtureEventBuilder implements EventBuilderInterface
+final readonly class ExistingFixtureEventBuilder implements EventBuilderInterface
 {
     public function __construct(
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly string $fixtureDirectory = __DIR__ . '/../Fixture/'
+        private SerializerInterface&DenormalizerInterface $serializer,
+        private string $fixtureDirectory = __DIR__ . '/../Fixture/'
     ) {
     }
 

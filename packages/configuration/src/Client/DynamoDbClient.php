@@ -19,7 +19,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class DynamoDbClient implements DynamoDbClientInterface
+final readonly class DynamoDbClient implements DynamoDbClientInterface
 {
     /**
      * The table name which stores the configuration settings.
@@ -30,9 +30,9 @@ final class DynamoDbClient implements DynamoDbClientInterface
     private const string TABLE_NAME = 'coverage-configuration-%s';
 
     public function __construct(
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $dynamoDbClientLogger,
-        private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $dynamoDbClientLogger,
+        private \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient
     ) {
     }
 

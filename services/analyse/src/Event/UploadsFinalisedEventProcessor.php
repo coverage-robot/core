@@ -39,21 +39,21 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class UploadsFinalisedEventProcessor implements EventProcessorInterface
+final readonly class UploadsFinalisedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
-        private readonly LoggerInterface $eventProcessorLogger,
-        private readonly MetricServiceInterface $metricService,
-        private readonly SerializerInterface&NormalizerInterface $serializer,
+        private LoggerInterface $eventProcessorLogger,
+        private MetricServiceInterface $metricService,
+        private SerializerInterface&NormalizerInterface $serializer,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
-        private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
-        private readonly CoverageComparisonServiceInterface $coverageComparisonService,
-        private readonly LineGroupingService $lineGroupingService,
-        private readonly SettingServiceInterface $settingService,
+        private CoverageAnalyserServiceInterface $coverageAnalyserService,
+        private CoverageComparisonServiceInterface $coverageComparisonService,
+        private LineGroupingService $lineGroupingService,
+        private SettingServiceInterface $settingService,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient,
+        private EventBusClientInterface $eventBusClient,
         #[Autowire(service: PublishClient::class)]
-        private readonly SqsClientInterface $publishClient
+        private SqsClientInterface $publishClient
     ) {
     }
 

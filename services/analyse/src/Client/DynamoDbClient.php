@@ -19,13 +19,13 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class DynamoDbClient implements DynamoDbClientInterface
+final readonly class DynamoDbClient implements DynamoDbClientInterface
 {
     public function __construct(
-        private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly LoggerInterface $dynamoDbClientLogger
+        private \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface&DenormalizerInterface $serializer,
+        private LoggerInterface $dynamoDbClientLogger
     ) {
     }
 

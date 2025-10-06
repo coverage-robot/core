@@ -7,16 +7,16 @@ namespace App\Model;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;
 
-final class EventStateChange
+final readonly class EventStateChange
 {
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $identifier,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly int $version,
-        private readonly array $event,
-        private readonly ?DateTimeImmutable $eventTime = null
+        private Provider $provider,
+        private string $identifier,
+        private string $owner,
+        private string $repository,
+        private int $version,
+        private array $event,
+        private ?DateTimeImmutable $eventTime = null
     ) {
     }
 

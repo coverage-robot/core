@@ -16,12 +16,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:new_project', description: 'Create a new project with tokens')]
-final class NewProjectCommand
+final readonly class NewProjectCommand
 {
     public function __construct(
-        private readonly CognitoClient $cognitoClient,
-        private readonly AuthTokenServiceInterface $authTokenService,
-        private readonly UniqueIdGeneratorService $uniqueIdGeneratorService
+        private CognitoClient $cognitoClient,
+        private AuthTokenServiceInterface $authTokenService,
+        private UniqueIdGeneratorService $uniqueIdGeneratorService
     ) {
     }
 

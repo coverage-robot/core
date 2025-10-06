@@ -10,7 +10,7 @@ use Override;
 use Packages\Contracts\Provider\ProviderAwareInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class CommitHistoryService implements CommitHistoryServiceInterface
+final readonly class CommitHistoryService implements CommitHistoryServiceInterface
 {
     /**
      * The total number of commits which should be returned per page.
@@ -36,7 +36,7 @@ final class CommitHistoryService implements CommitHistoryServiceInterface
             'app.commit_history',
             defaultIndexMethod: 'getProvider'
         )]
-        private readonly iterable $parsers
+        private iterable $parsers
     ) {
     }
 

@@ -37,12 +37,12 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the publish handler')]
-final class InvokeCommand
+final readonly class InvokeCommand
 {
     public function __construct(
         #[Autowire(service: EventHandler::class)]
-        private readonly SqsHandler $handler,
-        private readonly SerializerInterface $serializer
+        private SqsHandler $handler,
+        private SerializerInterface $serializer
     ) {
     }
 

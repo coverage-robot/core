@@ -23,12 +23,12 @@ use Symfony\Component\Serializer\Mapping\ClassDiscriminatorResolverInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class ManualInputEventBuilder implements EventBuilderInterface
+final readonly class ManualInputEventBuilder implements EventBuilderInterface
 {
     public function __construct(
-        private readonly PropertyInfoExtractorInterface $propertyInfoExtractor,
-        private readonly ClassDiscriminatorResolverInterface $classDiscriminatorFromClassMetadata,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        private PropertyInfoExtractorInterface $propertyInfoExtractor,
+        private ClassDiscriminatorResolverInterface $classDiscriminatorFromClassMetadata,
+        private SerializerInterface&DenormalizerInterface $serializer,
     ) {
     }
 

@@ -15,11 +15,11 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class BigQueryMetadataBuilderService
+final readonly class BigQueryMetadataBuilderService
 {
     public function __construct(
-        private readonly LoggerInterface $metadataBuilderServiceLogger,
-        private readonly SerializerInterface&NormalizerInterface $serializer
+        private LoggerInterface $metadataBuilderServiceLogger,
+        private SerializerInterface&NormalizerInterface $serializer
     ) {
     }
 

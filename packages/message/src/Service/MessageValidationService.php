@@ -8,10 +8,10 @@ use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Message\Exception\InvalidMessageException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class MessageValidationService
+final readonly class MessageValidationService
 {
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private ValidatorInterface $validator
     ) {
     }
 

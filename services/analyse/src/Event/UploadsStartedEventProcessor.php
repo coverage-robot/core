@@ -17,12 +17,12 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class UploadsStartedEventProcessor implements EventProcessorInterface
+final readonly class UploadsStartedEventProcessor implements EventProcessorInterface
 {
     public function __construct(
-        private readonly LoggerInterface $eventProcessorLogger,
+        private LoggerInterface $eventProcessorLogger,
         #[Autowire(service: PublishClient::class)]
-        private readonly SqsClientInterface $publishClient
+        private SqsClientInterface $publishClient
     ) {
     }
 

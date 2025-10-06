@@ -7,20 +7,20 @@ namespace App\Query\Result;
 use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class TotalCoverageQueryResult implements QueryResultInterface
+final readonly class TotalCoverageQueryResult implements QueryResultInterface
 {
     public function __construct(
         #[Assert\GreaterThanOrEqual(0)]
         #[Assert\LessThanOrEqual(100)]
-        private readonly float $coveragePercentage,
+        private float $coveragePercentage,
         #[Assert\PositiveOrZero]
-        private readonly int $lines,
+        private int $lines,
         #[Assert\PositiveOrZero]
-        private readonly int $covered,
+        private int $covered,
         #[Assert\PositiveOrZero]
-        private readonly int $partial,
+        private int $partial,
         #[Assert\PositiveOrZero]
-        private readonly int $uncovered
+        private int $uncovered
     ) {
     }
 

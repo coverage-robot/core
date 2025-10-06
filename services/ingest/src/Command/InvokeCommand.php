@@ -26,14 +26,14 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the ingest handler')]
-final class InvokeCommand
+final readonly class InvokeCommand
 {
     private const string BUCKET = 'coverage-ingest-%s';
 
     public function __construct(
         #[Autowire(service: EventHandler::class)]
-        private readonly S3Handler $handler,
-        private readonly EnvironmentServiceInterface $environmentService
+        private S3Handler $handler,
+        private EnvironmentServiceInterface $environmentService
     ) {
     }
 
@@ -48,7 +48,7 @@ final class InvokeCommand
                     'Records' => [
                         [
                             'eventSource' => 'aws:s3',
-                            'eventTime' => (new DateTimeImmutable())->format(DateTimeInterface::ATOM),
+                            'eventTime' => new DateTimeImmutable()->format(DateTimeInterface::ATOM),
                             's3' => [
                                 'bucket' => [
                                     'name' => sprintf(self::BUCKET, $this->environmentService->getEnvironment()->value),

@@ -12,14 +12,14 @@ use Packages\Contracts\Provider\Provider;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class SettingService implements SettingServiceInterface
+final readonly class SettingService implements SettingServiceInterface
 {
     public function __construct(
         #[AutowireIterator(
             'app.settings',
             defaultIndexMethod: 'getSettingKey'
         )]
-        private readonly iterable $settings
+        private iterable $settings
     ) {
     }
 

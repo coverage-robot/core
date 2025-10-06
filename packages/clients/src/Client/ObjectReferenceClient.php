@@ -11,10 +11,10 @@ use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
 use DateTimeImmutable;
 
-final class ObjectReferenceClient implements ObjectReferenceClientInterface
+final readonly class ObjectReferenceClient implements ObjectReferenceClientInterface
 {
     public function __construct(
-        private readonly S3Client $client,
+        private S3Client $client,
     ) {
     }
 

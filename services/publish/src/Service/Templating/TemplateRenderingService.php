@@ -16,11 +16,11 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-final class TemplateRenderingService
+final readonly class TemplateRenderingService
 {
     public function __construct(
         #[Autowire(service: 'app.coverage_template_environment')]
-        private readonly Environment $environment
+        private Environment $environment
     ) {
     }
 

@@ -8,15 +8,15 @@ use Packages\Telemetry\Enum\Resolution;
 use Packages\Telemetry\Enum\Unit;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class MetricDefinition
+final readonly class MetricDefinition
 {
     public function __construct(
         #[SerializedName('Name')]
-        private readonly string $name,
+        private string $name,
         #[SerializedName('Unit')]
-        private readonly Unit $unit,
+        private Unit $unit,
         #[SerializedName('StorageResolution')]
-        private readonly Resolution $resolution,
+        private Resolution $resolution,
     )
     {
     }

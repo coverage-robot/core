@@ -13,10 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class CustomPayloadEventBuilder implements EventBuilderInterface
+final readonly class CustomPayloadEventBuilder implements EventBuilderInterface
 {
     public function __construct(
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
+        private SerializerInterface&DenormalizerInterface $serializer,
     ) {
     }
 

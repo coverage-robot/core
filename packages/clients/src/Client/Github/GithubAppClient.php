@@ -44,9 +44,9 @@ class GithubAppClient extends Client
         private readonly MetricServiceInterface $metricService,
     ) {
         $builder = new Builder(
-            (new HttplugClient())
+            new HttplugClient()
                 ->withOptions(
-                    (new HttpOptions())
+                    new HttpOptions()
                         ->setTimeout(self::TIMEOUT)
                         ->toArray()
                 )

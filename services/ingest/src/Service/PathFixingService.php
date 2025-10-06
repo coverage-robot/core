@@ -9,10 +9,10 @@ use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
 
-final class PathFixingService
+final readonly class PathFixingService
 {
     public function __construct(
-        private readonly SettingServiceInterface $settingService
+        private SettingServiceInterface $settingService
     ) {
     }
 

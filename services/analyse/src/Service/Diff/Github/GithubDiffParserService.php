@@ -19,13 +19,13 @@ use Psr\Log\LoggerInterface;
 use SebastianBergmann\Diff\Line;
 use SebastianBergmann\Diff\Parser;
 
-final class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
+final readonly class GithubDiffParserService implements DiffParserServiceInterface, ProviderAwareInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClientInterface $client,
-        private readonly Parser $parser,
-        private readonly LoggerInterface $diffParserLogger,
-        private readonly MetricServiceInterface $metricService
+        private GithubAppInstallationClientInterface $client,
+        private Parser $parser,
+        private LoggerInterface $diffParserLogger,
+        private MetricServiceInterface $metricService
     ) {
     }
 

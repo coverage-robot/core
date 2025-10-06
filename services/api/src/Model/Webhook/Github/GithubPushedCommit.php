@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\SerializedPath;
  *
  * @see https://docs.github.com/en/webhooks/webhook-events-and-payloads#push
  */
-final class GithubPushedCommit implements PushedCommitInterface
+final readonly class GithubPushedCommit implements PushedCommitInterface
 {
     /**
      * @param string[] $addedFiles
@@ -22,11 +22,11 @@ final class GithubPushedCommit implements PushedCommitInterface
      * @param string[] $deletedFiles
      */
     public function __construct(
-        private readonly string $commit,
-        private readonly array $addedFiles,
-        private readonly array $modifiedFiles,
-        private readonly array $deletedFiles,
-        private readonly DateTimeImmutable $committedAt
+        private string $commit,
+        private array $addedFiles,
+        private array $modifiedFiles,
+        private array $deletedFiles,
+        private DateTimeImmutable $committedAt
     ) {
     }
 

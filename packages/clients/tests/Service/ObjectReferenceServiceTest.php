@@ -27,20 +27,16 @@ final class ObjectReferenceServiceTest extends TestCase
         $mockS3Client = $this->createMock(ObjectReferenceClientInterface::class);
         $mockS3Client->expects($this->once())
         ->method('putObject')
-        ->with($this->callback(function (PutObjectRequest $input): bool {
-            return $input->getBucket() === 'object_reference_store_name'
-                && $input->getKey() !== null
-                && $input->getBody() !== null
-                && $input->getMetadata()['service'] === Service::API->value;
-        }))
+        ->with($this->callback(fn(PutObjectRequest $input): bool => $input->getBucket() === 'object_reference_store_name'
+            && $input->getKey() !== null
+            && $input->getBody() !== null
+            && $input->getMetadata()['service'] === Service::API->value))
         ->willReturn($this->createMock(PutObjectOutput::class));
 
         $mockS3Client->expects($this->once())
         ->method('presign')
-        ->with($this->callback(function ($input): bool {
-            return $input->getBucket() === 'object_reference_store_name'
-                    && $input->getKey() !== null;
-        }))
+        ->with($this->callback(fn($input): bool => $input->getBucket() === 'object_reference_store_name'
+                && $input->getKey() !== null))
         ->willReturn('https://example.com');
 
         $objectReferenceService = new ObjectReferenceService(

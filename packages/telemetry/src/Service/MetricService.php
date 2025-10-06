@@ -21,20 +21,20 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class MetricService implements MetricServiceInterface
+final readonly class MetricService implements MetricServiceInterface
 {
-    private const NAMESPACE = 'Metrics';
+    private const string NAMESPACE = 'Metrics';
 
     public const FUNCTION_VERSION = 'functionVersion';
 
     public const FUNCTION_NAME = 'functionName';
 
     public function __construct(
-        private readonly LoggerInterface $metricsLogger,
+        private LoggerInterface $metricsLogger,
         #[Autowire(service: NativeClock::class)]
-        private readonly ClockInterface $clock,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface&NormalizerInterface $serializer
+        private ClockInterface $clock,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface&NormalizerInterface $serializer
     ) {
     }
 

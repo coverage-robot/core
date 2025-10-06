@@ -13,11 +13,11 @@ use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class IngestStarted implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final readonly class IngestStarted implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     public function __construct(
-        private readonly Upload $upload,
-        private readonly DateTimeImmutable $eventTime
+        private Upload $upload,
+        private DateTimeImmutable $eventTime
     ) {
     }
 

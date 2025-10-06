@@ -8,10 +8,10 @@ use Packages\Contracts\Event\EventInterface;
 use Packages\Event\Exception\InvalidEventException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class EventValidationService
+final readonly class EventValidationService
 {
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private ValidatorInterface $validator
     ) {
     }
 
