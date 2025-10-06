@@ -12,7 +12,6 @@ use Bref\Event\Sqs\SqsHandler;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
@@ -22,11 +21,8 @@ use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMessageCollection;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
-use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -50,23 +46,8 @@ final class InvokeCommand
     ) {
     }
 
-    public function __invoke(
-        SymfonyStyle $io,
-        #[Argument(name: 'commit', description: 'The commit to publish messages to')]
-        string $commit,
-        #[Argument(name: 'pullRequest', description: 'The pull request the commit belongs to')]
-        string $pullrequest,
-        #[Argument(name: 'repository', description: 'The repository the commit belongs to')]
-        string $repository,
-        #[Argument(name: 'owner', description: 'The owner of the repository')]
-        string $owner,
-        #[Argument(description: 'The tag of the coverage file which is being published for', name: 'tag')]
-        ?string $tag = 'mock-tag',
-        #[Argument(description: 'The ref of the commit being published to', name: 'ref')]
-        ?string $ref = 'mock-ref',
-        #[Argument(description: 'The parent of the commit being published to', name: 'parent')]
-        ?string $parent = '["mock-parent-commit"]',
-    ): int {
+    public function __invoke(SymfonyStyle $io,): int
+    {
         try {
             $validUntil = DateTimeImmutable::createFromFormat(
                 DateTimeInterface::ATOM,
