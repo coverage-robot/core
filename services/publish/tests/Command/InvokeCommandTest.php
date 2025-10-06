@@ -25,14 +25,7 @@ final class InvokeCommandTest extends KernelTestCase
 
         $command = $application->find('app:invoke');
         $commandTester = new CommandTester($command);
-        $commandTester->execute([
-            'commit' => 'mock-commit',
-            'parent' => '["mock-parent"]',
-            'owner' => 'mock-owner',
-            'tag' => 'mock-tag',
-            'repository' => 'mock-repository',
-            'pullRequest' => 'mock-pull-request'
-        ]);
+        $commandTester->execute([]);
 
         $commandTester->assertCommandIsSuccessful();
     }
