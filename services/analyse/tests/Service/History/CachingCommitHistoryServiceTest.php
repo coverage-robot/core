@@ -9,7 +9,6 @@ use App\Service\History\CachingCommitHistoryService;
 use App\Service\History\CommitHistoryService;
 use App\Service\History\CommitHistoryServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

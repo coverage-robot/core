@@ -11,7 +11,6 @@ use Override;
 use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class CoverageFilePersistService implements CoverageFilePersistServiceInterface
 {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Clients\Model\Object;
 
+use Override;
 use DateTimeInterface;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +35,7 @@ class Reference implements Stringable
         return $this->expiration;
     }
 
-    #[\Override]
+    #[Override]
     public function __toString(): string
     {
         return sprintf(

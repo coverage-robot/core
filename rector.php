@@ -37,6 +37,13 @@ return RectorConfig::configure()
         netteUtils: false, // No service use Nette
         laravel: false // No service use Laravel
     )
+    ->withImportNames(
+        importNames: true,
+        importDocBlockNames: true,
+        importShortClasses: true,
+        removeUnusedImports: true,
+    )
+    ->withAttributesSets()
     ->withTreatClassesAsFinal()
     ->withRules([
             /**

@@ -25,7 +25,7 @@ final class CoverageFinalised implements EventInterface, BaseAwareEventInterface
         private readonly ?string $baseCommit = null,
         private ?DateTimeImmutable $eventTime = null,
     ) {
-        if (!$this->eventTime instanceof \DateTimeImmutable) {
+        if (!$this->eventTime instanceof DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

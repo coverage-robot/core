@@ -9,14 +9,10 @@ use App\Exception\AuthenticationException;
 use App\Model\Tokens;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\UniqueIdGeneratorService;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'app:new_project', description: 'Create a new project with tokens')]

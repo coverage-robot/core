@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Enum\EnvironmentVariable;
 use App\Enum\OrchestratedEventState;
 use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
@@ -15,7 +14,6 @@ use App\Model\Finalised;
 use App\Model\Job;
 use App\Service\EventStoreServiceInterface;
 use App\Tests\Mock\FakeBackoffStrategy;
-use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
 use Packages\Configuration\Mock\MockEnvironmentServiceFactory;

@@ -13,8 +13,6 @@ use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use DateTimeImmutable;
 use Override;
-use Packages\Clients\Model\Object\Reference;
-use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Service\SettingServiceInterface;

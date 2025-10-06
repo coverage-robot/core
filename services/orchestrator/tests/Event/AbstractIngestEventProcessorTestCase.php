@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\AbstractIngestEventProcessor;
 use App\Event\Backoff\ReadyToFinaliseBackoffStrategy;
@@ -13,7 +12,6 @@ use App\Model\EventStateChangeCollection;
 use App\Model\Ingestion;
 use App\Service\EventStoreServiceInterface;
 use App\Tests\Mock\FakeBackoffStrategy;
-use App\Tests\Mock\FakeReadyToFinaliseBackoffStrategy;
 use DateInterval;
 use DateTimeImmutable;
 use Packages\Contracts\Provider\Provider;

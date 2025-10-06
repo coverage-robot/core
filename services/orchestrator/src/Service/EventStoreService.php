@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Client\DynamoDbClient;
 use App\Client\DynamoDbClientInterface;
 use App\Exception\EventStoreException;
 use App\Model\EventStateChange;

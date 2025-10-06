@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exception\QueryException;
-use App\Model\CoverageReport;
 use App\Model\ReportWaypoint;
 use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageQueryResult;

@@ -13,7 +13,6 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
-use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;

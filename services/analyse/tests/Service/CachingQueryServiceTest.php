@@ -7,7 +7,6 @@ namespace App\Tests\Service;
 use App\Client\DynamoDbClientInterface;
 use App\Enum\QueryParameter;
 use App\Model\QueryParameterBag;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\Result\TotalCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
 use App\Query\TotalCoverageQuery;

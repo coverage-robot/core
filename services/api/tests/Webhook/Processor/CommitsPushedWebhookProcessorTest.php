@@ -12,7 +12,6 @@ use App\Webhook\Processor\CommitsPushedWebhookProcessor;
 use DateTimeImmutable;
 use Iterator;
 use Packages\Configuration\Constant\ConfigurationFile;
-use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\ConfigurationFileChange;

@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 final class PublishableCoverageFailedJobMessage implements PublishableCheckRunMessageInterface
 {

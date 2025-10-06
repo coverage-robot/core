@@ -20,7 +20,6 @@ use Bref\Event\S3\S3Handler;
 use Bref\Event\S3\S3Record;
 use DateTimeImmutable;
 use Override;
-use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;

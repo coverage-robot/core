@@ -11,7 +11,6 @@ use App\Model\Line\Branch;
 use App\Model\Line\Method;
 use App\Model\Line\Statement;
 use App\Service\BigQueryMetadataBuilderService;
-use App\Tests\Mock\Factory\MockNormalizerFactory;
 use DateTimeImmutable;
 use Iterator;
 use Packages\Contracts\Format\CoverageFormat;

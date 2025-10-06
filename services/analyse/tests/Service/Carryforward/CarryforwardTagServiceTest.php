@@ -11,7 +11,6 @@ use App\Model\ReportWaypoint;
 use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagAvailabilityCollectionQueryResult;
 use App\Query\Result\TagAvailabilityQueryResult;
-use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\Result\UploadedTagsQueryResult;
 use App\Query\UploadedTagsQuery;
 use App\Service\Carryforward\CarryforwardTagService;

@@ -13,7 +13,6 @@ use App\Model\Webhook\WebhookInterface;
 use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
 use Override;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\JobStateChange;

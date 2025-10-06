@@ -8,7 +8,6 @@ use App\Enum\QueryParameter;
 use App\Model\CarryforwardTag;
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\Result\CoverageQueryResult;
 use App\Query\TotalCoverageQuery;
 use ArrayIterator;
 use DateTimeImmutable;

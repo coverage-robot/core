@@ -4,19 +4,9 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Client;
 
-use AsyncAws\Core\Exception\Http\HttpException;
-use AsyncAws\DynamoDb\Enum\ComparisonOperator;
-use AsyncAws\DynamoDb\Enum\Select;
-use AsyncAws\DynamoDb\Input\DeleteItemInput;
-use AsyncAws\DynamoDb\Input\PutItemInput;
-use AsyncAws\DynamoDb\Input\QueryInput;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Enum\SettingValueType;
-use Packages\Configuration\Exception\SettingNotFoundException;
-use Packages\Configuration\Exception\SettingRetrievalFailedException;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
-use Psr\Log\LoggerInterface;
 
 interface DynamoDbClientInterface
 {
