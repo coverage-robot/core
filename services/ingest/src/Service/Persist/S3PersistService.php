@@ -16,17 +16,17 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class S3PersistService implements PersistServiceInterface
+final readonly class S3PersistService implements PersistServiceInterface
 {
     private const string OUTPUT_BUCKET = 'coverage-output-%s';
 
     private const string OUTPUT_KEY = '%s%s.txt';
 
     public function __construct(
-        private readonly SimpleS3Client $s3Client,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface&NormalizerInterface $serializer,
-        private readonly LoggerInterface $s3PersistServiceLogger
+        private SimpleS3Client $s3Client,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface&NormalizerInterface $serializer,
+        private LoggerInterface $s3PersistServiceLogger
     ) {
     }
 

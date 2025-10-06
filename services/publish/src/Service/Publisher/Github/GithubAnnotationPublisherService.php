@@ -23,18 +23,18 @@ use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GithubAnnotationPublisherService implements PublisherServiceInterface
+final readonly class GithubAnnotationPublisherService implements PublisherServiceInterface
 {
     use GithubCheckRunAwareTrait;
 
     private const int MAX_ANNOTATIONS_PER_CHECK_RUN = 50;
 
     public function __construct(
-        private readonly TemplateRenderingService $templateRenderingService,
-        private readonly SettingServiceInterface $settingService,
-        private readonly GithubAppInstallationClientInterface $client,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $checkPublisherLogger
+        private TemplateRenderingService $templateRenderingService,
+        private SettingServiceInterface $settingService,
+        private GithubAppInstallationClientInterface $client,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $checkPublisherLogger
     ) {
     }
 

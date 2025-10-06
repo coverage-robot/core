@@ -17,17 +17,17 @@ use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CachingQueryService implements QueryServiceInterface
+final readonly class CachingQueryService implements QueryServiceInterface
 {
     public function __construct(
-        public readonly LoggerInterface $queryServiceLogger,
+        public LoggerInterface $queryServiceLogger,
         #[Autowire(service: QueryService::class)]
-        public readonly QueryServiceInterface $queryService,
+        public QueryServiceInterface $queryService,
         #[Autowire(service: QueryBuilderService::class)]
-        public readonly QueryBuilderServiceInterface $queryBuilderService,
+        public QueryBuilderServiceInterface $queryBuilderService,
         #[Autowire(service: DynamoDbClient::class)]
-        public readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly MetricServiceInterface $metricService
+        public DynamoDbClientInterface $dynamoDbClient,
+        private MetricServiceInterface $metricService
     ) {
     }
 

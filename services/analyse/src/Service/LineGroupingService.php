@@ -15,10 +15,10 @@ use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMes
 use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use Psr\Log\LoggerInterface;
 
-final class LineGroupingService
+final readonly class LineGroupingService
 {
     public function __construct(
-        private readonly LoggerInterface $lineGroupingLogger
+        private LoggerInterface $lineGroupingLogger
     ) {
     }
 

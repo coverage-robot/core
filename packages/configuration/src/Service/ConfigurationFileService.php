@@ -10,10 +10,10 @@ use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Yaml\Yaml;
 use WeakMap;
 
-final class ConfigurationFileService
+final readonly class ConfigurationFileService
 {
     public function __construct(
-        private readonly SettingServiceInterface $settingService
+        private SettingServiceInterface $settingService
     ) {
     }
 

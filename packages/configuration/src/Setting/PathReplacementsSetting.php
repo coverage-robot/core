@@ -20,14 +20,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class PathReplacementsSetting implements SettingInterface
+final readonly class PathReplacementsSetting implements SettingInterface
 {
     private const array DEFAULT_VALUE = [];
 
     public function __construct(
-        private readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly ValidatorInterface $validator,
+        private DynamoDbClientInterface $dynamoDbClient,
+        private SerializerInterface&DenormalizerInterface $serializer,
+        private ValidatorInterface $validator,
     ) {
     }
 

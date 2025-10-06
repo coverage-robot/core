@@ -143,7 +143,7 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
     {
         return sprintf(
             '%s#%s-%s-%s-%s-%s-%s',
-            get_class($this),
+            self::class,
             $this->provider->value,
             $this->owner,
             $this->repository,

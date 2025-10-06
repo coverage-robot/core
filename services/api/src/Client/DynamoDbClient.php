@@ -16,7 +16,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class DynamoDbClient implements DynamoDbClientInterface
+final readonly class DynamoDbClient implements DynamoDbClientInterface
 {
     private const string REPOSITORY_IDENTIFIER_COLUMN = 'repositoryIdentifier';
 
@@ -25,9 +25,9 @@ final class DynamoDbClient implements DynamoDbClientInterface
     private const string COVERAGE_PERCENTAGE_COLUMN = 'coveragePercentage';
 
     public function __construct(
-        private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $dynamoDbClientLogger
+        private \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $dynamoDbClientLogger
     ) {
     }
 

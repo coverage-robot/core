@@ -6,10 +6,11 @@ namespace Packages\Configuration\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PathReplacement
+final readonly class PathReplacement
 {
     public function __construct(
         #[Assert\NotBlank]
+        
         private string $before,
         private ?string $after,
     ) {

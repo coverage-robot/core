@@ -14,12 +14,12 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class QueryBuilderService implements QueryBuilderServiceInterface
+final readonly class QueryBuilderService implements QueryBuilderServiceInterface
 {
     public function __construct(
-        private readonly SqlFormatter $sqlFormatter,
-        private readonly SerializerInterface&NormalizerInterface $serializer,
-        private readonly ValidatorInterface $validator
+        private SqlFormatter $sqlFormatter,
+        private SerializerInterface&NormalizerInterface $serializer,
+        private ValidatorInterface $validator
     ) {
     }
 

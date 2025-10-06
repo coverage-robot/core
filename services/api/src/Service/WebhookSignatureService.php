@@ -14,14 +14,14 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\HttpFoundation\Request;
 
-final class WebhookSignatureService implements WebhookSignatureServiceInterface
+final readonly class WebhookSignatureService implements WebhookSignatureServiceInterface
 {
     /**
      * @param WebhookSignatureServiceInterface[] $webhookSignatureServices
      */
     public function __construct(
         #[AutowireIterator('app.webhook_signature', defaultIndexMethod: 'getProvider')]
-        private readonly iterable $webhookSignatureServices
+        private iterable $webhookSignatureServices
     ) {
     }
 

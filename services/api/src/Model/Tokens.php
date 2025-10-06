@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-final class Tokens
+final readonly class Tokens
 {
     public function __construct(
-        private readonly string $uploadToken,
-        private readonly string $graphToken
+        private string $uploadToken,
+        private string $graphToken
     ) {
     }
 

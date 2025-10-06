@@ -14,15 +14,15 @@ use Override;
  *
  * @template-implements Iterator<int, Item>
  */
-final class QueryResultIterator implements QueryResultInterface, Iterator, Countable
+final readonly class QueryResultIterator implements QueryResultInterface, Iterator, Countable
 {
     /**
      * @param Closure(mixed $row): Item $parser
      */
     public function __construct(
-        private readonly Iterator $rows,
-        private readonly int $count,
-        private readonly Closure $parser
+        private Iterator $rows,
+        private int $count,
+        private Closure $parser
     ) {
     }
 

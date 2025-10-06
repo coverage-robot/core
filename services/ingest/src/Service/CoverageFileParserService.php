@@ -12,12 +12,12 @@ use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class CoverageFileParserService implements CoverageFileParserServiceInterface
+final readonly class CoverageFileParserService implements CoverageFileParserServiceInterface
 {
     public function __construct(
         #[AutowireIterator('app.parser_strategy')]
-        private readonly iterable $parserStrategies,
-        private readonly LoggerInterface $parseStrategyLogger
+        private iterable $parserStrategies,
+        private LoggerInterface $parseStrategyLogger
     ) {
     }
 

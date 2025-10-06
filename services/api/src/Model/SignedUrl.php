@@ -7,15 +7,15 @@ namespace App\Model;
 use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class SignedUrl
+final readonly class SignedUrl
 {
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $uploadId,
+        private string $uploadId,
         #[Assert\Url]
-        private readonly string $signedUrl,
+        private string $signedUrl,
         #[Assert\GreaterThan('now')]
-        private readonly DateTimeInterface $expiration
+        private DateTimeInterface $expiration
     ) {
     }
 

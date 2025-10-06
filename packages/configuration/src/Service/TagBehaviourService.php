@@ -11,10 +11,10 @@ use Packages\Contracts\Provider\Provider;
  * A wrapper around the default, and individual tag behaviour settings, which helps
  * to simplify querying behaviours for a specific tag.
  */
-final class TagBehaviourService
+final readonly class TagBehaviourService
 {
     public function __construct(
-        private readonly SettingServiceInterface $settingService
+        private SettingServiceInterface $settingService
     ) {
     }
 

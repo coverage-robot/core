@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use ValueError;
 use XMLReader;
 
-final class CloverParseStrategy implements ParseStrategyInterface
+final readonly class CloverParseStrategy implements ParseStrategyInterface
 {
     private const string PROJECT = 'project';
 
@@ -35,8 +35,8 @@ final class CloverParseStrategy implements ParseStrategyInterface
     private const string CONDITION = 'cond';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger,
-        private readonly PathFixingService $pathFixingService
+        private LoggerInterface $parseStrategyLogger,
+        private PathFixingService $pathFixingService
     ) {
     }
 

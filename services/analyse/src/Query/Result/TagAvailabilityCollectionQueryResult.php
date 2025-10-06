@@ -8,7 +8,7 @@ use OutOfBoundsException;
 use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class TagAvailabilityCollectionQueryResult implements QueryResultInterface
+final readonly class TagAvailabilityCollectionQueryResult implements QueryResultInterface
 {
     /**
      * @param TagAvailabilityQueryResult[] $tagAvailability
@@ -17,7 +17,7 @@ final class TagAvailabilityCollectionQueryResult implements QueryResultInterface
         #[Assert\All([
             new Assert\Type(type: TagAvailabilityQueryResult::class)
         ])]
-        private readonly array $tagAvailability
+        private array $tagAvailability
     ) {
     }
 

@@ -9,10 +9,10 @@ use App\Model\Webhook\WebhookInterface;
 use Packages\Message\Exception\InvalidMessageException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class WebhookValidationService
+final readonly class WebhookValidationService
 {
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private ValidatorInterface $validator
     ) {
     }
 

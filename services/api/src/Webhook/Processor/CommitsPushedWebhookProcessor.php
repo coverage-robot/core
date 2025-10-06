@@ -22,14 +22,14 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
+final readonly class CommitsPushedWebhookProcessor implements WebhookProcessorInterface
 {
     public function __construct(
-        private readonly LoggerInterface $webhookProcessorLogger,
+        private LoggerInterface $webhookProcessorLogger,
         #[Autowire(service: EventBusClient::class)]
-        private readonly EventBusClientInterface $eventBusClient,
+        private EventBusClientInterface $eventBusClient,
         #[Autowire(service: CognitoClient::class)]
-        private readonly CognitoClientInterface $cognitoClient
+        private CognitoClientInterface $cognitoClient
     ) {
     }
 

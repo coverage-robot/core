@@ -10,10 +10,10 @@ namespace Packages\Configuration\Model;
  *
  * @see TagBehaviourService
  */
-final class DefaultTagBehaviour
+final readonly class DefaultTagBehaviour
 {
     public function __construct(
-        private readonly bool $carryforward
+        private bool $carryforward
     ) {
     }
 

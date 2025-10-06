@@ -16,13 +16,13 @@ use Random\Randomizer;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 
-final class AuthTokenService implements AuthTokenServiceInterface
+final readonly class AuthTokenService implements AuthTokenServiceInterface
 {
     public function __construct(
         #[Autowire(service: CognitoClient::class)]
-        private readonly CognitoClientInterface $cognitoClient,
-        private readonly Randomizer $randomizer,
-        private readonly LoggerInterface $authTokenLogger
+        private CognitoClientInterface $cognitoClient,
+        private Randomizer $randomizer,
+        private LoggerInterface $authTokenLogger
     ) {
     }
 

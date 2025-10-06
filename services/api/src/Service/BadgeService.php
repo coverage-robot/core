@@ -10,12 +10,12 @@ use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 
-final class BadgeService implements BadgeServiceInterface
+final readonly class BadgeService implements BadgeServiceInterface
 {
     public function __construct(
-        private readonly Environment $twig,
+        private Environment $twig,
         #[Autowire(value: '%twig.default_path%')]
-        private readonly string $twigDefaultPath
+        private string $twigDefaultPath
     ) {
     }
 

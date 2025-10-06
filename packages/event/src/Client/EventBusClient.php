@@ -28,7 +28,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class EventBusClient implements EventBusClientInterface
+final readonly class EventBusClient implements EventBusClientInterface
 {
     /**
      * The event bus name which has all of the coverage events published to it.
@@ -58,17 +58,17 @@ final class EventBusClient implements EventBusClientInterface
 
     public function __construct(
         #[Autowire(value: '%event_bus.name%')]
-        private readonly string $eventBusName,
+        private string $eventBusName,
         #[Autowire(value: '%event_bus.event_bus_arn%')]
-        private readonly string $eventBusArn,
+        private string $eventBusArn,
         #[Autowire(value: '%event_bus.scheduler_role_arn%')]
-        private readonly string $schedulerRoleArn,
-        private readonly EventBridgeClient $eventBridgeClient,
-        private readonly SchedulerClient $schedulerClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer,
-        private readonly EventValidationService $eventValidationService,
-        private readonly LoggerInterface $eventBusClientLogger
+        private string $schedulerRoleArn,
+        private EventBridgeClient $eventBridgeClient,
+        private SchedulerClient $schedulerClient,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface $serializer,
+        private EventValidationService $eventValidationService,
+        private LoggerInterface $eventBusClientLogger
     ) {
     }
 

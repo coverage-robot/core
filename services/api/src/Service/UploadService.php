@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class UploadService implements UploadServiceInterface
+final readonly class UploadService implements UploadServiceInterface
 {
     private const string TARGET_BUCKET = 'coverage-ingest-%s';
 
@@ -27,12 +27,12 @@ final class UploadService implements UploadServiceInterface
 
     public function __construct(
         #[Autowire(service: UploadSignerService::class)]
-        private readonly UploadSignerServiceInterface $uploadSignerService,
-        private readonly EnvironmentServiceInterface $environmentService,
+        private UploadSignerServiceInterface $uploadSignerService,
+        private EnvironmentServiceInterface $environmentService,
         #[Autowire(service: UniqueIdGeneratorService::class)]
-        private readonly UniqueIdGeneratorServiceInterface $uniqueIdGeneratorService,
-        private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
-        private readonly LoggerInterface $uploadLogger
+        private UniqueIdGeneratorServiceInterface $uniqueIdGeneratorService,
+        private SerializerInterface&NormalizerInterface&DenormalizerInterface $serializer,
+        private LoggerInterface $uploadLogger
     ) {
     }
 

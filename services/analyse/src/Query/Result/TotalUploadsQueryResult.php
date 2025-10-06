@@ -9,7 +9,7 @@ use Override;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class TotalUploadsQueryResult implements QueryResultInterface
+final readonly class TotalUploadsQueryResult implements QueryResultInterface
 {
     /**
      * @param string[] $successfulUploads
@@ -21,16 +21,16 @@ final class TotalUploadsQueryResult implements QueryResultInterface
             new Assert\Type(type: 'string'),
             new Assert\NotBlank()
         ])]
-        private readonly array $successfulUploads,
+        private array $successfulUploads,
         #[Assert\All([
             new Assert\Type(type: DateTimeImmutable::class),
             new Assert\LessThanOrEqual(value: 'now')
         ])]
-        private readonly array $successfulIngestTimes,
+        private array $successfulIngestTimes,
         #[Assert\All([
             new Assert\Type(type: Tag::class)
         ])]
-        private readonly array $successfulTags
+        private array $successfulTags
     ) {
     }
 

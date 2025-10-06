@@ -19,7 +19,7 @@ use STS\Backoff\Strategies\LinearStrategy;
  *
  * The retry interval is: 0ms, 500ms, 500ms
  */
-final class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
+final readonly class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterface
 {
     private Backoff $backoff;
 
