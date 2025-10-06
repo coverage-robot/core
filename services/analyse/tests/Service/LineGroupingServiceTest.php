@@ -10,12 +10,13 @@ use App\Query\Result\QueryResultIterator;
 use App\Service\LineGroupingService;
 use ArrayIterator;
 use DateTimeImmutable;
+use DateTimeInterface;
 use Iterator;
 use Packages\Contracts\Line\LineState;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Message\PublishableMessage\PublishableMessageInterface;
+use Packages\Message\PublishableMessage\PublishableLineCommentInterface;
 use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage;
 use Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,8 +26,9 @@ use Psr\Log\NullLogger;
 final class LineGroupingServiceTest extends TestCase
 {
     /**
-     * @param array<string, int[]> $diff
-     * @param \Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMessage[]|\Packages\Message\PublishableMessage\PublishablePartialBranchLineCommentMessage[] $expectedAnnotations
+     * @param array<string, array<int, int>> $diff
+     * @param QueryResultIterator<LineCoverageQueryResult> $lineCoverage
+     * @param PublishableLineCommentInterface[] $expectedAnnotations
      */
     #[DataProvider('diffDataProvider')]
     public function testGroupingAnnotationsAgainstDiff(
@@ -52,7 +54,9 @@ final class LineGroupingServiceTest extends TestCase
     }
 
     /**
-     * @return Iterator<string, list{ EventInterface, \DateTimeInterface, array<string, int[]>, QueryResultInterface, PublishableMessageInterface[]}>
+     * phpcs:disable
+     * @return Iterator<string, list{ EventInterface, DateTimeInterface, array<string, array<int, int>>, QueryResultIterator<LineCoverageQueryResult>, PublishableLineCommentInterface[]}>
+     * phpcs:enable
      */
     public static function diffDataProvider(): Iterator
     {

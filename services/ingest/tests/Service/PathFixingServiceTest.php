@@ -49,7 +49,7 @@ final class PathFixingServiceTest extends TestCase
     }
 
     /**
-     * @return Iterator<object{ string, string, PathReplacement[], string }>
+     * @return Iterator<list{ string, string, PathReplacement[], string }>
      */
     public static function configurationDataProvider(): Iterator
     {

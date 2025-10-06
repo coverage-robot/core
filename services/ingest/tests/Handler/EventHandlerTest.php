@@ -285,7 +285,7 @@ final class EventHandlerTest extends KernelTestCase
 
     /**
      * @throws InvalidLambdaEvent
-     * @return Iterator<string, object{ S3Event, string[], string[] }>
+     * @return Iterator<string, list{ S3Event, string[], string[] }>
      */
     public static function validS3EventDataProvider(): Iterator
     {
