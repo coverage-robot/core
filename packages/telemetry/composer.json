@@ -20,7 +20,8 @@
         "estahn/phpunit-json-assertions": "^4.0",
         "symfony/property-access": "^7.1",
         "bref/bref": "^2.1",
-        "rector/rector": "^2.0"
+        "rector/rector": "^2.0",
+        "vimeo/psalm": "^6.13"
     },
     "autoload": {
         "psr-4": {
