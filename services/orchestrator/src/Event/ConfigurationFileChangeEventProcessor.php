@@ -16,7 +16,7 @@ use Packages\Event\Model\ConfigurationFileChange;
 use Packages\Event\Processor\EventProcessorInterface;
 use Psr\Log\LoggerInterface;
 
-final class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
+final readonly class ConfigurationFileChangeEventProcessor implements EventProcessorInterface
 {
     private const array REFS = [
         'main',
@@ -24,9 +24,9 @@ final class ConfigurationFileChangeEventProcessor implements EventProcessorInter
     ];
 
     public function __construct(
-        private readonly LoggerInterface $eventProcessorLogger,
-        private readonly GithubAppInstallationClientInterface $githubAppInstallationClient,
-        private readonly ConfigurationFileService $configurationFileService
+        private LoggerInterface $eventProcessorLogger,
+        private GithubAppInstallationClientInterface $githubAppInstallationClient,
+        private ConfigurationFileService $configurationFileService
     ) {
     }
 

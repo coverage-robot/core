@@ -6,11 +6,11 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class RootNode
+final readonly class RootNode
 {
     public function __construct(
         #[SerializedName('_aws')]
-        private readonly Metadata $metadata
+        private Metadata $metadata
     ) {
     }
 

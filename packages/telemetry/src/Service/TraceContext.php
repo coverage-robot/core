@@ -9,7 +9,7 @@ use Packages\Telemetry\Enum\EnvironmentVariable;
 
 final class TraceContext
 {
-    private const LAMBDA_INVOCATION_CONTEXT = 'LAMBDA_INVOCATION_CONTEXT';
+    private const string LAMBDA_INVOCATION_CONTEXT = 'LAMBDA_INVOCATION_CONTEXT';
 
     /**
      * For event-based handlers (i.e. not HTTP requests) the invocation context is
@@ -39,7 +39,7 @@ final class TraceContext
         }
 
         /** @var array $context */
-        $context = json_decode($_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
+        $context = json_decode((string) $_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
 
         if (empty($context['traceId'] ?? '')) {
             return;

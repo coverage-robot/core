@@ -18,7 +18,7 @@ use STS\Backoff\Strategies\PolynomialStrategy;
  *
  * The retry interval is: 0ms, 400ms, 900ms, 1600ms, 2500ms
  */
-final class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
+final readonly class ReadyToFinaliseBackoffStrategy implements BackoffStrategyInterface
 {
     private Backoff $backoff;
 

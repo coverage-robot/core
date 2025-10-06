@@ -75,7 +75,7 @@ class ObjectReferenceService
         $metadata = [
             'service' => $this->environmentService->getService()->value,
             'event' => $event instanceof EventInterface ? (string) $event : '(not provided)',
-            'created_at' => (new DateTime())->format(DateTimeInterface::ATOM),
+            'created_at' => new DateTime()->format(DateTimeInterface::ATOM),
         ];
 
         $this->client->putObject(
