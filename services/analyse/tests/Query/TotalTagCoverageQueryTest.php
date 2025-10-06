@@ -23,6 +23,9 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         return TotalTagCoverageQuery::class;
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -136,6 +139,9 @@ final class TotalTagCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

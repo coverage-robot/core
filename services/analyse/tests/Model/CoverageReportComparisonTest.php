@@ -52,6 +52,9 @@ final class CoverageReportComparisonTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<string, list{ CoverageReport, CoverageReport, int}>
+     */
     public static function coverageChangesDataProvider(): Iterator
     {
         yield 'No change in total coverage' => [
@@ -392,6 +395,9 @@ final class CoverageReportComparisonTest extends TestCase
         ];
     }
 
+    /**
+     * @return Iterator<string, list{ CoverageReport, CoverageReport, int}>
+     */
     public static function uncoveredLineChangesDataProvider(): Iterator
     {
         yield '+2 change in uncovered lines' => [
@@ -644,7 +650,6 @@ final class CoverageReportComparisonTest extends TestCase
                 ),
             ),
             0
-
         ];
     }
 }

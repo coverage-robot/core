@@ -112,6 +112,9 @@ final class QueryBuilderServiceTest extends KernelTestCase
         );
     }
 
+    /**
+     * @param array<value-of<QueryParameter, string> $parameters
+     */
     #[DataProvider('hashProvider')]
     public function testHashingIsPredictableRegardlessOfArrayOrder(
         string $queryClass,
@@ -139,6 +142,9 @@ final class QueryBuilderServiceTest extends KernelTestCase
         $this->assertSame($expectedHash, $hash);
     }
 
+    /**
+     * @return Iterator<list{ string, array<value-of<QueryParameter, string>, string>>
+     */
     public static function hashProvider(): Iterator
     {
         yield [

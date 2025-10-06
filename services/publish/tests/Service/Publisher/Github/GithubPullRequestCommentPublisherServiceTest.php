@@ -220,6 +220,9 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
         );
     }
 
+    /**
+     * @return Iterator<list{ EventInterface, bool }>
+     */
     #[Override]
     public static function supportsDataProvider(): Iterator
     {

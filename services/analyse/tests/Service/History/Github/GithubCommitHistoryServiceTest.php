@@ -29,6 +29,10 @@ final class GithubCommitHistoryServiceTest extends TestCase
         $this->assertSame(Provider::GITHUB->value, $service->getProvider());
     }
 
+    /**
+     * @param array<int, array<array<string, array<int, array<string, bool|string>>>|string>> $response
+     * @param array<int, array<bool|string|null>> $expectedCommits
+     */
     #[DataProvider('commitDataProvider')]
     public function testGetPrecedingCommits(
         int $page,
@@ -117,6 +121,9 @@ final class GithubCommitHistoryServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<string, array>
+     */
     public static function commitDataProvider(): Iterator
     {
         yield 'First page' => [

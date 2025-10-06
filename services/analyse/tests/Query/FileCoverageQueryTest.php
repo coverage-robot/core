@@ -22,6 +22,9 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         return FileCoverageQuery::class;
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -176,6 +179,9 @@ final class FileCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

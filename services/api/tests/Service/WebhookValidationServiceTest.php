@@ -37,6 +37,9 @@ final class WebhookValidationServiceTest extends TestCase
         }
     }
 
+    /**
+     * @return Iterator<list{ GithubPushWebhook, bool }>
+     */
     public static function webhookDataProvider(): Iterator
     {
         yield [

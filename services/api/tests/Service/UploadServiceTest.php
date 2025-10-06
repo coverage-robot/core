@@ -47,6 +47,9 @@ final class UploadServiceTest extends KernelTestCase
         $uploadService->getSigningParametersFromRequest($request);
     }
 
+    /**
+     * @param array<string, string[]|string> $parameters
+     */
     #[DataProvider('signingParametersDataProvider')]
     public function testGetSigningParametersFromRequest(array $parameters, ?SigningParameters $expectedParameters): void
     {
@@ -69,6 +72,9 @@ final class UploadServiceTest extends KernelTestCase
         $this->assertEquals($expectedParameters, $signingParameters);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     #[DataProvider('signingParametersDataProvider')]
     public function testSignedParentIsJsonEncoded(array $parameters, ?SigningParameters $expectedParameters): void
     {
@@ -173,6 +179,9 @@ final class UploadServiceTest extends KernelTestCase
         );
     }
 
+    /**
+     * @return Iterator<string, list{ array<string, mixed>, SigningParameters|null }>
+     */
     public static function signingParametersDataProvider(): Iterator
     {
         yield 'With pull request' => [

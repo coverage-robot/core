@@ -28,6 +28,9 @@ final class CarryforwardTag extends Tag
         parent::__construct($name, $commit, $successfullyUploadedLines);
     }
 
+    /**
+     * @return DateTimeImmutable[]
+     */
     public function getIngestTimes(): array
     {
         return $this->ingestTimes;

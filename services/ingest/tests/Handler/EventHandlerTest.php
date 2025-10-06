@@ -44,6 +44,8 @@ final class EventHandlerTest extends KernelTestCase
     /**
      * @throws Exception
      * @throws InvalidLambdaEvent
+     * @param string[] $coverageFiles
+     * @param string[] $expectedOutputKeys
      */
     #[DataProvider('validS3EventDataProvider')]
     public function testSuccessfullyHandleS3(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
@@ -91,6 +93,10 @@ final class EventHandlerTest extends KernelTestCase
         $handler->handleS3($event, Context::fake());
     }
 
+    /**
+     * @param string[] $coverageFiles
+     * @param string[] $expectedOutputKeys
+     */
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3FailsToRetrieve(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
@@ -185,6 +191,11 @@ final class EventHandlerTest extends KernelTestCase
         );
     }
 
+    /**
+     * @param string[] $coverageFiles
+     * @param string[] $expectedOutputKeys
+     * @throws InvalidLambdaEvent
+     */
     #[DataProvider('validS3EventDataProvider')]
     public function testHandleS3FailsToDelete(S3Event $event, array $coverageFiles, array $expectedOutputKeys): void
     {
@@ -274,6 +285,7 @@ final class EventHandlerTest extends KernelTestCase
 
     /**
      * @throws InvalidLambdaEvent
+     * @return Iterator<string, object{ S3Event, string[], string[] }>
      */
     public static function validS3EventDataProvider(): Iterator
     {

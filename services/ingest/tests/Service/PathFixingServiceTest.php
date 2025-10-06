@@ -15,6 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 final class PathFixingServiceTest extends TestCase
 {
+    /**
+     * @param PathReplacement[] $pathReplacements
+     */
     #[DataProvider('configurationDataProvider')]
     public function testFixingPathsWithDifferentSettings(
         string $path,
@@ -45,6 +48,9 @@ final class PathFixingServiceTest extends TestCase
         $this->assertSame($expectedPath, $fixedPath);
     }
 
+    /**
+     * @return Iterator<object{ string, string, PathReplacement[], string }>
+     */
     public static function configurationDataProvider(): Iterator
     {
         yield [
