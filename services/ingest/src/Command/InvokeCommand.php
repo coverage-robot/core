@@ -11,13 +11,11 @@ use Bref\Event\S3\S3Event;
 use Bref\Event\S3\S3Handler;
 use DateTimeImmutable;
 use DateTimeInterface;
-use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -28,7 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the ingest handler')]
-final class InvokeCommand extends Command
+final class InvokeCommand
 {
     private const string BUCKET = 'coverage-ingest-%s';
 
@@ -37,18 +35,13 @@ final class InvokeCommand extends Command
         private readonly S3Handler $handler,
         private readonly EnvironmentServiceInterface $environmentService
     ) {
-        parent::__construct();
     }
 
-    #[Override]
-    protected function configure(): void
-    {
-        $this->addArgument('key', InputArgument::REQUIRED, 'The key of the file to retrieve');
-    }
-
-    #[Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The key of the file to retrieve', name: 'key')]
+        string $key,
+    ): int {
         try {
             $this->handler->handleS3(
                 new S3Event([
@@ -62,7 +55,7 @@ final class InvokeCommand extends Command
                                     'arn' => 'mock-arn'
                                 ],
                                 'object' => [
-                                    'key' => $input->getArgument('key')
+                                    'key' => $key
                                 ]
                             ]
                         ]
@@ -73,7 +66,7 @@ final class InvokeCommand extends Command
 
             return Command::SUCCESS;
         } catch (InvalidLambdaEvent $invalidLambdaEvent) {
-            $output->writeln($invalidLambdaEvent->getMessage());
+            $io->writeln($invalidLambdaEvent->getMessage());
             return Command::FAILURE;
         }
     }
