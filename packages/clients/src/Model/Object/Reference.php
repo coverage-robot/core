@@ -9,7 +9,7 @@ use DateTimeInterface;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class Reference implements Stringable
+final class Reference implements Stringable
 {
     public function __construct(
         #[Assert\NotBlank]

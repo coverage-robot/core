@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class PublishableMissingCoverageLineCommentMessage implements PublishableLineCommentInterface
 {
+    private DateTimeImmutable $validUntil;
+
     public function __construct(
         private readonly EventInterface $event,
         #[Assert\NotBlank]
@@ -21,12 +23,11 @@ final class PublishableMissingCoverageLineCommentMessage implements PublishableL
         private readonly int $startLineNumber,
         #[Assert\GreaterThanOrEqual(1)]
         private readonly int $endLineNumber,
-        private ?DateTimeImmutable $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof DateTimeImmutable) {
-            $this->validUntil = new DateTimeImmutable();
-        }
+        $this->validUntil = $validUntil ?? new DateTimeImmutable();
     }
+
 
     #[Override]
     public function getEvent(): EventInterface

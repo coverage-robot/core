@@ -42,6 +42,7 @@ final readonly class MetricService implements MetricServiceInterface
      * @inheritDoc
      *
      * @param int|float|(int|float)[] $value
+     * @param string[][]|null $dimensions
      */
     #[Override]
     public function put(
@@ -108,6 +109,8 @@ final readonly class MetricService implements MetricServiceInterface
 
     /**
      * Format a singular metric into the Embedded Metric Format.
+     *
+     * @param string[][] $dimensions
      *
      * @throws ExceptionInterface
      */

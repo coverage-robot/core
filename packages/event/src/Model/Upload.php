@@ -15,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
+    private DateTimeImmutable $eventTime;
+
     /**
      * @param string[] $parent
      */
@@ -32,11 +34,9 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         private readonly string|int|null $pullRequest = null,
         private readonly ?string $baseCommit = null,
         private readonly ?string $baseRef = null,
-        private ?DateTimeImmutable $eventTime = null
+        ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof DateTimeImmutable) {
-            $this->eventTime = new DateTimeImmutable();
-        }
+        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Assert\NotBlank]

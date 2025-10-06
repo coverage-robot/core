@@ -12,6 +12,8 @@ use Packages\Contracts\Provider\Provider;
 
 final class UploadsStarted implements EventInterface, BaseAwareEventInterface
 {
+    private DateTimeImmutable $eventTime;
+
     public function __construct(
         private readonly Provider $provider,
         private readonly string $projectId,
@@ -22,11 +24,9 @@ final class UploadsStarted implements EventInterface, BaseAwareEventInterface
         private readonly string|int|null $pullRequest = null,
         private readonly ?string $baseRef = null,
         private readonly ?string $baseCommit = null,
-        private ?DateTimeImmutable $eventTime = null
+        ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof DateTimeImmutable) {
-            $this->eventTime = new DateTimeImmutable();
-        }
+        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]

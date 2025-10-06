@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\HttplugClient;
 use Symfony\Component\HttpClient\HttpOptions;
 
-class GithubAppClient extends Client
+final class GithubAppClient extends Client
 {
     private bool $isAuthenticated = false;
 

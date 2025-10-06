@@ -104,10 +104,12 @@ final readonly class PathReplacementsSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): array
     {
+        /** @var PathReplacement[] $pathReplacements */
         $pathReplacements = [];
 
         foreach ((array) $value as $item) {
-            $pathReplacements[] = match (true) {
+            /** @var PathReplacement $pathReplacement */
+            $pathReplacement = match (true) {
                 $item instanceof AttributeValue => new PathReplacement(
                     $item->getM()['before']->getS(),
                     $item->getM()['after']->getS()
@@ -119,6 +121,8 @@ final readonly class PathReplacementsSetting implements SettingInterface
                 ),
                 default => $item,
             };
+
+            $pathReplacements[] = $pathReplacement;
         }
 
         return $this->validate($pathReplacements);
@@ -177,7 +181,12 @@ final readonly class PathReplacementsSetting implements SettingInterface
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+            throw new InvalidSettingValueException(
+                sprintf(
+                    "Invalid value for setting: %s",
+                    $violations
+                )
+            );
         }
 
         /** @var PathReplacement[] $value */

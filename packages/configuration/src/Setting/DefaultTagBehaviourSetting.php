@@ -106,9 +106,10 @@ final readonly class DefaultTagBehaviourSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): DefaultTagBehaviour
     {
+        /** @var DefaultTagBehaviour $value */
         $value = match (true) {
             $value instanceof AttributeValue => new DefaultTagBehaviour(
-                $value->getM()['carryforward']->getBool()
+                $value->getM()['carryforward']->getBool() ?: true
             ),
             is_array($value) => $this->serializer->denormalize(
                 $value,
@@ -158,7 +159,12 @@ final readonly class DefaultTagBehaviourSetting implements SettingInterface
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+            throw new InvalidSettingValueException(
+                sprintf(
+                    "Invalid value for setting: %s",
+                    $violations
+                )
+            );
         }
 
         /** @var DefaultTagBehaviour $value */

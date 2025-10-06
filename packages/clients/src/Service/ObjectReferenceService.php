@@ -19,7 +19,7 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
-class ObjectReferenceService
+final class ObjectReferenceService
 {
     public function __construct(
         #[Autowire(value: '%object_reference_store.name%')]
@@ -34,7 +34,7 @@ class ObjectReferenceService
     /**
      * Resolve an object reference into a resource which contains the content of the object.
      *
-     * @return resource
+     * @return resource|false
      */
     public function resolveReference(Reference $reference): mixed
     {

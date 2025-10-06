@@ -27,7 +27,7 @@ interface SettingInterface
         Provider $provider,
         string $owner,
         string $repository,
-        $value
+        mixed $value
     ): bool;
 
     /**

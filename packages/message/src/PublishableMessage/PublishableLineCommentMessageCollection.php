@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class PublishableLineCommentMessageCollection implements PublishableMessageInterface, Countable
 {
+    private DateTimeImmutable $validUntil;
+
     /**
      * @param PublishableLineCommentInterface[] $messages
      */
@@ -23,19 +25,22 @@ final class PublishableLineCommentMessageCollection implements PublishableMessag
             new Assert\Type(type: PublishableLineCommentInterface::class)
         ])]
         private readonly array $messages,
-        private ?DateTimeImmutable $validUntil = null
+        ?DateTimeImmutable $validUntil = null
     ) {
-        if ($this->validUntil instanceof DateTimeImmutable) {
+        if ($validUntil instanceof DateTimeImmutable) {
+            $this->validUntil = $validUntil;
             return;
         }
 
         if ($this->messages === []) {
             $this->validUntil = new DateTimeImmutable();
         } else {
-            $this->validUntil = max(
-                array_map(
-                    static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
-                    $this->messages
+            $this->validUntil = DateTimeImmutable::createFromInterface(
+                max(
+                    array_map(
+                        static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
+                        $this->messages
+                    )
                 )
             );
         }

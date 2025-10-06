@@ -39,12 +39,15 @@ final class TraceContext
         }
 
         /** @var array $context */
-        $context = json_decode((string) $_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
+        $context = json_decode($_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
 
-        if (empty($context['traceId'] ?? '')) {
+        /** @var string $traceId */
+        $traceId = ($context['traceId'] ?? '');
+
+        if ($traceId === "") {
             return;
         }
 
-        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $context['traceId']);
+        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $traceId);
     }
 }

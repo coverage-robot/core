@@ -16,6 +16,7 @@ use Packages\Clients\Exception\ClientException;
 class JwtGenerator
 {
     /**
+     * @param non-empty-string $privateKeyFile
      * @throws Exception
      */
     public function generate(string $issuer, string $privateKeyFile): UnencryptedToken

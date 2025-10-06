@@ -24,6 +24,7 @@ interface MetricServiceInterface
      * will ingest and process.
      *
      * @param int|float|(int|float)[] $value
+     * @param string[][]|null $dimensions
      */
     public function put(
         string $metric,

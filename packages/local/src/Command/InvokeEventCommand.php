@@ -7,12 +7,14 @@ namespace Packages\Local\Command;
 use Bref\Context\Context;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
+use LogicException;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Handler\EventHandler;
 use Packages\Event\Model\EventInterface;
 use Packages\Local\Service\EventBuilderInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -134,12 +136,20 @@ final class InvokeEventCommand extends Command
      * Select the highest priority event builder and use it
      * to build a valid event which should be invoked against
      * the event handler.
+     *
+     * @throws LogicException
      */
     private function buildEvent(
         InputInterface $input,
         OutputInterface $output,
         Event $event
     ): ?EventInterface {
+        $helperSet = $this->getHelperSet();
+
+        if (!$helperSet instanceof HelperSet) {
+            throw new LogicException("Unable to get helper set to build event with.");
+        }
+
         foreach ($this->eventBuilders as $eventBuilder) {
             if (!$eventBuilder->supports($input, $event)) {
                 continue;
@@ -148,7 +158,7 @@ final class InvokeEventCommand extends Command
             return $eventBuilder->build(
                 $input,
                 $output,
-                $this->getHelperSet(),
+                $helperSet,
                 $event
             );
         }

@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class UtilisationAmendment implements EventInterface
 {
+    private DateTimeImmutable $eventTime;
+
     public function __construct(
         private readonly Provider $provider,
         private readonly string $projectId,
@@ -21,11 +23,9 @@ final class UtilisationAmendment implements EventInterface
         private readonly string $commit,
         private readonly int $analysedCoverage,
         private readonly string|int|null $pullRequest = null,
-        private ?DateTimeImmutable $eventTime = null,
+        ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof DateTimeImmutable) {
-            $this->eventTime = new DateTimeImmutable();
-        }
+        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]

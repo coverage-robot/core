@@ -11,13 +11,13 @@ use Packages\Event\Model\EventInterface;
 
 final class PublishableCoverageFailedJobMessage implements PublishableCheckRunMessageInterface
 {
+    private DateTimeImmutable $validUntil;
+
     public function __construct(
         private readonly EventInterface $event,
-        private ?DateTimeImmutable $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof DateTimeImmutable) {
-            $this->validUntil = new DateTimeImmutable();
-        }
+        $this->validUntil = $validUntil ?? new DateTimeImmutable();
     }
 
     #[Override]

@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 final readonly class MetricDirective
 {
     /**
-     * @param string[][]|null $dimensions
+     * @param string[][] $dimensions
      * @param MetricDefinition[] $metrics
      */
     public function __construct(

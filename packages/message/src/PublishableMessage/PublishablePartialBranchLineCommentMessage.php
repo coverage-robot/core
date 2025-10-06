@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class PublishablePartialBranchLineCommentMessage implements PublishableLineCommentInterface
 {
+    private DateTimeImmutable $validUntil;
+
     public function __construct(
         private readonly EventInterface $event,
         #[Assert\NotBlank]
@@ -24,12 +26,11 @@ final class PublishablePartialBranchLineCommentMessage implements PublishableLin
         private readonly int $totalBranches,
         #[Assert\PositiveOrZero]
         private readonly int $coveredBranches,
-        private ?DateTimeImmutable $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof DateTimeImmutable) {
-            $this->validUntil = new DateTimeImmutable();
-        }
+        $this->validUntil = $validUntil ?? new DateTimeImmutable();
     }
+
 
     #[Override]
     public function getEvent(): EventInterface

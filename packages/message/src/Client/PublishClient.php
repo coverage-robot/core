@@ -9,6 +9,8 @@ use AsyncAws\Sqs\Enum\MessageSystemAttributeNameForSends;
 use AsyncAws\Sqs\Input\GetQueueUrlRequest;
 use AsyncAws\Sqs\Input\SendMessageRequest;
 use AsyncAws\Sqs\SqsClient;
+use AsyncAws\Sqs\ValueObject\MessageAttributeValue;
+use AsyncAws\Sqs\ValueObject\MessageSystemAttributeValue;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
@@ -18,6 +20,7 @@ use Packages\Telemetry\Enum\EnvironmentVariable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class PublishClient implements SqsClientInterface
@@ -59,11 +62,26 @@ final readonly class PublishClient implements SqsClientInterface
             return false;
         }
 
-        $request = [
-            'QueueUrl' => $this->getQueueUrl($this->getPublishQueueName()),
-            'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
-            'MessageGroupId' => $publishableMessage->getMessageGroup(),
-        ];
+        try {
+            $request = [
+                'QueueUrl' => $this->getQueueUrl($this->getPublishQueueName()),
+                'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
+                'MessageGroupId' => $publishableMessage->getMessageGroup(),
+            ];
+        } catch (ExceptionInterface $e) {
+            $this->publishClientLogger->error(
+                sprintf(
+                    'Unable to dispatch %s as it failed to serialize.',
+                    (string)$publishableMessage
+                ),
+                [
+                    'exception' => $e,
+                    'message' => $publishableMessage
+                ]
+            );
+
+            return false;
+        }
 
         return $this->dispatchWithTraceHeader($request);
     }
@@ -71,7 +89,15 @@ final readonly class PublishClient implements SqsClientInterface
     /**
      * Publish an SQS message onto the queue, with the trace header if it exists.
      *
-     * @param array<string, string> $request
+     * @param array{
+     *    QueueUrl?: string,
+     *    MessageBody?: string,
+     *    DelaySeconds?: null|int,
+     *    MessageAttributes?: null|array<string, MessageAttributeValue|array>,
+     *    MessageSystemAttributes?: null|array<MessageSystemAttributeNameForSends::*, MessageSystemAttributeValue|array>,
+     *    MessageDeduplicationId?: null|string,
+     *    MessageGroupId?: null|string,
+     *  } $request
      */
     private function dispatchWithTraceHeader(array $request): bool
     {
@@ -86,16 +112,14 @@ final readonly class PublishClient implements SqsClientInterface
              * @see TraceContext
              */
             $request['MessageSystemAttributes'] = [
-                MessageSystemAttributeNameForSends::AWSTRACE_HEADER => [
+                MessageSystemAttributeNameForSends::AWSTRACE_HEADER => new MessageSystemAttributeValue([
                     'StringValue' => $this->environmentService->getVariable(EnvironmentVariable::X_AMZN_TRACE_ID),
                     'DataType' => 'String',
-                ],
+                ]),
             ];
         }
 
-        $response = $this->sqsClient->sendMessage(
-            new SendMessageRequest($request)
-        );
+        $response = $this->sqsClient->sendMessage(new SendMessageRequest($request));
 
         try {
             $response->resolve();

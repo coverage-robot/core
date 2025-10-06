@@ -9,10 +9,10 @@ use Packages\Configuration\Enum\SettingKey;
 use Packages\Contracts\Provider\Provider;
 use Override;
 
-class MockSettingService implements SettingServiceInterface
+final class MockSettingService implements SettingServiceInterface
 {
     public function __construct(
-        private readonly array $settings = []
+        private array $settings = []
     ) {
     }
 

@@ -8,6 +8,9 @@ use Override;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @api
+ */
 class Tag implements Stringable
 {
     /**

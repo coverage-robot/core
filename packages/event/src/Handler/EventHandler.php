@@ -15,6 +15,7 @@ use Packages\Event\Service\EventProcessorServiceInterface;
 use Packages\Event\Service\EventValidationService;
 use Packages\Telemetry\Service\TraceContext;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -28,6 +29,9 @@ final class EventHandler extends EventBridgeHandler
     ) {
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Override]
     public function handleEventBridge(EventBridgeEvent $event, Context $context): void
     {
@@ -35,16 +39,17 @@ final class EventHandler extends EventBridgeHandler
 
         $eventType = Event::from($event->getDetailType());
 
-        $event = $this->serializer->denormalize(
+        /** @var EventInterface $eventModel */
+        $eventModel = $this->serializer->denormalize(
             $event->getDetail(),
             EventInterface::class
         );
 
-        $this->eventValidationService->validate($event);
+        $this->eventValidationService->validate($eventModel);
 
         $this->eventProcessorService->process(
             $eventType,
-            $event
+            $eventModel
         );
     }
 }

@@ -11,7 +11,11 @@ use Packages\Configuration\Service\TagBehaviourService;
 
 final class MockTagBehaviourServiceFactory
 {
-    public static function createMock($tagsToCarryforward = []): TagBehaviourService
+    /**
+     * @param array<string, bool> $tagsToCarryforward
+     * @return TagBehaviourService
+     */
+    public static function createMock(array $tagsToCarryforward = []): TagBehaviourService
     {
         $mockSettingService = MockSettingServiceFactory::createMock(
             [

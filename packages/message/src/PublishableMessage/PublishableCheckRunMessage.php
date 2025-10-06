@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class PublishableCheckRunMessage implements PublishableCheckRunMessageInterface
 {
+    private DateTimeImmutable $validUntil;
+
     public function __construct(
         private readonly EventInterface $event,
         private readonly PublishableCheckRunStatus $status,
@@ -23,11 +25,9 @@ final class PublishableCheckRunMessage implements PublishableCheckRunMessageInte
         #[Assert\LessThanOrEqual(100)]
         #[Assert\GreaterThanOrEqual(-100)]
         private readonly ?float $coverageChange = 0,
-        private ?DateTimeImmutable $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof DateTimeImmutable) {
-            $this->validUntil = new DateTimeImmutable();
-        }
+        $this->validUntil = $validUntil ?? new DateTimeImmutable();
     }
 
     #[Override]
