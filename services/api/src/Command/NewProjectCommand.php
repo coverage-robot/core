@@ -57,10 +57,12 @@ final class NewProjectCommand
                 $graphToken
             )
         );
+
         if ($created) {
             $io->writeln(sprintf('New upload token: %s, New graph token: %s', $uploadToken, $graphToken));
             return Command::SUCCESS;
         }
+
         $io->writeln('Failed to create project');
         return Command::FAILURE;
     }
