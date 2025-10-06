@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Event\Tests\Service;
 
+use Iterator;
 use Packages\Contracts\Event\EventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
@@ -36,7 +37,10 @@ final class EventValidationServiceTest extends TestCase
         }
     }
 
-    public static function eventDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ Upload, bool }>
+     */
+    public static function eventDataProvider(): Iterator
     {
         yield [
             new Upload(

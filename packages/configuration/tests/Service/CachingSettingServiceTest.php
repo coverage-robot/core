@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Tests\Service;
 
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Configuration\Service\CachingSettingService;
@@ -136,7 +137,10 @@ final class CachingSettingServiceTest extends TestCase
         );
     }
 
-    public static function settingValueDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ string|bool }>
+     */
+    public static function settingValueDataProvider(): Iterator
     {
         yield [
             'some-string'

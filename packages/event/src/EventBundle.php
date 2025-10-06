@@ -60,6 +60,8 @@ final class EventBundle extends AbstractBundle
 
     /**
      * Extract any configuration values from the configuration and populate the container with them.
+     *
+     * @param array<string, mixed> $config
      */
     private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
     {

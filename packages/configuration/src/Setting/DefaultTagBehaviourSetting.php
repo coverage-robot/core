@@ -128,6 +128,7 @@ final class DefaultTagBehaviourSetting implements SettingInterface
     }
 
     /**
+     * @return AttributeValue[]
      * @throws InvalidSettingValueException
      */
     #[Override]

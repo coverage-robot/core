@@ -6,6 +6,7 @@ namespace Packages\Telemetry\Tests\Service;
 
 use DateTimeImmutable;
 use EnricoStahn\JsonAssert\Assert;
+use Iterator;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Telemetry\Enum\EnvironmentVariable;
 use Packages\Telemetry\Enum\Resolution;
@@ -129,6 +130,11 @@ final class MetricServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param array<int, string[]> $dimensions
+     * @param array<string, int> $properties
+     * @throws Exception
+     */
     #[DataProvider('putMetricDataProvider')]
     public function testIncrementMetrics(
         string $metric,
@@ -213,7 +219,10 @@ final class MetricServiceTest extends TestCase
         );
     }
 
-    public static function putMetricDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ string, int, Unit, Resolution, string[][], array<string, int> }>
+     */
+    public static function putMetricDataProvider(): Iterator
     {
         yield [
             'mock-metric',

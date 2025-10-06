@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Message\Tests\Service;
 
+use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Contracts\Tag\Tag;
@@ -37,7 +38,10 @@ final class MessageValidationServiceTest extends TestCase
         }
     }
 
-    public static function messageDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ PublishablePullRequestMessage, bool }>
+     */
+    public static function messageDataProvider(): Iterator
     {
         yield [
             new PublishablePullRequestMessage(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Tests\Service;
 
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Exception\InvalidSettingValueException;
 use Packages\Configuration\Service\SettingService;
@@ -143,14 +144,20 @@ final class SettingServiceTest extends TestCase
         );
     }
 
-    public static function trueFalseDataProvider(): \Iterator
+    /**
+     * @return Iterator<string, bool>
+     */
+    public static function trueFalseDataProvider(): Iterator
     {
         yield 'True' => [true];
 
         yield 'False' => [false];
     }
 
-    public static function settingValueDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ string|bool }>
+     */
+    public static function settingValueDataProvider(): Iterator
     {
         yield [
             'some-string'

@@ -17,6 +17,9 @@ final class Dimensions
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function getDimension(): array
     {
         return $this->dimension;

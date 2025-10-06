@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Tests\Service;
 
+use Iterator;
 use Packages\Configuration\Client\DynamoDbClientInterface;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\LineCommentType;
@@ -25,6 +26,10 @@ use Symfony\Component\Validator\Validation;
 
 final class ConfigurationFileServiceTest extends TestCase
 {
+    /**
+     * @param string $yaml
+     * @param array<string, value-of<LineCommentType>> $expectedParsedFile
+     */
     #[DataProvider('configurationFileDataProvider')]
     public function testParsingToFile(
         string $yaml,
@@ -116,7 +121,10 @@ final class ConfigurationFileServiceTest extends TestCase
         );
     }
 
-    public static function configurationFileDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ string, array<string, LineCommentType> }>
+     */
+    public static function configurationFileDataProvider(): Iterator
     {
         yield [
             <<<YAML

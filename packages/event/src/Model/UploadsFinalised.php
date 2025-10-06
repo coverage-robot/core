@@ -64,6 +64,9 @@ final class UploadsFinalised implements EventInterface, ParentAwareEventInterfac
         return $this->commit;
     }
 
+    /**
+     * @return string[]
+     */
     #[Override]
     public function getParent(): array
     {
