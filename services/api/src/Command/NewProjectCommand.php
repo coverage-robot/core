@@ -42,8 +42,7 @@ final class NewProjectCommand
         string $owner,
         #[Argument(name: 'provider', description: 'The VCS provider the repository belongs to')]
         string $provider,
-    ): int
-    {
+    ): int {
         $uploadToken = $this->authTokenService->createNewUploadToken();
         $graphToken = $this->authTokenService->createNewGraphToken();
         $created = $this->cognitoClient->createProject(
