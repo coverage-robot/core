@@ -148,6 +148,9 @@ final class GithubWebhookSignatureServiceTest extends TestCase
         }
     }
 
+    /**
+     * @return Iterator<string[]>
+     */
     public static function invalidPayloadSignatureHeaderDataProvider(): Iterator
     {
         yield [

@@ -53,6 +53,9 @@ final class CommitsPushedWebhookProcessorTest extends TestCase
         $processor->process($webhook);
     }
 
+    /**
+     * @return Iterator<string, list{ GithubPushWebhook, bool }>
+     */
     public static function pushedCommitsDataProvider(): Iterator
     {
         yield 'No configuration file push (single commit)' => [

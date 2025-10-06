@@ -497,6 +497,9 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
         );
     }
 
+    /**
+     * @return Iterator<list{ EventInterface, bool }>
+     */
     #[Override]
     public static function supportsDataProvider(): Iterator
     {

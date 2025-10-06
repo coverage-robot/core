@@ -244,6 +244,9 @@ final class UploadControllerTest extends WebTestCase
         );
     }
 
+    /**
+     * @return Iterator<string, SigningParameters>
+     */
     public static function validPayloadDataProvider(): Iterator
     {
         yield 'With pull request' => [

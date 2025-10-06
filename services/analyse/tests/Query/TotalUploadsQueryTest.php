@@ -19,6 +19,9 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
         return TotalUploadsQuery::class;
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {
@@ -100,6 +103,9 @@ final class TotalUploadsQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {

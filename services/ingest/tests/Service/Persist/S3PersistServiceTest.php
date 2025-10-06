@@ -30,6 +30,9 @@ use Packages\Contracts\Environment\Service;
 
 final class S3PersistServiceTest extends KernelTestCase
 {
+    /**
+     * @param non-empty-list<string> $expectedWrittenLines
+     */
     #[DataProvider('coverageDataProvider')]
     public function testPersist(
         Upload $upload,

@@ -19,6 +19,9 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         return TagAvailabilityQuery::class;
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -41,6 +44,9 @@ final class TagAvailabilityQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return array[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

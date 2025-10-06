@@ -20,12 +20,17 @@ use InvalidArgumentException;
 use Iterator;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class EventStoreServiceTest extends KernelTestCase
 {
+    /**
+     * @param array<string, string> $expectedStateChange
+     * @throws Exception
+     */
     #[DataProvider('orchestratedEventsDataProvider')]
     public function testCalculatingStateChangeBetweenEvents(
         ?OrchestratedEventInterface $currentState,
@@ -353,6 +358,9 @@ final class EventStoreServiceTest extends KernelTestCase
         );
     }
 
+    /**
+     * @return Iterator<list{ Ingestion|null, Ingestion, array<string, mixed> }>
+     */
     public static function orchestratedEventsDataProvider(): Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');
@@ -436,6 +444,9 @@ final class EventStoreServiceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Iterator<array<array<int, mixed>, mixed>>
+     */
     public static function stateChangesDataProvider(): Iterator
     {
         $eventTime = new DateTimeImmutable('2021-01-01T00:00:00+00:00');

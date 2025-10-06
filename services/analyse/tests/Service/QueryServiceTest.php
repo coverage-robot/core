@@ -32,6 +32,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class QueryServiceTest extends KernelTestCase
 {
+    /**
+     * @param array<string, int|float> $bigQueryResponse
+     */
     #[DataProvider('queryDataProvider')]
     public function testRunQuery(
         string $query,
@@ -230,6 +233,9 @@ final class QueryServiceTest extends KernelTestCase
         $queryService->runQuery(TotalCoverageQuery::class, new QueryParameterBag());
     }
 
+    /**
+     * @return Iterator<string, list{ string, array<string, int|float>, QueryResultInterface }>
+     */
     public static function queryDataProvider(): Iterator
     {
         yield 'Total coverage query' => [

@@ -72,6 +72,7 @@ final class CachingCarryforwardTagService implements CarryforwardTagServiceInter
      * waypoint and tags.
      *
      * @return CarryforwardTag[]|null
+     * @param Tag[] $existingTags
      */
     private function lookupExistingValueInCache(ReportWaypoint $waypoint, array $existingTags): ?array
     {

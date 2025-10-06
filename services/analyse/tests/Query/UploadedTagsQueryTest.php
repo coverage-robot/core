@@ -20,6 +20,9 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         return UploadedTagsQuery::class;
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -39,6 +42,9 @@ final class UploadedTagsQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

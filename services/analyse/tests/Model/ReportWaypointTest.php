@@ -46,6 +46,9 @@ final class ReportWaypointTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<string, list{ ReportWaypoint, ReportWaypoint, bool}>
+     */
     public static function waypointProvider(): Iterator
     {
         yield 'Waypoints on same ref' => [

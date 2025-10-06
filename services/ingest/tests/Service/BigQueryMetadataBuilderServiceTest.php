@@ -101,6 +101,9 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
         );
     }
 
+    /**
+     * @param array<string, array<string|int>> $expectedMetadata
+     */
     #[DataProvider('lineDataProvider')]
     public function testBuildMetadata(AbstractLine $line, array $expectedMetadata): void
     {
@@ -114,6 +117,9 @@ final class BigQueryMetadataBuilderServiceTest extends KernelTestCase
         $this->assertEquals($expectedMetadata, $metadata);
     }
 
+    /**
+     * @return Iterator<value-of<LineType>, list{ AbstractLine, array<string, string|int> }>
+     */
     public static function lineDataProvider(): Iterator
     {
         yield LineType::BRANCH->value => [

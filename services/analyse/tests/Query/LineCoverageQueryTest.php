@@ -23,6 +23,9 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         return LineCoverageQuery::class;
     }
 
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -131,6 +134,9 @@ final class LineCoverageQueryTest extends AbstractQueryTestCase
         ];
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

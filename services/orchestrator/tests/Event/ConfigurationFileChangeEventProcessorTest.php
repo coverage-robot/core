@@ -109,6 +109,9 @@ final class ConfigurationFileChangeEventProcessorTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<list{ EventInterface, bool }>
+     */
     public static function eventDataProvider(): Iterator
     {
         yield [

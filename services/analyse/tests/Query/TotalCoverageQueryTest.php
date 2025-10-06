@@ -17,6 +17,9 @@ use Packages\Contracts\Provider\Provider;
 
 final class TotalCoverageQueryTest extends AbstractQueryTestCase
 {
+    /**
+     * @return QueryParameterBag[]
+     */
     #[Override]
     public static function getQueryParameters(): array
     {
@@ -137,6 +140,9 @@ final class TotalCoverageQueryTest extends AbstractQueryTestCase
         return TotalCoverageQuery::class;
     }
 
+    /**
+     * @return ArrayIterator[]
+     */
     #[Override]
     public static function getQueryResults(): array
     {

@@ -201,6 +201,9 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         );
     }
 
+    /**
+     * @return Iterator<list{ EventInterface, bool }>
+     */
     #[Override]
     public static function supportsDataProvider(): Iterator
     {

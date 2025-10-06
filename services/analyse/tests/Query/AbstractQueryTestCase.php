@@ -102,6 +102,9 @@ abstract class AbstractQueryTestCase extends KernelTestCase
         }
     }
 
+    /**
+     * @return QueryParameterBag[][]
+     */
     public static function queryParametersDataProvider(): array
     {
         return array_map(
@@ -112,6 +115,9 @@ abstract class AbstractQueryTestCase extends KernelTestCase
         );
     }
 
+    /**
+     * @return iterable[][]
+     */
     public static function queryResultsDataProvider(): array
     {
         return array_map(

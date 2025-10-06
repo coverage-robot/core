@@ -71,6 +71,9 @@ final class BadgeServiceTest extends KernelTestCase
         );
     }
 
+    /**
+     * @return Iterator<list{ float|null, string, float }>
+     */
     public static function projectCoverageDataProvider(): Iterator
     {
         yield [
@@ -110,6 +113,9 @@ final class BadgeServiceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return array<string, list{ float|null, bool }>
+     */
     public static function projectCoverageWithIconsDataProvider(): array
     {
         return array_reduce(

@@ -105,6 +105,8 @@ enum QueryParameter: string
      *
      * These parameters **must** be ones that BigQuery can parse and convert into values (i.e.
      * when an object, it must implement `ValueInterface` or be a `DateTimeInterface`).
+     *
+     * @return QueryParameter[]
      */
     public static function getSupportedBigQueryParameters(): array
     {

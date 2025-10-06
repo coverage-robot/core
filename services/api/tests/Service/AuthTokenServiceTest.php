@@ -303,6 +303,9 @@ final class AuthTokenServiceTest extends TestCase
         $this->assertSame(AuthTokenService::TOKEN_LENGTH, strlen($generatedToken) / 2);
     }
 
+    /**
+     * @return Iterator<string, list{ string|null, string|null }>
+     */
     public static function authorizationHeaderDataProvider(): Iterator
     {
         yield 'No Authorization' => [

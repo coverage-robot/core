@@ -47,6 +47,9 @@ final class TemplateRenderingServiceTest extends KernelTestCase
         $this->assertMatchesSnapshot($markdown);
     }
 
+    /**
+     * @return Iterator<list{PublishableMessageInterface, string}>
+     */
     public static function messageDataProvider(): Iterator
     {
         $event = new Upload(

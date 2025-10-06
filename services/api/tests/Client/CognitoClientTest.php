@@ -250,6 +250,9 @@ final class CognitoClientTest extends TestCase
         );
     }
 
+    /**
+     * @return Iterator<string, list{ TokenType, string }>
+     */
     public static function successfulTokenDataProvider(): Iterator
     {
         yield 'Valid upload token' => [TokenType::UPLOAD, 'upload-token'];
@@ -257,6 +260,9 @@ final class CognitoClientTest extends TestCase
         yield 'Valid graph token' => [TokenType::GRAPH, 'graph-token'];
     }
 
+    /**
+     * @return Iterator<string, list{ TokenType, string }>
+     */
     public static function invalidTokenDataProvider(): Iterator
     {
         yield 'Invalid upload token' => [TokenType::UPLOAD, 'invalid-upload-token'];

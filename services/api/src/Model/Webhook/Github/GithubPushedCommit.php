@@ -37,6 +37,9 @@ final class GithubPushedCommit implements PushedCommitInterface
         return $this->commit;
     }
 
+    /**
+     * @return string[]
+     */
     #[SerializedPath('[added]')]
     #[Override]
     public function getAddedFiles(): array
@@ -44,6 +47,9 @@ final class GithubPushedCommit implements PushedCommitInterface
         return $this->addedFiles;
     }
 
+    /**
+     * @return string[]
+     */
     #[SerializedPath('[modified]')]
     #[Override]
     public function getModifiedFiles(): array
@@ -52,6 +58,9 @@ final class GithubPushedCommit implements PushedCommitInterface
     }
 
 
+    /**
+     * @return string[]
+     */
     #[SerializedPath('[removed]')]
     #[Override]
     public function getDeletedFiles(): array
