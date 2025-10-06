@@ -10,7 +10,7 @@ use Override;
 use Packages\Contracts\Provider\ProviderAwareInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class DiffParserService implements DiffParserServiceInterface
+final readonly class DiffParserService implements DiffParserServiceInterface
 {
     /**
      * @param (DiffParserServiceInterface&ProviderAwareInterface)[] $parsers
@@ -21,7 +21,7 @@ final class DiffParserService implements DiffParserServiceInterface
             defaultIndexMethod: 'getProvider',
             exclude: ['CachingDiffParserService', 'DiffParserService']
         )]
-        private readonly iterable $parsers
+        private iterable $parsers
     ) {
     }
 

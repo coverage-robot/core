@@ -18,7 +18,7 @@ use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class LcovParseStrategy implements ParseStrategyInterface
+final readonly class LcovParseStrategy implements ParseStrategyInterface
 {
     private const string FILE = 'SF';
 
@@ -50,8 +50,8 @@ final class LcovParseStrategy implements ParseStrategyInterface
     public const string END_OF_RECORD_MARKER = 'end_of_record';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger,
-        private readonly PathFixingService $pathFixingService
+        private LoggerInterface $parseStrategyLogger,
+        private PathFixingService $pathFixingService
     ) {
     }
 

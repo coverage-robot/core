@@ -16,7 +16,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CoverageComparisonService implements CoverageComparisonServiceInterface
+final readonly class CoverageComparisonService implements CoverageComparisonServiceInterface
 {
     /**
      * The maximum number of pages of results to fetch from the commit history service.
@@ -26,9 +26,9 @@ final class CoverageComparisonService implements CoverageComparisonServiceInterf
     public const int MAX_COMMIT_HISTORY_COMMITS = 500;
 
     public function __construct(
-        private readonly LoggerInterface $coverageComparisonServiceLogger,
+        private LoggerInterface $coverageComparisonServiceLogger,
         #[Autowire(service: CachingCoverageAnalyserService::class)]
-        private readonly CoverageAnalyserServiceInterface $coverageAnalyserService,
+        private CoverageAnalyserServiceInterface $coverageAnalyserService,
     ) {
     }
 

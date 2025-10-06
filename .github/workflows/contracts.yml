@@ -13,13 +13,15 @@ on:
         branches:
             - main
         paths:
-            - '.github/workflows/contracts.yml'
-            - 'packages/contracts/**'
+            - ".github/workflows/contracts.yml"
+            - "packages/contracts/**"
+            - "rector.php"
 
     pull_request:
         paths:
-            - '.github/workflows/contracts.yml'
-            - 'packages/contracts/**'
+            - ".github/workflows/contracts.yml"
+            - "packages/contracts/**"
+            - "rector.php"
 
     workflow_dispatch:
 
@@ -30,14 +32,14 @@ concurrency:
 defaults:
     run:
         shell: bash
-        working-directory: './packages/contracts/'
+        working-directory: "./packages/contracts/"
 
 env:
     # PHP version to use for deploying - this should be included in the supported versions
     # defined in the build/lint/test jobs
     target-php-version: "8.4"
 
-    working-directory: './packages/contracts/'
+    working-directory: "./packages/contracts/"
 
 jobs:
     contracts-tests:
@@ -47,24 +49,22 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [
-                    "8.4"
-                ]
+                php-version: ["8.4"]
 
         steps:
-            -   uses: actions/checkout@v5
+            - uses: actions/checkout@v5
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php-version }}
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
 
-            -   name: Validate Composer configuration
-                run: composer validate
+            - name: Validate Composer configuration
+              run: composer validate
 
-            -   name: Install Composer dependencies
-                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative
-                env:
-                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative
+              env:
+                  COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
-            -   name: Run Rector
-                run: composer lint:rector
+            - name: Run Rector
+              run: composer lint:rector

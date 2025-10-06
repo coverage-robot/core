@@ -12,12 +12,12 @@ use Packages\Event\Model\Upload;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class CoverageFilePersistService implements CoverageFilePersistServiceInterface
+final readonly class CoverageFilePersistService implements CoverageFilePersistServiceInterface
 {
     public function __construct(
         #[AutowireIterator('app.persist_service', defaultPriorityMethod: 'getPriority')]
-        private readonly iterable $persistServices,
-        private readonly LoggerInterface $persistServiceLogger
+        private iterable $persistServices,
+        private LoggerInterface $persistServiceLogger
     ) {
     }
 

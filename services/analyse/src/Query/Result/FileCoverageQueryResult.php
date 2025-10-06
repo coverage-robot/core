@@ -7,34 +7,34 @@ namespace App\Query\Result;
 use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class FileCoverageQueryResult implements QueryResultInterface
+final readonly class FileCoverageQueryResult implements QueryResultInterface
 {
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $fileName,
+        private string $fileName,
         #[Assert\GreaterThanOrEqual(0)]
         #[Assert\LessThanOrEqual(100)]
-        private readonly float $coveragePercentage,
+        private float $coveragePercentage,
         #[Assert\All([
             new Assert\Type('int'),
             new Assert\Positive(),
         ])]
-        private readonly array $lines,
+        private array $lines,
         #[Assert\All([
             new Assert\Type('int'),
             new Assert\Positive(),
         ])]
-        private readonly array $coveredLines,
+        private array $coveredLines,
         #[Assert\All([
             new Assert\Type('int'),
             new Assert\Positive(),
         ])]
-        private readonly array $partialLines,
+        private array $partialLines,
         #[Assert\All([
             new Assert\Type('int'),
             new Assert\Positive(),
         ])]
-        private readonly array $uncoveredLines,
+        private array $uncoveredLines,
     ) {
     }
 

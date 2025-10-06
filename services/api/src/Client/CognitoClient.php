@@ -25,7 +25,7 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class CognitoClient implements CognitoClientInterface
+final readonly class CognitoClient implements CognitoClientInterface
 {
     private const string PROJECT_ID_ATTRIBUTE = 'custom:project_id';
 
@@ -38,9 +38,9 @@ final class CognitoClient implements CognitoClientInterface
     private const string GRAPH_TOKEN_ATTRIBUTE = 'custom:graph_token';
 
     public function __construct(
-        private readonly CognitoIdentityProviderClient $cognitoClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $cognitoClientLogger
+        private CognitoIdentityProviderClient $cognitoClient,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $cognitoClientLogger
     ) {
     }
 
@@ -366,14 +366,12 @@ final class CognitoClient implements CognitoClientInterface
 
             $attributes = array_reduce(
                 $project->getUserAttributes(),
-                function (array $attributes, AttributeType $attributeType): array {
-                    return array_merge(
-                        $attributes,
-                        [
-                            $attributeType->getName() => $attributeType->getValue()
-                        ]
-                    );
-                },
+                fn(array $attributes, AttributeType $attributeType): array => array_merge(
+                    $attributes,
+                    [
+                        $attributeType->getName() => $attributeType->getValue()
+                    ]
+                ),
                 []
             );
 

@@ -11,18 +11,18 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishableMessageCollection implements PublishableMessageInterface, Countable
+final readonly class PublishableMessageCollection implements PublishableMessageInterface, Countable
 {
     /**
      * @param PublishableMessageInterface[] $messages
      */
     public function __construct(
-        private readonly EventInterface $event,
+        private EventInterface $event,
         #[Assert\NotBlank]
         #[Assert\All([
             new Assert\Type(type: PublishableMessageInterface::class)
         ])]
-        private readonly array $messages,
+        private array $messages,
     ) {
     }
 
@@ -65,9 +65,7 @@ final class PublishableMessageCollection implements PublishableMessageInterface,
                 $this->event->getProvider()->value,
                 $this->event->getOwner(),
                 $this->event->getRepository(),
-                $this->event->getPullRequest() !== null ?
-                    $this->event->getPullRequest() :
-                    $this->event->getCommit()
+                $this->event->getPullRequest() ?? $this->event->getCommit()
             ])
         );
     }

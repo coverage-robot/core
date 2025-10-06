@@ -15,15 +15,15 @@ use Twig\Extra\String\StringExtension;
 use Twig\Loader\FilesystemLoader;
 use Twig\RuntimeLoader\ContainerRuntimeLoader;
 
-final class CoverageTemplateEnvironmentFactory
+final readonly class CoverageTemplateEnvironmentFactory
 {
     public function __construct(
         #[Autowire(value: '%kernel.project_dir%')]
         private string $rootDirectory,
         #[AutowireLocator('app.template_available')]
-        private readonly ContainerInterface $container,
-        private readonly CoverageTemplateSecurityPolicy $securityPolicy,
-        private readonly CoverageTemplateExtension $coverageTemplateExtension
+        private ContainerInterface $container,
+        private CoverageTemplateSecurityPolicy $securityPolicy,
+        private CoverageTemplateExtension $coverageTemplateExtension
     ) {
     }
 

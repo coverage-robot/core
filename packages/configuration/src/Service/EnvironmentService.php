@@ -11,12 +11,12 @@ use Packages\Contracts\Environment\Service;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-final class EnvironmentService implements EnvironmentServiceInterface
+final readonly class EnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(
-        private readonly KernelInterface $kernel,
+        private KernelInterface $kernel,
         #[Autowire(value: '%configuration.service%')]
-        private readonly Service $service,
+        private Service $service,
     ) {
     }
 

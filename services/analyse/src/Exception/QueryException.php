@@ -17,7 +17,7 @@ final class QueryException extends Exception
         return new self(
             sprintf(
                 'Invalid query result with type %s. Violations: %s',
-                get_class($result),
+                $result::class,
                 (string)$errors
             )
         );

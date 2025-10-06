@@ -71,7 +71,7 @@ final class InvokeEventCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $event = Event::tryFrom(strtoupper($input->getArgument('event')));
+        $event = Event::tryFrom(strtoupper((string) $input->getArgument('event')));
 
         if (!$event instanceof Event) {
             $output->writeln(

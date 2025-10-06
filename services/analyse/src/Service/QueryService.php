@@ -17,19 +17,19 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class QueryService implements QueryServiceInterface
+final readonly class QueryService implements QueryServiceInterface
 {
     /**
      * @param QueryInterface[] $queries
      */
     public function __construct(
-        private readonly BigQueryClient $bigQueryClient,
+        private BigQueryClient $bigQueryClient,
         #[AutowireIterator('app.coverage_query')]
-        private readonly iterable $queries,
+        private iterable $queries,
         #[Autowire(service: QueryBuilderService::class)]
-        private readonly QueryBuilderServiceInterface $queryBuilderService,
-        private readonly LoggerInterface $queryServiceLogger,
-        private readonly MetricServiceInterface $metricService
+        private QueryBuilderServiceInterface $queryBuilderService,
+        private LoggerInterface $queryServiceLogger,
+        private MetricServiceInterface $metricService
     ) {
     }
 

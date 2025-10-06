@@ -23,19 +23,19 @@ use Packages\Telemetry\Enum\Unit;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 
-final class GcsPersistService implements PersistServiceInterface
+final readonly class GcsPersistService implements PersistServiceInterface
 {
     public const string OUTPUT_BUCKET = 'coverage-loadable-data-%s';
 
     private const string OUTPUT_KEY = '%s%s.json';
 
     public function __construct(
-        private readonly StorageClient $googleCloudStorageClient,
-        private readonly BigQueryClient $bigQueryClient,
-        private readonly BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $gcsPersistServiceLogger,
-        private readonly MetricServiceInterface $metricService
+        private StorageClient $googleCloudStorageClient,
+        private BigQueryClient $bigQueryClient,
+        private BigQueryMetadataBuilderService $bigQueryMetadataBuilderService,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $gcsPersistServiceLogger,
+        private MetricServiceInterface $metricService
     ) {
     }
 

@@ -20,7 +20,7 @@ use RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class PublishClient implements SqsClientInterface
+final readonly class PublishClient implements SqsClientInterface
 {
     /**
      * The SQS queue (FIFO) which is used to publish messages to version control providers.
@@ -31,11 +31,11 @@ final class PublishClient implements SqsClientInterface
     private const string PUBLISH_QUEUE_NAME = 'coverage-publish-%s.fifo';
 
     public function __construct(
-        private readonly SqsClient $sqsClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer,
-        private readonly MessageValidationService $messageValidationService,
-        private readonly LoggerInterface $publishClientLogger
+        private SqsClient $sqsClient,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface $serializer,
+        private MessageValidationService $messageValidationService,
+        private LoggerInterface $publishClientLogger
     ) {
     }
 

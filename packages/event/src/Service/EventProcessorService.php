@@ -12,15 +12,15 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class EventProcessorService implements EventProcessorServiceInterface
+final readonly class EventProcessorService implements EventProcessorServiceInterface
 {
     /**
      * @param array<value-of<Event>, EventProcessorInterface> $eventProcessors
      */
     public function __construct(
-        private readonly LoggerInterface $eventProcessorLogger,
+        private LoggerInterface $eventProcessorLogger,
         #[AutowireIterator('event.processor', defaultIndexMethod: 'getEvent')]
-        private readonly iterable $eventProcessors
+        private iterable $eventProcessors
     ) {
     }
 
@@ -45,7 +45,7 @@ final class EventProcessorService implements EventProcessorServiceInterface
             sprintf(
                 'Processing %s using %s.',
                 $eventType->value,
-                get_class($processor)
+                $processor::class
             )
         );
 

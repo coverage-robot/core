@@ -20,13 +20,13 @@ use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
+final readonly class GithubPullRequestCommentPublisherService implements PublisherServiceInterface
 {
     public function __construct(
-        private readonly GithubAppInstallationClientInterface $client,
-        private readonly TemplateRenderingService $templateRenderingService,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $pullRequestPublisherLogger
+        private GithubAppInstallationClientInterface $client,
+        private TemplateRenderingService $templateRenderingService,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $pullRequestPublisherLogger
     ) {
     }
 

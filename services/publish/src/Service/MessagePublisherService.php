@@ -12,16 +12,16 @@ use Packages\Telemetry\Service\MetricServiceInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class MessagePublisherService implements MessagePublisherServiceInterface
+final readonly class MessagePublisherService implements MessagePublisherServiceInterface
 {
     /**
      * @param iterable<int, MessagePublisherService> $publishers
      */
     public function __construct(
         #[AutowireIterator('app.publisher_service', defaultPriorityMethod: 'getPriority')]
-        private readonly iterable $publishers,
-        private readonly LoggerInterface $publisherServiceLogger,
-        private readonly MetricServiceInterface $metricService
+        private iterable $publishers,
+        private LoggerInterface $publisherServiceLogger,
+        private MetricServiceInterface $metricService
     ) {
     }
 

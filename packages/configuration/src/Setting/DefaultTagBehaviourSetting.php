@@ -25,14 +25,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @see TagBehaviourService
  */
-final class DefaultTagBehaviourSetting implements SettingInterface
+final readonly class DefaultTagBehaviourSetting implements SettingInterface
 {
     private DefaultTagBehaviour $default;
 
     public function __construct(
-        private readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly ValidatorInterface $validator,
+        private DynamoDbClientInterface $dynamoDbClient,
+        private SerializerInterface&DenormalizerInterface $serializer,
+        private ValidatorInterface $validator,
     ) {
         $this->default = new DefaultTagBehaviour(carryforward: true);
     }

@@ -59,7 +59,7 @@ final class Coverage implements Countable, Stringable
     public function setGeneratedAt(int|DateTimeImmutable|null $generatedAt): void
     {
         if (gettype($generatedAt) === 'integer') {
-            $currentTimestamp = (new DateTimeImmutable())->getTimestamp();
+            $currentTimestamp = new DateTimeImmutable()->getTimestamp();
             if ($generatedAt > $currentTimestamp) {
                 // The timestamp MUST be in microseconds (since the timestamp is larger than
                 // the current timestamp, which is in seconds)

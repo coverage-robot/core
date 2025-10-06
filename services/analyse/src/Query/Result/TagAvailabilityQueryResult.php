@@ -8,18 +8,18 @@ use App\Model\CarryforwardTag;
 use Override;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class TagAvailabilityQueryResult implements QueryResultInterface
+final readonly class TagAvailabilityQueryResult implements QueryResultInterface
 {
     /**
      * @param CarryforwardTag[] $carryforwardTags
      */
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $tagName,
+        private string $tagName,
         #[Assert\All([
             new Assert\Type(type: CarryforwardTag::class)
         ])]
-        private readonly array $carryforwardTags,
+        private array $carryforwardTags,
     ) {
     }
 

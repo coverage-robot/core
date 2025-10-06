@@ -11,12 +11,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @see TagBehaviourService
  */
-final class IndividualTagBehaviour
+final readonly class IndividualTagBehaviour
 {
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $name,
-        private readonly bool $carryforward
+        private string $name,
+        private bool $carryforward
     ) {
     }
 

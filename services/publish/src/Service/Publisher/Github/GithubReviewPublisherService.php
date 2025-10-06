@@ -23,16 +23,16 @@ use Packages\Message\PublishableMessage\PublishableLineCommentMessageCollection;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class GithubReviewPublisherService implements PublisherServiceInterface
+final readonly class GithubReviewPublisherService implements PublisherServiceInterface
 {
     use GithubPullRequestAwareTrait;
 
     public function __construct(
-        private readonly TemplateRenderingService $templateRenderingService,
-        private readonly SettingServiceInterface $settingService,
-        private readonly GithubAppInstallationClientInterface $client,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $reviewPublisherLogger
+        private TemplateRenderingService $templateRenderingService,
+        private SettingServiceInterface $settingService,
+        private GithubAppInstallationClientInterface $client,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $reviewPublisherLogger
     ) {
     }
 

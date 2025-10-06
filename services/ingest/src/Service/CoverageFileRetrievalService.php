@@ -20,11 +20,11 @@ use Override;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-final class CoverageFileRetrievalService implements CoverageFileRetrievalServiceInterface
+final readonly class CoverageFileRetrievalService implements CoverageFileRetrievalServiceInterface
 {
     public function __construct(
-        private readonly SimpleS3Client $s3Client,
-        private readonly LoggerInterface $retrievalLogger
+        private SimpleS3Client $s3Client,
+        private LoggerInterface $retrievalLogger
     ) {
     }
 

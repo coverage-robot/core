@@ -24,7 +24,7 @@ use Packages\Contracts\Tag\Tag;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final class CarryforwardTagService implements CarryforwardTagServiceInterface
+final readonly class CarryforwardTagService implements CarryforwardTagServiceInterface
 {
     /**
      * The total number of pages to look back through in order to match the available tags we've seen
@@ -36,9 +36,9 @@ final class CarryforwardTagService implements CarryforwardTagServiceInterface
 
     public function __construct(
         #[Autowire(service: CachingQueryService::class)]
-        private readonly QueryServiceInterface $queryService,
-        private readonly TagBehaviourService $tagBehaviourService,
-        private readonly LoggerInterface $carryforwardLogger
+        private QueryServiceInterface $queryService,
+        private TagBehaviourService $tagBehaviourService,
+        private LoggerInterface $carryforwardLogger
     ) {
     }
 

@@ -23,12 +23,12 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class EventStoreService implements EventStoreServiceInterface
+final readonly class EventStoreService implements EventStoreServiceInterface
 {
     public function __construct(
-        private readonly SerializerInterface&NormalizerInterface&DenormalizerInterface&DecoderInterface $serializer,
-        private readonly DynamoDbClientInterface $dynamoDbClient,
-        private readonly LoggerInterface $eventStoreLogger
+        private SerializerInterface&NormalizerInterface&DenormalizerInterface&DecoderInterface $serializer,
+        private DynamoDbClientInterface $dynamoDbClient,
+        private LoggerInterface $eventStoreLogger
     ) {
     }
 

@@ -6,15 +6,15 @@ namespace App\Model;
 
 use Packages\Contracts\Provider\Provider;
 
-final class Project
+final readonly class Project
 {
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $email,
-        private readonly string $graphToken,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $email,
+        private string $graphToken,
     ) {
     }
 

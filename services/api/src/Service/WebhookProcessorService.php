@@ -10,14 +10,14 @@ use Override;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class WebhookProcessorService implements WebhookProcessorServiceInterface
+final readonly class WebhookProcessorService implements WebhookProcessorServiceInterface
 {
     /**
      * @param WebhookProcessorInterface[] $webhookProcessors
      */
     public function __construct(
         #[AutowireIterator('app.webhook_processor', defaultIndexMethod: 'getEvent')]
-        private readonly iterable $webhookProcessors
+        private iterable $webhookProcessors
     ) {
     }
 

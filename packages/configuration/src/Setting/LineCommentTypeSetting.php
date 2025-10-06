@@ -14,12 +14,12 @@ use Packages\Configuration\Exception\SettingRetrievalFailedException;
 use Packages\Configuration\Model\LineCommentType;
 use Packages\Contracts\Provider\Provider;
 
-final class LineCommentTypeSetting implements SettingInterface
+final readonly class LineCommentTypeSetting implements SettingInterface
 {
     private const LineCommentType DEFAULT_VALUE = LineCommentType::REVIEW_COMMENT;
 
     public function __construct(
-        private readonly DynamoDbClientInterface $dynamoDbClient
+        private DynamoDbClientInterface $dynamoDbClient
     ) {
     }
 

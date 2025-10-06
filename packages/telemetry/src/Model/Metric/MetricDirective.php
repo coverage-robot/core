@@ -6,7 +6,7 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class MetricDirective
+final readonly class MetricDirective
 {
     /**
      * @param string[][]|null $dimensions
@@ -14,11 +14,11 @@ final class MetricDirective
      */
     public function __construct(
         #[SerializedName('Namespace')]
-        private readonly string $namespace,
+        private string $namespace,
         #[SerializedName('Metrics')]
-        private readonly array $metrics,
+        private array $metrics,
         #[SerializedName('Dimensions')]
-        private readonly array $dimensions,
+        private array $dimensions,
     ) {
     }
 

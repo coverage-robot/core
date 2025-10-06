@@ -7,12 +7,12 @@ namespace App\Model;
 use Override;
 use Packages\Contracts\Provider\Provider;
 
-final class GraphParameters implements ParametersInterface
+final readonly class GraphParameters implements ParametersInterface
 {
     public function __construct(
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly Provider $provider,
+        private string $owner,
+        private string $repository,
+        private Provider $provider,
     ) {
     }
 

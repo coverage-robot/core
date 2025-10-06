@@ -7,11 +7,11 @@ namespace App\Model;
 use Override;
 use Stringable;
 
-final class CoverageReportComparison implements Stringable
+final readonly class CoverageReportComparison implements Stringable
 {
     public function __construct(
-        private readonly CoverageReportInterface $baseReport,
-        private readonly CoverageReportInterface $headReport
+        private CoverageReportInterface $baseReport,
+        private CoverageReportInterface $headReport
     ) {
     }
 

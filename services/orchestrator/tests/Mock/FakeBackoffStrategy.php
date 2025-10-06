@@ -15,7 +15,7 @@ use STS\Backoff\Backoff;
  * This is useful for tests which don't care about the wait time, and would just prefer to run
  * the callback immediately, and repeatedly.
  */
-final class FakeBackoffStrategy implements BackoffStrategyInterface
+final readonly class FakeBackoffStrategy implements BackoffStrategyInterface
 {
     private BackoffStrategyInterface $backoff;
 

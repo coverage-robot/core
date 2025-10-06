@@ -22,16 +22,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-final class TagAvailabilityQuery implements QueryInterface
+final readonly class TagAvailabilityQuery implements QueryInterface
 {
     use ParameterAwareTrait;
     use BigQueryTableAwareTrait;
 
     public function __construct(
-        private readonly SerializerInterface&DenormalizerInterface $serializer,
-        private readonly ValidatorInterface $validator,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly BigQueryClient $bigQueryClient
+        private SerializerInterface&DenormalizerInterface $serializer,
+        private ValidatorInterface $validator,
+        private EnvironmentServiceInterface $environmentService,
+        private BigQueryClient $bigQueryClient
     ) {
     }
 

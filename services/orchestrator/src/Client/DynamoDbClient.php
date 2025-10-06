@@ -17,7 +17,7 @@ use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class DynamoDbClient implements DynamoDbClientInterface
+final readonly class DynamoDbClient implements DynamoDbClientInterface
 {
     /**
      * The default TTL for each event in the store, in seconds - currently 12 hours.
@@ -38,9 +38,9 @@ final class DynamoDbClient implements DynamoDbClientInterface
         self::REPOSITORY_IDENTIFIER_COLUMN . '-' . self::COMMIT_COLUMN . '-index';
 
     public function __construct(
-        private readonly \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer
+        private \AsyncAws\DynamoDb\DynamoDbClient $dynamoDbClient,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface $serializer
     ) {
     }
 

@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class WebhookQueueClient implements WebhookQueueClientInterface
+final readonly class WebhookQueueClient implements WebhookQueueClientInterface
 {
     /**
      * The SQS queue (FIFO) which is used to process Webhooks from version control providers.
@@ -32,11 +32,11 @@ final class WebhookQueueClient implements WebhookQueueClientInterface
     private const string WEBHOOKS_QUEUE_NAME = 'coverage-webhooks-%s.fifo';
 
     public function __construct(
-        private readonly WebhookValidationService $webhookValidationService,
-        private readonly SqsClient $sqsClient,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly SerializerInterface $serializer,
-        private readonly LoggerInterface $webhookQueueClientLogger,
+        private WebhookValidationService $webhookValidationService,
+        private SqsClient $sqsClient,
+        private EnvironmentServiceInterface $environmentService,
+        private SerializerInterface $serializer,
+        private LoggerInterface $webhookQueueClientLogger,
     ) {
     }
 
