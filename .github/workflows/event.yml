@@ -76,6 +76,12 @@ jobs:
                     echo "php-version=${{ matrix.php-version }}" >> $GITHUB_OUTPUT
                 shell: bash
 
+            -   name: Run Psalm
+                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }}
+
+            -   name: Run Psalm Security Analysis
+                run: composer lint:security
+
             -   uses: coverage-robot/action@v1.0.10
                 # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
                 # tests are run on multiple PHP versions

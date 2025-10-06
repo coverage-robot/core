@@ -14,12 +14,15 @@
         }
     },
     "scripts": {
-        "lint:rector": "rector process --dry-run"
+        "lint:rector": "rector process --dry-run",
+        "lint:static-analysis": "psalm",
+        "lint:security": "psalm --taint-analysis"
     },
     "repositories": [
         {"type": "composer", "url": "https://coverage-robot.repo.repman.io"}
     ],
     "require-dev": {
-        "rector/rector": "^2.0"
+        "rector/rector": "^2.0",
+        "vimeo/psalm": "^6.13"
     }
 }
