@@ -7,7 +7,7 @@ namespace App\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class HealthControllerTest extends WebTestCase
+final class HealthControllerTest extends WebTestCase
 {
     public function testHealth(): void
     {

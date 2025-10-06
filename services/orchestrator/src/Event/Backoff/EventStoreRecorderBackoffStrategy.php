@@ -41,7 +41,7 @@ final class EventStoreRecorderBackoffStrategy implements BackoffStrategyInterfac
                     return false;
                 }
 
-                return ($attempt <= $maxAttempts) && ($result !== true || $exception instanceof \Exception);
+                return ($attempt <= $maxAttempts) && ($result !== true || $exception instanceof Exception);
             }
         );
     }

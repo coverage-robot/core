@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Event;
 
-use App\Client\EventBridgeEventClient;
 use App\Enum\OrchestratedEventState;
 use App\Event\IngestSuccessEventProcessor;
 use App\Model\EventStateChange;

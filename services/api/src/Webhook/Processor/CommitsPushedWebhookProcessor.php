@@ -15,7 +15,6 @@ use AsyncAws\Core\Exception\Http\HttpException;
 use JsonException;
 use Override;
 use Packages\Configuration\Constant\ConfigurationFile;
-use Packages\Contracts\Event\EventSource;
 use Packages\Event\Client\EventBusClient;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\ConfigurationFileChange;

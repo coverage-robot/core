@@ -13,7 +13,7 @@ use Twig\TwigFunction;
 final class CoverageTemplateExtension extends AbstractExtension
 {
     /**
-     * @return \Twig\TwigFunction[]
+     * @return TwigFunction[]
      */
     #[Override]
     public function getFunctions(): array

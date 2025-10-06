@@ -10,7 +10,6 @@ use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;
 use Override;
 use Packages\Configuration\Model\PathReplacement;
-use Packages\Configuration\Service\SettingService;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Psr\Log\NullLogger;
 

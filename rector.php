@@ -11,45 +11,54 @@ use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->sets([
-        /**
-         * Basic code quality rules - more specific rules are already enforced by Psalm
-         * and PHP_CS.
-         */
-        SetList::CODE_QUALITY,
-        SetList::CODING_STYLE,
-        SetList::DEAD_CODE,
-        SetList::NAMING,
-        SetList::TYPE_DECLARATION,
-        SetList::TYPE_DECLARATION_DOCBLOCKS,
-        SetList::PRIVATIZATION,
-        SetList::EARLY_RETURN,
-        SetList::INSTANCEOF,
-        SetList::STRICT_BOOLEANS,
-        /**
-         * PHPUnit and Symfony specific code quality rules.
-         */
-        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-        SymfonySetList::CONFIGS
-    ]);
-
-    /**
-     * Make sure all overridden methods have the `#[Override]` attribute.
-     */
-    $rectorConfig->rule(AddOverrideAttributeToOverriddenMethodsRector::class);
-
-    /**
-     * Ensure strict type declarations are present in all files.
-     *
-     * This is also enforced by PHP CodeSniffer, but this offers a simple way to apply
-     * the declaration to files very quickly.
-     */
-    $rectorConfig->rule(IncreaseDeclareStrictTypesRector::class);
-
-    $rectorConfig->skip([
+return RectorConfig::configure()
+    ->withPreparedSets(
+        deadCode: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        typeDeclarationDocblocks: true,
+        privatization: true,
+        naming: true,
+        instanceOf: true,
+        earlyReturn: true,
+        strictBooleans: true,
+        carbon: false, // No services use Carbon
+        rectorPreset: true,
+        phpunitCodeQuality: true,
+        doctrineCodeQuality: false, // No service use Doctrine
+        symfonyCodeQuality: true,
+        symfonyConfigs: true
+    )
+    ->withComposerBased(
+        twig: true,
+        doctrine: false, // No service use Doctrine
+        phpunit: true,
+        symfony: true,
+        netteUtils: false, // No service use Nette
+        laravel: false // No service use Laravel
+    )
+    ->withImportNames(
+        importNames: true,
+        importDocBlockNames: true,
+        importShortClasses: true,
+        removeUnusedImports: true,
+    )
+    ->withAttributesSets()
+    ->withTreatClassesAsFinal()
+    ->withRules([
+            /**
+             * Make sure all overridden methods have the `#[Override]` attribute.
+             */
+            AddOverrideAttributeToOverriddenMethodsRector::class,
+            /**
+             * Ensure strict type declarations are present in all files.
+             *
+             * This is also enforced by PHP CodeSniffer, but this offers a simple way to apply
+             * the declaration to files very quickly.
+             */
+            IncreaseDeclareStrictTypesRector::class
+        ])
+    ->withSkip([
         /**
          * Ignore as, although this is a good pattern in most cases, theres genuine use cases for
          * a variable name which _doesn't_ match the type being instantiated.
@@ -69,4 +78,3 @@ return static function (RectorConfig $rectorConfig): void {
         RenameVariableToMatchMethodCallReturnTypeRector::class,
         RenamePropertyToMatchTypeRector::class
     ]);
-};

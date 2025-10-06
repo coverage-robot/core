@@ -7,23 +7,16 @@ namespace Packages\Local\Tests\Command;
 use Bref\Event\EventBridge\EventBridgeEvent;
 use Bref\Event\EventBridge\EventBridgeHandler;
 use DateTimeImmutable;
-use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
-use Packages\Event\Handler\EventHandler;
-use Packages\Event\Model\EventInterface;
 use Packages\Event\Model\UploadsFinalised;
 use Packages\Local\Command\InvokeEventCommand;
 use Packages\Local\Service\EventBuilderInterface;
 use Packages\Local\Tests\Mock\FakeEventBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class InvokeEventCommandTest extends TestCase
 {

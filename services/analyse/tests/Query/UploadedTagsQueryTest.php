@@ -6,7 +6,6 @@ namespace App\Tests\Query;
 
 use App\Model\QueryParameterBag;
 use App\Model\ReportWaypoint;
-use App\Query\Result\UploadedTagsCollectionQueryResult;
 use App\Query\UploadedTagsQuery;
 use ArrayIterator;
 use Override;

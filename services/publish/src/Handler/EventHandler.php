@@ -15,7 +15,6 @@ use JsonException;
 use Override;
 use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\EventInterface;
-use Packages\Contracts\Event\EventSource;
 use Packages\Contracts\PublishableMessage\PublishableMessageInterface;
 use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\CoverageFailed;

@@ -6,10 +6,7 @@ namespace App\Service;
 
 use App\Exception\ParseException;
 use App\Model\Coverage;
-use App\Strategy\ParseStrategyInterface;
 use Packages\Contracts\Provider\Provider;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 interface CoverageFileParserServiceInterface
 {

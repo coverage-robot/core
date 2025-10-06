@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Exception\PersistException;
 use App\Model\Coverage;
-use App\Service\Persist\PersistServiceInterface;
 use Packages\Event\Model\Upload;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 interface CoverageFilePersistServiceInterface
 {

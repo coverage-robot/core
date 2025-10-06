@@ -34,7 +34,7 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         private readonly ?string $baseRef = null,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof \DateTimeImmutable) {
+        if (!$this->eventTime instanceof DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

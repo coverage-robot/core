@@ -12,7 +12,6 @@ use Bref\Event\Sqs\SqsHandler;
 use DateTimeImmutable;
 use DateTimeInterface;
 use InvalidArgumentException;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Packages\Event\Model\Upload;
@@ -24,9 +23,7 @@ use Packages\Message\PublishableMessage\PublishableMissingCoverageLineCommentMes
 use Packages\Message\PublishableMessage\PublishablePullRequestMessage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -40,40 +37,16 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @see README.md
  */
 #[AsCommand(name: 'app:invoke', description: 'Invoke the publish handler')]
-final class InvokeCommand extends Command
+final class InvokeCommand
 {
     public function __construct(
         #[Autowire(service: EventHandler::class)]
         private readonly SqsHandler $handler,
         private readonly SerializerInterface $serializer
     ) {
-        parent::__construct();
     }
 
-    #[Override]
-    protected function configure(): void
-    {
-        $this->addArgument('commit', InputArgument::REQUIRED, 'The commit to publish messages to')
-            ->addArgument('pullRequest', InputArgument::REQUIRED, 'The pull request the commit belongs to')
-            ->addArgument('repository', InputArgument::REQUIRED, 'The repository the commit belongs to')
-            ->addArgument('owner', InputArgument::REQUIRED, 'The owner of the repository')
-            ->addArgument(
-                'tag',
-                InputArgument::OPTIONAL,
-                'The tag of the coverage file which is being published for',
-                'mock-tag'
-            )
-            ->addArgument('ref', InputArgument::OPTIONAL, 'The ref of the commit being published to', 'mock-ref')
-            ->addArgument(
-                'parent',
-                InputArgument::OPTIONAL,
-                'The parent of the commit being published to',
-                '["mock-parent-commit"]'
-            );
-    }
-
-    #[Override]
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function __invoke(SymfonyStyle $io,): int
     {
         try {
             $validUntil = DateTimeImmutable::createFromFormat(
@@ -178,7 +151,7 @@ final class InvokeCommand extends Command
 
             return Command::SUCCESS;
         } catch (InvalidLambdaEvent $invalidLambdaEvent) {
-            $output->writeln($invalidLambdaEvent->getMessage());
+            $io->writeln($invalidLambdaEvent->getMessage());
             return Command::FAILURE;
         }
     }

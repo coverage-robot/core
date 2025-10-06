@@ -23,7 +23,7 @@ final class PublishableMissingCoverageLineCommentMessage implements PublishableL
         private readonly int $endLineNumber,
         private ?DateTimeImmutable $validUntil = null,
     ) {
-        if (!$this->validUntil instanceof \DateTimeImmutable) {
+        if (!$this->validUntil instanceof DateTimeImmutable) {
             $this->validUntil = new DateTimeImmutable();
         }
     }

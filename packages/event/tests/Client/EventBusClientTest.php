@@ -14,7 +14,6 @@ use AsyncAws\Scheduler\Input\CreateScheduleInput;
 use AsyncAws\Scheduler\Result\CreateScheduleOutput;
 use AsyncAws\Scheduler\SchedulerClient;
 use DateTimeImmutable;
-use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Environment\Service;
 use Packages\Contracts\Event\Event;
@@ -25,7 +24,6 @@ use Packages\Telemetry\Enum\EnvironmentVariable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class EventBusClientTest extends TestCase

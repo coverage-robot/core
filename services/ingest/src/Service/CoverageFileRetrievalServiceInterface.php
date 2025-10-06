@@ -6,18 +6,9 @@ namespace App\Service;
 
 use App\Exception\DeletionException;
 use App\Exception\RetrievalException;
-use AsyncAws\Core\Exception\Http\ClientException;
-use AsyncAws\Core\Exception\Http\HttpException;
-use AsyncAws\S3\Exception\InvalidObjectStateException;
-use AsyncAws\S3\Exception\NoSuchKeyException;
-use AsyncAws\S3\Input\DeleteObjectRequest;
-use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\Result\GetObjectOutput;
-use AsyncAws\SimpleS3\SimpleS3Client;
 use Bref\Event\S3\Bucket;
 use Bref\Event\S3\BucketObject;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 interface CoverageFileRetrievalServiceInterface
 {

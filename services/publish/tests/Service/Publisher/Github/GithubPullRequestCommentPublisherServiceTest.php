@@ -10,6 +10,7 @@ use App\Service\Publisher\Github\GithubPullRequestCommentPublisherService;
 use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\Issue;
+use Github\Api\Issue\Comments;
 use Iterator;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
@@ -86,7 +87,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             ->with($upload->getOwner());
 
         $mockIssueApi = $this->createMock(Issue::class);
-        $mockCommentApi = $this->createMock(Issue\Comments::class);
+        $mockCommentApi = $this->createMock(Comments::class);
 
         $mockGithubAppInstallationClient->expects($expectedSupport ? $this->exactly(2) : $this->never())
             ->method('issue')
@@ -162,7 +163,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
             ->with($upload->getOwner());
 
         $mockIssueApi = $this->createMock(Issue::class);
-        $mockCommentApi = $this->createMock(Issue\Comments::class);
+        $mockCommentApi = $this->createMock(Comments::class);
 
         $mockGithubAppInstallationClient->expects($expectedSupport ? $this->exactly(2) : $this->never())
             ->method('issue')

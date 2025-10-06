@@ -20,7 +20,7 @@ final class ConfigurationFileChange implements EventInterface
         private readonly string $commit,
         private ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof \DateTimeImmutable) {
+        if (!$this->eventTime instanceof DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

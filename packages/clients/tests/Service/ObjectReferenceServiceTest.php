@@ -16,7 +16,7 @@ use Psr\Log\NullLogger;
 use RuntimeException;
 use DateTimeImmutable;
 
-class ObjectReferenceServiceTest extends TestCase
+final class ObjectReferenceServiceTest extends TestCase
 {
     public function testCreateReference(): void
     {

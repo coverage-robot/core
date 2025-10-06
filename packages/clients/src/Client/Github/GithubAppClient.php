@@ -17,10 +17,8 @@ use Packages\Clients\Exception\ClientException;
 use Packages\Clients\Generator\JwtGenerator;
 use Packages\Telemetry\Service\MetricServiceInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpClient\HttplugClient;
 use Symfony\Component\HttpClient\HttpOptions;
-use Symfony\Component\HttpClient\RetryableHttpClient;
 
 class GithubAppClient extends Client
 {

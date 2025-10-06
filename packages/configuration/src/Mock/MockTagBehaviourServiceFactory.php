@@ -8,7 +8,6 @@ use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\DefaultTagBehaviour;
 use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Configuration\Service\TagBehaviourService;
-use PHPUnit\Framework\TestCase;
 
 final class MockTagBehaviourServiceFactory
 {

@@ -23,7 +23,7 @@ final class UtilisationAmendment implements EventInterface
         private readonly string|int|null $pullRequest = null,
         private ?DateTimeImmutable $eventTime = null,
     ) {
-        if (!$this->eventTime instanceof \DateTimeImmutable) {
+        if (!$this->eventTime instanceof DateTimeImmutable) {
             $this->eventTime = new DateTimeImmutable();
         }
     }

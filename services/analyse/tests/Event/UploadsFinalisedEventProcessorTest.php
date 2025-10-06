@@ -14,7 +14,6 @@ use App\Service\CoverageAnalyserServiceInterface;
 use App\Service\CoverageComparisonServiceInterface;
 use App\Service\LineGroupingService;
 use ArrayIterator;
-use Packages\Clients\Service\ObjectReferenceService;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Mock\MockSettingServiceFactory;
 use Packages\Contracts\Event\Event;

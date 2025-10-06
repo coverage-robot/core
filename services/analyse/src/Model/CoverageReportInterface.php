@@ -6,7 +6,6 @@ namespace App\Model;
 
 use App\Query\Result\FileCoverageQueryResult;
 use App\Query\Result\LineCoverageQueryResult;
-use App\Query\Result\LineCoverageSummaryCollectionQueryResult;
 use App\Query\Result\QueryResultIterator;
 use App\Query\Result\TagCoverageQueryResult;
 use App\Query\Result\TotalUploadsQueryResult;
