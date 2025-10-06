@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Packages\Telemetry;
 
 use Override;
-use Packages\Telemetry\Service\SymfonySerializerLineFormatter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;

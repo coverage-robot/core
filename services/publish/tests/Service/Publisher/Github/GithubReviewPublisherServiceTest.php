@@ -10,6 +10,8 @@ use App\Service\Templating\TemplateRenderingService;
 use App\Tests\Service\Publisher\AbstractPublisherServiceTestCase;
 use Github\Api\GraphQL;
 use Github\Api\PullRequest;
+use Github\Api\PullRequest\Comments;
+use Github\Api\PullRequest\Review;
 use Iterator;
 use Override;
 use Packages\Clients\Client\Github\GithubAppInstallationClientInterface;
@@ -175,7 +177,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ->method('authenticateAsRepositoryOwner')
             ->with($event->getOwner());
 
-        $mockReviewApi = $this->createMock(PullRequest\Review::class);
+        $mockReviewApi = $this->createMock(Review::class);
         $mockReviewApi->expects($this->once())
             ->method('create')
             ->with(
@@ -286,7 +288,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
             ->method('authenticateAsRepositoryOwner')
             ->with($event->getOwner());
 
-        $mockCommentsApi = $this->createMock(PullRequest\Comments::class);
+        $mockCommentsApi = $this->createMock(Comments::class);
         $mockCommentsApi->expects($this->once())
             ->method('remove')
             ->with(
