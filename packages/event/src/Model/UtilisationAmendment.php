@@ -10,19 +10,19 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class UtilisationAmendment implements EventInterface
+final readonly class UtilisationAmendment implements EventInterface
 {
     private DateTimeImmutable $eventTime;
 
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
-        private readonly int $analysedCoverage,
-        private readonly string|int|null $pullRequest = null,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $ref,
+        private string $commit,
+        private int $analysedCoverage,
+        private string|int|null $pullRequest = null,
         ?DateTimeImmutable $eventTime = null
     ) {
         $this->eventTime = $eventTime ?? new DateTimeImmutable();

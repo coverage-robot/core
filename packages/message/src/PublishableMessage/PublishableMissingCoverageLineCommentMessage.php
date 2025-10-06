@@ -10,19 +10,19 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishableMissingCoverageLineCommentMessage implements PublishableLineCommentInterface
+final readonly class PublishableMissingCoverageLineCommentMessage implements PublishableLineCommentInterface
 {
     private DateTimeImmutable $validUntil;
 
     public function __construct(
-        private readonly EventInterface $event,
+        private EventInterface $event,
         #[Assert\NotBlank]
-        private readonly string $fileName,
-        private readonly bool $startingOnMethod,
+        private string $fileName,
+        private bool $startingOnMethod,
         #[Assert\GreaterThanOrEqual(1)]
-        private readonly int $startLineNumber,
+        private int $startLineNumber,
         #[Assert\GreaterThanOrEqual(1)]
-        private readonly int $endLineNumber,
+        private int $endLineNumber,
         ?DateTimeImmutable $validUntil = null,
     ) {
         $this->validUntil = $validUntil ?? new DateTimeImmutable();

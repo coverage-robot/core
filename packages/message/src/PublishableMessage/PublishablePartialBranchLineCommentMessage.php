@@ -10,22 +10,22 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishablePartialBranchLineCommentMessage implements PublishableLineCommentInterface
+final readonly class PublishablePartialBranchLineCommentMessage implements PublishableLineCommentInterface
 {
     private DateTimeImmutable $validUntil;
 
     public function __construct(
-        private readonly EventInterface $event,
+        private EventInterface $event,
         #[Assert\NotBlank]
-        private readonly string $fileName,
+        private string $fileName,
         #[Assert\GreaterThanOrEqual(1)]
-        private readonly int $startLineNumber,
+        private int $startLineNumber,
         #[Assert\GreaterThanOrEqual(1)]
-        private readonly int $endLineNumber,
+        private int $endLineNumber,
         #[Assert\PositiveOrZero]
-        private readonly int $totalBranches,
+        private int $totalBranches,
         #[Assert\PositiveOrZero]
-        private readonly int $coveredBranches,
+        private int $coveredBranches,
         ?DateTimeImmutable $validUntil = null,
     ) {
         $this->validUntil = $validUntil ?? new DateTimeImmutable();

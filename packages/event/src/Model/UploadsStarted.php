@@ -10,20 +10,20 @@ use Packages\Contracts\Event\BaseAwareEventInterface;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 
-final class UploadsStarted implements EventInterface, BaseAwareEventInterface
+final readonly class UploadsStarted implements EventInterface, BaseAwareEventInterface
 {
     private DateTimeImmutable $eventTime;
 
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
-        private readonly string|int|null $pullRequest = null,
-        private readonly ?string $baseRef = null,
-        private readonly ?string $baseCommit = null,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $ref,
+        private string $commit,
+        private string|int|null $pullRequest = null,
+        private ?string $baseRef = null,
+        private ?string $baseCommit = null,
         ?DateTimeImmutable $eventTime = null
     ) {
         $this->eventTime = $eventTime ?? new DateTimeImmutable();

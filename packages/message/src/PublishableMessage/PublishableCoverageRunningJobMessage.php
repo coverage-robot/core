@@ -9,12 +9,12 @@ use Override;
 use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 
-final class PublishableCoverageRunningJobMessage implements PublishableCheckRunMessageInterface
+final readonly class PublishableCoverageRunningJobMessage implements PublishableCheckRunMessageInterface
 {
     private DateTimeImmutable $validUntil;
 
     public function __construct(
-        private readonly EventInterface $event,
+        private EventInterface $event,
         ?DateTimeImmutable $validUntil = null,
     ) {
         $this->validUntil = $validUntil ?? new DateTimeImmutable();

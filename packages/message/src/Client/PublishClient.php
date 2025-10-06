@@ -68,14 +68,14 @@ final readonly class PublishClient implements SqsClientInterface
                 'MessageBody' => $this->serializer->serialize($publishableMessage, 'json'),
                 'MessageGroupId' => $publishableMessage->getMessageGroup(),
             ];
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface $exception) {
             $this->publishClientLogger->error(
                 sprintf(
                     'Unable to dispatch %s as it failed to serialize.',
                     (string)$publishableMessage
                 ),
                 [
-                    'exception' => $e,
+                    'exception' => $exception,
                     'message' => $publishableMessage
                 ]
             );

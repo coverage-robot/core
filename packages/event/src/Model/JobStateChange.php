@@ -12,7 +12,7 @@ use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Enum\JobState;
 
-final class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final readonly class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
     private DateTimeImmutable $eventTime;
 
@@ -20,19 +20,19 @@ final class JobStateChange implements EventInterface, ParentAwareEventInterface,
      * @param string[] $parent
      */
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
-        private readonly array $parent,
-        private readonly string|int|null $externalId,
-        private readonly string|int|null $triggeredByExternalId,
-        private readonly JobState $state,
-        private readonly string|int|null $pullRequest = null,
-        private readonly ?string $baseCommit = null,
-        private readonly ?string $baseRef = null,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $ref,
+        private string $commit,
+        private array $parent,
+        private string|int|null $externalId,
+        private string|int|null $triggeredByExternalId,
+        private JobState $state,
+        private string|int|null $pullRequest = null,
+        private ?string $baseCommit = null,
+        private ?string $baseRef = null,
         ?DateTimeImmutable $eventTime = null
     ) {
         $this->eventTime = $eventTime ?? new DateTimeImmutable();

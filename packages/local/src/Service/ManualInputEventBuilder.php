@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Packages\Local\Service;
 
+use Symfony\Component\TypeInfo\Type;
+use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
 use BackedEnum;
 use DateTime;
 use DateTimeImmutable;
@@ -21,12 +23,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
-use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorResolverInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\TypeInfo\Type\ArrayShapeType;
 use Symfony\Component\TypeInfo\Type\BuiltinType;
 use Symfony\Component\TypeInfo\Type\EnumType;
 use Symfony\Component\TypeInfo\Type\ObjectType;
@@ -73,13 +73,13 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
             EventInterface::class
         );
 
-        if (!$discriminatorMap) {
+        if (!$discriminatorMap instanceof ClassDiscriminatorMapping) {
             throw new LogicException("Cannot manually build event if there is no discriminator map for the Event interface.");
         }
 
         $eventClass = $discriminatorMap->getClassForType($event->value);
 
-        if (!$eventClass) {
+        if ($eventClass === null || $eventClass === '' || $eventClass === '0') {
             throw new LogicException(
                 sprintf(
                     "Cannot build event manually for %s as it is not listed as a model on the Event interface.",
@@ -103,7 +103,7 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                 continue;
             }
 
-            /** @var \Symfony\Component\TypeInfo\Type $types */
+            /** @var Type $types */
             $types = $this->propertyInfoExtractor->getType($eventClass, $property)?->traverse() ?? [];
 
             $question = new Question(
@@ -129,7 +129,7 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         );
     }
 
-    private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, \Symfony\Component\TypeInfo\Type $types): void
+    private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, Type $types): void
     {
         if ($types instanceof BuiltinType && $types->getTypeIdentifier() === TypeIdentifier::ARRAY) {
             $question->setNormalizer(static fn(?string $value): ?array => $value !== null ? explode(',', $value) : $value);
@@ -192,6 +192,8 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
 
     /**
      * Get the values for an enum class to be used for autocompletion in the console.
+     *
+     * @return int[]|string[]
      */
     private function getEnumAutocompleteValues(string $enumClass): array
     {
@@ -199,7 +201,7 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         $cases = call_user_func([$enumClass, 'cases']);
 
         return array_map(
-            static fn(BackedEnum $provider) => $provider->value,
+            static fn(BackedEnum $provider): int|string => $provider->value,
             $cases
         );
     }

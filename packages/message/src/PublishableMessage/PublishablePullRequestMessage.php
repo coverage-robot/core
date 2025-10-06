@@ -10,30 +10,30 @@ use Packages\Contracts\PublishableMessage\PublishableMessage;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PublishablePullRequestMessage implements PublishableMessageInterface
+final readonly class PublishablePullRequestMessage implements PublishableMessageInterface
 {
     private DateTimeImmutable $validUntil;
 
     public function __construct(
-        private readonly EventInterface $event,
+        private EventInterface $event,
         #[Assert\PositiveOrZero]
         #[Assert\LessThanOrEqual(100)]
-        private readonly float $coveragePercentage,
+        private float $coveragePercentage,
         #[Assert\PositiveOrZero]
         #[Assert\LessThanOrEqual(100)]
-        private readonly ?float $diffCoveragePercentage,
+        private ?float $diffCoveragePercentage,
         #[Assert\PositiveOrZero]
-        private readonly ?float $diffUncoveredLines,
+        private ?float $diffUncoveredLines,
         #[Assert\PositiveOrZero]
-        private readonly int $successfulUploads,
-        private readonly array $tagCoverage,
-        private readonly array $leastCoveredDiffFiles,
+        private int $successfulUploads,
+        private array $tagCoverage,
+        private array $leastCoveredDiffFiles,
         #[Assert\NotBlank(allowNull: true)]
-        private readonly ?string $baseCommit = null,
-        private readonly ?int $uncoveredLinesChange = 0,
+        private ?string $baseCommit = null,
+        private ?int $uncoveredLinesChange = 0,
         #[Assert\GreaterThanOrEqual(-100)]
         #[Assert\LessThanOrEqual(100)]
-        private readonly ?float $coverageChange = 0,
+        private ?float $coverageChange = 0,
         ?DateTimeImmutable $validUntil = null,
     ) {
         $this->validUntil = $validUntil ?? new DateTimeImmutable();

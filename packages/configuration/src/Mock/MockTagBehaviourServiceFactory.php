@@ -13,7 +13,6 @@ final class MockTagBehaviourServiceFactory
 {
     /**
      * @param array<string, bool> $tagsToCarryforward
-     * @return TagBehaviourService
      */
     public static function createMock(array $tagsToCarryforward = []): TagBehaviourService
     {

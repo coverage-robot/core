@@ -10,12 +10,12 @@ use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Override;
 use Packages\Contracts\Environment\Service;
 
-final class MockEnvironmentService implements EnvironmentServiceInterface
+final readonly class MockEnvironmentService implements EnvironmentServiceInterface
 {
     public function __construct(
-        private readonly Environment $environment,
-        private readonly Service $service,
-        private readonly array $variables = []
+        private Environment $environment,
+        private Service $service,
+        private array $variables = []
     ) {
     }
 

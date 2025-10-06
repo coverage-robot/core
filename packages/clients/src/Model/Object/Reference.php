@@ -9,14 +9,14 @@ use DateTimeInterface;
 use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class Reference implements Stringable
+final readonly class Reference implements Stringable
 {
     public function __construct(
         #[Assert\NotBlank]
-        private readonly string $path,
+        private string $path,
         #[Assert\NotBlank]
-        private readonly string $signedUrl,
-        private readonly DateTimeInterface $expiration,
+        private string $signedUrl,
+        private DateTimeInterface $expiration,
     ) {
     }
 

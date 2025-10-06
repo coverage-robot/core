@@ -126,7 +126,11 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
                 $name =  $map['name']->getS();
                 $carryforward =  $map['carryforward']->getBool();
 
-                if ($name === null || $carryforward === null) {
+                if ($name === null) {
+                    continue;
+                }
+
+                if ($carryforward === null) {
                     continue;
                 }
 

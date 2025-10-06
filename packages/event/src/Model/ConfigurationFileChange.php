@@ -9,17 +9,17 @@ use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 
-final class ConfigurationFileChange implements EventInterface
+final readonly class ConfigurationFileChange implements EventInterface
 {
     private DateTimeImmutable $eventTime;
 
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $ref,
+        private string $commit,
         ?DateTimeImmutable $eventTime = null
     ) {
         $this->eventTime = $eventTime ?? new DateTimeImmutable();
