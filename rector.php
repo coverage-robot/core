@@ -43,6 +43,7 @@ return RectorConfig::configure()
         importShortClasses: true,
         removeUnusedImports: true,
     )
+    ->withPhpSets()
     ->withAttributesSets()
     ->withTreatClassesAsFinal()
     ->withRules([
