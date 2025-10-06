@@ -146,7 +146,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
     }
 
     /**
-     * @return Iterator<list{ string, array<value-of<QueryParameter>, string>, string>
+     * @return Iterator<list{ string, array<value-of<QueryParameter>, string>, string }>
      */
     public static function hashProvider(): Iterator
     {
