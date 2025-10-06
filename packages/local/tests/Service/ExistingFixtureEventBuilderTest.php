@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Local\Tests\Service;
 
+use Iterator;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
 use Packages\Local\Service\CustomPayloadEventBuilder;
@@ -91,7 +92,10 @@ final class ExistingFixtureEventBuilderTest extends TestCase
         );
     }
 
-    public static function variedConsoleInputDataProvider(): \Iterator
+    /**
+     * @return Iterator<list{ ArrayInput, bool }>
+     */
+    public static function variedConsoleInputDataProvider(): Iterator
     {
         yield [
             new ArrayInput(

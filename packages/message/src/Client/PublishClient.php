@@ -70,6 +70,8 @@ final class PublishClient implements SqsClientInterface
 
     /**
      * Publish an SQS message onto the queue, with the trace header if it exists.
+     *
+     * @param array<string, string> $request
      */
     private function dispatchWithTraceHeader(array $request): bool
     {
@@ -120,7 +122,7 @@ final class PublishClient implements SqsClientInterface
 
         $queueUrl = $response->getQueueUrl();
 
-        if ($queueUrl === null || $queueUrl === '' || $queueUrl === '0') {
+        if (in_array($queueUrl, [null, '', '0'], true)) {
             throw new RuntimeException(
                 sprintf(
                     'Could not get queue url for %s',

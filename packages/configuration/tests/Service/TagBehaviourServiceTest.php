@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Tests\Service;
 
+use Iterator;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\DefaultTagBehaviour;
 use Packages\Configuration\Model\IndividualTagBehaviour;
@@ -15,6 +16,9 @@ use PHPUnit\Framework\TestCase;
 
 final class TagBehaviourServiceTest extends TestCase
 {
+    /**
+     * @param IndividualTagBehaviour[] $individualTagBehaviours
+     */
     #[DataProvider('behavioursDataProvider')]
     public function testShouldCarryforwardTag(
         DefaultTagBehaviour $defaultTagBehaviour,
@@ -52,7 +56,10 @@ final class TagBehaviourServiceTest extends TestCase
         );
     }
 
-    public static function behavioursDataProvider(): \Iterator
+    /**
+     * @return Iterator<string, list{ DefaultTagBehaviour, IndividualTagBehaviour[], bool }>
+     */
+    public static function behavioursDataProvider(): Iterator
     {
         yield "Only default behaviour (turned off)" => [
             new DefaultTagBehaviour(

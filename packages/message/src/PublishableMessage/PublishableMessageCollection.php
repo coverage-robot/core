@@ -26,6 +26,9 @@ final class PublishableMessageCollection implements PublishableMessageInterface,
     ) {
     }
 
+    /**
+     * @return PublishableMessageInterface[]
+     */
     public function getMessages(): array
     {
         return $this->messages;

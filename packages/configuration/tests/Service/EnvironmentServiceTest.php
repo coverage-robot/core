@@ -30,6 +30,9 @@ final class EnvironmentServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return array<value-of<Environment>, list{ value-of<Environment>, Environment }[]>
+     */
     public static function environmentDataProvider(): array
     {
         return array_combine(

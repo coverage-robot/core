@@ -83,6 +83,9 @@ final class LineCommentTypeSettingTest extends TestCase
         );
     }
 
+    /**
+     * @return array<value-of<LineCommentType>, list{ LineCommentType }>
+     */
     public static function settingValueDataProvider(): array
     {
         $cases = array_map(

@@ -27,11 +27,17 @@ final class MetricDirective
         return $this->namespace;
     }
 
+    /**
+     * @return MetricDefinition[]
+     */
     public function getMetrics(): array
     {
         return $this->metrics;
     }
 
+    /**
+     * @return string[][]
+     */
     public function getDimensions(): array
     {
         return $this->dimensions;

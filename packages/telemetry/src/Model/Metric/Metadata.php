@@ -24,6 +24,9 @@ final class Metadata
         return $this->timestamp;
     }
 
+    /**
+     * @return MetricDirective[]
+     */
     public function getDirectives(): array
     {
         return $this->directives;

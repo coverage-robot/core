@@ -111,6 +111,9 @@ final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwa
         return $this->commit;
     }
 
+    /**
+     * @return string[]
+     */
     #[Override]
     public function getParent(): array
     {
