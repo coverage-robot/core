@@ -19,7 +19,6 @@ final readonly class CoverageTemplateEnvironmentFactory
 {
     public function __construct(
         #[Autowire(value: '%kernel.project_dir%')]
-        
         private string $rootDirectory,
         #[AutowireLocator('app.template_available')]
         private ContainerInterface $container,
