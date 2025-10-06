@@ -50,7 +50,7 @@ trait OverallCommitStateAwareTrait
             $currentState->getCommit()
         );
 
-        return count($events) == 0;
+        return count($events) === 0;
     }
 
     /**
