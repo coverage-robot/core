@@ -16,7 +16,7 @@ trait ContextAwareFunctionTrait
      * Helper method to get the message from the context.
      *
      * @see TemplateRenderingService::renderMessageWithTemplate()
-     * @param array<string, array<array-key, mixed>> $context
+     * @param array<array-key, mixed> $context
      */
     protected function getMessageFromContext(array $context): PublishableMessageInterface
     {
@@ -36,8 +36,9 @@ trait ContextAwareFunctionTrait
     /**
      * Helper method to get the message from the context.
      *
+     * @param array<array-key, mixed> $context
+     *
      * @see TemplateRenderingService::renderMessageWithTemplate()
-     * @param array<string, array<array-key, mixed>> $context
      */
     public function getEventFromContext(array $context): EventInterface
     {

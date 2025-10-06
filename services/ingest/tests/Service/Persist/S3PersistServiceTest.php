@@ -13,7 +13,7 @@ use App\Model\Line\Statement;
 use App\Service\Persist\S3PersistService;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use DateTimeImmutable;
-use nonuse Packages\Configuration\Mock\MockEnvironmentServiceFactory;
+use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Format\CoverageFormat;

@@ -19,6 +19,7 @@ use Iterator;
 use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
@@ -113,7 +114,9 @@ final class QueryBuilderServiceTest extends KernelTestCase
     }
 
     /**
-     * @param array<value-of<QueryParameter, string> $parameters
+     * @param array<value-of<QueryParameter>, string> $parameters
+     *
+     * @throws Exception
      */
     #[DataProvider('hashProvider')]
     public function testHashingIsPredictableRegardlessOfArrayOrder(
@@ -143,7 +146,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
     }
 
     /**
-     * @return Iterator<list{ string, array<value-of<QueryParameter, string>, string>>
+     * @return Iterator<list{ string, array<value-of<QueryParameter>, string>, string>
      */
     public static function hashProvider(): Iterator
     {
