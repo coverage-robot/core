@@ -15,6 +15,7 @@ use Packages\Configuration\Setting\LineCommentTypeSetting;
 use Packages\Configuration\Setting\PathReplacementsSetting;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -27,8 +28,8 @@ use Symfony\Component\Validator\Validation;
 final class ConfigurationFileServiceTest extends TestCase
 {
     /**
-     * @param string $yaml
      * @param array<string, value-of<LineCommentType>> $expectedParsedFile
+     * @throws Exception
      */
     #[DataProvider('configurationFileDataProvider')]
     public function testParsingToFile(
