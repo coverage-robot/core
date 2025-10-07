@@ -43,12 +43,13 @@ final readonly class PublishableMessageCollection implements PublishableMessageI
     #[Override]
     public function getValidUntil(): DateTimeInterface
     {
-        return max(
-            array_map(
-                static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
-                $this->messages
-            )
+        /** @var non-empty-array<array-key, DateTimeInterface> $allMessageValidUntilDates */
+        $allMessageValidUntilDates = array_map(
+            static fn(PublishableMessageInterface $message): DateTimeInterface => $message->getValidUntil(),
+            $this->messages
         );
+
+        return max($allMessageValidUntilDates);
     }
 
     #[Override]

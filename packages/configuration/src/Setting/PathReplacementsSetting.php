@@ -60,9 +60,6 @@ final readonly class PathReplacementsSetting implements SettingInterface
     }
 
     /**
-     * @param PathReplacement[] $value
-     *
-     * @throws ExceptionInterface
      * @throws InvalidSettingValueException
      */
     #[Override]
@@ -107,11 +104,12 @@ final readonly class PathReplacementsSetting implements SettingInterface
         /** @var PathReplacement[] $pathReplacements */
         $pathReplacements = [];
 
+        /** @var mixed $item */
         foreach ((array) $value as $item) {
             /** @var PathReplacement $pathReplacement */
             $pathReplacement = match (true) {
                 $item instanceof AttributeValue => new PathReplacement(
-                    $item->getM()['before']->getS(),
+                    $item->getM()['before']?->getS() ?? "",
                     $item->getM()['after']->getS()
                 ),
                 is_array($item) => $this->serializer->denormalize(
@@ -135,7 +133,6 @@ final readonly class PathReplacementsSetting implements SettingInterface
     }
 
     /**
-     * @param PathReplacement[] $value
      * @return AttributeValue[]
      *
      * @throws InvalidSettingValueException

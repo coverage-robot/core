@@ -34,12 +34,15 @@ final class TraceContext
      */
     public static function setTraceHeaderFromEnvironment(): void
     {
-        if (!isset($_SERVER[self::LAMBDA_INVOCATION_CONTEXT])) {
+        if (!array_key_exists(self::LAMBDA_INVOCATION_CONTEXT, $_SERVER)) {
             return;
         }
 
+        $rawContext = $_SERVER[self::LAMBDA_INVOCATION_CONTEXT];
+
+
         /** @var array $context */
-        $context = json_decode((string) $_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
+        $context = json_decode($rawContext, true);
 
         /** @var string $traceId */
         $traceId = ($context['traceId'] ?? '');

@@ -88,6 +88,8 @@ final readonly class MetricService implements MetricServiceInterface
 
     /**
      * @inheritDoc
+     *
+     * @param string[][]|null $dimensions
      */
     #[Override]
     public function increment(

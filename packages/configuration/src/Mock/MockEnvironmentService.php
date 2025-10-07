@@ -12,6 +12,9 @@ use Packages\Contracts\Environment\Service;
 
 final readonly class MockEnvironmentService implements EnvironmentServiceInterface
 {
+    /**
+     * @param array<array-key, string> $variables
+     */
     public function __construct(
         private Environment $environment,
         private Service $service,

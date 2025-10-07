@@ -130,9 +130,11 @@ final readonly class ConfigurationFileService
                     $results,
                     $this->parseDotNotationKey($value, $key . '.')
                 );
+
                 continue;
             }
 
+            /** @var array|int|float|string $value */
             $results[$key] = $value;
         }
 

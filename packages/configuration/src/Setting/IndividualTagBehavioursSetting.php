@@ -65,9 +65,6 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
     }
 
     /**
-     * @param IndividualTagBehaviour[] $value
-     *
-     * @throws ExceptionInterface
      * @throws InvalidSettingValueException
      */
     #[Override]
@@ -207,7 +204,12 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+            throw new InvalidSettingValueException(
+                sprintf(
+                    "Invalid value for setting: %s",
+                    $violations
+                )
+            );
         }
 
         /** @var IndividualTagBehaviour[] $value */

@@ -63,9 +63,6 @@ final readonly class DefaultTagBehaviourSetting implements SettingInterface
     }
 
     /**
-     * @param DefaultTagBehaviour $value
-     *
-     * @throws ExceptionInterface
      * @throws InvalidSettingValueException
      */
     #[Override]

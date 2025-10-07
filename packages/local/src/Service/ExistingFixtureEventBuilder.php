@@ -28,7 +28,7 @@ final readonly class ExistingFixtureEventBuilder implements EventBuilderInterfac
     #[Override]
     public static function supports(InputInterface $input, Event $event): bool
     {
-        return $input->getOption('fixture');
+        return (bool) $input->getOption('fixture');
     }
 
     #[Override]

@@ -89,17 +89,13 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         }
 
         /** @var list<string> $properties */
-        $properties = $this->propertyInfoExtractor->getProperties($eventClass);
+        $properties = $this->propertyInfoExtractor->getProperties($eventClass) ?? [];
 
         /** @var QuestionHelper $helper */
         $helper = $helperSet->get('question');
         foreach ($properties as $index => $property) {
             if ($property === 'type') {
                 // We can ignore the type property as that's for discrimination during denormalization
-                continue;
-            }
-
-            if (!is_string($property)) {
                 continue;
             }
 
@@ -123,10 +119,13 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
             $payload[$property] = $answer;
         }
 
-        return $this->serializer->denormalize(
+        /** @var EventInterface $eventModel */
+        $eventModel = $this->serializer->denormalize(
             $payload,
             $eventClass
         );
+
+        return $eventModel;
     }
 
     private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, Type $types): void

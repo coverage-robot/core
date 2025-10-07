@@ -13,9 +13,9 @@ use Packages\Telemetry\Enum\Unit;
  */
 interface MetricServiceInterface
 {
-    public const FUNCTION_VERSION = 'functionVersion';
+    public const string FUNCTION_VERSION = 'functionVersion';
 
-    public const FUNCTION_NAME = 'functionName';
+    public const string FUNCTION_NAME = 'functionName';
 
     /**
      * Put a new metric into CloudWatch.
@@ -37,6 +37,8 @@ interface MetricServiceInterface
 
     /**
      * Increment a metric by a given value.
+     *
+     * @param string[][]|null $dimensions
      */
     public function increment(
         string $metric,
