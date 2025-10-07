@@ -25,7 +25,7 @@ final readonly class ConfigurationFileService
     public function parseFile(string $configurationFile): WeakMap
     {
         /** @var array<array-key, mixed> $parsedFile */
-        $parsedFile = Yaml::parse($configurationFile);
+        $parsedFile = Yaml::parse($configurationFile) ?? [];
 
         $settings = $this->parseDotNotationKey($parsedFile);
 

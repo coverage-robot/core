@@ -99,8 +99,11 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                 continue;
             }
 
-            /** @var Type $types */
-            $types = $this->propertyInfoExtractor->getType($eventClass, $property)?->traverse() ?? [];
+            $type = $this->propertyInfoExtractor->getType($eventClass, $property);
+
+            if (!$type instanceof Type) {
+                continue;
+            }
 
             $question = new Question(
                 sprintf(
@@ -108,10 +111,10 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                     $index + 1,
                     count($properties),
                     $property,
-                    (string)$types
+                    (string)$type
                 )
             );
-            $this->setPropertyQuestionConstraintsBasedOnTypes($question, $types);
+            $this->setPropertyQuestionConstraintsBasedOnTypes($question, $type);
 
             /** @psalm-suppress MixedAssignment */
             $payload[$property] = $helper->ask($input, $output, $question);

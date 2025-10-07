@@ -25,10 +25,6 @@ final readonly class MetricService implements MetricServiceInterface
 {
     private const string NAMESPACE = 'Metrics';
 
-    public const FUNCTION_VERSION = 'functionVersion';
-
-    public const FUNCTION_NAME = 'functionName';
-
     public function __construct(
         private LoggerInterface $metricsLogger,
         #[Autowire(service: NativeClock::class)]

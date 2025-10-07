@@ -19,10 +19,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
-use Symfony\Component\PropertyInfo\Type;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\TypeInfo\Type;
+use Symfony\Component\TypeInfo\TypeIdentifier;
 
 final class ManualInputEventBuilderTest extends TestCase
 {
@@ -54,16 +55,9 @@ final class ManualInputEventBuilderTest extends TestCase
                 'some-field'
             ]);
         $mockPropertyInfoExtractor->expects($this->once())
-            ->method('getTypes')
+            ->method('getType')
             ->with(EventInterface::class, 'some-field')
-            ->willReturn([
-                new Type(
-                    Type::BUILTIN_TYPE_STRING,
-                    false,
-                    null,
-                    true
-                )
-            ]);
+            ->willReturn(new Type\BuiltinType(TypeIdentifier::STRING));
 
         $mockClassDiscriminator = $this->createMock(ClassDiscriminatorFromClassMetadata::class);
         $mockClassDiscriminator->expects($this->once())
