@@ -38,8 +38,12 @@ final class TraceContext
             return;
         }
 
+        /** @var mixed $rawContext */
         $rawContext = $_SERVER[self::LAMBDA_INVOCATION_CONTEXT];
 
+        if (!is_string($rawContext)) {
+            return;
+        }
 
         /** @var array $context */
         $context = json_decode($rawContext, true);

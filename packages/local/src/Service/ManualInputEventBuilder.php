@@ -113,10 +113,8 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
             );
             $this->setPropertyQuestionConstraintsBasedOnTypes($question, $types);
 
-            /** @var mixed $answer */
-            $answer = $helper->ask($input, $output, $question);
-
-            $payload[$property] = $answer;
+            /** @psalm-suppress MixedAssignment */
+            $payload[$property] = $helper->ask($input, $output, $question);
         }
 
         /** @var EventInterface $eventModel */
