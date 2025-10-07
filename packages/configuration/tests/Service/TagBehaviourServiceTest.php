@@ -61,7 +61,7 @@ final class TagBehaviourServiceTest extends TestCase
      */
     public static function behavioursDataProvider(): Iterator
     {
-        yield "Only default behaviour (turned off)" => [
+        yield 'Only default behaviour (turned off)' => [
             new DefaultTagBehaviour(
                 carryforward: false
             ),
@@ -69,7 +69,7 @@ final class TagBehaviourServiceTest extends TestCase
             false
         ];
 
-        yield "Only default behaviour (turned on)" => [
+        yield 'Only default behaviour (turned on)' => [
             new DefaultTagBehaviour(
                 carryforward: true
             ),
@@ -77,7 +77,7 @@ final class TagBehaviourServiceTest extends TestCase
             true
         ];
 
-        yield "No matching individual tag behaviours" => [
+        yield 'No matching individual tag behaviours' => [
             new DefaultTagBehaviour(
                 carryforward: true
             ),
@@ -94,7 +94,7 @@ final class TagBehaviourServiceTest extends TestCase
             true
         ];
 
-        yield "Matching individual tag behaviours" => [
+        yield 'Matching individual tag behaviours' => [
             new DefaultTagBehaviour(
                 carryforward: false
             ),

@@ -91,7 +91,7 @@ class GithubAppClient extends Client
     #[Override]
     public function api($name): AbstractApi
     {
-        if ( ! $this->isAuthenticated) {
+        if (! $this->isAuthenticated) {
             $this->authenticateAsApp();
         }
 

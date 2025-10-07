@@ -51,7 +51,7 @@ final class TraceContext
         /** @var string $traceId */
         $traceId = ($context['traceId'] ?? '');
 
-        if ($traceId === "") {
+        if ($traceId === '') {
             return;
         }
 

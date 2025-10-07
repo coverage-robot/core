@@ -76,7 +76,7 @@ final class CustomPayloadEventBuilderTest extends TestCase
     {
         yield [
             new ArrayInput(
-                ['--file' => "some-path/"],
+                ['--file' => 'some-path/'],
                 new InputDefinition([
                     new InputOption('file', null, InputOption::VALUE_REQUIRED)
                 ])

@@ -71,9 +71,12 @@ final class EventBundle extends AbstractBundle
     {
         $container->parameters()
             ->set('event_bus.name', $config['event_bus']['name'] ?? EventBusClient::EVENT_BUS_NAME)
-            ->set('event_bus.scheduler_role', $config['event_bus']['scheduler_role'] ?? EventBusClient::EVENT_SCHEDULER_ROLE)
-            ->set('event_bus.account_id', $config['event_bus']['account_id'] ?? "")
-            ->set('event_bus.region', $config['event_bus']['region'] ?? "");
+            ->set(
+                'event_bus.scheduler_role',
+                $config['event_bus']['scheduler_role'] ?? EventBusClient::EVENT_SCHEDULER_ROLE
+            )
+            ->set('event_bus.account_id', $config['event_bus']['account_id'] ?? '')
+            ->set('event_bus.region', $config['event_bus']['region'] ?? '');
     }
 
     /**

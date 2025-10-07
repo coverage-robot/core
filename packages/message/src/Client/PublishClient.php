@@ -94,7 +94,8 @@ final readonly class PublishClient implements SqsClientInterface
      *    MessageBody?: string,
      *    DelaySeconds?: null|int,
      *    MessageAttributes?: null|array<string, MessageAttributeValue|array>,
-     *    MessageSystemAttributes?: null|array<MessageSystemAttributeNameForSends::*, MessageSystemAttributeValue|array>,
+     *    MessageSystemAttributes?:
+     *     null|array<MessageSystemAttributeNameForSends::*, MessageSystemAttributeValue|array>,
      *    MessageDeduplicationId?: null|string,
      *    MessageGroupId?: null|string,
      *  } $request

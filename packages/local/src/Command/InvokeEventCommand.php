@@ -147,7 +147,7 @@ final class InvokeEventCommand extends Command
         $helperSet = $this->getHelperSet();
 
         if (!$helperSet instanceof HelperSet) {
-            throw new LogicException("Unable to get helper set to build event with.");
+            throw new LogicException('Unable to get helper set to build event with.');
         }
 
         foreach ($this->eventBuilders as $eventBuilder) {

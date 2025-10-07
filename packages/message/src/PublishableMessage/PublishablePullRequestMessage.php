@@ -120,7 +120,7 @@ final readonly class PublishablePullRequestMessage implements PublishableMessage
     public function __toString(): string
     {
         return sprintf(
-            "PublishablePullRequestMessage#%s-%s-%s",
+            'PublishablePullRequestMessage#%s-%s-%s',
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()
