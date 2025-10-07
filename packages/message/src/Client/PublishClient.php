@@ -90,15 +90,14 @@ final readonly class PublishClient implements SqsClientInterface
      * Publish an SQS message onto the queue, with the trace header if it exists.
      *
      * @param array{
-     *    QueueUrl?: string,
-     *    MessageBody?: string,
-     *    DelaySeconds?: null|int,
-     *    MessageAttributes?: null|array<string, MessageAttributeValue|array>,
-     *    MessageSystemAttributes?:
-     *     null|array<MessageSystemAttributeNameForSends::*, MessageSystemAttributeValue|array>,
-     *    MessageDeduplicationId?: null|string,
-     *    MessageGroupId?: null|string,
-     *  } $request
+     *  QueueUrl?: string,
+     *  MessageBody?: string,
+     *  DelaySeconds?: null|int,
+     *  MessageAttributes?: null|array<string, MessageAttributeValue|array>,
+     *  MessageSystemAttributes?: null|array<MessageSystemAttributeNameForSends::*, MessageSystemAttributeValue|array>,
+     *  MessageDeduplicationId?: null|string,
+     *  MessageGroupId?: null|string,
+     * } $request
      */
     private function dispatchWithTraceHeader(array $request): bool
     {
