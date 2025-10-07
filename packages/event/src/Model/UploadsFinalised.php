@@ -11,27 +11,27 @@ use Packages\Contracts\Event\Event;
 use Packages\Contracts\Event\ParentAwareEventInterface;
 use Packages\Contracts\Provider\Provider;
 
-final class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final readonly class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
+    private DateTimeImmutable $eventTime;
+
     /**
      * @param string[] $parent
      */
     public function __construct(
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $ref,
-        private readonly string $commit,
-        private readonly array $parent,
-        private readonly string|int|null $pullRequest = null,
-        private readonly ?string $baseCommit = null,
-        private readonly ?string $baseRef = null,
-        private ?DateTimeImmutable $eventTime = null
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $ref,
+        private string $commit,
+        private array $parent,
+        private string|int|null $pullRequest = null,
+        private ?string $baseCommit = null,
+        private ?string $baseRef = null,
+        ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof DateTimeImmutable) {
-            $this->eventTime = new DateTimeImmutable();
-        }
+        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]

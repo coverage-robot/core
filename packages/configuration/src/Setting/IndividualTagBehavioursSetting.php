@@ -65,9 +65,6 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
     }
 
     /**
-     * @param IndividualTagBehaviour[] $value
-     *
-     * @throws ExceptionInterface
      * @throws InvalidSettingValueException
      */
     #[Override]
@@ -109,8 +106,10 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
     #[Override]
     public function deserialize(mixed $value): array
     {
+        /** @var IndividualTagBehaviour[] $behaviours */
         $behaviours = [];
 
+        /** @var mixed $item */
         foreach ($value as $item) {
             if ($item instanceof IndividualTagBehaviour) {
                 $behaviours[] = $item;
@@ -121,16 +120,30 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
             if ($item instanceof AttributeValue) {
                 $map = $item->getM();
 
+                $name =  $map['name']->getS();
+                $carryforward =  $map['carryforward']->getBool();
+
+                if ($name === null) {
+                    continue;
+                }
+
+                if ($carryforward === null) {
+                    continue;
+                }
+
                 $behaviours[] = new IndividualTagBehaviour(
-                    $map['name']->getS(),
-                    $map['carryforward']->getBool()
+                    $name,
+                    $carryforward
                 );
             } elseif (is_array($item)) {
-                $behaviours[] = $this->serializer->denormalize(
+                /** @var IndividualTagBehaviour $behaviour */
+                $behaviour = $this->serializer->denormalize(
                     $item,
                     IndividualTagBehaviour::class,
                     'json'
                 );
+
+                $behaviours[] = $behaviour;
             }
         }
 
@@ -144,7 +157,6 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
     }
 
     /**
-     * @param IndividualTagBehaviour[] $value
      * @return AttributeValue[]
      * @throws InvalidSettingValueException
      */
@@ -192,7 +204,12 @@ final readonly class IndividualTagBehavioursSetting implements SettingInterface
         );
 
         if ($violations->count() > 0) {
-            throw new InvalidSettingValueException('Invalid value for setting: ' . $violations);
+            throw new InvalidSettingValueException(
+                sprintf(
+                    "Invalid value for setting: %s",
+                    $violations
+                )
+            );
         }
 
         /** @var IndividualTagBehaviour[] $value */

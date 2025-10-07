@@ -10,6 +10,9 @@ use Packages\Contracts\Environment\Service;
 
 final class MockEnvironmentServiceFactory
 {
+    /**
+     * @param array<array-key, string> $variables
+     */
     public static function createMock(
         Environment $environment,
         Service $service,

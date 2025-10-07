@@ -19,22 +19,22 @@ use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
-class ObjectReferenceService
+final readonly class ObjectReferenceService
 {
     public function __construct(
         #[Autowire(value: '%object_reference_store.name%')]
-        private readonly string $objectReferenceStoreName,
+        private string $objectReferenceStoreName,
         #[Autowire(service: ObjectReferenceClient::class)]
-        private readonly ObjectReferenceClientInterface $client,
-        private readonly EnvironmentServiceInterface $environmentService,
-        private readonly LoggerInterface $objectReferenceLogger
+        private ObjectReferenceClientInterface $client,
+        private EnvironmentServiceInterface $environmentService,
+        private LoggerInterface $objectReferenceLogger
     ) {
     }
 
     /**
      * Resolve an object reference into a resource which contains the content of the object.
      *
-     * @return resource
+     * @return resource|false
      */
     public function resolveReference(Reference $reference): mixed
     {

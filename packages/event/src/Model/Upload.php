@@ -13,30 +13,30 @@ use Packages\Contracts\Provider\Provider;
 use Packages\Contracts\Tag\Tag;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
+final readonly class Upload implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
+    private DateTimeImmutable $eventTime;
+
     /**
      * @param string[] $parent
      */
     public function __construct(
-        private readonly string $uploadId,
-        private readonly Provider $provider,
-        private readonly string $projectId,
-        private readonly string $owner,
-        private readonly string $repository,
-        private readonly string $commit,
-        private readonly array $parent,
-        private readonly string $ref,
-        private readonly string $projectRoot,
-        private readonly Tag $tag,
-        private readonly string|int|null $pullRequest = null,
-        private readonly ?string $baseCommit = null,
-        private readonly ?string $baseRef = null,
-        private ?DateTimeImmutable $eventTime = null
+        private string $uploadId,
+        private Provider $provider,
+        private string $projectId,
+        private string $owner,
+        private string $repository,
+        private string $commit,
+        private array $parent,
+        private string $ref,
+        private string $projectRoot,
+        private Tag $tag,
+        private string|int|null $pullRequest = null,
+        private ?string $baseCommit = null,
+        private ?string $baseRef = null,
+        ?DateTimeImmutable $eventTime = null
     ) {
-        if (!$this->eventTime instanceof DateTimeImmutable) {
-            $this->eventTime = new DateTimeImmutable();
-        }
+        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Assert\NotBlank]

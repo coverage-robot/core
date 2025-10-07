@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Mock;
 
+use BackedEnum;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Override;
 use Packages\Contracts\Environment\Service;
 
-class MockEnvironmentService implements EnvironmentServiceInterface
+final readonly class MockEnvironmentService implements EnvironmentServiceInterface
 {
+    /**
+     * @param array<array-key, string> $variables
+     */
     public function __construct(
-        private readonly Environment $environment,
-        private readonly Service $service,
-        private readonly array $variables = []
+        private Environment $environment,
+        private Service $service,
+        private array $variables = []
     ) {
     }
 
@@ -30,9 +34,12 @@ class MockEnvironmentService implements EnvironmentServiceInterface
         return $this->service;
     }
 
+    /**
+     * @param BackedEnum $variable
+     */
     #[Override]
-    public function getVariable($name): string
+    public function getVariable(mixed $variable): string
     {
-        return $this->variables[$name->value] ?? '';
+        return $this->variables[$variable->value] ?? '';
     }
 }

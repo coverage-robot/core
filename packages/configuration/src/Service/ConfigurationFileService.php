@@ -24,9 +24,10 @@ final readonly class ConfigurationFileService
      */
     public function parseFile(string $configurationFile): WeakMap
     {
-        $parsedFile = Yaml::parse($configurationFile);
+        /** @var array<array-key, mixed> $parsedFile */
+        $parsedFile = Yaml::parse($configurationFile) ?? [];
 
-        $settings = $this->parseDotNotationKey($parsedFile ?? []);
+        $settings = $this->parseDotNotationKey($parsedFile);
 
         /** @var WeakMap<SettingKey, mixed> $parsedSettings */
         $parsedSettings = new WeakMap();
@@ -37,12 +38,13 @@ final readonly class ConfigurationFileService
             }
 
             try {
+                /** @var mixed $settingValue */
                 $settingValue = $this->settingService->deserialize(
                     $settingKey,
                     $settings[$settingKey->value]
                 );
 
-                $parsedSettings[$settingKey] = $settingValue;
+                $parsedSettings->offsetSet($settingKey, $settingValue);
             } catch (InvalidSettingValueException) {
                 continue;
             }
@@ -108,13 +110,14 @@ final readonly class ConfigurationFileService
      * ]
      * ```
      *
-     * @param array<string, mixed> $yaml
+     * @param array<array-key, mixed> $yaml
      */
     private function parseDotNotationKey(array $yaml, string $prefix = ''): array
     {
         /** @var array<string, mixed> $results */
         $results = [];
 
+        /** @var mixed $value */
         foreach ($yaml as $key => $value) {
             $key = sprintf('%s%s', $prefix, $key);
 
@@ -127,9 +130,11 @@ final readonly class ConfigurationFileService
                     $results,
                     $this->parseDotNotationKey($value, $key . '.')
                 );
+
                 continue;
             }
 
+            /** @var array|int|float|string $value */
             $results[$key] = $value;
         }
 

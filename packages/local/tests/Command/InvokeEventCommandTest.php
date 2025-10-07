@@ -15,6 +15,8 @@ use Packages\Local\Service\EventBuilderInterface;
 use Packages\Local\Tests\Mock\FakeEventBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Serializer\Serializer;
 
@@ -49,16 +51,19 @@ final class InvokeEventCommandTest extends TestCase
                 ])
             );
 
-        $commandTester = new CommandTester(
-            new InvokeEventCommand(
-                $mockSerializer,
-                $mockEventHandler,
-                [
-                    new FakeEventBuilder(),
-                    $this->createMock(EventBuilderInterface::class)
-                ]
-            )
+        $command = new InvokeEventCommand(
+            $mockSerializer,
+            $mockEventHandler,
+            [
+                new FakeEventBuilder(),
+                $this->createMock(EventBuilderInterface::class)
+            ]
         );
+        $command->setHelperSet(new HelperSet([
+            new QuestionHelper()
+        ]));
+
+        $commandTester = new CommandTester($command);
 
         $outcome = $commandTester->execute([
             'event' => Event::UPLOADS_FINALISED->value

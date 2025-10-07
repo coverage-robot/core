@@ -34,17 +34,27 @@ final class TraceContext
      */
     public static function setTraceHeaderFromEnvironment(): void
     {
-        if (!isset($_SERVER[self::LAMBDA_INVOCATION_CONTEXT])) {
+        if (!array_key_exists(self::LAMBDA_INVOCATION_CONTEXT, $_SERVER)) {
+            return;
+        }
+
+        /** @var mixed $rawContext */
+        $rawContext = $_SERVER[self::LAMBDA_INVOCATION_CONTEXT];
+
+        if (!is_string($rawContext)) {
             return;
         }
 
         /** @var array $context */
-        $context = json_decode((string) $_SERVER[self::LAMBDA_INVOCATION_CONTEXT], true);
+        $context = json_decode($rawContext, true);
 
-        if (empty($context['traceId'] ?? '')) {
+        /** @var string $traceId */
+        $traceId = ($context['traceId'] ?? '');
+
+        if ($traceId === "") {
             return;
         }
 
-        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $context['traceId']);
+        putenv(EnvironmentVariable::X_AMZN_TRACE_ID->value . '=' . $traceId);
     }
 }

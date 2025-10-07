@@ -28,6 +28,10 @@ final class ConfigurationBundle extends AbstractBundle
     #[Override]
     public function configure(DefinitionConfigurator $definition): void
     {
+        /**
+         * @psalm-suppress UndefinedMethod
+         * @psalm-suppress MixedMethodCall
+         */
         $definition->rootNode()
             ->children()
                 ->enumNode('service')
@@ -40,7 +44,7 @@ final class ConfigurationBundle extends AbstractBundle
     /**
      * Extract any configuration values from the configuration and populate the container with them.
      *
-     * @param array<string, mixed> $config
+     * @param array<array-key, mixed> $config
      */
     private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
     {

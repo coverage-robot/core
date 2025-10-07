@@ -10,6 +10,7 @@ use Packages\Event\Model\EventInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -32,26 +33,37 @@ final readonly class CustomPayloadEventBuilder implements EventBuilderInterface
         return 0;
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Override]
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        ?HelperSet $helperSet,
+        HelperSet $helperSet,
         Event $event
     ): EventInterface {
+        /** @var string $filePath */
         $filePath = $input->getOption('file');
 
-        return $this->serializer->denormalize(
+        /** @var array $file */
+        $file = json_decode(
+            (string)file_get_contents($filePath),
+            true,
+            JSON_THROW_ON_ERROR
+        );
+
+        /** @var EventInterface $eventModel */
+        $eventModel = $this->serializer->denormalize(
             array_merge(
                 [
                     'type' => $event->value
                 ],
-                json_decode(
-                    file_get_contents($filePath),
-                    true
-                )
+                $file
             ),
             EventInterface::class
         );
+
+        return $eventModel;
     }
 }

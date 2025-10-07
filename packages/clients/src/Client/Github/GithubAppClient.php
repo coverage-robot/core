@@ -20,6 +20,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\HttplugClient;
 use Symfony\Component\HttpClient\HttpOptions;
 
+/**
+ * @api
+ */
 class GithubAppClient extends Client
 {
     private bool $isAuthenticated = false;
@@ -35,6 +38,10 @@ class GithubAppClient extends Client
      */
     private const int TIMEOUT = 15;
 
+    /**
+     * @param non-empty-string $appId
+     * @param non-empty-string $privateKeyFile
+     */
     public function __construct(
         #[Autowire(env: 'GITHUB_APP_ID')]
         private readonly string $appId,

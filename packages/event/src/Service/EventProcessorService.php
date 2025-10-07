@@ -55,7 +55,7 @@ final readonly class EventProcessorService implements EventProcessorServiceInter
     /**
      * Get a list of all the processors which are registered and available to handle events.
      *
-     * @return array<value-of<Event>, EventProcessorInterface>
+     * @return array<array-key, mixed>
      */
     public function getRegisteredProcessors(): array
     {

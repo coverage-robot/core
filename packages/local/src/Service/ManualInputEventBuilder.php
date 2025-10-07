@@ -4,24 +4,33 @@ declare(strict_types=1);
 
 namespace Packages\Local\Service;
 
+use Symfony\Component\TypeInfo\Type;
+use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
+use BackedEnum;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Exception;
 use InvalidArgumentException;
+use LogicException;
 use Override;
 use Packages\Contracts\Event\Event;
 use Packages\Contracts\Provider\Provider;
 use Packages\Event\Model\EventInterface;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\PropertyInfo\PropertyInfoExtractorInterface;
-use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorResolverInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\TypeInfo\Type\BuiltinType;
+use Symfony\Component\TypeInfo\Type\EnumType;
+use Symfony\Component\TypeInfo\Type\ObjectType;
+use Symfony\Component\TypeInfo\TypeIdentifier;
 
 final readonly class ManualInputEventBuilder implements EventBuilderInterface
 {
@@ -48,11 +57,14 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         return -1000;
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     #[Override]
     public function build(
         InputInterface $input,
         OutputInterface $output,
-        ?HelperSet $helperSet,
+        HelperSet $helperSet,
         Event $event
     ): EventInterface {
         $payload = [];
@@ -61,10 +73,25 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
             EventInterface::class
         );
 
+        if (!$discriminatorMap instanceof ClassDiscriminatorMapping) {
+            throw new LogicException("Cannot manually build event if there is no discriminator map for the Event interface.");
+        }
+
         $eventClass = $discriminatorMap->getClassForType($event->value);
 
-        $properties = $this->propertyInfoExtractor->getProperties($eventClass);
+        if ($eventClass === null || $eventClass === '' || $eventClass === '0') {
+            throw new LogicException(
+                sprintf(
+                    "Cannot build event manually for %s as it is not listed as a model on the Event interface.",
+                    $event->value
+                )
+            );
+        }
 
+        /** @var list<string> $properties */
+        $properties = $this->propertyInfoExtractor->getProperties($eventClass) ?? [];
+
+        /** @var QuestionHelper $helper */
         $helper = $helperSet->get('question');
         foreach ($properties as $index => $property) {
             if ($property === 'type') {
@@ -72,7 +99,11 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                 continue;
             }
 
-            $types = $this->propertyInfoExtractor->getTypes($eventClass, $property);
+            $type = $this->propertyInfoExtractor->getType($eventClass, $property);
+
+            if (!$type instanceof Type) {
+                continue;
+            }
 
             $question = new Question(
                 sprintf(
@@ -80,60 +111,63 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                     $index + 1,
                     count($properties),
                     $property,
-                    implode(
-                        "|",
-                        array_map(
-                            static fn (Type $type): string => $type->getClassName() ?? $type->getBuiltinType(),
-                            $types
-                        )
-                    )
+                    (string)$type
                 )
             );
-            $this->setPropertyQuestionConstraintsBasedOnTypes($question, $types);
+            $this->setPropertyQuestionConstraintsBasedOnTypes($question, $type);
 
+            /** @psalm-suppress MixedAssignment */
             $payload[$property] = $helper->ask($input, $output, $question);
         }
 
-        return $this->serializer->denormalize(
+        /** @var EventInterface $eventModel */
+        $eventModel = $this->serializer->denormalize(
             $payload,
             $eventClass
         );
+
+        return $eventModel;
     }
 
-    /**
-     * @param Type[] $types
-     */
-    private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, array $types): void
+    private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, Type $types): void
     {
-        switch ($types[0]->getClassName() ?? $types[0]->getBuiltinType()) {
-            case 'array':
-                $question->setNormalizer(static fn(?string $value): ?array => $value !== null ? explode(',', $value) : $value);
-                break;
-            case Provider::class:
-                $question->setValidator($this->getEnumValidatorCallback(Provider::class));
-                $question->setAutocompleterValues($this->getEnumAutocompleteValues(Provider::class));
-                break;
-            case DateTimeInterface::class:
-            case DateTime::class:
-            case DateTimeImmutable::class:
-                $question->setValidator(
-                    static function (string $value): string {
-                        try {
-                            new DateTimeImmutable($value);
-                            return $value;
-                        } catch (Exception) {
-                            throw new InvalidArgumentException(
-                                sprintf(
-                                    'Failed to parse date "%s", please try again',
-                                    $value
-                                )
-                            );
-                        }
+        if ($types instanceof BuiltinType && $types->getTypeIdentifier() === TypeIdentifier::ARRAY) {
+            $question->setNormalizer(static fn(?string $value): ?array => $value !== null ? explode(',', $value) : $value);
+            return;
+        }
+
+        if ($types instanceof EnumType && $types->getClassName() === Provider::class) {
+            $question->setValidator($this->getEnumValidatorCallback(Provider::class));
+            $question->setAutocompleterValues($this->getEnumAutocompleteValues(Provider::class));
+            return;
+        }
+
+        if (
+            $types instanceof ObjectType &&
+            in_array(
+                $types->getClassName(),
+                [
+                    DateTimeInterface::class,
+                    DateTime::class,
+                    DateTimeImmutable::class,
+                ]
+            )
+        ) {
+            $question->setValidator(
+                static function (string $value): string {
+                    try {
+                        new DateTimeImmutable($value);
+                        return $value;
+                    } catch (Exception) {
+                        throw new InvalidArgumentException(
+                            sprintf(
+                                'Failed to parse date "%s", please try again',
+                                $value
+                            )
+                        );
                     }
-                );
-                break;
-            default:
-                break;
+                }
+            );
         }
     }
 
@@ -158,12 +192,17 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
 
     /**
      * Get the values for an enum class to be used for autocompletion in the console.
+     *
+     * @return int[]|string[]
      */
     private function getEnumAutocompleteValues(string $enumClass): array
     {
+        /** @var BackedEnum[] $cases */
+        $cases = call_user_func([$enumClass, 'cases']);
+
         return array_map(
-            static fn(Provider $provider) => $provider->value,
-            call_user_func([$enumClass, 'cases'])
+            static fn(BackedEnum $provider): int|string => $provider->value,
+            $cases
         );
     }
 }

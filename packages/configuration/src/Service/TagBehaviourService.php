@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Packages\Configuration\Service;
 
 use Packages\Configuration\Enum\SettingKey;
+use Packages\Configuration\Model\DefaultTagBehaviour;
+use Packages\Configuration\Model\IndividualTagBehaviour;
 use Packages\Contracts\Provider\Provider;
 
 /**
@@ -24,6 +26,7 @@ final readonly class TagBehaviourService
         string $repository,
         string $tag
     ): bool {
+        /** @var IndividualTagBehaviour[] $individualBehaviours */
         $individualBehaviours = $this->settingService->get(
             $provider,
             $owner,
@@ -43,6 +46,7 @@ final readonly class TagBehaviourService
 
         // No individual setting has been defined, so fallback to the default
         // behaviour
+        /** @var DefaultTagBehaviour $defaultBehaviour */
         $defaultBehaviour = $this->settingService->get(
             $provider,
             $owner,

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Packages\Contracts\Environment;
 
+use BackedEnum;
+
 interface EnvironmentServiceInterface
 {
     /**
@@ -18,6 +20,8 @@ interface EnvironmentServiceInterface
 
     /**
      * Get the value of an environment variable.
+     *
+     * @param BackedEnum $variable
      */
-    public function getVariable($variable): string;
+    public function getVariable(mixed $variable): string;
 }

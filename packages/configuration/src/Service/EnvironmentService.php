@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Service;
 
+use BackedEnum;
 use Override;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
@@ -32,13 +33,24 @@ final readonly class EnvironmentService implements EnvironmentServiceInterface
         return $this->service;
     }
 
+    /**
+     * @param BackedEnum $variable
+     */
     #[Override]
-    public function getVariable($variable): string
+    public function getVariable(mixed $variable): string
     {
-        if (array_key_exists($variable->value, $_ENV)) {
-            return (string)$_ENV[$variable->value];
+        $variable = (string)$variable->value;
+
+        if (array_key_exists($variable, $_ENV)) {
+            return (string)$_ENV[$variable];
         }
 
-        return getenv($variable->value) ?: '';
+        $envVar  = getenv($variable);
+
+        if (false === $envVar) {
+            return '';
+        }
+
+        return $envVar;
     }
 }

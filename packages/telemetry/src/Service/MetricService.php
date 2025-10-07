@@ -25,10 +25,6 @@ final readonly class MetricService implements MetricServiceInterface
 {
     private const string NAMESPACE = 'Metrics';
 
-    public const FUNCTION_VERSION = 'functionVersion';
-
-    public const FUNCTION_NAME = 'functionName';
-
     public function __construct(
         private LoggerInterface $metricsLogger,
         #[Autowire(service: NativeClock::class)]
@@ -42,6 +38,7 @@ final readonly class MetricService implements MetricServiceInterface
      * @inheritDoc
      *
      * @param int|float|(int|float)[] $value
+     * @param string[][]|null $dimensions
      */
     #[Override]
     public function put(
@@ -87,6 +84,8 @@ final readonly class MetricService implements MetricServiceInterface
 
     /**
      * @inheritDoc
+     *
+     * @param string[][]|null $dimensions
      */
     #[Override]
     public function increment(
@@ -108,6 +107,8 @@ final readonly class MetricService implements MetricServiceInterface
 
     /**
      * Format a singular metric into the Embedded Metric Format.
+     *
+     * @param string[][] $dimensions
      *
      * @throws ExceptionInterface
      */
