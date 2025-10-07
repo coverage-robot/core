@@ -158,7 +158,7 @@ final readonly class DefaultTagBehaviourSetting implements SettingInterface
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
                 sprintf(
-                    "Invalid value for setting: %s",
+                    'Invalid value for setting: %s',
                     $violations
                 )
             );

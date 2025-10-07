@@ -61,7 +61,7 @@ final readonly class PublishableCoverageFailedJobMessage implements PublishableC
     public function __toString(): string
     {
         return sprintf(
-            "PublishableCoverageFailedJobMessage#%s-%s-%s",
+            'PublishableCoverageFailedJobMessage#%s-%s-%s',
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()

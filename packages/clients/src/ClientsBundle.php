@@ -49,6 +49,6 @@ final class ClientsBundle extends AbstractBundle
     private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
     {
         $container->parameters()
-            ->set('object_reference_store.name', $config['object_reference_store']['name'] ?? "");
+            ->set('object_reference_store.name', $config['object_reference_store']['name'] ?? '');
     }
 }

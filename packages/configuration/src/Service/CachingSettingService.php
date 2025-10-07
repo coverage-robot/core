@@ -135,7 +135,7 @@ final class CachingSettingService implements SettingServiceInterface
     ): string {
         return md5(
             implode(
-                "",
+                '',
                 [
                     $key->value,
                     $provider->value,

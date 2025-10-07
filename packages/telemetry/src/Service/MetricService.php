@@ -56,7 +56,7 @@ final readonly class MetricService implements MetricServiceInterface
                     $metric,
                     $value,
                     (int)$this->clock->now()
-                        ->format("Uv"),
+                        ->format('Uv'),
                     $unit,
                     $resolution,
                     array_merge([[self::FUNCTION_NAME]], $dimensions ?? []),

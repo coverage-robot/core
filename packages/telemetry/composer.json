@@ -21,7 +21,8 @@
         "symfony/property-access": "^7.1",
         "bref/bref": "^2.1",
         "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -34,6 +35,7 @@
         }
     },
     "scripts": {
+        "lint:style": "phpcs",
         "lint:rector": "rector process --dry-run",
         "lint:static-analysis": "psalm",
         "lint:security": "psalm --taint-analysis",

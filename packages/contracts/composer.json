@@ -14,6 +14,7 @@
         }
     },
     "scripts": {
+        "lint:style": "phpcs",
         "lint:rector": "rector process --dry-run",
         "lint:static-analysis": "psalm",
         "lint:security": "psalm --taint-analysis"
@@ -23,6 +24,7 @@
     ],
     "require-dev": {
         "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13",
+        "squizlabs/php_codesniffer": "^4.0"
     }
 }

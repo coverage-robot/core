@@ -74,7 +74,9 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         );
 
         if (!$discriminatorMap instanceof ClassDiscriminatorMapping) {
-            throw new LogicException("Cannot manually build event if there is no discriminator map for the Event interface.");
+            throw new LogicException(
+                'Cannot manually build event if there is no discriminator map for the Event interface.'
+            );
         }
 
         $eventClass = $discriminatorMap->getClassForType($event->value);
@@ -82,7 +84,7 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
         if ($eventClass === null || $eventClass === '' || $eventClass === '0') {
             throw new LogicException(
                 sprintf(
-                    "Cannot build event manually for %s as it is not listed as a model on the Event interface.",
+                    'Cannot build event manually for %s as it is not listed as a model on the Event interface.',
                     $event->value
                 )
             );
@@ -132,7 +134,11 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
     private function setPropertyQuestionConstraintsBasedOnTypes(Question $question, Type $types): void
     {
         if ($types instanceof BuiltinType && $types->getTypeIdentifier() === TypeIdentifier::ARRAY) {
-            $question->setNormalizer(static fn(?string $value): ?array => $value !== null ? explode(',', $value) : $value);
+            $question->setNormalizer(
+                static fn(?string $value): ?array =>
+                    $value !== null ? explode(',', $value) : $value
+            );
+
             return;
         }
 

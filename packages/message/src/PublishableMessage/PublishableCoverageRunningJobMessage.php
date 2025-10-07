@@ -61,7 +61,7 @@ final readonly class PublishableCoverageRunningJobMessage implements Publishable
     public function __toString(): string
     {
         return sprintf(
-            "PublishableCoverageRunningJobMessage#%s-%s-%s",
+            'PublishableCoverageRunningJobMessage#%s-%s-%s',
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()

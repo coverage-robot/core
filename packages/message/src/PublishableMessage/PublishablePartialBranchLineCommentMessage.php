@@ -95,7 +95,7 @@ final readonly class PublishablePartialBranchLineCommentMessage implements Publi
     public function __toString(): string
     {
         return sprintf(
-            "PublishableCheckAnnotationMessage#%s-%s-%s",
+            'PublishableCheckAnnotationMessage#%s-%s-%s',
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()

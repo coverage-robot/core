@@ -52,6 +52,6 @@ class Tag implements Stringable
     #[Override]
     public function __toString(): string
     {
-        return sprintf("Tag#%s-%s", $this->name, $this->commit);
+        return sprintf('Tag#%s-%s', $this->name, $this->commit);
     }
 }

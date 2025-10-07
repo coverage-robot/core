@@ -86,7 +86,7 @@ final readonly class PublishableCheckRunMessage implements PublishableCheckRunMe
     public function __toString(): string
     {
         return sprintf(
-            "PublishableCheckRunMessage#%s-%s-%s",
+            'PublishableCheckRunMessage#%s-%s-%s',
             $this->event->getOwner(),
             $this->event->getRepository(),
             $this->event->getCommit()

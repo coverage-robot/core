@@ -17,8 +17,7 @@ final readonly class MetricDefinition
         private Unit $unit,
         #[SerializedName('StorageResolution')]
         private Resolution $resolution,
-    )
-    {
+    ) {
     }
 
     public function getName(): string

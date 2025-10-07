@@ -109,7 +109,7 @@ final readonly class PathReplacementsSetting implements SettingInterface
             /** @var PathReplacement $pathReplacement */
             $pathReplacement = match (true) {
                 $item instanceof AttributeValue => new PathReplacement(
-                    $item->getM()['before']?->getS() ?? "",
+                    $item->getM()['before']?->getS() ?? '',
                     $item->getM()['after']->getS()
                 ),
                 is_array($item) => $this->serializer->denormalize(
@@ -180,7 +180,7 @@ final readonly class PathReplacementsSetting implements SettingInterface
         if ($violations->count() > 0) {
             throw new InvalidSettingValueException(
                 sprintf(
-                    "Invalid value for setting: %s",
+                    'Invalid value for setting: %s',
                     $violations
                 )
             );
