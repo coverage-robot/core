@@ -13,7 +13,10 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\UnencryptedToken;
 use Packages\Clients\Exception\ClientException;
 
-final class JwtGenerator
+/**
+ * @api
+ */
+class JwtGenerator
 {
     /**
      * @param non-empty-string $issuer

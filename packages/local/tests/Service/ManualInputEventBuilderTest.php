@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Local\Tests\Service;
 
+use Symfony\Component\TypeInfo\Type\BuiltinType;
 use Iterator;
 use Packages\Contracts\Event\Event;
 use Packages\Event\Model\EventInterface;
@@ -22,7 +23,6 @@ use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorMapping;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeIdentifier;
 
 final class ManualInputEventBuilderTest extends TestCase
@@ -57,7 +57,7 @@ final class ManualInputEventBuilderTest extends TestCase
         $mockPropertyInfoExtractor->expects($this->once())
             ->method('getType')
             ->with(EventInterface::class, 'some-field')
-            ->willReturn(new Type\BuiltinType(TypeIdentifier::STRING));
+            ->willReturn(new BuiltinType(TypeIdentifier::STRING));
 
         $mockClassDiscriminator = $this->createMock(ClassDiscriminatorFromClassMetadata::class);
         $mockClassDiscriminator->expects($this->once())
