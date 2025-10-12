@@ -73,15 +73,6 @@ resource "aws_iam_policy" "ingest_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:PutObject"
-        ]
-        Resource = [
-          "${data.terraform_remote_state.core.outputs.output_bucket.arn}/*"
-        ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
           "events:PutEvents"
         ]
         Resource = [

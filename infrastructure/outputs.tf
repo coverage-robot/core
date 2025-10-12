@@ -3,11 +3,6 @@ output "ingest_bucket" {
   sensitive = true
 }
 
-output "output_bucket" {
-  value     = module.bucket.output_bucket
-  sensitive = true
-}
-
 output "object_reference_bucket" {
   value     = module.bucket.object_reference_bucket
   sensitive = true
