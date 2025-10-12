@@ -23,7 +23,6 @@ use Packages\Event\Client\EventBusClientInterface;
 use Packages\Event\Model\CoverageFailed;
 use Packages\Event\Model\CoverageFinalised;
 use Packages\Event\Model\UploadsFinalised;
-use Packages\Event\Model\UtilisationAmendment;
 use Packages\Event\Processor\EventProcessorInterface;
 use Packages\Message\Client\PublishClient;
 use Packages\Message\Client\SqsClientInterface;
@@ -81,24 +80,6 @@ final readonly class UploadsFinalisedEventProcessor implements EventProcessorInt
             );
 
             if ($successful) {
-                /**
-                 * Broadcast a new amendment to the utilisation data for the project.
-                 *
-                 * This will let any services know that the project's utilisation has increased
-                 */
-                $this->eventBusClient->fireEvent(
-                    new UtilisationAmendment(
-                        provider: $event->getProvider(),
-                        projectId: $event->getProjectId(),
-                        owner: $event->getOwner(),
-                        repository: $event->getRepository(),
-                        ref: $event->getRef(),
-                        commit: $event->getCommit(),
-                        analysedCoverage: $totalReportSize,
-                        pullRequest: $event->getPullRequest(),
-                    )
-                );
-
                 /**
                  * Broadcast the finalised coverage event so that other services can act on it.
                  */
