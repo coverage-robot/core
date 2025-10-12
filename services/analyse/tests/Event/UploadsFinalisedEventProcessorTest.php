@@ -159,8 +159,8 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
 
-        // Should fire once for utilisation amendment and once for finalising coverage
-        $mockEventBusClient->expects($this->exactly(2))
+        // Should fire once when finalising coverage
+        $mockEventBusClient->expects($this->once())
             ->method('fireEvent')
             ->willReturn(true);
 
