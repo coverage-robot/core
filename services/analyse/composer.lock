@@ -763,16 +763,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "97ab02b2489cf61e11afdcdafa0b3938825df91b"
+                "reference": "ac0393ae225885b822031d933fbee059c025b610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/97ab02b2489cf61e11afdcdafa0b3938825df91b",
-                "reference": "97ab02b2489cf61e11afdcdafa0b3938825df91b",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/ac0393ae225885b822031d933fbee059c025b610",
+                "reference": "ac0393ae225885b822031d933fbee059c025b610",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -797,6 +797,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^10.3 || ^11.0 || ^12.0",
                 "rector/rector": "^1.2 || ^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "library",
@@ -812,6 +813,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -828,22 +832,22 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:42+00:00"
+            "time": "2025-10-07T18:32:33+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "8e82cd1749e9d291083d6c85711c91654ce31864"
+                "reference": "c9dedb111775bcf1c9a8d55a7be6a06512a24098"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/8e82cd1749e9d291083d6c85711c91654ce31864",
-                "reference": "8e82cd1749e9d291083d6c85711c91654ce31864",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/c9dedb111775bcf1c9a8d55a7be6a06512a24098",
+                "reference": "c9dedb111775bcf1c9a8d55a7be6a06512a24098",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -868,6 +872,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "symfony-bundle",
@@ -883,6 +888,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -899,22 +907,22 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:36+00:00"
+            "time": "2025-10-07T18:32:36+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "4caa87a18171ca3f611638901650528983e0e342"
+                "reference": "1fd258a47fbd136a0535b4510fbd0ed8a0ed3651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/4caa87a18171ca3f611638901650528983e0e342",
-                "reference": "4caa87a18171ca3f611638901650528983e0e342",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/1fd258a47fbd136a0535b4510fbd0ed8a0ed3651",
+                "reference": "1fd258a47fbd136a0535b4510fbd0ed8a0ed3651",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -929,6 +937,7 @@
             },
             "require-dev": {
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "symfony-bundle",
@@ -939,6 +948,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -951,22 +963,22 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:41+00:00"
+            "time": "2025-10-07T18:32:30+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "326d298d8ccd2fb165c917301eb5d8733b226abe"
+                "reference": "a81f8ce8d8b75499ec211d671d750274141a74ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/326d298d8ccd2fb165c917301eb5d8733b226abe",
-                "reference": "326d298d8ccd2fb165c917301eb5d8733b226abe",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/a81f8ce8d8b75499ec211d671d750274141a74ba",
+                "reference": "a81f8ce8d8b75499ec211d671d750274141a74ba",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -992,6 +1004,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "symfony-bundle",
@@ -1007,6 +1020,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -1023,22 +1039,22 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/event/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:37+00:00"
+            "time": "2025-10-12T23:52:08+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
-                "reference": "10b6ce76e85772b00f2cf6b277f0039f93ff09f8"
+                "reference": "9ce432a3e4dc58f94f791f87be52bc83922d1a6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/message/zipball/10b6ce76e85772b00f2cf6b277f0039f93ff09f8",
-                "reference": "10b6ce76e85772b00f2cf6b277f0039f93ff09f8",
+                "url": "https://api.github.com/repos/coverage-robot/message/zipball/9ce432a3e4dc58f94f791f87be52bc83922d1a6f",
+                "reference": "9ce432a3e4dc58f94f791f87be52bc83922d1a6f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1060,6 +1076,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "symfony-bundle",
@@ -1075,6 +1092,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -1091,22 +1111,22 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/message/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:39+00:00"
+            "time": "2025-10-07T18:32:33+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "6bfa27c3b2268eaf16cef15fe6990fa7009796cc"
+                "reference": "0354305f5419245418e74ce265c32353405b2af8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/6bfa27c3b2268eaf16cef15fe6990fa7009796cc",
-                "reference": "6bfa27c3b2268eaf16cef15fe6990fa7009796cc",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/0354305f5419245418e74ce265c32353405b2af8",
+                "reference": "0354305f5419245418e74ce265c32353405b2af8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1131,6 +1151,7 @@
                 "estahn/phpunit-json-assertions": "^4.0",
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "symfony/property-access": "^7.1",
                 "vimeo/psalm": "^6.13"
             },
@@ -1147,6 +1168,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -1163,9 +1187,9 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:41+00:00"
+            "time": "2025-10-07T18:32:34+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -9143,16 +9167,16 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.6.9",
+            "version": "v1.6.10",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
-                "reference": "2638da669d6210cbf05fe5933cb2958b74532907"
+                "reference": "4dd44e5cd42700aedcd02f3294fe89319575c163"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/local/zipball/2638da669d6210cbf05fe5933cb2958b74532907",
-                "reference": "2638da669d6210cbf05fe5933cb2958b74532907",
+                "url": "https://api.github.com/repos/coverage-robot/local/zipball/4dd44e5cd42700aedcd02f3294fe89319575c163",
+                "reference": "4dd44e5cd42700aedcd02f3294fe89319575c163",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9177,6 +9201,7 @@
                 "bref/bref": "^2.1",
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
+                "squizlabs/php_codesniffer": "^4.0",
                 "vimeo/psalm": "^6.13"
             },
             "type": "symfony-bundle",
@@ -9192,6 +9217,9 @@
             },
             "notification-url": "https://coverage-robot.repo.repman.io/downloads",
             "scripts": {
+                "lint:style": [
+                    "phpcs"
+                ],
                 "lint:rector": [
                     "rector process --dry-run"
                 ],
@@ -9208,9 +9236,9 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.6.9"
+                "source": "https://github.com/coverage-robot/local/tree/v1.6.10"
             },
-            "time": "2025-10-07T00:42:38+00:00"
+            "time": "2025-10-07T18:32:36+00:00"
         },
         {
             "name": "danog/advanced-json-rpc",
