@@ -19,8 +19,6 @@ final class ClientsBundle extends AbstractBundle
         ContainerBuilder $builder
     ): void {
         $container->import(__DIR__ . '/../config/services.yaml');
-
-        $this->populateContainerWithConfiguration($container, $config);
     }
 
     #[Override]
@@ -30,25 +28,6 @@ final class ClientsBundle extends AbstractBundle
          * @psalm-suppress UndefinedMethod
          * @psalm-suppress MixedMethodCall
          */
-        $definition->rootNode()
-            ->children()
-                ->arrayNode('object_reference_store')
-                    ->children()
-                        ->scalarNode('name')->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    /**
-     * Extract any configuration values from the configuration and populate the container with them.
-     *
-     * @param array<array-key, mixed> $config
-     */
-    private function populateContainerWithConfiguration(ContainerConfigurator $container, array $config): void
-    {
-        $container->parameters()
-            ->set('object_reference_store.name', $config['object_reference_store']['name'] ?? '');
+        $definition->rootNode()->end();
     }
 }

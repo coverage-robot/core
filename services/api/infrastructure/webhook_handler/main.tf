@@ -154,7 +154,6 @@ resource "aws_lambda_function" "webhooks" {
       "PROJECT_POOL_ID"                    = data.terraform_remote_state.core.outputs.project_pool.id,
       "PROJECT_POOL_CLIENT_ID"             = aws_cognito_user_pool_client.cognito_client.id,
       "PROJECT_POOL_CLIENT_SECRET"         = aws_cognito_user_pool_client.cognito_client.client_secret,
-      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }

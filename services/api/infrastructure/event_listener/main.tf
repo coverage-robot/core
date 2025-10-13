@@ -120,7 +120,6 @@ resource "aws_lambda_function" "events" {
       BREF_PING_DISABLE                    = "1"
       "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
       "REF_METADATA_TABLE"                 = var.ref_metadata_table.name,
-      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }

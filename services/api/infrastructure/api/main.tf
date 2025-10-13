@@ -165,7 +165,6 @@ resource "aws_lambda_function" "api" {
       "PROJECT_POOL_CLIENT_ID"             = aws_cognito_user_pool_client.cognito_client.id,
       "PROJECT_POOL_CLIENT_SECRET"         = aws_cognito_user_pool_client.cognito_client.client_secret,
       "REF_METADATA_TABLE"                 = var.ref_metadata_table.name,
-      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
     }
   }
 }

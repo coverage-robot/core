@@ -160,7 +160,6 @@ resource "aws_lambda_function" "analyse" {
       "BIGQUERY_UPLOAD_TABLE"              = data.terraform_remote_state.core.outputs.upload_table.table_id,
       "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
       "QUERY_CACHE_TABLE_NAME"             = var.query_cache_name
-      "OBJECT_REFERENCE_STORE_BUCKET_NAME" = data.terraform_remote_state.core.outputs.object_reference_bucket.bucket,
 
       # Mounted into the working directory as part of the deployment workflow, and picked up by
       # the GCP clients automatically.
