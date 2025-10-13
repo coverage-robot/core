@@ -3,11 +3,6 @@ output "ingest_bucket" {
   sensitive = true
 }
 
-output "object_reference_bucket" {
-  value     = module.bucket.object_reference_bucket
-  sensitive = true
-}
-
 output "publish_queue" {
   value     = module.queue.publish_queue
   sensitive = true
