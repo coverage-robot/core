@@ -117,9 +117,9 @@ resource "aws_lambda_function" "events" {
 
   environment {
     variables = {
-      BREF_PING_DISABLE                    = "1"
-      "AWS_ACCOUNT_ID"                     = data.aws_caller_identity.current.account_id
-      "REF_METADATA_TABLE"                 = var.ref_metadata_table.name,
+      BREF_PING_DISABLE    = "1"
+      "AWS_ACCOUNT_ID"     = data.aws_caller_identity.current.account_id
+      "REF_METADATA_TABLE" = var.ref_metadata_table.name,
     }
   }
 }
