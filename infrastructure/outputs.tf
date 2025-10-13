@@ -8,13 +8,6 @@ output "publish_queue" {
   sensitive = true
 }
 
-output "object_reference_bucket" {
-  value = {
-    bucket : "x",
-    arn : "x"
-  }
-  sensitive = true
-}
 output "webhooks_queue" {
   value     = module.queue.webhooks_queue
   sensitive = true
