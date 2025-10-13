@@ -14,17 +14,17 @@ output "webhooks_queue" {
 }
 
 output "cloudfront_distribution" {
-  value     = length(module.warehouse) > 0 ? module.routing.cloudwatch_distribution : null
+  value     = length(module.routing) > 0 ? module.routing.cloudwatch_distribution : null
   sensitive = true
 }
 
 output "api_gateway" {
-  value     = length(module.warehouse) > 0 ? module.routing.api_gateway : null
+  value     = length(module.routing) > 0 ? module.routing.api_gateway : null
   sensitive = true
 }
 
 output "api_gateway_default_stage" {
-  value     = length(module.warehouse) > 0 ? module.routing.api_gateway_default_stage : null
+  value     = length(module.routing) > 0 ? module.routing.api_gateway_default_stage : null
   sensitive = true
 }
 
