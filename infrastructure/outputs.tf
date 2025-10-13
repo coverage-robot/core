@@ -8,23 +8,30 @@ output "publish_queue" {
   sensitive = true
 }
 
+output "object_reference_bucket" {
+  value = {
+    bucket : "x",
+    arn : "x"
+  }
+  sensitive = true
+}
 output "webhooks_queue" {
   value     = module.queue.webhooks_queue
   sensitive = true
 }
 
 output "cloudfront_distribution" {
-  value     = length(module.warehouse) > 0 ? module.routing.cloudwatch_distribution : null
+  value     = length(module.routing) > 0 ? module.routing.cloudwatch_distribution : null
   sensitive = true
 }
 
 output "api_gateway" {
-  value     = length(module.warehouse) > 0 ? module.routing.api_gateway : null
+  value     = length(module.routing) > 0 ? module.routing.api_gateway : null
   sensitive = true
 }
 
 output "api_gateway_default_stage" {
-  value     = length(module.warehouse) > 0 ? module.routing.api_gateway_default_stage : null
+  value     = length(module.routing) > 0 ? module.routing.api_gateway_default_stage : null
   sensitive = true
 }
 

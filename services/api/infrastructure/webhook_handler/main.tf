@@ -93,16 +93,6 @@ resource "aws_iam_policy" "api_service_policy" {
         Resource = [
           data.terraform_remote_state.core.outputs.project_pool.arn
         ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "s3:PutObject",
-          "s3:GetObject",
-        ]
-        Resource = [
-          "${data.terraform_remote_state.core.outputs.object_reference_bucket.arn}/*"
-        ]
       }
     ]
   })
