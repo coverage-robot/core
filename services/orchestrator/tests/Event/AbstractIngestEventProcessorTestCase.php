@@ -250,7 +250,9 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             ));
 
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);
-        $mockEventBusClient->expects($this->once()) // We should fire off an event to say the uploads have been finalised!
+
+        // We should fire off an event to say the uploads have been finalised
+        $mockEventBusClient->expects($this->once())
             ->method('fireEvent')
             ->with($this->isInstanceOf(UploadsFinalised::class));
 
