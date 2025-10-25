@@ -2651,32 +2651,32 @@
         },
         {
             "name": "phpro/api-problem-bundle",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpro/api-problem-bundle.git",
-                "reference": "e30b15bd4d60b0edc38769048117bece3dcafefd"
+                "reference": "bf1d71167406f397bbc3686101d0055d18ec8b49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpro/api-problem-bundle/zipball/e30b15bd4d60b0edc38769048117bece3dcafefd",
-                "reference": "e30b15bd4d60b0edc38769048117bece3dcafefd",
+                "url": "https://api.github.com/repos/phpro/api-problem-bundle/zipball/bf1d71167406f397bbc3686101d0055d18ec8b49",
+                "reference": "bf1d71167406f397bbc3686101d0055d18ec8b49",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
                 "phpro/api-problem": "^1.0",
                 "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
                 "symfony/event-dispatcher": "^5.4 || ^6.0 || ^7.0",
                 "symfony/http-kernel": "^6.4 || ^7.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.39",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.3",
-                "phpro/grumphp-shim": "^2.10",
+                "php-cs-fixer/shim": "^3.88",
+                "phpro/grumphp-shim": "^2.17",
                 "phpspec/prophecy": "^1.17",
                 "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^12.4",
                 "symfony/security-core": "^5.4 || ^6.0 || ^7.0"
             },
             "type": "symfony-bundle",
@@ -2698,9 +2698,9 @@
             "description": "RFC7807 Problem details integration for Symfony",
             "support": {
                 "issues": "https://github.com/phpro/api-problem-bundle/issues",
-                "source": "https://github.com/phpro/api-problem-bundle/tree/1.10.0"
+                "source": "https://github.com/phpro/api-problem-bundle/tree/1.11.0"
             },
-            "time": "2025-01-30T08:10:18+00:00"
+            "time": "2025-10-21T09:49:28+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
