@@ -16,6 +16,7 @@ use Google\Cloud\Core\Exception\GoogleException;
 use Google\Cloud\Core\ExponentialBackoff;
 use Google\Cloud\Storage\StorageClient;
 use Google\Cloud\Storage\StorageObject;
+use JsonException;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Event\Model\Upload;
@@ -45,20 +46,30 @@ final readonly class GcsPersistService implements PersistServiceInterface
         $totalLines = $this->totalLines($coverage);
         $body = $this->getLineCoverageFileBody($upload, $coverage);
 
-        $bucket = $this->googleCloudStorageClient->bucket(
-            sprintf(
-                self::OUTPUT_BUCKET,
-                $this->environmentService->getEnvironment()->value
-            )
-        );
+        try {
+            $bucket = $this->googleCloudStorageClient->bucket(
+                sprintf(
+                    self::OUTPUT_BUCKET,
+                    $this->environmentService->getEnvironment()->value
+                )
+            );
 
-        $isCoverageLoaded = $this->triggerLoadJob(
-            $upload,
-            $bucket->upload(
-                $body,
-                ['name' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId())]
-            )
-        );
+            $isCoverageLoaded = $this->triggerLoadJob(
+                $upload,
+                $bucket->upload(
+                    $body,
+                    ['name' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId())]
+                )
+            );
+        } catch (GoogleException $googleException) {
+            throw new PersistException(
+                sprintf(
+                    'Unable to upload coverage file for %s to GCS bucket.',
+                    $upload
+                ),
+                previous: $googleException
+            );
+        }
 
         if (!$isCoverageLoaded) {
             $this->gcsPersistServiceLogger->error(
@@ -250,6 +261,8 @@ final readonly class GcsPersistService implements PersistServiceInterface
      * consisting of the line coverage data - one row per line of the file handle.
      *
      * @return resource
+     *
+     * @throws PersistException
      */
     public function getLineCoverageFileBody(Upload $upload, Coverage $coverage)
     {
@@ -260,22 +273,32 @@ final readonly class GcsPersistService implements PersistServiceInterface
             throw new PersistException('Unable to open buffer for writing GCS stream to.');
         }
 
-        foreach ($coverage->getFiles() as $file) {
-            foreach ($file->getLines() as $line) {
-                fwrite(
-                    $buffer,
-                    json_encode(
-                        $this->bigQueryMetadataBuilderService->buildLineCoverageRow(
-                            $upload,
-                            $totalLines,
-                            $coverage,
-                            $file,
-                            $line
-                        ),
-                        JSON_THROW_ON_ERROR
-                    ) . "\n"
-                );
+        try {
+            foreach ($coverage->getFiles() as $file) {
+                foreach ($file->getLines() as $line) {
+                    fwrite(
+                        $buffer,
+                        json_encode(
+                            $this->bigQueryMetadataBuilderService->buildLineCoverageRow(
+                                $upload,
+                                $totalLines,
+                                $coverage,
+                                $file,
+                                $line
+                            ),
+                            JSON_THROW_ON_ERROR
+                        ) . "\n"
+                    );
+                }
             }
+        } catch (JsonException $jsonException) {
+            throw new PersistException(
+                sprintf(
+                    'Unable to encode JSON for %s when writing to GCS stream.',
+                    $upload
+                ),
+                previous: $jsonException
+            );
         }
 
         return $buffer;
