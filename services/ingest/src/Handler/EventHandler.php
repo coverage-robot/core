@@ -114,8 +114,6 @@ final class EventHandler extends S3Handler
 
                 $this->persistCoverageIfNecessary($upload, $coverage);
 
-                $this->triggerIngestionSuccessEvent($upload);
-
                 $this->deleteFile($s3Record);
 
                 $this->handlerLogger->info(
@@ -320,7 +318,11 @@ final class EventHandler extends S3Handler
                 );
 
                 $this->triggerIngestionFailedEvent($upload);
+
+                return;
             }
+
+            $this->triggerIngestionSuccessEvent($upload);
         }
     }
 
