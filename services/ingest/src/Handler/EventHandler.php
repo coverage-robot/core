@@ -321,9 +321,11 @@ final class EventHandler extends S3Handler
 
                 return;
             }
-
-            $this->triggerIngestionSuccessEvent($upload);
         }
+
+        // We still want to let any other services know that an ingestion _has_ been processed, even if it
+        // not require any persisting
+        $this->triggerIngestionSuccessEvent($upload);
     }
 
     /**
