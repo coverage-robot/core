@@ -111,7 +111,7 @@ final class UploadServiceTest extends KernelTestCase
         $mockUploadSignerService->expects($this->once())
             ->method('sign')
             ->with(
-                $this->isType('string'),
+                $this->isString(),
                 new PutObjectRequest([
                     'Bucket' => 'coverage-ingest-prod',
                     'Key' => '1/a/2/mock-uuid.xml',

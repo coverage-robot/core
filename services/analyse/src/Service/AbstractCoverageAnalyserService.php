@@ -66,7 +66,7 @@ abstract class AbstractCoverageAnalyserService implements CoverageAnalyserServic
             ref: $ref,
             commit: $commit,
             history: fn(ReportWaypoint $waypoint, int $page): array => $this->getHistory($waypoint, $page),
-            diff: fn(ReportWaypoint $waypoint): array => $this->getDiff($waypoint),
+            diff: $this->getDiff(...),
             pullRequest: $pullRequest
         );
     }
