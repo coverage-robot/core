@@ -175,6 +175,11 @@ trait OverallCommitStateAwareTrait
                 continue;
             }
 
+            if ($previousState->getUniqueIdentifier() === $newState->getUniqueIdentifier()) {
+                // Don't compare to itself
+                continue;
+            }
+
             if ($previousState->getState() === OrchestratedEventState::ONGOING) {
                 $this->eventProcessorLogger->info(
                     sprintf(
