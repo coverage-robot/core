@@ -32,6 +32,7 @@ use Packages\Telemetry\Service\MetricServiceInterface;
 use Packages\Telemetry\Service\TraceContext;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -69,12 +70,36 @@ final class EventHandler extends S3Handler
                     $metadata,
                     Upload::class
                 );
+            } catch (RetrievalException $e) {
+                $this->handlerLogger->error(
+                    'Failed to retrieve coverage file.',
+                    [
+                        'exception' => $e,
+                        'bucket' => $s3Record->getBucket(),
+                        'key' => $s3Record->getObject()
+                    ]
+                );
 
+                return;
+            } catch (ExceptionInterface $e) {
+                $this->handlerLogger->error(
+                    'Failed to deserialize upload from metadata of object.',
+                    [
+                        'exception' => $e,
+                        'bucket' => $s3Record->getBucket(),
+                        'key' => $s3Record->getObject()
+                    ]
+                );
+
+                return;
+            }
+
+            try {
                 $this->handlerLogger->info(
                     sprintf(
                         'Starting to ingest %s for %s.',
                         $s3Record->getObject()->getKey(),
-                        (string)$upload
+                        $upload
                     )
                 );
 
@@ -87,16 +112,7 @@ final class EventHandler extends S3Handler
                         ->getContentAsString()
                 );
 
-                if (count($coverage) > 0) {
-                    // We only want to broadcast the ingestion started event if the know theres coverage to
-                    // persist, as otherwise we can wind up in contention with very fast start and finish events
-                    $this->triggerIngestionStartedEvent($upload);
-
-                    // Only try persisting the parsed coverage if the report contains coverage
-                    // content. This will prevent us from publishing events when the report was
-                    // empty coverage
-                    $this->persistCoverage($upload, $coverage);
-                }
+                $this->persistCoverageIfNecessary($upload, $coverage);
 
                 $this->triggerIngestionSuccessEvent($upload);
 
@@ -105,40 +121,26 @@ final class EventHandler extends S3Handler
                 $this->handlerLogger->info(
                     sprintf(
                         'Successfully ingested and persisted %s using %s parser.',
-                        (string)$upload,
+                        $upload,
                         $coverage->getSourceFormat()->value
                     )
-                );
-            } catch (RetrievalException $e) {
-                $this->handlerLogger->error(
-                    'Failed to retrieve coverage file.',
-                    [
-                        'exception' => $e,
-                        'bucket' => $s3Record->getBucket(),
-                        'key' => $s3Record->getObject()
-                    ]
                 );
             } catch (ParseException | PersistException $e) {
                 $this->handlerLogger->error(
                     'Failed to successfully ingest coverage.',
                     [
                         'exception' => $e,
-                        'upload' => $upload ?? null
+                        'upload' => $upload
                     ]
                 );
 
-                $this->eventBusClient->fireEvent(
-                    new IngestFailure(
-                        $upload,
-                        new DateTimeImmutable()
-                    )
-                );
+                $this->triggerIngestionFailedEvent($upload);
             } catch (DeletionException $e) {
                 $this->handlerLogger->error(
                     'Failed to successfully delete ingested coverage file.',
                     [
                         'exception' => $e,
-                        'upload' => $upload ?? null
+                        'upload' => $upload
                     ]
                 );
             }
@@ -164,6 +166,7 @@ final class EventHandler extends S3Handler
      *
      * The metadata from S3 will be all lower case, so we need to support the non-camel case
      * naming (hence the need to do this before deserialzation)
+     * @throws ExceptionInterface
      */
     private function retrieveFileMetadata(GetObjectOutput $output): array
     {
@@ -254,6 +257,16 @@ final class EventHandler extends S3Handler
         );
     }
 
+    private function triggerIngestionFailedEvent(Upload $upload): void
+    {
+        $this->eventBusClient->fireEvent(
+            new IngestFailure(
+                $upload,
+                new DateTimeImmutable()
+            )
+        );
+    }
+
     /**
      * Parse an arbitrary file from S3 using a collection of parsing strategies, until
      * one is able to support the file content.
@@ -286,9 +299,29 @@ final class EventHandler extends S3Handler
      *
      * @throws PersistException
      */
-    private function persistCoverage(Upload $upload, Coverage $coverage): bool
+    private function persistCoverageIfNecessary(Upload $upload, Coverage $coverage): void
     {
-        return $this->coverageFilePersistService->persist($upload, $coverage);
+        if (count($coverage) > 0) {
+            // We only want to broadcast the ingestion started event if the know theres coverage to
+            // persist, as otherwise we can wind up in contention with very fast start and finish events
+            $this->triggerIngestionStartedEvent($upload);
+
+            // Only try persisting the parsed coverage if the report contains coverage
+            // content. This will prevent us from publishing events when the report was
+            // empty coverage
+            $didPersist = $this->coverageFilePersistService->persist($upload, $coverage);
+
+            if (!$didPersist) {
+                $this->handlerLogger->error(
+                    sprintf(
+                        'Persisting coverage failed for %s',
+                        (string)$upload
+                    )
+                );
+
+                $this->triggerIngestionFailedEvent($upload);
+            }
+        }
     }
 
     /**
@@ -297,9 +330,9 @@ final class EventHandler extends S3Handler
      *
      * @throws DeletionException
      */
-    private function deleteFile(S3Record $coverageFile): bool
+    private function deleteFile(S3Record $coverageFile): void
     {
-        return $this->coverageFileRetrievalService->deleteFromS3(
+        $this->coverageFileRetrievalService->deleteFromS3(
             $coverageFile->getBucket(),
             $coverageFile->getObject()
         );

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Persist;
 
+use App\Exception\PersistException;
 use App\Model\Coverage;
 use Packages\Event\Model\Upload;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -15,6 +16,7 @@ interface PersistServiceInterface
      * Persist a parsed coverage file to a particular service. For example, S3 or
      * BigQuery.
      *
+     * @throws PersistException
      */
     public function persist(Upload $upload, Coverage $coverage): bool;
 
