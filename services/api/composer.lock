@@ -499,16 +499,16 @@
         },
         {
             "name": "bref/bref",
-            "version": "2.4.14",
+            "version": "2.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "f6446aa05392f288647a5303fd26b94a370624f9"
+                "reference": "45261cfd8e99ee0e6d7fb1a36b37a403912cecc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/f6446aa05392f288647a5303fd26b94a370624f9",
-                "reference": "f6446aa05392f288647a5303fd26b94a370624f9",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/45261cfd8e99ee0e6d7fb1a36b37a403912cecc2",
+                "reference": "45261cfd8e99ee0e6d7fb1a36b37a403912cecc2",
                 "shasum": ""
             },
             "require": {
@@ -562,7 +562,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/2.4.14"
+                "source": "https://github.com/brefphp/bref/tree/2.4.15"
             },
             "funding": [
                 {
@@ -574,7 +574,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-05T13:46:24+00:00"
+            "time": "2025-10-25T16:58:41+00:00"
         },
         {
             "name": "bref/monolog-bridge",
