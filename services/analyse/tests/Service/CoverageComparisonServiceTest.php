@@ -315,7 +315,7 @@ final class CoverageComparisonServiceTest extends TestCase
             repository: 'mock-repository',
             ref: 'mock-ref',
             commit: 'mock-commit',
-            history: function (ReportWaypoint $waypoint, int $page) use (&$historyPagesRequested) {
+            history: function (ReportWaypoint $waypoint, int $page) use (&$historyPagesRequested): array {
                 $historyPagesRequested[] = $page;
 
                 // Return all non-merged PRs, so that the history (before maxing out) does not

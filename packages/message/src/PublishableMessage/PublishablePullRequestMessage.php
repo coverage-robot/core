@@ -12,8 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class PublishablePullRequestMessage implements PublishableMessageInterface
 {
-    private DateTimeImmutable $validUntil;
-
     public function __construct(
         private EventInterface $event,
         #[Assert\PositiveOrZero]
@@ -34,9 +32,8 @@ final readonly class PublishablePullRequestMessage implements PublishableMessage
         #[Assert\GreaterThanOrEqual(-100)]
         #[Assert\LessThanOrEqual(100)]
         private ?float $coverageChange = 0,
-        ?DateTimeImmutable $validUntil = null,
+        private DateTimeImmutable $validUntil = new DateTimeImmutable(),
     ) {
-        $this->validUntil = $validUntil ?? new DateTimeImmutable();
     }
 
 

@@ -50,7 +50,7 @@ final class EventHandlerTest extends KernelTestCase
             ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(
                 ...array_map(
-                    fn(string $body): GetObjectOutput|MockObject => $this->getMockS3ObjectResponse($body),
+                    $this->getMockS3ObjectResponse(...),
                     $coverageFiles
                 )
             );
@@ -199,7 +199,7 @@ final class EventHandlerTest extends KernelTestCase
             ->method('ingestFromS3')
             ->willReturnOnConsecutiveCalls(
                 ...array_map(
-                    fn(string $body): GetObjectOutput|MockObject => $this->getMockS3ObjectResponse($body),
+                    $this->getMockS3ObjectResponse(...),
                     $coverageFiles
                 )
             );

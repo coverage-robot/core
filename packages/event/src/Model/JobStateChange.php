@@ -14,8 +14,6 @@ use Packages\Event\Enum\JobState;
 
 final readonly class JobStateChange implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
-    private DateTimeImmutable $eventTime;
-
     /**
      * @param string[] $parent
      */
@@ -33,9 +31,8 @@ final readonly class JobStateChange implements EventInterface, ParentAwareEventI
         private string|int|null $pullRequest = null,
         private ?string $baseCommit = null,
         private ?string $baseRef = null,
-        ?DateTimeImmutable $eventTime = null
+        private DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
-        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]
