@@ -107,7 +107,7 @@ jobs:
                     zip -q -r build.zip ./
 
             -   name: Upload build package to artifact storage
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v5
                 with:
                     name: build-php-${{ matrix.php-version }}
                     if-no-files-found: error
@@ -132,7 +132,7 @@ jobs:
                 run: mkdir -p ${{ env.working-directory }}
 
             -   name: Download build from artifact storage
-                uses: actions/download-artifact@v5
+                uses: actions/download-artifact@v6
                 with:
                     name: build-php-${{ matrix.php-version }}
                     path: ${{ env.working-directory }}
@@ -194,7 +194,7 @@ jobs:
                 run: mkdir -p ${{ env.working-directory }}
 
             -   name: Download build from artifact storage
-                uses: actions/download-artifact@v5
+                uses: actions/download-artifact@v6
                 with:
                     name: build-php-${{ matrix.php-version }}
                     path: ${{ env.working-directory }}
@@ -259,7 +259,7 @@ jobs:
                 run: mkdir -p ${{ env.working-directory }}
 
             -   name: Download build from artifact storage
-                uses: actions/download-artifact@v5
+                uses: actions/download-artifact@v6
                 with:
                     name: build-php-${{ env.target-php-version }}
                     path: ${{ env.working-directory }}
