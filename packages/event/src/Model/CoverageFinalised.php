@@ -23,7 +23,7 @@ final readonly class CoverageFinalised implements EventInterface, BaseAwareEvent
         private string|int|null $pullRequest = null,
         private ?string $baseRef = null,
         private ?string $baseCommit = null,
-        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
+        private DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
     }
 

@@ -24,7 +24,7 @@ final readonly class PublishablePartialBranchLineCommentMessage implements Publi
         private int $totalBranches,
         #[Assert\PositiveOrZero]
         private int $coveredBranches,
-        private ?DateTimeImmutable $validUntil = new DateTimeImmutable(),
+        private DateTimeImmutable $validUntil = new DateTimeImmutable(),
     ) {
     }
 

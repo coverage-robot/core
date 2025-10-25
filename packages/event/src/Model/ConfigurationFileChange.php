@@ -18,7 +18,7 @@ final readonly class ConfigurationFileChange implements EventInterface
         private string $repository,
         private string $ref,
         private string $commit,
-        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
+        private DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
     }
 

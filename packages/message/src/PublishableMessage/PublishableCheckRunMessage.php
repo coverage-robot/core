@@ -23,7 +23,7 @@ final readonly class PublishableCheckRunMessage implements PublishableCheckRunMe
         #[Assert\LessThanOrEqual(100)]
         #[Assert\GreaterThanOrEqual(-100)]
         private ?float $coverageChange = 0,
-        private ?DateTimeImmutable $validUntil = new DateTimeImmutable(),
+        private DateTimeImmutable $validUntil = new DateTimeImmutable(),
     ) {
     }
 

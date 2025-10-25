@@ -21,7 +21,7 @@ final readonly class PublishableMissingCoverageLineCommentMessage implements Pub
         private int $startLineNumber,
         #[Assert\GreaterThanOrEqual(1)]
         private int $endLineNumber,
-        private ?DateTimeImmutable $validUntil = new DateTimeImmutable(),
+        private DateTimeImmutable $validUntil = new DateTimeImmutable(),
     ) {
     }
 

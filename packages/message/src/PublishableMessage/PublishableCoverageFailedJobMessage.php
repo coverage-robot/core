@@ -13,7 +13,7 @@ final readonly class PublishableCoverageFailedJobMessage implements PublishableC
 {
     public function __construct(
         private EventInterface $event,
-        private ?DateTimeImmutable $validUntil = new DateTimeImmutable(),
+        private DateTimeImmutable $validUntil = new DateTimeImmutable(),
     ) {
     }
 

@@ -32,7 +32,7 @@ final readonly class Upload implements EventInterface, ParentAwareEventInterface
         private string|int|null $pullRequest = null,
         private ?string $baseCommit = null,
         private ?string $baseRef = null,
-        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
+        private DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
     }
 

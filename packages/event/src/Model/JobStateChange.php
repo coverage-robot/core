@@ -31,7 +31,7 @@ final readonly class JobStateChange implements EventInterface, ParentAwareEventI
         private string|int|null $pullRequest = null,
         private ?string $baseCommit = null,
         private ?string $baseRef = null,
-        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
+        private DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
     }
 
