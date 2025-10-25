@@ -13,8 +13,6 @@ use Packages\Contracts\Provider\Provider;
 
 final readonly class UploadsFinalised implements EventInterface, ParentAwareEventInterface, BaseAwareEventInterface
 {
-    private DateTimeImmutable $eventTime;
-
     /**
      * @param string[] $parent
      */
@@ -29,9 +27,8 @@ final readonly class UploadsFinalised implements EventInterface, ParentAwareEven
         private string|int|null $pullRequest = null,
         private ?string $baseCommit = null,
         private ?string $baseRef = null,
-        ?DateTimeImmutable $eventTime = null
+        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
-        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]

@@ -12,8 +12,6 @@ use Packages\Contracts\Provider\Provider;
 
 final readonly class CoverageFinalised implements EventInterface, BaseAwareEventInterface
 {
-    private DateTimeImmutable $eventTime;
-
     public function __construct(
         private Provider $provider,
         private string $projectId,
@@ -25,9 +23,8 @@ final readonly class CoverageFinalised implements EventInterface, BaseAwareEvent
         private string|int|null $pullRequest = null,
         private ?string $baseRef = null,
         private ?string $baseCommit = null,
-        ?DateTimeImmutable $eventTime = null
+        private ?DateTimeImmutable $eventTime = new DateTimeImmutable()
     ) {
-        $this->eventTime = $eventTime ?? new DateTimeImmutable();
     }
 
     #[Override]
