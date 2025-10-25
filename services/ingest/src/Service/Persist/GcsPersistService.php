@@ -61,13 +61,13 @@ final readonly class GcsPersistService implements PersistServiceInterface
                     ['name' => sprintf(self::OUTPUT_KEY, '', $upload->getUploadId())]
                 )
             );
-        } catch (GoogleException $e) {
+        } catch (GoogleException $googleException) {
             throw new PersistException(
                 sprintf(
                     'Unable to upload coverage file for %s to GCS bucket.',
                     $upload
                 ),
-                previous: $e
+                previous: $googleException
             );
         }
 
@@ -291,13 +291,13 @@ final readonly class GcsPersistService implements PersistServiceInterface
                     );
                 }
             }
-        } catch (JsonException $e) {
+        } catch (JsonException $jsonException) {
             throw new PersistException(
                 sprintf(
                     'Unable to encode JSON for %s when writing to GCS stream.',
                     $upload
                 ),
-                previous: $e
+                previous: $jsonException
             );
         }
 
