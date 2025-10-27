@@ -130,8 +130,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             'some' => 'invalid',
                             'values' => ['x','y'],
                             'type' => OrchestratedEvent::JOB->value,
-                        ],
-                        null
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -141,8 +140,7 @@ final class EventStoreServiceTest extends KernelTestCase
                         2,
                         [
                             'new-value' => 'z'
-                        ],
-                        null
+                        ]
                     )
                 ]
             )
@@ -179,6 +177,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
                     'version' => new AttributeValue(['N' => 1]),
                     'event' => new AttributeValue(['S' => $serializer->serialize($event, 'json')]),
+                    'eventTime' => new AttributeValue(['N' => $eventTime->getMicrosecond()]),
                 ],
             ]);
         $mockDynamoDbClient->expects($this->never())
@@ -237,6 +236,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
                     'version' => new AttributeValue(['N' => 1]),
                     'event' => new AttributeValue(['S' => $serializer->serialize($ongoingEvent, 'json')]),
+                    'eventTime' => new AttributeValue(['N' => $eventTime->getMicrosecond()]),
                 ],
             ]);
         $mockDynamoDbClient->expects($this->once())
@@ -287,18 +287,21 @@ final class EventStoreServiceTest extends KernelTestCase
                     'version' => new AttributeValue(['N' => 1]),
                     'identifier' => new AttributeValue(['S' => 'mock-identifier-1']),
                     'event' => new AttributeValue(['S' => '{"mock": "value"}']),
+                    'eventTime' => new AttributeValue(['N' => '1']),
                 ],
                 [
                     'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
                     'version' => new AttributeValue(['N' => 1]),
                     'identifier' => new AttributeValue(['S' => 'mock-identifier-2']),
                     'event' => new AttributeValue(['S' => '{"mock": "value-2"}']),
+                    'eventTime' => new AttributeValue(['N' => '1']),
                 ],
                 [
                     'provider' => new AttributeValue(['S' => Provider::GITHUB->value]),
                     'version' => new AttributeValue(['N' => 2]),
                     'identifier' => new AttributeValue(['S' => 'mock-identifier-2']),
                     'event' => new AttributeValue(['S' => '{"mock": "value-3"}']),
+                    'eventTime' => new AttributeValue(['N' => '3']),
                 ],
             ]);
 
@@ -324,7 +327,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     [
                         'mock' => 'value'
                     ],
-                    null
+                    new DateTimeImmutable('1970-01-01T00:00:01.000000+0000')
                 )
             ],
             $stateChanges['mock-identifier-1']->getEvents()
@@ -340,7 +343,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     [
                         'mock' => 'value-2'
                     ],
-                    null
+                    new DateTimeImmutable('1970-01-01T00:00:01.000000+0000')
                 ),
                 2 =>  new EventStateChange(
                     Provider::GITHUB,
@@ -351,7 +354,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     [
                         'mock' => 'value-3'
                     ],
-                    null
+                    new DateTimeImmutable('1970-01-01T00:00:03.000000+0000')
                 )
             ],
             $stateChanges['mock-identifier-2']->getEvents()
@@ -470,7 +473,6 @@ final class EventStoreServiceTest extends KernelTestCase
                             'type' => OrchestratedEvent::INGESTION->value,
                             'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
                         ],
-                        null
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -481,7 +483,6 @@ final class EventStoreServiceTest extends KernelTestCase
                         [
                             'state' => OrchestratedEventState::SUCCESS->value,
                         ],
-                        null
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -492,7 +493,6 @@ final class EventStoreServiceTest extends KernelTestCase
                         [
                             'state' => OrchestratedEventState::ONGOING->value,
                         ],
-                        null
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -503,8 +503,7 @@ final class EventStoreServiceTest extends KernelTestCase
                         [
                             'commit' => '2',
                             'state' => OrchestratedEventState::FAILURE->value,
-                        ],
-                        null
+                        ]
                     )
                 ]
             ),
@@ -539,8 +538,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             'type' => OrchestratedEvent::JOB->value,
                             'eventTime' => $eventTime->format(DateTimeImmutable::ATOM),
                             'externalId' => 'mock-external-id'
-                        ],
-                        null
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -552,8 +550,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             'state' => OrchestratedEventState::FAILURE->value,
                             'eventTime' => $eventTime->add(new DateInterval('PT1S'))
                                 ->format(DateTimeImmutable::ATOM),
-                        ],
-                        null
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -563,8 +560,7 @@ final class EventStoreServiceTest extends KernelTestCase
                         3,
                         [
                             'state' => OrchestratedEventState::SUCCESS->value,
-                        ],
-                        null
+                        ]
                     )
                 ]
             ),

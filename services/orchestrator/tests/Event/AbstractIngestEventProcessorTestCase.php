@@ -153,8 +153,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change'],
-                        null
+                        ['mock' => 'change']
                     )
                 ])
             );
@@ -218,8 +217,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                             'mock-owner',
                             'mock-repository',
                             1,
-                            ['mock' => 'change'],
-                            null
+                            ['mock' => 'change']
                         )
                     ])
                 ]
@@ -234,8 +232,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change'],
-                        null
+                        ['mock' => 'change']
                     )
                 ])
             );
