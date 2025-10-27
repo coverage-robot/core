@@ -170,7 +170,9 @@ trait OverallCommitStateAwareTrait
             false
         );
 
-        return $mostRecentEventTime > $newState->getEventTime();
+
+        return $mostRecentEventTime !== false &&
+            $mostRecentEventTime > $newState->getEventTime();
     }
 
     /**
