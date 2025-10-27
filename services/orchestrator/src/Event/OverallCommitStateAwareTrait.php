@@ -145,34 +145,34 @@ trait OverallCommitStateAwareTrait
         OrchestratedEventInterface $newState,
         array $collections
     ): bool {
-        $mostRecentEventTime = array_reduce(
+        $mostRecentStateChangeTime = array_reduce(
             $collections,
             static function (
-                DateTimeImmutable|false $largestEventTime,
+                DateTimeImmutable|false $largestStateChangeTime,
                 EventStateChangeCollection $e
             ): DateTimeImmutable|false {
-                $events = $e->getEvents();
-                $lastEvent = end($events);
+                $stateChanges = $e->getEvents();
+                $latestStateChange = end($stateChanges);
 
-                if (!$lastEvent) {
+                if (!$latestStateChange) {
                     // This collection has no events
-                    return $largestEventTime;
+                    return $largestStateChangeTime;
                 }
 
-                if (!$largestEventTime) {
+                if (!$largestStateChangeTime) {
                     // We're on the first iteration and have an event time, we should
                     // take this as the largest time
-                    return $lastEvent->getEventTime();
+                    return $latestStateChange->getEventTime();
                 }
 
-                return max($lastEvent->getEventTime(), $largestEventTime);
+                return max($latestStateChange->getEventTime(), $largestStateChangeTime);
             },
             false
         );
 
 
-        return $mostRecentEventTime !== false &&
-            $mostRecentEventTime > $newState->getEventTime();
+        return $mostRecentStateChangeTime !== false &&
+            $mostRecentStateChangeTime > $newState->getEventTime();
     }
 
     /**
