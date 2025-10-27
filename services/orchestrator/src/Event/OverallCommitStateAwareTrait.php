@@ -71,7 +71,7 @@ trait OverallCommitStateAwareTrait
 
         /** @var bool $result */
         $result = $this->backoffStrategy
-            ->run(function () use ($currentState, &$previousTotalStateChanges): bool {
+            ->run(function () use ($currentState): bool {
                 $collections = $this->eventStoreService->getAllStateChangesForCommit(
                     $currentState->getUniqueRepositoryIdentifier(),
                     $currentState->getCommit()
