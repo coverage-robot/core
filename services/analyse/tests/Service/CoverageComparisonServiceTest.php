@@ -46,8 +46,7 @@ final class CoverageComparisonServiceTest extends TestCase
                     'merged' => true
                 ]
             ],
-            diff: [],
-            pullRequest: null
+            diff: []
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
@@ -330,8 +329,7 @@ final class CoverageComparisonServiceTest extends TestCase
                     ]
                 );
             },
-            diff: [],
-            pullRequest: null
+            diff: []
         );
         $mockCoverageReport = new CoverageReport(
             waypoint: $headWaypoint,
