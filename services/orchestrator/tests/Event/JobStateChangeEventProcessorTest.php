@@ -134,7 +134,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                 'mock-owner',
                 'mock-repository',
                 1,
-                ['mock' => 'change']
+                ['mock' => 'change'],
+                null
             ));
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
@@ -203,7 +204,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        null
                     )
                 ])
             );
@@ -277,7 +279,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'x']
+                        ['mock' => 'x'],
+                        null
                     )
                 ])
             );
@@ -365,7 +368,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        null
                     )
                 ])
             );
@@ -475,7 +479,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        null
                     )
                 ])
             );

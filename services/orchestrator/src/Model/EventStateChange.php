@@ -16,7 +16,7 @@ final readonly class EventStateChange
         private string $repository,
         private int $version,
         private array $event,
-        private DateTimeImmutable $eventTime = new DateTimeImmutable()
+        private ?DateTimeImmutable $eventTime = null
     ) {
     }
 
@@ -50,7 +50,7 @@ final readonly class EventStateChange
         return $this->event;
     }
 
-    public function getEventTime(): DateTimeImmutable
+    public function getEventTime(): ?DateTimeImmutable
     {
         return $this->eventTime;
     }

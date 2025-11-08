@@ -14,7 +14,6 @@ use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
 use DateTimeImmutable;
 use InvalidArgumentException;
-use LogicException;
 use Override;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
@@ -138,8 +137,7 @@ final readonly class EventStoreService implements EventStoreServiceInterface
                 $event->getOwner(),
                 $event->getRepository(),
                 1,
-                $diff,
-                $event->getEventTime()
+                $diff
             );
         }
 
@@ -158,8 +156,7 @@ final readonly class EventStoreService implements EventStoreServiceInterface
                 $event->getOwner(),
                 $event->getRepository(),
                 $version,
-                $diff,
-                $event->getEventTime()
+                $diff
             );
         } catch (ConditionalCheckFailedException $exception) {
             $this->eventStoreLogger->info(
@@ -263,20 +260,8 @@ final readonly class EventStoreService implements EventStoreServiceInterface
     private function parseEventStateChange(array $item): EventStateChange
     {
         $eventTime = null;
-        if (
-            isset($item['eventTime']) &&
-            is_string($item['eventTime']->getN())
-        ) {
+        if (isset($item['eventTime']) && is_string($item['eventTime']->getN())) {
             $eventTime = DateTimeImmutable::createFromFormat('U', $item['eventTime']->getN()) ?: null;
-        }
-
-        if (!$eventTime) {
-            throw new LogicException(
-                sprintf(
-                    'Event time for item must be a numeric string, which is a valid and date time. "%s" given.',
-                    $item['eventTime']?->getN() ?? '(null)'
-                )
-            );
         }
 
         return new EventStateChange(

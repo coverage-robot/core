@@ -69,41 +69,56 @@ trait OverallCommitStateAwareTrait
             ),
         );
 
+        $previousTotalStateChanges = -1;
+
         /** @var bool $result */
         $result = $this->backoffStrategy
             ->run(function () use ($currentState, &$previousTotalStateChanges): bool {
-                $collections = $this->eventStoreService->getAllStateChangesForCommit(
+                $mostRecentEventStateChanges = $this->eventStoreService->getAllStateChangesForCommit(
                     $currentState->getUniqueRepositoryIdentifier(),
                     $currentState->getCommit()
                 );
 
-                if ($this->hasANewerStateChangeBeenRecorded($currentState, $collections)) {
+                $currentTotalStateChanges = array_sum(
+                    array_map(
+                        static fn(EventStateChangeCollection $stateChanges): int => count($stateChanges->getEvents()),
+                        $mostRecentEventStateChanges
+                    )
+                );
+
+                if (
+                    $previousTotalStateChanges >= 0 &&
+                    $currentTotalStateChanges > $previousTotalStateChanges
+                ) {
                     // Theres new state events since we last checked, so we should stop polling
                     // as a new event will have been processed and will have assessed our state
                     // as finished (i.e. we aren't needed anymore)
                     $this->eventProcessorLogger->info(
                         sprintf(
-                            'Newer state event have been recorded already, stopping polling on %s.',
+                            'New state events have been recorded since last check, stopping polling on %s.',
                             (string)$currentState
                         ),
                         [
-                            'currentState' => $currentState,
+                            'previousTotalStateChanges' => $previousTotalStateChanges,
+                            'currentTotalStateChanges' => $currentTotalStateChanges
                         ]
                     );
 
                     return false;
                 }
 
-                if ($this->isAnOngoingEventPresent($currentState, $collections)) {
+                if ($this->isAnOngoingEventPresent($currentState, $mostRecentEventStateChanges)) {
                     // At least one of the events is still ongoing, so we can stop polling
                     return false;
                 }
 
-                if ($this->isAlreadyFinalised($currentState, $collections)) {
+                if ($this->isAlreadyFinalised($currentState, $mostRecentEventStateChanges)) {
                     // All of the ingestion events have already been covered by a different
                     // finalised event, so we can stop polling
                     return false;
                 }
+
+                $previousTotalStateChanges = $currentTotalStateChanges;
 
                 return true;
             });
@@ -132,45 +147,6 @@ trait OverallCommitStateAwareTrait
 
             return false;
         }
-    }
-
-    /**
-     * Check if there are any state changes which occurred _after_ the current event which is
-     * being worked on.
-     *
-     * If this is the case, it tells us there are other workers currently polling the state of
-     * the commit and therefore we can bail out.
-     */
-    private function hasANewerStateChangeBeenRecorded(
-        OrchestratedEventInterface $newState,
-        array $collections
-    ): bool {
-        $mostRecentEventTime = array_reduce(
-            $collections,
-            static function (
-                DateTimeImmutable|false $largestEventTime,
-                EventStateChangeCollection $e
-            ): DateTimeImmutable|false {
-                $events = $e->getEvents();
-                $lastEvent = end($events);
-
-                if (!$lastEvent) {
-                    // This collection has no events
-                    return $largestEventTime;
-                }
-
-                if (!$largestEventTime) {
-                    // We're on the first iteration and have an event time, we should
-                    // take this as the largest time
-                    return $lastEvent->getEventTime();
-                }
-
-                return max($lastEvent->getEventTime(), $largestEventTime);
-            },
-            false
-        );
-
-        return $mostRecentEventTime > $newState->getEventTime();
     }
 
     /**

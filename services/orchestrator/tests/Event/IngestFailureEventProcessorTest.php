@@ -76,7 +76,8 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        null
                     )
                 ])
             );
@@ -174,7 +175,8 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        null
                     )
                 ])
             );
