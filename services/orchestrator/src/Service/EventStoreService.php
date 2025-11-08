@@ -263,6 +263,7 @@ final readonly class EventStoreService implements EventStoreServiceInterface
     private function parseEventStateChange(array $item): EventStateChange
     {
         $eventTime = null;
+
         if (
             isset($item['eventTime']) &&
             is_string($item['eventTime']->getN())

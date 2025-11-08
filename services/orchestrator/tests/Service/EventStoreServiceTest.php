@@ -301,7 +301,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     'version' => new AttributeValue(['N' => 2]),
                     'identifier' => new AttributeValue(['S' => 'mock-identifier-2']),
                     'event' => new AttributeValue(['S' => '{"mock": "value-3"}']),
-                    'eventTime' => new AttributeValue(['N' => '3']),
+                    'eventTime' => new AttributeValue(['N' => '1']),
                 ],
             ]);
 
@@ -354,7 +354,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     [
                         'mock' => 'value-3'
                     ],
-                    new DateTimeImmutable('1970-01-01T00:00:03.000000+0000')
+                    new DateTimeImmutable('1970-01-01T00:00:01.000000+0000')
                 )
             ],
             $stateChanges['mock-identifier-2']->getEvents()
@@ -472,7 +472,7 @@ final class EventStoreServiceTest extends KernelTestCase
                             'state' => OrchestratedEventState::ONGOING->value,
                             'type' => OrchestratedEvent::INGESTION->value,
                             'eventTime' => $eventTime->format(DateTimeImmutable::ATOM)
-                        ],
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -482,7 +482,7 @@ final class EventStoreServiceTest extends KernelTestCase
                         2,
                         [
                             'state' => OrchestratedEventState::SUCCESS->value,
-                        ],
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
@@ -492,7 +492,7 @@ final class EventStoreServiceTest extends KernelTestCase
                         3,
                         [
                             'state' => OrchestratedEventState::ONGOING->value,
-                        ],
+                        ]
                     ),
                     new EventStateChange(
                         Provider::GITHUB,
