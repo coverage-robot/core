@@ -27,6 +27,9 @@ final readonly class ReadyToFinaliseBackoffStrategy implements BackoffStrategyIn
         $this->backoff = new Backoff(
             maxAttempts: 5,
             strategy: new PolynomialStrategy(100, 2),
+            // Apply some jitter to reduce contention with other events being orchestrated and attempting
+            // to finalise coverage.
+            useJitter: true,
             decider: static fn (
                 int $attempt,
                 int $maxAttempts,
