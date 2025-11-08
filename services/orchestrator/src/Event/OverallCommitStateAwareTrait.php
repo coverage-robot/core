@@ -135,44 +135,48 @@ trait OverallCommitStateAwareTrait
     }
 
     /**
-     * Check if there are any state changes which occurred _after_ the current event which is
-     * being worked on.
+     * Check to see if the current event is is still the latest to occur for a given commit.
      *
-     * If this is the case, it tells us there are other workers currently polling the state of
-     * the commit and therefore we can bail out.
+     * @param EventStateChangeCollection[] $collections
      */
     private function hasANewerStateChangeBeenRecorded(
         OrchestratedEventInterface $newState,
         array $collections
     ): bool {
-        $mostRecentStateChangeTime = array_reduce(
-            $collections,
-            static function (
-                DateTimeImmutable|false $largestStateChangeTime,
-                EventStateChangeCollection $e
-            ): DateTimeImmutable|false {
-                $stateChanges = $e->getEvents();
-                $latestStateChange = end($stateChanges);
+        $latestStateChangeStoredTime = null;
+        $latestEvent = null;
+        foreach ($collections as $collection) {
+            $collectionEvents = $collection->getEvents();
+            $latestStateChange = end($collectionEvents);
 
-                if (!$latestStateChange) {
-                    // This collection has no events
-                    return $largestStateChangeTime;
-                }
+            if (!$latestStateChange) {
+                // This collection has no events
+                continue;
+            }
 
-                if (!$largestStateChangeTime) {
-                    // We're on the first iteration and have an event time, we should
-                    // take this as the largest time
-                    return $latestStateChange->getEventTime();
-                }
+            $currentEvent = $this->eventStoreService->reduceStateChangesToEvent($collection);
 
-                return max($latestStateChange->getEventTime(), $largestStateChangeTime);
-            },
-            false
-        );
+            if (!$currentEvent instanceof OrchestratedEventInterface) {
+                // The collection couldn't be reduced into an event
+                continue;
+            }
 
+            if (
+                $latestStateChangeStoredTime === null ||
+                $latestStateChange->getEventTime() > $latestStateChangeStoredTime
+            ) {
+                // We've either not got a latest event yet, or the time of the current event is
+                // the latest we've seen
+                $latestStateChangeStoredTime = $latestStateChange->getEventTime();
+                $latestEvent = $currentEvent;
+            }
+        }
 
-        return $mostRecentStateChangeTime !== false &&
-            $mostRecentStateChangeTime > $newState->getEventTime();
+        return $latestEvent instanceof OrchestratedEventInterface &&
+            (
+                $latestEvent->getUniqueIdentifier() !== $newState->getUniqueIdentifier() ||
+                $latestEvent->getEventTime() > $newState->getEventTime()
+            );
     }
 
     /**

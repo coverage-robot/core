@@ -111,7 +111,8 @@ final class DynamoDbClientTest extends KernelTestCase
             )
             ->willReturn(ResultMockFactory::create(PutItemOutput::class));
 
-        $this->assertTrue(
+        $this->assertInstanceOf(
+            DateTimeImmutable::class,
             $client->storeStateChange(
                 $mockEvent,
                 2,

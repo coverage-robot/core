@@ -93,7 +93,7 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
                             'S' => $this->serializer->serialize($change, 'json')
                         ],
                         'expiry' => [
-                            'N' => (string)((float)$storedTime->format('U') + self::DEFAULT_EVENT_TTL)
+                            'N' => (string)((int)$storedTime->format('U') + self::DEFAULT_EVENT_TTL)
                         ],
                         'eventTime' => [
                             'N' => $storedTime->format('U')
