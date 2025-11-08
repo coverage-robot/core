@@ -159,15 +159,6 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
                     ),
                     'Select' => Select::ALL_ATTRIBUTES,
                     /**
-                     * Use consistent reads so that when orchestrating the finalisation of the coverage data
-                     * orchestrator runs which are looking for the total count of events receive consistent
-                     * outcomes.
-                     *
-                     * Otherwise, theres a chance that two competing processors might get different counts back
-                     * from DynamoDB, and then end polling without any processor finalising the coverage.
-                     */
-                    'ConsistentRead' => true,
-                    /**
                      * Use the index to query for all of the events for a particular repository and
                      * commit. This helps us optimise query performance across the event store.
                      */
