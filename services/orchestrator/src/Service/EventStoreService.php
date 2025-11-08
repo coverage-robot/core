@@ -133,13 +133,13 @@ final readonly class EventStoreService implements EventStoreServiceInterface
             );
 
             return new EventStateChange(
-                $previousState->getProvider(),
-                $previousState->getUniqueIdentifier(),
-                $previousState->getOwner(),
-                $previousState->getRepository(),
+                $event->getProvider(),
+                $event->getUniqueIdentifier(),
+                $event->getOwner(),
+                $event->getRepository(),
                 1,
                 $diff,
-                $previousState->getEventTime()
+                $previousState?->getEventTime() ?? new DateTimeImmutable()
             );
         }
 
