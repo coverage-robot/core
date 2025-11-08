@@ -199,7 +199,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
             repository: 'repository',
             commit: 'commit',
             state: OrchestratedEventState::ONGOING,
-            eventTime: new DateTimeImmutable(),
+            eventTime: new DateTimeImmutable('2025-11-08T00:01:00Z'),
             externalId: 'external-id'
         );
 
@@ -217,7 +217,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                             'mock-owner',
                             'mock-repository',
                             1,
-                            ['mock' => 'change']
+                            ['mock' => 'change'],
+                            new DateTimeImmutable('2025-11-08T00:00:00Z')
                         )
                     ])
                 ]
@@ -232,7 +233,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                         'mock-owner',
                         'mock-repository',
                         1,
-                        ['mock' => 'change']
+                        ['mock' => 'change'],
+                        new DateTimeImmutable('2025-11-08T00:00:00Z')
                     )
                 ])
             );
@@ -244,6 +246,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                 repository: 'mock-repository',
                 version: 1,
                 event: ['mock' => 'change'],
+                eventTime: new DateTimeImmutable('2025-11-08T00:00:00Z')
             ));
 
         $mockEventBusClient = $this->createMock(EventBusClientInterface::class);

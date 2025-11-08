@@ -139,18 +139,14 @@ final readonly class EventStoreService implements EventStoreServiceInterface
                 $event->getRepository(),
                 1,
                 $diff,
-                $event->getEventTime()
+                $previousState?->getEventTime() ?? new DateTimeImmutable()
             );
         }
 
         $version = count($existingStateChanges) + 1;
 
         try {
-            $successful = $this->dynamoDbClient->storeStateChange($event, $version, $diff);
-
-            if (!$successful) {
-                return false;
-            }
+            $storedTime = $this->dynamoDbClient->storeStateChange($event, $version, $diff);
 
             return new EventStateChange(
                 $event->getProvider(),
@@ -159,7 +155,7 @@ final readonly class EventStoreService implements EventStoreServiceInterface
                 $event->getRepository(),
                 $version,
                 $diff,
-                $event->getEventTime()
+                $storedTime
             );
         } catch (ConditionalCheckFailedException $exception) {
             $this->eventStoreLogger->info(

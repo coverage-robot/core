@@ -248,7 +248,7 @@ final class EventStoreServiceTest extends KernelTestCase
                     'state' => OrchestratedEventState::SUCCESS->value,
                 ]
             )
-            ->willReturn(true);
+            ->willReturn(new DateTimeImmutable());
 
         $eventStoreService = new EventStoreService(
             $serializer,

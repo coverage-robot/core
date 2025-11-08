@@ -6,13 +6,16 @@ namespace App\Client;
 
 use App\Model\OrchestratedEventInterface;
 use AsyncAws\DynamoDb\ValueObject\AttributeValue;
+use DateTimeImmutable;
 
 interface DynamoDbClientInterface
 {
     /**
      * Store an event's state change as a new item in the event store.
+     *
+     * Returns the time in which the event was stored.
      */
-    public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): bool;
+    public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): DateTimeImmutable;
 
     /**
      * Get all of the state changes for a particular event.

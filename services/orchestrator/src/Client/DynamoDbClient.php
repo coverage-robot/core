@@ -13,6 +13,7 @@ use AsyncAws\DynamoDb\Enum\Select;
 use AsyncAws\DynamoDb\Exception\ConditionalCheckFailedException;
 use AsyncAws\DynamoDb\Input\PutItemInput;
 use AsyncAws\DynamoDb\Input\QueryInput;
+use DateTimeImmutable;
 use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -51,8 +52,15 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
      * @throws HttpException
      */
     #[Override]
-    public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): bool
+    public function storeStateChange(OrchestratedEventInterface $event, int $version, array $change): DateTimeImmutable
     {
+        /**
+         * Use the current time when persisting the event state change, instead of the time of the
+         * event itself, so that when finalising data we know the time in which the latest record was
+         * added (as opposed to when it was triggered - because that can fluctuate and cause out of order events).
+         */
+        $storedTime = new DateTimeImmutable();
+
         $response = $this->dynamoDbClient->putItem(
             new PutItemInput(
                 [
@@ -85,10 +93,10 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
                             'S' => $this->serializer->serialize($change, 'json')
                         ],
                         'expiry' => [
-                            'N' => (string)(time() + self::DEFAULT_EVENT_TTL)
+                            'N' => (string)((int)$storedTime->format('U') + self::DEFAULT_EVENT_TTL)
                         ],
                         'eventTime' => [
-                            'N' => $event->getEventTime()->format('U')
+                            'N' => $storedTime->format('U')
                         ],
                     ],
                 ]
@@ -97,7 +105,7 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
 
         $response->resolve();
 
-        return true;
+        return $storedTime;
     }
 
     /**

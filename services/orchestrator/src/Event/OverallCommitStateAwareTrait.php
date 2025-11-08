@@ -69,56 +69,41 @@ trait OverallCommitStateAwareTrait
             ),
         );
 
-        $previousTotalStateChanges = -1;
-
         /** @var bool $result */
         $result = $this->backoffStrategy
-            ->run(function () use ($currentState, &$previousTotalStateChanges): bool {
-                $mostRecentEventStateChanges = $this->eventStoreService->getAllStateChangesForCommit(
+            ->run(function () use ($currentState): bool {
+                $collections = $this->eventStoreService->getAllStateChangesForCommit(
                     $currentState->getUniqueRepositoryIdentifier(),
                     $currentState->getCommit()
                 );
 
-                $currentTotalStateChanges = array_sum(
-                    array_map(
-                        static fn(EventStateChangeCollection $stateChanges): int => count($stateChanges->getEvents()),
-                        $mostRecentEventStateChanges
-                    )
-                );
-
-                if (
-                    $previousTotalStateChanges >= 0 &&
-                    $currentTotalStateChanges > $previousTotalStateChanges
-                ) {
+                if ($this->hasANewerStateChangeBeenRecorded($currentState, $collections)) {
                     // Theres new state events since we last checked, so we should stop polling
                     // as a new event will have been processed and will have assessed our state
                     // as finished (i.e. we aren't needed anymore)
                     $this->eventProcessorLogger->info(
                         sprintf(
-                            'New state events have been recorded since last check, stopping polling on %s.',
+                            'Newer state event have been recorded already, stopping polling on %s.',
                             (string)$currentState
                         ),
                         [
-                            'previousTotalStateChanges' => $previousTotalStateChanges,
-                            'currentTotalStateChanges' => $currentTotalStateChanges
+                            'currentState' => $currentState,
                         ]
                     );
 
                     return false;
                 }
 
-                if ($this->isAnOngoingEventPresent($currentState, $mostRecentEventStateChanges)) {
+                if ($this->isAnOngoingEventPresent($currentState, $collections)) {
                     // At least one of the events is still ongoing, so we can stop polling
                     return false;
                 }
 
-                if ($this->isAlreadyFinalised($currentState, $mostRecentEventStateChanges)) {
+                if ($this->isAlreadyFinalised($currentState, $collections)) {
                     // All of the ingestion events have already been covered by a different
                     // finalised event, so we can stop polling
                     return false;
                 }
-
-                $previousTotalStateChanges = $currentTotalStateChanges;
 
                 return true;
             });
@@ -147,6 +132,51 @@ trait OverallCommitStateAwareTrait
 
             return false;
         }
+    }
+
+    /**
+     * Check to see if the current event is is still the latest to occur for a given commit.
+     *
+     * @param EventStateChangeCollection[] $collections
+     */
+    private function hasANewerStateChangeBeenRecorded(
+        OrchestratedEventInterface $newState,
+        array $collections
+    ): bool {
+        $latestStateChangeStoredTime = null;
+        $latestEvent = null;
+        foreach ($collections as $collection) {
+            $collectionEvents = $collection->getEvents();
+            $latestStateChange = end($collectionEvents);
+
+            if (!$latestStateChange) {
+                // This collection has no events
+                continue;
+            }
+
+            $currentEvent = $this->eventStoreService->reduceStateChangesToEvent($collection);
+
+            if (!$currentEvent instanceof OrchestratedEventInterface) {
+                // The collection couldn't be reduced into an event
+                continue;
+            }
+
+            if (
+                $latestStateChangeStoredTime === null ||
+                $latestStateChange->getEventTime() > $latestStateChangeStoredTime
+            ) {
+                // We've either not got a latest event yet, or the time of the current event is
+                // the latest we've seen
+                $latestStateChangeStoredTime = $latestStateChange->getEventTime();
+                $latestEvent = $currentEvent;
+            }
+        }
+
+        return $latestEvent instanceof OrchestratedEventInterface &&
+            (
+                $latestEvent->getUniqueIdentifier() !== $newState->getUniqueIdentifier() ||
+                $latestEvent->getEventTime() > $newState->getEventTime()
+            );
     }
 
     /**
