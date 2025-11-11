@@ -5,6 +5,7 @@ namespace App\Strategy\GoCover;
 use App\Exception\ParseException;
 use App\Model\Coverage;
 use App\Model\File;
+use App\Model\Line\Branch;
 use App\Model\Line\Statement;
 use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
@@ -215,8 +216,10 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
             $coverage->addFile($file);
         }
 
+        $lineHits = (int)$parts['count'];
 
         $startLine = (int)$parts['startLine'];
+        $endLine = (int)$parts['endLine'];
 
         try {
             /**
@@ -233,17 +236,40 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
              * github.com/some-owner/some-repo/internal/ipv4/ipv4.go:54.46,56.3 1 1
              * ```
              *
-             * In cases line this, we want to parse out the first block as line 54, and the second block
-             * as starting from line 50 onwards. And so, if theres already lines recorded in the file, and the
-             * latest line recorded is the same as the start line of the new block, we should increment it.
+             * If one starts while the other ends on the same line, that means we've uncovered an if/elseif/else
+             * line - and so we should any existing line data we have into a branch, and anything else in the block
+             * should continue as statements.
              */
-            $file->getLine((string)$startLine);
+            $alreadyParsedLine = $file->getLine((string)$startLine);
+
+            if ($alreadyParsedLine instanceof Branch) {
+                $alreadyParsedLine->addToBranchHits(count($alreadyParsedLine->getBranchHits()) + 1, $lineHits);
+            }
+
+            // The line we already have tracked is not a branch (it wont be when running through the
+            // individual block data), meaning we should convert it to a branch now we officially know its
+            // type isn't a simple statement.
+            $file->setLine(
+                new Branch(
+                    lineNumber: $alreadyParsedLine->getLineNumber(),
+                    lineHits: max($alreadyParsedLine->getLineHits(), $lineHits),
+                    branchHits: [
+                        0 => $lineHits
+                    ]
+                )
+            );
+
+
+            if ($startLine === $endLine) {
+                // This block only spans the single line - we've already recorded it, so can finish
+                // here
+                return $coverage;
+            }
+
             $startLine++;
         } catch (OutOfBoundsException) {
             // No line recorded with this line number - we can start from here.
         }
-
-        $endLine = (int)$parts['endLine'];
 
         if ($startLine > $endLine) {
             $this->parseStrategyLogger->error(
@@ -275,7 +301,7 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
             // Everything is a statement in Go cover files
             $line = new Statement(
                 lineNumber: $i,
-                lineHits: (int)$parts['count']
+                lineHits: $lineHits
             );
 
             $file->setLine($line);
