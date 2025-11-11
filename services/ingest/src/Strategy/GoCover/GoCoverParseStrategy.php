@@ -10,6 +10,7 @@ use App\Service\PathFixingService;
 use App\Strategy\ParseStrategyInterface;
 use Exception;
 use LogicException;
+use OutOfBoundsException;
 use Override;
 use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
@@ -214,30 +215,32 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
             $coverage->addFile($file);
         }
 
-        /**
-         * Each block of a Go cover file (represented as a single line) will span between two lines (with
-         * start and end columns recorded).
-         *
-         * It's possible that between two blocks, one block ends at column 39, and another block starts
-         * from 39 onwards (non-inclusive).
-         *
-         * For example:
-         *
-         * ```
-         * github.com/some-owner/some-repo/internal/ipv4/ipv4.go:54.2,54.46 1 1
-         * github.com/some-owner/some-repo/internal/ipv4/ipv4.go:54.46,56.3 1 1
-         * ```
-         *
-         * In cases line this, we want to parse out the first block as line 54, and the second block
-         * as starting from line 50 onwards. And so, if theres already lines recorded in the file, and the
-         * latest line recorded is the same as the start line of the new block, we should increment it.
-         */
+
         $startLine = (int)$parts['startLine'];
-        if (
-            count($file) > 0 &&
-            $file->getLines()[0]->getLineNumber() === $startLine
-        ) {
-            $startLine += 1;
+
+        try {
+            /**
+             * Each block of a Go cover file (represented as a single line) will span between two lines (with
+             * start and end columns recorded).
+             *
+             * It's possible that between two blocks, one block ends at column 39, and another block starts
+             * from 39 onwards (non-inclusive).
+             *
+             * For example:
+             *
+             * ```
+             * github.com/some-owner/some-repo/internal/ipv4/ipv4.go:54.2,54.46 1 1
+             * github.com/some-owner/some-repo/internal/ipv4/ipv4.go:54.46,56.3 1 1
+             * ```
+             *
+             * In cases line this, we want to parse out the first block as line 54, and the second block
+             * as starting from line 50 onwards. And so, if theres already lines recorded in the file, and the
+             * latest line recorded is the same as the start line of the new block, we should increment it.
+             */
+            $file->getLine((string)$startLine);
+            $startLine++;
+        } catch (OutOfBoundsException) {
+            // No line recorded with this line number - we can start from here.
         }
 
         $endLine = (int)$parts['endLine'];
