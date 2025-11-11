@@ -24,4 +24,12 @@ enum CoverageFormat: string
      * - Cypress
      */
     case CLOVER = 'CLOVER';
+
+    /**
+     * Coverage which originated from the Go CLI using the
+     * Cover flag.
+     *
+     * @see https://go.dev/blog/integration-test-coverage
+     */
+    case GO_COVER = 'GO_COVER';
 }
