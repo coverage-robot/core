@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Strategy\GoCover;
 
 use App\Service\PathFixingService;
-use App\Strategy\Clover\CloverParseStrategy;
 use App\Strategy\GoCover\GoCoverParseStrategy;
 use App\Strategy\ParseStrategyInterface;
 use App\Tests\Strategy\AbstractParseStrategyTestCase;

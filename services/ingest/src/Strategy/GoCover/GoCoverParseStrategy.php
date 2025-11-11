@@ -19,7 +19,7 @@ use Packages\Contracts\Format\CoverageFormat;
 use Packages\Contracts\Provider\Provider;
 use Psr\Log\LoggerInterface;
 
-final class GoCoverParseStrategy implements ParseStrategyInterface
+final readonly class GoCoverParseStrategy implements ParseStrategyInterface
 {
     /**
      * Each line is formatted as `name.go:line.column,line.column numberOfStatements count`.
@@ -33,8 +33,8 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
     private const string MODE_STRUCTURE = 'mode:';
 
     public function __construct(
-        private readonly LoggerInterface $parseStrategyLogger,
-        private readonly PathFixingService $pathFixingService
+        private LoggerInterface $parseStrategyLogger,
+        private PathFixingService $pathFixingService
     ) {
     }
 
@@ -90,16 +90,16 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
                 CoverageFormat::GO_COVER,
                 root: $projectRoot,
             );
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             throw new ParseException(
                 sprintf(
                     'Failed to create coverage model for %s %s %s. Error was %s',
                     $provider->value,
                     $owner,
                     $repository,
-                    $e
+                    $exception
                 ),
-                previous: $e
+                previous: $exception
             );
         }
 
@@ -128,7 +128,7 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
                     $block
                 );
             }
-        } catch (LogicException $e) {
+        } catch (LogicException $logicException) {
             throw new ParseException(
                 sprintf(
                     'Unable to parse coverage of line in Go Cover file for %s %s %s.',
@@ -136,7 +136,7 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
                     $owner,
                     $repository,
                 ),
-                previous: $e
+                previous: $logicException
             );
         }
 
@@ -268,7 +268,7 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
                 return $coverage;
             }
 
-            $startLine++;
+            ++$startLine;
         } catch (OutOfBoundsException) {
             // No line recorded with this line number - we can start from here.
         }
@@ -299,7 +299,7 @@ final class GoCoverParseStrategy implements ParseStrategyInterface
             );
         }
 
-        for ($i = $startLine; $i <= $endLine; $i++) {
+        for ($i = $startLine; $i <= $endLine; ++$i) {
             // Everything is a statement in Go cover files
             $line = new Statement(
                 lineNumber: $i,
