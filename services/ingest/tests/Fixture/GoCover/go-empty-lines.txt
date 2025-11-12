@@ -1,8 +1,8 @@
 mode: atomic
-github.com/some-owner/some-repo/examples/domain/main.go:11.13,18.16 5 0
-github.com/some-owner/some-repo/examples/domain/main.go:18.16,20.3 1 0
+github.com/mock-owner/mock-repository/examples/domain/main.go:11.13,18.16 5 0
+github.com/mock-owner/mock-repository/examples/domain/main.go:18.16,20.3 1 0
 
-github.com/some-owner/some-repo/examples/domain/main.go:22.2,23.16 2 0
-github.com/some-owner/some-repo/examples/domain/main.go:23.16,25.3 1 0
+github.com/mock-owner/mock-repository/examples/domain/main.go:22.2,23.16 2 0
+github.com/mock-owner/mock-repository/examples/domain/main.go:23.16,25.3 1 0
 
-github.com/some-owner/some-repo/examples/domain/main.go:27.2,27.25 1 0
+github.com/mock-owner/mock-repository/examples/domain/main.go:27.2,27.25 1 0

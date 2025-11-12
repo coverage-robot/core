@@ -34,7 +34,7 @@ final class GoCoverParseStrategyTest extends AbstractParseStrategyTestCase
         $mockSettingService->method('get')
             ->willReturn([
                 new PathReplacement(
-                    'mock/path/to/replace',
+                    'mock/path/to/replace/',
                     ''
                 )
             ]);
