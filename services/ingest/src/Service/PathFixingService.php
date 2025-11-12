@@ -47,12 +47,12 @@ final readonly class PathFixingService
         } catch (LogicException $logicException) {
             $this->pathFixingLogger->error(
                 sprintf(
-                    "Received an exception while performing path fixes on %s. Error was: %s",
+                    'Received an exception while performing path fixes on %s. Error was: %s',
                     $path,
                     $logicException->getMessage(),
                 ),
                 [
-                    "exception" => $logicException,
+                    'exception' => $logicException,
                 ]
             );
         }
@@ -142,7 +142,7 @@ final readonly class PathFixingService
             default:
                 throw new LogicException(
                     sprintf(
-                        "Unable to remove repository url as %s is not mapped to a repository URL.",
+                        'Unable to remove repository url as %s is not mapped to a repository URL.',
                         $provider->value
                     )
                 );
