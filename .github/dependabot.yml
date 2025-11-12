@@ -1,0 +1,12 @@
+# Exclusively used for Dependabot security patches - day to day dependency upgrades
+# are handled by Renovate
+
+version: 2
+
+registries:
+    # Allow access to the internal packages for security patches
+    packages-registry:
+        type: composer-repository
+        url: https://coverage-robot.repo.repman.io
+        username: token
+        password: ${{ secrets.REPMAN_TOKEN }}
