@@ -12,6 +12,7 @@ use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 final class PathFixingServiceTest extends TestCase
 {
@@ -35,7 +36,7 @@ final class PathFixingServiceTest extends TestCase
                 SettingKey::PATH_REPLACEMENTS
             )
             ->willReturn($pathReplacements);
-        $pathFixingService = new PathFixingService($mockSettingService);
+        $pathFixingService = new PathFixingService($mockSettingService, new NullLogger());
 
         $fixedPath = $pathFixingService->fixPath(
             Provider::GITHUB,

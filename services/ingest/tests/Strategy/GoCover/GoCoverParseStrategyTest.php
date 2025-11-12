@@ -41,7 +41,7 @@ final class GoCoverParseStrategyTest extends AbstractParseStrategyTestCase
 
         return new GoCoverParseStrategy(
             new NullLogger(),
-            new PathFixingService($mockSettingService)
+            new PathFixingService($mockSettingService, new NullLogger())
         );
     }
 }

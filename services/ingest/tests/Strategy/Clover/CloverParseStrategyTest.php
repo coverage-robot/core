@@ -52,7 +52,7 @@ final class CloverParseStrategyTest extends AbstractParseStrategyTestCase
 
         return new CloverParseStrategy(
             new NullLogger(),
-            new PathFixingService($mockSettingService)
+            new PathFixingService($mockSettingService, new NullLogger())
         );
     }
 }
