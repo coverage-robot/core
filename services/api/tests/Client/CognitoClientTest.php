@@ -35,37 +35,29 @@ final class CognitoClientTest extends TestCase
         $client = $this->createMock(CognitoIdentityProviderClient::class);
         $client->expects($this->once())
             ->method('signUp')
-            ->with(
-                $this->callback(
-                    function (SignUpRequest $request): bool {
-                        $this->assertSame('owner-github-repository', $request->getUsername());
-                        $this->assertSame('upload-token', $request->getPassword());
+            ->willReturnCallback(
+                function (SignUpRequest $request): SignUpResponse {
+                    $this->assertSame('owner-github-repository', $request->getUsername());
+                    $this->assertSame('upload-token', $request->getPassword());
 
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(
-                ResultMockFactory::create(
-                    SignUpResponse::class,
-                    [
-                        'userSub' => 'mock-sub',
-                    ]
-                )
+                    return ResultMockFactory::create(
+                        SignUpResponse::class,
+                        [
+                            'userSub' => 'mock-sub',
+                        ]
+                    );
+                }
             );
 
         $client->expects($this->once())
             ->method('adminConfirmSignUp')
-            ->with(
-                $this->callback(
-                    function (AdminConfirmSignUpRequest $request): bool {
-                        $this->assertSame('owner-github-repository', $request->getUsername());
+            ->willReturnCallback(
+                function (AdminConfirmSignUpRequest $request): AdminConfirmSignUpResponse {
+                    $this->assertSame('owner-github-repository', $request->getUsername());
 
-                        return true;
-                    }
-                )
-            )
-            ->willReturn(ResultMockFactory::create(AdminConfirmSignUpResponse::class));
+                    return ResultMockFactory::create(AdminConfirmSignUpResponse::class);
+                }
+            );
 
         $cognitoClient = new CognitoClient(
             $client,
@@ -118,47 +110,42 @@ final class CognitoClientTest extends TestCase
         } else {
             $client->expects($this->once())
                 ->method('adminGetUser')
-                ->with(
-                    $this->callback(
-                        function (AdminGetUserRequest $request): bool {
-                            $this->assertSame('owner-github-repository', $request->getUsername());
+                ->willReturnCallback(
+                    function (AdminGetUserRequest $request): AdminGetUserResponse {
+                        $this->assertSame('owner-github-repository', $request->getUsername());
 
-                            return true;
-                        }
-                    )
-                )
-                ->willReturn(
-                    ResultMockFactory::create(
-                        AdminGetUserResponse::class,
-                        [
-                            'userAttributes' => [
-                                new AttributeType([
-                                    'Name' => 'email',
-                                    'Value' => 'mock-email'
-                                ]),
-                                new AttributeType([
-                                    'Name' => 'custom:provider',
-                                    'Value' => Provider::GITHUB->value
-                                ]),
-                                new AttributeType([
-                                    'Name' => 'custom:owner',
-                                    'Value' => 'mock-owner'
-                                ]),
-                                new AttributeType([
-                                    'Name' => 'custom:repository',
-                                    'Value' => 'mock-repository'
-                                ]),
-                                new AttributeType([
-                                    'Name' => 'custom:project_id',
-                                    'Value' => 'mock-project-id'
-                                ]),
-                                new AttributeType([
-                                    'Name' => 'custom:graph_token',
-                                    'Value' => 'graph-token'
-                                ])
+                        return ResultMockFactory::create(
+                            AdminGetUserResponse::class,
+                            [
+                                'userAttributes' => [
+                                    new AttributeType([
+                                        'Name' => 'email',
+                                        'Value' => 'mock-email'
+                                    ]),
+                                    new AttributeType([
+                                        'Name' => 'custom:provider',
+                                        'Value' => Provider::GITHUB->value
+                                    ]),
+                                    new AttributeType([
+                                        'Name' => 'custom:owner',
+                                        'Value' => 'mock-owner'
+                                    ]),
+                                    new AttributeType([
+                                        'Name' => 'custom:repository',
+                                        'Value' => 'mock-repository'
+                                    ]),
+                                    new AttributeType([
+                                        'Name' => 'custom:project_id',
+                                        'Value' => 'mock-project-id'
+                                    ]),
+                                    new AttributeType([
+                                        'Name' => 'custom:graph_token',
+                                        'Value' => 'graph-token'
+                                    ])
+                                ]
                             ]
-                        ]
-                    )
+                        );
+                    }
                 );
         }
 
@@ -206,22 +193,17 @@ final class CognitoClientTest extends TestCase
         } else {
             $client->expects($this->once())
                 ->method('adminGetUser')
-                ->with(
-                    $this->callback(
-                        function (AdminGetUserRequest $request): bool {
-                            $this->assertSame('owner-github-repository', $request->getUsername());
+                ->willReturnCallback(
+                    function (AdminGetUserRequest $request): AdminGetUserResponse {
+                        $this->assertSame('owner-github-repository', $request->getUsername());
 
-                            return true;
-                        }
-                    )
-                )
-                ->willReturn(
-                    ResultMockFactory::create(
-                        AdminGetUserResponse::class,
-                        [
-                            'userAttributes' => []
-                        ]
-                    )
+                        return ResultMockFactory::create(
+                            AdminGetUserResponse::class,
+                            [
+                                'userAttributes' => []
+                            ]
+                        );
+                    }
                 );
         }
 
