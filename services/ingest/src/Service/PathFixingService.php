@@ -13,6 +13,18 @@ use Psr\Log\LoggerInterface;
 
 final readonly class PathFixingService
 {
+    /**
+     * This is largely relevant for Go, which has a convention of naming the module as
+     * `github.com/<owner>/<repository>/.../*.go`, where the owner and repository are the
+     * same as those hosted on the VCS provider.
+     *
+     * This doesn't handle aliased repository URLs (which will vary depending on package). If those
+     * are used, path replacements are a great alternative.
+     *
+     * @see https://go.dev/ref/mod#modules-overview
+     */
+    private const string GITHUB_REPOSITORY_URL_PATH = 'github.com/%s/%s';
+
     public function __construct(
         private SettingServiceInterface $settingService,
         private LoggerInterface $pathFixingLogger,
@@ -134,7 +146,7 @@ final readonly class PathFixingService
         switch ($provider) {
             case Provider::GITHUB:
                 $repositoryUrl = sprintf(
-                    'github.com/%s/%s',
+                    self::GITHUB_REPOSITORY_URL_PATH,
                     $owner,
                     $repository
                 );
