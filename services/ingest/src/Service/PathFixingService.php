@@ -140,6 +140,7 @@ final readonly class PathFixingService
                 );
                 break;
             default:
+                /** @var Provider $provider */
                 throw new LogicException(
                     sprintf(
                         'Unable to remove repository url as %s is not mapped to a repository URL.',
