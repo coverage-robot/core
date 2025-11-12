@@ -10,3 +10,5 @@ registries:
         url: https://coverage-robot.repo.repman.io
         username: token
         password: ${{ secrets.REPMAN_TOKEN }}
+
+updates:
