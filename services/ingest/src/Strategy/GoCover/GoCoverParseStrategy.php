@@ -245,22 +245,24 @@ final readonly class GoCoverParseStrategy implements ParseStrategyInterface
             $alreadyParsedLine = $file->getLine((string)$startLine);
 
             if ($alreadyParsedLine instanceof Branch) {
+                // Increment the existing branch
+                $alreadyParsedLine->setLineHits($alreadyParsedLine->getLineHits() + $lineHits);
                 $alreadyParsedLine->addToBranchHits(count($alreadyParsedLine->getBranchHits()) + 1, $lineHits);
+            } else {
+                // The line we already have tracked is not a branch (it wont be when running through the
+                // individual block data), meaning we should convert it to a branch now we officially know its
+                // type isn't a simple statement.
+                $file->setLine(
+                    new Branch(
+                        lineNumber: $startLine,
+                        lineHits: $alreadyParsedLine->getLineHits() + $lineHits,
+                        branchHits: [
+                            $alreadyParsedLine->getLineHits(),
+                            $lineHits
+                        ]
+                    )
+                );
             }
-
-            // The line we already have tracked is not a branch (it wont be when running through the
-            // individual block data), meaning we should convert it to a branch now we officially know its
-            // type isn't a simple statement.
-            $file->setLine(
-                new Branch(
-                    lineNumber: $alreadyParsedLine->getLineNumber(),
-                    lineHits: max($alreadyParsedLine->getLineHits(), $lineHits),
-                    branchHits: [
-                        0 => $lineHits
-                    ]
-                )
-            );
-
 
             if ($startLine === $endLine) {
                 // This block only spans the single line - we've already recorded it, so can finish
