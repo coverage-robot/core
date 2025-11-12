@@ -11,4 +11,4 @@ registries:
         username: token
         password: ${{ secrets.REPMAN_TOKEN }}
 
-updates:
+updates: []
