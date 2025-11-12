@@ -30,7 +30,7 @@ final class File implements Countable, Stringable
     }
 
     /**
-     * @return AbstractLine[]
+     * @return array<array-key, AbstractLine>
      */
     public function getLines(): array
     {

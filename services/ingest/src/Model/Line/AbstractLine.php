@@ -22,7 +22,7 @@ abstract class AbstractLine implements Stringable
 {
     public function __construct(
         private readonly int $lineNumber,
-        private readonly int $lineHits = 0
+        private int $lineHits = 0
     ) {
     }
 
@@ -50,6 +50,11 @@ abstract class AbstractLine implements Stringable
     public function getLineNumber(): int
     {
         return $this->lineNumber;
+    }
+
+    public function setLineHits(int $lineHits): void
+    {
+        $this->lineHits = $lineHits;
     }
 
     public function getLineHits(): int
