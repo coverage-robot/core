@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use LogicException;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
+use Psr\Log\LoggerInterface;
 
 final readonly class PathFixingService
 {
     public function __construct(
-        private SettingServiceInterface $settingService
+        private SettingServiceInterface $settingService,
+        private LoggerInterface $pathFixingLogger,
     ) {
     }
 
@@ -35,11 +38,24 @@ final readonly class PathFixingService
         string $path,
         string $projectRoot
     ): string {
-        $path = $this->removeUsingPathReplacements($provider, $owner, $repository, $path);
+        try {
+            $path = $this->removeUsingPathReplacements($provider, $owner, $repository, $path);
 
-        $path = $this->removeUsingProjectRoot($path, $projectRoot);
+            $path = $this->removeUsingProjectRoot($path, $projectRoot);
 
-        $path = $this->removeUsingRepositoryUrl($provider, $owner, $repository, $path);
+            $path = $this->removeUsingRepositoryUrl($provider, $owner, $repository, $path);
+        } catch (LogicException $logicException) {
+            $this->pathFixingLogger->error(
+                sprintf(
+                    "Received an exception while performing path fixes on %s. Error was: %s",
+                    $path,
+                    $logicException->getMessage(),
+                ),
+                [
+                    "exception" => $logicException,
+                ]
+            );
+        }
 
         return trim($path, '/');
     }
@@ -106,6 +122,8 @@ final readonly class PathFixingService
      * are used, path replacements are a great alternative.
      *
      * @see https://go.dev/ref/mod#modules-overview
+     *
+     * @throws LogicException
      */
     private function removeUsingRepositoryUrl(
         Provider $provider,
@@ -113,17 +131,21 @@ final readonly class PathFixingService
         string $repository,
         string $path
     ): string {
-        $repositoryUrl = null;
-        if ($provider == Provider::GITHUB) {
-            $repositoryUrl = sprintf(
-                'github.com/%s/%s',
-                $owner,
-                $repository
-            );
-        }
-
-        if ($repositoryUrl === null) {
-            return $path;
+        switch ($provider) {
+            case Provider::GITHUB:
+                $repositoryUrl = sprintf(
+                    'github.com/%s/%s',
+                    $owner,
+                    $repository
+                );
+                break;
+            default:
+                throw new LogicException(
+                    sprintf(
+                        "Unable to remove repository url as %s is not mapped to a repository URL.",
+                        $provider->value
+                    )
+                );
         }
 
         if (str_starts_with($path, $repositoryUrl)) {
