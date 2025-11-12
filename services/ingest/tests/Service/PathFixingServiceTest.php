@@ -95,5 +95,12 @@ final class PathFixingServiceTest extends TestCase
             ],
             'path/some-value/replacement/src/path/to/file'
         ];
+
+        yield [
+            'github.com/mock-owner/mock-repository/pkg/path/to/file',
+            'project-root/',
+            [],
+            'pkg/path/to/file'
+        ];
     }
 }

@@ -39,6 +39,8 @@ final readonly class PathFixingService
 
         $path = $this->removeUsingProjectRoot($path, $projectRoot);
 
+        $path = $this->removeUsingRepositoryUrl($provider, $owner, $repository, $path);
+
         return trim($path, '/');
     }
 
@@ -88,6 +90,44 @@ final readonly class PathFixingService
     ): string {
         if (str_starts_with($path, $projectRoot)) {
             return substr($path, strlen($projectRoot));
+        }
+
+        return $path;
+    }
+
+    /**
+     * Remove the repository URL from a path, if present.
+     *
+     * This is largely relevant for Go, which has a convention of naming the module as
+     * `github.com/<owner>/<repository>/.../*.go`, where the owner and repository are the
+     * same as those hosted on the VCS provider.
+     *
+     * This doesn't handle aliased repository URLs (which will vary depending on package). If those
+     * are used, path replacements are a great alternative.
+     *
+     * @see https://go.dev/ref/mod#modules-overview
+     */
+    private function removeUsingRepositoryUrl(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $path
+    ): string {
+        $repositoryUrl = null;
+        if ($provider == Provider::GITHUB) {
+            $repositoryUrl = sprintf(
+                'github.com/%s/%s',
+                $owner,
+                $repository
+            );
+        }
+
+        if ($repositoryUrl === null) {
+            return $path;
+        }
+
+        if (str_starts_with($path, $repositoryUrl)) {
+            return substr($path, strlen($repositoryUrl));
         }
 
         return $path;
