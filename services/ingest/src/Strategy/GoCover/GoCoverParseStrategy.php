@@ -174,13 +174,6 @@ final readonly class GoCoverParseStrategy implements ParseStrategyInterface
 
         // Match the record type and its data
         if (preg_match(self::LINE_STRUCTURE, $line, $parts) !== 1) {
-            $this->parseStrategyLogger->error(
-                'Unable to validate structure of line in Go Cover file.',
-                [
-                    'line' => $line
-                ]
-            );
-
             throw new ParseException(
                 sprintf(
                     'Unable to parse structure of line in Go Cover file: %s',
