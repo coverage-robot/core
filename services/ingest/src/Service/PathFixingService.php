@@ -4,15 +4,30 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use LogicException;
 use Packages\Configuration\Enum\SettingKey;
 use Packages\Configuration\Model\PathReplacement;
 use Packages\Configuration\Service\SettingServiceInterface;
 use Packages\Contracts\Provider\Provider;
+use Psr\Log\LoggerInterface;
 
 final readonly class PathFixingService
 {
+    /**
+     * This is largely relevant for Go, which has a convention of naming the module as
+     * `github.com/<owner>/<repository>/.../*.go`, where the owner and repository are the
+     * same as those hosted on the VCS provider.
+     *
+     * This doesn't handle aliased repository URLs (which will vary depending on package). If those
+     * are used, path replacements are a great alternative.
+     *
+     * @see https://go.dev/ref/mod#modules-overview
+     */
+    private const string GITHUB_REPOSITORY_URL_PATH = 'github.com/%s/%s';
+
     public function __construct(
-        private SettingServiceInterface $settingService
+        private SettingServiceInterface $settingService,
+        private LoggerInterface $pathFixingLogger,
     ) {
     }
 
@@ -35,9 +50,24 @@ final readonly class PathFixingService
         string $path,
         string $projectRoot
     ): string {
-        $path = $this->removeUsingPathReplacements($provider, $owner, $repository, $path);
+        try {
+            $path = $this->removeUsingPathReplacements($provider, $owner, $repository, $path);
 
-        $path = $this->removeUsingProjectRoot($path, $projectRoot);
+            $path = $this->removeUsingProjectRoot($path, $projectRoot);
+
+            $path = $this->removeUsingRepositoryUrl($provider, $owner, $repository, $path);
+        } catch (LogicException $logicException) {
+            $this->pathFixingLogger->error(
+                sprintf(
+                    'Received an exception while performing path fixes on %s. Error was: %s',
+                    $path,
+                    $logicException->getMessage(),
+                ),
+                [
+                    'exception' => $logicException,
+                ]
+            );
+        }
 
         return trim($path, '/');
     }
@@ -88,6 +118,51 @@ final readonly class PathFixingService
     ): string {
         if (str_starts_with($path, $projectRoot)) {
             return substr($path, strlen($projectRoot));
+        }
+
+        return $path;
+    }
+
+    /**
+     * Remove the repository URL from a path, if present.
+     *
+     * This is largely relevant for Go, which has a convention of naming the module as
+     * `github.com/<owner>/<repository>/.../*.go`, where the owner and repository are the
+     * same as those hosted on the VCS provider.
+     *
+     * This doesn't handle aliased repository URLs (which will vary depending on package). If those
+     * are used, path replacements are a great alternative.
+     *
+     * @see https://go.dev/ref/mod#modules-overview
+     *
+     * @throws LogicException
+     */
+    private function removeUsingRepositoryUrl(
+        Provider $provider,
+        string $owner,
+        string $repository,
+        string $path
+    ): string {
+        switch ($provider) {
+            case Provider::GITHUB:
+                $repositoryUrl = sprintf(
+                    self::GITHUB_REPOSITORY_URL_PATH,
+                    $owner,
+                    $repository
+                );
+                break;
+            default:
+                /** @var Provider $provider */
+                throw new LogicException(
+                    sprintf(
+                        'Unable to remove repository url as %s is not mapped to a repository URL.',
+                        $provider->value
+                    )
+                );
+        }
+
+        if (str_starts_with($path, $repositoryUrl)) {
+            return substr($path, strlen($repositoryUrl));
         }
 
         return $path;

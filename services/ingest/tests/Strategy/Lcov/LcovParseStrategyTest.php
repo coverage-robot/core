@@ -41,7 +41,7 @@ final class LcovParseStrategyTest extends AbstractParseStrategyTestCase
 
         return new LcovParseStrategy(
             new NullLogger(),
-            new PathFixingService($mockSettingService)
+            new PathFixingService($mockSettingService, new NullLogger())
         );
     }
 }
