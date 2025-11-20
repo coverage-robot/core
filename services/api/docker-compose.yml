@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   lambda:
-    image: bref/php-84-dev:3
+    image: bref/php-85-dev:3
     ports: [ '8000:8000' ]
     volumes:
       - .:/var/task:ro
@@ -15,7 +15,7 @@ services:
       HANDLER: public/index.php
 
   event_listener:
-    image: bref/php-84-dev:3
+    image: bref/php-85-dev:3
     volumes:
       - .:/var/task:ro
       - ./var:/var/task/var

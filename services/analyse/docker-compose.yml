@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
     lambda:
-        image: bref/php-84-dev:3
+        image: bref/php-85-dev:3
         environment:
             BREF_RUNTIME: fpm
         volumes:

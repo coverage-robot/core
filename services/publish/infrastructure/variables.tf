@@ -10,5 +10,5 @@ variable "environment" {
 
 variable "php_version" {
   type    = string
-  default = "php-84"
+  default = "php-85"
 }
