@@ -36,7 +36,7 @@ defaults:
 env:
     # PHP version to use for deploying - this should be included in the supported versions
     # defined in the build/lint/test jobs
-    target-php-version: "8.4"
+    target-php-version: "8.5"
 
     working-directory: "./packages/local/"
 
@@ -48,7 +48,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.4", "8.5"]
+                php-version: ["8.5"]
 
         steps:
             - uses: actions/checkout@v6
