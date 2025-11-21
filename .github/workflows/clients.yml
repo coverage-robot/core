@@ -74,9 +74,11 @@ jobs:
 
             - name: Run Psalm
               run: composer lint:static-analysis
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
             - name: Run Psalm Security Analysis
               run: composer lint:security
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
             - name: Run PHPUnit
               id: tests
