@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Packages\Configuration\Mock;
 
 use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Environment\Service;
 
 final class MockEnvironmentServiceFactory
