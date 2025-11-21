@@ -156,11 +156,11 @@ jobs:
 
             - name: Run Psalm
               run: composer lint:static-analysis
-              continue-on-error: ${{ marix.php-version == '8.5' }}
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
             - name: Run Psalm Security Analysis
               run: composer lint:security
-              continue-on-error: ${{ marix.php-version == '8.5' }}
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
             - name: Run Terraform Format
               uses: dflook/terraform-fmt-check@v2
