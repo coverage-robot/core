@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1eb335313e2cccfffd949473c0e6ca29",
+    "content-hash": "fa851826caaaac65c3047b49a20ece97",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -1735,22 +1735,22 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "5.5.0",
+            "version": "5.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "a835af59b030d3f2967725697cf88300f579088e"
+                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/a835af59b030d3f2967725697cf88300f579088e",
-                "reference": "a835af59b030d3f2967725697cf88300f579088e",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/bb3e9f21e4196e8afc41def81ef649c164bca25e",
+                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e",
                 "shasum": ""
             },
             "require": {
                 "ext-openssl": "*",
                 "ext-sodium": "*",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
                 "psr/clock": "^1.0"
             },
             "require-dev": {
@@ -1792,7 +1792,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/5.5.0"
+                "source": "https://github.com/lcobucci/jwt/tree/5.6.0"
             },
             "funding": [
                 {
@@ -1804,7 +1804,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-01-26T21:29:45+00:00"
+            "time": "2025-10-17T11:30:53+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2601,24 +2601,24 @@
         },
         {
             "name": "phpro/api-problem",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpro/api-problem.git",
-                "reference": "ab4306a9c262939e95d14b2bb696b30dcbaa2b41"
+                "reference": "c983ac10d30460563caa2d839faf0643e664c952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpro/api-problem/zipball/ab4306a9c262939e95d14b2bb696b30dcbaa2b41",
-                "reference": "ab4306a9c262939e95d14b2bb696b30dcbaa2b41",
+                "url": "https://api.github.com/repos/phpro/api-problem/zipball/c983ac10d30460563caa2d839faf0643e664c952",
+                "reference": "c983ac10d30460563caa2d839faf0643e664c952",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.13",
-                "phpro/grumphp-shim": "^2.10",
+                "php-cs-fixer/shim": "^3.88",
+                "phpro/grumphp-shim": "^2.17",
                 "phpspec/phpspec": "^7.2",
                 "sebastian/comparator": "^4.0",
                 "symfony/validator": "^5.4 || ^6.0 || ^7.0"
@@ -2645,9 +2645,9 @@
             "description": "RFC7807 Problem details implementation",
             "support": {
                 "issues": "https://github.com/phpro/api-problem/issues",
-                "source": "https://github.com/phpro/api-problem/tree/1.8.0"
+                "source": "https://github.com/phpro/api-problem/tree/1.9.0"
             },
-            "time": "2025-01-30T08:02:29+00:00"
+            "time": "2025-10-21T09:37:10+00:00"
         },
         {
             "name": "phpro/api-problem-bundle",
@@ -11746,16 +11746,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "6.13.1",
+            "version": "6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51"
+                "reference": "2b0ff73c8bed091af231a0a80ac109126c92083a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
-                "reference": "1e3b7f0a8ab32b23197b91107adc0a7ed8a05b51",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/2b0ff73c8bed091af231a0a80ac109126c92083a",
+                "reference": "2b0ff73c8bed091af231a0a80ac109126c92083a",
                 "shasum": ""
             },
             "require": {
@@ -11778,7 +11778,7 @@
                 "fidry/cpu-core-counter": "^0.4.1 || ^0.5.1 || ^1.0.0",
                 "netresearch/jsonmapper": "^5.0",
                 "nikic/php-parser": "^5.0.0",
-                "php": "~8.1.31 || ~8.2.27 || ~8.3.16 || ~8.4.3",
+                "php": "~8.1.31 || ~8.2.27 || ~8.3.16 || ~8.4.3 || ~8.5.0",
                 "sebastian/diff": "^4.0 || ^5.0 || ^6.0 || ^7.0",
                 "spatie/array-to-xml": "^2.17.0 || ^3.0",
                 "symfony/console": "^6.0 || ^7.0",
@@ -11810,6 +11810,7 @@
                 "ext-curl": "In order to send data to shepherd",
                 "ext-igbinary": "^2.0.5 is required, used to serialize caching data"
             },
+            "default-branch": true,
             "bin": [
                 "psalm",
                 "psalm-language-server",
@@ -11860,7 +11861,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2025-08-06T10:10:28+00:00"
+            "time": "2025-10-15T16:48:19+00:00"
         }
     ],
     "aliases": [],
