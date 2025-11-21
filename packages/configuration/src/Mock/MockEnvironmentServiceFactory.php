@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Packages\Configuration\Mock;
 
 use Packages\Contracts\Environment\Environment;
-use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Environment\Service;
 
 final class MockEnvironmentServiceFactory
@@ -17,7 +16,7 @@ final class MockEnvironmentServiceFactory
         Environment $environment,
         Service $service,
         array $variables = []
-    ): EnvironmentServiceInterface {
+    ): MockEnvironmentService {
         return new MockEnvironmentService($environment, $service, $variables);
     }
 }

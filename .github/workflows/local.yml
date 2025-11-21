@@ -48,7 +48,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.4"]
+                php-version: ["8.4", "8.5"]
 
         steps:
             - uses: actions/checkout@v5
@@ -72,7 +72,7 @@ jobs:
               run: composer lint:rector
 
             - name: Run Psalm
-              run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }}
+              run: composer lint:static-analysis
 
             - name: Run Psalm Security Analysis
               run: composer lint:security

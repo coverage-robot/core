@@ -55,10 +55,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [11]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [11])
                 ),
                 coveragePercentage: 99,
                 diffCoveragePercentage: null,
@@ -83,10 +80,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [12]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [12])
                 ),
                 coveragePercentage: -1,
                 diffCoveragePercentage: null,
@@ -111,10 +105,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [13]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [13])
                 ),
                 coveragePercentage: 99,
                 diffCoveragePercentage: null,
@@ -139,10 +130,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [14]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [14])
                 ),
                 coveragePercentage: 100,
                 diffCoveragePercentage: -1,
@@ -167,10 +155,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [15]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [15])
                 ),
                 coveragePercentage: 200,
                 diffCoveragePercentage: null,
@@ -195,10 +180,7 @@ final class MessageValidationServiceTest extends TestCase
                     parent: [],
                     ref: 'mock-ref',
                     projectRoot: '',
-                    tag: new Tag('1', 'mock-commit', [16]),
-                    pullRequest: null,
-                    baseCommit: null,
-                    baseRef: null
+                    tag: new Tag('1', 'mock-commit', [16])
                 ),
                 coveragePercentage: 100,
                 diffCoveragePercentage: 200,

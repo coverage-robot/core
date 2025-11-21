@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Packages\Configuration\Mock;
 
-use Packages\Configuration\Service\SettingServiceInterface;
-
 final class MockSettingServiceFactory
 {
-    public static function createMock(array $settings = []): SettingServiceInterface
+    public static function createMock(array $settings = []): MockSettingService
     {
         return new MockSettingService($settings);
     }
