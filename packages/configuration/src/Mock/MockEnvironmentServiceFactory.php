@@ -17,7 +17,7 @@ final class MockEnvironmentServiceFactory
         Environment $environment,
         Service $service,
         array $variables = []
-    ): EnvironmentServiceInterface {
+    ): MockEnvironmentService {
         return new MockEnvironmentService($environment, $service, $variables);
     }
 }
