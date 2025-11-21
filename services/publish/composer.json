@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "bref/bref": "^2.0",
@@ -41,7 +41,7 @@
         "rector/rector": "^2.0",
         "spatie/phpunit-snapshot-assertions": "^5.1",
         "squizlabs/php_codesniffer": "^4.0",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13 || 6.x-dev"
     },
     "config": {
         "allow-plugins": {

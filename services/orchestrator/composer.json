@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/async-aws-bundle": "^1.12",
@@ -41,7 +41,7 @@
         "psalm/plugin-symfony": "^5.2.7",
         "rector/rector": "^2.0",
         "squizlabs/php_codesniffer": "^4.0",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13 || 6.x-dev"
     },
     "config": {
         "allow-plugins": {

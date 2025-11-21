@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/cognito-identity-provider": "^1.7",
@@ -21,7 +21,7 @@
         "coverage-robot/telemetry": "^1.6",
         "cybercog/php-svg-font": "^1.0",
         "phpdocumentor/reflection-docblock": "^5.3",
-        "phpro/api-problem-bundle": "^1.7",
+        "phpro/api-problem-bundle": "^1.11",
         "phpstan/phpdoc-parser": "^2.0",
         "sentry/sentry-symfony": "^5.0",
         "symfony/clock": "7.3.*",
@@ -112,6 +112,6 @@
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/browser-kit": "7.3.*",
         "symfony/maker-bundle": "^1.48",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13 || 6.x-dev"
     }
 }

@@ -13,15 +13,15 @@ on:
         branches:
             - main
         paths:
-            - 'services/orchestrator/**'
-            - '.github/workflows/orchestrator.yml'
-            - 'rector.php'
+            - "services/orchestrator/**"
+            - ".github/workflows/orchestrator.yml"
+            - "rector.php"
 
     pull_request:
         paths:
-            - 'services/orchestrator/**'
-            - '.github/workflows/orchestrator.yml'
-            - 'rector.php'
+            - "services/orchestrator/**"
+            - ".github/workflows/orchestrator.yml"
+            - "rector.php"
 
     workflow_dispatch:
 
@@ -32,16 +32,16 @@ concurrency:
 defaults:
     run:
         shell: bash
-        working-directory: './services/orchestrator'
+        working-directory: "./services/orchestrator"
 
 env:
     # PHP version to use for deploying - this should be included in the supported versions
     # defined in the build/lint/test jobs
     target-php-version: "8.4"
 
-    working-directory: './services/orchestrator'
-    workspace: 'prod'
-    sentry-dsn: 'https://c644e5a97104f653906046185e8f2404@o4506265435176960.ingest.sentry.io/4506265484918784'
+    working-directory: "./services/orchestrator"
+    workspace: "prod"
+    sentry-dsn: "https://c644e5a97104f653906046185e8f2404@o4506265435176960.ingest.sentry.io/4506265484918784"
 
 permissions:
     id-token: write # For OIDC authentication with AWS
@@ -55,64 +55,62 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [
-                    "8.4"
-                ]
+                php-version: ["8.4", "8.5"]
 
         steps:
-            -   uses: actions/checkout@v6
+            - uses: actions/checkout@v6
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php-version }}
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
 
-            -   name: Validate Composer configuration
-                run: composer validate
+            - name: Validate Composer configuration
+              run: composer validate
 
-            -   name: Setup environment variables
-                uses: SpicyPizza/create-envfile@v2.0
-                with:
-                    envkey_APP_ENV: "dev"
-                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-                    directory: ${{ env.working-directory }}
-                    file_name: .env.local
-                    fail_on_empty: false
+            - name: Setup environment variables
+              uses: SpicyPizza/create-envfile@v2.0
+              with:
+                  envkey_APP_ENV: "dev"
+                  envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                  directory: ${{ env.working-directory }}
+                  file_name: .env.local
+                  fail_on_empty: false
 
-            -   name: Setup test environment variables
-                uses: SpicyPizza/create-envfile@v2.0
-                with:
-                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-                    directory: ${{ env.working-directory }}
-                    file_name: .env.test.local
-                    fail_on_empty: false
+            - name: Setup test environment variables
+              uses: SpicyPizza/create-envfile@v2.0
+              with:
+                  envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                  directory: ${{ env.working-directory }}
+                  file_name: .env.test.local
+                  fail_on_empty: false
 
-            -   name: Install Composer dependencies
-                run: composer install --prefer-dist --no-progress
-                env:
-                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --no-progress
+              env:
+                  COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
-                # For Psalm's symfony plugin, which requires the test containers
-            -   name: Warm testing environment cache
-                run: php bin/console cache:warmup --env=test
+              # For Psalm's symfony plugin, which requires the test containers
+            - name: Warm testing environment cache
+              run: php bin/console cache:warmup --env=test
 
-                # The base rector config needs to be available for the linting step
-            -   name: Archive build package
-                run: |
-                    cp -r ${{ github.workspace }}/.git ./
-                    cp -r ${{ github.workspace }}/rector.php ./rector-base.php
-                    cp -r ${{ github.workspace }}/phpcs.xml ./phpcs-base.xml
-                    cp -r ${{ github.workspace }}/psalm-files.xml ./psalm-files.xml
-                    cp -r ${{ github.workspace }}/psalm-issue-handlers.xml ./psalm-issue-handlers.xml
-                    cp -r ${{ github.workspace }}/psalm-plugins.xml ./psalm-plugins.xml
-                    zip -q -r build.zip ./
+              # The base rector config needs to be available for the linting step
+            - name: Archive build package
+              run: |
+                  cp -r ${{ github.workspace }}/.git ./
+                  cp -r ${{ github.workspace }}/rector.php ./rector-base.php
+                  cp -r ${{ github.workspace }}/phpcs.xml ./phpcs-base.xml
+                  cp -r ${{ github.workspace }}/psalm-files.xml ./psalm-files.xml
+                  cp -r ${{ github.workspace }}/psalm-issue-handlers.xml ./psalm-issue-handlers.xml
+                  cp -r ${{ github.workspace }}/psalm-plugins.xml ./psalm-plugins.xml
+                  zip -q -r build.zip ./
 
-            -   name: Upload build package to artifact storage
-                uses: actions/upload-artifact@v5
-                with:
-                    name: build-php-${{ matrix.php-version }}
-                    if-no-files-found: error
-                    path: ${{ env.working-directory }}/build.zip
-                    retention-days: 1
+            - name: Upload build package to artifact storage
+              uses: actions/upload-artifact@v5
+              with:
+                  name: build-php-${{ matrix.php-version }}
+                  if-no-files-found: error
+                  path: ${{ env.working-directory }}/build.zip
+                  retention-days: 1
 
     lint:
         name: "Lint"
@@ -122,59 +120,59 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [
-                    "8.4"
-                ]
+                php-version: ["8.4", "8.5"]
 
         steps:
-            -   name: Make services folder structure
-                working-directory: "./"
-                run: mkdir -p ${{ env.working-directory }}
+            - name: Make services folder structure
+              working-directory: "./"
+              run: mkdir -p ${{ env.working-directory }}
 
-            -   name: Download build from artifact storage
-                uses: actions/download-artifact@v6
-                with:
-                    name: build-php-${{ matrix.php-version }}
-                    path: ${{ env.working-directory }}
+            - name: Download build from artifact storage
+              uses: actions/download-artifact@v6
+              with:
+                  name: build-php-${{ matrix.php-version }}
+                  path: ${{ env.working-directory }}
 
-            -   name: Extract build package
-                run: |
-                    umask 644
-                    unzip -q build.zip -d ./
-                    mv ./rector-base.php ${{ github.workspace }}/rector.php
-                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
-                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
-                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
-                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
-                    mv ./.git ${{ github.workspace }}/.git
+            - name: Extract build package
+              run: |
+                  umask 644
+                  unzip -q build.zip -d ./
+                  mv ./rector-base.php ${{ github.workspace }}/rector.php
+                  mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                  mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                  mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                  mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
+                  mv ./.git ${{ github.workspace }}/.git
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php-version }}
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
 
-            -   name: Run PHP_CodeSniffer
-                run: composer lint:style
+            - name: Run PHP_CodeSniffer
+              run: composer lint:style
 
-            -   name: Run Rector
-                run: composer lint:rector
+            - name: Run Rector
+              run: composer lint:rector
 
-            -   name: Run Psalm
-                run: composer lint:static-analysis -- --php-version=${{ matrix.php-version }}
+            - name: Run Psalm
+              run: composer lint:static-analysis
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
-            -   name: Run Psalm Security Analysis
-                run: composer lint:security
+            - name: Run Psalm Security Analysis
+              run: composer lint:security
+              continue-on-error: ${{ matrix.php-version == '8.5' }}
 
-            -   name: Run Terraform Format
-                uses: dflook/terraform-fmt-check@v2
-                with:
-                    workspace: ${{ env.workspace }}
-                    path: ${{ env.working-directory }}/infrastructure
+            - name: Run Terraform Format
+              uses: dflook/terraform-fmt-check@v2
+              with:
+                  workspace: ${{ env.workspace }}
+                  path: ${{ env.working-directory }}/infrastructure
 
-            -   name: Run Terraform Validate
-                uses: dflook/terraform-validate@v2
-                with:
-                    workspace: ${{ env.workspace }}
-                    path: ${{ env.working-directory }}/infrastructure
+            - name: Run Terraform Validate
+              uses: dflook/terraform-validate@v2
+              with:
+                  workspace: ${{ env.workspace }}
+                  path: ${{ env.working-directory }}/infrastructure
 
     orchestrator-tests:
         name: "Orchestrator Tests"
@@ -184,53 +182,51 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: [
-                    "8.4"
-                ]
+                php-version: ["8.4", "8.5"]
 
         steps:
-            -   name: Make services folder structure
-                working-directory: "./"
-                run: mkdir -p ${{ env.working-directory }}
+            - name: Make services folder structure
+              working-directory: "./"
+              run: mkdir -p ${{ env.working-directory }}
 
-            -   name: Download build from artifact storage
-                uses: actions/download-artifact@v6
-                with:
-                    name: build-php-${{ matrix.php-version }}
-                    path: ${{ env.working-directory }}
+            - name: Download build from artifact storage
+              uses: actions/download-artifact@v6
+              with:
+                  name: build-php-${{ matrix.php-version }}
+                  path: ${{ env.working-directory }}
 
-            -   name: Extract build package
-                run: |
-                    umask 644
-                    unzip -q build.zip -d ./
-                    mv ./rector-base.php ${{ github.workspace }}/rector.php
-                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
-                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
-                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
-                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
-                    mv ./.git ${{ github.workspace }}/.git
+            - name: Extract build package
+              run: |
+                  umask 644
+                  unzip -q build.zip -d ./
+                  mv ./rector-base.php ${{ github.workspace }}/rector.php
+                  mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                  mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                  mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                  mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
+                  mv ./.git ${{ github.workspace }}/.git
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ matrix.php-version }}
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
 
-            -   name: Run PHPUnit
-                id: tests
-                run: |
-                    composer test:unit -- --coverage-clover='./coverage.xml'
-                    echo "php-version=${{ matrix.php-version }}" >> $GITHUB_OUTPUT
-                shell: bash
+            - name: Run PHPUnit
+              id: tests
+              run: |
+                  composer test:unit -- --coverage-clover='./coverage.xml'
+                  echo "php-version=${{ matrix.php-version }}" >> $GITHUB_OUTPUT
+              shell: bash
 
-            -   uses: coverage-robot/action@v1.0.10
-                # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
-                # tests are run on multiple PHP versions
-                if: always() && steps.tests.outputs.php-version == env.target-php-version
-                with:
-                    token: ${{ secrets.COVERAGE_TOKEN }}
-                    files: |
-                        ${{ env.working-directory }}/coverage.xml
-                    tag: orchestrator-service
-                continue-on-error: true
+            - uses: coverage-robot/action@v1.0.10
+              # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
+              # tests are run on multiple PHP versions
+              if: always() && steps.tests.outputs.php-version == env.target-php-version
+              with:
+                  token: ${{ secrets.COVERAGE_TOKEN }}
+                  files: |
+                      ${{ env.working-directory }}/coverage.xml
+                  tag: orchestrator-service
+              continue-on-error: true
 
     plan:
         name: Plan
@@ -244,39 +240,39 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-            -   name: Make services folder structure
-                working-directory: "./"
-                run: mkdir -p ${{ env.working-directory }}
+            - name: Make services folder structure
+              working-directory: "./"
+              run: mkdir -p ${{ env.working-directory }}
 
-            -   name: Download build from artifact storage
-                uses: actions/download-artifact@v6
-                with:
-                    name: build-php-${{ env.target-php-version }}
-                    path: ${{ env.working-directory }}
+            - name: Download build from artifact storage
+              uses: actions/download-artifact@v6
+              with:
+                  name: build-php-${{ env.target-php-version }}
+                  path: ${{ env.working-directory }}
 
-            -   name: Extract build package
-                run: |
-                    umask 644
-                    unzip -q build.zip -d ./
-                    mv ./rector-base.php ${{ github.workspace }}/rector.php
-                    mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
-                    mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
-                    mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
-                    mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
-                    mv ./.git ${{ github.workspace }}/.git
+            - name: Extract build package
+              run: |
+                  umask 644
+                  unzip -q build.zip -d ./
+                  mv ./rector-base.php ${{ github.workspace }}/rector.php
+                  mv ./phpcs-base.xml ${{ github.workspace }}/phpcs.xml
+                  mv ./psalm-files.xml ${{ github.workspace }}/./psalm-files.xml
+                  mv ./psalm-issue-handlers.xml ${{ github.workspace }}/psalm-issue-handlers.xml
+                  mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
+                  mv ./.git ${{ github.workspace }}/.git
 
-            -   uses: aws-actions/configure-aws-credentials@v5
-                with:
-                    aws-region: eu-west-2
-                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+            - uses: aws-actions/configure-aws-credentials@v5
+              with:
+                  aws-region: eu-west-2
+                  role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
-            -   name: Run Plan
-                uses: dflook/terraform-plan@v2
-                with:
-                    workspace: ${{ env.workspace }}
-                    add_github_comment: true
-                    path: ${{ env.working-directory }}/infrastructure
-                    var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+            - name: Run Plan
+              uses: dflook/terraform-plan@v2
+              with:
+                  workspace: ${{ env.workspace }}
+                  add_github_comment: true
+                  path: ${{ env.working-directory }}/infrastructure
+                  var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
     deployment:
         name: Deployment
@@ -291,56 +287,56 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-            -   uses: actions/checkout@v6
+            - uses: actions/checkout@v6
 
-            -   uses: shivammathur/setup-php@v2
-                with:
-                    php-version: ${{ env.target-php-version }}
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ env.target-php-version }}
 
-            -   uses: aws-actions/configure-aws-credentials@v5
-                with:
-                    aws-region: eu-west-2
-                    role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+            - uses: aws-actions/configure-aws-credentials@v5
+              with:
+                  aws-region: eu-west-2
+                  role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
-            -   name: Setup environment variables
-                uses: SpicyPizza/create-envfile@v2.0
-                with:
-                    envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
-                    envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
-                    envkey_SENTRY_DSN: ${{ env.sentry-dsn }}
-                    directory: ${{ env.working-directory }}
-                    file_name: .env.local
-                    fail_on_empty: false
+            - name: Setup environment variables
+              uses: SpicyPizza/create-envfile@v2.0
+              with:
+                  envkey_APP_SECRET: ${{ secrets.APP_SECRET }}
+                  envkey_GITHUB_APP_ID: ${{ secrets.GH_APP_ID }}
+                  envkey_SENTRY_DSN: ${{ env.sentry-dsn }}
+                  directory: ${{ env.working-directory }}
+                  file_name: .env.local
+                  fail_on_empty: false
 
-                # Install Composer dependencies, with symlinks mirrored (e.g. dependencies from the packages folder
-                # are copied directly into the vendor folder, rather than symlinked - as Terraform doesn't like that during archiving)
-            -   name: Install Composer dependencies
-                run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative --no-dev --no-scripts
-                env:
-                    COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
+              # Install Composer dependencies, with symlinks mirrored (e.g. dependencies from the packages folder
+              # are copied directly into the vendor folder, rather than symlinked - as Terraform doesn't like that during archiving)
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --optimize-autoloader --classmap-authoritative --no-dev --no-scripts
+              env:
+                  COMPOSER_AUTH: '{"http-basic": {"coverage-robot.repo.repman.io": {"username": "token", "password": "${{ secrets.REPMAN_TOKEN }}"}}}'
 
-            -   name: Clear platform cache
-                run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
+            - name: Clear platform cache
+              run: php bin/console cache:clear --no-debug --no-warmup --env=${{ env.workspace }}
 
-            -   name: Compile environment variables
-                run: composer dump-env ${{ env.workspace }}
+            - name: Compile environment variables
+              run: composer dump-env ${{ env.workspace }}
 
-            -   name: Warm platform cache
-                run: php bin/console cache:warmup --env=${{ env.workspace }}
+            - name: Warm platform cache
+              run: php bin/console cache:warmup --env=${{ env.workspace }}
 
-            -   name: Add Github Private Key
-                uses: DamianReeves/write-file-action@v1.3
-                with:
-                    path: ${{ env.working-directory }}/config/github.pem
-                    write-mode: overwrite
-                    contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
+            - name: Add Github Private Key
+              uses: DamianReeves/write-file-action@v1.3
+              with:
+                  path: ${{ env.working-directory }}/config/github.pem
+                  write-mode: overwrite
+                  contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
-            -   name: Run Apply
-                uses: dflook/terraform-apply@v2
-                with:
-                    workspace: ${{ env.workspace }}
-                    path: ${{ env.working-directory }}/infrastructure
-                    var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
+            - name: Run Apply
+              uses: dflook/terraform-apply@v2
+              with:
+                  workspace: ${{ env.workspace }}
+                  path: ${{ env.working-directory }}/infrastructure
+                  var_file: ${{ env.working-directory }}/infrastructure/${{ env.workspace }}.tfvars
 
-                    # The plan will already have been generated on the PR, so approving here should be fine
-                    auto_approve: true
+                  # The plan will already have been generated on the PR, so approving here should be fine
+                  auto_approve: true
