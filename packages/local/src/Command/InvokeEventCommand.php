@@ -58,15 +58,13 @@ final class InvokeEventCommand extends Command
                 'file',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'A pre-existing JSON payload to use as the event body',
-                null
+                'A pre-existing JSON payload to use as the event body'
             )
             ->addOption(
                 'fixture',
                 null,
                 InputOption::VALUE_NONE,
-                'Use pre-existing fixture to use as the event body',
-                null
+                'Use pre-existing fixture to use as the event body'
             );
     }
 
