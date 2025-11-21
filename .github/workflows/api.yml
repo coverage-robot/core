@@ -55,7 +55,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.4", "8.5"]
+                php-version: ["8.5"]
 
         steps:
             - uses: actions/checkout@v6
@@ -120,7 +120,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.4", "8.5"]
+                php-version: ["8.5"]
 
         steps:
             - name: Make services folder structure
@@ -185,7 +185,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-version: ["8.4", "8.5"]
+                php-version: ["8.5"]
 
         steps:
             - name: Make services folder structure
