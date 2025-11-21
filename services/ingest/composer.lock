@@ -696,16 +696,16 @@
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.14",
+            "version": "v1.6.18",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
-                "reference": "c9dedb111775bcf1c9a8d55a7be6a06512a24098"
+                "reference": "7f6362f278d2aeaabcc3e53cc5631f5a62616695"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/c9dedb111775bcf1c9a8d55a7be6a06512a24098",
-                "reference": "c9dedb111775bcf1c9a8d55a7be6a06512a24098",
+                "url": "https://api.github.com/repos/coverage-robot/configuration/zipball/7f6362f278d2aeaabcc3e53cc5631f5a62616695",
+                "reference": "7f6362f278d2aeaabcc3e53cc5631f5a62616695",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -718,7 +718,7 @@
                 "async-aws/async-aws-bundle": "^1.12",
                 "async-aws/dynamo-db": "^3.0",
                 "coverage-robot/contracts": "^1.6",
-                "php": "~8.4.0",
+                "php": "~8.4.0 || ~8.5.0",
                 "psr/log": "^3.0",
                 "symfony/dependency-injection": "^7.0",
                 "symfony/http-kernel": "^7.0",
@@ -731,7 +731,7 @@
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
                 "squizlabs/php_codesniffer": "^4.0",
-                "vimeo/psalm": "^6.13"
+                "vimeo/psalm": "^6.13 || 6.x-dev"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -765,22 +765,22 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.14"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.18"
             },
-            "time": "2025-10-07T18:32:36+00:00"
+            "time": "2025-11-21T13:55:08+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.14",
+            "version": "v1.6.18",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
-                "reference": "1b06ae4be89f2888e0a5e608840c841f5e480348"
+                "reference": "9e20294a2ff1fd835563278f4e61a0006a54b8b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/1b06ae4be89f2888e0a5e608840c841f5e480348",
-                "reference": "1b06ae4be89f2888e0a5e608840c841f5e480348",
+                "url": "https://api.github.com/repos/coverage-robot/contracts/zipball/9e20294a2ff1fd835563278f4e61a0006a54b8b5",
+                "reference": "9e20294a2ff1fd835563278f4e61a0006a54b8b5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -790,13 +790,13 @@
                 ]
             },
             "require": {
-                "php": "~8.4.0",
+                "php": "~8.4.0 || ~8.5.0",
                 "symfony/validator": "^7.0"
             },
             "require-dev": {
                 "rector/rector": "^2.0",
                 "squizlabs/php_codesniffer": "^4.0",
-                "vimeo/psalm": "^6.13"
+                "vimeo/psalm": "^6.13 || 6.x-dev"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -821,22 +821,22 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.14"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.18"
             },
-            "time": "2025-11-11T19:40:40+00:00"
+            "time": "2025-11-21T12:54:21+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.6.14",
+            "version": "v1.6.18",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
-                "reference": "0f856f1f286decf3221f074fc13589353fd6c8c6"
+                "reference": "e28547be73356edfcd47aa0ae0bf2c0ccc962eaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/event/zipball/0f856f1f286decf3221f074fc13589353fd6c8c6",
-                "reference": "0f856f1f286decf3221f074fc13589353fd6c8c6",
+                "url": "https://api.github.com/repos/coverage-robot/event/zipball/e28547be73356edfcd47aa0ae0bf2c0ccc962eaa",
+                "reference": "e28547be73356edfcd47aa0ae0bf2c0ccc962eaa",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -852,7 +852,7 @@
                 "bref/bref": "^2.1",
                 "coverage-robot/contracts": "^1.6",
                 "coverage-robot/telemetry": "^1.6",
-                "php": "~8.4.0",
+                "php": "~8.4.0 || ~8.5.0",
                 "psr/log": "^3.0",
                 "symfony/config": "^7.0",
                 "symfony/dependency-injection": "^7.0",
@@ -863,7 +863,7 @@
                 "phpunit/phpunit": "^12.0",
                 "rector/rector": "^2.0",
                 "squizlabs/php_codesniffer": "^4.0",
-                "vimeo/psalm": "^6.13"
+                "vimeo/psalm": "^6.13 || 6.x-dev"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -897,22 +897,22 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.6.14"
+                "source": "https://github.com/coverage-robot/event/tree/v1.6.18"
             },
-            "time": "2025-10-25T19:33:35+00:00"
+            "time": "2025-11-21T13:32:43+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.6.14",
+            "version": "v1.6.18",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
-                "reference": "0354305f5419245418e74ce265c32353405b2af8"
+                "reference": "ab38f1848214f8bf90ff5b38e60270028ccad7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/0354305f5419245418e74ce265c32353405b2af8",
-                "reference": "0354305f5419245418e74ce265c32353405b2af8",
+                "url": "https://api.github.com/repos/coverage-robot/telemetry/zipball/ab38f1848214f8bf90ff5b38e60270028ccad7c6",
+                "reference": "ab38f1848214f8bf90ff5b38e60270028ccad7c6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -924,7 +924,7 @@
             "require": {
                 "coverage-robot/contracts": "^1.6",
                 "monolog/monolog": "^3.5",
-                "php": "~8.4.0",
+                "php": "~8.4.0 || ~8.5.0",
                 "psr/log": "^3.0",
                 "symfony/clock": "^7.0",
                 "symfony/config": "^7.0",
@@ -939,7 +939,7 @@
                 "rector/rector": "^2.0",
                 "squizlabs/php_codesniffer": "^4.0",
                 "symfony/property-access": "^7.1",
-                "vimeo/psalm": "^6.13"
+                "vimeo/psalm": "^6.13 || 6.x-dev"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -973,9 +973,9 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.14"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.18"
             },
-            "time": "2025-10-07T18:32:34+00:00"
+            "time": "2025-11-21T13:11:17+00:00"
         },
         {
             "name": "crwlr/query-string",
@@ -4935,16 +4935,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v7.3.4",
+            "version": "v7.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "c061c7c18918b1b64268771aad04b40be41dd2e6"
+                "reference": "db488a62f98f7a81d5746f05eea63a74e55bb7c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/c061c7c18918b1b64268771aad04b40be41dd2e6",
-                "reference": "c061c7c18918b1b64268771aad04b40be41dd2e6",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/db488a62f98f7a81d5746f05eea63a74e55bb7c4",
+                "reference": "db488a62f98f7a81d5746f05eea63a74e55bb7c4",
                 "shasum": ""
             },
             "require": {
@@ -4994,7 +4994,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v7.3.4"
+                "source": "https://github.com/symfony/http-foundation/tree/v7.3.7"
             },
             "funding": [
                 {
@@ -5014,7 +5014,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-16T08:38:17+00:00"
+            "time": "2025-11-08T16:41:12+00:00"
         },
         {
             "name": "symfony/http-kernel",
