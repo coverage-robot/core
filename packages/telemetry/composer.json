@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "psr/log": "^3.0",
         "coverage-robot/contracts": "^1.6",
         "symfony/serializer": "^7.0",
@@ -21,7 +21,7 @@
         "symfony/property-access": "^7.1",
         "bref/bref": "^2.1",
         "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.13",
+        "vimeo/psalm": "^6.13 || 6.x-dev",
         "squizlabs/php_codesniffer": "^4.0"
     },
     "autoload": {
