@@ -127,8 +127,8 @@ final class EventBusClientTest extends TestCase
         $mockScheduler = $this->createMock(SchedulerClient::class);
         $mockScheduler->expects($this->once())
             ->method('createSchedule')
-            ->with(
-                $this->callback(function (CreateScheduleInput $input): bool {
+            ->willReturnCallback(
+                function (CreateScheduleInput $input): CreateScheduleOutput {
                     $this->assertSame(
                         FlexibleTimeWindowMode::OFF,
                         $input->getFlexibleTimeWindow()->getMode()
@@ -154,13 +154,10 @@ final class EventBusClientTest extends TestCase
                         $input->getTarget()->getInput()
                     );
 
-                    return true;
-                })
-            )
-            ->willReturn(
-                ResultMockFactory::create(
-                    CreateScheduleOutput::class
-                )
+                    return ResultMockFactory::create(
+                        CreateScheduleOutput::class
+                    );
+                }
             );
 
         $mockValidator = $this->createMock(ValidatorInterface::class);

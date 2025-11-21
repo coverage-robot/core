@@ -53,10 +53,7 @@ final class EventValidationServiceTest extends TestCase
                 parent: [],
                 ref: 'mock-ref',
                 projectRoot: '',
-                tag: new Tag('1', 'mock-commit', [11]),
-                pullRequest: null,
-                baseCommit: null,
-                baseRef: null
+                tag: new Tag('1', 'mock-commit', [11])
             ),
             true
         ];
@@ -72,10 +69,7 @@ final class EventValidationServiceTest extends TestCase
                 parent: [],
                 ref: 'mock-ref',
                 projectRoot: '',
-                tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [12]),
-                pullRequest: null,
-                baseCommit: null,
-                baseRef: null
+                tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [12])
             ),
             false
         ];
@@ -91,10 +85,7 @@ final class EventValidationServiceTest extends TestCase
                 parent: [],
                 ref: 'mock-ref',
                 projectRoot: '',
-                tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [13]),
-                pullRequest: null,
-                baseCommit: null,
-                baseRef: null
+                tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [13])
             ),
             false
         ];
@@ -111,9 +102,7 @@ final class EventValidationServiceTest extends TestCase
                 ref: 'mock-ref',
                 projectRoot: '',
                 tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [14]),
-                pullRequest: '',
-                baseCommit: null,
-                baseRef: null
+                pullRequest: ''
             ),
             false
         ];
@@ -130,9 +119,7 @@ final class EventValidationServiceTest extends TestCase
                 ref: 'mock-ref',
                 projectRoot: '',
                 tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [15]),
-                pullRequest: 2,
-                baseCommit: null,
-                baseRef: null
+                pullRequest: 2
             ),
             false
         ];
@@ -149,9 +136,7 @@ final class EventValidationServiceTest extends TestCase
                 ref: 'mock-ref',
                 projectRoot: '',
                 tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [16]),
-                pullRequest: 'not-a-pull-request-number',
-                baseCommit: null,
-                baseRef: null
+                pullRequest: 'not-a-pull-request-number'
             ),
             false
         ];
@@ -168,9 +153,7 @@ final class EventValidationServiceTest extends TestCase
                 ref: 'mock-ref',
                 projectRoot: '',
                 tag: new Tag('1', 'dd1100c9409de748590abfac1036e383a3e4de37', [17]),
-                pullRequest: 2,
-                baseCommit: null,
-                baseRef: null
+                pullRequest: 2
             ),
             true
         ];
