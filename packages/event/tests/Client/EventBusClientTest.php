@@ -158,8 +158,7 @@ final class EventBusClientTest extends TestCase
                         CreateScheduleOutput::class
                     );
                 }
-            )
-        );
+            );
 
         $mockValidator = $this->createMock(ValidatorInterface::class);
         $mockValidator->expects($this->once())
