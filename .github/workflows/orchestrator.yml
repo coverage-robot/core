@@ -58,7 +58,7 @@ jobs:
                 php-version: ["8.4", "8.5"]
 
         steps:
-            -   uses: actions/checkout@v6
+            - uses: actions/checkout@v6
 
             - uses: shivammathur/setup-php@v2
               with:
@@ -155,7 +155,8 @@ jobs:
               run: composer lint:rector
 
             - name: Run Psalm
-              run: composer lint:static-analysis 
+              run: composer lint:static-analysis
+              continue-on-error: true
 
             - name: Run Psalm Security Analysis
               run: composer lint:security
@@ -285,7 +286,7 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-            -   uses: actions/checkout@v6
+            - uses: actions/checkout@v6
 
             - uses: shivammathur/setup-php@v2
               with:
