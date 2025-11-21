@@ -112,6 +112,6 @@
         "squizlabs/php_codesniffer": "^4.0",
         "symfony/browser-kit": "7.3.*",
         "symfony/maker-bundle": "^1.48",
-        "vimeo/psalm": "^6.13"
+        "vimeo/psalm": "^6.13 || 6.x-dev"
     }
 }
