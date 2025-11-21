@@ -5,7 +5,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "symfony/validator": "^7.0"
     },
     "autoload": {
@@ -24,7 +24,7 @@
     ],
     "require-dev": {
         "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.13",
+        "vimeo/psalm": "^6.13 || 6.x-dev",
         "squizlabs/php_codesniffer": "^4.0"
     }
 }
