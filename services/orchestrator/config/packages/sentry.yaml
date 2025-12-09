@@ -1,8 +1,9 @@
 when@prod:
     sentry:
-        dsn: '%env(SENTRY_DSN)%'
+        dsn: "%env(SENTRY_DSN)%"
         options:
             traces_sample_rate: 1.0
+            enable_logs: true
 
         register_error_listener: false
         register_error_handler: false
@@ -10,6 +11,10 @@ when@prod:
     monolog:
         handlers:
             sentry:
-                type: sentry
-                level: !php/const Monolog\Logger::ERROR
-                hub_id: Sentry\State\HubInterface
+                type: service
+                id: Sentry\SentryBundle\Monolog\LogsHandler
+
+    services:
+        Sentry\SentryBundle\Monolog\LogsHandler:
+            arguments:
+                - !php/const Monolog\Logger::ERROR
