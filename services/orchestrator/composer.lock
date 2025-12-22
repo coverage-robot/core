@@ -573,26 +573,26 @@
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
-                "reference": "5204c4926ffa1aa2b29ed5a89c5e52e782951d60"
+                "reference": "187b8f6ee3d1a1fcd7405d35c8bf205fc128e7cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/5204c4926ffa1aa2b29ed5a89c5e52e782951d60",
-                "reference": "5204c4926ffa1aa2b29ed5a89c5e52e782951d60",
+                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/187b8f6ee3d1a1fcd7405d35c8bf205fc128e7cc",
+                "reference": "187b8f6ee3d1a1fcd7405d35c8bf205fc128e7cc",
                 "shasum": ""
             },
             "require": {
                 "bref/bref": "^1.2|^2.0",
                 "bref/monolog-bridge": "^1.0",
                 "php": ">=8.0",
-                "symfony/filesystem": "^5.4|^6.0|^7.0",
-                "symfony/http-kernel": "^5.4|^6.0|^7.0",
-                "symfony/psr-http-message-bridge": "^2.1|^6.4|^7.0",
-                "symfony/runtime": "^5.4|^6.0|^7.0"
+                "symfony/filesystem": "^5.4|^6.0|^7.0|^8.0",
+                "symfony/http-kernel": "^5.4|^6.0|^7.0|^8.0",
+                "symfony/psr-http-message-bridge": "^2.1|^6.4|^7.0|^8.0",
+                "symfony/runtime": "^5.4|^6.0|^7.0|^8.0"
             },
             "require-dev": {
                 "mnapoli/hard-mode": "^0.3.0",
@@ -625,7 +625,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/1.1.0"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/1.1.1"
             },
             "funding": [
                 {
@@ -633,7 +633,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-06-14T15:19:38+00:00"
+            "time": "2025-12-01T17:19:33+00:00"
         },
         {
             "name": "clue/stream-filter",
