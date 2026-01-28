@@ -145,32 +145,37 @@
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "77e7c6af2d0646d0ac698cc8caa1a6f1c48b3b07"
+                "reference": "175a4d4424a5dc8ff24a70524430cd442105e4eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/77e7c6af2d0646d0ac698cc8caa1a6f1c48b3b07",
-                "reference": "77e7c6af2d0646d0ac698cc8caa1a6f1c48b3b07",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/175a4d4424a5dc8ff24a70524430cd442105e4eb",
+                "reference": "175a4d4424a5dc8ff24a70524430cd442105e4eb",
                 "shasum": ""
             },
             "require": {
                 "async-aws/core": "^1.16",
                 "ext-filter": "*",
                 "ext-json": "*",
-                "php": "^7.2.5 || ^8.0",
+                "php": "^8.2",
                 "symfony/polyfill-uuid": "^1.13.1"
             },
             "conflict": {
                 "symfony/http-client": "<4.4.16 <5.1.7"
             },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.8-dev"
+                    "dev-master": "3.9-dev"
                 }
             },
             "autoload": {
@@ -191,7 +196,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.8.0"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.9.0"
             },
             "funding": [
                 {
@@ -203,7 +208,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-08T07:05:54+00:00"
+            "time": "2026-01-16T22:28:05+00:00"
         },
         {
             "name": "async-aws/event-bridge",
