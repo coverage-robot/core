@@ -12,7 +12,7 @@
         "ext-libxml": "*",
         "ext-xmlreader": "*",
         "async-aws/async-aws-bundle": "^1.12",
-        "async-aws/simple-s3": "^2.0",
+        "async-aws/simple-s3": "^3.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/configuration": "^1.6",
