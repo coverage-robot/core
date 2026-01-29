@@ -10,7 +10,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/cognito-identity-provider": "^1.7",
-        "async-aws/s3": "^2.0",
+        "async-aws/s3": "^3.0",
         "bref/bref": "^2.0",
         "bref/symfony-bridge": "^1.0.0",
         "coverage-robot/clients": "^1.6",
