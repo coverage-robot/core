@@ -8,38 +8,43 @@
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
-            "version": "1.15.0",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/symfony-bundle.git",
-                "reference": "12bad08344247612c15342b391afbbbe4f32eb83"
+                "reference": "d37704d0227c4270572768c43f536575710a8c83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/12bad08344247612c15342b391afbbbe4f32eb83",
-                "reference": "12bad08344247612c15342b391afbbbe4f32eb83",
+                "url": "https://api.github.com/repos/async-aws/symfony-bundle/zipball/d37704d0227c4270572768c43f536575710a8c83",
+                "reference": "d37704d0227c4270572768c43f536575710a8c83",
                 "shasum": ""
             },
             "require": {
                 "async-aws/core": "^1.0",
-                "php": "^7.2.5 || ^8.0",
+                "php": "^8.2",
                 "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
                 "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
                 "symfony/http-kernel": "^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "async-aws/s3": "^1.0 || ^2.0",
+                "async-aws/s3": "^1.0 || ^2.0 || ^3.0",
                 "async-aws/ses": "^1.0",
                 "async-aws/sqs": "^1.0 || ^2.0",
                 "async-aws/ssm": "^1.0 || ^2.0",
-                "matthiasnoback/symfony-config-test": "^4.1 || ^5.0",
+                "matthiasnoback/symfony-config-test": "^6.1",
                 "nyholm/symfony-bundle-test": "^3.0",
-                "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0"
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/cache": "^4.4 || ^5.0 || ^6.0 || ^7.0 || ^8.0",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/framework-bundle": "^5.4.45 || ^6.4.13 || ^7.1.6",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0",
+                "symfony/runtime": "^7.3.2 || ^8.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.16-dev"
                 }
             },
             "autoload": {
@@ -61,7 +66,7 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/async-aws/symfony-bundle/tree/1.15.0"
+                "source": "https://github.com/async-aws/symfony-bundle/tree/1.16.0"
             },
             "funding": [
                 {
@@ -73,7 +78,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-11T10:03:27+00:00"
+            "time": "2026-01-16T22:28:05+00:00"
         },
         {
             "name": "async-aws/core",
