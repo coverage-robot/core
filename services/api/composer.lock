@@ -77,28 +77,33 @@
         },
         {
             "name": "async-aws/cognito-identity-provider",
-            "version": "1.15.1",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/cognito-identity-provider.git",
-                "reference": "25c87a89714e097b063c0e777bf7b9bb41aef8c3"
+                "reference": "db09b0bb5a465ab93216e655b9f858f30d291e17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/25c87a89714e097b063c0e777bf7b9bb41aef8c3",
-                "reference": "25c87a89714e097b063c0e777bf7b9bb41aef8c3",
+                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/db09b0bb5a465ab93216e655b9f858f30d291e17",
+                "reference": "db09b0bb5a465ab93216e655b9f858f30d291e17",
                 "shasum": ""
             },
             "require": {
                 "async-aws/core": "^1.9",
                 "ext-filter": "*",
                 "ext-json": "*",
-                "php": "^7.2.5 || ^8.0"
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.16-dev"
                 }
             },
             "autoload": {
@@ -119,7 +124,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.15.1"
+                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.16.0"
             },
             "funding": [
                 {
@@ -131,7 +136,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-08T07:05:54+00:00"
+            "time": "2026-01-16T22:28:05+00:00"
         },
         {
             "name": "async-aws/core",
