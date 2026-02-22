@@ -42,7 +42,7 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
         self::LINE_DATA => '(?<lineNumber>\d+),(?<lineHits>\d+)$',
         'LH' => '\d+$',
         'LF' => '\d+$',
-        self::BRANCH_DATA => '(?<lineNumber>\d+),\d+,(?<branchNumber>\d+),(?<branchHits>\d+)$',
+        self::BRANCH_DATA => '(?<lineNumber>\d+),\d+,(?<branchNumber>\d+),(?<branchHits>(?:\d+|\-))$',
         'BRF' => '.+$',
         'BRH' => '\d+$'
     ];
@@ -214,12 +214,24 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
                 break;
             case self::BRANCH_DATA:
                 $lineNumber = $extractedData['lineNumber'];
+                /**
+                 * Some coverage instrumentation tools (specifically llvm-cov for Rust) appear to
+                 * return a `-`, in place of one or more digits, in the branch hits section (the
+                 * last comma seperated value) of the `BRDA` lines.
+                 *
+                 * Its not clear _exactly_ why this is - but filling in with a zero here should
+                 * suffice.
+                 *
+                 * @see https://crates.io/crates/cargo-llvm-cov
+                 * @see tests/Fixture/Lcov/branch-hits-with-dashes.info
+                 */
+                $branchHits = $extractedData['branchHits'] === '-' ? 0 : (int)$extractedData['branchHits'];
 
                 try {
                     $line = $latestFile->getLine($lineNumber);
 
                     if ($line instanceof Branch) {
-                        $line->addToBranchHits((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
+                        $line->addToBranchHits((int)$extractedData['branchNumber'], $branchHits);
                         break;
                     }
 
@@ -231,7 +243,7 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
                             lineNumber: $line->getLineNumber(),
                             lineHits: $line->getLineHits(),
                             branchHits: [
-                                (int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']
+                                (int)$extractedData['branchNumber'] => $branchHits
                             ]
                         )
                     );
@@ -241,7 +253,7 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
                         new Branch(
                             lineNumber: (int)$lineNumber,
                             lineHits: 0,
-                            branchHits: [(int)$extractedData['branchNumber'] => (int)$extractedData['branchHits']]
+                            branchHits: [(int)$extractedData['branchNumber'] => $branchHits]
                         )
                     );
                 }
