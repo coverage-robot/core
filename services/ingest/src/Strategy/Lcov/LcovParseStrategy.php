@@ -230,7 +230,7 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
                          * @see https://crates.io/crates/cargo-llvm-cov
                          * @see tests/Fixture/Lcov/branch-hits-with-dashes.info
                          */
-                        $branchHits = $extractedData['branchHits'] === "-" ? 0 : $line->getLineHits();
+                        $branchHits = $extractedData['branchHits'] === '-' ? 0 : $line->getLineHits();
 
                         $line->addToBranchHits((int)$extractedData['branchNumber'], $branchHits);
                         break;
