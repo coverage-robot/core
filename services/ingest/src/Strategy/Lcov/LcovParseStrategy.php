@@ -42,7 +42,7 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
         self::LINE_DATA => '(?<lineNumber>\d+),(?<lineHits>\d+)$',
         'LH' => '\d+$',
         'LF' => '\d+$',
-        self::BRANCH_DATA => '(?<lineNumber>\d+),\d+,(?<branchNumber>\d+),(?<branchHits>\d+)$',
+        self::BRANCH_DATA => '(?<lineNumber>\d+),\d+,(?<branchNumber>\d+),(?<branchHits>(?:\d+|\-))$',
         'BRF' => '.+$',
         'BRH' => '\d+$'
     ];
@@ -219,7 +219,20 @@ final readonly class LcovParseStrategy implements ParseStrategyInterface
                     $line = $latestFile->getLine($lineNumber);
 
                     if ($line instanceof Branch) {
-                        $line->addToBranchHits((int)$extractedData['branchNumber'], (int)$extractedData['branchHits']);
+                        /**
+                         * Some coverage instrumentation tools (specifically llvm-cov for Rust) appear to
+                         * return a `-`, in place of one or more digits, in the branch hits section (the
+                         * last comma seperated value) of the `BRDA` lines.
+                         *
+                         * Its not clear _exactly_ why this is - but filling in with a zero here should
+                         * suffice.
+                         *
+                         * @see https://crates.io/crates/cargo-llvm-cov
+                         * @see tests/Fixture/Lcov/branch-hits-with-dashes.info
+                         */
+                        $branchHits = $extractedData['branchHits'] === "-" ? 0 : $line->getLineHits();
+
+                        $line->addToBranchHits((int)$extractedData['branchNumber'], $branchHits);
                         break;
                     }
 
