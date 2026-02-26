@@ -39,8 +39,8 @@ final class DefaultTagBehaviourSettingTest extends TestCase
 
         $defaultTagBehaviourSetting = new DefaultTagBehaviourSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertTrue(
@@ -77,8 +77,8 @@ final class DefaultTagBehaviourSettingTest extends TestCase
 
         $defaultTagBehaviourSetting = new DefaultTagBehaviourSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertEquals(
@@ -99,6 +99,9 @@ final class DefaultTagBehaviourSettingTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, array<mixed[], mixed>>
+     */
     public static function validatingValuesDataProvider(): array
     {
         return [

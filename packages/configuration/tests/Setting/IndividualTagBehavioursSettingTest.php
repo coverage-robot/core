@@ -61,8 +61,8 @@ final class IndividualTagBehavioursSettingTest extends TestCase
             ->willReturn(true);
         $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertTrue(
@@ -122,8 +122,8 @@ final class IndividualTagBehavioursSettingTest extends TestCase
             );
         $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertEquals(
@@ -159,8 +159,8 @@ final class IndividualTagBehavioursSettingTest extends TestCase
             ->willReturn(true);
         $individualTagBehavioursSetting = new IndividualTagBehavioursSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertTrue(
@@ -175,7 +175,7 @@ final class IndividualTagBehavioursSettingTest extends TestCase
     public function testDeserializingPathReplacements(): void
     {
         $pathReplacementsSetting = new PathReplacementsSetting(
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new Serializer(
                 [
                     new ArrayDenormalizer(),
@@ -260,6 +260,9 @@ final class IndividualTagBehavioursSettingTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, array<int, stdClass|bool|mixed[]|IndividualTagBehaviour[]|float|int|string|null>>
+     */
     public static function validatingValuesDataProvider(): array
     {
         return [

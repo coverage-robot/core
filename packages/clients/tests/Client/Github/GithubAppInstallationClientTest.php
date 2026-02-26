@@ -52,7 +52,7 @@ final class GithubAppInstallationClientTest extends TestCase
         $installation = new GithubAppInstallationClient(
             $appClient,
             $installationClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -88,7 +88,7 @@ final class GithubAppInstallationClientTest extends TestCase
         $installation = new GithubAppInstallationClient(
             $appClient,
             $installationClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -123,7 +123,7 @@ final class GithubAppInstallationClientTest extends TestCase
         $installation = new GithubAppInstallationClient(
             $appClient,
             $installationClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $installation->authenticateAsRepositoryOwner('test-owner');
@@ -132,9 +132,9 @@ final class GithubAppInstallationClientTest extends TestCase
     public function testCommonEndpointsAreAvailable(): void
     {
         $client = new GithubAppInstallationClient(
-            $this->createMock(GithubAppClient::class),
-            $this->createMock(GithubAppClient::class),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(GithubAppClient::class),
+            $this->createStub(GithubAppClient::class),
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertInstanceOf(Issue::class, $client->issue());
@@ -147,13 +147,13 @@ final class GithubAppInstallationClientTest extends TestCase
 
     public function testGettingLastResponse(): void
     {
-        $mockLastResponse = $this->createMock(ResponseInterface::class);
+        $mockLastResponse = $this->createStub(ResponseInterface::class);
 
         $installationClient = $this->createMock(GithubAppClient::class);
         $client = new GithubAppInstallationClient(
-            $this->createMock(GithubAppClient::class),
+            $this->createStub(GithubAppClient::class),
             $installationClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $installationClient->expects($this->once())

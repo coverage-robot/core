@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Telemetry\Model\Metric;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 final readonly class Dimensions
 {

@@ -135,8 +135,8 @@ final class PublishClientTest extends TestCase
 
         $publishClient = new PublishClient(
             $mockSqsClient,
-            $this->createMock(EnvironmentServiceInterface::class),
-            $this->createMock(SerializerInterface::class),
+            $this->createStub(EnvironmentServiceInterface::class),
+            $this->createStub(SerializerInterface::class),
             new MessageValidationService(
                 Validation::createValidatorBuilder()
                     ->enableAttributeMapping()

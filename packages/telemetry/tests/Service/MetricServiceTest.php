@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Packages\Telemetry\Tests\Service;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use DateTimeImmutable;
 use EnricoStahn\JsonAssert\Assert;
 use Iterator;
@@ -29,6 +30,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\UidNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
+#[AllowMockObjectsWithoutExpectations]
 final class MetricServiceTest extends TestCase
 {
     use Assert;
@@ -55,7 +57,7 @@ final class MetricServiceTest extends TestCase
             ->willReturn(new DateTimeImmutable('2023-11-20 09:00:00'));
 
         $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
-        $mockEnvironmentService->method('getVariable')
+        $mockEnvironmentService->expects($this->exactly(2))->method('getVariable')
             ->willReturnMap(
                 [
                     [
@@ -150,7 +152,7 @@ final class MetricServiceTest extends TestCase
             ->willReturn(new DateTimeImmutable('2023-11-20 09:00:00'));
 
         $mockEnvironmentService = $this->createMock(EnvironmentServiceInterface::class);
-        $mockEnvironmentService->method('getVariable')
+        $mockEnvironmentService->expects($this->exactly(2))->method('getVariable')
             ->willReturnMap(
                 [
                     [

@@ -38,7 +38,7 @@ final readonly class ConfigurationFileService
             }
 
             try {
-                /** @var mixed $settingValue */
+                /** @psalm-suppress MixedAssignment */
                 $settingValue = $this->settingService->deserialize(
                     $settingKey,
                     $settings[$settingKey->value]

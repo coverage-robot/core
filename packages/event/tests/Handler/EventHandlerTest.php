@@ -36,7 +36,7 @@ final class EventHandlerTest extends TestCase
             'baseRef' => null
         ]);
 
-        $mockUpload = $this->createMock(EventInterface::class);
+        $mockUpload = $this->createStub(EventInterface::class);
 
         $mockEventProcessor = $this->createMock(EventProcessorServiceInterface::class);
         $mockEventProcessor->expects($this->once())
