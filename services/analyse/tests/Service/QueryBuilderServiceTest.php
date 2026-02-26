@@ -62,14 +62,14 @@ final class QueryBuilderServiceTest extends KernelTestCase
         $mockQuery->method('getQuery')
             ->willReturn('SELECT * FROM `mock-table` WHERE commit = "mock-commit" AND provider = "github"');
         $mockQuery->method('parseResults')
-            ->willReturn($this->createMock(QueryResultInterface::class));
+            ->willReturn($this->createStub(QueryResultInterface::class));
 
         $queryBuilder = new QueryBuilderService(
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertMatchesTextSnapshot(
@@ -89,7 +89,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
             new SqlFormatter(
                 new NullHighlighter()
             ),
-            $this->createMock(Serializer::class),
+            $this->createStub(Serializer::class),
             $this->getContainer()->get(ValidatorInterface::class)
         );
 
@@ -97,7 +97,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
         $mockQuery->method('getQuery')
             ->willReturn('');
         $mockQuery->method('parseResults')
-            ->willReturn($this->createMock(QueryResultInterface::class));
+            ->willReturn($this->createStub(QueryResultInterface::class));
 
         $mockQuery->expects($this->once())
             ->method('getQueryParameterConstraints')
@@ -137,7 +137,7 @@ final class QueryBuilderServiceTest extends KernelTestCase
                 new NullHighlighter()
             ),
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(ValidatorInterface::class)
         );
 
         $hash = $queryBuilder->hash($queryClass, $parameterBag);

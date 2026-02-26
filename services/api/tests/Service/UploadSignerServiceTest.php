@@ -31,7 +31,7 @@ final class UploadSignerServiceTest extends TestCase
 
         $uploadSignerService = new UploadSignerService(
             $mockClient,
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(ValidatorInterface::class)
         );
 
         $signedUpload = $uploadSignerService->sign(

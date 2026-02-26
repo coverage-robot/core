@@ -32,7 +32,7 @@ final class GithubPullRequestCommentPublisherServiceTest extends AbstractPublish
     public function testSupports(EventInterface $event, bool $expectedSupport): void
     {
         $publisher = new GithubPullRequestCommentPublisherService(
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
             MockEnvironmentServiceFactory::createMock(

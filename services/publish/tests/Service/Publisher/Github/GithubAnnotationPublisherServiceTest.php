@@ -43,7 +43,7 @@ final class GithubAnnotationPublisherServiceTest extends AbstractPublisherServic
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::ANNOTATION
                 ]
             ),
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 Service::PUBLISH,

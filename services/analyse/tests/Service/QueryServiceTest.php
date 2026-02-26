@@ -56,7 +56,7 @@ final class QueryServiceTest extends KernelTestCase
             $this->getContainer()
                 ->get(QueryBuilderService::class),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -120,7 +120,7 @@ final class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilder,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockBigQueryService->expects($this->never())
@@ -151,7 +151,7 @@ final class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);
@@ -199,7 +199,7 @@ final class QueryServiceTest extends KernelTestCase
             ],
             $mockQueryBuilderService,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockQueryJobConfiguration = $this->createMock(QueryJobConfiguration::class);

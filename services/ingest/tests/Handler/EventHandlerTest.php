@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Handler;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Exception\DeletionException;
 use App\Exception\PersistException;
 use App\Exception\RetrievalException;
@@ -32,6 +33,7 @@ use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\SerializerInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 final class EventHandlerTest extends KernelTestCase
 {
     /**
@@ -78,9 +80,9 @@ final class EventHandlerTest extends KernelTestCase
             $this->getContainer()
                 ->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -115,7 +117,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());
@@ -159,7 +161,7 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFilePersistService,
             $mockEventBusClient,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $handler->handleS3(
@@ -225,9 +227,9 @@ final class EventHandlerTest extends KernelTestCase
             $mockCoverageFileRetrievalService,
             $this->getContainer()->get(CoverageFileParserServiceInterface::class),
             $mockCoverageFilePersistService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $handler->handleS3($event, Context::fake());

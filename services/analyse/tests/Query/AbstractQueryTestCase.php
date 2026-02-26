@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Enum\EnvironmentVariable;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
@@ -20,6 +21,7 @@ use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+#[AllowMockObjectsWithoutExpectations]
 abstract class AbstractQueryTestCase extends KernelTestCase
 {
     use MatchesSnapshots;

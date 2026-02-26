@@ -13,8 +13,8 @@
         "ext-xmlreader": "*",
         "async-aws/async-aws-bundle": "^1.12",
         "async-aws/simple-s3": "^2.0",
-        "bref/bref": "^2.0",
-        "bref/symfony-bridge": "^1.0.0",
+        "bref/bref": "^3",
+        "bref/symfony-bridge": "^2",
         "coverage-robot/configuration": "^1.6",
         "coverage-robot/contracts": "^1.6",
         "coverage-robot/event": "^1.6",
@@ -105,7 +105,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.2.*"
+            "require": "7.3.*"
         }
     }
 }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Packages\Contracts\Format\CoverageFormat;
+use Packages\Contracts\Line\LineType;
+use Packages\Contracts\Provider\Provider;
 use App\Exception\PersistException;
 use App\Model\Coverage;
 use App\Model\File;
@@ -25,6 +28,7 @@ final readonly class BigQueryMetadataBuilderService
 
     /**
      * Build a row's worth of line coverage data, suitable for insertion into BigQuery.
+     * @return array<string, CoverageFormat|string|LineType|int|mixed[]|Provider|null>
      */
     public function buildLineCoverageRow(
         Upload $upload,
@@ -55,6 +59,9 @@ final readonly class BigQueryMetadataBuilderService
         ];
     }
 
+    /**
+     * @return array<string, string|int|CoverageFormat|string[]|Provider|null>
+     */
     public function buildUploadRow(Upload $upload, Coverage $coverage, int $totalLines): array
     {
         return [

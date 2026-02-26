@@ -20,6 +20,9 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Sequentially;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class TagAvailabilityQuery implements QueryInterface
@@ -83,6 +86,9 @@ final readonly class TagAvailabilityQuery implements QueryInterface
         return '';
     }
 
+    /**
+     * @return array<value-of<QueryParameter>, Type[]|Uuid[]|Sequentially[]>
+     */
     #[Override]
     public function getQueryParameterConstraints(): array
     {

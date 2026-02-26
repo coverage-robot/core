@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Client\CognitoClientInterface;
 use App\Enum\TokenType;
 use App\Exception\AuthenticationException;
@@ -12,7 +13,6 @@ use App\Model\Project;
 use App\Model\SigningParameters;
 use App\Service\AuthTokenService;
 use Iterator;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,15 +21,14 @@ use Psr\Log\NullLogger;
 use Random\Randomizer;
 use Symfony\Component\HttpFoundation\Request;
 
+#[AllowMockObjectsWithoutExpectations]
 final class AuthTokenServiceTest extends TestCase
 {
     private MockObject $cognitoClient;
 
-    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->cognitoClient = $this->createMock(CognitoClientInterface::class);
     }
 

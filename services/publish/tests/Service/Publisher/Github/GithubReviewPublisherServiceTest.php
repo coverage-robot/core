@@ -45,7 +45,7 @@ final class GithubReviewPublisherServiceTest extends AbstractPublisherServiceTes
                     SettingKey::LINE_COMMENT_TYPE->value => LineCommentType::REVIEW_COMMENT
                 ]
             ),
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 Service::PUBLISH,

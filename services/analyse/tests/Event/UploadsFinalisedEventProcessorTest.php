@@ -200,7 +200,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class),
+            $this->createStub(MetricServiceInterface::class),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,
@@ -322,7 +322,7 @@ final class UploadsFinalisedEventProcessorTest extends KernelTestCase
 
         $uploadsFinalisedEventProcessor = new UploadsFinalisedEventProcessor(
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class),
+            $this->createStub(MetricServiceInterface::class),
             $this->getContainer()->get(SerializerInterface::class),
             $mockCoverageAnalyserService,
             $mockCoverageComparisonService,

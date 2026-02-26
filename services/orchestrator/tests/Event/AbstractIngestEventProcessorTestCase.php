@@ -49,9 +49,9 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
     public function testHandlingInvalidEvent(): void
     {
         $ingestEventProcessor = $this->getIngestEventProcessor(
-            $this->createMock(EventStoreServiceInterface::class),
-            $this->createMock(EventBusClientInterface::class),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(EventStoreServiceInterface::class),
+            $this->createStub(EventBusClientInterface::class),
+            $this->createStub(SqsClientInterface::class)
         );
 
         $this->assertFalse(
@@ -97,8 +97,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(EventBusClientInterface::class),
+            $this->createStub(SqsClientInterface::class)
         );
 
         $this->assertTrue(
@@ -162,8 +162,8 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
 
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(EventBusClientInterface::class),
+            $this->createStub(SqsClientInterface::class)
         );
 
         $this->assertFalse(
@@ -268,7 +268,7 @@ abstract class AbstractIngestEventProcessorTestCase extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage

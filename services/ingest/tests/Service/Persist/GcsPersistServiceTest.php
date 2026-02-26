@@ -34,7 +34,7 @@ final class GcsPersistServiceTest extends KernelTestCase
     public function testPersistSuccessfully(): void
     {
         $mockBucket = $this->createMock(Bucket::class);
-        $mockStorageObject = $this->createMock(StorageObject::class);
+        $mockStorageObject = $this->createStub(StorageObject::class);
 
         $mockGcsClient = $this->createMock(StorageClient::class);
         $mockGcsClient->expects($this->once())
@@ -60,7 +60,7 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockTable->expects($this->once())
             ->method('loadFromStorage')
             ->with($mockStorageObject)
-            ->willReturn($this->createMock(LoadJobConfiguration::class));
+            ->willReturn($this->createStub(LoadJobConfiguration::class));
         $mockTable->expects($this->once())
             ->method('insertRow')
             ->willReturn(new InsertResponse([], []));
@@ -91,7 +91,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 ]
             ),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertTrue(
@@ -122,7 +122,7 @@ final class GcsPersistServiceTest extends KernelTestCase
     public function testPersistFailsLineCoverageUpload(): void
     {
         $mockBucket = $this->createMock(Bucket::class);
-        $mockStorageObject = $this->createMock(StorageObject::class);
+        $mockStorageObject = $this->createStub(StorageObject::class);
 
         $mockGcsClient = $this->createMock(StorageClient::class);
         $mockGcsClient->expects($this->once())
@@ -148,7 +148,7 @@ final class GcsPersistServiceTest extends KernelTestCase
         $mockTable->expects($this->once())
             ->method('loadFromStorage')
             ->with($mockStorageObject)
-            ->willReturn($this->createMock(LoadJobConfiguration::class));
+            ->willReturn($this->createStub(LoadJobConfiguration::class));
         $mockTable->expects($this->never())
             ->method('insertRow');
 
@@ -185,7 +185,7 @@ final class GcsPersistServiceTest extends KernelTestCase
                 ]
             ),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertFalse(

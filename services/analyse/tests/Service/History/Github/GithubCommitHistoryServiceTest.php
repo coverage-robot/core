@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\History\Github;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Service\History\Github\GithubCommitHistoryService;
 use Github\Api\GraphQL;
 use Iterator;
@@ -16,14 +17,15 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
+#[AllowMockObjectsWithoutExpectations]
 final class GithubCommitHistoryServiceTest extends TestCase
 {
     public function testGetProvider(): void
     {
         $service = new GithubCommitHistoryService(
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertSame(Provider::GITHUB->value, $service->getProvider());
@@ -112,7 +114,7 @@ final class GithubCommitHistoryServiceTest extends TestCase
         $service = new GithubCommitHistoryService(
             $githubClient,
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertEquals(

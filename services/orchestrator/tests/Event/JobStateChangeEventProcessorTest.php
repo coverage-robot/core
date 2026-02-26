@@ -36,8 +36,8 @@ final class JobStateChangeEventProcessorTest extends TestCase
     public function testHandlingInvalidEvent(): void
     {
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
-            $this->createMock(EventStoreServiceInterface::class),
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventStoreServiceInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
@@ -47,7 +47,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -83,7 +83,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
@@ -93,7 +93,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'mock-github-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         $mockEventStoreService->expects($this->never())
@@ -139,7 +139,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
@@ -149,7 +149,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -212,7 +212,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
@@ -222,7 +222,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -286,7 +286,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
 
         $jobStateChangeEventProcessor = new JobStateChangeEventProcessor(
             $mockEventStoreService,
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger(),
             new FakeBackoffStrategy(),
             MockEnvironmentServiceFactory::createMock(
@@ -296,7 +296,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -396,7 +396,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage
@@ -506,7 +506,7 @@ final class JobStateChangeEventProcessorTest extends TestCase
                     EnvironmentVariable::GITHUB_APP_ID->value => 'some-app'
                 ]
             ),
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         // Ensure any backoff which occurs when waiting to finalise the coverage

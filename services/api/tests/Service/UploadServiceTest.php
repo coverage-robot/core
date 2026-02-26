@@ -33,10 +33,10 @@ final class UploadServiceTest extends KernelTestCase
     public function testGetMissingSigningParametersFromRequest(): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerServiceInterface::class),
-            $this->createMock(EnvironmentServiceInterface::class),
+            $this->createStub(UploadSignerServiceInterface::class),
+            $this->createStub(EnvironmentServiceInterface::class),
             new UniqueIdGeneratorService(),
-            $this->createMock(Serializer::class),
+            $this->createStub(Serializer::class),
             new NullLogger(),
         );
 
@@ -54,8 +54,8 @@ final class UploadServiceTest extends KernelTestCase
     public function testGetSigningParametersFromRequest(array $parameters, ?SigningParameters $expectedParameters): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerServiceInterface::class),
-            $this->createMock(EnvironmentServiceInterface::class),
+            $this->createStub(UploadSignerServiceInterface::class),
+            $this->createStub(EnvironmentServiceInterface::class),
             new UniqueIdGeneratorService(),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()
@@ -79,8 +79,8 @@ final class UploadServiceTest extends KernelTestCase
     public function testSignedParentIsJsonEncoded(array $parameters, ?SigningParameters $expectedParameters): void
     {
         $uploadService = new UploadService(
-            $this->createMock(UploadSignerServiceInterface::class),
-            $this->createMock(EnvironmentServiceInterface::class),
+            $this->createStub(UploadSignerServiceInterface::class),
+            $this->createStub(EnvironmentServiceInterface::class),
             new UniqueIdGeneratorService(),
             $this->getContainer()->get(SerializerInterface::class),
             new NullLogger()

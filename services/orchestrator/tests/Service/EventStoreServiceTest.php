@@ -39,7 +39,7 @@ final class EventStoreServiceTest extends KernelTestCase
     ): void {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -58,7 +58,7 @@ final class EventStoreServiceTest extends KernelTestCase
     {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -95,7 +95,7 @@ final class EventStoreServiceTest extends KernelTestCase
     ): void {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new NullLogger()
         );
 
@@ -113,7 +113,7 @@ final class EventStoreServiceTest extends KernelTestCase
     {
         $eventStoreService = new EventStoreService(
             $this->getContainer()->get(SerializerInterface::class),
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new NullLogger()
         );
 

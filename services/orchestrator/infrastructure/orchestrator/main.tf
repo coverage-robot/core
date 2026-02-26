@@ -120,13 +120,13 @@ resource "aws_lambda_function" "service" {
   source_code_hash = var.deployment_hash
   function_name    = format("coverage-orchestrator-%s", var.environment)
   role             = aws_iam_role.orchestrator_role.arn
-  runtime          = "provided.al2"
+  runtime          = "provided.al2023"
   handler          = "Packages\\Event\\Handler\\EventHandler"
   timeout          = 30
   architectures    = ["arm64"]
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
+      "arn:aws:lambda:%s:873528684822:layer:arm-${var.php_version}:%s",
       var.region,
       local.bref_layers["arm-${var.php_version}"][var.region]
     )
@@ -141,6 +141,8 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
+      "BREF_RUNTIME" = "function",
+
       "EVENT_STORE"    = var.event_store_name
       "AWS_ACCOUNT_ID" = data.aws_caller_identity.current.account_id
     }

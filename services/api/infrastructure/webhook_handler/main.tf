@@ -117,13 +117,13 @@ resource "aws_lambda_function" "webhooks" {
   source_code_hash = var.deployment_hash
   function_name    = format("coverage-api-webhook-handler-%s", var.environment)
   role             = aws_iam_role.api_policy.arn
-  runtime          = "provided.al2"
+  runtime          = "provided.al2023"
   handler          = "App\\Handler\\WebhookHandler"
   architectures    = ["arm64"]
   timeout          = 28
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-%s:%s",
+      "arn:aws:lambda:%s:873528684822:layer:arm-%s:%s",
       var.region,
       var.php_version,
       local.bref_layers["arm-${var.php_version}"][var.region]
@@ -139,7 +139,9 @@ resource "aws_lambda_function" "webhooks" {
 
   environment {
     variables = {
-      "BREF_PING_DISABLE"          = "1",
+      "BREF_RUNTIME"      = "function",
+      "BREF_PING_DISABLE" = "1",
+
       "AWS_ACCOUNT_ID"             = data.aws_caller_identity.current.account_id,
       "PROJECT_POOL_ID"            = data.terraform_remote_state.core.outputs.project_pool.id,
       "PROJECT_POOL_CLIENT_ID"     = aws_cognito_user_pool_client.cognito_client.id,

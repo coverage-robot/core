@@ -48,7 +48,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -95,7 +95,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(
@@ -131,7 +131,7 @@ final class CachingQueryServiceTest extends KernelTestCase
             $mockQueryService,
             $mockQueryBuilderService,
             $mockDynamoDbClient,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $cachingQueryService->runQuery(

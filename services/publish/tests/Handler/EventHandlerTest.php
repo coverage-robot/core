@@ -126,7 +126,7 @@ final class EventHandlerTest extends KernelTestCase
             $serializer,
             $this->getContainer()
                 ->get(MessageValidationService::class),
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger()
         );
 
@@ -260,7 +260,7 @@ final class EventHandlerTest extends KernelTestCase
             $serializer,
             $this->getContainer()
                 ->get(MessageValidationService::class),
-            $this->createMock(EventBusClientInterface::class),
+            $this->createStub(EventBusClientInterface::class),
             new NullLogger()
         );
 

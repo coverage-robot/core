@@ -127,16 +127,16 @@ resource "aws_lambda_function" "api" {
   source_code_hash = var.deployment_hash
   function_name    = format("coverage-api-%s", var.environment)
   role             = aws_iam_role.api_role.arn
-  runtime          = "provided.al2"
+  runtime          = "provided.al2023"
   handler          = "public/index.php"
   architectures    = ["arm64"]
   timeout          = 28
   memory_size      = 1024
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}-fpm:%s",
+      "arn:aws:lambda:%s:873528684822:layer:arm-${var.php_version}:%s",
       var.region,
-      local.bref_layers["arm-${var.php_version}-fpm"][var.region]
+      local.bref_layers["arm-${var.php_version}"][var.region]
     )
   ]
 
@@ -149,7 +149,9 @@ resource "aws_lambda_function" "api" {
 
   environment {
     variables = {
-      "BREF_PING_DISABLE"          = "1"
+      "BREF_RUNTIME"      = "fpm",
+      "BREF_PING_DISABLE" = "1"
+
       "AWS_ACCOUNT_ID"             = data.aws_caller_identity.current.account_id,
       "PROJECT_POOL_ID"            = data.terraform_remote_state.core.outputs.project_pool.id,
       "PROJECT_POOL_CLIENT_ID"     = aws_cognito_user_pool_client.cognito_client.id,
