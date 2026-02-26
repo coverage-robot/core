@@ -102,7 +102,7 @@ resource "aws_lambda_function" "service" {
   source_code_hash = var.deployment_hash
   function_name    = format("coverage-ingest-%s", var.environment)
   role             = aws_iam_role.ingest_role.arn
-  runtime          = "provided.al2"
+  runtime          = "provided.al2023"
   handler          = "App\\Handler\\EventHandler"
   architectures    = ["arm64"]
   # Allow five minutes for the file to successfully ingest. That should be plenty of time to import hundreds of MB work of coverage
@@ -110,7 +110,7 @@ resource "aws_lambda_function" "service" {
   memory_size = 1024
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
+      "arn:aws:lambda:%s:873528684822:layer:arm-${var.php_version}:%s",
       var.region,
       local.bref_layers["arm-${var.php_version}"][var.region]
     )
@@ -125,6 +125,8 @@ resource "aws_lambda_function" "service" {
 
   environment {
     variables = {
+      "BREF_RUNTIME" = "function",
+
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
       "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload_table.table_id,

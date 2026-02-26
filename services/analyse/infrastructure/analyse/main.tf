@@ -124,7 +124,7 @@ resource "aws_lambda_function" "analyse" {
   timeout = 180
 
   memory_size   = 1024
-  runtime       = "provided.al2"
+  runtime       = "provided.al2023"
   handler       = "Packages\\Event\\Handler\\EventHandler"
   architectures = ["arm64"]
 
@@ -137,7 +137,7 @@ resource "aws_lambda_function" "analyse" {
 
   layers = [
     format(
-      "arn:aws:lambda:%s:534081306603:layer:arm-${var.php_version}:%s",
+      "arn:aws:lambda:%s:873528684822:layer:arm-${var.php_version}:%s",
       var.region,
       local.bref_layers["arm-${var.php_version}"][var.region]
     )
@@ -145,6 +145,8 @@ resource "aws_lambda_function" "analyse" {
 
   environment {
     variables = {
+      "BREF_RUNTIME" = "function",
+
       "BIGQUERY_ENVIRONMENT_DATASET" = data.terraform_remote_state.core.outputs.environment_dataset.dataset_id,
       "BIGQUERY_LINE_COVERAGE_TABLE" = data.terraform_remote_state.core.outputs.line_coverage_table.table_id,
       "BIGQUERY_UPLOAD_TABLE"        = data.terraform_remote_state.core.outputs.upload_table.table_id,
