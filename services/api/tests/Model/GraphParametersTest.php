@@ -23,6 +23,9 @@ final class GraphParametersTest extends TestCase
         $this->assertSame(Provider::GITHUB, $parameters->getProvider());
     }
 
+    /**
+     * @return array<int, Packages\Contracts\Provider\Provider::GITHUB[]|string[]|null[]>
+     */
     public static function missingParametersDataProvider(): array
     {
         return [

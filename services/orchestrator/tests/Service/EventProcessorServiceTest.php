@@ -17,7 +17,7 @@ final class EventProcessorServiceTest extends KernelTestCase
         // Mock out the GitHub client so that we don't need to worry about private key
         // authentication files
         $this->getContainer()
-            ->set(GithubAppClient::class, $this->createMock(Client::class));
+            ->set(GithubAppClient::class, $this->createStub(Client::class));
 
         /** @var EventProcessorService $eventProcessorService */
         $eventProcessorService = $this->getContainer()

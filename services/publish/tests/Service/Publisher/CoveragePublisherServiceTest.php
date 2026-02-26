@@ -28,7 +28,7 @@ final class CoveragePublisherServiceTest extends TestCase
             ->method('publish');
 
         $message = new PublishablePullRequestMessage(
-            event: $this->createMock(EventInterface::class),
+            event: $this->createStub(EventInterface::class),
             coveragePercentage: 100,
             diffCoveragePercentage: 100,
             diffUncoveredLines: 1,
@@ -44,7 +44,7 @@ final class CoveragePublisherServiceTest extends TestCase
                 $unsupportedPublisher
             ],
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertTrue($publisher->publish($message));
@@ -67,7 +67,7 @@ final class CoveragePublisherServiceTest extends TestCase
                 ->willThrowException(
                     new PublishingNotSupportedException(
                         PublisherServiceInterface::class,
-                        $this->createMock(PublishableMessageInterface::class)
+                        $this->createStub(PublishableMessageInterface::class)
                     )
                 );
         }

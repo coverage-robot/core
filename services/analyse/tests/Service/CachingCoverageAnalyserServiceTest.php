@@ -57,9 +57,9 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
 
         $mockQueryService = $this->getMockedQueryService();
 
-        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+        $mockCommitHistoryService = $this->createStub(CommitHistoryServiceInterface::class);
 
-        $mockCarryforwardTagService = $this->createMock(CarryforwardTagServiceInterface::class);
+        $mockCarryforwardTagService = $this->createStub(CarryforwardTagServiceInterface::class);
 
         $coverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
@@ -175,8 +175,8 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $coverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
-            $this->createMock(CommitHistoryServiceInterface::class),
-            $this->createMock(CarryforwardTagServiceInterface::class)
+            $this->createStub(CommitHistoryServiceInterface::class),
+            $this->createStub(CarryforwardTagServiceInterface::class)
         );
 
         $coverageReport = $coverageAnalyserService->analyse($waypoint);
@@ -223,8 +223,8 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $coverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
-            $this->createMock(CommitHistoryServiceInterface::class),
-            $this->createMock(CarryforwardTagServiceInterface::class)
+            $this->createStub(CommitHistoryServiceInterface::class),
+            $this->createStub(CarryforwardTagServiceInterface::class)
         );
 
         $coverageReport = $coverageAnalyserService->analyse($waypoint);
@@ -260,8 +260,8 @@ final class CachingCoverageAnalyserServiceTest extends TestCase
         $coverageAnalyserService = new CachingCoverageAnalyserService(
             $mockQueryService,
             $mockDiffParserService,
-            $this->createMock(CommitHistoryServiceInterface::class),
-            $this->createMock(CarryforwardTagServiceInterface::class)
+            $this->createStub(CommitHistoryServiceInterface::class),
+            $this->createStub(CarryforwardTagServiceInterface::class)
         );
 
         $coverageReport = $coverageAnalyserService->analyse($waypoint);

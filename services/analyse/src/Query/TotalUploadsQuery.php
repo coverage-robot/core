@@ -20,6 +20,9 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class TotalUploadsQuery implements QueryInterface
@@ -100,6 +103,9 @@ final readonly class TotalUploadsQuery implements QueryInterface
         return $results;
     }
 
+    /**
+     * @return array<value-of<QueryParameter>, array<int, Type|Regex|Uuid>>
+     */
     #[Override]
     public function getQueryParameterConstraints(): array
     {

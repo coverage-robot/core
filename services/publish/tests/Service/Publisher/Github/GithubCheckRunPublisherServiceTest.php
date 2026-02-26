@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Service\Publisher\Github;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Enum\EnvironmentVariable;
 use App\Exception\PublishingNotSupportedException;
 use App\Service\Publisher\Github\GithubCheckRunPublisherService;
@@ -27,6 +28,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AllowMockObjectsWithoutExpectations]
 final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceTestCase
 {
     #[Override]
@@ -36,7 +38,7 @@ final class GithubCheckRunPublisherServiceTest extends AbstractPublisherServiceT
         $publisher = new GithubCheckRunPublisherService(
             $this->getContainer()
                 ->get(TemplateRenderingService::class),
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             MockEnvironmentServiceFactory::createMock(
                 Environment::TESTING,
                 Service::PUBLISH

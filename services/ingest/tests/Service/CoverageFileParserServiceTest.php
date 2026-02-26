@@ -81,7 +81,7 @@ final class CoverageFileParserServiceTest extends TestCase
             ->with('mock-file')
             ->willReturn(false);
 
-        $invalidParser = $this->createMock(stdClass::class);
+        $invalidParser = $this->createStub(stdClass::class);
 
         $coverageFileParserService = new CoverageFileParserService(
             [

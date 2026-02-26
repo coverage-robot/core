@@ -42,7 +42,7 @@ final class MessagePublisherServiceTest extends TestCase
                 $mockUnsupportedPublisher
             ],
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertTrue($messagePublisherService->publish($mockMessage));

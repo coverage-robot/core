@@ -39,7 +39,7 @@ final class GithubDiffParserServiceTest extends TestCase
             $mockApiClient,
             new Parser(),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockWaypoint = $this->getMockWaypoint(1);
@@ -104,7 +104,7 @@ final class GithubDiffParserServiceTest extends TestCase
             $mockApiClient,
             new Parser(),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockWaypoint = $this->getMockWaypoint();
@@ -199,7 +199,7 @@ final class GithubDiffParserServiceTest extends TestCase
             $mockApiClient,
             new Parser(),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockWaypoint = $this->getMockWaypoint();
@@ -283,7 +283,7 @@ final class GithubDiffParserServiceTest extends TestCase
             $mockApiClient,
             new Parser(),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $mockWaypoint = $this->getMockWaypoint();
@@ -314,10 +314,10 @@ final class GithubDiffParserServiceTest extends TestCase
     public function testGetProvider(): void
     {
         $parser = new GithubDiffParserService(
-            $this->createMock(GithubAppInstallationClientInterface::class),
+            $this->createStub(GithubAppInstallationClientInterface::class),
             new Parser(),
             new NullLogger(),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertSame(

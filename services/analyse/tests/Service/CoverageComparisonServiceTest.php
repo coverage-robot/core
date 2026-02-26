@@ -79,10 +79,10 @@ final class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CachingCoverageAnalyserService(
-                $this->createMock(QueryServiceInterface::class),
-                $this->createMock(DiffParserServiceInterface::class),
-                $this->createMock(CommitHistoryServiceInterface::class),
-                $this->createMock(CarryforwardTagServiceInterface::class)
+                $this->createStub(QueryServiceInterface::class),
+                $this->createStub(DiffParserServiceInterface::class),
+                $this->createStub(CommitHistoryServiceInterface::class),
+                $this->createStub(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -151,10 +151,10 @@ final class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CachingCoverageAnalyserService(
-                $this->createMock(QueryServiceInterface::class),
-                $this->createMock(DiffParserServiceInterface::class),
-                $this->createMock(CommitHistoryServiceInterface::class),
-                $this->createMock(CarryforwardTagServiceInterface::class)
+                $this->createStub(QueryServiceInterface::class),
+                $this->createStub(DiffParserServiceInterface::class),
+                $this->createStub(CommitHistoryServiceInterface::class),
+                $this->createStub(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -220,10 +220,10 @@ final class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CachingCoverageAnalyserService(
-                $this->createMock(QueryServiceInterface::class),
-                $this->createMock(DiffParserServiceInterface::class),
-                $this->createMock(CommitHistoryServiceInterface::class),
-                $this->createMock(CarryforwardTagServiceInterface::class)
+                $this->createStub(QueryServiceInterface::class),
+                $this->createStub(DiffParserServiceInterface::class),
+                $this->createStub(CommitHistoryServiceInterface::class),
+                $this->createStub(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -288,10 +288,10 @@ final class CoverageComparisonServiceTest extends TestCase
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CachingCoverageAnalyserService(
-                $this->createMock(QueryServiceInterface::class),
-                $this->createMock(DiffParserServiceInterface::class),
-                $this->createMock(CommitHistoryServiceInterface::class),
-                $this->createMock(CarryforwardTagServiceInterface::class)
+                $this->createStub(QueryServiceInterface::class),
+                $this->createStub(DiffParserServiceInterface::class),
+                $this->createStub(CommitHistoryServiceInterface::class),
+                $this->createStub(CarryforwardTagServiceInterface::class)
             )
         );
 
@@ -359,15 +359,15 @@ final class CoverageComparisonServiceTest extends TestCase
             baseRef: 'mock-base-ref',
         );
 
-        $mockCommitHistoryService = $this->createMock(CommitHistoryServiceInterface::class);
+        $mockCommitHistoryService = $this->createStub(CommitHistoryServiceInterface::class);
 
         $coverageComparisonService = new CoverageComparisonService(
             new NullLogger(),
             new CachingCoverageAnalyserService(
-                $this->createMock(QueryServiceInterface::class),
-                $this->createMock(DiffParserServiceInterface::class),
+                $this->createStub(QueryServiceInterface::class),
+                $this->createStub(DiffParserServiceInterface::class),
                 $mockCommitHistoryService,
-                $this->createMock(CarryforwardTagServiceInterface::class)
+                $this->createStub(CarryforwardTagServiceInterface::class)
             )
         );
 

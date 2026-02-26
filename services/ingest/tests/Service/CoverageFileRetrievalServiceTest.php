@@ -35,7 +35,7 @@ final class CoverageFileRetrievalServiceTest extends TestCase
                     'Key' => 'mock-key',
                 ])
             )
-            ->willReturn($this->createMock(GetObjectOutput::class));
+            ->willReturn($this->createStub(GetObjectOutput::class));
 
         $coverageFileRetrievalService = new CoverageFileRetrievalService($mockS3Client, new NullLogger());
 
@@ -96,7 +96,7 @@ final class CoverageFileRetrievalServiceTest extends TestCase
                 new DeleteObjectOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )
@@ -131,7 +131,7 @@ final class CoverageFileRetrievalServiceTest extends TestCase
                 new DeleteObjectOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )

@@ -18,6 +18,10 @@ use Override;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Line\LineType;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\AtLeastOneOf;
+use Symfony\Component\Validator\Constraints\Sequentially;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\Uuid;
 
 abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
 {
@@ -158,6 +162,9 @@ abstract class AbstractUnnestedLineMetadataQuery implements QueryInterface
     }
 
 
+    /**
+     * @return array<value-of<QueryParameter>, Type[]|Uuid[]|AtLeastOneOf[]|Sequentially[]>
+     */
     #[Override]
     public function getQueryParameterConstraints(): array
     {

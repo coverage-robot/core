@@ -12,7 +12,6 @@ use App\Service\AuthTokenServiceInterface;
 use App\Service\UploadServiceInterface;
 use DateTimeImmutable;
 use Iterator;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -24,11 +23,9 @@ final class UploadControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->client = UploadControllerTest::createClient([
             /**
              * Turning off debug mode so that problem responses do not contain the full

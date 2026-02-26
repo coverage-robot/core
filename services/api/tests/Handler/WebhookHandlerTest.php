@@ -80,7 +80,7 @@ final class WebhookHandlerTest extends KernelTestCase
                 Validation::createValidatorBuilder()
                     ->getValidator()
             ),
-            $this->createMock(MetricServiceInterface::class),
+            $this->createStub(MetricServiceInterface::class),
         );
 
         $sqsEvent = new SqsEvent(
@@ -157,7 +157,7 @@ final class WebhookHandlerTest extends KernelTestCase
                 Validation::createValidatorBuilder()
                     ->getValidator()
             ),
-            $this->createMock(MetricServiceInterface::class),
+            $this->createStub(MetricServiceInterface::class),
         );
 
         $sqsEvent = new SqsEvent(

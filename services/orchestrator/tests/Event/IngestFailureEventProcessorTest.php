@@ -98,7 +98,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
             $mockEventBusClient,
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         $this->assertTrue(
@@ -196,7 +196,7 @@ final class IngestFailureEventProcessorTest extends AbstractIngestEventProcessor
         $ingestEventProcessor = $this->getIngestEventProcessor(
             $mockEventStoreService,
             $mockEventBusClient,
-            $this->createMock(SqsClientInterface::class)
+            $this->createStub(SqsClientInterface::class)
         );
 
         $this->assertTrue(

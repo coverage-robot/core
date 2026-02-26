@@ -21,6 +21,8 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class UploadedTagsQuery implements QueryInterface
@@ -61,6 +63,9 @@ final readonly class UploadedTagsQuery implements QueryInterface
         return '';
     }
 
+    /**
+     * @return array<value-of<QueryParameter>, array<int, Type|Uuid>>
+     */
     #[Override]
     public function getQueryParameterConstraints(): array
     {

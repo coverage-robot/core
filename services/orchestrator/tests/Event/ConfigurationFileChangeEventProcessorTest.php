@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Event;
 
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Event\ConfigurationFileChangeEventProcessor;
 use DateTimeImmutable;
 use Github\Api\Repo;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
+#[AllowMockObjectsWithoutExpectations]
 final class ConfigurationFileChangeEventProcessorTest extends TestCase
 {
     #[DataProvider('eventDataProvider')]

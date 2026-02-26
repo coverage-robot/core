@@ -68,7 +68,7 @@ final class DynamoDbClientTest extends KernelTestCase
                 new PutItemOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )
@@ -147,7 +147,7 @@ final class DynamoDbClientTest extends KernelTestCase
                 new GetItemOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )
@@ -218,7 +218,7 @@ final class DynamoDbClientTest extends KernelTestCase
                 new GetItemOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )
@@ -340,7 +340,7 @@ final class DynamoDbClientTest extends KernelTestCase
                 new PutItemOutput(
                     new Response(
                         $mockResponse,
-                        $this->createMock(HttpClientInterface::class),
+                        $this->createStub(HttpClientInterface::class),
                         new NullLogger()
                     )
                 )

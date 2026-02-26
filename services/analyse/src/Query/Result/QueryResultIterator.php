@@ -32,7 +32,7 @@ final readonly class QueryResultIterator implements QueryResultInterface, Iterat
     #[Override]
     public function current(): QueryResultInterface
     {
-        /** @var mixed $current */
+        /** @psalm-suppress MixedAssignment */
         $current = $this->rows->current();
 
         return ($this->parser)($current);

@@ -10,7 +10,6 @@ use App\Model\GraphParameters;
 use App\Model\Project;
 use App\Service\AuthTokenServiceInterface;
 use App\Service\BadgeServiceInterface;
-use Override;
 use Packages\Contracts\Provider\Provider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -21,11 +20,9 @@ final class GraphControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
-    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->client = GraphControllerTest::createClient([
             /**
              * Turning off debug mode so that problem responses do not contain the full
