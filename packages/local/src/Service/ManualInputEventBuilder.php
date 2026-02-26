@@ -179,6 +179,8 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
 
     /**
      * Get a validator callback, for use in the console, to validate inputs against an enum.
+     *
+     * @return callable(string):string
      */
     private function getEnumValidatorCallback(string $enumClass): callable
     {
