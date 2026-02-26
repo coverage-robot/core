@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Packages\Message\PublishableMessage;
 
 use Packages\Contracts\PublishableMessage\PublishableMessage;
-use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
+use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 
 #[DiscriminatorMap(
     'type',
