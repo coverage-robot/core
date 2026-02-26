@@ -97,6 +97,7 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
 
             $setting = reset($settings);
 
+            /** @psalm-suppress MixedAssignment */
             $value = $setting['value']->{'get' . ucfirst(strtolower($type->value))}();
         } catch (HttpException $httpException) {
             $this->dynamoDbClientLogger->error(
