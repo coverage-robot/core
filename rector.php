@@ -6,10 +6,6 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php83\Rector\ClassMethod\AddOverrideAttributeToOverriddenMethodsRector;
-use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonySetList;
-use Rector\TypeDeclaration\Rector\StmtsAwareInterface\IncreaseDeclareStrictTypesRector;
 
 return RectorConfig::configure()
     ->withPreparedSets(
@@ -50,13 +46,6 @@ return RectorConfig::configure()
              * Make sure all overridden methods have the `#[Override]` attribute.
              */
             AddOverrideAttributeToOverriddenMethodsRector::class,
-            /**
-             * Ensure strict type declarations are present in all files.
-             *
-             * This is also enforced by PHP CodeSniffer, but this offers a simple way to apply
-             * the declaration to files very quickly.
-             */
-            IncreaseDeclareStrictTypesRector::class
         ])
     ->withSkip([
         /**
