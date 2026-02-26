@@ -40,7 +40,7 @@ final class ManualInputEventBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $mockEvent = $this->createMock(EventInterface::class);
+        $mockEvent = $this->createStub(EventInterface::class);
 
         $mockSerializer = $this->createMock(Serializer::class);
         $mockSerializer->expects($this->once())
@@ -99,7 +99,7 @@ final class ManualInputEventBuilderTest extends TestCase
                 [],
                 new InputDefinition()
             ),
-            $this->createMock(OutputInterface::class),
+            $this->createStub(OutputInterface::class),
             new HelperSet([
                 'question' => $mockQuestionHelper
             ]),

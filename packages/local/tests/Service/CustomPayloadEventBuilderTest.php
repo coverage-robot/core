@@ -34,7 +34,7 @@ final class CustomPayloadEventBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $mockEvent = $this->createMock(EventInterface::class);
+        $mockEvent = $this->createStub(EventInterface::class);
 
         $mockSerializer = $this->createMock(Serializer::class);
         $mockSerializer->expects($this->once())
@@ -52,8 +52,8 @@ final class CustomPayloadEventBuilderTest extends TestCase
                     new InputOption('file', null, InputOption::VALUE_REQUIRED)
                 ])
             ),
-            $this->createMock(OutputInterface::class),
-            $this->createMock(HelperSet::class),
+            $this->createStub(OutputInterface::class),
+            $this->createStub(HelperSet::class),
             Event::UPLOAD
         );
 

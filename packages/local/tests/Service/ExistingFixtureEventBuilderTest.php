@@ -35,7 +35,7 @@ final class ExistingFixtureEventBuilderTest extends TestCase
 
     public function testBuild(): void
     {
-        $mockEvent = $this->createMock(EventInterface::class);
+        $mockEvent = $this->createStub(EventInterface::class);
 
         $mockSerializer = $this->createMock(Serializer::class);
         $mockSerializer->expects($this->once())
@@ -55,7 +55,7 @@ final class ExistingFixtureEventBuilderTest extends TestCase
                     InputInterface $input,
                     OutputInterface $output,
                     ChoiceQuestion $question
-                ) {
+                ): mixed {
                     $this->assertCount(1, $question->getChoices());
                     return $question->getChoices()[0];
                 }
@@ -70,7 +70,7 @@ final class ExistingFixtureEventBuilderTest extends TestCase
                     new InputOption('fixture', null, InputOption::VALUE_NONE)
                 ])
             ),
-            $this->createMock(OutputInterface::class),
+            $this->createStub(OutputInterface::class),
             new HelperSet([
                 'question' => $mockQuestionHelper
             ]),

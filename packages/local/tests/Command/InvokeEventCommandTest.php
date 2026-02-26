@@ -56,7 +56,7 @@ final class InvokeEventCommandTest extends TestCase
             $mockEventHandler,
             [
                 new FakeEventBuilder(),
-                $this->createMock(EventBuilderInterface::class)
+                $this->createStub(EventBuilderInterface::class)
             ]
         );
         $command->setHelperSet(new HelperSet([
