@@ -19,7 +19,7 @@
         "phpunit/phpunit": "^12.0",
         "estahn/phpunit-json-assertions": "^4.0",
         "symfony/property-access": "^7.1",
-        "bref/bref": "^2.1",
+        "bref/bref": "^3",
         "rector/rector": "^2.0",
         "vimeo/psalm": "^6.13 || 6.x-dev",
         "squizlabs/php_codesniffer": "^4.0"

@@ -12,7 +12,7 @@
         "symfony/config": "^7.0",
         "symfony/dependency-injection": "^7.0",
         "coverage-robot/telemetry": "^1.6",
-        "bref/bref": "^2.1",
+        "bref/bref": "^3",
         "async-aws/event-bridge": "^1.5",
         "symfony/validator": "^7.0",
         "async-aws/async-aws-bundle": "^1.12",
