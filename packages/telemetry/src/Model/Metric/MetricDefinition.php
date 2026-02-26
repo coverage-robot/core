@@ -6,7 +6,7 @@ namespace Packages\Telemetry\Model\Metric;
 
 use Packages\Telemetry\Enum\Resolution;
 use Packages\Telemetry\Enum\Unit;
-use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 final readonly class MetricDefinition
 {
