@@ -40,10 +40,10 @@ final class ConfigurationFileServiceTest extends TestCase
             new SettingService(
                 [
                     SettingKey::LINE_COMMENT_TYPE->value => new LineCommentTypeSetting(
-                        $this->createMock(DynamoDbClientInterface::class)
+                        $this->createStub(DynamoDbClientInterface::class)
                     ),
                     SettingKey::PATH_REPLACEMENTS->value => new PathReplacementsSetting(
-                        $this->createMock(DynamoDbClientInterface::class),
+                        $this->createStub(DynamoDbClientInterface::class),
                         new Serializer(
                             [
                                 new ArrayDenormalizer(),

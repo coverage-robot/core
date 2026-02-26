@@ -27,7 +27,7 @@ final class GithubAppClientTest extends TestCase
             'mock-app-id',
             'some-path/file.pem',
             $jwtGenerator,
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(MetricServiceInterface::class)
         );
 
         // Lazily generate a token when the first API request is made.
@@ -44,8 +44,8 @@ final class GithubAppClientTest extends TestCase
         $client = new GithubAppClient(
             'mock-app-id',
             'some-path/file.pem',
-            $this->createMock(JwtGenerator::class),
-            $this->createMock(MetricServiceInterface::class)
+            $this->createStub(JwtGenerator::class),
+            $this->createStub(MetricServiceInterface::class)
         );
 
         $this->assertInstanceOf(Apps::class, $client->apps());

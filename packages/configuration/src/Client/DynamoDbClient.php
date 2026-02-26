@@ -97,7 +97,6 @@ final readonly class DynamoDbClient implements DynamoDbClientInterface
 
             $setting = reset($settings);
 
-            /** @var mixed $value */
             $value = $setting['value']->{'get' . ucfirst(strtolower($type->value))}();
         } catch (HttpException $httpException) {
             $this->dynamoDbClientLogger->error(

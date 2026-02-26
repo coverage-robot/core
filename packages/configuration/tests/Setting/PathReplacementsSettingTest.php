@@ -59,8 +59,8 @@ final class PathReplacementsSettingTest extends TestCase
             ->willReturn(true);
         $pathReplacementsSetting = new PathReplacementsSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertTrue(
@@ -120,8 +120,8 @@ final class PathReplacementsSettingTest extends TestCase
             );
         $pathReplacementsSetting = new PathReplacementsSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertEquals(
@@ -157,8 +157,8 @@ final class PathReplacementsSettingTest extends TestCase
             ->willReturn(true);
         $pathReplacementsSetting = new PathReplacementsSetting(
             $mockDynamoDbClient,
-            $this->createMock(Serializer::class),
-            $this->createMock(ValidatorInterface::class)
+            $this->createStub(Serializer::class),
+            $this->createStub(ValidatorInterface::class)
         );
 
         $this->assertTrue(
@@ -173,7 +173,7 @@ final class PathReplacementsSettingTest extends TestCase
     public function testDeserializingPathReplacements(): void
     {
         $pathReplacementsSetting = new PathReplacementsSetting(
-            $this->createMock(DynamoDbClientInterface::class),
+            $this->createStub(DynamoDbClientInterface::class),
             new Serializer(
                 [
                     new ArrayDenormalizer(),
@@ -258,6 +258,9 @@ final class PathReplacementsSettingTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, array<int, stdClass|bool|mixed[]|PathReplacement[]|float|int|string|null>>
+     */
     public static function validatingValuesDataProvider(): array
     {
         return [

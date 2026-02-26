@@ -46,7 +46,7 @@ final class EventProcessorServiceTest extends TestCase
             new NullLogger(),
             [
                 Event::INGEST_SUCCESS->value => $mockProcessor,
-                Event::INGEST_FAILURE->value => $this->createMock(EventProcessorInterface::class),
+                Event::INGEST_FAILURE->value => $this->createStub(EventProcessorInterface::class),
             ]
         );
 

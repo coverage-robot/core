@@ -104,6 +104,9 @@ final class LineCommentTypeSettingTest extends TestCase
         );
     }
 
+    /**
+     * @return array<string, never[][]|bool[]|float[]|int[]|stdClass[]|string[]|null[]>
+     */
     public static function validatingValuesDataProvider(): array
     {
         return [
