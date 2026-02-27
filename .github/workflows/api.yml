@@ -264,7 +264,7 @@ jobs:
                   mv ./psalm-plugins.xml ${{ github.workspace }}/psalm-plugins.xml
                   mv ./.git ${{ github.workspace }}/.git
 
-            - uses: aws-actions/configure-aws-credentials@v5
+            - uses: aws-actions/configure-aws-credentials@v6
               with:
                   aws-region: eu-west-2
                   role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
@@ -296,7 +296,7 @@ jobs:
               with:
                   php-version: ${{ env.target-php-version }}
 
-            - uses: aws-actions/configure-aws-credentials@v5
+            - uses: aws-actions/configure-aws-credentials@v6
               with:
                   aws-region: eu-west-2
                   role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
