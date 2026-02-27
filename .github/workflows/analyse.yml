@@ -227,7 +227,7 @@ jobs:
                   echo "php-version=${{ matrix.php-version }}" >> $GITHUB_OUTPUT
               shell: bash
 
-            - uses: coverage-robot/action@v1.0.11
+            - uses: coverage-robot/action@v1.0.10
               # Only upload coverage for the target PHP version so that we don't upload duplicate coverage where the
               # tests are run on multiple PHP versions
               if: always() && steps.tests.outputs.php-version == env.target-php-version
