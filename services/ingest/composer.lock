@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc12a395690b75d4e8d73110861f1bcd",
+    "content-hash": "47310142ec45cebeb50a0f43d04cb03d",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -281,16 +281,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "2.10.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "9c826ab620dbdc99528f0ad0b728ef9d478714db"
+                "reference": "68664f2db5d990b7e8863624791366d6e8925398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/9c826ab620dbdc99528f0ad0b728ef9d478714db",
-                "reference": "9c826ab620dbdc99528f0ad0b728ef9d478714db",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/68664f2db5d990b7e8863624791366d6e8925398",
+                "reference": "68664f2db5d990b7e8863624791366d6e8925398",
                 "shasum": ""
             },
             "require": {
@@ -299,12 +299,17 @@
                 "ext-filter": "*",
                 "ext-hash": "*",
                 "ext-simplexml": "*",
-                "php": "^7.2.5 || ^8.0"
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -325,7 +330,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.10.0"
+                "source": "https://github.com/async-aws/s3/tree/3.1.0"
             },
             "funding": [
                 {
@@ -337,7 +342,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-11T10:03:27+00:00"
+            "time": "2026-02-16T10:24:54+00:00"
         },
         {
             "name": "async-aws/scheduler",
@@ -404,27 +409,31 @@
         },
         {
             "name": "async-aws/simple-s3",
-            "version": "2.1.1",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/simple-s3.git",
-                "reference": "3edb3676244960a36b801c0141401d2f58b5f617"
+                "reference": "e51f78df03e3cb91d389962c7b71d61e1b825a37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/3edb3676244960a36b801c0141401d2f58b5f617",
-                "reference": "3edb3676244960a36b801c0141401d2f58b5f617",
+                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/e51f78df03e3cb91d389962c7b71d61e1b825a37",
+                "reference": "e51f78df03e3cb91d389962c7b71d61e1b825a37",
                 "shasum": ""
             },
             "require": {
-                "async-aws/s3": "^2.0",
-                "ext-json": "*",
-                "php": "^7.2.5 || ^8.0"
+                "async-aws/s3": "^3.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -445,7 +454,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/simple-s3/tree/2.1.1"
+                "source": "https://github.com/async-aws/simple-s3/tree/3.0.1"
             },
             "funding": [
                 {
@@ -457,7 +466,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-10-09T08:09:09+00:00"
+            "time": "2026-02-16T10:24:54+00:00"
         },
         {
             "name": "bref/bref",
