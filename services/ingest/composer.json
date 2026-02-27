@@ -101,11 +101,5 @@
             "type": "composer",
             "url": "https://coverage-robot.repo.repman.io"
         }
-    ],
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "7.3.*"
-        }
-    }
+    ]
 }

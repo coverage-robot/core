@@ -97,12 +97,6 @@
             "url": "https://coverage-robot.repo.repman.io"
         }
     ],
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "7.3.*"
-        }
-    },
     "require-dev": {
         "coverage-robot/local": "^1.5",
         "phpunit/phpunit": "^12.0",
