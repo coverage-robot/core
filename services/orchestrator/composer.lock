@@ -8134,7 +8134,7 @@
         },
         {
             "name": "coverage-robot/local",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/local.git",
@@ -8203,7 +8203,7 @@
             },
             "description": "Shared local tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/local/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/local/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:06+00:00"
         },
