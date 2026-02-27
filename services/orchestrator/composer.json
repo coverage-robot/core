@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": "~8.4.0 || ~8.5.0",
+        "php": "~8.5.0",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "async-aws/async-aws-bundle": "^1.12",
@@ -98,11 +98,5 @@
             "type": "composer",
             "url": "https://coverage-robot.repo.repman.io"
         }
-    ],
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "7.3.*"
-        }
-    }
+    ]
 }
