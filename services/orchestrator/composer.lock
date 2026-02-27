@@ -281,16 +281,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "2.10.0",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "9c826ab620dbdc99528f0ad0b728ef9d478714db"
+                "reference": "68664f2db5d990b7e8863624791366d6e8925398"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/9c826ab620dbdc99528f0ad0b728ef9d478714db",
-                "reference": "9c826ab620dbdc99528f0ad0b728ef9d478714db",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/68664f2db5d990b7e8863624791366d6e8925398",
+                "reference": "68664f2db5d990b7e8863624791366d6e8925398",
                 "shasum": ""
             },
             "require": {
@@ -299,12 +299,17 @@
                 "ext-filter": "*",
                 "ext-hash": "*",
                 "ext-simplexml": "*",
-                "php": "^7.2.5 || ^8.0"
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5.42",
+                "symfony/error-handler": "^7.3.2 || ^8.0",
+                "symfony/phpunit-bridge": "^7.3.2 || ^8.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.10-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -325,7 +330,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/2.10.0"
+                "source": "https://github.com/async-aws/s3/tree/3.1.0"
             },
             "funding": [
                 {
@@ -337,7 +342,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-11T10:03:27+00:00"
+            "time": "2026-02-16T10:24:54+00:00"
         },
         {
             "name": "async-aws/scheduler",
@@ -736,16 +741,16 @@
         },
         {
             "name": "coverage-robot/clients",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/clients.git",
-                "reference": "3827345733be54bee6563dc7743971590ea88b79"
+                "reference": "feffb78a60d56ad14b1ca068e290ca4a38642dee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/3827345733be54bee6563dc7743971590ea88b79",
-                "reference": "3827345733be54bee6563dc7743971590ea88b79",
+                "url": "https://api.github.com/repos/coverage-robot/clients/zipball/feffb78a60d56ad14b1ca068e290ca4a38642dee",
+                "reference": "feffb78a60d56ad14b1ca068e290ca4a38642dee",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -755,7 +760,7 @@
                 ]
             },
             "require": {
-                "async-aws/s3": "^2.3",
+                "async-aws/s3": "^3.0",
                 "coverage-robot/telemetry": "^1.6",
                 "knplabs/github-api": "^3.13",
                 "lcobucci/jwt": "^5.2",
@@ -805,13 +810,13 @@
             },
             "description": "Shared clients across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/clients/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/clients/tree/v1.6.23"
             },
-            "time": "2026-02-27T00:10:12+00:00"
+            "time": "2026-02-27T00:24:37+00:00"
         },
         {
             "name": "coverage-robot/configuration",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/configuration.git",
@@ -880,13 +885,13 @@
             },
             "description": "Tooling to access user-defined configuration settings",
             "support": {
-                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/configuration/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:25+00:00"
         },
         {
             "name": "coverage-robot/contracts",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/contracts.git",
@@ -936,13 +941,13 @@
             },
             "description": "Decoupled contracts usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/contracts/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:24+00:00"
         },
         {
             "name": "coverage-robot/event",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/event.git",
@@ -1012,13 +1017,13 @@
             },
             "description": "Shared event logic across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/event/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/event/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:24+00:00"
         },
         {
             "name": "coverage-robot/message",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/message.git",
@@ -1084,13 +1089,13 @@
             },
             "description": "Decoupled queue messages usable across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/message/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/message/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:21+00:00"
         },
         {
             "name": "coverage-robot/telemetry",
-            "version": "v1.6.22",
+            "version": "v1.6.23",
             "source": {
                 "type": "git",
                 "url": "git@github.com:coverage-robot/telemetry.git",
@@ -1160,7 +1165,7 @@
             },
             "description": "Shared telemetry tooling across the services",
             "support": {
-                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.22"
+                "source": "https://github.com/coverage-robot/telemetry/tree/v1.6.23"
             },
             "time": "2026-02-27T00:10:25+00:00"
         },
