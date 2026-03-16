@@ -44,7 +44,7 @@ jobs:
 
             # When run on a tag push, the GITHUB_REF will be in the format refs/head/{commit_sha}
             - if: "!startsWith(github.ref, 'refs/tags/')"
-              uses: "symplify/monorepo-split-github-action@v2.4.0"
+              uses: "symplify/monorepo-split-github-action@v2.4.4"
               with:
                   # Split the package directory into the appropriate repository
                   package_directory: '${{ matrix.package.directory }}'
@@ -57,7 +57,7 @@ jobs:
 
             # When run on a tag push, the GITHUB_REF will be in the format refs/tags/{tag}
             - if: "startsWith(github.ref, 'refs/tags/')"
-              uses: "symplify/monorepo-split-github-action@v2.4.0"
+              uses: "symplify/monorepo-split-github-action@v2.4.4"
               with:
                   tag: ${GITHUB_REF#refs/tags/}
 
