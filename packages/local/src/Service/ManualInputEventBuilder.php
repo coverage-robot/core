@@ -156,7 +156,8 @@ final readonly class ManualInputEventBuilder implements EventBuilderInterface
                     DateTimeInterface::class,
                     DateTime::class,
                     DateTimeImmutable::class,
-                ]
+                ],
+                true
             )
         ) {
             $question->setValidator(
