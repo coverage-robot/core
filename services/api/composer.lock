@@ -1291,16 +1291,16 @@
         },
         {
             "name": "cybercog/php-svg-font",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cybercog/php-svg-font.git",
-                "reference": "f453a62f22d82c90bb547679bd6b60edded7a8d6"
+                "reference": "11abc3db396129bd4abbc0df789f038151b6ed41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cybercog/php-svg-font/zipball/f453a62f22d82c90bb547679bd6b60edded7a8d6",
-                "reference": "f453a62f22d82c90bb547679bd6b60edded7a8d6",
+                "url": "https://api.github.com/repos/cybercog/php-svg-font/zipball/11abc3db396129bd4abbc0df789f038151b6ed41",
+                "reference": "11abc3db396129bd4abbc0df789f038151b6ed41",
                 "shasum": ""
             },
             "require": {
@@ -1341,7 +1341,7 @@
             ],
             "support": {
                 "issues": "https://github.com/cybercog/php-svg-font/issues",
-                "source": "https://github.com/cybercog/php-svg-font/tree/1.0.0"
+                "source": "https://github.com/cybercog/php-svg-font/tree/1.0.1"
             },
             "funding": [
                 {
@@ -1349,7 +1349,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-01-04T13:05:54+00:00"
+            "time": "2026-03-01T11:04:39+00:00"
         },
         {
             "name": "cybercog/php-unicode",
@@ -12039,5 +12039,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
