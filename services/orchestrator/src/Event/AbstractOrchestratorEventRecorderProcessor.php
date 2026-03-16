@@ -91,7 +91,11 @@ abstract class AbstractOrchestratorEventRecorderProcessor implements EventProces
 
         if (
             $previousState instanceof OrchestratedEventInterface &&
-            in_array($previousState->getState(), [OrchestratedEventState::SUCCESS, OrchestratedEventState::FAILURE]) &&
+            in_array(
+                $previousState->getState(),
+                [OrchestratedEventState::SUCCESS, OrchestratedEventState::FAILURE],
+                true
+            ) &&
             $currentState->getState() === OrchestratedEventState::ONGOING
         ) {
             /**
