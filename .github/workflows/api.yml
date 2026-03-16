@@ -155,10 +155,14 @@ jobs:
               run: composer lint:rector
 
             - name: Run Psalm
-              run: composer lint:static-analysis
+              # TODO: Remove PSALM_ALLOW_XDEBUG=1 issue with JIT and the Override
+              # attribute is fixed. See: https://github.com/vimeo/psalm/issues/11723
+              run: PSALM_ALLOW_XDEBUG=1 composer lint:static-analysis
 
             - name: Run Psalm Security Analysis
-              run: composer lint:security
+              # TODO: Remove PSALM_ALLOW_XDEBUG=1 issue with JIT and the Override
+              # attribute is fixed. See: https://github.com/vimeo/psalm/issues/11723
+              run: PSALM_ALLOW_XDEBUG=1 composer lint:security
 
             - name: Run Twig Lint
               run: composer lint:templates
