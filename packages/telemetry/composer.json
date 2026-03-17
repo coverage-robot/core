@@ -16,7 +16,7 @@
         "monolog/monolog": "^3.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.0",
+        "phpunit/phpunit": "^13.0",
         "estahn/phpunit-json-assertions": "^4.0",
         "symfony/property-access": "^7.1",
         "bref/bref": "^3",
