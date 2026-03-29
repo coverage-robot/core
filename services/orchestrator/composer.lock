@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d7974d343eb4f37bcf3ce95932125e6",
+    "content-hash": "a8792f93dc0f5db79b8b844eb0094e54",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -602,7 +602,7 @@
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "2.0.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
@@ -663,7 +663,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/2.0.1"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/3.0.0"
             },
             "funding": [
                 {
