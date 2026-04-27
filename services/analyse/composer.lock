@@ -154,16 +154,16 @@
         },
         {
             "name": "async-aws/dynamo-db",
-            "version": "3.10.0",
+            "version": "3.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/dynamo-db.git",
-                "reference": "f1b01adfa644855d2228409d38d1e642db059b84"
+                "reference": "490897ade605167abab5bbece970904df2ba43e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/f1b01adfa644855d2228409d38d1e642db059b84",
-                "reference": "f1b01adfa644855d2228409d38d1e642db059b84",
+                "url": "https://api.github.com/repos/async-aws/dynamo-db/zipball/490897ade605167abab5bbece970904df2ba43e3",
+                "reference": "490897ade605167abab5bbece970904df2ba43e3",
                 "shasum": ""
             },
             "require": {
@@ -183,7 +183,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.10-dev"
+                    "dev-master": "3.11-dev"
                 }
             },
             "autoload": {
@@ -204,7 +204,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/dynamo-db/tree/3.10.0"
+                "source": "https://github.com/async-aws/dynamo-db/tree/3.11.0"
             },
             "funding": [
                 {
@@ -216,7 +216,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T10:24:54+00:00"
+            "time": "2026-04-18T17:06:10+00:00"
         },
         {
             "name": "async-aws/event-bridge",
