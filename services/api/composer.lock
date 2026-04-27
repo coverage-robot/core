@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17bcdd1756f8eaa5b547699bf81a33c1",
+    "content-hash": "b1fe10b9cff9e5fb63c5e201f82c7c61",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -144,21 +144,20 @@
         },
         {
             "name": "async-aws/core",
-            "version": "1.28.0",
+            "version": "1.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/core.git",
-                "reference": "0d5f4d650b74a8366bca1fb400b6cfb694c3b217"
+                "reference": "70899695fcc7b23a9247926ff8b581668583b993"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/core/zipball/0d5f4d650b74a8366bca1fb400b6cfb694c3b217",
-                "reference": "0d5f4d650b74a8366bca1fb400b6cfb694c3b217",
+                "url": "https://api.github.com/repos/async-aws/core/zipball/70899695fcc7b23a9247926ff8b581668583b993",
+                "reference": "70899695fcc7b23a9247926ff8b581668583b993",
                 "shasum": ""
             },
             "require": {
                 "ext-hash": "*",
-                "ext-json": "*",
                 "ext-simplexml": "*",
                 "php": "^8.2",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
@@ -180,7 +179,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.28-dev"
+                    "dev-master": "1.29-dev"
                 }
             },
             "autoload": {
@@ -201,7 +200,7 @@
                 "sts"
             ],
             "support": {
-                "source": "https://github.com/async-aws/core/tree/1.28.0"
+                "source": "https://github.com/async-aws/core/tree/1.29.0"
             },
             "funding": [
                 {
@@ -213,7 +212,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-16T22:28:05+00:00"
+            "time": "2026-04-18T17:06:10+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
