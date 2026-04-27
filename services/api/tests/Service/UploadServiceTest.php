@@ -116,20 +116,25 @@ final class UploadServiceTest extends KernelTestCase
                     'Bucket' => 'coverage-ingest-prod',
                     'Key' => '1/a/2/mock-uuid.xml',
                     'Metadata' => [
+                        /**
+                         * Notice that all keys are lowercase, this is intentional!
+                         *
+                         * @see UploadService::getSignedPutRequest()
+                         */
                         'owner' => '1',
                         'repository' => 'a',
                         'commit' => '2',
                         'parent' => '["mock-parent-hash"]',
                         'tag' => 'frontend',
                         'provider' => 'github',
-                        'fileName' => 'some/root/test.xml',
-                        'pullRequest' => '12',
-                        'baseRef' => 'main',
-                        'baseCommit' => 'mock-base-commit',
-                        'uploadId' => 'mock-uuid',
-                        'projectId' => 'mock-project-id',
+                        'filename' => 'some/root/test.xml',
+                        'pullrequest' => '12',
+                        'baseref' => 'main',
+                        'basecommit' => 'mock-base-commit',
+                        'uploadid' => 'mock-uuid',
+                        'projectid' => 'mock-project-id',
                         'ref' => 'mock-branch-reference',
-                        'projectRoot' => 'some/root/'
+                        'projectroot' => 'some/root/'
                     ]
                 ]),
                 $this->isInstanceOf(DateTimeImmutable::class)
