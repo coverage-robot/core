@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Query;
 
-use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use App\Enum\EnvironmentVariable;
 use App\Model\QueryParameterBag;
 use App\Query\QueryInterface;
@@ -16,6 +15,7 @@ use Packages\Configuration\Mock\MockEnvironmentServiceFactory;
 use Packages\Contracts\Environment\Environment;
 use Packages\Contracts\Environment\EnvironmentServiceInterface;
 use Packages\Contracts\Environment\Service;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -58,7 +58,7 @@ abstract class AbstractQueryTestCase extends KernelTestCase
                 Environment::PRODUCTION,
                 Service::ANALYSE,
                 [
-                    EnvironmentVariable::BIGQUERY_PROJECT->value => 'mock-project-id',
+                    EnvironmentVariable::GOOGLE_CLOUD_PROJECT->value => 'mock-project-id',
                     EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET->value => 'prod',
                     EnvironmentVariable::BIGQUERY_UPLOAD_TABLE->value => 'mock-upload-table',
                     EnvironmentVariable::BIGQUERY_LINE_COVERAGE_TABLE->value => 'mock-line-coverage-table'

@@ -18,7 +18,7 @@ trait BigQueryTableAwareTrait
     {
         return sprintf(
             '%s.%s.%s',
-            $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_PROJECT),
+            $this->environmentService->getVariable(EnvironmentVariable::GOOGLE_CLOUD_PROJECT),
             $this->environmentService->getVariable(EnvironmentVariable::BIGQUERY_ENVIRONMENT_DATASET),
             $tableName
         );
