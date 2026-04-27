@@ -82,16 +82,16 @@
         },
         {
             "name": "async-aws/cognito-identity-provider",
-            "version": "1.16.1",
+            "version": "1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/cognito-identity-provider.git",
-                "reference": "876b1a06993ca85eab8bcec8a94fc818a5c6820c"
+                "reference": "dc9619362020e1286e740ee00faafe81bb68a026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/876b1a06993ca85eab8bcec8a94fc818a5c6820c",
-                "reference": "876b1a06993ca85eab8bcec8a94fc818a5c6820c",
+                "url": "https://api.github.com/repos/async-aws/cognito-identity-provider/zipball/dc9619362020e1286e740ee00faafe81bb68a026",
+                "reference": "dc9619362020e1286e740ee00faafe81bb68a026",
                 "shasum": ""
             },
             "require": {
@@ -107,7 +107,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.16-dev"
+                    "dev-master": "1.17-dev"
                 }
             },
             "autoload": {
@@ -128,7 +128,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.16.1"
+                "source": "https://github.com/async-aws/cognito-identity-provider/tree/1.17.0"
             },
             "funding": [
                 {
@@ -140,7 +140,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T10:24:54+00:00"
+            "time": "2026-04-18T17:06:10+00:00"
         },
         {
             "name": "async-aws/core",
