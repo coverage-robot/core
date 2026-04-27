@@ -122,16 +122,31 @@ final readonly class UploadService implements UploadServiceInterface
         string $projectId,
         SigningParameters $signingParameters
     ): PutObjectRequest {
-        /** @var array<string, string> $metadata */
-        $metadata = [
-            ...(array)$this->serializer->normalize($signingParameters),
-            'uploadId' => $uploadId,
-            'projectId' => $projectId,
-            'parent' => $this->serializer->serialize(
-                $signingParameters->getParent(),
-                'json'
-            )
-        ];
+        /**
+         * Object metadata keys must always be in lowercase, otherwise S3 will reject the presigned
+         * request.
+         *
+         * async-aws/core `<=v1.28.0` used to (unintentionally) do this transformation to convert all
+         * of the keys to lowercase, but as of `>=v1.28.1` the onus is now on us to ensure the key case is
+         * correct.
+         *
+         * @see https://github.com/async-aws/aws/pull/2057#issuecomment-4274180844
+         *
+         * @see https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingMetadata.html
+         *
+         * @var array<string, string> $metadata
+         */
+        $metadata = array_change_key_case(
+            [
+                ...(array)$this->serializer->normalize($signingParameters),
+                'uploadid' => $uploadId,
+                'projectid' => $projectId,
+                'parent' => $this->serializer->serialize(
+                    $signingParameters->getParent(),
+                    'json'
+                )
+            ]
+        );
 
         return new PutObjectRequest([
             'Bucket' => $bucket,
