@@ -14,7 +14,7 @@
         "async-aws/async-aws-bundle": "^1.12",
         "async-aws/simple-s3": "^3.0",
         "bref/bref": "^3",
-        "bref/symfony-bridge": "^2",
+        "bref/symfony-bridge": "^3",
         "coverage-robot/configuration": "^1.6",
         "coverage-robot/contracts": "^1.6",
         "coverage-robot/event": "^1.6",
