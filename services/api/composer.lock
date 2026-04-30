@@ -343,16 +343,16 @@
         },
         {
             "name": "async-aws/s3",
-            "version": "3.2.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/s3.git",
-                "reference": "39dcee8af248a26b99c1af109e9b577c8bd51b67"
+                "reference": "26bf7e498df4fd135fb2c32cbaa5ba92c0615fa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/s3/zipball/39dcee8af248a26b99c1af109e9b577c8bd51b67",
-                "reference": "39dcee8af248a26b99c1af109e9b577c8bd51b67",
+                "url": "https://api.github.com/repos/async-aws/s3/zipball/26bf7e498df4fd135fb2c32cbaa5ba92c0615fa3",
+                "reference": "26bf7e498df4fd135fb2c32cbaa5ba92c0615fa3",
                 "shasum": ""
             },
             "require": {
@@ -371,7 +371,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -392,7 +392,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/s3/tree/3.2.0"
+                "source": "https://github.com/async-aws/s3/tree/3.3.0"
             },
             "funding": [
                 {
@@ -404,7 +404,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-18T17:06:10+00:00"
+            "time": "2026-04-29T10:05:33+00:00"
         },
         {
             "name": "async-aws/scheduler",
