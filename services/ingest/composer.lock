@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47310142ec45cebeb50a0f43d04cb03d",
+    "content-hash": "e4f57d8013dd8a42fb4c277983fd9ee1",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -1372,16 +1372,16 @@
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.51.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "9ba3d5e8cbd53bf67fab644b5be310e719533def"
+                "reference": "51da3edc2282b762c15e862b0e5c4390bdb52c20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/9ba3d5e8cbd53bf67fab644b5be310e719533def",
-                "reference": "9ba3d5e8cbd53bf67fab644b5be310e719533def",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/51da3edc2282b762c15e862b0e5c4390bdb52c20",
+                "reference": "51da3edc2282b762c15e862b0e5c4390bdb52c20",
                 "shasum": ""
             },
             "require": {
@@ -1424,9 +1424,9 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.51.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v2.2.0"
             },
-            "time": "2026-04-09T21:01:46+00:00"
+            "time": "2026-05-20T05:08:53+00:00"
         },
         {
             "name": "google/common-protos",
