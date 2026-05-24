@@ -1247,16 +1247,16 @@
         },
         {
             "name": "google/cloud-bigquery",
-            "version": "v1.35.1",
+            "version": "v1.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-bigquery.git",
-                "reference": "f39856b9a87d386983126b6e5acd4891913a9975"
+                "reference": "b839d59f9a0b064fd2d589edfedfdee8634d313d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/f39856b9a87d386983126b6e5acd4891913a9975",
-                "reference": "f39856b9a87d386983126b6e5acd4891913a9975",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-bigquery/zipball/b839d59f9a0b064fd2d589edfedfdee8634d313d",
+                "reference": "b839d59f9a0b064fd2d589edfedfdee8634d313d",
                 "shasum": ""
             },
             "require": {
@@ -1266,8 +1266,9 @@
             },
             "require-dev": {
                 "erusev/parsedown": "^1.6",
+                "google/cloud-bigquery-connection": "^2.1",
                 "google/cloud-bigquery-reservation": "^2.0",
-                "google/cloud-storage": "^1.3",
+                "google/cloud-storage": "^2.0",
                 "nikic/php-parser": "^5.0",
                 "phpdocumentor/reflection": "^5.3.3||^6.0",
                 "phpdocumentor/reflection-docblock": "^5.3.3||^6.0",
@@ -1299,9 +1300,9 @@
             ],
             "description": "BigQuery Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.35.1"
+                "source": "https://github.com/googleapis/google-cloud-php-bigquery/tree/v1.38.0"
             },
-            "time": "2026-01-23T22:57:13+00:00"
+            "time": "2026-05-20T05:08:53+00:00"
         },
         {
             "name": "google/cloud-core",
