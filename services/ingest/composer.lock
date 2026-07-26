@@ -409,16 +409,16 @@
         },
         {
             "name": "async-aws/simple-s3",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/simple-s3.git",
-                "reference": "e51f78df03e3cb91d389962c7b71d61e1b825a37"
+                "reference": "639129eeb1cce936a9e9532d71818acbac67a196"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/e51f78df03e3cb91d389962c7b71d61e1b825a37",
-                "reference": "e51f78df03e3cb91d389962c7b71d61e1b825a37",
+                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/639129eeb1cce936a9e9532d71818acbac67a196",
+                "reference": "639129eeb1cce936a9e9532d71818acbac67a196",
                 "shasum": ""
             },
             "require": {
@@ -454,7 +454,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/simple-s3/tree/3.0.1"
+                "source": "https://github.com/async-aws/simple-s3/tree/3.0.2"
             },
             "funding": [
                 {
@@ -466,7 +466,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T10:24:54+00:00"
+            "time": "2026-07-01T13:58:12+00:00"
         },
         {
             "name": "bref/bref",
