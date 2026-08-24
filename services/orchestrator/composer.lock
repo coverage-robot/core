@@ -471,22 +471,21 @@
         },
         {
             "name": "bref/bref",
-            "version": "3.0.7",
+            "version": "3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/bref.git",
-                "reference": "34ef49efe62ccac65043c3a33255afd58eccd478"
+                "reference": "0d899c6a2122519d4b69f80ef20503007cccafbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/bref/zipball/34ef49efe62ccac65043c3a33255afd58eccd478",
-                "reference": "34ef49efe62ccac65043c3a33255afd58eccd478",
+                "url": "https://api.github.com/repos/brefphp/bref/zipball/0d899c6a2122519d4b69f80ef20503007cccafbc",
+                "reference": "0d899c6a2122519d4b69f80ef20503007cccafbc",
                 "shasum": ""
             },
             "require": {
                 "crwlr/query-string": "^1.0.3",
                 "ext-curl": "*",
-                "ext-json": "*",
                 "hollodotme/fast-cgi-client": "^3.0.1",
                 "nyholm/psr7": "^1.4.1",
                 "php": ">=8.2",
@@ -494,7 +493,7 @@
                 "psr/http-message": "^1.0|^2.0",
                 "psr/http-server-handler": "^1.0",
                 "riverline/multipart-parser": "^2.1.2",
-                "symfony/process": "^6.4|^7.0|^8.0"
+                "symfony/process": "^5.4|^6.4|^7.0|^8.0"
             },
             "require-dev": {
                 "async-aws/core": "^1.0",
@@ -506,8 +505,8 @@
                 "guzzlehttp/guzzle": "^7.5",
                 "phpstan/phpstan": "^2",
                 "phpunit/phpunit": "^10.1",
-                "symfony/console": "^6.4|^7.0|^8.0",
-                "symfony/yaml": "^6.4|^7.0|^8.0"
+                "symfony/console": "^5.4|^6.4|^7.0|^8.0",
+                "symfony/yaml": "^5.4|^6.4|^7.0|^8.0"
             },
             "bin": [
                 "src/bref-local"
@@ -533,7 +532,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/bref/issues",
-                "source": "https://github.com/brefphp/bref/tree/3.0.7"
+                "source": "https://github.com/brefphp/bref/tree/3.0.9"
             },
             "funding": [
                 {
@@ -545,7 +544,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-09T09:30:10+00:00"
+            "time": "2026-08-04T08:22:56+00:00"
         },
         {
             "name": "bref/monolog-bridge",
