@@ -7,14 +7,14 @@
     "require": {
         "php": "~8.5.0",
         "knplabs/github-api": "^3.13",
-        "symfony/http-client": "^7.0",
+        "symfony/http-client": "^8.0",
         "nyholm/psr7": "^1.8",
         "lcobucci/jwt": "^5.2",
-        "symfony/http-kernel": "^7.0",
-        "symfony/config": "^7.0",
-        "symfony/dependency-injection": "^7.0",
+        "symfony/http-kernel": "^8.0",
+        "symfony/config": "^8.0",
+        "symfony/dependency-injection": "^8.0",
         "coverage-robot/telemetry": "^1.6",
-        "symfony/uid": "^7.1",
+        "symfony/uid": "^8.0",
         "async-aws/s3": "^3.0"
     },
     "require-dev": {
