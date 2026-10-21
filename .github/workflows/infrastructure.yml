@@ -51,7 +51,7 @@ jobs:
             -   uses: actions/checkout@v6
 
             -   name: Run Terraform Format
-                uses: dflook/terraform-fmt-check@v2
+                uses: dflook/terraform-fmt-check@v3
                 with:
                     workspace: ${{ env.workspace }}
                     path: ${{ env.working-directory }}

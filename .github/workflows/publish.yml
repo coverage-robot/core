@@ -168,7 +168,7 @@ jobs:
               run: composer lint:coverage_templates
 
             - name: Run Terraform Format
-              uses: dflook/terraform-fmt-check@v2
+              uses: dflook/terraform-fmt-check@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure
