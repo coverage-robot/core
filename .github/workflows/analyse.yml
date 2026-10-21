@@ -279,7 +279,7 @@ jobs:
                   role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
 
             - name: Run Plan
-              uses: dflook/terraform-plan@v2
+              uses: dflook/terraform-plan@v3
               with:
                   workspace: ${{ env.workspace }}
                   add_github_comment: true
