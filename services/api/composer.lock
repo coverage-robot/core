@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dd0a37857b24ee67109709aa54a1725",
+    "content-hash": "7656a1a8944f194b4de70c5aa462f313",
     "packages": [
         {
             "name": "async-aws/async-aws-bundle",
@@ -663,21 +663,21 @@
         },
         {
             "name": "bref/symfony-bridge",
-            "version": "2.0.1",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brefphp/symfony-bridge.git",
-                "reference": "45b93c8131b3363d35db5792d2f89fb01cde0c8d"
+                "reference": "3c6a789258d7ce98a9196a295048bda47b65d1e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/45b93c8131b3363d35db5792d2f89fb01cde0c8d",
-                "reference": "45b93c8131b3363d35db5792d2f89fb01cde0c8d",
+                "url": "https://api.github.com/repos/brefphp/symfony-bridge/zipball/3c6a789258d7ce98a9196a295048bda47b65d1e4",
+                "reference": "3c6a789258d7ce98a9196a295048bda47b65d1e4",
                 "shasum": ""
             },
             "require": {
-                "bref/bref": "^2.0|^3",
-                "bref/monolog-bridge": "^1.0",
+                "bref/bref": "^2.1.13|^3.0.13",
+                "bref/monolog-bridge": "^1.0|^2.0",
                 "php": ">=8.2",
                 "symfony/dependency-injection": "^5.4|^6.0|^7.0|^8.0",
                 "symfony/filesystem": "^5.4|^6.0|^7.0|^8.0",
@@ -695,15 +695,6 @@
                 "symfony/process": "^5.4|^6.0|^7.0|^8.0"
             },
             "type": "library",
-            "extra": {
-                "symfony": {
-                    "bundles": {
-                        "Bref\\SymfonyBridge\\BrefBundle": [
-                            "all"
-                        ]
-                    }
-                }
-            },
             "autoload": {
                 "files": [
                     "src/bootstrap.php"
@@ -724,7 +715,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brefphp/symfony-bridge/issues",
-                "source": "https://github.com/brefphp/symfony-bridge/tree/2.0.1"
+                "source": "https://github.com/brefphp/symfony-bridge/tree/3.0.3"
             },
             "funding": [
                 {
@@ -732,7 +723,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-03T10:49:38+00:00"
+            "time": "2026-10-12T13:18:06+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -4975,16 +4966,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v7.4.16",
+            "version": "v7.4.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "b676451bb638e99a7d34d8a2be90406822e301eb"
+                "reference": "58c89144c7a36dd89c3d01917e9fa3a72d8aaf31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/b676451bb638e99a7d34d8a2be90406822e301eb",
-                "reference": "b676451bb638e99a7d34d8a2be90406822e301eb",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/58c89144c7a36dd89c3d01917e9fa3a72d8aaf31",
+                "reference": "58c89144c7a36dd89c3d01917e9fa3a72d8aaf31",
                 "shasum": ""
             },
             "require": {
@@ -5033,7 +5024,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v7.4.16"
+                "source": "https://github.com/symfony/http-foundation/tree/v7.4.21"
             },
             "funding": [
                 {
@@ -5053,7 +5044,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-07T11:50:27+00:00"
+            "time": "2026-10-08T16:56:12+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -12132,5 +12123,5 @@
         "ext-iconv": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
