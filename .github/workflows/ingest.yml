@@ -171,7 +171,7 @@ jobs:
                   path: ${{ env.working-directory }}/infrastructure
 
             - name: Run Terraform Validate
-              uses: dflook/terraform-validate@v2
+              uses: dflook/terraform-validate@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure
