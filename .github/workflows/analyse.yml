@@ -351,7 +351,7 @@ jobs:
                   contents: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
             - name: Run Apply
-              uses: dflook/terraform-apply@v2
+              uses: dflook/terraform-apply@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure

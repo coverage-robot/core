@@ -343,7 +343,7 @@ jobs:
                   contents: ${{ secrets.BIGQUERY_SERVICE_ACCOUNT }}
 
             - name: Run Apply
-              uses: dflook/terraform-apply@v2
+              uses: dflook/terraform-apply@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure

@@ -332,7 +332,7 @@ jobs:
               run: php bin/console cache:warmup --env=${{ env.workspace }}
 
             - name: Run Apply
-              uses: dflook/terraform-apply@v2
+              uses: dflook/terraform-apply@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure
