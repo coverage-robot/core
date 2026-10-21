@@ -20,7 +20,7 @@
         "coverage-robot/message": "^1.6",
         "coverage-robot/telemetry": "^1.6",
         "cybercog/php-svg-font": "^1.0",
-        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpdocumentor/reflection-docblock": "^6.0",
         "phpro/api-problem-bundle": "^1.11",
         "phpstan/phpdoc-parser": "^2.0",
         "sentry/sentry-symfony": "^5.0",
