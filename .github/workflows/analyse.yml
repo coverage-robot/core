@@ -165,7 +165,7 @@ jobs:
               run: PSALM_ALLOW_XDEBUG=1 composer lint:security
 
             - name: Run Terraform Format
-              uses: dflook/terraform-fmt-check@v2
+              uses: dflook/terraform-fmt-check@v3
               with:
                   workspace: ${{ env.workspace }}
                   path: ${{ env.working-directory }}/infrastructure
