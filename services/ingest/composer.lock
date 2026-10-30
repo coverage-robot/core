@@ -150,7 +150,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T10:24:54+00:00"
+            "time": "2026-02-16T10:24:54+00:00",
+            "published-time": "2026-02-16T10:26:39+00:00"
         },
         {
             "name": "async-aws/dynamo-db",
@@ -342,7 +343,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-16T10:24:54+00:00"
+            "time": "2026-02-16T10:24:54+00:00",
+            "published-time": "2026-02-16T10:26:14+00:00"
         },
         {
             "name": "async-aws/scheduler",
@@ -409,16 +411,16 @@
         },
         {
             "name": "async-aws/simple-s3",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/async-aws/simple-s3.git",
-                "reference": "639129eeb1cce936a9e9532d71818acbac67a196"
+                "reference": "84982cc8f04308c543eeacfbdafac5eb0e9c6a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/639129eeb1cce936a9e9532d71818acbac67a196",
-                "reference": "639129eeb1cce936a9e9532d71818acbac67a196",
+                "url": "https://api.github.com/repos/async-aws/simple-s3/zipball/84982cc8f04308c543eeacfbdafac5eb0e9c6a6b",
+                "reference": "84982cc8f04308c543eeacfbdafac5eb0e9c6a6b",
                 "shasum": ""
             },
             "require": {
@@ -433,7 +435,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -454,7 +456,7 @@
                 "sdk"
             ],
             "support": {
-                "source": "https://github.com/async-aws/simple-s3/tree/3.0.2"
+                "source": "https://github.com/async-aws/simple-s3/tree/3.1.0"
             },
             "funding": [
                 {
@@ -466,7 +468,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-01T13:58:12+00:00"
+            "time": "2026-09-09T11:10:02+00:00",
+            "published-time": "2026-09-09T11:12:58+00:00"
         },
         {
             "name": "bref/bref",
@@ -2618,7 +2621,8 @@
             "support": {
                 "source": "https://github.com/php-fig/cache/tree/3.0.0"
             },
-            "time": "2021-02-03T23:26:27+00:00"
+            "time": "2021-02-03T23:26:27+00:00",
+            "published-time": "2021-02-03T23:27:34+00:00"
         },
         {
             "name": "psr/clock",
@@ -2719,7 +2723,8 @@
                 "issues": "https://github.com/php-fig/container/issues",
                 "source": "https://github.com/php-fig/container/tree/2.0.2"
             },
-            "time": "2021-11-05T16:47:00+00:00"
+            "time": "2021-11-05T16:47:00+00:00",
+            "published-time": "2021-11-05T16:53:27+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -3035,7 +3040,8 @@
             "support": {
                 "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2024-09-11T13:17:53+00:00"
+            "time": "2024-09-11T13:17:53+00:00",
+            "published-time": "2024-09-11T13:21:14+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -4133,7 +4139,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:21:43+00:00"
+            "time": "2024-09-25T14:21:43+00:00",
+            "published-time": "2025-05-25T20:28:15+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -4921,7 +4928,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-27T16:12:03+00:00"
+            "time": "2026-01-27T16:12:03+00:00",
+            "published-time": "2026-01-28T10:29:13+00:00"
         },
         {
             "name": "symfony/http-client-contracts",
@@ -4999,7 +5007,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-29T11:18:49+00:00"
+            "time": "2025-04-29T11:18:49+00:00",
+            "published-time": "2025-05-25T20:28:16+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -5763,7 +5772,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-08T02:45:35+00:00"
+            "time": "2025-07-08T02:45:35+00:00",
+            "published-time": "2025-08-19T20:34:30+00:00"
         },
         {
             "name": "symfony/polyfill-php84",
@@ -6607,7 +6617,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-15T11:30:57+00:00"
+            "time": "2025-07-15T11:30:57+00:00",
+            "published-time": "2025-11-07T09:49:53+00:00"
         },
         {
             "name": "symfony/string",
@@ -11436,5 +11447,5 @@
         "ext-xmlreader": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.11.0"
 }
